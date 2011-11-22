@@ -1,0 +1,97 @@
+TProject Unknown
+v4
+r1
+cCheck dependencies
+cCompileC "build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/main.o" "/Users/darkfall/codes/Project Unknown/Project Unknown/main.cpp" normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+
+N/Developer/SDKs/MacOSX10.7.sdk
+c000000004E97F51100000000000000EE
+t1318581521
+s238
+
+N/Users/darkfall/codes/Project Unknown/Project Unknown/include/Exception.cpp
+c000000004E822163000000000000223E
+t1317151075
+s8766
+
+N/Users/darkfall/codes/Project Unknown/Project Unknown/include/detail/signal/SoraSignal.cpp
+c000000004E82216600000000000001F9
+t1317151078
+s505
+
+N/Users/darkfall/codes/Project Unknown/Project Unknown/main.cpp
+c000000004ECB0D8A00000000000001F5
+t1321930122
+s501
+
+N/Users/darkfall/codes/Project Unknown/build/Debug/Project Unknown
+t2
+s0
+
+N/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/Exception.o
+t2
+s0
+
+N/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/Project Unknown.LinkFileList
+c000000004ECB0D8A000000000000007B
+t1321930122
+s123
+
+N/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/SoraSignal.o
+t2
+s0
+
+N/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/main.o
+t2
+s0
+
+CBuild AST from "/Users/darkfall/codes/Project Unknown/Project Unknown/include/Exception.cpp"
+r0
+
+CBuild AST from "/Users/darkfall/codes/Project Unknown/Project Unknown/include/detail/signal/SoraSignal.cpp"
+r0
+
+CBuild AST from "/Users/darkfall/codes/Project Unknown/Project Unknown/main.cpp"
+r0
+
+CCheck dependencies
+r0
+lSLF04#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies3bc7a80a457bb441^7d21ac0a457bb441^---0#1#0#--18"Check dependencies36"C36C94B7-77D0-4823-8CB7-938984C68E81-
+
+CCompileC "build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/Exception.o" "/Users/darkfall/codes/Project Unknown/Project Unknown/include/Exception.cpp" normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC "build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/SoraSignal.o" "/Users/darkfall/codes/Project Unknown/Project Unknown/include/detail/signal/SoraSignal.cpp" normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+r0
+
+CCompileC "build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/main.o" "/Users/darkfall/codes/Project Unknown/Project Unknown/main.cpp" normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler
+s343622922.696590
+e343622924.108584
+r0
+xCompileC
+xbuild/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/main.o
+x/Users/darkfall/codes/Project Unknown/Project Unknown/main.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.llvm.clang.1_0.compiler
+oIn file included from /Users/darkfall/codes/Project Unknown/Project Unknown/main.cpp:9:
+oIn file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/iostream:44:
+oIn file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/ostream:44:
+oIn file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/ios:42:
+oIn file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/iosfwd:45:
+oIn file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/c++io.h:43:
+oIn file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/gthr.h:114:
+oIn file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/gthr-default.h:43:
+oIn file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/pthread.h:60:
+oIn file included from /Users/darkfall/codes/Project Unknown/Project Unknown/include/time.h:12:
+oIn file included from /Users/darkfall/codes/Project Unknown/Project Unknown/include/Platform.h:12:
+o/Users/darkfall/codes/Project Unknown/Project Unknown/include/Type.h:41:10: fatal error: 'windows.h' file not found [2]
+o #include <windows.h>
+o          ^
+o1 error generated.
+lSLF04#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection70"Compile /Users/darkfall/codes/Project Unknown/Project Unknown/main.cppee94b20a457bb441^08ad1b0c457bb441^-1161"In file included from /Users/darkfall/codes/Project Unknown/Project Unknown/include/Platform.h:12:In file included from /Users/darkfall/codes/Project Unknown/Project Unknown/include/time.h:12:In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/pthread.h:60:In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/gthr-default.h:43:In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/gthr.h:114:In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/c++io.h:43:In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/iosfwd:45:In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/ios:42:In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/ostream:44:In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/iostream:44:In file included from /Users/darkfall/codes/Project Unknown/Project Unknown/main.cpp:9:/Users/darkfall/codes/Project Unknown/Project Unknown/include/Type.h:41:10: fatal error: 'windows.h' file not found [2] #include <windows.h>          ^1 error generated.1(21%IDEActivityLogMessage2@26"'windows.h' file not found-343622923#988#120#12(36%IDEActivityLogHeaderInclusionMessage3@98"In file included from /Users/darkfall/codes/Project Unknown/Project Unknown/include/Platform.h:12:-343622923#0#99#-0#-23%DVTTextDocumentLocation4@92"file://localhost/Users/darkfall/codes/Project%20Unknown/Project%20Unknown/include/Platform.h0000000000000000^11#18446744073709551615#11#18446744073709551615#18446744073709551615#0#---3@94"In file included from /Users/darkfall/codes/Project Unknown/Project Unknown/include/time.h:12:-343622923#99#95#-0#-4@88"file://localhost/Users/darkfall/codes/Project%20Unknown/Project%20Unknown/include/time.h0000000000000000^11#18446744073709551615#11#18446744073709551615#18446744073709551615#0#---3@78"In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/pthread.h:60:-343622923#194#79#-0#-4@68"file://localhost/Developer/SDKs/MacOSX10.7.sdk/usr/include/pthread.h0000000000000000^59#18446744073709551615#59#18446744073709551615#18446744073709551615#0#---3@98"In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/gthr-default.h:43:-343622923#273#99#-0#-4@88"file://localhost/Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/gthr-default.h0000000000000000^42#18446744073709551615#42#18446744073709551615#18446744073709551615#0#---3@91"In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/gthr.h:114:-343622923#372#92#-0#-4@80"file://localhost/Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/gthr.h0000000000000000^113#18446744073709551615#113#18446744073709551615#18446744073709551615#0#---3@91"In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/c++io.h:43:-343622923#464#92#-0#-4@81"file://localhost/Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/bits/c++io.h0000000000000000^42#18446744073709551615#42#18446744073709551615#18446744073709551615#0#---3@85"In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/iosfwd:45:-343622923#556#86#-0#-4@75"file://localhost/Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/iosfwd0000000000000000^44#18446744073709551615#44#18446744073709551615#18446744073709551615#0#---3@82"In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/ios:42:-343622923#642#83#-0#-4@72"file://localhost/Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/ios0000000000000000^41#18446744073709551615#41#18446744073709551615#18446744073709551615#0#---3@86"In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/ostream:44:-343622923#725#87#-0#-4@76"file://localhost/Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/ostream0000000000000000^43#18446744073709551615#43#18446744073709551615#18446744073709551615#0#---3@87"In file included from /Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/iostream:44:-343622923#812#88#-0#-4@77"file://localhost/Developer/SDKs/MacOSX10.7.sdk/usr/include/c++/4.2.1/iostream0000000000000000^43#18446744073709551615#43#18446744073709551615#18446744073709551615#0#---3@87"In file included from /Users/darkfall/codes/Project Unknown/Project Unknown/main.cpp:9:-343622923#900#88#-0#-4@82"file://localhost/Users/darkfall/codes/Project%20Unknown/Project%20Unknown/main.cpp0000000000000000^8#18446744073709551615#8#18446744073709551615#18446744073709551615#0#---2@98"'windows.h' file not found in /Users/darkfall/codes/Project Unknown/Project Unknown/include/Type.h-343622923#18446744073709551615#0#-0#-4@88"file://localhost/Users/darkfall/codes/Project%20Unknown/Project%20Unknown/include/Type.h0000000000000000^40#9#40#9#18446744073709551615#0#---2#-4@88"file://localhost/Users/darkfall/codes/Project%20Unknown/Project%20Unknown/include/Type.h0000000000000000^40#9#40#9#18446744073709551615#0#29"Lexical or Preprocessor Issue--0#0#0#-19%DVTDocumentLocation5@82"file://localhost/Users/darkfall/codes/Project%20Unknown/Project%20Unknown/main.cpp0000000000000000^2087"CompileC "build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/main.o" "Project Unknown/main.cpp" normal x86_64 c++ com.apple.compilers.llvm.clang.1_0.compiler    cd "/Users/darkfall/codes/Project Unknown"    setenv LANG en_US.US-ASCII    /Developer/usr/bin/clang -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-print-source-range-info -fdiagnostics-show-category=id -fdiagnostics-parseable-fixits -Wno-trigraphs -fpascal-strings -O0 -Wmissing-prototypes -Wreturn-type -Wparentheses -Wswitch -Wno-unused-parameter -Wunused-variable -Wunused-value -Wshorten-64-to-32 -Wc++0x-extensions -DDEBUG=1 -isysroot /Developer/SDKs/MacOSX10.7.sdk -fasm-blocks -mmacosx-version-min=10.7 -gdwarf-2 -fvisibility-inlines-hidden -Wno-sign-conversion -iquote "/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Project Unknown-generated-files.hmap" "-I/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Project Unknown-own-target-headers.hmap" "-I/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Project Unknown-all-target-headers.hmap" -iquote "/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Project Unknown-project-headers.hmap" "-I/Users/darkfall/codes/Project Unknown/build/Debug/include" "-I/Users/darkfall/codes/Project Unknown/Project Unknown/include" "-I/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/DerivedSources/x86_64" "-I/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/DerivedSources" "-F/Users/darkfall/codes/Project Unknown/build/Debug" -MMD -MT dependencies -MF "/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/main.d" -c "/Users/darkfall/codes/Project Unknown/Project Unknown/main.cpp" -o "/Users/darkfall/codes/Project Unknown/build/Project Unknown.build/Debug/Project Unknown.build/Objects-normal/x86_64/main.o"36"8848B317-76BB-46BF-BB57-746C16A38DDB-
+
+CLd "/Users/darkfall/codes/Project Unknown/build/Debug/Project Unknown" normal x86_64
+r0
+

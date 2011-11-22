@@ -8,6 +8,17 @@
 
 #include <iostream>
 
+#include "Platform.h"
+#include "Exception.h"
+#include "StackTrace.h"
+#include "SharedPtr.h"
+#include "Any.h"
+#include "Preprocessor.h"
+#include "Type.h"
+#include "Time.h"
+#include "Function.h"
+#include "Signal.h"
+
 int main (int argc, const char * argv[])
 {
 

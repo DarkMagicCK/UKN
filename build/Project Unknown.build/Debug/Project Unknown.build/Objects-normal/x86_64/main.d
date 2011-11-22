@@ -1,0 +1,29 @@
+dependencies: \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/main.cpp \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/Platform.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/Type.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/Exception.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/StackTrace.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/SharedPtr.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/Any.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/Preprocessor.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/Function.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function0.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/FunctionInclude.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/FunctionTemplate.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/FunctionBase.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/TypeTraits.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/FunctionFoward.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function1.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function2.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function3.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function4.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function5.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function6.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function7.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function8.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function9.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function10.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function11.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/detail/function/Function12.h \
+  /Users/darkfall/codes/Project\ Unknown/Project\ Unknown/include/Signal.h

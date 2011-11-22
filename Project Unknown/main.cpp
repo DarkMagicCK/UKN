@@ -2,7 +2,7 @@
 //  main.cpp
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 11/19/11.
+//  Created by Robert Bu on 11/19/11.
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 

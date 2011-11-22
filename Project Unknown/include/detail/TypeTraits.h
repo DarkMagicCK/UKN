@@ -2,7 +2,7 @@
 //  TypeTraits.h
 //  zeromq_client
 //
-//  Created by Ruiwei Bu on 8/15/11.
+//  Created by Robert Bu on 8/15/11.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 

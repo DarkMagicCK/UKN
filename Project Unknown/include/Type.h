@@ -38,232 +38,183 @@
     #pragma warning(disable:1744) // field of class type without a DLL interface used in a class with a DLL interface
 #endif
 
-#if defined(_WIN32) || defined(_MSC_VER)
-
-#include <windows.h>
-
-#undef GetBinaryType
-#undef GetShortPathName
-#undef GetLongPathName
-#undef GetEnvironmentStrings
-#undef SetEnvironmentStrings
-#undef FreeEnvironmentStrings
-#undef FormatMessage
-#undef EncryptFile
-#undef DecryptFile
-#undef CreateMutex
-#undef OpenMutex
-#undef CreateEvent
-#undef OpenEvent
-#undef CreateSemaphore
-#undef OpenSemaphore
-#undef LoadLibrary
-#undef GetModuleFileName
-#undef CreateProcess
-#undef GetCommandLine
-#undef GetEnvironmentVariable
-#undef SetEnvironmentVariable
-#undef ExpandEnvironmentStrings
-#undef OutputDebugString
-#undef FindResource
-#undef UpdateResource
-#undef FindAtom
-#undef AddAtom
-#undef GetSystemDirector
-#undef GetTempPath
-#undef GetTempFileName
-#undef SetCurrentDirectory
-#undef GetCurrentDirectory
-#undef CreateDirectory
-#undef RemoveDirectory
-#undef CreateFile
-#undef DeleteFile
-#undef SearchPath
-#undef CopyFile
-#undef MoveFile
-#undef ReplaceFile
-#undef GetComputerName
-#undef SetComputerName
-#undef GetUserName
-#undef LogonUser
-#undef GetVersion
-#undef GetObject
-
-#endif
-
 #include <stdint.h>
 
+namespace ukn {
+
 #if defined(_MSC_VER)
-//
-// Windows/Visual C++
-//
-typedef signed char            int8;
-typedef unsigned char          uint8;
-typedef signed short           int16;
-typedef unsigned short         uint16;
-typedef signed int             int32;
-typedef unsigned int           uint32;
-typedef signed __int64         int64;
-typedef unsigned __int64       uint64;
+    //
+    // Windows/Visual C++
+    //
+    typedef signed char            int8;
+    typedef unsigned char          uint8;
+    typedef signed short           int16;
+    typedef unsigned short         uint16;
+    typedef signed int             int32;
+    typedef unsigned int           uint32;
+    typedef signed __int64         int64;
+    typedef unsigned __int64       uint64;
 #if defined(_WIN64)
 #define _PTR_IS_64_BIT 1
-typedef signed __int64     intPtr;
-typedef unsigned __int64   uintPtr;
+    typedef signed __int64     intPtr;
+    typedef unsigned __int64   uintPtr;
 #else
-typedef signed long        intPtr;
-typedef unsigned long      uintPtr;
+    typedef signed long        intPtr;
+    typedef unsigned long      uintPtr;
 #endif
 #ifndef _HAVE_int64
 #define _HAVE_int64 1
 #endif
 #elif defined(__GNUC__)
-//
-// Unix/GCC
-//
-typedef signed char            int8;
-typedef unsigned char          uint8;
-typedef signed short           int16;
-typedef unsigned short         uint16;
-typedef signed int             int32;
-typedef unsigned int           uint32;
-typedef signed long            intPtr;
-typedef unsigned long          uintPtr;
+    //
+    // Unix/GCC
+    //
+    typedef signed char            int8;
+    typedef unsigned char          uint8;
+    typedef signed short           int16;
+    typedef unsigned short         uint16;
+    typedef signed int             int32;
+    typedef unsigned int           uint32;
+    typedef signed long            intPtr;
+    typedef unsigned long          uintPtr;
 #if defined(__LP64__)
 #define _PTR_IS_64_BIT 1
 #define _LONG_IS_64_BIT 1
-
+    
 #ifdef _UINT64
 #undef _UINT64
 #endif
-
+    
 #ifdef __INT64
 #undef __INT64
 #endif
-typedef int64_t        int64;
-typedef uint64_t		uint64;
+    typedef int64_t        int64;
+    typedef uint64_t		uint64;
 #else
-typedef signed long long   int64;
-typedef unsigned long long uint64;
+    typedef signed long long   int64;
+    typedef unsigned long long uint64;
 #endif
 #ifndef _HAVE_int64
 #define _HAVE_int64 1
 #endif
 #elif defined(__DECCXX)
-//
-// Compaq C++
-//
-typedef signed char            int8;
-typedef unsigned char          uint8;
-typedef signed short           int16;
-typedef unsigned short         uint16;
-typedef signed int             int32;
-typedef unsigned int           uint32;
-typedef signed __int64         int64;
-typedef unsigned __int64       uint64;
+    //
+    // Compaq C++
+    //
+    typedef signed char            int8;
+    typedef unsigned char          uint8;
+    typedef signed short           int16;
+    typedef unsigned short         uint16;
+    typedef signed int             int32;
+    typedef unsigned int           uint32;
+    typedef signed __int64         int64;
+    typedef unsigned __int64       uint64;
 #if defined(__VMS)
 #if defined(__32BITS)
-typedef signed long    intPtr;
-typedef unsigned long  uintPtr;
+    typedef signed long    intPtr;
+    typedef unsigned long  uintPtr;
 #else
-typedef int64          intPtr;
-typedef uint64         uintPtr;
+    typedef int64          intPtr;
+    typedef uint64         uintPtr;
 #define _PTR_IS_64_BIT 1
 #endif
 #else
-typedef signed long        intPtr;
-typedef unsigned long      uintPtr;
+    typedef signed long        intPtr;
+    typedef unsigned long      uintPtr;
 #define _PTR_IS_64_BIT 1
 #define _LONG_IS_64_BIT 1
 #endif
 #define _HAVE_int64 1
 #elif defined(__HP_aCC)
-//
-// HP Ansi C++
-//
-typedef signed char            int8;
-typedef unsigned char          uint8;
-typedef signed short           int16;
-typedef unsigned short         uint16;
-typedef signed int             int32;
-typedef unsigned int           uint32;
-typedef signed long            intPtr;
-typedef unsigned long          uintPtr;
+    //
+    // HP Ansi C++
+    //
+    typedef signed char            int8;
+    typedef unsigned char          uint8;
+    typedef signed short           int16;
+    typedef unsigned short         uint16;
+    typedef signed int             int32;
+    typedef unsigned int           uint32;
+    typedef signed long            intPtr;
+    typedef unsigned long          uintPtr;
 #if defined(__LP64__)
 #define _PTR_IS_64_BIT 1
 #define _LONG_IS_64_BIT 1
-typedef signed long        int64;
-typedef unsigned long      uint64;
+    typedef signed long        int64;
+    typedef unsigned long      uint64;
 #else
-typedef signed long long   int64;
-typedef unsigned long long uint64;
+    typedef signed long long   int64;
+    typedef unsigned long long uint64;
 #endif
 #define _HAVE_int64 1
 #elif defined(__SUNPRO_CC)
-//
-// SUN Forte C++
-//
-typedef signed char            int8;
-typedef unsigned char          uint8;
-typedef signed short           int16;
-typedef unsigned short         uint16;
-typedef signed int             int32;
-typedef unsigned int           uint32;
-typedef signed long            intPtr;
-typedef unsigned long          uintPtr;
+    //
+    // SUN Forte C++
+    //
+    typedef signed char            int8;
+    typedef unsigned char          uint8;
+    typedef signed short           int16;
+    typedef unsigned short         uint16;
+    typedef signed int             int32;
+    typedef unsigned int           uint32;
+    typedef signed long            intPtr;
+    typedef unsigned long          uintPtr;
 #if defined(__sparcv9)
 #define _PTR_IS_64_BIT 1
 #define _LONG_IS_64_BIT 1
-typedef signed long        int64;
-typedef unsigned long      uint64;
+    typedef signed long        int64;
+    typedef unsigned long      uint64;
 #else
-typedef signed long long   int64;
-typedef unsigned long long uint64;
+    typedef signed long long   int64;
+    typedef unsigned long long uint64;
 #endif
 #define _HAVE_int64 1
 #elif defined(__IBMCPP__)
-//
-// IBM XL C++
-//
-typedef signed char            int8;
-typedef unsigned char          uint8;
-typedef signed short           int16;
-typedef unsigned short         uint16;
-typedef signed int             int32;
-typedef unsigned int           uint32;
-typedef signed long            intPtr;
-typedef unsigned long          uintPtr;
+    //
+    // IBM XL C++
+    //
+    typedef signed char            int8;
+    typedef unsigned char          uint8;
+    typedef signed short           int16;
+    typedef unsigned short         uint16;
+    typedef signed int             int32;
+    typedef unsigned int           uint32;
+    typedef signed long            intPtr;
+    typedef unsigned long          uintPtr;
 #if defined(__64BIT__)
 #define _PTR_IS_64_BIT 1
 #define _LONG_IS_64_BIT 1
-typedef signed long        int64;
-typedef unsigned long      uint64;
+    typedef signed long        int64;
+    typedef unsigned long      uint64;
 #else
-typedef signed long long   int64;
-typedef unsigned long long uint64;
+    typedef signed long long   int64;
+    typedef unsigned long long uint64;
 #endif
 #define _HAVE_int64 1
 #elif defined(__sgi)
-//
-// MIPSpro C++
-//
-typedef signed char            int8;
-typedef unsigned char          uint8;
-typedef signed short           int16;
-typedef unsigned short         uint16;
-typedef signed int             int32;
-typedef unsigned int           uint32;
-typedef signed long            intPtr;
-typedef unsigned long          uintPtr;
+    //
+    // MIPSpro C++
+    //
+    typedef signed char            int8;
+    typedef unsigned char          uint8;
+    typedef signed short           int16;
+    typedef unsigned short         uint16;
+    typedef signed int             int32;
+    typedef unsigned int           uint32;
+    typedef signed long            intPtr;
+    typedef unsigned long          uintPtr;
 #if _MIPS_SZLONG == 64
 #define _PTR_IS_64_BIT 1
 #define _LONG_IS_64_BIT 1
-typedef signed long        int64;
-typedef unsigned long      uint64;
+    typedef signed long        int64;
+    typedef unsigned long      uint64;
 #else
-typedef signed long long   int64;
-typedef unsigned long long uint64;
+    typedef signed long long   int64;
+    typedef unsigned long long uint64;
 #endif
 #define _HAVE_int64 1
 #endif
+    
+} // namespace ukn
 
 #endif // Project_Unknown_Config_h

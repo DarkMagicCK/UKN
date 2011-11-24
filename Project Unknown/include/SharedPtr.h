@@ -12,6 +12,7 @@
 
 #include "Platform.h"
 #include "Exception.h"
+#include "MemoryUtil.h"
 
 namespace ukn {
 	
@@ -37,16 +38,27 @@ namespace ukn {
     template<class C>
     struct SharedPtrReleasePolicy {
         static void Release(C* obj) {
-            if(obj)
-                delete obj;
+            ukn_assert(obj);
+            
+            delete obj;
         }
     };
     
     template<class C>
     struct SharedPtrReleaseArrayPolicy {
         static void Release(C* obj) {
-            if(obj)
-                delete []obj;
+            ukn_assert(obj);
+            
+            delete []obj;
+        }
+    };
+    
+    template<class C>
+    struct SharedPtrFreeReleasePolicy {
+        static void Release(C* obj) {
+            ukn_assert(obj);
+
+            ukn_free(obj);
         }
     };
 
@@ -145,14 +157,14 @@ namespace ukn {
 		T* operator->() {
 			return deref();
 		}
-        const T* operator->() const {
+        T* operator->() const {
             return deref();
         }
     
 		T& operator*() {
 			return *deref();
 		}
-        const T& operator*() const {
+        T& operator*() const {
 			return *deref();
 		}
         
@@ -239,7 +251,7 @@ namespace ukn {
 		
         T* deref() const {
             if(!ptr)
-                UKN_THROW_EXCEOTION("ukn::SharedPtr: invalid ptr to deref");
+                UKN_THROW_EXCEPTION("ukn::SharedPtr: invalid ptr to deref");
             return ptr;
         }
         

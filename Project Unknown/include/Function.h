@@ -9,6 +9,9 @@
 #ifndef Project_Unknown_Function_h
 #define Project_Unknown_Function_h
 
+#include "detail/function/Memfun.h"
+#include "detail/function/Bind.h"
+
 #include "detail/function/Function0.h"
 #include "detail/function/Function1.h"
 #include "detail/function/Function2.h"
@@ -22,5 +25,6 @@
 #include "detail/function/Function10.h"
 #include "detail/function/Function11.h"
 #include "detail/function/Function12.h"
+
 
 #endif

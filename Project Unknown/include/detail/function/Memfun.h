@@ -20,9 +20,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(void);
+        typedef R (obj::*mem_fun)(void);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R invoke(obj* left) {
@@ -34,11 +34,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -49,9 +49,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0);
+        typedef R (obj::*mem_fun)(T0);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R invoke(obj* left, T0 a0) {
@@ -63,11 +63,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -79,9 +79,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0, T1);
+        typedef R (obj::*mem_fun)(T0, T1);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R invoke(obj* left, T0 a0, T1 a1) {
@@ -93,11 +93,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -110,9 +110,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0, T1, T2);
+        typedef R (obj::*mem_fun)(T0, T1, T2);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R invoke(obj* left, T0 a0, T1 a1, T2 a2) {
@@ -124,11 +124,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -142,9 +142,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0, T1, T2, T3);
+        typedef R (obj::*mem_fun)(T0, T1, T2, T3);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3) {
@@ -156,11 +156,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -175,9 +175,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0, T1, T2, T3, T4);
+        typedef R (obj::*mem_fun)(T0, T1, T2, T3, T4);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) {
@@ -189,11 +189,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -209,9 +209,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0, T1, T2, T3, T4, T5);
+        typedef R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) {
@@ -223,11 +223,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -241,9 +241,9 @@ namespace ukn {
              typename obj>
     class Memfun<R(T0, T1, T2, T3, T4, T5, T6), obj> {
     public:
-        typedef R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6);
+        typedef R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) {
@@ -255,11 +255,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -277,9 +277,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6, T7);
+        typedef R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) {
@@ -291,11 +291,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -314,9 +314,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6, T7, T8);
+        typedef R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7, T8);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) {
@@ -328,11 +328,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
         
     template<typename R, 
@@ -352,9 +352,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9);
+        typedef R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) {
@@ -366,11 +366,11 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, 
@@ -391,9 +391,9 @@ namespace ukn {
         typedef obj ObjType;
         typedef R ReturnType;
         
-        typedef R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10);
+        typedef R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10);
         
-        explicit Memfun(Memfun func):
+        explicit Memfun(mem_fun func):
         mFunc(func) { }
         
         inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) {
@@ -405,36 +405,36 @@ namespace ukn {
         }
         
         operator bool() {
-            return mFunc != NULL;
+            return this->mFunc != NULL;
         }
         
     private:
-        Memfun mFunc;
+        mem_fun mFunc;
     };
     
     template<typename R, typename obj>
-    inline Memfun<R(), obj> MemFun(R (obj::*Memfun)()) {
-        return Memfun<R(), obj>(Memfun);
+    inline Memfun<R(), obj> MemFun(R (obj::*mem_fun)()) {
+        return Memfun<R(), obj>(mem_fun);
     }
     
     template<typename R, typename T0, typename obj>
-    inline Memfun<R(T0), obj> MemFun(R (obj::*Memfun)(T0)) {
-        return Memfun<R(T0), obj>(Memfun);
+    inline Memfun<R(T0), obj> MemFun(R (obj::*mem_fun)(T0)) {
+        return Memfun<R(T0), obj>(mem_fun);
     }
     
     template<typename R, typename T0, typename T1, typename obj>
-    inline Memfun<R(T0, T1), obj> MemFun(R (obj::*Memfun)(T0, T1)) {
-        return Memfun<R(T0, T1), obj>(Memfun);
+    inline Memfun<R(T0, T1), obj> MemFun(R (obj::*mem_fun)(T0, T1)) {
+        return Memfun<R(T0, T1), obj>(mem_fun);
     }
     
     template<typename R, typename T0, typename T1, typename T2, typename obj>
-    inline Memfun<R(T0, T1, T2), obj> MemFun(R (obj::*Memfun)(T0, T1, T2)) {
-        return Memfun<R(T0, T1, T2), obj>(Memfun);
+    inline Memfun<R(T0, T1, T2), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2)) {
+        return Memfun<R(T0, T1, T2), obj>(mem_fun);
     }
     
     template<typename R, typename T0, typename T1, typename T2, typename T3, typename obj>
-    inline Memfun<R(T0, T1, T2, T3), obj> MemFun(R (obj::*Memfun)(T0, T1, T2, T3)) {
-        return Memfun<R(T0, T1, T2, T3), obj>(Memfun);
+    inline Memfun<R(T0, T1, T2, T3), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2, T3)) {
+        return Memfun<R(T0, T1, T2, T3), obj>(mem_fun);
     }
     
     template<typename R, 
@@ -444,8 +444,8 @@ namespace ukn {
              typename T3, 
              typename T4,
              typename obj>
-    inline Memfun<R(T0, T1, T2, T3, T4), obj> MemFun(R (obj::*Memfun)(T0, T1, T2, T3, T4)) {
-        return Memfun<R(T0, T1, T2, T3, T4), obj>(Memfun);
+    inline Memfun<R(T0, T1, T2, T3, T4), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2, T3, T4)) {
+        return Memfun<R(T0, T1, T2, T3, T4), obj>(mem_fun);
     }
     
     template<typename R, 
@@ -456,8 +456,8 @@ namespace ukn {
             typename T4,
             typename T5,
             typename obj>
-    inline Memfun<R(T0, T1, T2, T3, T4, T5), obj> MemFun(R (obj::*Memfun)(T0, T1, T2, T3, T4, T5)) {
-        return Memfun<R(T0, T1, T2, T3, T4, T5), obj>(Memfun);
+    inline Memfun<R(T0, T1, T2, T3, T4, T5), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5)) {
+        return Memfun<R(T0, T1, T2, T3, T4, T5), obj>(mem_fun);
     }
     
     template<typename R, 
@@ -469,8 +469,8 @@ namespace ukn {
             typename T5,
             typename T6,
             typename obj>
-    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6), obj> MemFun(R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6)) {
-        return Memfun<R(T0, T1, T2, T3, T4, T5, T6), obj>(Memfun);
+    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6)) {
+        return Memfun<R(T0, T1, T2, T3, T4, T5, T6), obj>(mem_fun);
     }
     
     template<typename R, 
@@ -483,8 +483,8 @@ namespace ukn {
             typename T6,
             typename T7,
             typename obj>
-    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7), obj> MemFun(R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6, T7)) {
-        return Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7), obj>(Memfun);
+    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7)) {
+        return Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7), obj>(mem_fun);
     }
     
     template<typename R, 
@@ -498,8 +498,8 @@ namespace ukn {
             typename T7,
             typename T8,
             typename obj>
-    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8), obj> MemFun(R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6, T7, T8)) {
-        return Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8), obj>(Memfun);
+    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7, T8)) {
+        return Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8), obj>(mem_fun);
     }
     
     template<typename R, 
@@ -514,8 +514,8 @@ namespace ukn {
             typename T8,
             typename T9,
             typename obj>
-    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9), obj> MemFun(R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)) {
-        return Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9), obj>(Memfun);
+    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9)) {
+        return Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9), obj>(mem_fun);
     }
     
     template<typename R, 
@@ -531,8 +531,8 @@ namespace ukn {
             typename T9,
             typename T10,
             typename obj>
-    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10), obj> MemFun(R (obj::*Memfun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)) {
-        return Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10), obj>(Memfun);
+    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)) {
+        return Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10), obj>(mem_fun);
     }
 } // namespace ukn
 

@@ -11,11 +11,10 @@
 #define ukn_exception_h
 
 #include "Platform.h"
-
 #include <string>
 #include <sstream>
 
-#define UKN_THROW_EXCEOTION(mess) throw ukn::Exception(mess,   \
+#define UKN_THROW_EXCEPTION(mess) throw ukn::Exception(mess,   \
                                                         __FUNCTION__,     \
                                                         __FILE__,         \
                                                         __LINE__)
@@ -24,7 +23,7 @@ namespace ukn {
     
 	class Exception: public std::exception {
 	public:
-		Exception(const std::string& mssg, const std::string& function, const std::string& file, int line):
+		Exception(const ukn_string& mssg, const ukn_string& function, const ukn_string& file, int line):
         mMssg(mssg), 
         mFunction(function), 
         mFile(file), 
@@ -32,7 +31,7 @@ namespace ukn {
             
         }
 		
-        Exception(const std::string& mssg):
+        Exception(const ukn_string& mssg):
         mMssg(mssg), 
         mFunction("?"), 
         mFile("?"), 
@@ -63,13 +62,13 @@ namespace ukn {
             return typeid(*this).name();
         }
         
-		const std::string& mssg() const {
+		const ukn_string& mssg() const {
             return mMssg;
         }
-		const std::string& function() const {
+		const ukn_string& function() const {
             return mFunction;
         }
-		const std::string& file() const {
+		const ukn_string& file() const {
             return mFile;
         }
         
@@ -82,7 +81,7 @@ namespace ukn {
         }
         
 	private:
-		std::string mMssg, mFunction, mFile;
+		ukn_string mMssg, mFunction, mFile;
         int mLine;
 	};
 

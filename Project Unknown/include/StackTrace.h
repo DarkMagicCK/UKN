@@ -22,13 +22,15 @@
 #include <execinfo.h>
 #endif
 
+#include "PreDeclare.h"
+
 namespace ukn {
     
 #ifdef UKN_OS_WINDOWS
         
 #define INVALID_FP_RET_ADDR_VALUE 0x0000000
     
-    inline std::string DisplaySymbolDetails(DWORD dwAddress) {
+    inline ukn_string DisplaySymbolDetails(DWORD dwAddress) {
         DWORD64 displacement = 0;
         ULONG64 buffer[(sizeof(SYMBOL_INFO) + MAX_SYM_NAME*sizeof(TCHAR) + sizeof(ULONG64) - 1) / sizeof(ULONG64)];
         
@@ -36,7 +38,7 @@ namespace ukn {
         pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
         pSymbol->MaxNameLen = MAX_SYM_NAME;
         
-        std::string info;
+        ukn_string info;
         
         if (SymFromAddr(GetCurrentProcess(), dwAddress, &displacement, pSymbol)) {
 			IMAGEHLP_MODULE64 moduleinfo;
@@ -59,7 +61,7 @@ namespace ukn {
         return info;
 	}
     
-    std::string win_GetStackTrace() {
+    ukn_string win_GetStackTrace() {
 		HANDLE process = GetCurrentProcess();
 		if(SymInitialize(process, NULL, TRUE)) {            
             DWORD _ebp = INVALID_FP_RET_ADDR_VALUE;
@@ -78,7 +80,7 @@ namespace ukn {
             DWORD *pCurFP = (DWORD *)_ebp;
             BOOL fFirstFP = TRUE;
             
-            std::string stackTrace("CurrFP\t\tRetAddr\t\tFunction\n");
+            ukn_string stackTrace("CurrFP\t\tRetAddr\t\tFunction\n");
             while (pCurFP != INVALID_FP_RET_ADDR_VALUE) {
                 DWORD pRetAddrInCaller = (*((DWORD *)(pCurFP + 1)));
                 
@@ -108,8 +110,8 @@ namespace ukn {
     
 #endif // UKN_OS_WINDOWS
     
-    static std::string GetFormattedStackTraceString() {
-        std::string stackTraceString;
+    static ukn_string GetFormattedStackTraceString() {
+        ukn_string stackTraceString;
         
 #ifdef __GNUC__
         const int len = 200;

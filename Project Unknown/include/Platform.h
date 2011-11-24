@@ -11,10 +11,6 @@
 
 #include "Type.h"
 
-#define UKN_VERSION_MAJOR 0
-#define UKN_VERSION_MINOR 1
-#define UKN_VERSION_REV   1
-
 #if !defined(__cplusplus)
     #error C++ compiler required.
 #endif
@@ -179,16 +175,6 @@
         #endif
     #endif // UKN_COMPILER_GCC
 #endif // UKN_CPU_X64
-
-#define UKN_SINGLE_PRECISION
-
-#include "Type.h"
-
-#ifdef UKN_SINGLE_PRECISION
-typedef		float			real;
-#else
-typedef     double          real;
-#endif
 
 #include <cassert>
 

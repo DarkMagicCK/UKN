@@ -153,7 +153,7 @@ namespace ukn {
     
     namespace detail {
         
-        void SignalImpl::clearConnection() {
+        inline void SignalImpl::clearConnection() {
             IteratorType it = mConnections.begin();
             while(it != mConnections.end()) {
                 it->second.setControl(false);

@@ -118,7 +118,7 @@ namespace ukn {
     inline ValueType AnyCast(const Any& operand) {
         ValueType* result = AnyCast<ValueType>(const_cast<Any*>(&operand));
         if(!result)
-            UKN_THROW_EXCEOTION("ukn::AnyCast: Faild to conver between const any types");
+            UKN_THROW_EXCEPTION("ukn::AnyCast: Faild to conver between const any types");
         return *result;
     }
     
@@ -126,7 +126,7 @@ namespace ukn {
     inline ValueType AnyCast(Any& operand) {
         ValueType* result = AnyCast<ValueType>(&operand);
         if(!result)
-            UKN_THROW_EXCEOTION("ukn::AnyCast: Faild to conver between const any types");
+            UKN_THROW_EXCEPTION("ukn::AnyCast: Faild to conver between const any types");
         return *result;
     }
     
@@ -134,7 +134,7 @@ namespace ukn {
     inline const ValueType& RefAnyCast(const Any& operand) {
         ValueType* result = AnyCast<ValueType>(const_cast<Any*>(&operand));
         if(!result)
-            UKN_THROW_EXCEOTION("ukn::RefAnyCast: Faild to conver between const any types");
+            UKN_THROW_EXCEPTION("ukn::RefAnyCast: Faild to conver between const any types");
         return *result;
     }
     

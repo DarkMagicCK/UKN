@@ -39,6 +39,7 @@
 #endif
 
 #include <stdint.h>
+#include <string>
 
 namespace ukn {
 
@@ -213,6 +214,17 @@ namespace ukn {
     typedef unsigned long long uint64;
 #endif
 #define _HAVE_int64 1
+#endif
+    
+    typedef std::string ukn_string;
+    typedef std::wstring ukn_wstring;
+    
+#define UKN_SINGLE_PRECISION
+    
+#ifdef UKN_SINGLE_PRECISION
+    typedef		float			real;
+#else
+    typedef     double          real;
 #endif
     
 } // namespace ukn

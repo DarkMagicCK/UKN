@@ -9,6 +9,14 @@
 #ifndef Project_Unknown_Event_h
 #define Project_Unknown_Event_h
 
+#include "Platform.h"
 
+namespace ukn {
+    
+    class Event {
+        
+    };
+    
+} // namespace ukn
 
 #endif

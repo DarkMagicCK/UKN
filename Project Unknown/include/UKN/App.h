@@ -39,7 +39,7 @@ namespace ukn {
         virtual void onUpdate();
         
     private:
-        void onWindowClose(const Window& wnd);
+        void onWindowClose(Window& wnd);
         
         ukn_string mName;
         bool mInited;    

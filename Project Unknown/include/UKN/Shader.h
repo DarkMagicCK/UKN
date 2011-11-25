@@ -20,9 +20,9 @@ namespace ukn {
     
     class Shader {
     public:
-        enum Type {
-            FragmentShader,
-            VertexShader,
+        enum ShaderType {
+            ST_FragmentShader,
+            ST_VertexShader,
             
             // geometry shaders to do
         }

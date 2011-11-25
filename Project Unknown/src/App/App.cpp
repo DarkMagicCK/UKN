@@ -27,7 +27,7 @@ namespace ukn {
         
     }
     
-    void AppInstance::onWindowClose(const Window& wnd) {
+    void AppInstance::onWindowClose(Window& wnd) {
         terminate();
     }
     

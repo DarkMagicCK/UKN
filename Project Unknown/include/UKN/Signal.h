@@ -19,7 +19,7 @@
 namespace ukn {
     
     /**
-     * A Simple Signal Implementatiob
+     * A Simple Signal Implementation
      **/
     
     class Connection;

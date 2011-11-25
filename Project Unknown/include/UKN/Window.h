@@ -56,24 +56,24 @@ namespace ukn {
         uint32 mHeight;
         
     public:
-        typedef Signal<void(const Window&, bool)>               ActiveEvent;
-        typedef Signal<void(const Window&, bool)>               IconifyEvent;
-        typedef Signal<void(const Window&)>                     RenderEvent;
-        typedef Signal<void(const Window&)>                     UpdateEvent;
-        typedef Signal<void(const Window&, uint32, uint32)>     ResizeEvent;
-        typedef Signal<void(const Window&, int32, int32)>       ScrollEvent;
-        typedef Signal<void(const Window&)>                     SetCursorEvent;
-        typedef Signal<void(const Window&)>                     SetIconEvent;
-        typedef Signal<void(const Window&, int32 /* char */)>   CharEvent;
-        typedef Signal<void(const Window&, uint32 /* key */)>   KeyDownEvent;
-        typedef Signal<void(const Window&, uint32 /* key */)>   KeyUpEvent;
-        typedef Signal<void(const Window&, uint32 /* btn */)>   MouseDownEvent;
-        typedef Signal<void(const Window&, uint32 /* btn */)>   MouseUpEvent;
-        typedef Signal<void(const Window&, uint32 /* wheel */)> MouseWheelEvent;
-        typedef Signal<void(const Window&)>                     CloseEvent;
-        typedef Signal<void(const Window&)>                     FrameEndEvent;
-        typedef Signal<void(const Window&)>                     FrameStartEvent;
-        typedef Signal<void(const Window&, uint32 /* btn */, uint32, uint32 /* pos */)>   MouseDraggedEvent;
+        typedef Signal<void(Window&, bool)>               ActiveEvent;
+        typedef Signal<void(Window&, bool)>               IconifyEvent;
+        typedef Signal<void(Window&)>                     RenderEvent;
+        typedef Signal<void(Window&)>                     UpdateEvent;
+        typedef Signal<void(Window&, uint32, uint32)>     ResizeEvent;
+        typedef Signal<void(Window&, int32, int32)>       ScrollEvent;
+        typedef Signal<void(Window&)>                     SetCursorEvent;
+        typedef Signal<void(Window&)>                     SetIconEvent;
+        typedef Signal<void(Window&, int32 /* char */)>   CharEvent;
+        typedef Signal<void(Window&, uint32 /* key */)>   KeyDownEvent;
+        typedef Signal<void(Window&, uint32 /* key */)>   KeyUpEvent;
+        typedef Signal<void(Window&, uint32 /* btn */)>   MouseDownEvent;
+        typedef Signal<void(Window&, uint32 /* btn */)>   MouseUpEvent;
+        typedef Signal<void(Window&, uint32 /* wheel */)> MouseWheelEvent;
+        typedef Signal<void(Window&)>                     CloseEvent;
+        typedef Signal<void(Window&)>                     FrameEndEvent;
+        typedef Signal<void(Window&)>                     FrameStartEvent;
+        typedef Signal<void(Window&, uint32 /* btn */, uint32, uint32 /* pos */)>   MouseDraggedEvent;
         
     private:
         ActiveEvent     mActiveEvent;

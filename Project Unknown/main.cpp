@@ -13,8 +13,14 @@
 
 #include "UKN/App.h"
 #include "UKN/Context.h"
+#include "UKN/Window.h"
+#include "UKN/TimeUtil.h"
 
 #include <vector>
+
+void update(ukn::Window& window) {
+    printf("fps: %f\n", ukn::FrameCounter::Instance().getCurrentFps());
+}
 
 int main (int argc, const char * argv[])
 {
@@ -42,6 +48,8 @@ int main (int argc, const char * argv[])
     
     // create app context
     instance.create();
+    
+    ukn::Connection updateConn = instance.getMainWindow().onUpdate().connect(update);
     
     // run app
     instance.run();

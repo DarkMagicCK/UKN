@@ -25,15 +25,15 @@ namespace ukn {
         GraphicDevice& getGraphicDevice() const;
         
         GraphicBufferPtr createVertexBuffer(GraphicBuffer::Usage, 
-                                                    GraphicBuffer::Access, 
-                                                    uint32 count, 
-                                                    const void* initialData, 
-                                                    const VertexFormat& format);
+                                            GraphicBuffer::Access, 
+                                            uint32 count, 
+                                            const void* initialData, 
+                                            const VertexFormat& format);
         
         GraphicBufferPtr createIndexBuffer(GraphicBuffer::Usage, 
-                                                   GraphicBuffer::Access, 
-                                                   uint32 count, 
-                                                   const void* initialData);
+                                           GraphicBuffer::Access, 
+                                           uint32 count, 
+                                           const void* initialData);
         
         
         RenderBufferPtr createRenderBuffer();

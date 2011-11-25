@@ -145,13 +145,15 @@ namespace ukn {
         
         // swap buffers when frame ends
         mSwapBuffersConn = onFrameEnd().connect(Bind(this, &GLWindow::onSwapBuffers));
+        
+        glfwSwapInterval(0);
     }
     
-    void GLWindow::onPullEvents(const Window& wind) {
+    void GLWindow::onPullEvents(Window& wind) {
         glfwPollEvents();
     }
     
-    void GLWindow::onSwapBuffers(const Window& wnd) {
+    void GLWindow::onSwapBuffers(Window& wnd) {
         glfwSwapBuffers();
     }
     

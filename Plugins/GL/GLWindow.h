@@ -22,8 +22,8 @@ namespace ukn {
         
         const ukn_wstring& description() const;
         
-        void onPullEvents(const Window& wnd);
-        void onSwapBuffers(const Window& wnd);
+        void onPullEvents(Window& wnd);
+        void onSwapBuffers(Window& wnd);
         
     private:
         void* mGlfwWindow;

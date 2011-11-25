@@ -17,7 +17,8 @@
 namespace ukn {
     
     /**
-     * Abstract base classes from direct render buffer access
+     * Abstract base class of a graphic buffer
+     * such as VertexBuffer
      **/
     class UKN_API GraphicBuffer {
     public:        

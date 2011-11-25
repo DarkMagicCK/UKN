@@ -14,7 +14,7 @@
 namespace ukn {
     
     /**
-     * Retrives cpuinfo of current platform
+     * Retrives cpuinfo from current platform
      **/
     
     class CpuInfo {

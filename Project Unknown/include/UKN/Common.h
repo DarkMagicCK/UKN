@@ -45,7 +45,7 @@ namespace ukn {
 		}
 	};
     
-    inline ukn_string format_string(const char* format, ...) {
+    static ukn_string format_string(const char* format, ...) {
         va_list	arg;
 		char message[512] = {0};
 		va_start(arg, format);
@@ -55,7 +55,7 @@ namespace ukn {
     }
     
     template<typename T, typename Base>
-    inline T* checked_cast(Base* pointer) {
+    static T* checked_cast(Base* pointer) {
         T* derived = dynamic_cast<T*>(pointer);
         if(!derived)
             UKN_THROW_EXCEPTION("checked_cast: failed to cast from parent to child");

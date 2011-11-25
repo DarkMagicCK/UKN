@@ -15,9 +15,7 @@
 #include "MemoryUtil.h"
 
 namespace ukn {
-	
-#define UKN_SAFE_DELETE(ptr) { if(ptr) delete ptr; ptr=0; }
-    
+	    
     class SharedPtrRefCounter {
     public:
         SharedPtrRefCounter(): mRef(1) {}

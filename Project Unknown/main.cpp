@@ -18,9 +18,7 @@
 
 int main (int argc, const char * argv[])
 {
-    // not building plugin as dynamic libraries
-    // register it by hand
-    // should be in dll and configured by config file
+    // register plugins by hand for testing purpose
     ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);
     
@@ -32,6 +30,10 @@ int main (int argc, const char * argv[])
     cfg.render_cfg.height       = 600;
     cfg.render_cfg.top          = 0;
     cfg.render_cfg.left         = 0;
+    cfg.render_cfg.fsaa_samples = 4;
+    cfg.render_cfg.show_mouse   = true;
+    cfg.render_cfg.color_fmt    = ukn::EF_ARGB8;
+    cfg.render_cfg.depth_stencil_fmt = ukn::EF_D24S8;   
     cfg.render_cfg.full_screen  = false;
     
     ukn::AppInstance instance("Test App");

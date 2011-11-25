@@ -6,27 +6,27 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "CpuInfo.h"
+#include "UKN/CpuInfo.h"
 
-namespace ukn {
-    
 #include <vector>
-    
+
 #ifdef UKN_OS_WINDOWS
 #include <windows.h>
-    
+
 #ifdef UKN_COMPILER_MSVC
 #include <intrin.h>
 #endif
 #elif defined(UKN_OS_LINUX) || defined(UKN_OS_OSX)
 #include <sched.h>
-    
+
 #if defined UKN_OS_OSX
 #include <sys/sysctl.h>
 #endif
 #endif
-    
+
 #include <algorithm>
+
+namespace ukn {
     
     namespace
     {

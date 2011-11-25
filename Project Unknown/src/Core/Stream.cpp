@@ -6,7 +6,8 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "Stream.h"
+#include "UKN/Stream.h"
+#include "UKN/MemoryUtil.h"
 
 namespace ukn {
     
@@ -25,7 +26,6 @@ namespace ukn {
 	}
 	
 	MemoryStream::~MemoryStream() {
-        
     }
     
     void MemoryStream::clean() {
@@ -39,12 +39,19 @@ namespace ukn {
     }
 	
 	void MemoryStream::set(uint8* data, size_t length) {
-		mData.reset();
-        mData.append(data, length);
+        mData.set(data, length);
         mCurrPos = 0;
 		mLength = length;
+        mRealSize = mLength;
 	}
 	
+    void MemoryStream::map(uint8* data, size_t length) {        
+        mData.map(data, length);
+        mCurrPos = 0;
+        mLength = length;
+        mRealSize = mLength;
+    }
+    
 	bool MemoryStream::alloc(size_t size) {
 		mData.realloc(size, 0);
         
@@ -54,13 +61,14 @@ namespace ukn {
 	}
 	
 	void MemoryStream::resize() {
-		if(mCurrPos != 0) {
-			uint8* tmpData = new uint8[mRealSize];
+		if(mLength != mRealSize && mRealSize != 0) {
+			uint8* tmpData = (uint8*)ukn_malloc(mRealSize);
 			memcpy(tmpData, (void*)(get()), mRealSize);
 			mLength = mRealSize;
 			
-			mData.reset();
-            mData.append(tmpData, mLength);
+            mData.set(tmpData, mLength);
+            
+            ukn_free(tmpData);
 		}
 	}
 	
@@ -70,7 +78,7 @@ namespace ukn {
 	}
 	
 	size_t MemoryStream::read(uint8* pv, size_t size) {
-		if(!valid()) return 0;
+		if(!isValid()) return 0;
 		if(mCurrPos == mLength) return 0;
 		
 		assert(pv != NULL);
@@ -84,7 +92,7 @@ namespace ukn {
 	}
 	
 	size_t MemoryStream::read(size_t offset, uint8* pv, size_t size) {
-		if(!valid()) return false;
+		if(!isValid()) return false;
 		
 		size_t tempPos = mCurrPos;
 		if(!seek(offset))
@@ -112,20 +120,42 @@ namespace ukn {
 		return false;
 	}
 	
-	size_t MemoryStream::size() const { 
+	size_t MemoryStream::getSize() const { 
         return mLength;
     }
     
-	size_t MemoryStream::realsize() const { 
+	size_t MemoryStream::getRealsize() const { 
         return mRealSize;
     }
     
-	size_t MemoryStream::pos() const { 
+	size_t MemoryStream::getPos() const { 
         return mCurrPos; 
     }
     
-	bool MemoryStream::valid() const { 
+	bool MemoryStream::isValid() const { 
         return !mData.empty();
+    }
+    
+    StreamPtr FileStreamBasic::readIntoMemory() {
+        if(isValid()) {
+            uint8* dataBuffer = (uint8*)ukn_malloc(getSize());
+            ukn_assert(dataBuffer != 0);
+            
+            this->seek(0);
+            size_t readSize = this->read(dataBuffer, getSize());
+            if(readSize != getSize()) {
+                // log error
+            }
+            
+            StreamPtr memBuffer = MakeSharedPtr<MemoryStream>();
+            // give memory management to MemoryStream
+            // faster
+            static_cast<MemoryStream*>(memBuffer.get())->set(dataBuffer, readSize);
+            
+            return memBuffer;
+        } else 
+            // return null memorystream
+            return MakeSharedPtr<MemoryStream>();
     }
     
 #ifdef OS_WIN32
@@ -181,13 +211,13 @@ namespace ukn {
         SetEndOfFile(file);
     }
     
-    size_t FileStreamWin32::size() const {
+    size_t FileStreamWin32::getSize() const {
         DWORD low, high;
         low = GetFileSize(file, &high);
         return (uint64)low + (((uint64)high)<<32);
     }
     
-    size_t FileStreamWin32::pos() const {
+    size_t FileStreamWin32::getPos() const {
         DWORD low;
         LONG high = 0;
         low = SetFilePointer(file, 0, &high, FILE_CURRENT);
@@ -199,7 +229,7 @@ namespace ukn {
         SetFilePointer(file, pos & 0xFFFFFFFF, (high > 0 ? &high : NULL), type);
     }
     
-    bool FileStreamWin32::valid() const {
+    bool FileStreamWin32::isValid() const {
         return file != 0;
     }
     
@@ -259,7 +289,7 @@ namespace ukn {
         
     }
     
-    size_t FileStreamPosix::size() const {
+    size_t FileStreamPosix::getSize() const {
         size_t pos = ftell(file);
         fseek(file, 0, SEEK_END);
         size_t size = ftell(file);
@@ -267,11 +297,11 @@ namespace ukn {
         return size;
     }
     
-    size_t FileStreamPosix::pos() const {
+    size_t FileStreamPosix::getPos() const {
         return ftell(file);
     }
     
-    bool FileStreamPosix::valid() const {
+    bool FileStreamPosix::isValid() const {
         return file != 0;
     }
     

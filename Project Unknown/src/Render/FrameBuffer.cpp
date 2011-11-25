@@ -6,8 +6,8 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "FrameBuffer.h"
-#include "RenderView.h"
+#include "UKN/FrameBuffer.h"
+#include "UKN/RenderView.h"
 
 namespace ukn {
     

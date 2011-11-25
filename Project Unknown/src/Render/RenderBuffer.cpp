@@ -6,10 +6,26 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "RenderBuffer.h"
-#include "GraphicBuffer.h"
+#include "UKN/RenderBuffer.h"
+#include "UKN/GraphicBuffer.h"
 
 namespace ukn {
+    
+    class NullRenderBuffer: public RenderBuffer {
+    public:
+        NullRenderBuffer() {
+            
+        }
+        
+        virtual ~NullRenderBuffer() {
+            
+        }
+    };
+    
+    RenderBufferPtr RenderBuffer::NullObject() {
+        static RenderBufferPtr static_ptr = MakeSharedPtr<NullRenderBuffer>();
+        return static_ptr;
+    }
     
     RenderBuffer::RenderBuffer():
     mRenderMode(RM_Triangle),

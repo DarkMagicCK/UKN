@@ -8,32 +8,42 @@
 
 #include <iostream>
 
-#include "Platform.h"
-#include "Exception.h"
-#include "StackTrace.h"
-#include "SharedPtr.h"
-#include "Any.h"
-#include "Preprocessor.h"
-#include "Type.h"
-#include "Time.h"
-#include "Function.h"
-#include "Signal.h"
-#include "Factory.h"
-#include "MathUtil.h"
-#include "PreDeclare.h"
-#include "FSM.h"
+
+#include "../Plugins/GL/GLGraphicFactory.h"
+
+#include "UKN/App.h"
+#include "UKN/Context.h"
 
 #include <vector>
 
 int main (int argc, const char * argv[])
 {
-    std::vector<int> cont;
-    UKN_FOR_EACH(int i, cont) {
-        
-    }
+    // not building plugin as dynamic libraries
+    // register it by hand
+    // should be in dll and configured by config file
+    ukn::GraphicFactoryPtr gl_factory;
+    ukn::CreateGraphicFactory(gl_factory);
     
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    ukn::Context::Instance().registerGraphicFactory(gl_factory);
+    
+    ukn::ContextCfg cfg;
+    
+    cfg.render_cfg.width        = 800;
+    cfg.render_cfg.height       = 600;
+    cfg.render_cfg.top          = 0;
+    cfg.render_cfg.left         = 0;
+    cfg.render_cfg.full_screen  = false;
+    
+    ukn::AppInstance instance("Test App");
+    // init with custom cfg
+    instance.init(cfg);
+    
+    // create app context
+    instance.create();
+    
+    // run app
+    instance.run();
+    
     return 0;
 }
 

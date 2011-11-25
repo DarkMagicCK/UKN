@@ -6,8 +6,8 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "Camera.h"
-#include "GraphicDevice.h"
+#include "UKN/Camera.h"
+#include "UKN/GraphicDevice.h"
 
 namespace ukn {
     

@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "DllLoader.h"
+#include "UKN/DllLoader.h"
 
 #ifndef UKN_OS_WINDOWS
 #include <dlfcn.h>

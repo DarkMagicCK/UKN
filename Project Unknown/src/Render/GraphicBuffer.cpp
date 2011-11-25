@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "GraphicBuffer.h"
+#include "UKN/GraphicBuffer.h"
 
 namespace ukn {
     

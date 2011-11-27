@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{33687FF7-7B1D-4ACC-BE3F-85190D3C657C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>UKN</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)/../../Plugins/GL;$(SolutionDir)/../../Project Unknown/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)/../../Project Unknown/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)/../../Plugins/GL/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Plugins\GL\glfw\glfw3.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLGraphicDevice.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLGraphicFactory.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLWindow.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\image_DXT.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\image_helper.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\SOIL.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\stbi_DDS_aug.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\stbi_DDS_aug_c.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\stb_image_aug.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Action.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Any.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\App.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Camera.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Color.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Common.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Condition.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Config.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Context.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\CpuInfo.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Bind.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function0.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function1.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function10.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function11.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function12.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function2.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function3.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function4.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function5.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function6.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function7.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function8.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function9.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionBase.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionFoward.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionInclude.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionTemplate.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Memfun.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\TypeTraits.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\DllLoader.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Event.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Exception.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Factory.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Font.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\FrameBuffer.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Frustum.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\FSM.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Function.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicBuffer.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicDevice.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicFactory.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicSettings.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Input.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Key.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\KeyFrameAnimation.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Logger.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\MathUtil.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\MemoryUtil.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Platform.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\PreDeclare.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Preprocessor.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Renderable.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\RenderBuffer.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\RenderEffect.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\RenderView.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Resource.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Scene.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\ScopedPtr.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Shader.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\SharedPtr.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Signal.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\StackTrace.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Stream.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\StringUtil.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Texture.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\TimeUtil.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Type.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\UKN.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Uncopyable.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Util.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Vertex.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Viewport.h" />
+    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Window.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Plugins\GL\GLGraphicDevice.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLGraphicFactory.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLWindow.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\soil\image_DXT.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\soil\image_helper.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\soil\SOIL.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\soil\stb_image_aug.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\main.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\App\App.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\App\Window.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Core\Context.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Core\CpuInfo.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Core\DllLoader.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Core\Resource.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Core\Stream.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Core\StringUtil.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Core\Timeutil.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Render\Camera.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Render\FrameBuffer.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Render\Frustum.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Render\GraphicBuffer.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Render\GraphicDevice.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Render\GraphicFactory.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Render\RenderBuffer.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Render\RenderView.cpp" />
+    <ClCompile Include="..\..\..\Project Unknown\src\Render\Texture.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

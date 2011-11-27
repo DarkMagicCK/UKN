@@ -11,6 +11,8 @@
 
 #include "Platform.h"
 
+#include <ctime>
+
 namespace ukn {
     
     // Timestamp from Poco C++ Library
@@ -215,9 +217,8 @@ namespace ukn {
         uint64 mFrameCount;
     };
     
-#ifndef UKN_OS_WINDOWS
-    void msleep(uint32_t msec);
-#endif
+    inline void msleep(uint32 msec);
+
     
 } // namespace ukn
 

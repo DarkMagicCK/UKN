@@ -139,13 +139,13 @@ namespace ukn {
         fileTimeLow  = ts.LowPart;
         fileTimeHigh = ts.HighPart;
     }
-    
+ 
 #endif
-    
+   
 #ifndef UKN_OS_WINDOWS
     // sleep for milliseconds
     // see my http://cc.byexamples.com/2007/05/25/nanosleep-is-better-than-sleep-and-usleep/ for more information
-    void msleep(uint32_t msec) {
+    void msleep(uint32 msec) {
         struct timespec timeout0;
         struct timespec timeout1;
         struct timespec* tmp;
@@ -162,6 +162,14 @@ namespace ukn {
         }
     }
     
+} // namespace ukn
+
+#else
+
+	void msleep(uint32 msec) {
+		Sleep(msec);
+	}
+
 } // namespace ukn
 
 #endif
@@ -268,13 +276,7 @@ namespace ukn {
 
 namespace ukn {
     
-#include "windows.h"
-    
     /* Orz by Advance */    
-    
-#define    VT_READ_PTR     1
-#define    VT_WRITE_PTR    1 << 1
-        
     typedef __int64 INT64, *PINT64, *LPINT64;
 
     INT64 GetCurrentSystemTime(void) {
@@ -313,40 +315,10 @@ namespace ukn {
             SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_NORMAL);
     }
 
-    int VerifyPointer (int VerificationType,
-                       void *pDataPointer,
-                       unsigned int SizeOfData) {
-        int CallResult = 0;
-        
-        if ((VerificationType & VT_READ_PTR) != 0)
-            CallResult |= VerifyReadPtr(pDataPointer, SizeOfData);
-        
-        if ((VerificationType & VT_WRITE_PTR) != 0)
-            CallResult |= VerifyWritePtr(pDataPointer, SizeOfData);
-        
-        return CallResult;
-    }
-    
-    int VerifyReadPtr (void *pDataPointer,
-                       unsigned int SizeOfData) {
-        if (IsBadReadPtr(pDataPointer, SizeOfData))
-            return -1;
-        
-        return 0;
-    }
-    
-    int VerifyWritePtr (void *pDataPointer,
-                        unsigned int SizeOfData) {
-        if (IsBadWritePtr(pDataPointer, SizeOfData))
-            return -1;
-        
-        return 0;
-    }
-    
     class WindowsFrameCounter: public FrameCounter {
     public:
         virtual float doWaitToNextFrame() {
-            int bPriorityRaised = 0;
+			int bPriorityRaised = 0;
 		    LONGLONG TimeInterval, TimePrecision, NowTime;
 			static LONGLONG lastTime = GetCurrentSystemTime();
 			double deltaTime;
@@ -354,8 +326,8 @@ namespace ukn {
 			LARGE_INTEGER Frequency;
 		    QueryPerformanceFrequency(&Frequency);
 			TimePrecision = Frequency.QuadPart;
-			if (getDesiredFPS() > 0) {
-				TimeInterval = TimePrecision / (LONGLONG)getDesiredFPS();
+			if (getDesiredFps() > 0) {
+				TimeInterval = TimePrecision / (LONGLONG)getDesiredFps();
 			}
 			else {
 				TimeInterval = 0;
@@ -402,13 +374,14 @@ namespace ukn {
 			if(deltaTime >= 1.f) 
 				deltaTime = 1.f / getDesiredFps();
             
-			return deltaTime;
-        }
-    }
+			return (float)deltaTime;
+		} 
+	};
     
 } // namespace ukn
 
-#endif
+
+#endif // UKN_OS_WINDOWS
 
 namespace ukn {
     
@@ -423,7 +396,7 @@ namespace ukn {
             if(getDesiredFps() == FpsUnlimited) {
 				fpsInterval = 0;
 			} else {
-                fpsInterval = 1.f / getDesiredFps() * 1000 * 1000;
+                fpsInterval = (uint64)((double)(1.0 / getDesiredFps()) * 1000 * 1000);
             }
             
 			if(Timestamp::CurrentTime() - oldtime.epochMicroseconds() < fpsInterval) {
@@ -452,7 +425,7 @@ namespace ukn {
 			if(deltaTime >= 1.f)
 				deltaTime = 1.f / getDesiredFps();
 			
-			return deltaTime;
+			return (float)deltaTime;
         }
     };    
 } // namespace ukn
@@ -472,7 +445,7 @@ namespace ukn {
     }
     
     void FrameCounter::setDesiredFps(int32 fps) {
-        mDesiredFps = fps;
+        mDesiredFps = (float)fps;
         
         if(mDesiredFps != FpsUnlimited)
             mPrevDelta = 1.f / mDesiredFps;

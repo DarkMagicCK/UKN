@@ -13,7 +13,7 @@
 namespace ukn {
     
     static void ErrorFunc(int e, const char* w) {
-    }
+	}
     
     static void WindowSizeFunc(GLFWwindow window, int w, int h) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
@@ -156,6 +156,12 @@ namespace ukn {
     void GLWindow::onSwapBuffers(Window& wnd) {
         glfwSwapBuffers();
     }
+
+	#ifdef UKN_OS_WINDOWS
+	HWND GLWindow::getHWnd() const {
+		return 0;
+	}
+	#endif
     
     GLWindow::~GLWindow() {
         glfwCloseWindow(mGlfwWindow);

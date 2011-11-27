@@ -10,6 +10,8 @@
 
 #ifndef UKN_OS_WINDOWS
 #include <dlfcn.h>
+#else
+#include <windows.h>
 #endif
 
 namespace ukn {

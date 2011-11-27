@@ -17,9 +17,11 @@
 #ifdef UKN_HAS_DECLSPEC
     #ifdef UKN_GL_AS_SOURCE					 // Build dll
         #define UKN_GL_API __declspec(dllexport)
-    #else										// Use dll
+    #elif defined(UKN_GL_AS_LIBRARY)								     // Use dll
         #define UKN_GL_API __declspec(dllimport)
-    #endif
+    #else
+		#define UKN_GL_API
+	#endif
 #else
 #define UKN_GL_API
 #endif // UKN_HAS_DECLSPEC

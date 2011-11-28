@@ -24,6 +24,10 @@ namespace ukn {
         
         void onPullEvents(Window& wnd);
         void onSwapBuffers(Window& wnd);
+
+#ifdef UKN_OS_WINDOWS
+		HWND getHWnd() const;
+#endif
         
     private:
         void* mGlfwWindow;

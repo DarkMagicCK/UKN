@@ -52,7 +52,7 @@ namespace ukn {
     };
     
     extern "C" {
-        void CreateGraphicFactory(GraphicFactoryPtr& ptr) {
+        UKN_GL_API void CreateGraphicFactory(GraphicFactoryPtr& ptr) {
             static GraphicFactoryPtr static_ptr = MakeSharedPtr<GLGraphicFactory>();
             ptr = static_ptr;
         }

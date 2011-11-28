@@ -91,9 +91,9 @@ namespace ukn {
     class ResourceLoader;
     typedef SharedPtr<ResourceLoader> ResourceLoaderPtr;
     
-    class VertexFormat;
+    struct VertexFormat;
     
-    class ContextCfg;
+    struct ContextCfg;
     
 } // namespace ukn
 

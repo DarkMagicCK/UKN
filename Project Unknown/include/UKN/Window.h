@@ -15,6 +15,10 @@
 
 #include "Signal.h"
 
+#ifdef UKN_OS_WINDOWS
+#include <Windows.h>
+#endif
+
 namespace ukn {
     
     /**

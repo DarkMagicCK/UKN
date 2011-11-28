@@ -8,10 +8,13 @@
 
 #include "GLGraphicDevice.h"
 
+#include "glfw/glfw3.h"
 
 #ifdef UKN_OS_WINDOWS
 #include <GL/GL.h>
 #include <GL/GLU.h>
+
+#pragma comment(lib, "glfw.lib")
 
 #elif defined(UKN_OS_OSX)
 #include <OpenGL/OpenGL.h>

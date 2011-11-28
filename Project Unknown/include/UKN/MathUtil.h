@@ -26,11 +26,11 @@ namespace ukn {
 	const double d_pi_8   = 0.3926990816987241548078304229099;
     
     inline real degree_to_radius(real dgr) {
-        return (d_pi * dgr) / 180.f;
+        return (real)((d_pi * dgr) / 180.0);
     }
     
     inline real radius_to_degree(real rad) {
-        return (180.f * rad) / d_pi;
+        return (real)((180.0 * rad) / d_pi);
     }
     
 #ifndef UKN_TINY
@@ -1065,7 +1065,7 @@ namespace ukn {
         AABB3(const Vector3& u, const Vector3& l): 
         min(u), 
         max(l), 
-        boundingRadius((max - min).length() / 2.0) { 
+        boundingRadius((max - min).length() / 2.0f) { 
         }
         
         AABB3(const AABB3& rhs): 

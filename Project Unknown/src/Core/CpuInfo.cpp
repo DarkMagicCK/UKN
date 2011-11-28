@@ -498,7 +498,7 @@ namespace ukn {
                         }
                         else
                         {
-                            sora_assert(AuthenticAMD == mCPUString);
+                            ukn_assert(AuthenticAMD == mCPUString);
                             
                             if (max_ext_fn >= 0x80000008)
                             {

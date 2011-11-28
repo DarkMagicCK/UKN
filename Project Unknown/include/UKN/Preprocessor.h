@@ -347,7 +347,7 @@ namespace ukn {
             ++auto_any_cast<iter_type>(iter);
         }
         
-        // see if the iteration is ended
+        // see if the iteration ends
         template<typename Container>
         bool any_cont_done(const auto_any_base& iter, const auto_any_base& end, type2type<Container>) {
             typedef typename type2type<Container>::iterator iter_type;

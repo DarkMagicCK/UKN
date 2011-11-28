@@ -3,7 +3,7 @@
 //  zeromq_client
 //
 //  Created by Robert Bu on 8/16/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 heizi. All rights reserved.
 //
 
 #ifndef ukn_Function10_h

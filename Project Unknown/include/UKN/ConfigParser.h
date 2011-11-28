@@ -2,7 +2,7 @@
 //  Config.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 11/24/11.
+//  Created by Robert Bu on 11/24/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -18,7 +18,7 @@ namespace ukn {
      * Abstract config loader/writer
      * Currently supports xml only
      **/
-    class UKN_API Config {
+    class UKN_API ConfigParser {
         
     };
     

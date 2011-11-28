@@ -2,7 +2,7 @@
 //  Uncopyable.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 11/24/11.
+//  Created by Robert Bu on 11/24/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 

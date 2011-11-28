@@ -97,7 +97,7 @@
 		88E3C3E8147F2DEB00E8754D /* Color.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Color.h; sourceTree = "<group>"; };
 		88E3C3E9147F2DEB00E8754D /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		88E3C3EA147F2DEB00E8754D /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Condition.h; sourceTree = "<group>"; };
-		88E3C3EB147F2DEB00E8754D /* Config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
+		88E3C3EB147F2DEB00E8754D /* ConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; path = ConfigParser.h; sourceTree = "<group>"; };
 		88E3C3EC147F2DEB00E8754D /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context.h; sourceTree = "<group>"; };
 		88E3C3ED147F2DEB00E8754D /* CpuInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CpuInfo.h; sourceTree = "<group>"; };
 		88E3C3F0147F2DEB00E8754D /* Bind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bind.h; sourceTree = "<group>"; };
@@ -331,7 +331,7 @@
 				88E3C3E8147F2DEB00E8754D /* Color.h */,
 				88E3C3E9147F2DEB00E8754D /* Common.h */,
 				88E3C3EA147F2DEB00E8754D /* Condition.h */,
-				88E3C3EB147F2DEB00E8754D /* Config.h */,
+				88E3C3EB147F2DEB00E8754D /* ConfigParser.h */,
 				88E3C3EC147F2DEB00E8754D /* Context.h */,
 				88E3C3ED147F2DEB00E8754D /* CpuInfo.h */,
 				88E3C3EE147F2DEB00E8754D /* detail */,

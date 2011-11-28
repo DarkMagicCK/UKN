@@ -2,7 +2,7 @@
 //  CpuInfo.cpp
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 11/24/11.
+//  Created by Robert Bu on 11/24/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -35,8 +35,8 @@ namespace ukn {
         
         void get_cpuid(int op, uint32_t* peax, uint32_t* pebx, uint32_t* pecx, uint32_t* pedx)
         {	
-#ifdef SORA_COMPILER_MSVC
-#if SORA_COMPILER_VERSION >= 80 
+#ifdef UKN_COMPILER_MSVC
+#if UKN_COMPILER_VERSION >= 80 
             int CPUInfo[4];
             __cpuid(CPUInfo, op);
             *peax = CPUInfo[0];
@@ -54,8 +54,8 @@ namespace ukn {
                 mov		[pecx], edx
             }
 #endif
-#elif defined SORA_COMPILER_GCC
-#ifdef SORA_CPU_X64
+#elif defined UKN_COMPILER_GCC
+#ifdef UKN_CPU_X64
             __asm__
             (
              "cpuid": "=a" (*peax), "=b" (*pebx), "=c" (*pecx), "=d" (*pedx) : "a" (op)
@@ -77,7 +77,7 @@ namespace ukn {
         }
         
         
-#if defined(SORA_CPU_X86) || defined(SORA_CPU_X64)
+#if defined(UKN_CPU_X86) || defined(UKN_CPU_X64)
         enum CPUIDFeatureMask
         {
             // In EBX of type 1. Intel only.
@@ -118,8 +118,8 @@ namespace ukn {
             CFM_ApicIdCoreIdSize_AMD    = 0x0000F000,
         };
         
-#ifdef OS_WIN32
-#ifdef SORA_COMPILER_GCC
+#ifdef UKN_OS_WINDOWS
+#ifdef UKN_COMPILER_GCC
         typedef enum _LOGICAL_PROCESSOR_RELATIONSHIP
         {
             RelationProcessorCore,
@@ -296,7 +296,7 @@ namespace ukn {
         mNumHWThreads = 1;
         mNumCores = 1;
         
-#if defined(SORA_CPU_X64) || defined(SORA_CPU_X86)
+#if defined(UKN_CPU_X64) || defined(UKN_CPU_X86)
         Cpuid cpuid;
         
         cpuid.Call(0);
@@ -366,20 +366,20 @@ namespace ukn {
             }
         }
         
-#if defined OS_WIN32
+#if defined UKN_OS_WINDOWS
         {
             SYSTEM_INFO si;
             ::GetSystemInfo(&si);
             mNumHWThreads = si.dwNumberOfProcessors;
         }
-#elif defined(OS_LINUX) || defined(OS_OSX)
+#elif defined(UKN_OS_LINUX) || defined(UKN_OS_OSX)
         // Linux doesn't easily allow us to look at the Affinity Bitmask directly,
         // but it does provide an API to test affinity maskbits of the current process
         // against each logical processor visible under OS.
         mNumHWThreads = sysconf(_SC_NPROCESSORS_CONF);	// This will tell us how many CPUs are currently enabled.
 #endif
         
-#if defined OS_WIN32
+#if defined UKN_OS_WINDOWS
         GetLogicalProcessorInformationPtr glpi = NULL;
         {
             OSVERSIONINFO os_ver_info;
@@ -467,7 +467,7 @@ namespace ukn {
                     }
                 }
             }
-#elif defined(OS_LINUX) || defined(OS_OSX)
+#elif defined(UKN_OS_LINUX) || defined(UKN_OS_OSX)
             {
                 bool supported = (GenuineIntel == mCPUString) || (AuthenticAMD == mCPUString);
                 
@@ -537,7 +537,7 @@ namespace ukn {
                     apic_extractor.SetPackageTopology(log_procs_per_pkg, cores_per_pkg);
                     
                     
-#if defined OS_WIN32
+#if defined UKN_OS_WINDOWS
                     DWORD_PTR process_affinity, system_affinity;
                     HANDLE process_handle = ::GetCurrentProcess();
                     HANDLE thread_handle = ::GetCurrentThread();
@@ -592,7 +592,7 @@ namespace ukn {
                         ::SetThreadAffinityMask(thread_handle, prev_thread_affinity);
                         ::Sleep(0);
                     }
-#elif defined(OS_LINUX)
+#elif defined(UKN_OS_LINUX)
                     if (1 == mNumHWThreads)
                     {
                         // Since we only have 1 logical processor present on the system, we
@@ -640,7 +640,7 @@ namespace ukn {
             }
 #endif
             
-#if defined OS_OSX
+#if defined UKN_OS_OSX
             int nm[2];
             size_t len = 4;
             uint32_t count;

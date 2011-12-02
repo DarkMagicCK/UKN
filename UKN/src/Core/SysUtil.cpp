@@ -1,12 +1,21 @@
 //
-//  CpuInfo.cpp
+//  SysUtil.cpp
 //  Project Unknown
 //
-//  Created by Robert Bu on 11/24/11.
+//  Created by Ruiwei Bu on 12/1/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "UKN/CpuInfo.h"
+#include "UKN/SysUtil.h"
+
+#ifdef UKN_OS_WINDOWS
+#include <Windows.h>
+#endif
+
+#include "UKN/Context.h"
+#include "UKN/Common.h"
+
+#include "AppleStuff.h"
 
 #include <vector>
 
@@ -25,6 +34,327 @@
 #endif
 
 #include <algorithm>
+
+#include "UKN/StringUtil.h"
+
+namespace ukn {
+    
+#ifdef UKN_OS_WINDOWS
+    
+    inline MessageBoxButton ukn_win_message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option) {
+        HWND hWnd = Context::Instance().isAppAvailable() ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
+        return MessageBoxA(hWnd, mssg.c_str(), title.c_str(), option);
+    }
+    
+    inline MessageBoxButton ukn_win_message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option) {
+        HWND hWnd = Context::Instance().isAppAvailable() ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
+        return MessageBoxW(hWnd, mssg.c_str(), title.c_str(), option);
+    }
+    
+    inline uint32 ukn_win_get_processor_speed() {
+        LONG Error;
+        
+        HKEY Key;
+        Error = RegOpenKeyExW(HKEY_LOCAL_MACHINE,
+                              __TEXT("HARDWARE\\DESCRIPTION\\System\\CentralProcessor\\0"),
+                              0, KEY_READ, &Key);
+        
+        if(Error != ERROR_SUCCESS)
+            return 0;
+        
+        DWORD Speed = 0;
+        DWORD Size = sizeof(Speed);
+        Error = RegQueryValueExW(Key, __TEXT("~MHz"), NULL, NULL, (LPBYTE)&Speed, &Size);
+        
+        RegCloseKey(Key);
+        
+        if (Error != ERROR_SUCCESS)
+            return 0;
+        else
+            return Speed;
+    }
+    
+    inline uint64 ukn_win_get_memory_size() {
+        MEMORYSTATUSEX status;
+        status.dwLength = sizeof(status);
+        GlobalMemoryStatusEx(&status);
+        return status.ullTotalPhys;
+    }
+    
+    inline ukn_string ukn_win_get_os_version() {
+        OSVERSIONINFO osvi;
+        
+        ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+        osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+        
+        GetVersionEx(&osvi);
+        
+        return format_string("Windows %d.%d Build %d %s", osvi.dwMajorVersion, osvi.dwMinorVersion, osvi.dwBuildNumber, osvi.szCSDVersion);
+    }
+    
+#endif
+    
+    UKN_API MessageBoxButton message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option) {
+#ifdef UKN_OS_WINDOWS
+        return ukn_win_message_box(mssg, title, option);
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return ukn_apple_message_box(mssg, title, option);
+        
+#elif defined(UKN_OS_LINUX)
+#endif
+        return MBB_OK;
+    }
+    
+    UKN_API MessageBoxButton message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option) {
+#ifdef UKN_OS_WINDOWS
+        return ukn_win_message_box(mssg, title, option);
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return ukn_apple_message_box(mssg, title, option);
+        
+#elif defined(UKN_OS_LINUX)
+#endif
+        return MBB_OK;
+    }
+    
+    UKN_API uint64 get_system_processor_speed() {
+#ifdef UKN_OS_WINDOWS
+        return ukn_win_get_processor_speed();
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return ukn_apple_get_processor_speed();
+        
+#elif defined(UKN_OS_LINUX)
+        
+#endif  
+        return 0;
+    }
+    
+    UKN_API uint64 get_system_memory_size() {
+#ifdef UKN_OS_WINDOWS
+        return ukn_win_get_memory_size();
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return ukn_apple_get_memory_size();
+                
+#elif defined(UKN_OS_LINUX)
+        
+#endif  
+        return 0;
+    }
+    
+    UKN_API ukn_string get_os_version() {
+#ifdef UKN_OS_WINDOWS
+        return ukn_win_get_os_version();
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return ukn_apple_get_os_version();
+        
+#elif defined(UKN_OS_LINUX)
+        
+#endif  
+        return ukn_string("Unknown OS");
+    }
+    
+}
+
+#ifndef UKN_OS_WINDOWS
+
+#include <dirent.h>
+
+namespace ukn {
+    
+    class DirectoryIteratorImpl {
+    public:
+        DirectoryIteratorImpl(const ukn_string& path) {
+            mDir = opendir((path+"/").c_str());
+            
+            if(mDir)
+                next();
+        }
+        
+        ~DirectoryIteratorImpl() {
+            if(mDir)
+                closedir(mDir);
+        }
+        
+        void duplicate();
+        void release();
+        
+        const ukn_string& get() const;
+        const ukn_string& next() {
+            do {
+                struct dirent* entry = readdir(mDir);
+                if(entry)
+                    mCurrent = entry->d_name;
+                else
+                    mCurrent.clear();
+            }
+            while(mCurrent == "." || mCurrent == ".." || (mCurrent.size() > 0 && mCurrent[0] == '.'));
+            
+            return mCurrent;
+        }
+        
+    private:
+        DIR* mDir;
+        ukn_string mCurrent;
+        int mRC;
+    };
+    
+    const ukn_string& DirectoryIteratorImpl::get() const {
+        return mCurrent;
+    }
+    
+    inline void DirectoryIteratorImpl::duplicate() {
+        ++mRC;
+    }
+    
+    inline void DirectoryIteratorImpl::release() {
+        if (--mRC) {
+            delete this;
+        }
+    }    
+} 
+
+#else
+
+#include <Windows.h>
+
+namespace ukn {
+    
+    class DirectoryIteratorImpl {
+    public:
+        DirectoryIteratorImpl(const ukn_string& path) {
+            std::string findPath = path + "/*";
+            
+            mFH = FindFirstFileA(findPath.c_str(), &mFD);
+            if(mFH == INVALID_HANDLE_VALUE) {
+				DWORD error = GetLastError();
+                if(error != ERROR_NO_MORE_FILES) {
+                    
+                }
+            } else {
+                mCurrent = mFD.cFileName;
+                if(mCurrent == "." || mCurrent == "..")
+                    next();
+            }
+        }
+        
+        ~DirectoryIteratorImpl() {
+            if(mFH != INVALID_HANDLE_VALUE)
+                FindClose(mFH);
+        }
+        
+        void duplicate();
+        void release();
+        
+        const ukn_string& get() const;
+        const ukn_string& next() {
+            do {
+                if(FindNextFileA(mFH, &mFD) != 0) {
+                    mCurrent = mFD.cFileName;
+                } else 
+                    mCurrent.clear();
+            }
+            while(mCurrent == "." || mCurrent == "..");
+            
+            return mCurrent;
+        }
+        
+    private:
+        HANDLE mFH;
+        WIN32_FIND_DATAA mFD;
+        ukn_string mCurrent;
+        int mRC;
+    };
+    
+    const std::string& DirectoryIteratorImpl::get() const {
+        return mCurrent;
+    }
+    
+    inline void DirectoryIteratorImpl::duplicate() {
+        ++mRC;
+    }
+    
+    inline void DirectoryIteratorImpl::release() {
+        if (--mRC) {
+            delete this;
+        }
+    }
+    
+} // namespace ukn
+
+#endif // UKN_OS_WINDOWS
+
+namespace ukn {
+    
+    DirectoryIterator::DirectoryIterator():
+    mImpl(0) {
+        mIsEnd = false;
+    }
+    
+    DirectoryIterator::DirectoryIterator(const DirectoryIterator& iterator):
+    mPath(iterator.mPath),
+    mFile(iterator.mFile),
+    mImpl(iterator.mImpl) {
+        mIsEnd = false;
+        if(mImpl) {
+            mImpl->duplicate();
+        }
+    }
+    
+    DirectoryIterator::DirectoryIterator(const ukn_string& path):
+    mPath(path+"/"),
+    mImpl(new DirectoryIteratorImpl(path)) {
+        mIsEnd = false;
+        
+        mFile = mPath + mImpl->get();
+    }
+    
+    DirectoryIterator::DirectoryIterator(const ukn_wstring& path):
+    mPath(wstring_to_string(path+L"/")) {
+        mIsEnd = false;
+        mImpl = new DirectoryIteratorImpl(mPath.c_str());
+        
+        mFile = mPath + mImpl->get();
+    }
+
+    DirectoryIterator::~DirectoryIterator() {
+        if(mImpl)
+            mImpl->release();
+    }
+    
+    DirectoryIterator& DirectoryIterator::operator =(const DirectoryIterator& rhs) {
+        if(this != &rhs) {
+            if(mImpl)
+                mImpl->duplicate();
+            mImpl = rhs.mImpl;
+            if(mImpl) {
+                mImpl->duplicate();
+                mPath = rhs.mPath;
+                mIsEnd = rhs.mIsEnd;
+                mFile = rhs.mFile;
+            }
+            return *this;
+        }
+        return *this;
+    }
+    
+    
+    DirectoryIterator& DirectoryIterator ::operator++() {
+        if(mImpl) {
+            std::string n = mImpl->next();
+            if(n.empty())
+                mIsEnd = true;
+            else {
+                mFile = mPath + mImpl->get();
+            }
+        }
+        return *this;
+    }
+    
+}
 
 namespace ukn {
     
@@ -657,5 +987,4 @@ namespace ukn {
             
 #endif
         }
-    
 } // namespace ukn

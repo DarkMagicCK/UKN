@@ -31,7 +31,7 @@ namespace ukn {
         explicit Window(const ukn_string& name);
         virtual ~Window();
     
-        virtual const ukn_wstring& description() const = 0;
+        virtual ukn_string description() const = 0;
         
 #if defined(UKN_OS_WINDOWS)
         virtual HWND getHWnd() const = 0;
@@ -52,6 +52,12 @@ namespace ukn {
         uint32 getHeight() const {
             return mHeight;
         }
+        
+        // swap window render buffers
+        virtual void swapBuffers() = 0;
+        // poll windows events
+        // PeekMessage on Windows etc
+        virtual void pullEvents() = 0;
         
     protected:
         int32 mLeft;
@@ -77,6 +83,7 @@ namespace ukn {
         typedef Signal<void(Window&)>                     CloseEvent;
         typedef Signal<void(Window&)>                     FrameEndEvent;
         typedef Signal<void(Window&)>                     FrameStartEvent;
+        typedef Signal<void(Window&)>                     InitializeEvent;
         typedef Signal<void(Window&, uint32 /* btn */, uint32, uint32 /* pos */)>   MouseDraggedEvent;
         
     private:
@@ -97,6 +104,7 @@ namespace ukn {
         CharEvent       mCharEvent;
         FrameStartEvent mFrameStart;
         FrameEndEvent   mFrameEnd;
+        InitializeEvent mInitEvent;
         
     public:
         ActiveEvent& onActive() {
@@ -161,6 +169,10 @@ namespace ukn {
         
         FrameEndEvent& onFrameEnd() {
             return mFrameEnd;
+        }
+        
+        InitializeEvent& onInit() {
+            return mInitEvent;
         }
     
     protected:

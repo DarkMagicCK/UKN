@@ -17,6 +17,10 @@
     #define UKN_DEBUG
 #endif
 
+#define UKN_VERSION_MARJOR  0
+#define UKN_VERSION_MINOR   1
+#define UKN_VERSION_REV     2
+
 /*
  if gcc version >= 4
  then there is tr1 support
@@ -69,7 +73,10 @@
 
 // apple os ( osx / ios )
 #if defined(__APPLE__) || defined(__APPLE_CC__)
-    #if !defined(__IPHONE_OS_VERSION_MAX_ALLOWED)
+
+#include <Availability.h>
+
+    #if !defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
         #define UKN_OS_OSX
     #else
         #define UKN_OS_IOS

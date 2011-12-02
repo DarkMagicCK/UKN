@@ -23,7 +23,7 @@ namespace ukn {
     }
     
     bool ConfigParserXmlImpl::open(ResourcePtr resource) {
-        StreamPtr dataStream = Stream::ToMemoryStream(resource->getResourceStream());
+        StreamPtr dataStream = stream_to_memory_stream(resource->getResourceStream());
         if(dataStream) {
             if(!mDocument) {
                 mDocument = new pugi::xml_document;
@@ -335,31 +335,38 @@ namespace ukn {
     
     void ConfigParserXmlImpl::myWritter::write(const void* data, size_t size) {
         str += ukn_string((const char*)data, size);
+        str += indent;
     }
     
     void ConfigParserXmlImpl::myStreamWritter::write(const void* data, size_t size) {
         stream->write((const uint8*)data, size);
+        stream->write((const uint8*)indent.data(), indent.size());
     }
     
-    ukn_string ConfigParserXmlImpl::writeToString() const {
+    ukn_string ConfigParserXmlImpl::writeToString(const char* indent) const {
         if(!mDocument)
             return ukn_string();
         
-        myWritter writter;
-        mDocument->save(writter);
+        myWritter writter(indent);
+        mDocument->save(writter, PUGIXML_TEXT("\t"), pugi::format_indent, pugi::encoding_utf8);
         return writter.str;
     }
     
-    ConfigParserXmlImpl::myStreamWritter::myStreamWritter() {
+    ConfigParserXmlImpl::myStreamWritter::myStreamWritter(const char* indent) {
         stream = MakeSharedPtr<MemoryStream>();
+        this->indent = indent;
     }
     
-    StreamPtr ConfigParserXmlImpl::writeToStream() const {
+    ConfigParserXmlImpl::myWritter::myWritter(const char* indent) {
+        this->indent = indent;
+    }
+    
+    StreamPtr ConfigParserXmlImpl::writeToStream(const char* indent) const {
         if(!mDocument)
             return MakeSharedPtr<MemoryStream>();
         
-        myStreamWritter writter;
-        mDocument->save(writter);
+        myStreamWritter writter(indent);
+        mDocument->save(writter, PUGIXML_TEXT("\t"), pugi::format_indent, pugi::encoding_utf8);
         return writter.stream;
     }
     

@@ -26,7 +26,7 @@ namespace ukn {
     class DiskResourceFactory: public ResourceFactory {
     public:
         bool resourceExists(const ukn_wstring& path) {
-            return ukn_file_exists(path);
+            return file_exists(path);
         }
         ResourcePtr onResourceLoad(const ukn_wstring& path) {
             FileStream* pfs = new FileStream;

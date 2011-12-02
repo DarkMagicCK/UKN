@@ -23,7 +23,7 @@ namespace ukn {
         GLGraphicDevice();
         virtual ~GLGraphicDevice();
         
-        const ukn_wstring& description() const;
+        ukn_string description() const;
         
         WindowPtr createRenderWindow(const ukn_string& name, const RenderSettings& settings);
         void onRenderBuffer(const RenderBufferPtr& buffer);

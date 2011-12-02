@@ -20,7 +20,7 @@ namespace ukn {
     
     /**
      * Abstract config loader/writer
-     * Currently supports xml only
+     * Currently only supports xml
      **/
     enum ConfigParserType {
         CPT_XML,
@@ -35,8 +35,8 @@ namespace ukn {
 
         virtual bool create() = 0;
         
-        virtual StreamPtr  writeToStream() const = 0;
-        virtual ukn_string writeToString() const = 0;
+        virtual StreamPtr  writeToStream(const char* indent="\n") const = 0;
+        virtual ukn_string writeToString(const char* indent="\n") const = 0;
         
         virtual void close() = 0;
         

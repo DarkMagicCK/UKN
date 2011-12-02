@@ -19,9 +19,8 @@ namespace ukn {
             
         }
         
-        const ukn_wstring& description() const {
-            static ukn_wstring des(L"Null Window");
-            return des;
+        ukn_string description() const {
+            return ukn_string("Null Window");
         }
         
 #if defined(UKN_OS_WINDOWS)
@@ -29,6 +28,14 @@ namespace ukn {
             return 0;
         }
 #endif
+        
+        void swapBuffers() {
+            
+        }
+        
+        void pullEvents() {
+            
+        }
         
     };
     
@@ -43,9 +50,8 @@ namespace ukn {
             
         }
         
-        const ukn_wstring& description() const {
-            static ukn_wstring des(L"Null GraphicDevice");
-            return des;
+        ukn_string description() const {
+            return ukn_string("Null GraphicDevice");
         }
     };
     

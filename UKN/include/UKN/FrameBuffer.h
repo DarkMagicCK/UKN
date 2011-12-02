@@ -38,7 +38,7 @@ namespace ukn {
         
         static FrameBufferPtr NullObject();
         
-        virtual const ukn_wstring& description() const = 0;
+        virtual const ukn_string& description() const = 0;
         
         uint32 left() const;
         uint32 top() const;

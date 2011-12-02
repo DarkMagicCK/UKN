@@ -32,20 +32,21 @@ namespace ukn {
     public:
         static Context& Instance();
         
-        void            setCfg(const ContextCfg& cfg);
-        ContextCfg      getCfg() const;
+        void        setCfg(const ContextCfg& cfg);
+        ContextCfg  getCfg() const;
         
-        void            loadCfgFile(const ukn_wstring& name);
-        void            saveCfgFile(const ukn_wstring& name);
+        void loadCfgFile(const ukn_wstring& name);
+        void saveCfgFile(const ukn_wstring& name);
         
-        GraphicFactoryPtr   getGraphicFactoryPtr() const;
-        GraphicFactory&     getGraphicFactory() const;
+        GraphicFactoryPtr getGraphicFactoryPtr() const;
+        GraphicFactory&   getGraphicFactory() const;
         
         void registerGraphicFactory(GraphicFactoryPtr factory);
         
         void loadGraphicFactory(const ukn_string& name);
         
-        void setApp(AppPtr app);
+        void setApp(AppInstance* app);
+        bool isAppAvailable() const;
         AppInstance& getAppInstance() const;
         
     protected:
@@ -55,7 +56,7 @@ namespace ukn {
         friend class AppInstance;
         
     private:
-        AppPtr mApp;
+        AppInstance* mApp;
         ContextCfg mCfg;
         
         DllLoader mGraphicFactoryLoader;

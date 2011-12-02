@@ -293,7 +293,7 @@ namespace ukn {
         }
         
         // ? operator trick 
-        // determines the expr returns a rvalue or not without actually evaluate it
+        // determine the expr returns a rvalue or not without actually evaluate it
 #define _for_each_EvalRValue(expr, is_rvalue) (true ? ukn::detail::make_holder(expr, is_rvalue) : expr)
         
         
@@ -318,7 +318,7 @@ namespace ukn {
             return value.item;
         }
         
-        // begin iterator for any container
+        // get begin iterator for container
         template<typename Container>
         auto_any<typename type2type<Container>::iterator> any_cont_begin(const auto_any_base& holder, bool is_rvalue, type2type<Container>) {
             const simple_any& val = auto_any_cast<simple_any>(holder);
@@ -329,7 +329,7 @@ namespace ukn {
             return cont.begin();
         }
         
-        // end iterator for any container
+        // get end iterator for container
         template<typename Container>
         auto_any<typename type2type<Container>::iterator> any_cont_end(const auto_any_base& holder, bool is_rvalue, type2type<Container>) {
             const simple_any& val = auto_any_cast<simple_any>(holder);
@@ -379,23 +379,7 @@ namespace ukn {
 #include "Platform.h"
 
 namespace ukn {
-    
-    namespace detail {
-        template<typename Cont>
-        typename type2type<Cont>::iterator any_cont_iter(type2type<Cont> type) {
-            typedef typename type2type<Cont>::iterator iter_type;
-            iter_type iter;
-            return iter;
-        }
-    }
-    
-    
-#ifdef UKN_CXX0X_SUPPORT
-#define UKN_AUTO(var, expr) auto var = expr;
-#else
-#define UKN_AUTO(var, expr)
-    
-#endif // UKN_CXX0X_SUPPORT
+
     
 }
 

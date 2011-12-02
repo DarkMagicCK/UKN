@@ -23,7 +23,7 @@
 
 namespace ukn {
     
-    UKN_API bool ukn_file_exists(const ukn_wstring& filepath) {
+    UKN_API bool file_exists(const ukn_wstring& filepath) {
 #ifdef UKN_OS_WINDOWS
         return PathFileExistsW(filepath.c_str())?true:false;
         
@@ -38,7 +38,7 @@ namespace ukn {
         return true;
     }
     
-    UKN_API ukn_wstring ukn_get_writtable_path(const ukn_wstring& filePath) {
+    UKN_API ukn_wstring get_writtable_path(const ukn_wstring& filePath) {
 #ifndef UKN_OS_FAMILY_APPLE
         return ukn_get_application_path() + filePath;
 #else
@@ -46,7 +46,7 @@ namespace ukn {
 #endif
     }
     
-    UKN_API ukn_wstring ukn_get_application_path() {
+    UKN_API ukn_wstring get_application_path() {
 #ifdef UKN_OS_WINDOWS
         wchar_t buffer[MAX_PATH];
         GetCurrentDirectoryW(MAX_PATH, buffer);

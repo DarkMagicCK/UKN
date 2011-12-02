@@ -30,11 +30,47 @@ namespace ukn {
         virtual size_t  getSize() const = 0;
         virtual bool    isValid() const = 0;
         
-        virtual void clean() = 0;
+        virtual void close() = 0;
         
         virtual StreamType getStreamType() const = 0;
         
-        static StreamPtr ToMemoryStream(const StreamPtr& input);
+        template<typename T>
+        Stream& operator<<(const T& val) {
+            write((uint8*)&val, sizeof(T));
+            return *this;
+        }
+        template<typename T>
+        Stream& operator>>(T& val) {
+            read((uint8*)&val, sizeof(T));
+            return *this;
+        }
+        
+        Stream& operator<<(const ukn_string& val) {
+            write((const uint8*)val.c_str(), val.size());
+            return *this;
+        }
+        Stream& operator>>(ukn_string& val) {
+            char buffer;
+            *this >> buffer;
+            while(buffer != 0) {
+                val += buffer;
+                *this >> buffer;
+            }
+            return *this;
+        }
+        
+        Stream& operator<<(const char* val) {
+            write((const uint8*)val, strlen(val));
+            return *this;
+        }
+        
+        template<typename T>
+        Stream& operator<<(const Array<T>& array) {
+            for(size_t i=0; i<array.size(); ++i) {
+                *this<<array[i];
+            }
+            return *this;
+        }
     };
 
     
@@ -45,7 +81,7 @@ namespace ukn {
 		
 		virtual ~MemoryStream();
         
-        void clean();
+        void close();
         
         StreamType getStreamType() const {
             return ST_Memory;
@@ -67,7 +103,7 @@ namespace ukn {
 		/* alloc a block of memory */
 		bool alloc(size_t size);
 		
-		// reduce size to real size, beware that this->mLength have different meaning if you have used seek
+		// reduce size to real size, beware that this->getSize() have different meaning if you have used seek
 		void resize();
 				
 		template<typename T>
@@ -101,15 +137,13 @@ namespace ukn {
 		
 		template<typename datatype> 
         datatype& get(size_t offset) const { 
-            if(offset > this->mLength+sizeof(datatype)) offset = 0;
+            if(offset > this->getSize()+sizeof(datatype)) offset = 0;
             return *(datatype*)(mData[offset]);
         }
         
         uint8 operator[](size_t index);
         
 	private:
-		size_t mLength;
-		size_t mRealSize;
 		size_t mCurrPos;
         Array<uint8> mData;
 	};
@@ -118,10 +152,10 @@ namespace ukn {
     template<typename T>
     T MemoryStream::read() {
         if(!isValid()) return 0;
-        if(this->mCurrPos == this->mLength) return 0;
+        if(this->mCurrPos == this->getSize()) return 0;
         
         uint32 size = sizeof(T);
-        if(this->mCurrPos+size <= this->mLength) {
+        if(this->mCurrPos+size <= this->getSize()) {
             T t;
             memcpy(&t, (void*)(get()+this->mCurrPos), size);
             this->mCurrPos += size;
@@ -133,10 +167,10 @@ namespace ukn {
     template<typename T>
     bool MemoryStream::read(T* t) {
         if(!isValid()) return 0;
-        if(this->mCurrPos == this->mLength) return 0;
+        if(this->mCurrPos == this->getSize()) return 0;
         
         uint32 size = sizeof(T);
-        if(this->mCurrPos+size <= this->mLength) {
+        if(this->mCurrPos+size <= this->getSize()) {
             memcpy(t, (void*)(get()+this->mCurrPos), size);
             this->mCurrPos += size;
             return true;
@@ -159,10 +193,6 @@ namespace ukn {
             return ST_File;
         }
         
-        void clean() {
-            close();
-        }
-        
         virtual void close() = 0;
         virtual void truncate() = 0;
         virtual size_t getSize() const = 0;
@@ -173,17 +203,6 @@ namespace ukn {
         virtual bool seek(size_t pos, SeekType type) = 0;
         virtual size_t read(uint8* data, size_t len) = 0;
         virtual size_t write(const uint8* data, size_t len) = 0;
-        
-        template<typename T>
-        inline FileStreamBasic& operator<<(const T& val) {
-            write(&val, sizeof(T));
-            return *this;
-        }
-        template<typename T>
-        inline FileStreamBasic& operator>>(T& val) {
-            read(&val, sizeof(T));
-            return *this;
-        }
         
         StreamPtr readIntoMemory();
     };
@@ -245,6 +264,11 @@ namespace ukn {
     typedef FileStreamPosix FileStream;
     
 #endif //OS_WIN32
+    
+    StreamPtr stream_to_memory_stream(const StreamPtr& stream);
+    bool write_stream_to_file(const StreamPtr& stream, const ukn_wstring& file);
+    
+    bool write_stream_to_file(Stream& stream, const ukn_wstring& file);
     
 } // namespace ukn
 

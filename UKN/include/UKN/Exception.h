@@ -11,6 +11,7 @@
 #define ukn_exception_h
 
 #include "Platform.h"
+#include "StackTrace.h"
 #include <string>
 #include <sstream>
 
@@ -78,6 +79,10 @@ namespace ukn {
         
         virtual void rethrow() {
             throw *this;
+        }
+        
+        ukn_string getFormattedCallStack() const {
+            return ukn_get_formatted_stack_trace_string();
         }
         
 	private:

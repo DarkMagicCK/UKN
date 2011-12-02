@@ -15,12 +15,16 @@
 
 #include "UKN/TimeUtil.h"
 
+#include "UKN/Logger.h"
+#include "UKN/Common.h"
+#include "UKN/SysUtil.h"
+
 namespace ukn {
     
     AppInstance::AppInstance(const ukn_string& name):
     mName(name),
     mInited(false) {
-        
+        Context::Instance().setApp(this);
     }
     
     AppInstance::~AppInstance() {
@@ -54,10 +58,37 @@ namespace ukn {
         
         mMainWindow = graphic_device.createRenderWindow(mName, Context::Instance().getCfg().render_cfg);
         
-        if(!mMainWindow.isValid())
+        if(!mMainWindow)
             return terminate();
         
         mCloseConn = mMainWindow->onClose().connect(Bind(this, &AppInstance::onWindowClose));
+        
+        // log basic information
+        Logger::Instance().setFeature(LF_PrependRunningTime, false);
+        
+        log_info(format_string("Project Unknown %d.%d Rev %d", 
+                               UKN_VERSION_MARJOR,
+                               UKN_VERSION_MINOR,
+                               UKN_VERSION_REV));
+        log_info(get_os_version());
+        log_info(format_string("CPU Speed: %d mhz", 
+                               get_system_processor_speed()));
+        log_info(format_string("Memory Size: %d kb", get_system_memory_size() / 1024));
+        
+        CpuInfo cpuinfo;
+        log_info(format_string("CPU: %s, %s, Cores: %d Threads: %d", 
+                               cpuinfo.getCPUString().c_str(),
+                               cpuinfo.getCPUBrandString().c_str(),
+                               cpuinfo.getNumCores(),
+                               cpuinfo.getNumHWThreads()));
+        
+        log_info(graphic_device.description());
+        
+        Logger::Instance().setFeature(LF_PrependRunningTime, true);
+        
+        // on init
+        mMainWindow->onInit()(*mMainWindow);
+        onInit();
     }
     
     void AppInstance::terminate() {
@@ -68,7 +99,29 @@ namespace ukn {
 #endif
     }
     
+    void AppInstance::update() {
+        mMainWindow->onUpdate()(*mMainWindow);
+        mMainWindow->pullEvents();
+
+        onUpdate();
+    }
+    
+    void AppInstance::render() {
+        mMainWindow->onRender()(*mMainWindow);
+        
+        onRender();
+    }
+    
+    void AppInstance::onInit() {        
+        
+    }
+    
     void AppInstance::run() {
+        if(!mMainWindow) {
+            log_error("ukn::AppInstance::run: cannot without a window");
+            return ;
+        }
+        
         FrameCounter& counter = FrameCounter::Instance();
         
         while(true) {
@@ -76,13 +129,12 @@ namespace ukn {
             
             mMainWindow->onFrameStart()(*mMainWindow);
             
-            onUpdate();
-            mMainWindow->onUpdate()(*mMainWindow);
-            
-            onRender();
-            mMainWindow->onRender()(*mMainWindow);
+            update();
+            render();
             
             mMainWindow->onFrameEnd()(*mMainWindow);
+            
+            mMainWindow->swapBuffers();
         }
     }
     

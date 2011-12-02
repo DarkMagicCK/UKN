@@ -190,9 +190,6 @@ namespace ukn {
     public:
         enum { FpsUnlimited = 0 };
         
-        FrameCounter();
-        ~FrameCounter();
-        
         static FrameCounter& Instance();
         
         void setDesiredFps(int32 fps);
@@ -203,13 +200,17 @@ namespace ukn {
         
         void waitToNextFrame();
         uint64 getFrameCount() const; 
+        uint64 getRunningTime() const;
         
     protected:    
         void setDelta(float delta);
         void setCurrentFps(float fps);
         
         virtual float doWaitToNextFrame() = 0;
-
+        
+        FrameCounter();
+        ~FrameCounter();
+        
     private:
         float mDesiredFps;
         float mPrevDelta;

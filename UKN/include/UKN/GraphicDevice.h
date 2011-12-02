@@ -42,7 +42,7 @@ namespace ukn {
         
         static GraphicDevicePtr NullObject();
         
-        virtual const ukn_wstring& description() const = 0;
+        virtual ukn_string description() const = 0;
         
         virtual WindowPtr createRenderWindow(const ukn_string& name, const RenderSettings& settings) = 0;
         virtual void onRenderBuffer(const RenderBufferPtr& buffer) = 0;

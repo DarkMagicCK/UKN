@@ -15,6 +15,8 @@
 #include "UKN/Context.h"
 #include "UKN/Window.h"
 #include "UKN/TimeUtil.h"
+#include "UKN/Stream.h"
+#include "UKN/SysUtil.h"
 
 #include <vector>
 
@@ -32,6 +34,7 @@ int CALLBACK WinMain(
   __in  int nCmdShow
 ) {
 #endif
+
     // register plugins by hand for testing purpose
     ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);
@@ -41,6 +44,7 @@ int CALLBACK WinMain(
     ukn::AppInstance instance("Test App");
     // init with custom cfg
     instance.init(L"test.xml");
+    ukn::Context::Instance().saveCfgFile(L"config.xml");
         
     // create app context
     instance.create();
@@ -49,6 +53,7 @@ int CALLBACK WinMain(
     
     // run app
     instance.run();
+    
     
     return 0;
 }

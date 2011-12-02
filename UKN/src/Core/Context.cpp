@@ -14,6 +14,8 @@
 #include "UKN/ConfigParser.h"
 #include "UKN/Resource.h"
 #include "UKN/Stream.h"
+#include "UKN/Logger.h"
+#include "UKN/Common.h"
 
 namespace ukn {
     
@@ -24,7 +26,8 @@ namespace ukn {
         return static_instance;
     }
     
-    Context::Context() {
+    Context::Context():
+    mApp(0) {
         mGraphicFactory = GraphicFactory::NullObject();
     }
     
@@ -32,12 +35,16 @@ namespace ukn {
         mGraphicFactoryLoader.close();
     }
     
-    void Context::setApp(AppPtr app) {
+    void Context::setApp(AppInstance* app) {
         mApp = app;
     }
     
     AppInstance& Context::getAppInstance() const {
         return *mApp;
+    }
+    
+    bool Context::isAppAvailable() const {
+        return mApp != 0;
     }
     
     void Context::setCfg(const ContextCfg& cfg) {
@@ -83,14 +90,11 @@ namespace ukn {
         cfg.render_cfg.height = 600;
         cfg.render_cfg.top = 0;
         cfg.render_cfg.left = 0;
-        cfg.render_cfg.hdr = false;
-        cfg.render_cfg.gamma = false;
         cfg.render_cfg.color_fmt = EF_ARGB8;
         cfg.render_cfg.depth_stencil_fmt = EF_D16;
         cfg.render_cfg.resizable = false;
         cfg.render_cfg.full_screen = false;
         cfg.render_cfg.show_mouse = true;
-        cfg.render_cfg.motion_frames = 0;
         cfg.render_cfg.sample_count = 0;
         cfg.render_cfg.sample_quality = 0;
         cfg.render_cfg.fsaa_samples = 0;
@@ -104,12 +108,9 @@ namespace ukn {
                     cfg.render_cfg.height = configParser->getInt("height", cfg.render_cfg.height);
                     cfg.render_cfg.top = configParser->getInt("top", cfg.render_cfg.top);
                     cfg.render_cfg.left = configParser->getInt("left", cfg.render_cfg.left);
-                    cfg.render_cfg.hdr = configParser->getBool("hdr", cfg.render_cfg.hdr);
-                    cfg.render_cfg.gamma = configParser->getBool("gamma", cfg.render_cfg.gamma);
                     cfg.render_cfg.resizable = configParser->getBool("resizable", cfg.render_cfg.resizable);
                     cfg.render_cfg.show_mouse = configParser->getBool("show_mouse", cfg.render_cfg.show_mouse);
                     cfg.render_cfg.full_screen = configParser->getBool("full_screen", cfg.render_cfg.full_screen);
-                    cfg.render_cfg.motion_frames = configParser->getInt("motion_frames", cfg.render_cfg.motion_frames);
 
                     cfg.render_cfg.sample_count = configParser->getInt("sample_count", cfg.render_cfg.sample_count);
                     cfg.render_cfg.sample_quality = configParser->getInt("sample_quality", cfg.render_cfg.sample_quality);
@@ -120,18 +121,30 @@ namespace ukn {
                     
                     fmt_string = configParser->getString("color_fmt", "EF_ARGB8");
                     fmt_id = fmt_string_to_element_format(fmt_string);
-                    if(fmt_id != -1)
+                    if(fmt_id != -1) {
+                        log_warning(format_string("ukn::Context::loadCfgFile: unknown color format %s, using EF_ARGB8", fmt_string.c_str()));
+                        
                         cfg.render_cfg.color_fmt = (ElementFormat)fmt_id;
+                    }
                     
                     fmt_string = configParser->getString("depth_stencil_fmt", "EF_D16");
                     fmt_id = fmt_string_to_element_format(fmt_string);
-                    if(fmt_id != -1)
+                    if(fmt_id != -1) {
+                        log_warning(format_string("ukn::Context::loadCfgFile: unknown depth stencil format %s, using EF_D16", fmt_string.c_str()));
+
                         cfg.render_cfg.depth_stencil_fmt = (ElementFormat)fmt_id;
+                    }
                 }
+                
+                if(configParser->toNode("/cfg/plugins")) {
+                    cfg.graphic_factory_name = configParser->getString("graphic_factory", "");
+                }
+            } else {
+                log_warning(L"ukn::Context::loadCfgFile: unable to open config file "+configData->getName());
             }
         }
         
-        mCfg = cfg;
+        setCfg(mCfg);
     }
     
     void Context::saveCfgFile(const ukn_wstring& name) {
@@ -143,17 +156,19 @@ namespace ukn {
             configParser->setInt("height", mCfg.render_cfg.height);
             configParser->setInt("top", mCfg.render_cfg.top);
             configParser->setInt("left", mCfg.render_cfg.left);
-            configParser->setBool("hdr", mCfg.render_cfg.hdr);
-            configParser->setBool("gamma", mCfg.render_cfg.gamma);
             configParser->setBool("show_mouse", mCfg.render_cfg.show_mouse);
             configParser->setBool("full_screen", mCfg.render_cfg.full_screen);
             configParser->setBool("resizable", mCfg.render_cfg.resizable);
-            configParser->setInt("motion_frames", mCfg.render_cfg.motion_frames);
             configParser->setInt("sample_count", mCfg.render_cfg.sample_count);
             configParser->setInt("sample_quality", mCfg.render_cfg.sample_quality);
             configParser->setInt("fsaa_samples", mCfg.render_cfg.fsaa_samples);
             configParser->setString("color_fmt", element_format_to_string(mCfg.render_cfg.color_fmt));
             configParser->setString("depth_stencil_fmt", element_format_to_string(mCfg.render_cfg.depth_stencil_fmt));
+            
+            configParser->toNode("/cfg");
+            configParser->beginNode("plugins");
+            if(!mCfg.graphic_factory_name.empty()) 
+                configParser->setString("graphic_factory", mCfg.graphic_factory_name);
         }
         
         ukn_string formattedString = configParser->writeToString();

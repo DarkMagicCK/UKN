@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		88260E631488450200142365 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E621488450100142365 /* Logger.cpp */; };
+		88260E651488541E00142365 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E641488541E00142365 /* Window.cpp */; };
+		88260E681488583300142365 /* SysUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E671488583200142365 /* SysUtil.cpp */; };
 		88AAC15B14868751007A80A4 /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14614868751007A80A4 /* App.cpp */; };
-		88AAC15C14868751007A80A4 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14714868751007A80A4 /* Window.cpp */; };
 		88AAC15D14868751007A80A4 /* ConfigParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14914868751007A80A4 /* ConfigParser.cpp */; };
 		88AAC15E14868751007A80A4 /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14A14868751007A80A4 /* Context.cpp */; };
-		88AAC15F14868751007A80A4 /* CpuInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14B14868751007A80A4 /* CpuInfo.cpp */; };
 		88AAC16014868751007A80A4 /* DllLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14C14868751007A80A4 /* DllLoader.cpp */; };
 		88AAC16114868751007A80A4 /* Resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14D14868751007A80A4 /* Resource.cpp */; };
 		88AAC16214868751007A80A4 /* Stream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14E14868751007A80A4 /* Stream.cpp */; };
@@ -58,6 +59,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		88260E621488450100142365 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
+		88260E641488541E00142365 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
+		88260E661488570100142365 /* SysUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SysUtil.h; sourceTree = "<group>"; };
+		88260E671488583200142365 /* SysUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SysUtil.cpp; sourceTree = "<group>"; };
 		88AAC0F714868751007A80A4 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
 		88AAC0F814868751007A80A4 /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
 		88AAC0F914868751007A80A4 /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
@@ -67,7 +72,6 @@
 		88AAC0FD14868751007A80A4 /* Condition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Condition.h; sourceTree = "<group>"; };
 		88AAC0FE14868751007A80A4 /* ConfigParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigParser.h; sourceTree = "<group>"; };
 		88AAC0FF14868751007A80A4 /* Context.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Context.h; sourceTree = "<group>"; };
-		88AAC10014868751007A80A4 /* CpuInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CpuInfo.h; sourceTree = "<group>"; };
 		88AAC10314868751007A80A4 /* Bind.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bind.h; sourceTree = "<group>"; };
 		88AAC10414868751007A80A4 /* Function0.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Function0.h; sourceTree = "<group>"; };
 		88AAC10514868751007A80A4 /* Function1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Function1.h; sourceTree = "<group>"; };
@@ -133,10 +137,8 @@
 		88AAC14214868751007A80A4 /* Viewport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Viewport.h; sourceTree = "<group>"; };
 		88AAC14314868751007A80A4 /* Window.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Window.h; sourceTree = "<group>"; };
 		88AAC14614868751007A80A4 /* App.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = App.cpp; sourceTree = "<group>"; };
-		88AAC14714868751007A80A4 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		88AAC14914868751007A80A4 /* ConfigParser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigParser.cpp; sourceTree = "<group>"; };
 		88AAC14A14868751007A80A4 /* Context.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Context.cpp; sourceTree = "<group>"; };
-		88AAC14B14868751007A80A4 /* CpuInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CpuInfo.cpp; sourceTree = "<group>"; };
 		88AAC14C14868751007A80A4 /* DllLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DllLoader.cpp; sourceTree = "<group>"; };
 		88AAC14D14868751007A80A4 /* Resource.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Resource.cpp; sourceTree = "<group>"; };
 		88AAC14E14868751007A80A4 /* Stream.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Stream.cpp; sourceTree = "<group>"; };
@@ -157,7 +159,7 @@
 		88AAC174148689ED007A80A4 /* pugixml.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = pugixml.hpp; sourceTree = "<group>"; };
 		88AAC176148689FA007A80A4 /* ConfigParserXml.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConfigParserXml.h; sourceTree = "<group>"; };
 		88AAC17714868AF5007A80A4 /* ConfigParserXml.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConfigParserXml.cpp; sourceTree = "<group>"; };
-		88AAC1791486EBD0007A80A4 /* AppleStuff.h */ = {isa = PBXFileReference; fileEncoding = 4; path = AppleStuff.h; sourceTree = "<group>"; };
+		88AAC1791486EBD0007A80A4 /* AppleStuff.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppleStuff.h; sourceTree = "<group>"; };
 		88AAC17A1486EBD9007A80A4 /* AppleStuff.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppleStuff.mm; sourceTree = "<group>"; };
 		88AAC17C1486F787007A80A4 /* FileUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUtil.h; sourceTree = "<group>"; };
 		88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileUtil.cpp; sourceTree = "<group>"; };
@@ -220,7 +222,6 @@
 				88AAC0FD14868751007A80A4 /* Condition.h */,
 				88AAC0FE14868751007A80A4 /* ConfigParser.h */,
 				88AAC0FF14868751007A80A4 /* Context.h */,
-				88AAC10014868751007A80A4 /* CpuInfo.h */,
 				88AAC10114868751007A80A4 /* detail */,
 				88AAC11814868751007A80A4 /* DllLoader.h */,
 				88AAC11914868751007A80A4 /* Event.h */,
@@ -267,6 +268,7 @@
 				88AAC14114868751007A80A4 /* Vertex.h */,
 				88AAC14214868751007A80A4 /* Viewport.h */,
 				88AAC14314868751007A80A4 /* Window.h */,
+				88260E661488570100142365 /* SysUtil.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -329,7 +331,6 @@
 			isa = PBXGroup;
 			children = (
 				88AAC14614868751007A80A4 /* App.cpp */,
-				88AAC14714868751007A80A4 /* Window.cpp */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -341,7 +342,6 @@
 				88AAC176148689FA007A80A4 /* ConfigParserXml.h */,
 				88AAC17714868AF5007A80A4 /* ConfigParserXml.cpp */,
 				88AAC14A14868751007A80A4 /* Context.cpp */,
-				88AAC14B14868751007A80A4 /* CpuInfo.cpp */,
 				88AAC14C14868751007A80A4 /* DllLoader.cpp */,
 				88AAC14D14868751007A80A4 /* Resource.cpp */,
 				88AAC14E14868751007A80A4 /* Stream.cpp */,
@@ -350,6 +350,8 @@
 				88AAC1791486EBD0007A80A4 /* AppleStuff.h */,
 				88AAC15014868751007A80A4 /* Timeutil.cpp */,
 				88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */,
+				88260E621488450100142365 /* Logger.cpp */,
+				88260E671488583200142365 /* SysUtil.cpp */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -357,6 +359,7 @@
 		88AAC15114868751007A80A4 /* Render */ = {
 			isa = PBXGroup;
 			children = (
+				88260E641488541E00142365 /* Window.cpp */,
 				88AAC15214868751007A80A4 /* Camera.cpp */,
 				88AAC15314868751007A80A4 /* FrameBuffer.cpp */,
 				88AAC15414868751007A80A4 /* Frustum.cpp */,
@@ -391,8 +394,6 @@
 		88CC310E1477915700558EA1 = {
 			isa = PBXGroup;
 			children = (
-				88E3C434147F2F1D00E8754D /* OpenGL.framework */,
-				88E3C432147F2F1400E8754D /* Cocoa.framework */,
 				88CC311C1477915700558EA1 /* Project Unknown */,
 				88E3C431147F2EC300E8754D /* Frameworks */,
 				88CC311A1477915700558EA1 /* Products */,
@@ -472,6 +473,8 @@
 		88E3C431147F2EC300E8754D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				88E3C434147F2F1D00E8754D /* OpenGL.framework */,
+				88E3C432147F2F1400E8754D /* Cocoa.framework */,
 			);
 			name = Frameworks;
 			path = "Project Unknown";
@@ -536,10 +539,8 @@
 				88E3C3E1147F2D6200E8754D /* GLGraphicFactory.cpp in Sources */,
 				88E3C438147F30F200E8754D /* GLWindow.cpp in Sources */,
 				88AAC15B14868751007A80A4 /* App.cpp in Sources */,
-				88AAC15C14868751007A80A4 /* Window.cpp in Sources */,
 				88AAC15D14868751007A80A4 /* ConfigParser.cpp in Sources */,
 				88AAC15E14868751007A80A4 /* Context.cpp in Sources */,
-				88AAC15F14868751007A80A4 /* CpuInfo.cpp in Sources */,
 				88AAC16014868751007A80A4 /* DllLoader.cpp in Sources */,
 				88AAC16114868751007A80A4 /* Resource.cpp in Sources */,
 				88AAC16214868751007A80A4 /* Stream.cpp in Sources */,
@@ -559,6 +560,9 @@
 				88AAC17814868AF5007A80A4 /* ConfigParserXml.cpp in Sources */,
 				88AAC17B1486EBDA007A80A4 /* AppleStuff.mm in Sources */,
 				88AAC17E1486F7FC007A80A4 /* FileUtil.cpp in Sources */,
+				88260E631488450200142365 /* Logger.cpp in Sources */,
+				88260E651488541E00142365 /* Window.cpp in Sources */,
+				88260E681488583300142365 /* SysUtil.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

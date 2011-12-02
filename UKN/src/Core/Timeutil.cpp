@@ -437,7 +437,7 @@ namespace ukn {
     mPrevDelta(0),
     mCurrentFps(0),
     mFrameCount(0) {
-        
+        getRunningTime();
     }
     
     FrameCounter::~FrameCounter() {
@@ -497,6 +497,11 @@ namespace ukn {
         
 #endif
         return static_counter;
+    }
+    
+    uint64 FrameCounter::getRunningTime() const {
+        static Timestamp starttime = Timestamp();
+        return starttime.elapsed();
     }
     
 } // namespace ukn

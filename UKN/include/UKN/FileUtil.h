@@ -13,11 +13,11 @@
 
 namespace ukn {
     
-    UKN_API bool ukn_file_exists(const ukn_wstring& filepath);
+    UKN_API bool file_exists(const ukn_wstring& filepath);
     
-    UKN_API ukn_wstring ukn_get_writtable_path(const ukn_wstring& filePath);
+    UKN_API ukn_wstring get_writtable_path(const ukn_wstring& filePath);
     
-    UKN_API ukn_wstring ukn_get_application_path();
+    UKN_API ukn_wstring get_application_path();
             
     
 } // namespace ukn

@@ -1517,8 +1517,22 @@ namespace ukn {
         void fromUInt(uint32 f);
         uint32 asUInt() const;
         
-        void fromString(const ukn_string& s);
-        ukn_string toString() const;
+        void fromString(const ukn_string& s) {
+            ukn_assert(!s.empty() &&
+                       s.size() >= 4);
+            
+            this->mFourCC = uint32(s[0] | s[1]<<8 | s[2]<<16 | s[3]<<24);
+        }
+        ukn_string toString() const {
+            ukn_assert(isValid());
+            
+            std::string str("1234");
+            str[0] = static_cast<char>((this->mFourCC & 0xFF000000) >> 24);
+            str[1] = static_cast<char>((this->mFourCC & 0x00FF0000) >> 16);
+            str[2] = static_cast<char>((this->mFourCC & 0x0000FF00) >> 8);
+            str[3] = static_cast<char>((this->mFourCC & 0x000000FF));
+            return str;
+        }
         
         static ukn_string ToString(const FourCC& f);
         static FourCC FromString(const ukn_string& s);
@@ -1567,24 +1581,6 @@ namespace ukn {
     
     inline bool FourCC::isValid() const {
         return this->mFourCC != 0;
-    }
-    
-    inline void FourCC::fromString(const ukn_string& s) {
-        ukn_assert(!s.empty() &&
-                    s.size() >= 4);
-        
-        this->mFourCC = uint32(s[0] | s[1]<<8 | s[2]<<16 | s[3]<<24);
-    }
-    
-    inline ukn_string FourCC::toString() const {
-        ukn_assert(isValid());
-        
-        std::string str("1234");
-        str[0] = static_cast<char>((this->mFourCC & 0xFF000000) >> 24);
-        str[1] = static_cast<char>((this->mFourCC & 0x00FF0000) >> 16);
-        str[2] = static_cast<char>((this->mFourCC & 0x0000FF00) >> 8);
-        str[3] = static_cast<char>((this->mFourCC & 0x000000FF));
-        return str;
     }
     
     inline void FourCC::fromUInt(uint32 i) {

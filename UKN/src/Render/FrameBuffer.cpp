@@ -13,8 +13,8 @@ namespace ukn {
     
     class NullFrameBuffer: public FrameBuffer {
     public:
-        const ukn_wstring& description() const {
-            static ukn_wstring const desc(L"Null Frame Buffer");
+        const ukn_string& description() const {
+            static ukn_string const desc("Null Frame Buffer");
             return desc;
         }
         

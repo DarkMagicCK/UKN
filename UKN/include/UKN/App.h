@@ -26,7 +26,7 @@ namespace ukn {
         
         Window& getMainWindow() const;
         
-        void init(const ukn_wstring& cfgname);
+        void init(const ukn_wstring& cfgname=L"config.xml");
         void init(const ContextCfg& cfg);
         
         void create();
@@ -34,9 +34,13 @@ namespace ukn {
         void run();
         void terminate();
         
+        void update();
+        void render();
+        
     protected:
         virtual void onRender();
         virtual void onUpdate();
+        virtual void onInit();
         
     private:
         void onWindowClose(Window& wnd);

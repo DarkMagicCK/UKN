@@ -53,12 +53,16 @@ namespace ukn {
         TokenContainer mTokens;
     };
     
-    UKN_API ukn_string ukn_wstring_to_string(const ukn_wstring& str);
-    UKN_API ukn_wstring ukn_string_to_wstring(const ukn_string& str);
+    UKN_API ukn_string wstring_to_string(const ukn_wstring& str);
+    UKN_API ukn_wstring string_to_wstring(const ukn_string& str);
     
     // by direct data copy
-    UKN_API ukn_string ukn_wstring_to_string_fast(const ukn_wstring& str);
-    UKN_API ukn_wstring ukn_string_to_wstring_fast(const ukn_string& str);
+    UKN_API ukn_string wstring_to_string_fast(const ukn_wstring& str);
+    UKN_API ukn_wstring string_to_wstring_fast(const ukn_string& str);
+    
+    UKN_API ukn_string get_file_name(const ukn_string& str);
+    UKN_API ukn_wstring get_file_name(const ukn_wstring& str);
+    
     
 } // namespace ukn
 

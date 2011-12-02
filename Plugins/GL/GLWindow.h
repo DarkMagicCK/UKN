@@ -20,20 +20,17 @@ namespace ukn {
         GLWindow(const ukn_string& name, const RenderSettings& settings);
         ~GLWindow();
         
-        const ukn_wstring& description() const;
+        ukn_string description() const;
         
-        void onPullEvents(Window& wnd);
-        void onSwapBuffers(Window& wnd);
-
 #ifdef UKN_OS_WINDOWS
 		HWND getHWnd() const;
 #endif
         
+        void swapBuffers();
+        void pullEvents();
+        
     private:
         void* mGlfwWindow;
-        
-        Connection mPollEventConn;
-        Connection mSwapBuffersConn;
     };
     
 } // namespace ukn

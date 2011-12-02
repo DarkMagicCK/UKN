@@ -1083,137 +1083,111 @@ namespace ukn {
             return *this;
         }
         
-        void set(const Vector3& min, const Vector3& max);
-        void set(const Vector3& min, const Vector3& max, real boundingRadius);
-        
-        real getBoudingRadius() const;
-        Vector3 getCenter() const;
-        
-        void transform(const Matrix4& mat);
-        
-        const Vector3& getMin() const;
-        const Vector3& getMax() const;
-        
-        Vector3& getMin();
-        Vector3& getMax();
-        
-        real getWidth() const;
-        real getHeight() const;
-        real getDepth() const;
-        
-        void scale(float scale);
-    };
-    
-    inline void AABB3::set(const Vector3& min, const Vector3& max) {
-        this->min = min;
-        this->max = max;
-        this->boundingRadius = (this->max - this->min).length() / 2.0f;
-    }
-    
-    inline void AABB3::set(const Vector3& min, const Vector3& max, real boundingR) {
-        this->min = min;
-        this->max = max;
-        this->boundingRadius = boundingR;
-    }
-    
-    inline real AABB3::getBoudingRadius() const {
-        return this->boundingRadius;
-    }
-    
-    inline Vector3 AABB3::getCenter() const {
-        return (this->max - this->min) / 2.0f;
-    }
-    
-    inline void AABB3::transform(const Matrix4& mat) {
-        Vector4 box[8];
-        Vector4 newMin, newMax;
-        
-        box[0].x = this->min.x;
-        box[0].y = this->min.y;
-        box[0].z = this->min.z;
-        
-        box[1].x = this->min.x;
-        box[1].y = this->min.y;
-        box[1].z = this->max.z;
-        
-        box[2].x = this->min.x;
-        box[2].y = this->max.y;
-        box[2].z = this->min.z;
-        
-        box[3].x = this->min.x;
-        box[3].y = this->max.y;
-        box[3].z = this->max.z;
-        
-        box[4].x = this->max.x;
-        box[4].y = this->min.y;
-        box[4].z = this->min.z;
-        
-        box[5].x = this->max.x;
-        box[5].y = this->min.y;
-        box[5].z = this->max.z;
-        
-        box[6].x = this->max.x;
-        box[6].y = this->max.y;
-        box[6].z = this->min.z;
-        
-        box[7].x = this->max.x;
-        box[7].y = this->max.y;
-        box[7].z = this->max.z;
-        
-        newMin = mat * box[0];
-        newMax = newMin;
-        
-        for(int i=1; i<8; ++i) {
-            box[i] = mat * box[i];
-            
-            newMin.x = ukn_min(box[i].x, newMin.x);
-            newMin.y = ukn_min(box[i].x, newMin.y);
-            newMin.z = ukn_min(box[i].x, newMin.z);
-            
-            newMax.x = ukn_max(box[i].x, newMax.x);
-            newMax.y = ukn_max(box[i].x, newMax.y);
-            newMax.z = ukn_max(box[i].x, newMax.z);
+        void set(const Vector3& min, const Vector3& max) {
+            this->min = min;
+            this->max = max;
+            this->boundingRadius = (this->max - this->min).length() / 2.0f;
+        }
+        void set(const Vector3& min, const Vector3& max, real boundingRadius) {
+            this->min = min;
+            this->max = max;
+            this->boundingRadius = boundingRadius;
         }
         
-        set(static_cast<Vector3>(newMin),
-            static_cast<Vector3>(newMax));
-    }
-    
-    inline const Vector3& AABB3::getMin() const {
-        return this->min;
-    }
-    
-    inline const Vector3& AABB3::getMax() const {
-        return this->max;
-    }
-    
-    inline Vector3& AABB3::getMin() {
-        return this->min;
-    }
-    
-    inline Vector3& AABB3::getMax() {
-        return this->max; 
-    }
-    
-    inline real AABB3::getWidth() const {
-        return abs(this->max.x - this->min.x);
-    }
-    
-    inline real AABB3::getHeight() const {
-        return abs(this->max.y - this->min.y);
-    }
-    
-    inline real AABB3::getDepth() const {
-        return abs(this->max.z - this->min.z);
-    }
-    
-    inline void AABB3::scale(float scale) {
-        Vector3 center = this->getCenter();
-        Vector3 dist = (this->max - center) / 2.0 * scale;
+        real getBoudingRadius() const {
+            return this->boundingRadius;
+        }
+        Vector3 getCenter() const {
+            return (this->max - this->min) / 2.0f;
+        }
         
-        set(center - dist, center + dist);
-    }
-    
+        void transform(const Matrix4& mat) {
+            Vector4 box[8];
+            Vector4 newMin, newMax;
+            
+            box[0].x = this->min.x;
+            box[0].y = this->min.y;
+            box[0].z = this->min.z;
+            
+            box[1].x = this->min.x;
+            box[1].y = this->min.y;
+            box[1].z = this->max.z;
+            
+            box[2].x = this->min.x;
+            box[2].y = this->max.y;
+            box[2].z = this->min.z;
+            
+            box[3].x = this->min.x;
+            box[3].y = this->max.y;
+            box[3].z = this->max.z;
+            
+            box[4].x = this->max.x;
+            box[4].y = this->min.y;
+            box[4].z = this->min.z;
+            
+            box[5].x = this->max.x;
+            box[5].y = this->min.y;
+            box[5].z = this->max.z;
+            
+            box[6].x = this->max.x;
+            box[6].y = this->max.y;
+            box[6].z = this->min.z;
+            
+            box[7].x = this->max.x;
+            box[7].y = this->max.y;
+            box[7].z = this->max.z;
+            
+            newMin = mat * box[0];
+            newMax = newMin;
+            
+            for(int i=1; i<8; ++i) {
+                box[i] = mat * box[i];
+                
+                newMin.x = ukn_min(box[i].x, newMin.x);
+                newMin.y = ukn_min(box[i].x, newMin.y);
+                newMin.z = ukn_min(box[i].x, newMin.z);
+                
+                newMax.x = ukn_max(box[i].x, newMax.x);
+                newMax.y = ukn_max(box[i].x, newMax.y);
+                newMax.z = ukn_max(box[i].x, newMax.z);
+            }
+            
+            set(static_cast<Vector3>(newMin),
+                static_cast<Vector3>(newMax));
+        }
+        
+        const Vector3& getMin() const {
+            return this->min;
+        }
+        const Vector3& getMax() const {
+            return this->max;
+        }
+        
+        Vector3& getMin() {
+            return this->min;
+        }
+        Vector3& getMax() {
+            return this->max; 
+        }
+        
+        real getWidth() const {
+            return abs(this->max.x - this->min.x);
+        }
+        real getHeight() const {
+            return abs(this->max.y - this->min.y);
+        }
+        real getDepth() const {
+            return abs(this->max.z - this->min.z);
+        }
+        
+        void scale(float scale) {
+            Vector3 center = this->getCenter();
+            Vector3 dist = (this->max - center) / 2.0 * scale;
+            
+            set(center - dist, center + dist);
+        }
+    };
+
     typedef AABB3 Box;
     
     class Plane {

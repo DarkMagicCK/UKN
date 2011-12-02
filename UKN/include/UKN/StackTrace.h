@@ -22,8 +22,6 @@
 #include <execinfo.h>
 #endif
 
-#include "PreDeclare.h"
-
 namespace ukn {
     
 #ifdef UKN_OS_WINDOWS
@@ -110,7 +108,7 @@ namespace ukn {
     
 #endif // UKN_OS_WINDOWS
     
-    static ukn_string GetFormattedStackTraceString() {
+    static ukn_string ukn_get_formatted_stack_trace_string() {
         ukn_string stackTraceString;
         
 #ifdef __GNUC__

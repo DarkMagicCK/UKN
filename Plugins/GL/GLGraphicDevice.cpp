@@ -28,6 +28,7 @@
 #endif
 
 #include "GLWindow.h"
+#include "UKN/Common.h"
 
 namespace ukn {
     
@@ -39,13 +40,22 @@ namespace ukn {
         
     }
     
-    const ukn_wstring& GLGraphicDevice::description() const {
-        static ukn_wstring des(L"OpenGL GraphicDevice");
+    ukn_string GLGraphicDevice::description() const {
+        static ukn_string des = format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s", 
+                                              (char*)glGetString(GL_VERSION),
+                                              (char*)glGetString(GL_VENDOR),
+                                              (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));;
         return des;
     }
     
     WindowPtr GLGraphicDevice::createRenderWindow(const ukn_string& name, const RenderSettings& settings) {
-        return MakeSharedPtr<GLWindow>(name, settings);
+        WindowPtr window;
+        try {
+            window = MakeSharedPtr<GLWindow>(name, settings);
+        } catch(Exception& e) {
+            return WindowPtr();
+        }
+        return window;
     }
     
     void GLGraphicDevice::onRenderBuffer(const RenderBufferPtr& buffer) {

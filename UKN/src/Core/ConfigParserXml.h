@@ -23,8 +23,8 @@ namespace ukn {
         
         virtual bool create();
         
-        virtual StreamPtr  writeToStream() const;
-        virtual ukn_string writeToString() const;
+        virtual StreamPtr  writeToStream(const char* indent="\n") const;
+        virtual ukn_string writeToString(const char* indent="\n") const;
         
         virtual void close();
         
@@ -66,13 +66,18 @@ namespace ukn {
         struct myWritter: public pugi::xml_writer {
             void write(const void* data, size_t size);
             ukn_string str;
+            
+            myWritter(const char* indent);
+            
+            ukn_string indent;
         };
         
         struct myStreamWritter: public pugi::xml_writer {
-            myStreamWritter();
+            myStreamWritter(const char* indent);
             
             void write(const void* data, size_t size);            
             StreamPtr stream;
+            ukn_string indent;
         };
 
         pugi::xml_document* mDocument;

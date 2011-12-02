@@ -31,10 +31,7 @@ namespace ukn {
         color_fmt(EF_ARGB8),
         depth_stencil_fmt(EF_D16),
         sample_count(1),
-        sample_quality(0),
-        motion_frames(0),
-        hdr(false),
-        gamma(false) {
+        sample_quality(0) {
             
         }
         
@@ -51,14 +48,8 @@ namespace ukn {
         ElementFormat depth_stencil_fmt;
         
         uint32 sample_count;
-        uint32 sample_quality;
-        uint32 sync_interval;
-        uint32 motion_frames;
-        
+        uint32 sample_quality;        
         uint32 fsaa_samples;
-        
-        bool hdr;
-        bool gamma;
     };
 
     

@@ -115,6 +115,13 @@ namespace ukn {
             glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, settings.resizable);
         }
         
+#if defined(UKN_HAS_OPENGL_3_2)
+        
+        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
+        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
+        
+#endif // UKN_HAS_OPENGL_3_2
+        
         if((mGlfwWindow = glfwOpenWindow(settings.width,
                                          settings.height,
                                          settings.full_screen ? GLFW_FULLSCREEN : GLFW_WINDOWED, 
@@ -140,20 +147,15 @@ namespace ukn {
         glfwSetScrollCallback(ScrollFunc);
         glfwSetCharCallback(CharFunc);
         
-        // poll window events during update
-        mPollEventConn = onRender().connect(Bind(this, &GLWindow::onPullEvents));
-        
-        // swap buffers when frame ends
-        mSwapBuffersConn = onFrameEnd().connect(Bind(this, &GLWindow::onSwapBuffers));
         
         glfwSwapInterval(0);
     }
     
-    void GLWindow::onPullEvents(Window& wind) {
+    void GLWindow::pullEvents() {
         glfwPollEvents();
     }
     
-    void GLWindow::onSwapBuffers(Window& wnd) {
+    void GLWindow::swapBuffers() {
         glfwSwapBuffers();
     }
 
@@ -168,8 +170,8 @@ namespace ukn {
         glfwTerminate();
     }
     
-    const ukn_wstring& GLWindow::description() const {
-        static ukn_wstring des(L"OpenGL Window based on GLFW");
+    ukn_string GLWindow::description() const {
+        static ukn_string des("OpenGL Window based on GLFW");
         return des;
     }
      

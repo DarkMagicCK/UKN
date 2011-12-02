@@ -10,11 +10,13 @@
 #define Project_Unknown_Util_h
 
 #include "Platform.h"
-#include "SharedPtr.h"
+#include "Ptr.h"
 #include "Preprocessor.h"
 
 namespace ukn {
     
+    // array for POD
+    // *** does NOT call constructors
     template<typename T>
     class Array {
     public:
@@ -101,7 +103,7 @@ namespace ukn {
         size_t mSize;
         T* mElements;
         
-        typedef SharedPtr<T, SharedPtrRefCounter> Ptr;
+        typedef SharedPtr<T> Ptr;
         Ptr mHolder;
         
         bool mMapped;
@@ -124,7 +126,7 @@ namespace ukn {
     mSize(0),
     mMapped(false) {
         if(capacity != 0) {
-            this->mElements = ukn_malloc_t(T, capacity);
+            this->mElements = new T[capacity];
             this->mHolder = this->mElements;
             this->mSize = this->mCapacity;
         } else 
@@ -138,7 +140,7 @@ namespace ukn {
     mSize(size),
     mMapped(false) {
         if(size > 0) {
-            this->mElements = (T*)sora_malloc(sizeof(T) * this->mCapacity);
+            this->mElements = new T[mCapacity];
             for(int32 i = 0; i < this->mCapacity; ++i) {
                 this->mElements[i] = value;
             }
@@ -169,7 +171,7 @@ namespace ukn {
         this->mCapacity = src.mCapacity;
         this->mSize = src.mSize;
         if(this->mCapacity > 0) {
-            this->mElements = (T*)sora_malloc(sizeof(T) * this->mCapacity);
+            this->mElements = new T[mCapacity];
             for(size_t i=0; i<this->mSize; ++i) {
                 this->mElements[i] = src.mElements[i];
             }
@@ -237,7 +239,7 @@ namespace ukn {
         this->mMapped= false;
         this->mSize = 0;
         if(this->mCapacity > 0) {
-            this->mElements = ukn_malloc_t(T, this->mCapacity);
+            this->mElements = new T[mCapacity];
             this->mHolder = this->mElements;
         } else {
             this->mElements = 0;
@@ -262,7 +264,7 @@ namespace ukn {
     void Array<T>::growTo(size_t newCapacity) {
         ukn_assert(!this->mMapped);
         
-        T* newArray = ukn_malloc_t(T, newCapacity);
+        T* newArray = new T[mCapacity];
         if(this->mElements) {
             memcpy(newArray, this->mElements, sizeof(T) * this->mCapacity);
         }
@@ -1685,6 +1687,50 @@ namespace ukn {
     private:
         IteratorType mEnd;
         IteratorType mCurr;
+    };
+    
+    // simple circular buffer impl
+    template<typename T>
+    class RingBuffer {
+    public:
+        explicit RingBuffer(size_t size=2):
+        mHead(0),
+        mTail(0),
+        mQueue(size, 0) {
+        }
+        
+        ~RingBuffer() { }
+        
+        void put(const T& data) {
+            mQueue[mHead] = data;
+            mHead++;
+            if(mHead >= mQueue.size()) {
+                mHead = 0;
+            }
+        }
+        
+        T get() {
+            if(mTail < mQueue.size()) {
+                mTail++;
+                return mQueue[mTail-1];
+            } else {
+                mTail = 1;
+                return mQueue[mTail-1];
+            }
+        }
+        
+        void resize(size_t size) {
+            mQueue.resize(size);
+        }
+        size_t getSize() const {
+            return mQueue.size();
+        }
+        
+    private:
+        size_t mHead;
+        size_t mTail;
+        
+        Array<T> mQueue;
     };
     
 } // namespace ukn

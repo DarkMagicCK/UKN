@@ -10,6 +10,8 @@
 		88260E631488450200142365 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E621488450100142365 /* Logger.cpp */; };
 		88260E651488541E00142365 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E641488541E00142365 /* Window.cpp */; };
 		88260E681488583300142365 /* SysUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E671488583200142365 /* SysUtil.cpp */; };
+		8832D1461488C9F700D08C15 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1451488C9F700D08C15 /* GLTexture.cpp */; };
+		8832D14A1488CFDC00D08C15 /* GLFrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */; };
 		88AAC15B14868751007A80A4 /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14614868751007A80A4 /* App.cpp */; };
 		88AAC15D14868751007A80A4 /* ConfigParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14914868751007A80A4 /* ConfigParser.cpp */; };
 		88AAC15E14868751007A80A4 /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14A14868751007A80A4 /* Context.cpp */; };
@@ -63,6 +65,11 @@
 		88260E641488541E00142365 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		88260E661488570100142365 /* SysUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SysUtil.h; sourceTree = "<group>"; };
 		88260E671488583200142365 /* SysUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SysUtil.cpp; sourceTree = "<group>"; };
+		8832D1431488C87C00D08C15 /* GLConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLConvert.h; sourceTree = "<group>"; };
+		8832D1441488C9F200D08C15 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
+		8832D1451488C9F700D08C15 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
+		8832D1481488CFD400D08C15 /* GLFrameBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFrameBuffer.h; sourceTree = "<group>"; };
+		8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFrameBuffer.cpp; sourceTree = "<group>"; };
 		88AAC0F714868751007A80A4 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
 		88AAC0F814868751007A80A4 /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
 		88AAC0F914868751007A80A4 /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
@@ -120,9 +127,8 @@
 		88AAC13114868751007A80A4 /* RenderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderView.h; sourceTree = "<group>"; };
 		88AAC13214868751007A80A4 /* Resource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Resource.h; sourceTree = "<group>"; };
 		88AAC13314868751007A80A4 /* Scene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scene.h; sourceTree = "<group>"; };
-		88AAC13414868751007A80A4 /* ScopedPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScopedPtr.h; sourceTree = "<group>"; };
 		88AAC13514868751007A80A4 /* Shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Shader.h; sourceTree = "<group>"; };
-		88AAC13614868751007A80A4 /* SharedPtr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SharedPtr.h; sourceTree = "<group>"; };
+		88AAC13614868751007A80A4 /* Ptr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ptr.h; sourceTree = "<group>"; };
 		88AAC13714868751007A80A4 /* Signal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Signal.h; sourceTree = "<group>"; };
 		88AAC13814868751007A80A4 /* StackTrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StackTrace.h; sourceTree = "<group>"; };
 		88AAC13914868751007A80A4 /* Stream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stream.h; sourceTree = "<group>"; };
@@ -251,9 +257,8 @@
 				88AAC13114868751007A80A4 /* RenderView.h */,
 				88AAC13214868751007A80A4 /* Resource.h */,
 				88AAC13314868751007A80A4 /* Scene.h */,
-				88AAC13414868751007A80A4 /* ScopedPtr.h */,
 				88AAC13514868751007A80A4 /* Shader.h */,
-				88AAC13614868751007A80A4 /* SharedPtr.h */,
+				88AAC13614868751007A80A4 /* Ptr.h */,
 				88AAC13714868751007A80A4 /* Signal.h */,
 				88AAC17C1486F787007A80A4 /* FileUtil.h */,
 				88AAC13814868751007A80A4 /* StackTrace.h */,
@@ -440,6 +445,11 @@
 				88E3C3E0147F2D6200E8754D /* GLGraphicFactory.cpp */,
 				88E3C436147F30EC00E8754D /* GLWindow.h */,
 				88E3C437147F30F100E8754D /* GLWindow.cpp */,
+				8832D1431488C87C00D08C15 /* GLConvert.h */,
+				8832D1441488C9F200D08C15 /* GLTexture.h */,
+				8832D1451488C9F700D08C15 /* GLTexture.cpp */,
+				8832D1481488CFD400D08C15 /* GLFrameBuffer.h */,
+				8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -563,6 +573,8 @@
 				88260E631488450200142365 /* Logger.cpp in Sources */,
 				88260E651488541E00142365 /* Window.cpp in Sources */,
 				88260E681488583300142365 /* SysUtil.cpp in Sources */,
+				8832D1461488C9F700D08C15 /* GLTexture.cpp in Sources */,
+				8832D14A1488CFDC00D08C15 /* GLFrameBuffer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

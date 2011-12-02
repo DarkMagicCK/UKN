@@ -55,7 +55,8 @@ namespace ukn {
     
     class UKN_API ResourceFactory {
     public:
-        virtual bool resourceExists(const ukn_wstring& path) = 0;
+        virtual bool resourceExists(const ukn_wstring& resource) = 0;
+        virtual bool pathExists(const ukn_wstring& path) = 0;
         virtual ResourcePtr onResourceLoad(const ukn_wstring& path) = 0;
         
         typedef std::vector<ukn_wstring> ResourceNames;
@@ -89,6 +90,9 @@ namespace ukn {
         ResourcePtr loadResource(const ukn_wstring& name_or_path);
         ResourcePtr createMemoryResource(const uint8* data, size_t size, const ukn_wstring& name=L"memory_buffer");
         ResourcePtr createFileResource(const ukn_wstring& name);
+        
+        typedef std::vector<ukn_wstring> FileList;
+        void enumResourceNamesInPath(const ukn_wstring& path, FileList& names);
         
     private:
         ResourcePtr onResourceLoad(const ukn_wstring& name);

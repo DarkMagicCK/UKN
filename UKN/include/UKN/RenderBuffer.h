@@ -14,8 +14,6 @@
 #include "GraphicSettings.h"
 #include "Vertex.h"
 
-#include <vector>
-
 namespace ukn {
     
     /**
@@ -38,7 +36,7 @@ namespace ukn {
         GraphicBufferPtr    getVertexStream() const;
         void                bindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format);
         
-        VertexFormat        getVertexFormat() const;
+        const VertexFormat& getVertexFormat() const;
         void                setVertexFormat(const VertexFormat& format);
         
         uint32              getVertexCount() const;

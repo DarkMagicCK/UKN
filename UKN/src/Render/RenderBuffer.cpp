@@ -61,7 +61,7 @@ namespace ukn {
         mVertexFormat = format;
     }
     
-    VertexFormat RenderBuffer::getVertexFormat() const {
+    const VertexFormat& RenderBuffer::getVertexFormat() const {
         return mVertexFormat;
     }
     

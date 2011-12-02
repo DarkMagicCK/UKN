@@ -12,6 +12,9 @@
 #include "Platform.h"
 #include "PreDeclare.h"
 #include "GraphicSettings.h"
+#include "MathUtil.h"
+
+#include <stack>
 
 namespace ukn {
     
@@ -42,10 +45,49 @@ namespace ukn {
         
         static GraphicDevicePtr NullObject();
         
-        virtual ukn_string description() const = 0;
+        void pushViewMatrix();
+        void popViewMatrix();
         
-        virtual WindowPtr createRenderWindow(const ukn_string& name, const RenderSettings& settings) = 0;
+        void pushProjectionMatrix();
+        void popProjectionMatrix();
+        
+    protected:
+        typedef std::stack<Matrix4> MatrixStack;
+        MatrixStack mViewMatrixStack;
+        MatrixStack mProjMatrixStack;
+        
+        virtual WindowPtr doCreateRenderWindow(const ukn_string& name, const RenderSettings& settings) = 0;
+
+    public:
+        virtual void beginFrame() = 0;
+        virtual void endFrame() = 0;
+        
+    public:
+        virtual ukn_string description() const = 0;
+               
+        virtual void setViewMatrix(const Matrix4& mat) = 0;
+        virtual void setProjectionMatrix(const Matrix4& mat) = 0;
+        
+        virtual void getViewMatrix(Matrix4& mat) = 0;
+        virtual void getProjectionMatrix(Matrix4& mat) = 0;
+        
+        virtual void bindTexture(TexturePtr texture) = 0;
+                
+        virtual void fillGraphicCaps(GraphicDeviceCaps& caps) = 0;
+    
         virtual void onRenderBuffer(const RenderBufferPtr& buffer) = 0;
+        virtual void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) = 0;
+        
+    public:
+        WindowPtr createRenderWindow(const ukn_string& name, const RenderSettings& settings);
+        
+        void bindFrameBuffer(const FrameBufferPtr& ptr);
+        const FrameBufferPtr& getCurrFrameBuffer() const;
+        const FrameBufferPtr& getScreenFrameBuffer() const;
+        
+    protected:
+        FrameBufferPtr mCurrFrameBuffer;
+        FrameBufferPtr mScreenFrameBuffer; 
     };
     
 } // namespace ukn

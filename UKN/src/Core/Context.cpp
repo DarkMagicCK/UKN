@@ -104,17 +104,18 @@ namespace ukn {
             ConfigParserPtr configParser = MakeConfigParser(configData);
             if(configParser) {
                 if(configParser->toNode("/cfg/graphics")) {
-                    cfg.render_cfg.width = configParser->getInt("width", cfg.render_cfg.width);
-                    cfg.render_cfg.height = configParser->getInt("height", cfg.render_cfg.height);
-                    cfg.render_cfg.top = configParser->getInt("top", cfg.render_cfg.top);
-                    cfg.render_cfg.left = configParser->getInt("left", cfg.render_cfg.left);
-                    cfg.render_cfg.resizable = configParser->getBool("resizable", cfg.render_cfg.resizable);
-                    cfg.render_cfg.show_mouse = configParser->getBool("show_mouse", cfg.render_cfg.show_mouse);
-                    cfg.render_cfg.full_screen = configParser->getBool("full_screen", cfg.render_cfg.full_screen);
+                    cfg.render_cfg.width        = configParser->getInt("width", cfg.render_cfg.width);
+                    cfg.render_cfg.height       = configParser->getInt("height", cfg.render_cfg.height);
+                    cfg.render_cfg.top          = configParser->getInt("top", cfg.render_cfg.top);
+                    cfg.render_cfg.left         = configParser->getInt("left", cfg.render_cfg.left);
+                    
+                    cfg.render_cfg.resizable    = configParser->getBool("resizable", cfg.render_cfg.resizable);
+                    cfg.render_cfg.show_mouse   = configParser->getBool("show_mouse", cfg.render_cfg.show_mouse);
+                    cfg.render_cfg.full_screen  = configParser->getBool("full_screen", cfg.render_cfg.full_screen);
 
-                    cfg.render_cfg.sample_count = configParser->getInt("sample_count", cfg.render_cfg.sample_count);
-                    cfg.render_cfg.sample_quality = configParser->getInt("sample_quality", cfg.render_cfg.sample_quality);
-                    cfg.render_cfg.fsaa_samples = configParser->getInt("fsaa_samples", cfg.render_cfg.fsaa_samples);
+                    cfg.render_cfg.sample_count     = configParser->getInt("sample_count", cfg.render_cfg.sample_count);
+                    cfg.render_cfg.sample_quality   = configParser->getInt("sample_quality", cfg.render_cfg.sample_quality);
+                    cfg.render_cfg.fsaa_samples     = configParser->getInt("fsaa_samples", cfg.render_cfg.fsaa_samples);
                     
                     ukn_string fmt_string;
                     int fmt_id;

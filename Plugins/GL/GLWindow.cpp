@@ -154,10 +154,6 @@ namespace ukn {
     void GLWindow::pullEvents() {
         glfwPollEvents();
     }
-    
-    void GLWindow::swapBuffers() {
-        glfwSwapBuffers();
-    }
 
 	#ifdef UKN_OS_WINDOWS
 	HWND GLWindow::getHWnd() const {

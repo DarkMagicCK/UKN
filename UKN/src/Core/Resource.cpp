@@ -28,6 +28,11 @@ namespace ukn {
         bool resourceExists(const ukn_wstring& path) {
             return file_exists(path);
         }
+        
+        bool pathExists(const ukn_wstring& path) {
+            return path_exists(path);
+        }
+        
         ResourcePtr onResourceLoad(const ukn_wstring& path) {
             FileStream* pfs = new FileStream;
             if(pfs->open(path)) {
@@ -37,7 +42,11 @@ namespace ukn {
         }
         
         void enumResourceNamesInPath(const ukn_wstring& path, ResourceFactory::ResourceNames& names) {
-            
+            DirectoryIterator it(path);
+            while(!it.isEnd()) {
+                names.push_back(string_to_wstring(it.file()));
+                ++it;
+            }
         }
     };
     
@@ -67,7 +76,6 @@ namespace ukn {
             }
         }
     }
-    
     
     const ResourceLoader::ResourcePaths& ResourceLoader::getResourcePaths() const {
         return mResourcePaths;
@@ -139,6 +147,18 @@ namespace ukn {
         if(file_stream->open(name, true, false, false))
             return MakeSharedPtr<Resource>(name, file_stream);
         return ResourcePtr();
+    }
+    
+    void ResourceLoader::enumResourceNamesInPath(const ukn_wstring& path, FileList& names) {
+        ResourceFactories::iterator itFac = mResourceFactories.begin();
+        while(itFac != mResourceFactories.end()) {
+            if((*itFac)->pathExists(path)) {
+                (*itFac)->enumResourceNamesInPath(path, names);
+                break;
+            }
+            
+            ++itFac;
+        }
     }
     
 } // namespace ukn

@@ -37,6 +37,9 @@ namespace ukn {
         void update();
         void render();
         
+        void setCamera(CameraPtr camera);
+        CameraPtr getCamera() const;
+        
     protected:
         virtual void onRender();
         virtual void onUpdate();
@@ -49,6 +52,7 @@ namespace ukn {
         bool mInited;    
 
         WindowPtr mMainWindow;
+        CameraPtr mCamera;
         
         Connection mCloseConn;
     };

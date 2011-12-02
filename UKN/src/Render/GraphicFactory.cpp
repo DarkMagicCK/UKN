@@ -62,11 +62,11 @@ namespace ukn {
             return FrameBuffer::NullObject();
         }
         
-        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format) {
+        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) {
             return Texture::NullObject();
         }
         
-        TexturePtr loadTexture(const ukn_wstring& name, bool generateMipmaps=false) {
+        TexturePtr load2DTexture(const ukn_wstring& name, bool generateMipmaps=false) {
             return Texture::NullObject();
         }
         

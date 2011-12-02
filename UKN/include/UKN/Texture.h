@@ -15,42 +15,45 @@
 
 namespace ukn {
     
+    enum TextureType {
+        // Null Texture
+        TT_Null = 0,
+        
+        // 2d texture
+        TT_Texture2D,
+        
+        // 1d texture
+        TT_Texture1D,
+        // 3d texture
+        TT_Texture3D,
+        // cubemap
+        TT_TextureCubeMap,
+    };
+    
+    enum MapperAccess {
+        MA_ReadOnly,
+        MA_WriteOnly,
+        MA_ReadWrite,
+    };
+    
     /**
      * Abstract texture class
      * Implementations differs on plugins
      **/
     class UKN_API Texture {
     public:
-        enum TextureType {
-            // Null Texture
-            TT_Null = 0,
-            
-            // 2d texture
-            TT_Texture2D,
-            
-            // 1d texture
-            TT_Texture1D,
-            // 3d texture
-            TT_Texture3D,
-            // cubemap
-            TT_TextureCubeMap,
-        };
-        
-        enum MapperAccess {
-            MA_ReadOnly,
-            MA_WriteOnly,
-            MA_ReadWrite,
-        };
-        
         static TexturePtr NullObject();
         
         explicit Texture(TextureType type);
         virtual ~Texture();
         
         ElementFormat getFormat() const;
+        TextureType getType() const;
         
-        virtual uint32 getWidth(uint32 level = 0) = 0;
-        virtual uint32 getHeight(uint32 level = 0) = 0;
+        virtual uint32 getWidth(uint32 level = 0) const = 0;
+        virtual uint32 getHeight(uint32 level = 0) const = 0;
+        
+        virtual uintPtr getTextureId() const = 0;
         
     protected:
         TextureType mType;

@@ -1,5 +1,5 @@
 /*
- *  SharedPtr.h
+ *  Ptr.h
  *  Hoshizora
  *
  *  Created by Robert Bu on 8/24/10.
@@ -7,31 +7,80 @@
  *
  */
 
-#ifndef ukn_shared_ptr_h_
-#define ukn_shared_ptr_h_
+#ifndef ukn_ptr_h_
+#define ukn_ptr_h_
 
 #include "Platform.h"
 #include "Exception.h"
 #include "MemoryUtil.h"
 #include "Function.h"
+#include "Uncopyable.h"
 
 namespace ukn {
-	    
+    
+    /**
+     * Some ptr object implementation
+     * including SharedPtr, WeakPtr and ScopedPtr
+     **/
+    
+    template<typename T, class RP>
+	class SharedPtr;
+    
+    template<typename T>
+    class ScopedPtr;
+    
+    template<typename T>
+    class WeakPtr;
+    
     class SharedPtrRefCounter {
     public:
-        SharedPtrRefCounter(): mRef(1) {}
+        SharedPtrRefCounter(): mRef(1), mWeakRef(1) {}
+        
         void incRef() {
             ++this->mRef;
         }
+        
         int decRef() {
             return --this->mRef;
         }
+        
         int getRef() const {
             return this->mRef;
         }
         
+        void incWeakRef() {
+            ++this->mWeakRef;
+        }
+        
+        int decWeakRef() {
+            return --this->mWeakRef;
+        }
+        
+        int getWeakRef() const {
+            return this->mWeakRef;
+        }
+        
+        void destruct() {
+            delete this;
+        }
+        
+        void release() {
+            int32 newref = --this->mRef;
+            if(newref != 0)
+                return;
+            
+            this->weakRelease();
+        }
+        
+        void weakRelease() {
+            int32 newweakref = --this->mWeakRef;
+            if(newweakref == 0)
+                this->destruct();
+        }
+        
     private:
         int32 mRef;
+        int32 mWeakRef;
     };
     
     template<class C>
@@ -66,39 +115,41 @@ namespace ukn {
         }
     };
 
-	template<typename T, class RC=SharedPtrRefCounter, class RP=SharedPtrReleasePolicy<T> >
+	template<typename T, class RP=SharedPtrReleasePolicy<T> >
 	class SharedPtr {
 	public:
+        typedef T element_type;
+        
 		SharedPtr(): 
         mPtr(0), 
-        mCounter(new RC),
+        mCounter(new SharedPtrRefCounter),
         mAllocator(),
         mUnallocator() {
         }
 		
         SharedPtr(T* t): 
         mPtr(t), 
-        mCounter(new RC),
+        mCounter(new SharedPtrRefCounter),
         mAllocator(),
         mUnallocator() { 
         }
         
         SharedPtr(const Function<T*(void)>& allocator, const Function<void(T*)>& unallocator): 
         mPtr(0), 
-        mCounter(new RC),
+        mCounter(new SharedPtrRefCounter),
         mAllocator(allocator),
         mUnallocator(unallocator) {
         }
 		
         SharedPtr(T* t, const Function<T*(void)>& allocator, const Function<void(T*)>& unallocator): 
         mPtr(t), 
-        mCounter(new RC),
+        mCounter(new SharedPtrRefCounter),
         mAllocator(allocator),
         mUnallocator(unallocator) { 
         }
         
         template<class Other, class OtherRP>
-		SharedPtr(const SharedPtr<Other, RC, OtherRP>& rhs): 
+		SharedPtr(const SharedPtr<Other, OtherRP>& rhs): 
         mCounter(rhs.mCounter),
         mPtr(const_cast<Other*>(rhs.get())) {
             this->mCounter->incRef();
@@ -116,7 +167,7 @@ namespace ukn {
 		
 		SharedPtr& assign(T* _ptr) {
             if(get() != _ptr) {
-                RC* tmp = new RC;
+                SharedPtrRefCounter* tmp = new SharedPtrRefCounter;
                 release();
                 this->mCounter = tmp;
                 this->mPtr = _ptr;
@@ -133,7 +184,7 @@ namespace ukn {
         }
         
         template<class Other, class OtherRP>
-        SharedPtr& assign(const SharedPtr<Other, RC, OtherRP>& _ptr) {
+        SharedPtr& assign(const SharedPtr<Other, OtherRP>& _ptr) {
             if(_ptr.get() != this->mPtr) {
                 SharedPtr tmp(_ptr);
                 swap(tmp);
@@ -160,7 +211,7 @@ namespace ukn {
 		}
         
         template<class Other, class OtherRP>
-        SharedPtr& operator=(const SharedPtr<Other, RC, OtherRP>& _ptr) {
+        SharedPtr& operator=(const SharedPtr<Other, OtherRP>& _ptr) {
             return this->assign<Other>(_ptr);
         }
         
@@ -170,18 +221,18 @@ namespace ukn {
         }
         
         template<class Other, class OtherRP>
-        SharedPtr<Other, RC, OtherRP> cast() const {
+        SharedPtr<Other, OtherRP> cast() const {
             Other* other = dynamic_cast<Other*>(this->mPtr);
             if(other) {
-                return SharedPtr<Other, RC, OtherRP>(this->mCounter, other);
+                return SharedPtr<Other, OtherRP>(this->mCounter, other);
             }
-            return SharedPtr<Other, RC, OtherRP>();
+            return SharedPtr<Other, OtherRP>();
         }
         
         template<class Other, class OtherRP>
-		SharedPtr<Other, RC, OtherRP> unsafeCast() const {
+		SharedPtr<Other, OtherRP> unsafeCast() const {
             Other* other = static_cast<Other*>(this->mPtr);
-            return SharedPtr<Other, RC, OtherRP>(this->mCounter, other);
+            return SharedPtr<Other, OtherRP>(this->mCounter, other);
         }
         
         T* get() const {
@@ -275,7 +326,7 @@ namespace ukn {
             return this->mPtr==0;
         }
 		
-		int32 getRefCount() const { 
+		int32 use_count() const { 
 			return this->mCounter->getRef();
 		}
         
@@ -300,30 +351,39 @@ namespace ukn {
                     RP::Release(this->mPtr);
                 this->mPtr = 0;
                 
-                delete this->mCounter;
-                this->mCounter = 0;
+                this->mCounter->release();
             }
         }
         
-        SharedPtr(RC* pCounter, T* pPtr):
+        SharedPtr(SharedPtrRefCounter* pCounter, T* pPtr):
         mCounter(pCounter), mPtr(pPtr) {
             ukn_assert(pCounter);
             pCounter->incRef();
         }
         
     private:
-        RC* mCounter;
         T* mPtr;
+        SharedPtrRefCounter* mCounter;
+        
+        template<typename OT>
+        friend class WeakPtr;
+        
+        SharedPtr(T* ptr, SharedPtrRefCounter* ref):
+        mPtr(ptr),
+        mCounter(ref) {
+            if(mCounter)
+                mCounter->incRef();
+        }
         
         Function<T*(void)> mAllocator;
         Function<void(T*)> mUnallocator;
         
-        template<class OC, class ORC, class ORP>
+        template<class OC, class ORP>
         friend class SharedPtr;
 	};
     
-    template <class C, class RC, class RP>
-    inline void swap(SharedPtr<C, RC, RP>& p1, SharedPtr<C, RC, RP>& p2) {
+    template <class C, class RP>
+    inline void swap(SharedPtr<C, RP>& p1, SharedPtr<C, RP>& p2) {
         p1.swap(p2);
     }
     
@@ -336,7 +396,7 @@ namespace ukn {
     
     template<typename T>
     static SharedPtr<T> MakeCOMPtr(T* pointer) {
-        return SharedPtr<T, SharedPtrRefCounter>(pointer);
+        return SharedPtr<T>(pointer);
     }
 	
 	template<typename T>
@@ -389,6 +449,156 @@ namespace ukn {
     SharedPtr<T> MakeSharedPtr(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8) {
         return SharedPtr<T>(new T(a1, a2, a3, a4, a5, a6, a7, a8));
     }
+    
+    
+    template<class T>
+    class ScopedPtr: Uncopyable {
+    public:
+        typedef T element_type;
+        
+        explicit ScopedPtr(T* _ptr):
+        ptr(_ptr) {
+        }
+        
+        ScopedPtr():
+        ptr(0) {
+            
+        }
+        
+        ~ScopedPtr() {
+            if(this->ptr) {
+                delete this->ptr;
+                this->ptr = 0;
+            }
+        }
+        
+        void reset(T* p = 0) {
+            this->ptr = p;
+        }
+        
+        T& operator*() const {
+            ukn_assert(this->ptr != 0);
+            return *this->ptr;
+        }
+        T* operator->() const {
+            return this->ptr;
+        }
+        
+        T* get() const {
+            return this->ptr;
+        }
+        
+        void swap(ScopedPtr& b);
+        
+    private:
+        T* ptr;
+    };
+    
+    template<class T>
+    void swap(ScopedPtr<T>& a, ScopedPtr<T>& b) {
+        std::swap(a.ptr, b.ptr);
+    }
+    
+    template<typename T>
+    class WeakPtr {
+    public:
+        typedef T element_type;
+        
+        WeakPtr():
+        mPtr(0),
+        mCounter(0) {
+            
+        }
+        
+        WeakPtr(const WeakPtr<T>& ptr):
+        mCounter(ptr.mCounter) {
+            if(mCounter) {
+                mCounter->incWeakRef();
+                mPtr = ptr.lock().get();
+            }
+        }
+        
+        template<class Y> WeakPtr(const SharedPtr<Y>& ptr):
+        mPtr(ptr.get()),
+        mCounter(ptr.mCounter) {
+            if(mCounter) {
+                mCounter->incWeakRef();
+            }
+        }
+        template<class Y> WeakPtr(const WeakPtr<Y>& ptr):
+        mCounter(ptr.mCounter) {
+            if(mCounter) {
+                mCounter->incWeakRef();
+                mPtr = ptr.lock().get();
+            }
+        }
+        
+        ~WeakPtr() {
+            if(mCounter) {
+                mCounter->decWeakRef();
+            }
+        }
+        
+        WeakPtr& operator=(const WeakPtr& r) {
+            mPtr = r.lock().get();
+            mCounter = r.mCounter;
+            if(mCounter)
+                mCounter->incWeakRef();
+        }
+        template<class Y> WeakPtr & operator=(const WeakPtr<Y>& r) {
+            mPtr = r.lock().get();
+            mCounter = r.mCounter;
+            if(mCounter)
+                mCounter->incWeakRef();
+        }
+        template<class Y> WeakPtr & operator=(const SharedPtr<Y>& r) {
+            mPtr = r.get();
+            mCounter = r.mCounter;
+            
+            if(mCounter)
+                mCounter->incWeakRef();
+        }
+        
+        int32 use_count() const {
+            return mCounter ? mCounter->getRef() : 0;
+        }
+        int32 weak_count() const {
+            return mCounter ? mCounter->getWeakRef() : 0;
+        }
+        bool expired() const {
+            return (mCounter && mCounter->getRef() == 0) || !mCounter;
+        }
+        SharedPtr<T> lock() const {
+            return SharedPtr<T>(mPtr, mCounter);
+        }
+        
+        void reset() {
+            mPtr = 0;
+            if(mCounter) {
+                mCounter->decWeakRef();
+            }
+            mCounter = 0;
+        }
+    
+        void swap(WeakPtr<T> & b) {
+            std::swap(mPtr, b.mPtr);
+            std::swap(mCounter, b.mCounter);
+        }
+        
+    private:
+        T* mPtr;
+        SharedPtrRefCounter* mCounter;
+        
+        template<class Y>
+        friend class WeakPtr;
+    };
+    
+    template<class T>
+    void swap(WeakPtr<T>& a, WeakPtr<T>& b) {
+        std::swap(a.mPtr, b.mPtr);
+        std::swap(a.mCounter, b.mCounter);
+    }
+
 		
 } // namespace ukn
 #endif

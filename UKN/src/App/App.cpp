@@ -18,6 +18,7 @@
 #include "UKN/Logger.h"
 #include "UKN/Common.h"
 #include "UKN/SysUtil.h"
+#include "UKN/Camera.h"
 
 namespace ukn {
     
@@ -112,6 +113,14 @@ namespace ukn {
         onRender();
     }
     
+    void AppInstance::setCamera(CameraPtr camera) {
+        mCamera = camera;
+    }
+    
+    CameraPtr AppInstance::getCamera() const {
+        return mCamera;
+    }
+    
     void AppInstance::onInit() {        
         
     }
@@ -133,8 +142,6 @@ namespace ukn {
             render();
             
             mMainWindow->onFrameEnd()(*mMainWindow);
-            
-            mMainWindow->swapBuffers();
         }
     }
     

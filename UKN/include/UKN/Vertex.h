@@ -95,6 +95,16 @@ namespace ukn {
             return size;
         }
         
+        bool checkFormat(uint32 flag) const {
+            return (mFlag & flag) != 0 ? true : false;
+        }
+        
+        uint32 offsetXYZ()    const { return mOffsetXYZ; }
+        uint32 offsetUV()     const { return mOffsetUV; }
+        uint32 offsetColor0() const { return mOffsetColor0; }
+        uint32 offsetColor1() const { return mOffsetColor1; }
+        uint32 offsetNormal() const { return mOffsetNormal; }
+        
         uint32 mFlag;
         uint32 mOffsetXYZ, mOffsetUV, mOffsetColor0, mOffsetColor1, mOffsetNormal;
         

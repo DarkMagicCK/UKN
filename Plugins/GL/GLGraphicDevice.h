@@ -25,8 +25,26 @@ namespace ukn {
         
         ukn_string description() const;
         
-        WindowPtr createRenderWindow(const ukn_string& name, const RenderSettings& settings);
+        WindowPtr doCreateRenderWindow(const ukn_string& name, const RenderSettings& settings);
+        
+        void beginFrame();
+        void endFrame();
+        
         void onRenderBuffer(const RenderBufferPtr& buffer);
+        void onBindFrameBuffer(const FrameBufferPtr& frameBuffer);
+        
+        void setViewMatrix(const Matrix4& mat);
+        void setProjectionMatrix(const Matrix4& mat);
+        
+        void getViewMatrix(Matrix4& mat);
+        void getProjectionMatrix(Matrix4& mat);
+        
+        void bindTexture(TexturePtr texture);
+        
+        void fillGraphicCaps(GraphicDeviceCaps& caps);
+        
+    private:
+        TexturePtr mCurrTexture;
     };
     
 } // namespace ukn

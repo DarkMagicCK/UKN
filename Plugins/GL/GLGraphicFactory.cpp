@@ -15,6 +15,8 @@
 #include "UKN/FrameBuffer.h"
 #include "UKN/Texture.h"
 
+#include "GLTexture.h"
+
 namespace ukn {
     
     class GLGraphicFactory: public GraphicFactory {
@@ -43,9 +45,9 @@ namespace ukn {
         
         FrameBufferPtr createFrameBuffer();
         
-        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format);
+        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData);
         
-        TexturePtr loadTexture(const ukn_wstring& name, bool generateMipmaps=false);
+        TexturePtr load2DTexture(const ukn_wstring& name, bool generateMipmaps=false);
         
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -103,12 +105,20 @@ namespace ukn {
         return FrameBuffer::NullObject();
     }
     
-    TexturePtr GLGraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format) {
-        return Texture::NullObject();
+    TexturePtr GLGraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) {
+        GLTexture2D* texture = new GLTexture2D();
+        if(texture->create(width, height, numMipmaps, format, initialData)) {
+            return texture;
+        }
+        return TexturePtr();
     }
     
-    TexturePtr GLGraphicFactory::loadTexture(const ukn_wstring& name, bool generateMipmaps) {
-        return Texture::NullObject();
+    TexturePtr GLGraphicFactory::load2DTexture(const ukn_wstring& name, bool generateMipmaps) {
+        GLTexture2D* texture = new GLTexture2D();
+        if(texture->load(name, generateMipmaps)) {
+            return texture;
+        }
+        return TexturePtr();
     }
     
 } // namespace ukn

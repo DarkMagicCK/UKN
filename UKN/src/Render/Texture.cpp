@@ -17,11 +17,15 @@ namespace ukn {
             
         }
         
-        uint32 getWidth(uint32 level) {
+        uint32 getWidth(uint32 level) const {
             return 0;
         }
         
-        uint32 getHeight(uint32 level) {
+        uint32 getHeight(uint32 level) const {
+            return 0;
+        }
+        
+        uintPtr getTextureId() const {
             return 0;
         }
     };
@@ -34,6 +38,10 @@ namespace ukn {
     Texture::Texture(TextureType type):
     mType(type) {
         
+    }
+    
+    TextureType Texture::getType() const {
+        return mType;
     }
     
     Texture::~Texture() {

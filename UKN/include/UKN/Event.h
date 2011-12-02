@@ -10,11 +10,26 @@
 #define Project_Unknown_Event_h
 
 #include "Platform.h"
+#include "Any.h"
 
 namespace ukn {
     
+    class EventHandler;
+    
     class Event {
+    public:
+        Event(const ukn_string& name):
+        mName(name);
         
+        
+        
+    private:
+        ukn_string mName;
+        
+        bool mConsumed;
+        
+        EventHandler* mSender;
+        EventHandler* mReceiver;
     };
     
 } // namespace ukn

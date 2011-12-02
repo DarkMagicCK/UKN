@@ -9,6 +9,16 @@
 #ifndef Project_Unknown_Font_h
 #define Project_Unknown_Font_h
 
+#include "Platform.h"
+#include "Uncopyable.h"
 
+namespace ukn {
+    
+    class Font: Uncopyable {
+    public:
+        
+    };
+    
+} // namespace ukn  
 
 #endif

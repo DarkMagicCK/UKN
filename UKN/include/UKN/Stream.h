@@ -20,6 +20,7 @@ namespace ukn {
         enum StreamType {
             ST_Memory,
             ST_File,
+            ST_Net,
         };
         
         virtual bool    seek(size_t pos) = 0;
@@ -269,6 +270,45 @@ namespace ukn {
     bool write_stream_to_file(const StreamPtr& stream, const ukn_wstring& file);
     
     bool write_stream_to_file(Stream& stream, const ukn_wstring& file);
+    
+    /**
+     * simple stream that receives / sends data through internet
+     * some stream actions may not available for net stream
+     * such as size and pos
+     * implementation from http://www.keithschwarz.com/interesting/code/?dir=nstream by Keith Schwarz
+     **/
+    class NetStream: public Stream, public std::iostream {
+    public:
+        NetStream();
+        explicit NetStream(const ukn_string& hostName, uint16 portNum);
+        explicit NetStream(uint16 port);
+
+        ~NetStream();
+        
+        // wait for a connection
+        // port no. 0-32767
+        void open(uint16 port);
+        
+        // connect to a server
+        void open(const ukn_string& server, uint16 port);
+        
+        bool is_open() const;
+        
+        void close();
+        
+        bool    seek(size_t pos);
+        size_t  read(uint8* buffer, size_t length);
+        size_t  write(const uint8* buffer, size_t length);
+        
+        size_t  getPos() const;
+        size_t  getSize() const;
+        bool    isValid() const;
+        
+    private:
+        class SocketStreambuf;
+        
+        SocketStreambuf* connection;
+    };
     
 } // namespace ukn
 

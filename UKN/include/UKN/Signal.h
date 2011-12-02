@@ -11,7 +11,7 @@
 
 #include "Platform.h"
 #include "Any.h"
-#include "SharedPtr.h"
+#include "Ptr.h"
 #include "Function.h"
 
 #include <map>

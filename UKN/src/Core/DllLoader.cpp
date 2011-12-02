@@ -18,7 +18,7 @@ namespace ukn {
     
 #ifdef UKN_OS_WINDOWS
     
-    class DllLoaderImpl {
+    class DllLoader::DllLoaderImpl {
     public:
         bool open(const char* path) {
             module = LoadLibraryA(path);
@@ -46,7 +46,7 @@ namespace ukn {
     
 #elif defined(UKN_OS_OSX) || defined(UKN_OS_LINUX) || defined(UKN_OS_IOS) 
     
-    class DllLoaderImpl {
+    class DllLoader::DllLoaderImpl {
     public:
         bool open(const char* path) {
             dyn = dlopen(path, RTLD_LOCAL);
@@ -75,7 +75,7 @@ namespace ukn {
     
     // null impl
     
-    class DllLoaderImpl {
+    class DllLoader::DllLoaderImpl {
     public:
         bool open(const char* path) { return false; }
         void close() {}

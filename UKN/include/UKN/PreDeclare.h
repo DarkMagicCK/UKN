@@ -10,7 +10,7 @@
 #define Project_Unknown_PreDeclare_h
 
 #include "Platform.h"
-#include "SharedPtr.h"
+#include "Ptr.h"
 
 #include <string>
 

@@ -26,7 +26,6 @@ namespace ukn {
 		HWND getHWnd() const;
 #endif
         
-        void swapBuffers();
         void pullEvents();
         
     private:

@@ -53,8 +53,6 @@ namespace ukn {
             return mHeight;
         }
         
-        // swap window render buffers
-        virtual void swapBuffers() = 0;
         // poll windows events
         // PeekMessage on Windows etc
         virtual void pullEvents() = 0;

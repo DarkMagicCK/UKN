@@ -17,6 +17,8 @@
 #include "UKN/TimeUtil.h"
 #include "UKN/Stream.h"
 #include "UKN/SysUtil.h"
+#include "UKN/Ptr.h"
+#include "UKN/Texture.h"
 
 #include <vector>
 
@@ -43,13 +45,15 @@ int CALLBACK WinMain(
     
     ukn::AppInstance instance("Test App");
     // init with custom cfg
-    instance.init(L"test.xml");
-    ukn::Context::Instance().saveCfgFile(L"config.xml");
+    instance.init(L"config.xml");
         
     // create app context
     instance.create();
     
     ukn::Connection updateConn = instance.getMainWindow().onUpdate().connect(update);
+    
+    
+    ukn::TexturePtr texture = gl_factory->load2DTexture(L"617.jpg");
     
     // run app
     instance.run();

@@ -9,6 +9,15 @@
 #ifndef Project_Unknown_Scene_h
 #define Project_Unknown_Scene_h
 
+#include "Platform.h"
+
+namespace ukn {
+    
+    class SceneNode;
+    class Scene;
+    class SceneManager;
+    
+} // namespace ukn
 
 
 #endif

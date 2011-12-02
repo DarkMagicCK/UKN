@@ -48,9 +48,9 @@ namespace ukn {
         virtual FrameBufferPtr createFrameBuffer() = 0;
         
         // textures
-        virtual TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format) = 0;
+        virtual TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) = 0;
         
-        virtual TexturePtr loadTexture(const ukn_wstring& name, bool generateMipmaps=false) = 0; 
+        virtual TexturePtr load2DTexture(const ukn_wstring& name, bool generateMipmaps=false) = 0; 
     };
     
 } // namespace ukn

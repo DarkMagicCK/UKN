@@ -13,7 +13,6 @@
 
 namespace ukn {
     
-    class DllLoaderImpl;
     
     class UKN_API DllLoader {
     public:
@@ -26,6 +25,8 @@ namespace ukn {
         void* getProc(const char* name);
 
     private:
+        class DllLoaderImpl;
+
         DllLoaderImpl* mImpl;
     };
     

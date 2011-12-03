@@ -22,6 +22,8 @@
 #include <execinfo.h>
 #endif
 
+#include "Common.h"
+
 namespace ukn {
     
 #ifdef UKN_OS_WINDOWS
@@ -59,7 +61,7 @@ namespace ukn {
         return info;
 	}
     
-    ukn_string win_GetStackTrace() {
+    inline ukn_string win_GetStackTrace() {
 		HANDLE process = GetCurrentProcess();
 		if(SymInitialize(process, NULL, TRUE)) {            
             DWORD _ebp = INVALID_FP_RET_ADDR_VALUE;
@@ -82,7 +84,7 @@ namespace ukn {
             while (pCurFP != INVALID_FP_RET_ADDR_VALUE) {
                 DWORD pRetAddrInCaller = (*((DWORD *)(pCurFP + 1)));
                 
-                stackTrace.append(vamssg("%.8p%*p        ", pCurFP, 20, (DWORD *)pRetAddrInCaller));
+                stackTrace.append(format_string("%.8p%*p        ", pCurFP, 20, (DWORD *)pRetAddrInCaller));
                 
                 if (fFirstFP) {
                     fFirstFP = FALSE;
@@ -124,7 +126,7 @@ namespace ukn {
             free(strings);
         }
 #elif defined(UKN_OS_WINDOWS)
-        mStackTrace = win_GetStackTrace();
+        stackTraceString = win_GetStackTrace();
 #endif
         return stackTraceString;
         

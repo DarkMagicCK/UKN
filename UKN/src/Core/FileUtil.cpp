@@ -34,20 +34,20 @@ namespace ukn {
         
 #elif defined(UKN_OS_FAMILY_APPLE)
         return ukn_apple_file_exists(filepath);
-#endif
+#else
         
         struct stat sb;
         
         if (stat(wstring_to_string(filepath).c_str(), &sb) == 0 && S_ISREG(sb.st_mode)) {
             return true;
         }
-        
-        return true;
+#endif
+        return false;
     }
     
     UKN_API bool path_exists(const ukn_wstring& path) {
 #ifdef UKN_OS_WINDOWS
-        return PathFileExistsW(filepath.c_str())?true:false;
+        return PathFileExistsW(path.c_str())?true:false;
 
 #else
         struct stat sb;
@@ -62,7 +62,7 @@ namespace ukn {
     
     UKN_API ukn_wstring get_writtable_path(const ukn_wstring& filePath) {
 #ifndef UKN_OS_FAMILY_APPLE
-        return ukn_get_application_path() + filePath;
+        return get_application_path() + filePath;
 #else
         return ukn_apple_documents_path() + filePath;
 #endif
@@ -73,7 +73,7 @@ namespace ukn {
         wchar_t buffer[MAX_PATH];
         GetCurrentDirectoryW(MAX_PATH, buffer);
         
-        return filePath+L"/";
+        return ukn_wstring(buffer)+L"/";
         
 #elif defined(UKN_OS_FAMILY_APPLE)
         return ukn_apple_application_path() + L"/";

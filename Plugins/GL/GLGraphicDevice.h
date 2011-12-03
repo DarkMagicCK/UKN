@@ -53,7 +53,7 @@ namespace ukn {
         WindowPtr mWindow;
         TexturePtr mCurrTexture;
         
-        GLuint mCurrFrameBuffer;
+        GLuint mCurrGLFrameBuffer;
     };
     
 } // namespace ukn

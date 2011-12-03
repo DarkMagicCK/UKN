@@ -7,6 +7,7 @@
 //
 
 #include "GLFrameBuffer.h"
+#include "GLPreq.h"
 
 namespace ukn {
     
@@ -14,7 +15,7 @@ namespace ukn {
     mOffscreen(offscreen),
     mFBO(0) {
         if(mOffscreen) {
-            glGenBuffers(1, &mFBO); 
+			//glGenBuffers(1, &mFBO); 
         }
     }
     

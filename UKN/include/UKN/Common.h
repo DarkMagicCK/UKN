@@ -10,7 +10,6 @@
 #define Project_Unknown_Common_h
 
 #include "Platform.h"
-#include "Exception.h"
 
 #ifdef UKN_OS_WINDOWS
 
@@ -53,15 +52,7 @@ namespace ukn {
 		va_end(arg);
 		return ukn_string(message);
     }
-    
-    template<typename T, typename Base>
-    static T checked_cast(Base* pointer) {
-        T derived = dynamic_cast<T>(pointer);
-        if(!derived)
-            UKN_THROW_EXCEPTION("checked_cast: failed to cast from parent to child");
-        return derived;
-    }
-    
+
     inline ukn_string get_lib_name(const ukn_string& lib) {
 #if defined(UKN_OS_OSX)
         return lib + ".dylib";

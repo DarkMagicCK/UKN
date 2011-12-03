@@ -13,342 +13,399 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="源文件\GL">
-      <UniqueIdentifier>{809e0831-b741-420e-8235-1acc1b755b3c}</UniqueIdentifier>
+    <Filter Include="源文件\gl">
+      <UniqueIdentifier>{c02dabe9-b8c5-42b5-b73c-29c463955949}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{2f326ab9-6d1a-4327-9b9a-d46852a7902b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Action.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Action.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Any.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Any.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\App.h">
+    <ClInclude Include="..\..\UKN\include\UKN\App.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Camera.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Color.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Color.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Common.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Common.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Condition.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Condition.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Config.h">
+    <ClInclude Include="..\..\UKN\include\UKN\ConfigParser.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Context.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Context.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\CpuInfo.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Bind.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Bind.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function0.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function0.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function1.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function1.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function10.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function10.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function11.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function11.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function12.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function12.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function2.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function2.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function3.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function3.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function4.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function4.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function5.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function5.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function6.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function6.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function7.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function7.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function8.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function8.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function9.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function9.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionBase.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionFoward.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionFoward.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionInclude.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionInclude.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionTemplate.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionTemplate.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Memfun.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Memfun.h">
+    <ClInclude Include="..\..\UKN\include\UKN\detail\TypeTraits.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\TypeTraits.h">
+    <ClInclude Include="..\..\UKN\include\UKN\DllLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\DllLoader.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Event.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Event.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Exception.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Exception.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Factory.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Factory.h">
+    <ClInclude Include="..\..\UKN\include\UKN\FileUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Font.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Font.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\FrameBuffer.h">
+    <ClInclude Include="..\..\UKN\include\UKN\FrameBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Frustum.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Frustum.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\FSM.h">
+    <ClInclude Include="..\..\UKN\include\UKN\FSM.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Function.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Function.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicBuffer.h">
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicDevice.h">
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicDevice.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicFactory.h">
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicFactory.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicSettings.h">
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicSettings.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Input.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Input.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Key.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Key.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\KeyFrameAnimation.h">
+    <ClInclude Include="..\..\UKN\include\UKN\KeyFrameAnimation.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Logger.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Logger.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\MathUtil.h">
+    <ClInclude Include="..\..\UKN\include\UKN\MathUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\MemoryUtil.h">
+    <ClInclude Include="..\..\UKN\include\UKN\MemoryUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Platform.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Platform.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\PreDeclare.h">
+    <ClInclude Include="..\..\UKN\include\UKN\PreDeclare.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Preprocessor.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Preprocessor.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Renderable.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Property.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\RenderBuffer.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Ptr.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\RenderEffect.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Renderable.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\RenderView.h">
+    <ClInclude Include="..\..\UKN\include\UKN\RenderBuffer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Resource.h">
+    <ClInclude Include="..\..\UKN\include\UKN\RenderEffect.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Scene.h">
+    <ClInclude Include="..\..\UKN\include\UKN\RenderView.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\ScopedPtr.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Resource.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Shader.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Scene.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\SharedPtr.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Signal.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Signal.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\StackTrace.h">
+    <ClInclude Include="..\..\UKN\include\UKN\StackTrace.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Stream.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Stream.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\StringUtil.h">
+    <ClInclude Include="..\..\UKN\include\UKN\StringUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Texture.h">
+    <ClInclude Include="..\..\UKN\include\UKN\SysUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\TimeUtil.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Texture.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Type.h">
+    <ClInclude Include="..\..\UKN\include\UKN\TimeUtil.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\UKN.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Type.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Uncopyable.h">
+    <ClInclude Include="..\..\UKN\include\UKN\UKN.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Util.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Uncopyable.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Vertex.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Util.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Viewport.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Vertex.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Window.h">
+    <ClInclude Include="..\..\UKN\include\UKN\Viewport.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\glfw\glfw3.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\UKN\include\UKN\Window.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\src\Core\AppleStuff.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\src\Core\ConfigParserXml.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLConvert.h">
+      <Filter>源文件\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\soil\stbi_DDS_aug_c.h">
+      <Filter>源文件\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h">
+      <Filter>源文件\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\glfw\glfw3.h">
+      <Filter>源文件\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h">
+      <Filter>源文件\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLGraphicFactory.h">
+      <Filter>源文件\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLPreq.h">
+      <Filter>源文件\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLRenderView.h">
+      <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\GLGraphicDevice.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\Plugins\GL\GLTexture.h">
+      <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\GLGraphicFactory.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\Plugins\GL\GLWindow.h">
+      <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\GLWindow.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\Plugins\GL\soil\image_DXT.h">
+      <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\soil\image_DXT.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\Plugins\GL\soil\image_helper.h">
+      <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\soil\image_helper.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\Plugins\GL\soil\SOIL.h">
+      <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\soil\SOIL.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\Plugins\GL\soil\stb_image_aug.h">
+      <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\soil\stbi_DDS_aug.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\Plugins\GL\soil\stbi_DDS_aug.h">
+      <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\soil\stbi_DDS_aug_c.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\External\pugixml\pugiconfig.hpp">
+      <Filter>external</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Plugins\GL\soil\stb_image_aug.h">
-      <Filter>源文件\GL</Filter>
+    <ClInclude Include="..\..\External\pugixml\pugixml.hpp">
+      <Filter>external</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Project Unknown\src\App\App.cpp">
+    <ClCompile Include="..\..\UKN\src\App\App.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\App\Window.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\ConfigParser.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\Context.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\ConfigParserXml.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\CpuInfo.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\Context.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\DllLoader.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\DllLoader.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\Resource.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\FileUtil.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\Stream.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\Logger.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\StringUtil.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\Resource.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\Timeutil.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\Stream.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\Camera.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\StringUtil.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\FrameBuffer.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\SysUtil.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\Frustum.cpp">
+    <ClCompile Include="..\..\UKN\src\Core\Timeutil.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\GraphicBuffer.cpp">
+    <ClCompile Include="..\..\UKN\src\Render\Camera.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\GraphicDevice.cpp">
+    <ClCompile Include="..\..\UKN\src\Render\FrameBuffer.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\GraphicFactory.cpp">
+    <ClCompile Include="..\..\UKN\src\Render\Frustum.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\RenderBuffer.cpp">
+    <ClCompile Include="..\..\UKN\src\Render\GraphicBuffer.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\RenderView.cpp">
+    <ClCompile Include="..\..\UKN\src\Render\GraphicDevice.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\Texture.cpp">
+    <ClCompile Include="..\..\UKN\src\Render\GraphicFactory.cpp">
       <Filter>头文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Project Unknown\main.cpp">
+    <ClCompile Include="..\..\UKN\src\Render\RenderBuffer.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\RenderView.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\Texture.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\Window.cpp">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLGraphicFactory.cpp">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLRenderView.cpp">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLTexture.cpp">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLWindow.cpp">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\soil\image_DXT.c">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\soil\image_helper.c">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\soil\SOIL.c">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\soil\stb_image_aug.c">
+      <Filter>源文件\gl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Plugins\GL\GLGraphicDevice.cpp">
-      <Filter>源文件\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Plugins\GL\GLGraphicFactory.cpp">
-      <Filter>源文件\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Plugins\GL\GLWindow.cpp">
-      <Filter>源文件\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Plugins\GL\soil\image_DXT.cpp">
-      <Filter>源文件\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Plugins\GL\soil\image_helper.cpp">
-      <Filter>源文件\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Plugins\GL\soil\SOIL.cpp">
-      <Filter>源文件\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Plugins\GL\soil\stb_image_aug.cpp">
-      <Filter>源文件\GL</Filter>
+    <ClCompile Include="..\..\External\pugixml\pugixml.cpp">
+      <Filter>external</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

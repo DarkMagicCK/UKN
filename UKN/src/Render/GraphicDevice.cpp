@@ -9,6 +9,7 @@
 #include "UKN/GraphicDevice.h"
 #include "UKN/FrameBuffer.h"
 #include "UKN/Window.h"
+#include "UKN/Texture.h"
 
 namespace ukn {
     

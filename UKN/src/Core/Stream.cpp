@@ -374,6 +374,8 @@ static string ShortToString(short value) {
 #include <winsock2.h>
 #include <ws2tcpip.h>
 
+#pragma comment(lib, "WS2_32.lib")
+
 typedef SOCKET SocketType;
 typedef int SocketLengthType;
 const SocketType NotASocket = INVALID_SOCKET;
@@ -386,7 +388,7 @@ static void CloseSocket(SocketType socket) {
  * major difference is that the Windows API requires some calls to functions at
  * program startup and shutdown.  This handles those cases.
  */
-static class WinsockInitialize {
+static class WinsockInitializer {
 public:
     WinsockInitializer() {
         WSADATA wsaData;
@@ -612,11 +614,11 @@ namespace ukn {
                     throw runtime_error("Couldn't create a listener socket.");
                 
                 /* Bind the socket on the proper port so we can listen.  Fail if we can't. */
-                if(bind(listenerSocket, addresses->ai_addr, (int) addresses->ai_addrlen) != 0)
+                if(::bind(listenerSocket, addresses->ai_addr, (int) addresses->ai_addrlen) != 0)
                     throw runtime_error("Couldn't bind the socket.");
                 
                 /* Now, tell the socket to listen in for at most one connection. */
-                if(listen(listenerSocket, 1) == -1)
+                if(::listen(listenerSocket, 1) == -1)
                     throw runtime_error("Couldn't listen for incoming connections.");
                 
                 /* Finally, set our socket to be the one we get when we find someone who

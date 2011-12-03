@@ -42,13 +42,13 @@ namespace ukn {
         mScaleH = scaleH;
     }
     
-    void Camera2D::setOrthoParams(float left, float right, float bottom, float top, float near, float far) {
+    void Camera2D::setOrthoParams(float left, float right, float bottom, float top, float nearx, float farx) {
         mLeft = left;
         mRight = right;
         mTop = top;
         mBottom = bottom;
-        mNear = near;
-        mFar = far;
+        mNear = nearx;
+        mFar = farx;
     }
     
     float Camera2D::getLeft() const {
@@ -136,13 +136,13 @@ namespace ukn {
         mFrustumDirty = true;
     }
     
-    void Camera3D::setProjParams(float fov, float aspect, float near, float far) {
+    void Camera3D::setProjParams(float fov, float aspect, float nearx, float farx) {
         mFOV = fov;
         mAspect = aspect;
-        mNearPlane = near;
-        mFarPlane = far;
+        mNearPlane = nearx;
+        mFarPlane = farx;
         
-        mProjMat[0] = Matrix4::PerspectiveMat(fov, aspect, near, far);
+        mProjMat[0] = Matrix4::PerspectiveMat(fov, aspect, nearx, farx);
         mFrustumDirty = true;
     }
     

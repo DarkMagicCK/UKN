@@ -131,6 +131,8 @@ namespace ukn {
             // so exception is acceptable here
             UKN_THROW_EXCEPTION("Error opening window");
         }
+
+		glfwSetWindowPos(mGlfwWindow, settings.left, settings.top);
         
         glfwSetWindowUserPointer(mGlfwWindow, this);
         
@@ -163,19 +165,19 @@ namespace ukn {
 		bool gotMsg;
 		MSG  msg;
         
-		::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
+		while(::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
         
-		if (WM_QUIT != msg.message) {
-			gotMsg = ::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) ? true : false;
-            
-			if (gotMsg)
-			{
-				::TranslateMessage(&msg);
-				::DispatchMessage(&msg);
-			}
-            return false;
-		} else
-            return true;
+			if (WM_QUIT != msg.message && WM_CLOSE != msg.message) {
+				gotMsg = ::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) ? true : false;
+				
+				if (gotMsg)
+				{
+					::TranslateMessage(&msg);
+					::DispatchMessage(&msg);
+				}
+			} else 
+				return true;
+		}
 #endif
         
         glfwPollEvents();

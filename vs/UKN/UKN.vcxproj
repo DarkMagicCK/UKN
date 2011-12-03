@@ -10,6 +10,138 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\External\pugixml\pugiconfig.hpp" />
+    <ClInclude Include="..\..\External\pugixml\pugixml.hpp" />
+    <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
+    <ClInclude Include="..\..\Plugins\GL\glfw\glfw3.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLGraphicFactory.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLPreq.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLRenderView.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLTexture.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLWindow.h" />
+    <ClInclude Include="..\..\Plugins\GL\soil\image_DXT.h" />
+    <ClInclude Include="..\..\Plugins\GL\soil\image_helper.h" />
+    <ClInclude Include="..\..\Plugins\GL\soil\SOIL.h" />
+    <ClInclude Include="..\..\Plugins\GL\soil\stbi_DDS_aug.h" />
+    <ClInclude Include="..\..\Plugins\GL\soil\stbi_DDS_aug_c.h" />
+    <ClInclude Include="..\..\Plugins\GL\soil\stb_image_aug.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Action.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Any.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\App.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Camera.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Color.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Common.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Condition.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\ConfigParser.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Context.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Bind.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function0.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function1.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function10.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function11.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function12.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function2.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function3.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function4.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function5.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function6.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function7.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function8.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function9.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionBase.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionFoward.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionInclude.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionTemplate.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Memfun.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\TypeTraits.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\DllLoader.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Event.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Exception.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Factory.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\FileUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Font.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\FrameBuffer.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Frustum.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\FSM.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Function.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicBuffer.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicDevice.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicFactory.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicSettings.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Input.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Key.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\KeyFrameAnimation.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Logger.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\MathUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\MemoryUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Platform.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\PreDeclare.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Preprocessor.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Property.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Ptr.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Renderable.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\RenderBuffer.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\RenderEffect.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\RenderView.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Resource.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Scene.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Shader.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Signal.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\StackTrace.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Stream.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\StringUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\SysUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Texture.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\TimeUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Type.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\UKN.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Uncopyable.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Util.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Vertex.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Viewport.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Window.h" />
+    <ClInclude Include="..\..\UKN\src\Core\AppleStuff.h" />
+    <ClInclude Include="..\..\UKN\src\Core\ConfigParserXml.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\External\pugixml\pugixml.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLGraphicFactory.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLRenderView.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLTexture.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLWindow.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\soil\image_DXT.c" />
+    <ClCompile Include="..\..\Plugins\GL\soil\image_helper.c" />
+    <ClCompile Include="..\..\Plugins\GL\soil\SOIL.c" />
+    <ClCompile Include="..\..\Plugins\GL\soil\stb_image_aug.c" />
+    <ClCompile Include="..\..\UKN\main.cpp" />
+    <ClCompile Include="..\..\UKN\src\App\App.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\ConfigParser.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\ConfigParserXml.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Context.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\DllLoader.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\FileUtil.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Logger.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Resource.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Stream.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\StringUtil.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\SysUtil.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Timeutil.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\FrameBuffer.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Frustum.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\GraphicBuffer.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\GraphicDevice.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\GraphicFactory.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\RenderBuffer.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\RenderView.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Texture.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Window.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{33687FF7-7B1D-4ACC-BE3F-85190D3C657C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -39,7 +171,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)/../../Plugins/GL;$(SolutionDir)/../../Project Unknown/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)/../Plugins/GL;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -77,120 +209,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\..\Plugins\GL\glfw\glfw3.h" />
-    <ClInclude Include="..\..\..\Plugins\GL\GLGraphicDevice.h" />
-    <ClInclude Include="..\..\..\Plugins\GL\GLGraphicFactory.h" />
-    <ClInclude Include="..\..\..\Plugins\GL\GLWindow.h" />
-    <ClInclude Include="..\..\..\Plugins\GL\soil\image_DXT.h" />
-    <ClInclude Include="..\..\..\Plugins\GL\soil\image_helper.h" />
-    <ClInclude Include="..\..\..\Plugins\GL\soil\SOIL.h" />
-    <ClInclude Include="..\..\..\Plugins\GL\soil\stbi_DDS_aug.h" />
-    <ClInclude Include="..\..\..\Plugins\GL\soil\stbi_DDS_aug_c.h" />
-    <ClInclude Include="..\..\..\Plugins\GL\soil\stb_image_aug.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Action.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Any.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\App.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Camera.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Color.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Common.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Condition.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Config.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Context.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\CpuInfo.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Bind.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function0.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function1.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function10.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function11.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function12.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function2.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function3.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function4.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function5.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function6.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function7.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function8.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Function9.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionBase.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionFoward.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionInclude.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\FunctionTemplate.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\function\Memfun.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\detail\TypeTraits.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\DllLoader.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Event.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Exception.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Factory.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Font.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\FrameBuffer.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Frustum.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\FSM.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Function.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicBuffer.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicDevice.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicFactory.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\GraphicSettings.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Input.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Key.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\KeyFrameAnimation.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Logger.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\MathUtil.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\MemoryUtil.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Platform.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\PreDeclare.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Preprocessor.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Renderable.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\RenderBuffer.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\RenderEffect.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\RenderView.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Resource.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Scene.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\ScopedPtr.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Shader.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\SharedPtr.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Signal.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\StackTrace.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Stream.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\StringUtil.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Texture.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\TimeUtil.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Type.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\UKN.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Uncopyable.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Util.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Vertex.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Viewport.h" />
-    <ClInclude Include="..\..\..\Project Unknown\include\UKN\Window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\..\Plugins\GL\GLGraphicDevice.cpp" />
-    <ClCompile Include="..\..\..\Plugins\GL\GLGraphicFactory.cpp" />
-    <ClCompile Include="..\..\..\Plugins\GL\GLWindow.cpp" />
-    <ClCompile Include="..\..\..\Plugins\GL\soil\image_DXT.cpp" />
-    <ClCompile Include="..\..\..\Plugins\GL\soil\image_helper.cpp" />
-    <ClCompile Include="..\..\..\Plugins\GL\soil\SOIL.cpp" />
-    <ClCompile Include="..\..\..\Plugins\GL\soil\stb_image_aug.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\main.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\App\App.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\App\Window.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\Context.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\CpuInfo.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\DllLoader.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\Resource.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\Stream.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\StringUtil.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Core\Timeutil.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\Camera.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\FrameBuffer.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\Frustum.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\GraphicBuffer.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\GraphicDevice.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\GraphicFactory.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\RenderBuffer.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\RenderView.cpp" />
-    <ClCompile Include="..\..\..\Project Unknown\src\Render\Texture.cpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

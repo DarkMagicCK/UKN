@@ -17,7 +17,7 @@
 namespace ukn {
     
     template<int size, typename T>
-    class PointTemplate;
+    struct PointTemplate;
     
     typedef PointTemplate<1, float> float1;
     typedef PointTemplate<2, float> float2;

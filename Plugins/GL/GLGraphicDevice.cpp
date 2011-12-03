@@ -32,7 +32,7 @@ namespace ukn {
     
     GLGraphicDevice::GLGraphicDevice():
     mCurrTexture(TexturePtr()),
-    mCurrFrameBuffer(0) {
+    mCurrGLFrameBuffer(0) {
         
     }
     
@@ -44,7 +44,7 @@ namespace ukn {
         static ukn_string des = format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s", 
                                               (char*)glGetString(GL_VERSION),
                                               (char*)glGetString(GL_VENDOR),
-                                              (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));;
+                                              (char*)"0");;
         return des;
     }
     
@@ -56,22 +56,22 @@ namespace ukn {
         }
         
         bindFrameBuffer(checked_cast<GLWindow*>(mWindow.get()));
-        mScreenFrameBuffer = checked_cast<GLWindow*>(mWindow.get());
+        mScreenFrameBuffer = mCurrFrameBuffer;
         
         return mWindow;
     }
     
     void GLGraphicDevice::fillGraphicCaps(GraphicDeviceCaps& caps) {
-        glGetIntegerv(GL_MAX_ELEMENTS_INDICES, (GLint*)&caps.max_indices);
-        glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, (GLint*)&caps.max_vertices);
+  //      glGetIntegerv(GL_MAX_ELEMENTS_INDICES, (GLint*)&caps.max_indices);
+ //       glGetIntegerv(GL_MAX_ELEMENTS_VERTICES, (GLint*)&caps.max_vertices);
         
         glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&caps.max_texture_height);
         glGetIntegerv(GL_MAX_TEXTURE_SIZE, (GLint*)&caps.max_texture_width);
         
-        glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, (GLint*)&caps.max_texture_cube_map_size);
+  //      glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, (GLint*)&caps.max_texture_cube_map_size);
         
-        glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (GLint*)&caps.max_pixel_texture_units);
-        glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, (GLint*)&caps.max_vertex_texture_units);
+   //     glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (GLint*)&caps.max_pixel_texture_units);
+   //     glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, (GLint*)&caps.max_vertex_texture_units);
     }
     
     void GLGraphicDevice::bindTexture(TexturePtr texture) {
@@ -94,8 +94,8 @@ namespace ukn {
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, (GLuint)mCurrTexture->getTextureId());
             } else if(mCurrTexture->getType() == TT_Texture3D) {
-                glEnable(GL_TEXTURE_3D);
-                glBindTexture(GL_TEXTURE_3D, (GLuint)mCurrTexture->getTextureId());
+     //           glEnable(GL_TEXTURE_3D);
+//                glBindTexture(GL_TEXTURE_3D, (GLuint)mCurrTexture->getTextureId());
             } 
         } else {
             glDisable(GL_TEXTURE_2D);
@@ -129,11 +129,11 @@ namespace ukn {
         }
         
         if(format.checkFormat(VF_Color1)) {
-            glEnableClientState(GL_SECONDARY_COLOR_ARRAY);
+  /*          glEnableClientState(GL_SECONDARY_COLOR_ARRAY);
             glSecondaryColorPointer(4, 
                                     GL_UNSIGNED_BYTE, 
                                     format.totalSize(),
-                                    BUFFER_OFFSET(format.offsetColor1()));
+                                    BUFFER_OFFSET(format.offsetColor1()));*/
         }
         
         if(format.checkFormat(VF_UV)) {
@@ -154,27 +154,27 @@ namespace ukn {
             }
             
             indexBuffer->activate();
-            
+   /*         
             glDrawRangeElements(render_mode_to_gl_mode(buffer->getRenderMode()), 
                                 0,
                                 0xffffffff,
                                 indexBuffer->count(),
                                 GL_UNSIGNED_INT,
-                                BUFFER_OFFSET(0));
+                                BUFFER_OFFSET(0));*/
         } else {
             glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()), 
                          0, 
                          vertexBuffer->count());
         }
         
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_APPLE, 0);
+ //       glBindBuffer(GL_ARRAY_BUFFER, 0);
+ //       glBindBuffer(GL_ELEMENT_ARRAYE, 0);
         
         glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_SECONDARY_COLOR_ARRAY);
+  //      glDisableClientState(GL_SECONDARY_COLOR_ARRAY);
     }
     
     void GLGraphicDevice::setViewMatrix(const Matrix4& mat) {
@@ -183,9 +183,9 @@ namespace ukn {
     }
     
     void GLGraphicDevice::bindGLFrameBuffer(GLuint fbo) {
-        if(mCurrFrameBuffer != fbo) {
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
-            mCurrFrameBuffer = fbo;
+        if(mCurrGLFrameBuffer != fbo) {
+   //         glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+            mCurrGLFrameBuffer = fbo;
         }
     }
     
@@ -223,7 +223,7 @@ namespace ukn {
     }
     
     GLuint GLGraphicDevice::getBindedGLFrameBuffer() const {
-        return mCurrFrameBuffer;
+        return mCurrGLFrameBuffer;
     }
     
     void GLGraphicDevice::setProjectionMatrix(const Matrix4& mat) {

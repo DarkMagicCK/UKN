@@ -12,7 +12,6 @@
 #include <Windows.h>
 #endif
 
-#include "UKN/Context.h"
 #include "UKN/Common.h"
 
 #include "AppleStuff.h"
@@ -36,6 +35,9 @@
 #include <algorithm>
 
 #include "UKN/StringUtil.h"
+#include "UKN/App.h"
+#include "UKN/Context.h"
+#include "UKN/Window.h"
 
 namespace ukn {
     
@@ -43,12 +45,12 @@ namespace ukn {
     
     inline MessageBoxButton ukn_win_message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option) {
         HWND hWnd = Context::Instance().isAppAvailable() ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
-        return MessageBoxA(hWnd, mssg.c_str(), title.c_str(), option);
+        return (MessageBoxButton)MessageBoxA(hWnd, mssg.c_str(), title.c_str(), option);
     }
     
     inline MessageBoxButton ukn_win_message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option) {
         HWND hWnd = Context::Instance().isAppAvailable() ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
-        return MessageBoxW(hWnd, mssg.c_str(), title.c_str(), option);
+        return (MessageBoxButton)MessageBoxW(hWnd, mssg.c_str(), title.c_str(), option);
     }
     
     inline uint32 ukn_win_get_processor_speed() {
@@ -679,7 +681,7 @@ namespace ukn {
                     {
                         // Since we only have 1 logical processor present on the system, we
                         // can explicitly set a single APIC ID to zero.
-                        sora_assert(1 == log_procs_per_pkg);
+                        ukn_assert(1 == log_procs_per_pkg);
                         apic_ids.push_back(0);
                     }
                     else
@@ -702,12 +704,12 @@ namespace ukn {
                                 {
                                     // Save the previous thread affinity so we can return
                                     // the executing thread affinity back to this state.
-                                    sora_assert(apic_ids.empty());
+                                    ukn_assert(apic_ids.empty());
                                     prev_thread_affinity = ::SetThreadAffinityMask(thread_handle, thread_affinity);
                                 }
                                 else
                                 {
-                                    sora_assert(!apic_ids.empty());
+                                    ukn_assert(!apic_ids.empty());
                                     ::SetThreadAffinityMask(thread_handle, thread_affinity);
                                 }
                                 
@@ -730,7 +732,7 @@ namespace ukn {
                     {
                         // Since we only have 1 logical processor present on the system, we
                         // can explicitly set a single APIC ID to zero.
-                        sora_assert(1 == log_procs_per_pkg);
+                        ukn_assert(1 == log_procs_per_pkg);
                         apic_ids.push_back(0);
                     }
                     else

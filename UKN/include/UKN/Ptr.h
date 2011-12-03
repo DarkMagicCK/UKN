@@ -31,6 +31,15 @@ namespace ukn {
     
     template<typename T>
     class WeakPtr;
+	    
+    template<typename T, typename Base>
+    static T checked_cast(Base* pointer) {
+        T derived = dynamic_cast<T>(pointer);
+        if(!derived)
+            UKN_THROW_EXCEPTION("checked_cast: failed to cast from parent to child");
+        return derived;
+    }
+    
     
     class SharedPtrRefCounter {
     public:

@@ -11,6 +11,7 @@
 
 #include "Platform.h"
 #include "PreDeclare.h"
+#include "GraphicSettings.h"
 #include "Color.h"
 
 namespace ukn {
@@ -48,9 +49,10 @@ namespace ukn {
         virtual void onBind(FrameBuffer& fb, uint32 att);
         virtual void onUnbind(FrameBuffer& fb, uint32 att);
         
-    private:
+    protected:
         uint32 mWidth, mHeight;
         
+        ElementFormat mElementFormat;
         // todo element formats
         // uint32 mColorDepth;
     };

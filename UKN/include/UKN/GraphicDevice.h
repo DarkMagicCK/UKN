@@ -13,6 +13,7 @@
 #include "PreDeclare.h"
 #include "GraphicSettings.h"
 #include "MathUtil.h"
+#include "Color.h"
 
 #include <stack>
 
@@ -62,6 +63,8 @@ namespace ukn {
         virtual void beginFrame() = 0;
         virtual void endFrame() = 0;
         
+        virtual void beginRendering() = 0;
+        
     public:
         virtual ukn_string description() const = 0;
                
@@ -85,9 +88,17 @@ namespace ukn {
         const FrameBufferPtr& getCurrFrameBuffer() const;
         const FrameBufferPtr& getScreenFrameBuffer() const;
         
+        void clearColor(const Color& clr);
+        void clearDepth(float depth);
+        void clearStencil(int32 stencil);
+        
     protected:
         FrameBufferPtr mCurrFrameBuffer;
-        FrameBufferPtr mScreenFrameBuffer; 
+        FrameBufferPtr mScreenFrameBuffer;
+        
+        Color mClearColor;
+        float mClearDepth;
+        int mClearStencil;
     };
     
 } // namespace ukn

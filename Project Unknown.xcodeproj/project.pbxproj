@@ -12,6 +12,7 @@
 		88260E681488583300142365 /* SysUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E671488583200142365 /* SysUtil.cpp */; };
 		8832D1461488C9F700D08C15 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1451488C9F700D08C15 /* GLTexture.cpp */; };
 		8832D14A1488CFDC00D08C15 /* GLFrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */; };
+		8832D1531489A47E00D08C15 /* GLRenderView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1521489A47E00D08C15 /* GLRenderView.cpp */; };
 		88AAC15B14868751007A80A4 /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14614868751007A80A4 /* App.cpp */; };
 		88AAC15D14868751007A80A4 /* ConfigParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14914868751007A80A4 /* ConfigParser.cpp */; };
 		88AAC15E14868751007A80A4 /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14A14868751007A80A4 /* Context.cpp */; };
@@ -70,6 +71,10 @@
 		8832D1451488C9F700D08C15 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
 		8832D1481488CFD400D08C15 /* GLFrameBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFrameBuffer.h; sourceTree = "<group>"; };
 		8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFrameBuffer.cpp; sourceTree = "<group>"; };
+		8832D14B1488F89100D08C15 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Property.h; sourceTree = "<group>"; };
+		8832D1501489A47800D08C15 /* GLRenderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderView.h; sourceTree = "<group>"; };
+		8832D1521489A47E00D08C15 /* GLRenderView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderView.cpp; sourceTree = "<group>"; };
+		8832D1541489B53100D08C15 /* GLPreq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLPreq.h; sourceTree = "<group>"; };
 		88AAC0F714868751007A80A4 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
 		88AAC0F814868751007A80A4 /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
 		88AAC0F914868751007A80A4 /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
@@ -274,6 +279,7 @@
 				88AAC14214868751007A80A4 /* Viewport.h */,
 				88AAC14314868751007A80A4 /* Window.h */,
 				88260E661488570100142365 /* SysUtil.h */,
+				8832D14B1488F89100D08C15 /* Property.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -282,7 +288,6 @@
 			isa = PBXGroup;
 			children = (
 				88AAC10214868751007A80A4 /* function */,
-				88AAC11614868751007A80A4 /* signal */,
 				88AAC11714868751007A80A4 /* TypeTraits.h */,
 			);
 			path = detail;
@@ -312,13 +317,6 @@
 				88AAC11514868751007A80A4 /* Memfun.h */,
 			);
 			path = function;
-			sourceTree = "<group>";
-		};
-		88AAC11614868751007A80A4 /* signal */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = signal;
 			sourceTree = "<group>";
 		};
 		88AAC14414868751007A80A4 /* src */ = {
@@ -450,6 +448,9 @@
 				8832D1451488C9F700D08C15 /* GLTexture.cpp */,
 				8832D1481488CFD400D08C15 /* GLFrameBuffer.h */,
 				8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */,
+				8832D1501489A47800D08C15 /* GLRenderView.h */,
+				8832D1521489A47E00D08C15 /* GLRenderView.cpp */,
+				8832D1541489B53100D08C15 /* GLPreq.h */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -575,6 +576,7 @@
 				88260E681488583300142365 /* SysUtil.cpp in Sources */,
 				8832D1461488C9F700D08C15 /* GLTexture.cpp in Sources */,
 				8832D14A1488CFDC00D08C15 /* GLFrameBuffer.cpp in Sources */,
+				8832D1531489A47E00D08C15 /* GLRenderView.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

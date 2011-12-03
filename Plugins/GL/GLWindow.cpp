@@ -7,6 +7,7 @@
 //
 
 #include "GLWindow.h"
+#include "GLRenderView.h"
 
 #include "glfw/glfw3.h"
 
@@ -74,6 +75,7 @@ namespace ukn {
     }
     
     GLWindow::GLWindow(const ukn_string& name, const RenderSettings& settings):
+    GLFrameBuffer(false),
     Window(name) {
         glfwInit();
         
@@ -111,9 +113,7 @@ namespace ukn {
             glfwOpenWindowHint(GLFW_FSAA_SAMPLES, settings.fsaa_samples);
         }
         
-        if(settings.resizable) {
-            glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, settings.resizable);
-        }
+        glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, settings.resizable);
         
 #if defined(UKN_HAS_OPENGL_3_2)
         
@@ -147,12 +147,43 @@ namespace ukn {
         glfwSetScrollCallback(ScrollFunc);
         glfwSetCharCallback(CharFunc);
         
-        
         glfwSwapInterval(0);
+        
+        this->attach(ATT_Color0, new GLScreenColorRenderView(settings.width, 
+                                                             settings.height,
+                                                             settings.color_fmt));
+        this->attach(ATT_DepthStencil, new GLScreenDepthStencilRenderView(settings.width, 
+                                                                    settings.height,
+                                                                    settings.depth_stencil_fmt));
+        
     }
     
-    void GLWindow::pullEvents() {
+    bool GLWindow::pullEvents() { 
+#ifdef UKN_OS_WINDOWS
+		bool gotMsg;
+		MSG  msg;
+        
+		::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
+        
+		if (WM_QUIT != msg.message) {
+			gotMsg = ::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) ? true : false;
+            
+			if (gotMsg)
+			{
+				::TranslateMessage(&msg);
+				::DispatchMessage(&msg);
+			}
+            return false;
+		} else
+            return true;
+#endif
+        
         glfwPollEvents();
+        return false;
+    }
+
+    void GLWindow::swapBuffers() {
+        glfwSwapBuffers();
     }
 
 	#ifdef UKN_OS_WINDOWS

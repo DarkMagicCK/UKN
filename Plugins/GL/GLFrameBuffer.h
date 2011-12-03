@@ -11,16 +11,24 @@
 
 #include "UKN/FrameBuffer.h"
 
+#include "glfw/glfw3.h"
+
 namespace ukn {
     
     class GLFrameBuffer: public FrameBuffer {
     public:
-        const ukn_string& description() const;
+        GLFrameBuffer(bool offscreen);
+        
         bool requiresFlipping() const;
         
         void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
-        void onBind();
-        void onUnbind();
+        
+        GLuint getGLFBO() const;
+        
+    private:
+        GLuint mFBO;
+        
+        bool mOffscreen;
     };
     
     

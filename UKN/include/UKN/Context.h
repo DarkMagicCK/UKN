@@ -47,7 +47,7 @@ namespace ukn {
         
         void setApp(AppInstance* app);
         bool isAppAvailable() const;
-        AppInstance& getAppInstance() const;
+        AppInstance& getApp() const;
         
     protected:
         Context();

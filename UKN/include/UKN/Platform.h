@@ -81,6 +81,12 @@
     #else
         #define UKN_OS_IOS
     #endif
+
+    #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
+        #include <OpenGL/gl3.h>     
+        #define UKN_APPLE_OSX_LION
+    #endif
+
     
     #define UKN_OS_FAMILY_APPLE
 

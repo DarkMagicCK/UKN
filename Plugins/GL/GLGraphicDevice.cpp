@@ -8,24 +8,7 @@
 
 #include "GLGraphicDevice.h"
 
-#include "glfw/glfw3.h"
-
-#ifdef UKN_OS_WINDOWS
-#include <GL/GL.h>
-#include <GL/GLU.h>
-
-#pragma comment(lib, "glfw.lib")
-
-#elif defined(UKN_OS_OSX)
-#include <OpenGL/OpenGL.h>
-#include <OpenGL/glext.h>
-
-#elif defined(UKN_OS_LINUX)
-#define GL_GLEXT_PROTOTYPES
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glext.h>
-#endif
+#include "GLPreq.h"
 
 #include "GLWindow.h"
 #include "GLConvert.h"
@@ -35,12 +18,21 @@
 #include "UKN/RenderBuffer.h"
 #include "UKN/Logger.h"
 #include "UKN/Texture.h"
+#include "UKN/FrameBuffer.h"
+#include "UKN/Window.h"
+#include "UKN/TimeUtil.h"
+#include "UKN/Context.h"
+#include "UKN/App.h"
 
+#include "GLFrameBuffer.h"
+#include "GLRenderView.h"
+#include "GLTexture.h"
 
 namespace ukn {
     
     GLGraphicDevice::GLGraphicDevice():
-    mCurrTexture(TexturePtr()) {
+    mCurrTexture(TexturePtr()),
+    mCurrFrameBuffer(0) {
         
     }
     
@@ -57,13 +49,16 @@ namespace ukn {
     }
     
     WindowPtr GLGraphicDevice::doCreateRenderWindow(const ukn_string& name, const RenderSettings& settings) {
-        WindowPtr window;
         try {
-            window = MakeSharedPtr<GLWindow>(name, settings);
+            mWindow = MakeSharedPtr<GLWindow>(name, settings);
         } catch(Exception& e) {
             return WindowPtr();
         }
-        return window;
+        
+        bindFrameBuffer(checked_cast<GLWindow*>(mWindow.get()));
+        mScreenFrameBuffer = checked_cast<GLWindow*>(mWindow.get());
+        
+        return mWindow;
     }
     
     void GLGraphicDevice::fillGraphicCaps(GraphicDeviceCaps& caps) {
@@ -75,24 +70,12 @@ namespace ukn {
         
         glGetIntegerv(GL_MAX_CUBE_MAP_TEXTURE_SIZE, (GLint*)&caps.max_texture_cube_map_size);
         
-        glGetIntegerv(GL_MAX_TEXTURE_UNITS, (GLint*)&caps.max_pixel_texture_units);
+        glGetIntegerv(GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, (GLint*)&caps.max_pixel_texture_units);
         glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, (GLint*)&caps.max_vertex_texture_units);
     }
     
     void GLGraphicDevice::bindTexture(TexturePtr texture) {
         mCurrTexture = texture;
-    }
-    
-    void GLGraphicDevice::beginFrame() {
-        
-    }
-    
-    void GLGraphicDevice::endFrame() {
-        
-    }
-    
-    void GLGraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
-        
     }
     
     void GLGraphicDevice::onRenderBuffer(const RenderBufferPtr& buffer) {
@@ -110,7 +93,7 @@ namespace ukn {
             if(mCurrTexture->getType() == TT_Texture2D) {
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, (GLuint)mCurrTexture->getTextureId());
-            } else {
+            } else if(mCurrTexture->getType() == TT_Texture3D) {
                 glEnable(GL_TEXTURE_3D);
                 glBindTexture(GL_TEXTURE_3D, (GLuint)mCurrTexture->getTextureId());
             } 
@@ -197,6 +180,50 @@ namespace ukn {
     void GLGraphicDevice::setViewMatrix(const Matrix4& mat) {
         glMatrixMode(GL_MODELVIEW);
         glLoadMatrixf(&mat.x[0]);
+    }
+    
+    void GLGraphicDevice::bindGLFrameBuffer(GLuint fbo) {
+        if(mCurrFrameBuffer != fbo) {
+            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+            mCurrFrameBuffer = fbo;
+        }
+    }
+    
+    void GLGraphicDevice::beginFrame() {
+        mWindow->onFrameStart()(*mWindow);
+    }
+    
+    void GLGraphicDevice::endFrame() {
+        mWindow->onFrameEnd()(*mWindow);
+    }
+    
+    void GLGraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
+        
+    }
+    
+    void GLGraphicDevice::beginRendering() {
+        FrameBuffer& fb = *this->getScreenFrameBuffer();
+        
+        FrameCounter& counter = FrameCounter::Instance();
+        AppInstance& app = Context::Instance().getApp();
+        
+        while(true) {
+            if(fb.isActive()) {
+                counter.waitToNextFrame();
+                
+                app.update();
+                app.render();
+                
+                if(mWindow->pullEvents())
+                    break;
+                
+                fb.swapBuffers();
+            }
+        }
+    }
+    
+    GLuint GLGraphicDevice::getBindedGLFrameBuffer() const {
+        return mCurrFrameBuffer;
     }
     
     void GLGraphicDevice::setProjectionMatrix(const Matrix4& mat) {

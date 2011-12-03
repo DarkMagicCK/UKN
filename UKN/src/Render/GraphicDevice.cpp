@@ -22,7 +22,7 @@ namespace ukn {
 #if defined(UKN_OS_WINDOWS)
         HWND getHWnd() const { return 0; }
 #endif
-        void pullEvents() { }
+        bool pullEvents() { return true; }
     };
     
     class NullGraphicDevice: public GraphicDevice {
@@ -37,6 +37,8 @@ namespace ukn {
         ukn_string description() const {
             return ukn_string("Null GraphicDevice");
         }
+        
+        void beginRendering() { }
         
         void setViewMatrix(const Matrix4& mat) { }
         void setProjectionMatrix(const Matrix4& mat) { }
@@ -121,6 +123,18 @@ namespace ukn {
     
     WindowPtr GraphicDevice::createRenderWindow(const ukn_string& name, const RenderSettings& settings) {
         return doCreateRenderWindow(name, settings);
+    }
+    
+    void GraphicDevice::clearColor(const Color& clr) {
+        
+    }
+    
+    void GraphicDevice::clearDepth(float depth) {
+        
+    }
+    
+    void GraphicDevice::clearStencil(int32 stencil) {
+        
     }
     
 } // namespace ukn

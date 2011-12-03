@@ -12,10 +12,13 @@
 #include "UKN/Platform.h"
 #include "UKN/Window.h"
 #include "UKN/Signal.h"
+#include "UKN/FrameBuffer.h"
+
+#include "GLFrameBuffer.h"
 
 namespace ukn {
     
-    class GLWindow: public Window {
+    class GLWindow: public Window, public GLFrameBuffer {
     public:
         GLWindow(const ukn_string& name, const RenderSettings& settings);
         ~GLWindow();
@@ -26,7 +29,8 @@ namespace ukn {
 		HWND getHWnd() const;
 #endif
         
-        void pullEvents();
+        bool pullEvents();
+        void swapBuffers();
         
     private:
         void* mGlfwWindow;

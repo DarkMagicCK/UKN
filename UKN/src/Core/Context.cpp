@@ -39,7 +39,7 @@ namespace ukn {
         mApp = app;
     }
     
-    AppInstance& Context::getAppInstance() const {
+    AppInstance& Context::getApp() const {
         return *mApp;
     }
     
@@ -122,7 +122,7 @@ namespace ukn {
                     
                     fmt_string = configParser->getString("color_fmt", "EF_ARGB8");
                     fmt_id = fmt_string_to_element_format(fmt_string);
-                    if(fmt_id != -1) {
+                    if(fmt_id == -1) {
                         log_warning(format_string("ukn::Context::loadCfgFile: unknown color format %s, using EF_ARGB8", fmt_string.c_str()));
                         
                         cfg.render_cfg.color_fmt = (ElementFormat)fmt_id;
@@ -130,7 +130,7 @@ namespace ukn {
                     
                     fmt_string = configParser->getString("depth_stencil_fmt", "EF_D16");
                     fmt_id = fmt_string_to_element_format(fmt_string);
-                    if(fmt_id != -1) {
+                    if(fmt_id == -1) {
                         log_warning(format_string("ukn::Context::loadCfgFile: unknown depth stencil format %s, using EF_D16", fmt_string.c_str()));
 
                         cfg.render_cfg.depth_stencil_fmt = (ElementFormat)fmt_id;
@@ -145,7 +145,7 @@ namespace ukn {
             }
         }
         
-        setCfg(mCfg);
+        setCfg(cfg);
     }
     
     void Context::saveCfgFile(const ukn_wstring& name) {

@@ -18,28 +18,25 @@
 
 namespace ukn {
     
+    enum Attachment {
+        ATT_DepthStencil,
+        ATT_Color0,
+        // more to do
+    };
+    
+    enum ClearMask {
+        CM_Color   = 1UL << 0,
+        CM_Depth   = 1UL << 1,
+        CM_Stencil = 1UL << 2
+    };
+    
     class UKN_API FrameBuffer {
-    public:
-        enum Attachment {
-            ATT_DepthStencil,
-            ATT_Color0,
-            // more to do
-        };
-        
-        enum ClearMask {
-            CM_Color   = 1UL << 0,
-            CM_Depth   = 1UL << 1,
-            CM_Stencil = 1UL << 2
-        };
-        
     public:
         FrameBuffer();
         virtual ~FrameBuffer();
         
         static FrameBufferPtr NullObject();
-        
-        virtual const ukn_string& description() const = 0;
-        
+                
         uint32 left() const;
         uint32 top() const;
         uint32 width() const;
@@ -69,7 +66,7 @@ namespace ukn {
         virtual void onBind();
         virtual void onUnbind();
         
-        virtual void swapbuffers();
+        virtual void swapBuffers();
         
         bool isDirty() const;
     

@@ -55,7 +55,7 @@ namespace ukn {
         
         // poll windows events
         // PeekMessage on Windows etc
-        virtual void pullEvents() = 0;
+        virtual bool pullEvents() = 0;
         
     protected:
         int32 mLeft;

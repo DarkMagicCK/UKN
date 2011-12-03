@@ -16,6 +16,8 @@
 #pragma comment(lib, "glu32.lib")
 #endif
 
+#include "glfw/glfw3.h"
+
 namespace ukn {
     
     class GLGraphicDevice: public GraphicDevice {
@@ -29,6 +31,7 @@ namespace ukn {
         
         void beginFrame();
         void endFrame();
+        void beginRendering();
         
         void onRenderBuffer(const RenderBufferPtr& buffer);
         void onBindFrameBuffer(const FrameBufferPtr& frameBuffer);
@@ -43,8 +46,14 @@ namespace ukn {
         
         void fillGraphicCaps(GraphicDeviceCaps& caps);
         
+        void bindGLFrameBuffer(GLuint fbo);
+        GLuint getBindedGLFrameBuffer() const;
+        
     private:
+        WindowPtr mWindow;
         TexturePtr mCurrTexture;
+        
+        GLuint mCurrFrameBuffer;
     };
     
 } // namespace ukn

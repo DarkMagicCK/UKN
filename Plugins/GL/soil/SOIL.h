@@ -35,6 +35,13 @@
 	* Sean Barret - for the awesome stb_image
 	* Dan Venkitachalam - for finding some non-compliant DDS files, and patching some explicit casts
 	* everybody at gamedev.net
+ 
+    Robert Bu
+    2011-12-1
+        
+    Update SOIL to lastest version
+    and fix OpenGL 3.2 issue caused by deprecated glGetString(GL_EXTENSION) on osx lion
+    
 **/
 
 #ifndef HEADER_SIMPLE_OPENGL_IMAGE_LIBRARY

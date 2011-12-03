@@ -13,11 +13,6 @@ namespace ukn {
     
     class NullFrameBuffer: public FrameBuffer {
     public:
-        const ukn_string& description() const {
-            static ukn_string const desc("Null Frame Buffer");
-            return desc;
-        }
-        
         bool requiresFlipping() const {
             return false;
         }
@@ -108,13 +103,13 @@ namespace ukn {
                 break;
                 
             default:
-                ukn_assert(attachment > ATT_Color0);
+                ukn_assert(attachment >= ATT_Color0);
                 
                 uint32 clrid = attachment - ATT_Color0;
                 if(mClearViews.size() < clrid + 1)
                     mClearViews.resize(clrid + 1);
                 
-                mClearViews[clrid + 1] = view;
+                mClearViews[clrid] = view;
                 size_t min_clr_index = clrid;
                 for(size_t i = 0; i < clrid; ++i) {
                     if(mClearViews[i])
@@ -205,7 +200,7 @@ namespace ukn {
         }
     }
     
-    void FrameBuffer::swapbuffers() {
+    void FrameBuffer::swapBuffers() {
         
     }
     

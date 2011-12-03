@@ -21,8 +21,16 @@
 	#include <wingdi.h>
 	#include <GL/gl.h>
 #elif defined(__APPLE__) || defined(__APPLE_CC__)
-	/*	I can't test this Apple stuff!	*/
-	#include <OpenGL/gl.h>
+	/*	I can't test this Apple stuff!	*/    
+    /* gl3 check for osx lion by robert bu */
+    #include <Availability.h>
+    #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
+        #include <OpenGL/gl3.h>
+        #define APPLE_OSX_LION
+    #else
+        #include <OpenGL/gl.h>  
+    #endif
+    #include <OpenGL/glu.h>
 	#include <Carbon/Carbon.h>
 	#define APIENTRY
 #else
@@ -1907,18 +1915,47 @@ int query_NPOT_capability( void )
 	if( has_NPOT_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
 		/*	we haven't yet checked for the capability, do so	*/
-		if(
-			(NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
-				"GL_ARB_texture_non_power_of_two" ) )
-			)
-		{
-			/*	not there, flag the failure	*/
-			has_NPOT_capability = SOIL_CAPABILITY_NONE;
-		} else
-		{
-			/*	it's there!	*/
-			has_NPOT_capability = SOIL_CAPABILITY_PRESENT;
-		}
+        /*  glGetString(GL_EXTENSIONS) is deprecated on OpenGL 3.0 +
+            so use glGetStringi
+         */
+#ifdef APPLE_OSX_LION
+        int NumberOfExtensions;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
+        for(int i=0; i<NumberOfExtensions; i++)
+        {
+            const GLubyte *ccc=glGetStringi(GL_EXTENSIONS, i);
+            
+            if(
+               
+               (NULL == strstr( (char const*)ccc,
+                               "GL_ARB_texture_non_power_of_two" ) )
+               )
+            {
+                /*	not there, flag the failure	*/
+                has_NPOT_capability = SOIL_CAPABILITY_NONE;
+            } else
+            {
+                /*	it's there!	*/
+                has_NPOT_capability = SOIL_CAPABILITY_PRESENT;
+            }
+            //Now, do something with ccc
+        }
+#else
+        if(
+           
+           (NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
+                           "GL_ARB_texture_non_power_of_two" ) )
+           )
+        {
+            /*	not there, flag the failure	*/
+            has_NPOT_capability = SOIL_CAPABILITY_NONE;
+        } else
+        {
+            /*	it's there!	*/
+            has_NPOT_capability = SOIL_CAPABILITY_PRESENT;
+        }
+#endif // APPLE_OSX_LION
+        
 	}
 	/*	let the user know if we can do non-power-of-two textures or not	*/
 	return has_NPOT_capability;
@@ -1929,17 +1966,45 @@ int query_tex_rectangle_capability( void )
 	/*	check for the capability	*/
 	if( has_tex_rectangle_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
-		/*	we haven't yet checked for the capability, do so	*/
+#ifdef APPLE_OSX_LION
+        int NumberOfExtensions;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
+        for(int i=0; i<NumberOfExtensions; i++)
+        {
+            const GLubyte *ccc=glGetStringi(GL_EXTENSIONS, i);
+            
+            /*	we haven't yet checked for the capability, do so	*/
+            if(
+               (NULL == strstr( (char const*)ccc,
+                               "GL_ARB_texture_rectangle" ) )
+               &&
+               (NULL == strstr( (char const*)ccc,
+                               "GL_EXT_texture_rectangle" ) )
+               &&
+               (NULL == strstr( (char const*)ccc,
+                               "GL_NV_texture_rectangle" ) )
+               )
+            {
+                /*	not there, flag the failure	*/
+                has_tex_rectangle_capability = SOIL_CAPABILITY_NONE;
+            } else
+            {
+                /*	it's there!	*/
+                has_tex_rectangle_capability = SOIL_CAPABILITY_PRESENT;
+            }
+        }
+#else
+        /*	we haven't yet checked for the capability, do so	*/
 		if(
-			(NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
-				"GL_ARB_texture_rectangle" ) )
-		&&
-			(NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
-				"GL_EXT_texture_rectangle" ) )
-		&&
-			(NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
-				"GL_NV_texture_rectangle" ) )
-			)
+           (NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
+                           "GL_ARB_texture_rectangle" ) )
+           &&
+           (NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
+                           "GL_EXT_texture_rectangle" ) )
+           &&
+           (NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
+                           "GL_NV_texture_rectangle" ) )
+           )
 		{
 			/*	not there, flag the failure	*/
 			has_tex_rectangle_capability = SOIL_CAPABILITY_NONE;
@@ -1948,6 +2013,8 @@ int query_tex_rectangle_capability( void )
 			/*	it's there!	*/
 			has_tex_rectangle_capability = SOIL_CAPABILITY_PRESENT;
 		}
+#endif // APPLE_OSX_LION
+		
 	}
 	/*	let the user know if we can do texture rectangles or not	*/
 	return has_tex_rectangle_capability;
@@ -1958,14 +2025,39 @@ int query_cubemap_capability( void )
 	/*	check for the capability	*/
 	if( has_cubemap_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
-		/*	we haven't yet checked for the capability, do so	*/
+#ifdef APPLE_OSX_LION
+        int NumberOfExtensions;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
+        for(int i=0; i<NumberOfExtensions; i++)
+        {
+            const GLubyte *ccc=glGetStringi(GL_EXTENSIONS, i);
+            
+            /*	we haven't yet checked for the capability, do so	*/
+            if(
+               (NULL == strstr( (char const*)ccc,
+                               "GL_ARB_texture_cube_map" ) )
+               &&
+               (NULL == strstr( (char const*)ccc,
+                               "GL_EXT_texture_cube_map" ) )
+               )
+            {
+                /*	not there, flag the failure	*/
+                has_cubemap_capability = SOIL_CAPABILITY_NONE;
+            } else
+            {
+                /*	it's there!	*/
+                has_cubemap_capability = SOIL_CAPABILITY_PRESENT;
+            }
+        }
+#else
+        /*	we haven't yet checked for the capability, do so	*/
 		if(
-			(NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
-				"GL_ARB_texture_cube_map" ) )
-		&&
-			(NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
-				"GL_EXT_texture_cube_map" ) )
-			)
+           (NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
+                           "GL_ARB_texture_cube_map" ) )
+           &&
+           (NULL == strstr( (char const*)glGetString( GL_EXTENSIONS ),
+                           "GL_EXT_texture_cube_map" ) )
+           )
 		{
 			/*	not there, flag the failure	*/
 			has_cubemap_capability = SOIL_CAPABILITY_NONE;
@@ -1974,6 +2066,7 @@ int query_cubemap_capability( void )
 			/*	it's there!	*/
 			has_cubemap_capability = SOIL_CAPABILITY_PRESENT;
 		}
+#endif // APPLE_OSX_LION
 	}
 	/*	let the user know if we can do cubemaps or not	*/
 	return has_cubemap_capability;
@@ -1984,14 +2077,38 @@ int query_DXT_capability( void )
 	/*	check for the capability	*/
 	if( has_DXT_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
-		/*	we haven't yet checked for the capability, do so	*/
+#ifdef APPLE_OSX_LION
+        int NumberOfExtensions;
+        bool flags;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
+        for(int i=0; i<NumberOfExtensions; i++)
+        {
+            const GLubyte *ccc=glGetStringi(GL_EXTENSIONS, i);
+            
+            if( NULL == strstr(
+                               (char const*)ccc,
+                               "GL_EXT_texture_compression_s3tc" ) )
+            {
+                /*	not there, flag the failure	*/
+                has_DXT_capability = SOIL_CAPABILITY_NONE;
+                flags = true;
+            } 
+        }
+        if(flags) {
+            
+        }
+#else
+        /*	we haven't yet checked for the capability, do so	*/
 		if( NULL == strstr(
-				(char const*)glGetString( GL_EXTENSIONS ),
-				"GL_EXT_texture_compression_s3tc" ) )
+                           (char const*)glGetString( GL_EXTENSIONS ),
+                           "GL_EXT_texture_compression_s3tc" ) )
 		{
 			/*	not there, flag the failure	*/
 			has_DXT_capability = SOIL_CAPABILITY_NONE;
-		} else
+		} 
+#endif // APPLE_OSX_LION
+		/*	we haven't yet checked for the capability, do so	*/
+		else
 		{
 			/*	and find the address of the extension function	*/
 			P_SOIL_GLCOMPRESSEDTEXIMAGE2DPROC ext_addr = NULL;

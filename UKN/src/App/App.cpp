@@ -82,8 +82,20 @@ namespace ukn {
                                cpuinfo.getCPUBrandString().c_str(),
                                cpuinfo.getNumCores(),
                                cpuinfo.getNumHWThreads()));
+      
         
         log_info(graphic_device.description());
+        
+        GraphicDeviceCaps caps;
+        graphic_device.fillGraphicCaps(caps);
+        log_info(format_string("Graphic Device Caps:\n\tMaxTextureSize:\t(%d, %d)\n\tMaxCubeMapSize:\t%d\n\tMaxIndices:\t%d\n\tMaxVertices:\t%d\n\tMaxPixelTextureUnits:\t%d\n\tMaxVertexTextureUnits:\t%d\n",
+                               caps.max_texture_width,
+                               caps.max_texture_height,
+                               caps.max_texture_cube_map_size,
+                               caps.max_indices,
+                               caps.max_vertices,
+                               caps.max_pixel_texture_units,
+                               caps.max_vertex_texture_units));
         
         Logger::Instance().setFeature(LF_PrependRunningTime, true);
         
@@ -102,7 +114,6 @@ namespace ukn {
     
     void AppInstance::update() {
         mMainWindow->onUpdate()(*mMainWindow);
-        mMainWindow->pullEvents();
 
         onUpdate();
     }
@@ -131,18 +142,7 @@ namespace ukn {
             return ;
         }
         
-        FrameCounter& counter = FrameCounter::Instance();
-        
-        while(true) {
-            counter.waitToNextFrame();
-            
-            mMainWindow->onFrameStart()(*mMainWindow);
-            
-            update();
-            render();
-            
-            mMainWindow->onFrameEnd()(*mMainWindow);
-        }
+        Context::Instance().getGraphicFactory().getGraphicDevice().beginRendering();
     }
     
     void AppInstance::onUpdate() {

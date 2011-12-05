@@ -21,11 +21,13 @@
 #include "UKN/Texture.h"
 #include "UKN/GraphicDevice.h"
 #include "UKN/FrameBuffer.h"
+#include "UKN/Logger.h"
+#include "UKN/Common.h"
 
 #include <vector>
 
 void update(ukn::Window& window) {
-    printf("fps: %f\n", ukn::FrameCounter::Instance().getCurrentFps());
+    ukn::log_warning(ukn::format_string("fps: %f\n", ukn::FrameCounter::Instance().getCurrentFps()));
     
     ukn::Context::Instance().getGraphicFactory().getGraphicDevice().getCurrFrameBuffer()->clear(ukn::CM_Color, ukn::ColorRed, 0, 0);
 
@@ -57,9 +59,7 @@ int CALLBACK WinMain(
     
     instance.getMainWindow().onUpdate().connect(update);
     
-    ukn::FrameCounter::Instance().setDesiredFps(1000);
-    
-    ukn::TexturePtr texture = gl_factory->load2DTexture(L"617.jpg");
+    ukn::FrameCounter::Instance().setDesiredFps(0);
     
     // run app
     instance.run();

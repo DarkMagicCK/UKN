@@ -160,8 +160,8 @@ namespace ukn {
                                                              settings.height,
                                                              settings.color_fmt));
         this->attach(ATT_DepthStencil, new GLScreenDepthStencilRenderView(settings.width, 
-                                                                    settings.height,
-                                                                    settings.depth_stencil_fmt));
+																		settings.height,
+																		settings.depth_stencil_fmt));
         
     }
     
@@ -193,11 +193,11 @@ namespace ukn {
         glfwSwapBuffers();
     }
 
-	#ifdef UKN_OS_WINDOWS
+#ifdef UKN_OS_WINDOWS
 	HWND GLWindow::getHWnd() const {
 		return 0;
 	}
-	#endif
+#endif
     
     GLWindow::~GLWindow() {
         glfwCloseWindow(mGlfwWindow);

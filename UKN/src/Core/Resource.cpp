@@ -111,7 +111,7 @@ namespace ukn {
             
             ++itFac;
         }
-        return MakeSharedPtr<Resource>(L"null", StreamPtr());
+        return MakeSharedPtr<Resource>(name, StreamPtr());
     }
     
     ResourcePtr ResourceLoader::loadResource(const ukn_wstring& name_or_path, bool isFullPath) {

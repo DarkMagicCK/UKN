@@ -43,7 +43,23 @@ namespace ukn {
         static ukn_string des = format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s", 
                                               (char*)glGetString(GL_VERSION),
                                               (char*)glGetString(GL_VENDOR),
-                                              (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));;
+                                              (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+//#ifdef UKN_DEBUG
+
+#if UKN_OPENGL_VERSION >= 30
+		int NumberOfExtensions;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
+		
+		des += "\n\nGL Extensions:\n";
+        for(int i=0; i<NumberOfExtensions; i++) {
+            des += (const char*)glGetStringi(GL_EXTENSIONS, i);
+			des += "\n";
+		}
+#else
+		des += format_string("\n\nGL Extensions:\n %s\n", glGetString(GL_EXTENSIONS));
+#endif
+
+//#endif
         return des;
     }
     

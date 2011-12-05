@@ -12,6 +12,7 @@
 
 #include "UKN/Resource.h"
 #include "UKN/Stream.h"
+#include "UKN/Logger.h"
 
 #include "glfw/glfw3.h"
 
@@ -63,7 +64,9 @@ namespace ukn {
                     return true;
                 }
             }            
-        }
+        } else {
+			log_error(L"ukn::GLTexture2D::load(name, mipmap): error loading texture " + name);
+		}
         return false;
     }
     

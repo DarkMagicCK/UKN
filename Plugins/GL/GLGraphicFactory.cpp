@@ -110,6 +110,7 @@ namespace ukn {
         if(texture->create(width, height, numMipmaps, format, initialData)) {
             return texture;
         }
+		delete texture;
         return TexturePtr();
     }
     
@@ -118,6 +119,7 @@ namespace ukn {
         if(texture->load(name, generateMipmaps)) {
             return texture;
         }
+		delete texture;
         return TexturePtr();
     }
     

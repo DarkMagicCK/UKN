@@ -78,7 +78,7 @@ namespace ukn {
     GLFrameBuffer(false),
     Window(name) {
         glfwInit();
-        
+       
         switch(settings.color_fmt) {
             case EF_ARGB8:
                 glfwOpenWindowHint(GLFW_RED_BITS, 8);
@@ -129,8 +129,13 @@ namespace ukn {
                                          0)) == 0) {
             // no window = app exit
             // so exception is acceptable here
-            UKN_THROW_EXCEPTION("Error opening window");
-        }
+            UKN_THROW_EXCEPTION("GLWindow::GLWindow: Error opening window");
+        } 
+
+		GLenum err = glewInit();
+		if (GLEW_OK != err) {
+			UKN_THROW_EXCEPTION(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err)));
+		}
 
 		glfwSetWindowPos(mGlfwWindow, settings.left, settings.top);
         

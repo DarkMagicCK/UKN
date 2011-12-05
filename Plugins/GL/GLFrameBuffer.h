@@ -10,8 +10,7 @@
 #define Project_Unknown_GLFrameBuffer_h
 
 #include "UKN/FrameBuffer.h"
-
-#include "glfw/glfw3.h"
+#include "GLPreq.h"
 
 namespace ukn {
     

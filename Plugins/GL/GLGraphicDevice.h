@@ -10,13 +10,7 @@
 #define Project_Unknown_GLRenderDevice_h
 
 #include "UKN/GraphicDevice.h"
-
-#ifdef UKN_OS_WINDOWS
-#pragma comment(lib, "OpenGL32.lib")
-#pragma comment(lib, "glu32.lib")
-#endif
-
-#include "glfw/glfw3.h"
+#include "GLPreq.h"
 
 namespace ukn {
     

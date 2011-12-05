@@ -150,7 +150,7 @@ namespace ukn {
             return MakeSharedPtr<MemoryStream>();
     }
     
-#ifdef OS_WIN32
+#ifdef UKN_OS_WINDOWS
     
     FileStreamWin32::FileStreamWin32() {
         file = NULL;
@@ -202,7 +202,7 @@ namespace ukn {
     
     bool FileStreamWin32::seek(size_t pos, SeekType type) {
         LONG high = (LONG)(pos >> 32);
-        return SetFilePointer(file, pos & 0xFFFFFFFF, (high > 0 ? &high : NULL), type) != INVALID_HANDLE_VALUE;
+        return SetFilePointer(file, pos & 0xFFFFFFFF, (high > 0 ? &high : NULL), type) != INVALID_SET_FILE_POINTER;
     }
     
     bool FileStreamWin32::isValid() const {
@@ -211,7 +211,7 @@ namespace ukn {
     
     bool FileStreamWin32::seek(size_t pos) {
         LONG high = (LONG)(pos >> 32);
-        return SetFilePointer(file, pos & 0xFFFFFFFF, (high > 0 ? &high : NULL), type) != INVALID_HANDLE_VALUE;
+        return SetFilePointer(file, pos & 0xFFFFFFFF, (high > 0 ? &high : NULL), Current) != INVALID_SET_FILE_POINTER;
     }
     
     size_t FileStreamWin32::read(uint8* data, size_t len) {

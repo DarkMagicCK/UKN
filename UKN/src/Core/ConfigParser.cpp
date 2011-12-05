@@ -23,7 +23,7 @@ namespace ukn {
                 }
             }
         } else {
-            return MakeSharedPtr<ConfigParserXmlImpl>();
+            return ConfigParserPtr();
         }
         
         return ConfigParserPtr();

@@ -11,23 +11,34 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\External\glew\glew.h" />
+    <ClInclude Include="..\..\External\glew\glxew.h" />
+    <ClInclude Include="..\..\External\glew\wglew.h" />
+    <ClInclude Include="..\..\External\glfw\glfw3.h" />
     <ClInclude Include="..\..\External\pugixml\pugiconfig.hpp" />
     <ClInclude Include="..\..\External\pugixml\pugixml.hpp" />
+    <ClInclude Include="..\..\External\soil\image_DXT.h" />
+    <ClInclude Include="..\..\External\soil\image_helper.h" />
+    <ClInclude Include="..\..\External\soil\SOIL.h" />
+    <ClInclude Include="..\..\External\soil\stbi_DDS_aug.h" />
+    <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h" />
+    <ClInclude Include="..\..\External\soil\stb_image_aug.h" />
+    <ClInclude Include="..\..\Plugins\DirectX\DXConvert.h" />
+    <ClInclude Include="..\..\Plugins\DirectX\DXFrameBuffer.h" />
+    <ClInclude Include="..\..\Plugins\DirectX\DXGraphicDevice.h" />
+    <ClInclude Include="..\..\Plugins\DirectX\DXGraphicFactory.h" />
+    <ClInclude Include="..\..\Plugins\DirectX\DXPreq.h" />
+    <ClInclude Include="..\..\Plugins\DirectX\DXRenderView.h" />
+    <ClInclude Include="..\..\Plugins\DirectX\DXTexture.h" />
+    <ClInclude Include="..\..\Plugins\DirectX\DXWindow.h" />
     <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
-    <ClInclude Include="..\..\Plugins\GL\glfw\glfw3.h" />
     <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h" />
     <ClInclude Include="..\..\Plugins\GL\GLGraphicFactory.h" />
     <ClInclude Include="..\..\Plugins\GL\GLPreq.h" />
     <ClInclude Include="..\..\Plugins\GL\GLRenderView.h" />
     <ClInclude Include="..\..\Plugins\GL\GLTexture.h" />
     <ClInclude Include="..\..\Plugins\GL\GLWindow.h" />
-    <ClInclude Include="..\..\Plugins\GL\soil\image_DXT.h" />
-    <ClInclude Include="..\..\Plugins\GL\soil\image_helper.h" />
-    <ClInclude Include="..\..\Plugins\GL\soil\SOIL.h" />
-    <ClInclude Include="..\..\Plugins\GL\soil\stbi_DDS_aug.h" />
-    <ClInclude Include="..\..\Plugins\GL\soil\stbi_DDS_aug_c.h" />
-    <ClInclude Include="..\..\Plugins\GL\soil\stb_image_aug.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Action.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Any.h" />
     <ClInclude Include="..\..\UKN\include\UKN\App.h" />
@@ -107,17 +118,24 @@
     <ClInclude Include="..\..\UKN\src\Core\ConfigParserXml.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\External\glew\glew.c" />
     <ClCompile Include="..\..\External\pugixml\pugixml.cpp" />
+    <ClCompile Include="..\..\External\soil\image_DXT.c" />
+    <ClCompile Include="..\..\External\soil\image_helper.c" />
+    <ClCompile Include="..\..\External\soil\SOIL.c" />
+    <ClCompile Include="..\..\External\soil\stb_image_aug.c" />
+    <ClCompile Include="..\..\Plugins\DirectX\DXFrameBuffer.cpp" />
+    <ClCompile Include="..\..\Plugins\DirectX\DXGraphicDevice.cpp" />
+    <ClCompile Include="..\..\Plugins\DirectX\DXGraphicFactory.cpp" />
+    <ClCompile Include="..\..\Plugins\DirectX\DXRenderView.cpp" />
+    <ClCompile Include="..\..\Plugins\DirectX\DXTexture.cpp" />
+    <ClCompile Include="..\..\Plugins\DirectX\DXWindow.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicFactory.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLRenderView.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLTexture.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLWindow.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\soil\image_DXT.c" />
-    <ClCompile Include="..\..\Plugins\GL\soil\image_helper.c" />
-    <ClCompile Include="..\..\Plugins\GL\soil\SOIL.c" />
-    <ClCompile Include="..\..\Plugins\GL\soil\stb_image_aug.c" />
     <ClCompile Include="..\..\UKN\main.cpp" />
     <ClCompile Include="..\..\UKN\src\App\App.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\ConfigParser.cpp" />

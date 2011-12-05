@@ -79,7 +79,11 @@ namespace ukn {
         mLogQueue.push_back(realLog);
         
         if(mOutputStream) {
-            *mOutputStream<<realLog<<"\n";
+#ifdef UKN_OS_WINDOWS
+            *mOutputStream<<realLog<<"\r\n";
+#else
+			*mOutputStream<<realLog<<"\n";
+#endif // UKN_OS_WINDOWS
         }
     }
     

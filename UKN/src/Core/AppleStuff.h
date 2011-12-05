@@ -28,8 +28,8 @@ namespace ukn {
     uint64 ukn_apple_get_memory_size();
     ukn_string ukn_apple_get_os_version();
     
-    MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option);
-    MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option);
+    MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, int option);
+    MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option);
     
 #ifdef UKN_OS_OSX
     int ukn_get_os_osx_version();

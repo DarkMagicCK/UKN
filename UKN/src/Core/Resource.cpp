@@ -81,21 +81,6 @@ namespace ukn {
         return mResourcePaths;
     }
     
-    void ResourceLoader::addName(const ukn_wstring& name, const ukn_wstring& alias) {
-        mResourceNames.insert(std::make_pair(name, alias));
-    }
-    
-    void ResourceLoader::removeName(const ukn_wstring& name) {
-        ResourceNames::iterator it = mResourceNames.find(name);
-        if(it != mResourceNames.end()) {
-            mResourceNames.erase(it);
-        }
-    }
-    
-    const ResourceLoader::ResourceNames& ResourceLoader::getResourceNames() const {
-        return mResourceNames;
-    }
-    
     void ResourceLoader::registerResourceFactory(ResourceFactoryPtr rfac) {
         mResourceFactories.push_back(rfac);
     }
@@ -104,12 +89,12 @@ namespace ukn {
         return mResourceFactories;
     }
     
-    inline ResourcePtr ResourceLoader::onResourceLoad(const ukn_wstring& name) {
+    inline ResourcePtr ResourceLoader::onResourceLoad(const ukn_wstring& name, bool isFullPath) {
         ResourceFactories::iterator itFac = mResourceFactories.begin();
         while(itFac != mResourceFactories.end()) {
             ResourcePaths::iterator itPath = mResourcePaths.begin();
             
-            if(mResourcePaths.size() != 0) {
+			 if(!isFullPath && mResourcePaths.size() != 0) {
                 while(itPath != mResourcePaths.end()) {
                     ukn_wstring fullPath = *itPath + L"/" + name;
                     
@@ -129,13 +114,8 @@ namespace ukn {
         return MakeSharedPtr<Resource>(L"null", StreamPtr());
     }
     
-    ResourcePtr ResourceLoader::loadResource(const ukn_wstring& name_or_path) {
-        ResourceNames::iterator itName = mResourceNames.find(name_or_path);
-        if(itName != mResourceNames.end()) {
-            return onResourceLoad(itName->second);
-        } else {
-            return onResourceLoad(name_or_path);
-        }
+    ResourcePtr ResourceLoader::loadResource(const ukn_wstring& name_or_path, bool isFullPath) {
+        return onResourceLoad(name_or_path, isFullPath);
     }
     
     ResourcePtr ResourceLoader::createMemoryResource(const uint8* data, size_t size, const ukn_wstring& name) {

@@ -39,6 +39,10 @@ namespace ukn {
     Window& AppInstance::getMainWindow() const {
         return *mMainWindow;
     }
+
+	WindowPtr AppInstance::getMainWindowPtr() const {
+		return mMainWindow;
+	}
     
     void AppInstance::init(const ukn_wstring& cfgname) {
         mInited = true;
@@ -107,6 +111,7 @@ namespace ukn {
     void AppInstance::terminate() {
 #ifdef UKN_OS_WINDOWS
         ::PostQuitMessage(0);
+		exit(0);
 #else
         exit(0);
 #endif

@@ -13,7 +13,7 @@
 
 namespace ukn {
     
-    struct KeyEvent {
+    struct InputEvent {
         int		type;			// event type
 		int		key;			// key code
 		int		flags;			// event flags

@@ -14,11 +14,11 @@
 namespace ukn {
     
     enum MessageBoxOption {
-        MBO_OK          = 1UL,
-        MBO_OKCancel    = 1UL << 1,
-        MBO_IconError   = 1UL << 2,
-        MBO_IconWarning = 1UL << 3,
-        MBO_IconInfo    = 1UL << 4,
+        MBO_OK          = 0x00000000L,
+        MBO_OKCancel    = 0x00000001L,
+        MBO_IconError   = 0x00000010L,
+        MBO_IconWarning = 0x00000030L,
+        MBO_IconInfo    = 0x00000040L,
     };
     
     enum MessageBoxButton {
@@ -26,8 +26,8 @@ namespace ukn {
         MBB_Cancel      = 2,
     };
     
-    UKN_API MessageBoxButton message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option);
-    UKN_API MessageBoxButton message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option);
+    UKN_API MessageBoxButton message_box(const ukn_string& mssg, const ukn_string& title, int option);
+    UKN_API MessageBoxButton message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option);
 
     // in mhz
     UKN_API uint64 get_system_processor_speed();

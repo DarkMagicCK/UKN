@@ -100,9 +100,12 @@ namespace ukn {
         cfg.render_cfg.fsaa_samples = 0;
         
         ResourcePtr configData = ResourceLoader::Instance().loadResource(name); 
+		bool configAvail = false;
         if(configData) {
             ConfigParserPtr configParser = MakeConfigParser(configData);
             if(configParser) {
+				configAvail = true;
+
                 if(configParser->toNode("/cfg/graphics")) {
                     cfg.render_cfg.width        = configParser->getInt("width", cfg.render_cfg.width);
                     cfg.render_cfg.height       = configParser->getInt("height", cfg.render_cfg.height);
@@ -143,9 +146,14 @@ namespace ukn {
             } else {
                 log_warning(L"ukn::Context::loadCfgFile: unable to open config file "+configData->getName());
             }
-        }
+		}
         
         setCfg(cfg);
+
+		
+		if(!configAvail) {
+			saveCfgFile(L"config.xml");
+		}
     }
     
     void Context::saveCfgFile(const ukn_wstring& name) {

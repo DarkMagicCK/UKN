@@ -43,13 +43,13 @@ namespace ukn {
     
 #ifdef UKN_OS_WINDOWS
     
-    inline MessageBoxButton ukn_win_message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option) {
-        HWND hWnd = Context::Instance().isAppAvailable() ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
+    inline MessageBoxButton ukn_win_message_box(const ukn_string& mssg, const ukn_string& title, int option) {
+        HWND hWnd = (Context::Instance().isAppAvailable() && Context::Instance().getApp().getMainWindowPtr().isValid()) ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
         return (MessageBoxButton)MessageBoxA(hWnd, mssg.c_str(), title.c_str(), option);
     }
     
-    inline MessageBoxButton ukn_win_message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option) {
-        HWND hWnd = Context::Instance().isAppAvailable() ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
+    inline MessageBoxButton ukn_win_message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
+        HWND hWnd = (Context::Instance().isAppAvailable() && Context::Instance().getApp().getMainWindowPtr().isValid()) ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
         return (MessageBoxButton)MessageBoxW(hWnd, mssg.c_str(), title.c_str(), option);
     }
     
@@ -96,7 +96,7 @@ namespace ukn {
     
 #endif
     
-    UKN_API MessageBoxButton message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option) {
+    UKN_API MessageBoxButton message_box(const ukn_string& mssg, const ukn_string& title, int option) {
 #ifdef UKN_OS_WINDOWS
         return ukn_win_message_box(mssg, title, option);
         
@@ -108,7 +108,7 @@ namespace ukn {
         return MBB_OK;
     }
     
-    UKN_API MessageBoxButton message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option) {
+    UKN_API MessageBoxButton message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
 #ifdef UKN_OS_WINDOWS
         return ukn_win_message_box(mssg, title, option);
         

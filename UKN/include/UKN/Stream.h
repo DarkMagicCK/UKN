@@ -208,7 +208,7 @@ namespace ukn {
         StreamPtr readIntoMemory();
     };
     
-#ifdef OS_WIN32
+#ifdef UKN_OS_WINDOWS
     /*
      Win32 implemention
      */

@@ -75,19 +75,13 @@ namespace ukn {
         
         typedef std::vector<ukn_wstring> ResourcePaths;
         const ResourcePaths& getResourcePaths() const;
-        
-        void addName(const ukn_wstring& name, const ukn_wstring& alias);
-        void removeName(const ukn_wstring& name);
-        
-        typedef std::map<ukn_wstring, ukn_wstring> ResourceNames;
-        const ResourceNames& getResourceNames() const;
-        
+
         void registerResourceFactory(ResourceFactoryPtr rfac);
         
         typedef std::vector<ResourceFactoryPtr> ResourceFactories;
         const ResourceFactories& getResourceFactories() const;
         
-        ResourcePtr loadResource(const ukn_wstring& name_or_path);
+        ResourcePtr loadResource(const ukn_wstring& name_or_path, bool isFullPath=false /* search resource paths? */);
         ResourcePtr createMemoryResource(const uint8* data, size_t size, const ukn_wstring& name=L"memory_buffer");
         ResourcePtr createFileResource(const ukn_wstring& name);
         
@@ -95,12 +89,11 @@ namespace ukn {
         void enumResourceNamesInPath(const ukn_wstring& path, FileList& names);
         
     private:
-        ResourcePtr onResourceLoad(const ukn_wstring& name);
+        ResourcePtr onResourceLoad(const ukn_wstring& name, bool isFullPath);
         
         ResourceFactories mResourceFactories;
-        
+      
         ResourcePaths mResourcePaths;
-        ResourceNames mResourceNames;
     };
     
     

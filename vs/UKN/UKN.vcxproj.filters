@@ -19,6 +19,24 @@
     <Filter Include="external">
       <UniqueIdentifier>{2f326ab9-6d1a-4327-9b9a-d46852a7902b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="external\glew">
+      <UniqueIdentifier>{cecd2706-7972-46d3-b8df-300d69413474}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\pugi">
+      <UniqueIdentifier>{71d83da5-ece2-46f6-a610-6caa015e36a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\glfw">
+      <UniqueIdentifier>{31ff83c0-e7cd-419d-a8c6-460be8b12621}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="external\soil">
+      <UniqueIdentifier>{e62a1f3d-f89a-4d11-ac52-7bd12c02a5e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="源文件\directx">
+      <UniqueIdentifier>{0eb2d388-e66f-4c34-9141-b61872d081dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\detail">
+      <UniqueIdentifier>{5d71e1cc-0d67-47a6-8c90-6dc8d36c0c7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\UKN\include\UKN\Action.h">
@@ -49,57 +67,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\UKN\include\UKN\detail\function\Bind.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function0.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function1.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function10.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function11.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function12.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function2.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function3.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function4.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function5.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function6.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function7.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function8.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function9.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionBase.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionFoward.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionInclude.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionTemplate.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\UKN\include\UKN\detail\function\Memfun.h">
@@ -133,9 +100,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\UKN\include\UKN\FSM.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\Function.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\UKN\include\UKN\GraphicBuffer.h">
@@ -255,13 +219,7 @@
     <ClInclude Include="..\..\Plugins\GL\GLConvert.h">
       <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\soil\stbi_DDS_aug_c.h">
-      <Filter>源文件\gl</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h">
-      <Filter>源文件\gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\glfw\glfw3.h">
       <Filter>源文件\gl</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h">
@@ -282,26 +240,119 @@
     <ClInclude Include="..\..\Plugins\GL\GLWindow.h">
       <Filter>源文件\gl</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\soil\image_DXT.h">
-      <Filter>源文件\gl</Filter>
+    <ClInclude Include="..\..\External\glew\glxew.h">
+      <Filter>external\glew</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\soil\image_helper.h">
-      <Filter>源文件\gl</Filter>
+    <ClInclude Include="..\..\External\glew\glew.h">
+      <Filter>external\glew</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\soil\SOIL.h">
-      <Filter>源文件\gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\soil\stb_image_aug.h">
-      <Filter>源文件\gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\soil\stbi_DDS_aug.h">
-      <Filter>源文件\gl</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\External\pugixml\pugiconfig.hpp">
-      <Filter>external</Filter>
+    <ClInclude Include="..\..\External\glew\wglew.h">
+      <Filter>external\glew</Filter>
     </ClInclude>
     <ClInclude Include="..\..\External\pugixml\pugixml.hpp">
-      <Filter>external</Filter>
+      <Filter>external\pugi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\pugixml\pugiconfig.hpp">
+      <Filter>external\pugi</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\glfw\glfw3.h">
+      <Filter>external\glfw</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\soil\image_helper.h">
+      <Filter>external\soil</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\soil\SOIL.h">
+      <Filter>external\soil</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\soil\stb_image_aug.h">
+      <Filter>external\soil</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\soil\stbi_DDS_aug.h">
+      <Filter>external\soil</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h">
+      <Filter>external\soil</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\soil\image_DXT.h">
+      <Filter>external\soil</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\DirectX\DXConvert.h">
+      <Filter>源文件\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\DirectX\DXFrameBuffer.h">
+      <Filter>源文件\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\DirectX\DXGraphicDevice.h">
+      <Filter>源文件\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\DirectX\DXGraphicFactory.h">
+      <Filter>源文件\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\DirectX\DXPreq.h">
+      <Filter>源文件\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\DirectX\DXTexture.h">
+      <Filter>源文件\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\DirectX\DXWindow.h">
+      <Filter>源文件\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\DirectX\DXRenderView.h">
+      <Filter>源文件\directx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Function.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionTemplate.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function0.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function1.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function10.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function11.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function12.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function2.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function3.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function4.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function5.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function6.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function7.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function8.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function9.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionBase.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionFoward.h">
+      <Filter>头文件\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionInclude.h">
+      <Filter>头文件\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -389,23 +440,44 @@
     <ClCompile Include="..\..\Plugins\GL\GLWindow.cpp">
       <Filter>源文件\gl</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\soil\image_DXT.c">
-      <Filter>源文件\gl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\soil\image_helper.c">
-      <Filter>源文件\gl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\soil\SOIL.c">
-      <Filter>源文件\gl</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\soil\stb_image_aug.c">
-      <Filter>源文件\gl</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\UKN\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\External\glew\glew.c">
+      <Filter>external\glew</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\External\pugixml\pugixml.cpp">
-      <Filter>external</Filter>
+      <Filter>external\pugi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\soil\image_helper.c">
+      <Filter>external\soil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\soil\SOIL.c">
+      <Filter>external\soil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\soil\stb_image_aug.c">
+      <Filter>external\soil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\soil\image_DXT.c">
+      <Filter>external\soil</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\DirectX\DXFrameBuffer.cpp">
+      <Filter>源文件\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\DirectX\DXGraphicDevice.cpp">
+      <Filter>源文件\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\DirectX\DXGraphicFactory.cpp">
+      <Filter>源文件\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\DirectX\DXRenderView.cpp">
+      <Filter>源文件\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\DirectX\DXTexture.cpp">
+      <Filter>源文件\directx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\DirectX\DXWindow.cpp">
+      <Filter>源文件\directx</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

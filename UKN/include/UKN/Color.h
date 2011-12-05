@@ -182,9 +182,10 @@ namespace ukn {
         float g;
         float b;
         float a;
+
     };
-	
-    static Color ColorWhite          = Color(1.f, 1.f, 1.f, 1.f);
+
+	static Color ColorWhite          = Color(1.f, 1.f, 1.f, 1.f);
     static Color ColorBlack          = Color(0.f, 0.f, 0.f, 1.f);
     static Color ColorRed            = Color(1.f, 0.f, 0.f, 1.f);
     static Color ColorBlue           = Color(0.f, 0.f, 1.f, 1.f);
@@ -300,7 +301,7 @@ namespace ukn {
     static Color ColorLightgrey      = Color(0xFFD3D3D3);
     static Color ColorGainsboro      = Color(0xFFDCDCDC);
     static Color ColorWhitesmoke     = Color(0xFFF5F5F5);  
-    
+
     class ColorHSV {
     public:
         float h, s, v, a;

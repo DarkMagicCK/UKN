@@ -87,7 +87,7 @@ namespace ukn {
         
 	private:
 		ukn_string mMssg, mFunction, mFile;
-        int mLine;
+        int32 mLine;
 	};
 
     

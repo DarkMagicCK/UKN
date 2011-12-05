@@ -13,8 +13,8 @@
 #include "UKN/Uncopyable.h"
 #include "UKN/GraphicSettings.h"
 
+#include "GLPreq.h"
 #include "GLTexture.h"
-#include "glfw/glfw3.h"
 
 namespace ukn {
     

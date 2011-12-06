@@ -12,6 +12,7 @@
 #include "Platform.h"
 #include "PreDeclare.h"
 #include "GraphicSettings.h"
+#include "Class.h"
 
 namespace ukn {
     
@@ -54,7 +55,7 @@ namespace ukn {
         virtual uint32 getHeight(uint32 level = 0) const = 0;
         
         virtual uintPtr getTextureId() const = 0;
-        
+                
     protected:
         TextureType mType;
         uint32 mNumMipmaps;

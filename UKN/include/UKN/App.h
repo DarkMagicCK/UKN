@@ -24,13 +24,11 @@ namespace ukn {
         AppInstance(const ukn_string& name);
         ~AppInstance();
         
-        Window& getMainWindow() const;
-		WindowPtr getMainWindowPtr() const;
+        Window&     getMainWindow() const;
+		WindowPtr   getMainWindowPtr() const;
         
-        void init(const ukn_wstring& cfgname=L"config.xml");
-        void init(const ContextCfg& cfg);
-        
-        void create();
+        void create(const ukn_wstring& cfgname=L"config.xml");
+        void create(const ContextCfg& cfg);
         
         void run();
         void terminate();
@@ -38,8 +36,8 @@ namespace ukn {
         void update();
         void render();
         
-        void setCamera(CameraPtr camera);
-        CameraPtr getCamera() const;
+        void        setCamera(CameraPtr camera);
+        CameraPtr   getCamera() const;
         
     protected:
         virtual void onRender();
@@ -47,6 +45,7 @@ namespace ukn {
         virtual void onInit();
         
     private:
+        void doCreate();
         void onWindowClose(Window& wnd);
         
         ukn_string mName;

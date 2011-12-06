@@ -115,7 +115,7 @@ namespace ukn {
         
         glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, settings.resizable);
         
-#if defined(UKN_HAS_OPENGL_3_2)
+#if defined(UKN_OPENGL_3_2)
         
         glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
         glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
@@ -132,10 +132,12 @@ namespace ukn {
             UKN_THROW_EXCEPTION("GLWindow::GLWindow: Error opening window");
         } 
 
+#if defined(UKN_OS_WINDOWS)
 		GLenum err = glewInit();
 		if (GLEW_OK != err) {
 			UKN_THROW_EXCEPTION(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err)));
 		}
+#endif
 
 		glfwSetWindowPos(mGlfwWindow, settings.left, settings.top);
         

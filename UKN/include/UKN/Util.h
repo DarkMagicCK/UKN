@@ -264,9 +264,9 @@ namespace ukn {
     void Array<T>::growTo(size_t newCapacity) {
         ukn_assert(!this->mMapped);
         
-        T* newArray = new T[mCapacity];
+        T* newArray = new T[newCapacity];
         if(this->mElements) {
-            memcpy(newArray, this->mElements, sizeof(T) * this->mCapacity);
+            memcpy(newArray, this->mElements, sizeof(T) * this->mSize);
         }
         this->mElements = newArray;
         this->mHolder.reset(newArray);
@@ -342,7 +342,7 @@ namespace ukn {
     
     template<typename T>
     void Array<T>::append(const T& elemt) {
-        if(this->mSize == this->mCapacity) {
+        if(this->mSize >= this->mCapacity) {
             this->grow();
         }
         ukn_assert(this->mElements);
@@ -475,6 +475,11 @@ namespace ukn {
     }
     
     template<typename T>
+    void Array<T>::insert(const T& elemt) {
+        this->append(elemt);
+    }
+    
+    template<typename T>
     void Array<T>::pop_front() {
         ukn_assert(this->mElements);
         ukn_assert(this->mSize >= 1);
@@ -523,7 +528,7 @@ namespace ukn {
     typename Array<T>::iterator Array<T>::find(const T& elemt) const {
         for (size_t i=0; i<this->mSize; ++i) {
             if(this->mElements[i] == elemt)
-                return &(this->mElements[index]);
+                return &(this->mElements[i]);
         }
         return 0;
     }
@@ -562,7 +567,7 @@ namespace ukn {
     
     template<typename T>
     void Array<T>::insertSorted(const T& elm) {
-        if(this->mSize == 0) 
+        if(this->mSize == 0 || this->mSize == 1) 
             this->append(elm);
         else {
             size_t num = this->mSize;
@@ -839,14 +844,22 @@ namespace ukn {
         bool operator > (const SelfType& rhs) const { return this->mKey > rhs.mKey; }
         
         Pair& operator=(const SelfType& rhs) {
-            this->mKey = rhs.mKey;
-            this->mValue = rhs.mValue;
+            if(this != &rhs) {
+                this->mKey = rhs.mKey;
+                this->mValue = rhs.mValue;
+            }
+            return *this;
         }
         
     private:
         Key mKey;
         Value mValue;
     };
+    
+    template<typename Key, typename Val>
+    static Pair<Key, Val> make_pair(const Key& key, const Val& val) {
+        return Pair<Key, Val>(key, val);
+    }
     
     template<typename Key, typename Value>
     class Dictionary {

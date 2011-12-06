@@ -44,19 +44,21 @@ namespace ukn {
 		return mMainWindow;
 	}
     
-    void AppInstance::init(const ukn_wstring& cfgname) {
+    void AppInstance::create(const ukn_wstring& cfgname) {
         mInited = true;
         
         Context::Instance().loadCfgFile(cfgname);
+        doCreate();
     }
     
-    void AppInstance::init(const ContextCfg& cfg) {
+    void AppInstance::create(const ContextCfg& cfg) {
         mInited = true;
         
         Context::Instance().setCfg(cfg);
+        doCreate();
     }
     
-    void AppInstance::create() {
+    void AppInstance::doCreate() {
         ukn_assert(mInited);
         
         GraphicDevice& graphic_device = Context::Instance().getGraphicFactory().getGraphicDevice();

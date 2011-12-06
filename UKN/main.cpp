@@ -23,8 +23,15 @@
 #include "UKN/FrameBuffer.h"
 #include "UKN/Logger.h"
 #include "UKN/Common.h"
+#include "UKN/Texture.h"
 
 #include <vector>
+
+class MyClassTest {
+public:
+    UKN_DEF_CLASS_2(MyClassTest, (UKN_DEF_PROP("hello", ukn::ukn_string, "hello world"), UKN_DEF_PROP("i", int, 0)));
+    
+};
 
 void update(ukn::Window& window) {
     ukn::log_warning(ukn::format_string("fps: %f\n", ukn::FrameCounter::Instance().getCurrentFps()));
@@ -43,6 +50,12 @@ int CALLBACK WinMain(
   __in  int nCmdShow
 ) {
 #endif
+    MyClassTest test;
+    ukn::PropertyPtr prop = test.GetClass()["hello"];
+    ukn_assert(prop.isValid());
+    
+    prop = test.GetClass()["i"];
+
 
     // register plugins by hand for testing purpose
     ukn::GraphicFactoryPtr gl_factory;
@@ -51,11 +64,9 @@ int CALLBACK WinMain(
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
     
     ukn::AppInstance instance("Test App");
-    // init with custom cfg
-    instance.init(L"config.xml");
-        
+
     // create app context
-    instance.create();
+    instance.create(L"config.xml");
     
     instance.getMainWindow().onUpdate().connect(update);
     

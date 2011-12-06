@@ -118,7 +118,7 @@ namespace ukn {
 		return kCFUserNotificationPlainAlertLevel;
 	}
     
-    MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option) {
+    MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, int option) {
         CFStringRef header_ref   = CFStringCreateWithCString(NULL, title.c_str(), (uint32)title.size());
 		CFStringRef message_ref  = CFStringCreateWithCString(NULL, mssg.c_str(), (uint32)mssg.size());
 		
@@ -132,7 +132,8 @@ namespace ukn {
 									   header_ref,
 									   message_ref,
 									   NULL, // default "ok"
-									   (option & MBO_OKCancel)?CFSTR("Cancel"):NULL, // alternate button
+									   (option & MBO_OKCancel)?CFSTR("Cancel") :
+                                       NULL, // alternate button
 									   NULL, //other button title
 									   &result
 									   );
@@ -150,7 +151,7 @@ namespace ukn {
 		}
     }
     
-    MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option) {
+    MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
         return ukn_apple_message_box(wstring_to_string(mssg),
                                      wstring_to_string(title),
                                      option);

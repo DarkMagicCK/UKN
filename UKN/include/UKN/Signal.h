@@ -196,6 +196,12 @@ namespace ukn {
             
             return slotcon;
         }
+        
+        template<typename F>
+        SignalBase& operator+=(const F& f) {
+            this->connect(0, f);
+            return *this;
+        }
     };
     
     template<typename SIG>

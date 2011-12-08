@@ -71,10 +71,8 @@ public:
         
         ukn::RandomArea randomobj(ukn::Vector2(0, 0), ukn::Vector2(1024, 768));
         
-        for(int i=0; i<10; ++i) {
-            ukn::Vector2 pos = randomobj.randomize();
-            mSpriteBatch->draw(mTexture, pos.x, pos.y);
-        }
+        mSpriteBatch->draw(mTexture, ukn::Rectangle(0, 0, 100, 100), ukn::Rectangle(200, 200, 500, 500));
+        
         mSpriteBatch->render();
 
         mSpriteBatch->onRenderEnd();

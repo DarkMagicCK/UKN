@@ -228,13 +228,17 @@ namespace ukn {
         TextureObject obj(texture, 0.f);
         obj.srcRect = srcRect;
         
-        obj.buildVertices(dstRect.x1, 
-                          dstRect.y1, 
-                          (dstRect.x2 - dstRect.x1) / 2,
-                          (dstRect.y2 - dstRect.y1) / 2,
+        float w = srcRect.x2 - srcRect.x1;
+        float h = srcRect.y2 - srcRect.y1;
+        float sx = (dstRect.x2 - dstRect.x1) / w;
+        float sy = (dstRect.y2 - dstRect.y1) / h;
+        obj.buildVertices(dstRect.x1 + w / 2 * sx, 
+                          dstRect.y1 + h / 2 * sy, 
+                          w / 2,
+                          h / 2,
                           rot, 
-                          (dstRect.x2 - dstRect.x1) / texture->getWidth(), 
-                          (dstRect.y2 - dstRect.y1) / texture->getHeight(),
+                          sx, 
+                          sy,
                           color);
         
         mRenderQueue.insert(obj);
@@ -259,13 +263,17 @@ namespace ukn {
         TextureObject obj(texture, layerDepth);
         obj.srcRect = srcRect;
         
-        obj.buildVertices(dstRect.x1, 
-                          dstRect.y1, 
-                          (dstRect.x2 - dstRect.x1) / 2,
-                          (dstRect.y2 - dstRect.y1) / 2,
+        float w = srcRect.x2 - srcRect.x1;
+        float h = srcRect.y2 - srcRect.y1;
+        float sx = (dstRect.x2 - dstRect.x1) / w;
+        float sy = (dstRect.y2 - dstRect.y1) / h;
+        obj.buildVertices(dstRect.x1 + w / 2 * sx, 
+                          dstRect.y1 + h / 2 * sy, 
+                          w / 2,
+                          h / 2,
                           rot, 
-                          (dstRect.x2 - dstRect.x1) / texture->getWidth(), 
-                          (dstRect.y2 - dstRect.y1) / texture->getHeight(),
+                          sx, 
+                          sy,
                           color);
         
         mRenderQueue.insert(obj);

@@ -9,8 +9,8 @@
 #ifndef Project_Unknown_Hashing_h
 #define Project_Unknown_Hashing_h
 
-#include "Platform.h"
-#include "PreDeclare.h"
+#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
 
 namespace ukn {
     

@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_TypeInfo_h
 #define Project_Unknown_TypeInfo_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 
 namespace ukn {
     

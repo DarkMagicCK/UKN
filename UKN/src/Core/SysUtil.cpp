@@ -94,6 +94,31 @@ namespace ukn {
         return format_string("Windows %d.%d Build %d %s", osvi.dwMajorVersion, osvi.dwMinorVersion, osvi.dwBuildNumber, osvi.szCSDVersion);
     }
     
+    inline void ukn_win_enum_desktop_modes(Array<DesktopMode>& arr) {
+        
+        DesktopMode currMode;
+        currMode.width = (uint32)GetSystemMetrics(SM_CXSCREEN);
+		currMode.height = (uint32)GetSystemMetrics(SM_CYSCREEN);
+        
+        screenDC = GetDC(NULL);
+        currMode.bpp = GetDeviceCaps(screenDC,BITSPIXEL);
+        ReleaseDC(NULL,screenDC);
+        
+        arr.push_back(currMode);
+        
+        DEVMODE devmode;
+		devmode.dmSize = sizeof(DEVMODE);
+        
+		while(EnumDisplaySettings(0, n, &devmode) != 0) {
+			DesktopMode mode;
+            mode.width  = devmode.dmPelsWidth;
+            mode.height = devmode.dmPelsHeight;
+            mode.bpp    = devmode.dmBitsPerPel;
+            
+            arr.push_back(mode);
+		}
+    }
+    
 #endif
     
     UKN_API MessageBoxButton message_box(const ukn_string& mssg, const ukn_string& title, int option) {
@@ -159,6 +184,19 @@ namespace ukn {
         return ukn_string("Unknown OS");
     }
     
+    Array<DesktopMode> enum_desktop_mode() {
+        Array<DesktopMode> arr;
+#if defined(UKN_OS_FAMILY_APPLE)
+        ukn_apple_enum_desktop_modes(arr);
+
+#elif defined(UKN_OS_WINDOWS)
+        ukn_win_enum_desktop_modes(arr);
+        
+#endif
+        // but how to for linux without xwindow info?
+        
+        return arr;
+    }
 }
 
 namespace ukn {

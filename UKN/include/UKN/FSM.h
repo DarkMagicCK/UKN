@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_FSM_h
 #define Project_Unknown_FSM_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 
 namespace ukn {
     
@@ -213,7 +213,7 @@ namespace ukn {
         }
         
         ~FSMManager() {
-            FSMStateMap::iterator itState = mStates.begin();
+            FSMStateMap::iterator itState = this->mStates.begin();
             while(itState != mStates.end()) {
                 itState->second->onDestroy();
                 itState->second->mManager = 0;

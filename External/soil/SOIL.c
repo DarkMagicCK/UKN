@@ -14,6 +14,7 @@
 */
 
 #define SOIL_CHECK_FOR_GL_ERRORS 0
+// #define USE_GL_3
 
 #ifdef WIN32
 	#define WIN32_LEAN_AND_MEAN
@@ -24,9 +25,8 @@
 	/*	I can't test this Apple stuff!	*/    
     /* gl3 check for osx lion by robert bu */
     #include <Availability.h>
-    #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
+    #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7 && defined(USE_GL_3)
         #include <OpenGL/gl3.h>
-        #define APPLE_OSX_LION
     #else
         #include <OpenGL/gl.h>  
     #endif
@@ -1918,7 +1918,7 @@ int query_NPOT_capability( void )
         /*  glGetString(GL_EXTENSIONS) is deprecated on OpenGL 3.0 +
             so use glGetStringi
          */
-#ifdef APPLE_OSX_LION
+#ifdef USE_GL_3
         int NumberOfExtensions;
         glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
         for(int i=0; i<NumberOfExtensions; i++)
@@ -1966,7 +1966,7 @@ int query_tex_rectangle_capability( void )
 	/*	check for the capability	*/
 	if( has_tex_rectangle_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
-#ifdef APPLE_OSX_LION
+#ifdef USE_GL_3
         int NumberOfExtensions;
         glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
         for(int i=0; i<NumberOfExtensions; i++)
@@ -2025,7 +2025,7 @@ int query_cubemap_capability( void )
 	/*	check for the capability	*/
 	if( has_cubemap_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
-#ifdef APPLE_OSX_LION
+#ifdef USE_GL_3
         int NumberOfExtensions;
         glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
         for(int i=0; i<NumberOfExtensions; i++)
@@ -2077,7 +2077,7 @@ int query_DXT_capability( void )
 	/*	check for the capability	*/
 	if( has_DXT_capability == SOIL_CAPABILITY_UNKNOWN )
 	{
-#ifdef APPLE_OSX_LION
+#ifdef USE_GL_3
         int NumberOfExtensions;
         bool flags;
         glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);

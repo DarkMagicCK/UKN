@@ -9,10 +9,10 @@
 #ifndef Project_Unknown_ConfigParser_h
 #define Project_Unknown_ConfigParser_h
 
-#include "Platform.h"
-#include "Uncopyable.h"
+#include "UKN/Platform.h"
+#include "UKN/Uncopyable.h"
     
-#include "PreDeclare.h"
+#include "UKN/PreDeclare.h"
 
 #include <vector>
 

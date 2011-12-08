@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_Common_h
 #define Project_Unknown_Common_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 
 #ifdef UKN_OS_WINDOWS
 
@@ -46,7 +46,7 @@ namespace ukn {
     
     static ukn_string format_string(const char* format, ...) {
         va_list	arg;
-		char message[512] = {0};
+		char message[1024] = {0};
 		va_start(arg, format);
 		vsprintf(message, format, arg);
 		va_end(arg);

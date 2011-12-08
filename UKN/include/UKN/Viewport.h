@@ -9,8 +9,8 @@
 #ifndef Project_Unknown_Viewport_h
 #define Project_Unknown_Viewport_h
 
-#include "Platform.h"
-#include "Camera.h"
+#include "UKN/Platform.h"
+#include "UKN/Camera.h"
 
 namespace ukn {
 

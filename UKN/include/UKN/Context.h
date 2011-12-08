@@ -9,10 +9,10 @@
 #ifndef Project_Unknown_PluginContents_h
 #define Project_Unknown_PluginContents_h
 
-#include "Platform.h"
-#include "GraphicSettings.h"
-#include "PreDeclare.h"
-#include "DllLoader.h"
+#include "UKN/Platform.h"
+#include "UKN/GraphicSettings.h"
+#include "UKN/PreDeclare.h"
+#include "UKN/DllLoader.h"
 
 namespace ukn {
         

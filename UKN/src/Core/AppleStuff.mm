@@ -20,6 +20,9 @@
 #include <sys/sysctl.h>
 
 #else
+#import <UIKit/UIkit.h>
+#import <UIKit/UIDevice.h>
+#import <AudioToolbox/AudioToolbox.h>
 
 #endif
 
@@ -162,10 +165,134 @@ namespace ukn {
         return MAC_OS_X_VERSION_MAX_ALLOWED;
     }
     
+    static DesktopMode vidmodeFromCGDisplayMode(NSDictionary* mode) {
+        DesktopMode result;
+        result.width    = [[mode objectForKey:(id)kCGDisplayWidth] unsignedIntValue];;
+        result.height   = [[mode objectForKey:(id)kCGDisplayHeight] unsignedIntValue];;
+        result.bpp      = [[mode objectForKey:(id)kCGDisplayBitsPerPixel] unsignedIntValue];;
+        return result;
+    }
+    
+    void ukn_apple_enum_desktop_modes(Array<DesktopMode>& arr) {
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
+        CGDisplayModeRef cgmode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
+        DesktopMode mode;
+        mode.width  = (uint32)CGDisplayModeGetWidth(cgmode);
+        mode.height = (uint32)CGDisplayModeGetHeight(cgmode);
+        
+        CFStringRef pixEnc = CGDisplayModeCopyPixelEncoding(cgmode);
+        if(CFStringCompare(pixEnc, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            mode.bpp = 32;
+        else if(CFStringCompare(pixEnc, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            mode.bpp = 16;
+        else if(CFStringCompare(pixEnc, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+            mode.bpp = 8;
+        
+        arr.push_back(mode);
+        
+        CGDisplayModeRelease(cgmode);
+        
+#else
+        NSDictionary *mode = (NSDictionary*)CGDisplayCurrentMode(kCGDirectMainDisplay);
+        arr.push_back(vidmodeFromCGDisplayMode(mode));
+#endif
+        
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
+        CFArrayRef modes = CGDisplayCopyAllDisplayModes(CGMainDisplayID(), 0);
+        CFIndex count = CFArrayGetCount(modes);
+        
+        for (CFIndex index = 0; index < count; index++) {
+            CGDisplayModeRef cgmode = (CGDisplayModeRef)CFArrayGetValueAtIndex(modes, index);
+            
+            DesktopMode mode;
+            mode.width  = (uint32)CGDisplayModeGetWidth(cgmode);
+            mode.height = (uint32)CGDisplayModeGetHeight(cgmode);
+            
+            CFStringRef pixEnc = CGDisplayModeCopyPixelEncoding(cgmode);
+            if(CFStringCompare(pixEnc, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+                mode.bpp = 32;
+            else if(CFStringCompare(pixEnc, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+                mode.bpp = 16;
+            else if(CFStringCompare(pixEnc, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+                mode.bpp = 8;
+            
+            arr.push_back(mode);
+        }
+        CFRelease(modes);
+        
+#else
+        NSArray* modes = (NSArray*) CGDisplayAvailableModes(CGMainDisplayID());
+        unsigned long n = [modes count];
+        
+        for(unsigned long i = 0;  i < n;  i++) {
+            NSDictionary *mode = [modes objectAtIndex:i];
+            
+            arr.push_back(vidmodeFromCGDisplayMode(mode));
+        }
+#endif
+    }
+    
 #elif defined(UKN_OS_IOS)
+    
+    iOSDeviceType ukn_get_ios_device_type() {
+        if(ukn_ios_is_ipad())
+            return IDT_iPad;
+        else if(ukn_ios_is_retina_display())
+            return IDT_Retina;
+        else
+            return IDT_Old;
+    }
+    
+    bool ukn_ios_is_ipad() {
+        return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+    }
+    
+    bool ukn_ios_is_retina_display() {
+        if ([[UIScreen mainScreen] respondsToSelector:@selector(displayLinkWithTarget:selector:)] && ([UIScreen mainScreen].scale == 2.0)) { 
+            return true; 
+        }	
+        return false; 
+    }
+    
+    uint32 ukn_ios_get_screen_width() {
+        CGRect rect = [[UIScreen mainScreen] bounds];
+        return rect.size.width;
+    }
+    
+    uint32 ukn_ios_get_screen_height() {
+        CGRect rect = [[UIScreen mainScreen] bounds];
+        return rect.size.height;
+    }
+    
+    float ukn_ios_get_scale_factor() {
+        return ukn_ios_is_retina_display() ? 2.0 : 1.0;
+    }
+    
+    void ukn_ios_vabrite_device() {
+        AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+    }
+    
+    static bool g_use_retina = false;
+    
+    void ukn_ios_set_use_retina(bool flag) {
+        g_use_retina = flag;
+    }
+    
+    bool ukn_ios_is_use_retina() {
+        return g_use_retina;
+    }
     
     uint32 ukn_apple_get_processor_speed() {
         return 0;
+    }
+    
+    void ukn_apple_enum_desktop_modes(Array<DesktopMode>& arr) {
+        DesktopMode mode;
+        mode.width = ukn_ios_get_screen_width();
+        mode.height = ukn_ios_get_screen_height();
+        mode.bpp = 32;
+        
+        arr.push_back(mode);
     }
     
     uint64 ukn_apple_get_memory_size() {

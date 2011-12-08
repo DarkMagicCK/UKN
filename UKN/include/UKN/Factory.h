@@ -9,8 +9,8 @@
 #ifndef Project_Unknown_Factory_h
 #define Project_Unknown_Factory_h
 
-#include "Common.h"
-#include "Exception.h"
+#include "UKN/Common.h"
+#include "UKN/Exception.h"
 
 #include <map>
 
@@ -54,7 +54,7 @@ namespace ukn {
             if(mInstantiators.find(name) == mInstantiators.end())
                 mInstantiators.insert(std::make_pair(name, instantiator));
             else
-                UKN_THROW_EXCEPTION(format_string("Factory::registerClass: class with name %s alreay registered", name.c_str()));
+                UKN_THROW_EXCEPTION(format_string("ukn::Factory::registerClass: class with name %s alreay registered", name.c_str()));
         }
         
         template<typename C>
@@ -62,7 +62,7 @@ namespace ukn {
             if(mInstantiators.find(name) == mInstantiators.end())
                 mInstantiators.insert(std::make_pair(name, new DefaultClassInstantiator<Base, C>()));
             else
-                UKN_THROW_EXCEPTION(format_string("Factory::registerClass: class with name %s alreay registered", name.c_str()));
+                UKN_THROW_EXCEPTION(format_string("ukn::Factory::registerClass: class with name %s alreay registered", name.c_str()));
         }
         
         Base* createClass(const ukn_string& name) {

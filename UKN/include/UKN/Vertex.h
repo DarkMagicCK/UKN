@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_Vertex_h
 #define Project_Unknown_Vertex_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 
 namespace ukn {
     
@@ -123,20 +123,22 @@ namespace ukn {
      **/
     
     struct Vertex2D {
-        float x, y, z;
+        // GL_T2F_C4UB_V3F
         float u, v;
         uint32 color;
+        float x, y, z;
         
         Vertex2D():
-        x(0.f), y(0.f), z(0.f),
         u(0.f), v(0.f),
-        color(0xffffffff) { }
+        color(0xffffffff),        
+        x(0.f), y(0.f), z(0.f)
+        { }
         
         static VertexFormat& Format() {
             static VertexFormat static_vertex2d_format(VF_XYZ | VF_UV | VF_Color0,
+                                                       sizeof(float) * 2 + sizeof(uint32),
                                                        0,
-                                                       sizeof(float) * 3,
-                                                       sizeof(float) * 5,
+                                                       sizeof(float) * 2,
                                                        0,
                                                        0);
             return static_vertex2d_format;

@@ -9,8 +9,8 @@
 #ifndef Project_Unknown_Font_h
 #define Project_Unknown_Font_h
 
-#include "Platform.h"
-#include "Uncopyable.h"
+#include "UKN/Platform.h"
+#include "UKN/Uncopyable.h"
 
 namespace ukn {
     

@@ -9,11 +9,11 @@
 #ifndef Project_Unknown_Class_h
 #define Project_Unknown_Class_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 
-#include "Hashing.h"
-#include "Ptr.h"
-#include "Preprocessor.h"
+#include "UKN/Hashing.h"
+#include "UKN/Ptr.h"
+#include "UKN/Preprocessor.h"
 
 #include <map>
 #include <vector>
@@ -37,7 +37,7 @@ namespace ukn {
     template<typename T>
     struct RegisteredProperty;
     
-#define UKN_REGISTER_PROPERTY(type) \
+#define UKN_REGISTER_PROPERTY_TYPE(type) \
     template<> struct RegisteredProperty<type> { \
         operator ukn_string() { \
             return detail::get_registered_property_map().find(#type)->first; \
@@ -57,8 +57,8 @@ namespace ukn {
         } \
     };
     
-    UKN_REGISTER_PROPERTY(int);
-    UKN_REGISTER_PROPERTY(ukn_string);
+    UKN_REGISTER_PROPERTY_TYPE(int);
+    UKN_REGISTER_PROPERTY_TYPE(ukn_string);
    
 #define UKN_IS_PROPERTY_TYPE_REGISTERD(type) \
     UKN_JOIN(_ukn_is_property_registered, type)()
@@ -214,6 +214,10 @@ namespace ukn {
                 return it->second;
             }
             return PropertyPtr();
+        }
+        
+        void addProperty(const PropertyPtr& prop) {
+            mProperties.insert(std::make_pair(prop->getName(), prop));
         }
         
     private:

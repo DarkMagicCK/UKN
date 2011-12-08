@@ -127,15 +127,21 @@ namespace ukn {
     }
     
     void GraphicDevice::clearColor(const Color& clr) {
-        
+        if(mCurrFrameBuffer) {
+            mCurrFrameBuffer->clear(CM_Color, clr, 0, 0);
+        }
     }
     
     void GraphicDevice::clearDepth(float depth) {
-        
+        if(mCurrFrameBuffer) {
+            mCurrFrameBuffer->clear(CM_Depth, Color(), depth, 0);
+        }
     }
     
     void GraphicDevice::clearStencil(int32 stencil) {
-        
+        if(mCurrFrameBuffer) {
+            mCurrFrameBuffer->clear(CM_Stencil, Color(), 0, stencil);
+        }
     }
     
 } // namespace ukn

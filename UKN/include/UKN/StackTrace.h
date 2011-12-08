@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_StackTrace_h
 #define Project_Unknown_StackTrace_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 
 #ifdef UKN_OS_WINDOWS
 #include <Windows.h>
@@ -22,7 +22,7 @@
 #include <execinfo.h>
 #endif
 
-#include "Common.h"
+#include "UKN/Common.h"
 
 namespace ukn {
     

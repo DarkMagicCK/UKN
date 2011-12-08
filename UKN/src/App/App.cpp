@@ -20,6 +20,8 @@
 #include "UKN/SysUtil.h"
 #include "UKN/Camera.h"
 
+#include "UKN/UKN.h"
+
 namespace ukn {
     
     AppInstance::AppInstance(const ukn_string& name):
@@ -74,7 +76,7 @@ namespace ukn {
         Logger::Instance().setFeature(LF_PrependRunningTime, false);
         
         log_info(format_string("Project Unknown %d.%d Rev %d", 
-                               UKN_VERSION_MARJOR,
+                               UKN_VERSION_MAJOR,
                                UKN_VERSION_MINOR,
                                UKN_VERSION_REV));
         log_info(get_os_version());
@@ -106,7 +108,7 @@ namespace ukn {
         Logger::Instance().setFeature(LF_PrependRunningTime, true);
         
         // on init
-        mMainWindow->onInit()(*mMainWindow);
+        mMainWindow->onInit().getEvent()(*mMainWindow);
         onInit();
     }
     
@@ -120,13 +122,13 @@ namespace ukn {
     }
     
     void AppInstance::update() {
-        mMainWindow->onUpdate()(*mMainWindow);
+        mMainWindow->onUpdate().getEvent()(*mMainWindow);
 
         onUpdate();
     }
     
     void AppInstance::render() {
-        mMainWindow->onRender()(*mMainWindow);
+        mMainWindow->onRender().getEvent()(*mMainWindow);
         
         onRender();
     }

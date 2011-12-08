@@ -9,10 +9,9 @@
 #ifndef Project_Unknown_DllLoader_h
 #define Project_Unknown_DllLoader_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 
 namespace ukn {
-    
     
     class UKN_API DllLoader {
     public:

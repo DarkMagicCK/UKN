@@ -9,8 +9,8 @@
 #ifndef Project_Unknown_Color_h
 #define Project_Unknown_Color_h
 
-#include "Platform.h"
-#include "MathUtil.h"
+#include "UKN/Platform.h"
+#include "UKN/MathUtil.h"
 
 namespace ukn {
     
@@ -36,13 +36,17 @@ namespace ukn {
         r(_r / 255.0f),
         g(_g / 255.0f),
         b(_b / 255.0f),
-        a(1.0f) {}
+        a(1.0f) {
+            normalize();
+        }
         
         Color(float _r, float _g, float _b, float _a):
         r(_r), 
         g(_g), 
         b(_b), 
-        a(_a) {}
+        a(_a) {
+            normalize();
+        }
         
         Color(uint32 col) { 
             *this = col;
@@ -147,8 +151,7 @@ namespace ukn {
             return !(*this == rhs);
         }
         
-        unsigned int toHWColor() { 
-            normalize();
+        uint32 toHWColor() const { 
             return ((unsigned int)(this->a*255.0f)<<24) + 
                     ((unsigned int)(this->r*255.0f)<<16) +
                     ((unsigned int)(this->g*255.0f)<<8) + 
@@ -166,7 +169,7 @@ namespace ukn {
             return Color(col);
         }
         
-        operator uint32() {
+        operator uint32() const {
             return toHWColor();
         }
         
@@ -313,17 +316,17 @@ namespace ukn {
         a(_a) {}
         
         ColorHSV(uint32 col) {
-            setHWColor(col);
+            fromHWColor(col);
         }
         
         bool operator ==(const ColorHSV& c) const;
         bool operator !=(const ColorHSV& c) const;
         
-        void setHWColor(uint32 col);
-        uint32 getHWColor() const;
+        void fromHWColor(uint32 col);
+        uint32 toHWColor() const;
     };
     
-    inline void ColorHSV::setHWColor(uint32 col) {
+    inline void ColorHSV::fromHWColor(uint32 col) {
         float r, g, b;
         float minv, maxv, delta;
         float del_R, del_G, del_B;
@@ -358,7 +361,7 @@ namespace ukn {
         }
     }
     
-    inline uint32 ColorHSV::getHWColor() const {
+    inline uint32 ColorHSV::toHWColor() const {
         float r, g, b;
         float xh, i, p1, p2, p3;
         

@@ -9,9 +9,9 @@
 #ifndef Project_Unknown_Frustum_h
 #define Project_Unknown_Frustum_h
 
-#include "Platform.h"
-#include "Util.h"
-#include "MathUtil.h"
+#include "UKN/Platform.h"
+#include "UKN/Util.h"
+#include "UKN/MathUtil.h"
 
 namespace ukn {
     

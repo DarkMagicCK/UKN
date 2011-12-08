@@ -149,13 +149,13 @@ namespace ukn {
         
         // event type
         enum {
-            KeyPressed = 0,
-            KeyDown = 1,
-            KeyUp = 2,
-            MouseDown =3,
-            MouseUp = 4,
-            MouseMove = 5,
-            MouseWheel = 6,
+            KeyPressed  = 0,
+            KeyDown     = 1,
+            KeyUp       = 2,
+            MouseDown   =3,
+            MouseUp     = 4,
+            MouseMove   = 5,
+            MouseWheel  = 6,
         };
         
         // keyflag

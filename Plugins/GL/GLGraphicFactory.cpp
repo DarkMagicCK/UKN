@@ -16,6 +16,10 @@
 #include "UKN/Texture.h"
 
 #include "GLTexture.h"
+#include "GLRenderBuffer.h"
+#include "GLFrameBuffer.h"
+#include "GLGraphicBuffer.h"
+#include "GLSpriteBatch.h"
 
 namespace ukn {
     
@@ -26,14 +30,16 @@ namespace ukn {
         
         GraphicDevice& getGraphicDevice() const;
         
-        GraphicBufferPtr createVertexBuffer(GraphicBuffer::Usage, 
-                                            GraphicBuffer::Access, 
+        SpriteBatchPtr createSpriteBatch() const;
+        
+        GraphicBufferPtr createVertexBuffer(GraphicBuffer::Access, 
+                                            GraphicBuffer::Usage, 
                                             uint32 count, 
                                             const void* initialData, 
                                             const VertexFormat& format);
         
-        GraphicBufferPtr createIndexBuffer(GraphicBuffer::Usage, 
-                                           GraphicBuffer::Access, 
+        GraphicBufferPtr createIndexBuffer(GraphicBuffer::Access, 
+                                           GraphicBuffer::Usage, 
                                            uint32 count, 
                                            const void* initialData);
         
@@ -73,24 +79,35 @@ namespace ukn {
         return *mGraphicDevice;
     }
     
-    GraphicBufferPtr GLGraphicFactory::createVertexBuffer(GraphicBuffer::Usage, 
-                                                          GraphicBuffer::Access, 
+    SpriteBatchPtr GLGraphicFactory::createSpriteBatch() const {
+        return SpriteBatchPtr(new GLSpriteBatch());
+    }
+    
+    GraphicBufferPtr GLGraphicFactory::createVertexBuffer(GraphicBuffer::Access access, 
+                                                          GraphicBuffer::Usage usage,
                                                           uint32 count, 
                                                           const void* initialData, 
                                                           const VertexFormat& format) {
-        return GraphicBuffer::NullObject();
+        return GraphicBufferPtr(new GLVertexBuffer(access,
+                                                   usage,
+                                                   count,
+                                                   initialData,
+                                                   format));
     }
     
-    GraphicBufferPtr GLGraphicFactory::createIndexBuffer(GraphicBuffer::Usage, 
-                                                         GraphicBuffer::Access, 
+    GraphicBufferPtr GLGraphicFactory::createIndexBuffer(GraphicBuffer::Access access, 
+                                                         GraphicBuffer::Usage usage, 
                                                          uint32 count, 
                                                          const void* initialData) {
-        return GraphicBuffer::NullObject();
+        return GraphicBufferPtr(new GLIndexBuffer(access,
+                                                  usage,
+                                                  count,
+                                                  initialData));
     }
     
     
     RenderBufferPtr GLGraphicFactory::createRenderBuffer() {
-        return RenderBuffer::NullObject();
+        return RenderBufferPtr(new GLRenderBuffer());
     }
     
     RenderViewPtr GLGraphicFactory::create2DRenderView(TexturePtr texture) {
@@ -102,7 +119,7 @@ namespace ukn {
     }
     
     FrameBufferPtr GLGraphicFactory::createFrameBuffer() {
-        return FrameBuffer::NullObject();
+        return FrameBufferPtr(new GLFrameBuffer(true));
     }
     
     TexturePtr GLGraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) {

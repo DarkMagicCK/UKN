@@ -10,8 +10,8 @@
 #ifndef ukn_exception_h
 #define ukn_exception_h
 
-#include "Platform.h"
-#include "StackTrace.h"
+#include "UKN/Platform.h"
+#include "UKN/StackTrace.h"
 #include <string>
 #include <sstream>
 

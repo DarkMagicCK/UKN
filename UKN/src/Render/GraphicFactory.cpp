@@ -13,6 +13,7 @@
 #include "UKN/FrameBuffer.h"
 #include "UKN/RenderBuffer.h"
 #include "UKN/GraphicDevice.h"
+#include "UKN/SpriteBatch.h"
 
 namespace ukn {
     
@@ -30,16 +31,16 @@ namespace ukn {
             return *GraphicDevice::NullObject();
         }
         
-        GraphicBufferPtr createVertexBuffer(GraphicBuffer::Usage, 
-                                            GraphicBuffer::Access, 
+        GraphicBufferPtr createVertexBuffer(GraphicBuffer::Access, 
+                                            GraphicBuffer::Usage, 
                                             uint32 count, 
                                             const void* initialData, 
                                             const VertexFormat& format) {
             return GraphicBuffer::NullObject();
         }
         
-        GraphicBufferPtr createIndexBuffer(GraphicBuffer::Usage, 
-                                           GraphicBuffer::Access, 
+        GraphicBufferPtr createIndexBuffer(GraphicBuffer::Access, 
+                                           GraphicBuffer::Usage, 
                                            uint32 count, 
                                            const void* initialData) {
             return GraphicBuffer::NullObject();
@@ -83,6 +84,10 @@ namespace ukn {
     
     GraphicFactory::~GraphicFactory() { 
    
+    }
+    
+    SpriteBatchPtr GraphicFactory::createSpriteBatch() const {
+        return SpriteBatchPtr(new SpriteBatch());
     }
      
 } // namespace ukn

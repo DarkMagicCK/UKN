@@ -9,8 +9,8 @@
 #ifndef Project_Unknown_PreDeclare_h
 #define Project_Unknown_PreDeclare_h
 
-#include "Platform.h"
-#include "Ptr.h"
+#include "UKN/Platform.h"
+#include "UKN/Ptr.h"
 
 #include <string>
 
@@ -96,6 +96,9 @@ namespace ukn {
     struct VertexFormat;
     
     struct ContextCfg;
+    
+    class SpriteBatch;
+    typedef SharedPtr<SpriteBatch> SpriteBatchPtr;
     
 } // namespace ukn
 

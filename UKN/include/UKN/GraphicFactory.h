@@ -9,10 +9,10 @@
 #ifndef Project_Unknown_GraphicFactory_h
 #define Project_Unknown_GraphicFactory_h
 
-#include "Platform.h"
-#include "PreDeclare.h"
-#include "GraphicBuffer.h"
-#include "GraphicSettings.h"
+#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
+#include "UKN/GraphicBuffer.h"
+#include "UKN/GraphicSettings.h"
 
 namespace ukn {
     
@@ -23,16 +23,18 @@ namespace ukn {
         GraphicFactory();
         virtual ~GraphicFactory();
         
+        virtual SpriteBatchPtr createSpriteBatch() const;
+        
         virtual GraphicDevice& getGraphicDevice() const = 0;
         
-        virtual GraphicBufferPtr createVertexBuffer(GraphicBuffer::Usage, 
-                                                    GraphicBuffer::Access, 
+        virtual GraphicBufferPtr createVertexBuffer(GraphicBuffer::Access, 
+                                                    GraphicBuffer::Usage, 
                                                     uint32 count, 
                                                     const void* initialData, 
                                                     const VertexFormat& format) = 0;
         
-        virtual GraphicBufferPtr createIndexBuffer(GraphicBuffer::Usage, 
-                                                   GraphicBuffer::Access, 
+        virtual GraphicBufferPtr createIndexBuffer(GraphicBuffer::Access, 
+                                                   GraphicBuffer::Usage, 
                                                    uint32 count, 
                                                    const void* initialData) = 0;
         

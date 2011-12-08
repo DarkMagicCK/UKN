@@ -9,8 +9,8 @@
 #ifndef Project_Unknown_Logger_h
 #define Project_Unknown_Logger_h
 
-#include "Platform.h"
-#include "PreDeclare.h"
+#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
 
 #include <deque>
 
@@ -22,7 +22,7 @@ namespace ukn {
     enum LoggerFeature {
         // prepend time since app start
         LF_PrependRunningTime,
-        // prepend log leven name except LL_Info
+        // prepend log level name except LL_Info
         LF_PrependLevelName,
     };
     

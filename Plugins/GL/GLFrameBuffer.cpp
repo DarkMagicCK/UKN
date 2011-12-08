@@ -31,7 +31,6 @@ namespace ukn {
             glflags |= GL_COLOR_BUFFER_BIT;
         }
         if(flags & CM_Depth) {
-            glDepthMask(true);
             glClearDepth(depth);
             
             glflags |= GL_DEPTH_BUFFER_BIT;
@@ -42,7 +41,7 @@ namespace ukn {
             glflags |= GL_STENCIL_BUFFER_BIT;
         }
         
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(glflags);
     }
     
     GLuint GLFrameBuffer::getGLFBO() const {

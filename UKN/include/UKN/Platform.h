@@ -13,19 +13,11 @@
     #error C++ compiler required.
 #endif
 
-#if defined(DEBUG) | defined(_DEBUG)
+#if defined(DEBUG) || defined(_DEBUG)
     #define UKN_DEBUG
 #endif
 
-#define UKN_VERSION_MARJOR  0
-#define UKN_VERSION_MINOR   1
-#define UKN_VERSION_REV     2
 
-/*
- if gcc version >= 4
- then there is tr1 support
- visual studio 2008 sp1 or above also has tr1 support
- */
 #if defined(__GNUC__)
 
     #define UKN_COMPILER_GCC
@@ -197,7 +189,7 @@
     #define UKN_CALL
 #endif
 
-#if defined(_WIN32)
+#if defined(UKN_OS_WINDOWS)
     #define strcmpnocase stricmp
 #else
     #define strcmpnocase strcasecmp

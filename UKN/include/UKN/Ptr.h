@@ -10,11 +10,11 @@
 #ifndef ukn_ptr_h_
 #define ukn_ptr_h_
 
-#include "Platform.h"
-#include "Exception.h"
-#include "MemoryUtil.h"
-#include "Function.h"
-#include "Uncopyable.h"
+#include "UKN/Platform.h"
+#include "UKN/Exception.h"
+#include "UKN/MemoryUtil.h"
+#include "UKN/Function.h"
+#include "UKN/Uncopyable.h"
 
 namespace ukn {
     

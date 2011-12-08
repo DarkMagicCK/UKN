@@ -9,9 +9,9 @@
 #ifndef Project_Unknown_Util_h
 #define Project_Unknown_Util_h
 
-#include "Platform.h"
-#include "Ptr.h"
-#include "Preprocessor.h"
+#include "UKN/Platform.h"
+#include "UKN/Ptr.h"
+#include "UKN/Preprocessor.h"
 
 namespace ukn {
     
@@ -84,7 +84,7 @@ namespace ukn {
         /* Sort and Search */
         void insertSorted(const T& elm);
         bool isSorted() const;
-        void sort() const;
+        void sort();
         size_t binarySearchIndex(const T& elm);
         
         void map(T* mappedPtr, size_t size);
@@ -103,7 +103,7 @@ namespace ukn {
         size_t mSize;
         T* mElements;
         
-        typedef SharedPtr<T> Ptr;
+        typedef SharedPtr<T, SharedPtrReleaseArrayPolicy<T> > Ptr;
         Ptr mHolder;
         
         bool mMapped;
@@ -159,7 +159,8 @@ namespace ukn {
         ukn_assert(size > 0);
         
         reserve(size);
-        memcpy(this->mElements, arr, sizeof(T) * size);
+        for(size_t i=0; i<size; ++i) 
+            this->mElements[i] = arr[i];
         this->mSize = size;
     }
     
@@ -266,7 +267,8 @@ namespace ukn {
         
         T* newArray = new T[newCapacity];
         if(this->mElements) {
-            memcpy(newArray, this->mElements, sizeof(T) * this->mSize);
+            for(size_t i=0; i<this->mSize; ++i) 
+                newArray[i] = this->mElements[i];
         }
         this->mElements = newArray;
         this->mHolder.reset(newArray);
@@ -297,7 +299,8 @@ namespace ukn {
         if(newSize >= this->mCapacity) {
             this->growTo(newSize);
         }
-        memcpy(this->mElements + this->mSize, arr, size);
+        for(size_t i=0; i<size; ++i) 
+            this->mElements[i+this->mSize] = arr[i];
         this->mSize = newSize;
     }
     
@@ -645,7 +648,7 @@ namespace ukn {
     }
     
     template<typename T>
-    void Array<T>::sort() const {
+    void Array<T>::sort() {
         std::sort(this->begin(), this->end());
     }
     
@@ -1723,7 +1726,7 @@ namespace ukn {
         }
         
         T get() {
-            if(mTail < mQueue.size()) {
+            if(mTail <= mQueue.size()) {
                 mTail++;
                 return mQueue[mTail-1];
             } else {

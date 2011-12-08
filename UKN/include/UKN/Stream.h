@@ -9,9 +9,9 @@
 #ifndef Project_Unknown_Stream_h
 #define Project_Unknown_Stream_h
 
-#include "Platform.h"
-#include "Util.h"
-#include "PreDeclare.h"
+#include "UKN/Platform.h"
+#include "UKN/Util.h"
+#include "UKN/PreDeclare.h"
 
 namespace ukn {
     

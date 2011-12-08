@@ -107,11 +107,11 @@ namespace ukn {
     }
     
     uint32 GLTexture2D::getWidth(uint32 level) const {
-        return mWidth;
+        return mOrigWidth;
     }
     
     uint32 GLTexture2D::getHeight(uint32 level) const {
-        return mHeight;
+        return mOrigHeight;
     }
     
     uintPtr GLTexture2D::getTextureId() const {

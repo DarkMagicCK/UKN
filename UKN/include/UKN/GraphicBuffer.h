@@ -9,10 +9,10 @@
 #ifndef Project_Unknown_GraphicBuffer_h
 #define Project_Unknown_GraphicBuffer_h
 
-#include "Platform.h"
-#include "PreDeclare.h"
+#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
 
-#include "Vertex.h"
+#include "UKN/Vertex.h"
 
 namespace ukn {
     

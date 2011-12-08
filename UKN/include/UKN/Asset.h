@@ -9,9 +9,9 @@
 #ifndef Project_Unknown_Asset_h
 #define Project_Unknown_Asset_h
 
-#include "Platformh.h"
-#include "Uncopyable.h"
-#include "PreDeclare.h"
+#include "UKN/Platformh.h"
+#include "UKN/Uncopyable.h"
+#include "UKN/PreDeclare.h"
 
 namespace ukn {
     

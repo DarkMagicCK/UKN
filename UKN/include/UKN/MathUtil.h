@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_Math_h
 #define Project_Unknown_Math_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 #include <cmath>
 
 namespace ukn {
@@ -135,7 +135,8 @@ namespace ukn {
         return (sin(1-t) * a) / sina * t1 + sin(t * a) / sina * t2;
     }
     
-    inline float clamp(float t1, float t2, real v) {
+    template<typename T>
+    inline T clamp(T t1, T t2, real v) {
         if(v > t2) return t2;
         else if(v < t1) return t1;
         return v;
@@ -144,7 +145,7 @@ namespace ukn {
 #define ukn_min(a, b) a < b ? a : b
 #define ukn_max(a, b) a > b ? a : b
 #define ukn_abs(x) x < 0 ? -x : x
-    
+
     class Vector2 {
     public:
         real x, y;
@@ -508,12 +509,12 @@ namespace ukn {
             if(y>this->y2) this->y2 = y;
         }
         
-        bool testPoint(real x, real y) const {
+        bool contains(real x, real y) const {
             return x>=x1 && x<=x2 && y>=y1 && y<=y2;
         }
         
-        bool testPoint(const Vector2& pos) const {
-            return testPoint(pos.x, pos.y);
+        bool contains(const Vector2& pos) const {
+            return contains(pos.x, pos.y);
         }
         
         bool intersect(const AABB2& rhs) const {
@@ -530,6 +531,8 @@ namespace ukn {
                               (this->y1 + this->y2)/2);
         }
     };
+    
+    typedef AABB2 Rectangle;
   
     class Quaternion {
 	public:
@@ -1339,7 +1342,7 @@ namespace ukn {
             return distantce <= mRadius * mRadius;
         }
         
-        bool testPoint(const Vector3& point) {
+        bool contains(const Vector3& point) {
             return vecInBound(point);
         }
         

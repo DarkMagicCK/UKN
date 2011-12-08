@@ -32,7 +32,6 @@ namespace ukn {
     GLGraphicDevice::GLGraphicDevice():
     mCurrTexture(TexturePtr()),
     mCurrGLFrameBuffer(0) {
-        
     }
     
     GLGraphicDevice::~GLGraphicDevice() {
@@ -44,9 +43,9 @@ namespace ukn {
                                               (char*)glGetString(GL_VERSION),
                                               (char*)glGetString(GL_VENDOR),
                                               (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
-//#ifdef UKN_DEBUG
+#ifdef UKN_DEBUG
 
-#if UKN_OPENGL_VERSION >= 30
+#if UKN_OPENGL_VERSION >= 30 && defined(UKN_REQUEST_OPENGL_3_2_PROFILE)
 		int NumberOfExtensions;
         glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
 		
@@ -56,10 +55,12 @@ namespace ukn {
 			des += "\n";
 		}
 #else
-		des += format_string("\n\nGL Extensions:\n %s\n", glGetString(GL_EXTENSIONS));
+		des += "GL Extensions:\n ";
+        des += (char*)glGetString(GL_EXTENSIONS);
+        des += "\n\n";
 #endif
 
-//#endif
+#endif
         return des;
     }
     
@@ -93,6 +94,19 @@ namespace ukn {
     
     void GLGraphicDevice::bindTexture(TexturePtr texture) {
         mCurrTexture = texture;
+        
+        if(mCurrTexture) {
+            if(mCurrTexture->getType() == TT_Texture2D) {
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, (GLuint)mCurrTexture->getTextureId());
+            } else if(mCurrTexture->getType() == TT_Texture3D) {
+                glEnable(GL_TEXTURE_3D);
+                glBindTexture(GL_TEXTURE_3D, (GLuint)mCurrTexture->getTextureId());
+            } 
+        } else {
+            glDisable(GL_TEXTURE_2D);
+            glDisable(GL_TEXTURE_3D);
+        }
     }
     
     void GLGraphicDevice::onRenderBuffer(const RenderBufferPtr& buffer) {
@@ -106,19 +120,18 @@ namespace ukn {
             return;
         }
         
-        if(mCurrTexture) {
-            if(mCurrTexture->getType() == TT_Texture2D) {
-                glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, (GLuint)mCurrTexture->getTextureId());
-            } else if(mCurrTexture->getType() == TT_Texture3D) {
-                glEnable(GL_TEXTURE_3D);
-                glBindTexture(GL_TEXTURE_3D, (GLuint)mCurrTexture->getTextureId());
-            } 
-        } else {
-            glDisable(GL_TEXTURE_2D);
-        }
-        
         const VertexFormat& format = buffer->getVertexFormat();
+        if(format == Vertex2D::Format()) {
+            // acceleration for 2d vertices
+            Array<Vertex2D> vtxArr((Vertex2D*)vertexBuffer->map(), vertexBuffer->count());
+            vertexBuffer->unmap();
+
+            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vtxArr.begin());
+            glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()), 
+                         0, 
+                         vertexBuffer->count());
+            return;
+        }
         
         vertexBuffer->activate();
         
@@ -194,11 +207,6 @@ namespace ukn {
         glDisableClientState(GL_SECONDARY_COLOR_ARRAY);
     }
     
-    void GLGraphicDevice::setViewMatrix(const Matrix4& mat) {
-        glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(&mat.x[0]);
-    }
-    
     void GLGraphicDevice::bindGLFrameBuffer(GLuint fbo) {
         if(mCurrGLFrameBuffer != fbo) {
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
@@ -207,11 +215,11 @@ namespace ukn {
     }
     
     void GLGraphicDevice::beginFrame() {
-        mWindow->onFrameStart()(*mWindow);
+        mWindow->onFrameStart().getEvent()(*mWindow);
     }
     
     void GLGraphicDevice::endFrame() {
-        mWindow->onFrameEnd()(*mWindow);
+        mWindow->onFrameEnd().getEvent()(*mWindow);
     }
     
     void GLGraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
@@ -241,6 +249,11 @@ namespace ukn {
     
     GLuint GLGraphicDevice::getBindedGLFrameBuffer() const {
         return mCurrGLFrameBuffer;
+    }
+    
+    void GLGraphicDevice::setViewMatrix(const Matrix4& mat) {
+        glMatrixMode(GL_MODELVIEW);
+        glLoadMatrixf(&mat.x[0]);
     }
     
     void GLGraphicDevice::setProjectionMatrix(const Matrix4& mat) {

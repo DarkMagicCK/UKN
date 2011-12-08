@@ -9,11 +9,11 @@
 #ifndef Project_Unknown_Window_h
 #define Project_Unknown_Window_h
 
-#include "Platform.h"
-#include "PreDeclare.h"
-#include "GraphicSettings.h"
+#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
+#include "UKN/GraphicSettings.h"
 
-#include "Signal.h"
+#include "UKN/Event.h"
 
 #ifdef UKN_OS_WINDOWS
 #include <Windows.h>
@@ -64,25 +64,25 @@ namespace ukn {
         uint32 mHeight;
         
     public:
-        typedef Signal<void(Window&, bool)>               ActiveEvent;
-        typedef Signal<void(Window&, bool)>               IconifyEvent;
-        typedef Signal<void(Window&)>                     RenderEvent;
-        typedef Signal<void(Window&)>                     UpdateEvent;
-        typedef Signal<void(Window&, uint32, uint32)>     ResizeEvent;
-        typedef Signal<void(Window&, int32, int32)>       ScrollEvent;
-        typedef Signal<void(Window&)>                     SetCursorEvent;
-        typedef Signal<void(Window&)>                     SetIconEvent;
-        typedef Signal<void(Window&, int32 /* char */)>   CharEvent;
-        typedef Signal<void(Window&, uint32 /* key */)>   KeyDownEvent;
-        typedef Signal<void(Window&, uint32 /* key */)>   KeyUpEvent;
-        typedef Signal<void(Window&, uint32 /* btn */)>   MouseDownEvent;
-        typedef Signal<void(Window&, uint32 /* btn */)>   MouseUpEvent;
-        typedef Signal<void(Window&, uint32 /* wheel */)> MouseWheelEvent;
-        typedef Signal<void(Window&)>                     CloseEvent;
-        typedef Signal<void(Window&)>                     FrameEndEvent;
-        typedef Signal<void(Window&)>                     FrameStartEvent;
-        typedef Signal<void(Window&)>                     InitializeEvent;
-        typedef Signal<void(Window&, uint32 /* btn */, uint32, uint32 /* pos */)>   MouseDraggedEvent;
+        typedef EventObject<void(Window&, bool)>               ActiveEvent;
+        typedef EventObject<void(Window&, bool)>               IconifyEvent;
+        typedef EventObject<void(Window&)>                     RenderEvent;
+        typedef EventObject<void(Window&)>                     UpdateEvent;
+        typedef EventObject<void(Window&, uint32, uint32)>     ResizeEvent;
+        typedef EventObject<void(Window&, int32, int32)>       ScrollEvent;
+        typedef EventObject<void(Window&)>                     SetCursorEvent;
+        typedef EventObject<void(Window&)>                     SetIconEvent;
+        typedef EventObject<void(Window&, int32 /* char */)>   CharEvent;
+        typedef EventObject<void(Window&, uint32 /* key */)>   KeyDownEvent;
+        typedef EventObject<void(Window&, uint32 /* key */)>   KeyUpEvent;
+        typedef EventObject<void(Window&, uint32 /* btn */)>   MouseDownEvent;
+        typedef EventObject<void(Window&, uint32 /* btn */)>   MouseUpEvent;
+        typedef EventObject<void(Window&, uint32 /* wheel */)> MouseWheelEvent;
+        typedef EventObject<void(Window&)>                     CloseEvent;
+        typedef EventObject<void(Window&)>                     FrameEndEvent;
+        typedef EventObject<void(Window&)>                     FrameStartEvent;
+        typedef EventObject<void(Window&)>                     InitializeEvent;
+        typedef EventObject<void(Window&, uint32 /* btn */, uint32, uint32 /* pos */)>   MouseDraggedEvent;
         
     private:
         ActiveEvent     mActiveEvent;

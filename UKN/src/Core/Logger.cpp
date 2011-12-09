@@ -20,7 +20,7 @@ namespace ukn {
             FileStream* default_stream = new FileStream();
             // open with no write buffer, no append and write mode
             default_stream->open(L"ukn_log.txt", true, false, true);
-            g_Instance = new Logger(default_stream);
+            g_Instance = new Logger(StreamPtr(default_stream));
         }
         return *g_Instance;
     }

@@ -55,7 +55,7 @@
 	#endif
 
 #elif defined(UKN_OS_LINUX) // linux still need workaround
-	#define GL_GLEXT_PROTOTYPES
+	#include <glew/glew.h>
 	#include <GL/gl.h>
 	#include <GL/glu.h>
 	#include <GL/glext.h>

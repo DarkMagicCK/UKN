@@ -77,41 +77,56 @@ namespace ukn {
         
     }
     
-    void GraphicDevice::pushViewMatrix() {
+    Matrix4 GraphicDevice::pushViewMatrix() {
         Matrix4 mat;
         getViewMatrix(mat);
         mViewMatrixStack.push(mat);
+        
+        return mat;
     }
     
-    void GraphicDevice::popViewMatrix() {
+    Matrix4 GraphicDevice::popViewMatrix() {
         if(!mViewMatrixStack.empty()) {
-            setViewMatrix(mViewMatrixStack.top());
+            Matrix4 mat = mViewMatrixStack.top();
+            setViewMatrix(mat);
             mViewMatrixStack.pop();
+            
+            return mat;
         }
+        return Matrix4();
     }
     
-    void GraphicDevice::pushProjectionMatrix() {
+    Matrix4 GraphicDevice::pushProjectionMatrix() {
         Matrix4 mat;
         getProjectionMatrix(mat);
         mProjMatrixStack.push(mat);
+        
+        return mat;
     }
    
-    void GraphicDevice::popProjectionMatrix() {
+    Matrix4 GraphicDevice::popProjectionMatrix() {
         if(!mProjMatrixStack.empty()) {
-            setProjectionMatrix(mProjMatrixStack.top());
+            Matrix4 mat = mProjMatrixStack.top();
+            setProjectionMatrix(mat);
             mProjMatrixStack.pop();
+            
+            return mat;
         }
+        return Matrix4();
     }
     
-    void GraphicDevice::bindFrameBuffer(const FrameBufferPtr& ptr) {
+    void GraphicDevice::bindFrameBuffer(const FrameBufferPtr& frameBuffer) {
         if(mCurrFrameBuffer) {
             mCurrFrameBuffer->onUnbind();
         }
         
-        mCurrFrameBuffer = ptr;
-        mCurrFrameBuffer->onBind();
+        if(frameBuffer.isValid()) {
+            mCurrFrameBuffer = frameBuffer;
+            mCurrFrameBuffer->onBind();
         
-        onBindFrameBuffer(ptr);
+            onBindFrameBuffer(frameBuffer);
+        } else
+            bindFrameBuffer(mScreenFrameBuffer);
     }
     
     const FrameBufferPtr& GraphicDevice::getCurrFrameBuffer() const {

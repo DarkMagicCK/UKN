@@ -48,6 +48,9 @@ namespace ukn {
         void draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, float rot, float layerDepth, const Color& color=ColorWhite);
         void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, float layerDepth, const Color& color=ColorWhite);
         
+        Matrix4& getTransformMatrix();
+        const Matrix4& getTransformMatrix() const;
+                
     protected:
         void updateBoundingBox(float x, float y, float x2, float y2);
         
@@ -57,6 +60,7 @@ namespace ukn {
             TextureObject(const TexturePtr& tex, float depth);
             
             void buildVertices(float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color);
+            void buildVertices(const Rectangle& dstRect, float rot, const Color& color);
             bool operator<(const SpriteBatch::TextureObject& rhs) const;
             
             TexturePtr  texture;
@@ -72,6 +76,7 @@ namespace ukn {
         GraphicBufferPtr mVertexBuffer;
         
         Rectangle mBoundingBox;
+        Matrix4 mTransformMatrix;
     };
     
 } // namespace ukn

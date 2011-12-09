@@ -15,6 +15,8 @@
 #include "UKN/Function.h"
 
 #include <map>
+#include <memory>
+#include <utility>
 
 namespace ukn {
     
@@ -22,14 +24,41 @@ namespace ukn {
      * A Simple Signal Implementation
      **/
     
-    class Connection;
+    namespace detail {
+        class ConnectionBase;
+        class SignalImpl;
+    }
+    
+    class Connection {
+    public:
+        friend class detail::SignalImpl;
+        
+        Connection();
+        
+        ~Connection();
+        bool isValid();
+        void disconnect() ;
+        
+        bool operator ==(const Connection &rhs);
+        
+        detail::ConnectionBase* get_con_base() const ;
+        
+        Connection& operator=(const Connection& rhs);
+        void setControl(bool flag) ;
+        
+        void reset(detail::ConnectionBase* _con) ;
+        
+    private:
+        bool isControlling;
+        SharedPtr<detail::ConnectionBase> con;
+    };
     
     namespace detail {
         
         class SignalImpl {
-        public:                        
-            typedef std::multimap<int, Connection> ConnectionMap;
-            typedef std::multimap<int, Connection>::iterator IteratorType;
+        public:
+            typedef std::multimap<int, ukn::Connection> ConnectionMap;
+            typedef std::multimap<int, ukn::Connection>::iterator IteratorType;
             ConnectionMap mConnections;
             
             // set controlling flag to false to avoid repeat destruction in disconnect
@@ -39,7 +68,7 @@ namespace ukn {
             
             void clearConnection();
             
-            void disconnect(void* sig, void* data) {                
+            void disconnect(void* sig, void* data) {
                 std::auto_ptr<IteratorType> slot(reinterpret_cast<IteratorType*>(data));
                 mConnections.erase(*slot);
             }
@@ -94,79 +123,10 @@ namespace ukn {
         
     } // namespace detail
     
-    class Connection {
-    public:
-        friend class detail::SignalImpl;
-        
-        Connection():
-        isControlling(false) {
-            
-        }
-        
-        ~Connection() {
-            if(isControlling) {
-                disconnect();
-            }
-        }
-        
-        bool isValid() {
-            if(con.get())
-                return con->isValid();
-            return false;
-        }
-        
-        void disconnect() {
-            if(con.get())
-                con->disconnect();
-        }
-        
-        bool operator ==(const Connection &rhs) {
-            ukn_assert(con.get());
-            return con.get() == rhs.con.get();
-        }
-        
-        detail::ConnectionBase* get_con_base() const {
-            return con.get();
-        }
-        
-        Connection& operator=(const Connection& rhs) {
-            if(this != &rhs) {
-                isControlling = false;
-                con = rhs.con;
-            }
-            return *this;
-        }
-        
-        void setControl(bool flag) {
-            isControlling = flag;
-        }
-        
-        void reset(detail::ConnectionBase* _con) {
-            con.reset(_con);
-        }
-        
-    private:
-        bool isControlling;
-        SharedPtr<detail::ConnectionBase> con;
-    };
-    
-    namespace detail {
-        
-        inline void SignalImpl::clearConnection() {
-            IteratorType it = mConnections.begin();
-            while(it != mConnections.end()) {
-                it->second.setControl(false);
-                ++it;
-            }
-            mConnections.clear();
-        }
-        
-    } // namespace detail
-    
     template<typename SIG>
     class SignalBase: public detail::SignalImpl {
     public:
-        typedef Connection ConnectionType; 
+        typedef Connection ConnectionType;
         typedef typename detail::BasicConnection<SIG>::FuncType slot_type;
         
         template<typename F>
@@ -254,7 +214,7 @@ namespace ukn {
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0)>* con = 
+                detail::BasicConnection<RT(T0)>* con =
                 static_cast<detail::BasicConnection<RT(T0)>* >(itConnection->second.get_con_base());
                 
                 rtVal = con->slot.get()->fn(a0);
@@ -274,7 +234,7 @@ namespace ukn {
             typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0)>* con = 
+                detail::BasicConnection<void(T0)>* con =
                 static_cast<detail::BasicConnection<void(T0)>* >(itConnection->second.get_con_base());
                 
                 con->slot.get()->fn(a0);
@@ -294,7 +254,7 @@ namespace ukn {
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1)>* con = 
+                detail::BasicConnection<RT(T0, T1)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1)>* >(itConnection->second.get_con_base());
                 
                 rtVal = con->slot.get()->fn(a0, a1);
@@ -314,7 +274,7 @@ namespace ukn {
             typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1)>* con = 
+                detail::BasicConnection<void(T0, T1)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1)>* >(itConnection->second.get_con_base());
                 
                 con->slot.get()->fn(a0, a1);
@@ -334,7 +294,7 @@ namespace ukn {
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2)>* >(itConnection->second.get_con_base());
                 
                 rtVal = con->slot.get()->fn(a0, a1, a2);
@@ -354,7 +314,7 @@ namespace ukn {
             typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2)>* con = 
+                detail::BasicConnection<void(T0, T1, T2)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2)>* >(itConnection->second.get_con_base());
                 
                 con->slot.get()->fn(a0, a1, a2);
@@ -374,7 +334,7 @@ namespace ukn {
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3)>* >(itConnection->second.get_con_base());
                 
                 rtVal = con->slot.get()->fn(a0, a1, a2, a3);
@@ -394,7 +354,7 @@ namespace ukn {
             typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3)>* >(itConnection->second.get_con_base());
                 
                 con->slot.get()->fn(a0, a1, a2, a3);
@@ -414,7 +374,7 @@ namespace ukn {
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4)>* >(itConnection->second.get_con_base());
                 
                 rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4);
@@ -434,7 +394,7 @@ namespace ukn {
             typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4)>* >(itConnection->second.get_con_base());
                 
                 con->slot.get()->fn(a0, a1, a2, a3, a4);
@@ -454,7 +414,7 @@ namespace ukn {
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5)>* >(itConnection->second.get_con_base());
                 
                 rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5);
@@ -474,7 +434,7 @@ namespace ukn {
             typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4, T5)>* >(itConnection->second.get_con_base());
                 
                 con->slot.get()->fn(a0, a1, a2, a3, a4, a5);
@@ -494,7 +454,7 @@ namespace ukn {
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6)>* >(itConnection->second.get_con_base());
                 
                 rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6);
@@ -514,7 +474,7 @@ namespace ukn {
             typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6)>* >(itConnection->second.get_con_base());
                 
                 con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6);
@@ -534,7 +494,7 @@ namespace ukn {
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7)>* >(itConnection->second.get_con_base());
                 
                 rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7);
@@ -554,7 +514,7 @@ namespace ukn {
             typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7)>* >(itConnection->second.get_con_base());
                 
                 con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7);
@@ -574,7 +534,7 @@ namespace ukn {
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* >(itConnection->second.get_con_base());
                 
                 rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7, a8);
@@ -594,7 +554,7 @@ namespace ukn {
             typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* >(itConnection->second.get_con_base());
                 
                 con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7, a8);

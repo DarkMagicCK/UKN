@@ -17,18 +17,24 @@ namespace ukn {
     class GLFrameBuffer: public FrameBuffer {
     public:
         GLFrameBuffer(bool offscreen);
+        virtual ~GLFrameBuffer();
         
         bool requiresFlipping() const;
         
         void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
         
         GLuint getGLFBO() const;
+        void swapBuffers();
         
     private:
         GLuint mFBO;
         
         bool mOffscreen;
+        
+        friend class GLWindow;
     };
+    
+    typedef SharedPtr<GLFrameBuffer> GLFrameBufferPtr;
     
     
 } // namespace ukn

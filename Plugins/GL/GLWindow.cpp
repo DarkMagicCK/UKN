@@ -9,8 +9,12 @@
 #include "GLWindow.h"
 #include "GLRenderView.h"
 
+#include "UKN/Context.h"
 #include "UKN/SysUtil.h"
-#include "glfw/glfw3.h"
+#include "UKN/GraphicFactory.h"
+#include "UKN/GraphicDevice.h"
+
+#include "GLPreq.h"
 
 namespace ukn {
     
@@ -76,7 +80,7 @@ namespace ukn {
     }
     
     GLWindow::GLWindow(const ukn_string& name, const RenderSettings& settings):
-    GLFrameBuffer(false),
+    mFrameBuffer(new GLFrameBuffer(false)),
     Window(name) {
         glfwInit();
        
@@ -98,27 +102,27 @@ namespace ukn {
                 glfwOpenWindowHint(GLFW_DEPTH_BITS, 16);
                 glfwOpenWindowHint(GLFW_STENCIL_BITS, 0);
                 
-                mIsDepthBuffered = true;
-                mDepthBits = 16;
-                mStencilBits = 0;
+                mFrameBuffer->mIsDepthBuffered = true;
+                mFrameBuffer->mDepthBits = 16;
+                mFrameBuffer->mStencilBits = 0;
                 break;
                 
             case EF_D24S8:
                 glfwOpenWindowHint(GLFW_DEPTH_BITS, 24);
                 glfwOpenWindowHint(GLFW_STENCIL_BITS, 8);
                 
-                mIsDepthBuffered = true;
-                mDepthBits = 24;
-                mStencilBits = 8;
+                mFrameBuffer->mIsDepthBuffered = true;
+                mFrameBuffer->mDepthBits = 24;
+                mFrameBuffer->mStencilBits = 8;
                 break;
                 
             default:
                 glfwOpenWindowHint(GLFW_DEPTH_BITS, 0);
                 glfwOpenWindowHint(GLFW_STENCIL_BITS, 0);
                 
-                mIsDepthBuffered = false;
-                mDepthBits = 0;
-                mStencilBits = 0;
+                mFrameBuffer->mIsDepthBuffered = false;
+                mFrameBuffer->mDepthBits = 0;
+                mFrameBuffer->mStencilBits = 0;
                 break;
         }
 
@@ -182,27 +186,52 @@ namespace ukn {
         
         glfwSwapInterval(0);
         
-        this->attach(ATT_Color0, new GLScreenColorRenderView(settings.width, 
-                                                             settings.height,
-                                                             settings.color_fmt));
-        this->attach(ATT_DepthStencil, new GLScreenDepthStencilRenderView(settings.width, 
-                                                                          settings.height,
-                                                                          settings.depth_stencil_fmt));
+        mFrameBuffer->attach(ATT_Color0, RenderViewPtr(new GLScreenColorRenderView(settings.width, 
+                                                                                   settings.height,
+                                                                                   settings.color_fmt)));
+        mFrameBuffer->attach(ATT_DepthStencil, RenderViewPtr(new GLScreenDepthStencilRenderView(settings.width, 
+                                                                                                settings.height,
+                                                                                                settings.depth_stencil_fmt)));
         
-        FrameBuffer::mLeft = 0;
-        FrameBuffer::mTop = 0;
-        FrameBuffer::mWidth = settings.width;
-        FrameBuffer::mHeight = settings.height;
+        onResize() += Bind(this, &GLWindow::onWindowResize);
         
-        Window::mLeft = wndPosX;
-        Window::mTop = wndPosY;
-        Window::mWidth = settings.width;
-        Window::mHeight = settings.height;
+        updateWindowProperties(wndPosX, wndPosY, settings.width, settings.height);
+    }
+    
+    GLFrameBufferPtr GLWindow::getFrameBuffer() const {
+        return mFrameBuffer;
+    }
+    
+    void GLWindow::updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h) {
+        mFrameBuffer->mLeft = 0;
+        mFrameBuffer->mTop = 0;
+        mFrameBuffer->mWidth = w;
+        mFrameBuffer->mHeight = h;
         
-        mViewPort.left = 0;
-        mViewPort.top = 0;
-        mViewPort.width = settings.width;
-        mViewPort.height = settings.height;
+        Window::mLeft = x;
+        Window::mTop = y;
+        Window::mWidth = w;
+        Window::mHeight = h;
+        
+        mFrameBuffer->mViewPort.left = 0;
+        mFrameBuffer->mViewPort.top = 0;
+        mFrameBuffer->mViewPort.width = w;
+        mFrameBuffer->mViewPort.height = h;
+        
+        Viewport& vp = mFrameBuffer->getViewport();
+        vp.camera = MakeSharedPtr<Camera2D>();
+        ((Camera2D*)vp.camera.get())->setOrthoParams(0, mFrameBuffer->width(), mFrameBuffer->height(), 0);
+
+        vp.camera->update();
+    }
+    
+    void GLWindow::onWindowResize(Window& wnd, uint32 w, uint32 h) {
+        updateWindowProperties(getLeft(), getTop(), w, h);
+
+    }
+    
+    void GLWindow::onWindowMove(Window& wnd, uint32 x, uint32 y) {
+        updateWindowProperties(x, y, getWidth(), getHeight());
     }
     
     bool GLWindow::pullEvents() { 
@@ -227,10 +256,6 @@ namespace ukn {
         
         glfwPollEvents();
         return false;
-    }
-
-    void GLWindow::swapBuffers() {
-        glfwSwapBuffers();
     }
 
 #ifdef UKN_OS_WINDOWS

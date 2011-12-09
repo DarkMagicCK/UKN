@@ -125,7 +125,7 @@ namespace ukn {
     TexturePtr GLGraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) {
         GLTexture2D* texture = new GLTexture2D();
         if(texture->create(width, height, numMipmaps, format, initialData)) {
-            return texture;
+            return TexturePtr(texture);
         }
 		delete texture;
         return TexturePtr();
@@ -134,7 +134,7 @@ namespace ukn {
     TexturePtr GLGraphicFactory::load2DTexture(const ukn_wstring& name, bool generateMipmaps) {
         GLTexture2D* texture = new GLTexture2D();
         if(texture->load(name, generateMipmaps)) {
-            return texture;
+            return TexturePtr(texture);
         }
 		delete texture;
         return TexturePtr();

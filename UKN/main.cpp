@@ -29,6 +29,7 @@
 #include "UKN/RandomUtil.h"
 #include "UKN/SpriteBatch.h"
 #include "UKN/RenderBuffer.h"
+#include "UKN/MathUtil.h"
 
 #include "../Plugins/GL/GLPreq.h"
 
@@ -54,7 +55,6 @@ public:
         mSpriteBatch = ukn::Context::Instance().getGraphicFactory().createSpriteBatch();
         
         mTexture = ukn::Context::Instance().getGraphicFactory().load2DTexture(L"pong3d_title.tga");
-
     }
     
     void onUpdate() {
@@ -62,7 +62,7 @@ public:
     }
     
     void onRender() {
-        ukn::Context::Instance().getGraphicFactory().getGraphicDevice().getCurrFrameBuffer()->clear(ukn::CM_Color, ukn::ColorCadetblue, 0, 0);
+        ukn::Context::Instance().getGraphicFactory().getGraphicDevice().getCurrFrameBuffer()->clear(ukn::CM_Color, ukn::ColorBurlywood, 0, 0);
        
         
         ukn::Timestamp time;
@@ -71,13 +71,13 @@ public:
         
         ukn::RandomArea randomobj(ukn::Vector2(0, 0), ukn::Vector2(1024, 768));
         
-        mSpriteBatch->draw(mTexture, ukn::Rectangle(0, 0, 100, 100), ukn::Rectangle(200, 200, 500, 500));
+        mSpriteBatch->draw(mTexture, ukn::Rectangle(0, 0, 0, 0), ukn::Rectangle(0, 00, 0, 0));
         
         mSpriteBatch->render();
 
         mSpriteBatch->onRenderEnd();
         
-        printf("%lu\n", time.elapsed());
+        printf("%lld\n", time.elapsed());
     }
     
 private:

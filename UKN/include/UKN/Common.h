@@ -20,11 +20,14 @@
 
 #endif // UKN_OS_WINDOWS
 
+#include <cstdarg>
+#include <cstdio>
+
 namespace ukn {
 
     // for_each(STL_CONT.begin(), STL_CONT.end(), DeleteSTLPtr());
 	// for_each(STL_MAP.begin(), STL_MAP.end(), DeleteSTLMapPtr());
-    
+
     struct DeleteSTLPtr {
 		template<typename T>
 		void operator() (const T* ptr) const {
@@ -34,7 +37,7 @@ namespace ukn {
 			}
 		}
 	};
-	
+
 	struct DeleteSTLPairPtr {
 		template<typename Ty1, typename Ty2>
 		void operator() (const std::pair<Ty1, Ty2>& ptr) const {
@@ -43,7 +46,7 @@ namespace ukn {
 			}
 		}
 	};
-    
+
     static ukn_string format_string(const char* format, ...) {
         va_list	arg;
 		char message[1024] = {0};
@@ -62,7 +65,7 @@ namespace ukn {
         return lib + ".so";
 #endif
     }
-    
+
 #define UKN_DEF_SET_GET(type, var, name) \
     void set##name(type value) { \
         var = value; \
@@ -70,7 +73,7 @@ namespace ukn {
     type get##name() const { \
         return var; \
     }
-    
+
 } // namespace ukn
 
 

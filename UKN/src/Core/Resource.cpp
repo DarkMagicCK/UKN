@@ -36,7 +36,7 @@ namespace ukn {
         ResourcePtr onResourceLoad(const ukn_wstring& path) {
             FileStream* pfs = new FileStream;
             if(pfs->open(path)) {
-                return MakeSharedPtr<Resource>(path, pfs);
+                return MakeSharedPtr<Resource>(path, StreamPtr(pfs));
             }
             return MakeSharedPtr<Resource>(path, StreamPtr());
         }
@@ -125,7 +125,7 @@ namespace ukn {
     ResourcePtr ResourceLoader::createFileResource(const ukn_wstring& name) {
         FileStream* file_stream = new FileStream();
         if(file_stream->open(name, true, false, false))
-            return MakeSharedPtr<Resource>(name, file_stream);
+            return MakeSharedPtr<Resource>(name, StreamPtr(file_stream));
         return ResourcePtr();
     }
     

@@ -25,7 +25,7 @@ namespace ukn {
         uint32 getHeight(uint32 level = 0) const;
         
         uintPtr getTextureId() const;
-            
+        
     private:
         uintPtr mTextureId;
         

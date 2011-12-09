@@ -22,8 +22,7 @@ namespace ukn {
         
         CameraPtr camera;
         
-        Viewport():
-        camera(MakeSharedPtr<Camera2D>()) {
+        Viewport() {
             
         }
         
@@ -31,8 +30,7 @@ namespace ukn {
         left(l),
         top(t),
         width(w),
-        height(h),
-        camera(MakeSharedPtr<Camera2D>()) {
+        height(h) {
             
         }
     };

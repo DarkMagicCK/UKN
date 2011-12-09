@@ -46,11 +46,11 @@ namespace ukn {
         
         static GraphicDevicePtr NullObject();
         
-        void pushViewMatrix();
-        void popViewMatrix();
+        Matrix4 pushViewMatrix();
+        Matrix4 popViewMatrix();
         
-        void pushProjectionMatrix();
-        void popProjectionMatrix();
+        Matrix4 pushProjectionMatrix();
+        Matrix4 popProjectionMatrix();
         
     protected:
         typedef std::stack<Matrix4> MatrixStack;

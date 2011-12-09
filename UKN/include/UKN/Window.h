@@ -12,7 +12,6 @@
 #include "UKN/Platform.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
-
 #include "UKN/Event.h"
 
 #ifdef UKN_OS_WINDOWS

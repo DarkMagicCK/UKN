@@ -36,8 +36,10 @@ namespace ukn {
         gd.pushProjectionMatrix();
         gd.pushViewMatrix();
         
-        gd.setProjectionMatrix(ukn::Matrix4::OrthoMat(0, gd.getCurrFrameBuffer()->width(), gd.getCurrFrameBuffer()->height(), 0, 0, 1));
-        gd.setViewMatrix(ukn::Matrix4());
+        Camera* cam = gd.getCurrFrameBuffer()->getViewport().camera.get();
+        
+        gd.setProjectionMatrix(cam->getProjMatrix());
+        gd.setViewMatrix(mTransformMatrix * cam->getViewMatrix());
         
         RenderQueue::iterator it = mRenderQueue.begin();
         

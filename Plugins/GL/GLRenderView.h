@@ -82,6 +82,13 @@ namespace ukn {
     
     typedef SharedPtr<GLTexture2DRenderView> GLTexture2DRenderViewPtr;
     
+    class GLTexture2DDepthStencilView: Uncopyable, public GLRenderView {
+    public:
+        GLTexture2DDepthStencilView(uint32 width, uint32 height, ElementFormat ef);
+    };
+    
+    typedef SharedPtr<GLTexture2DDepthStencilView> GLTexture2DDepthStencilViewPtr;
+    
 } // namespace ukn
 
 #endif

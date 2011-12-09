@@ -39,22 +39,54 @@ namespace ukn {
         }
     }
        
-        
-    void SpriteBatch::TextureObject::buildVertices(float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color) {  
-        if(!texture)
-            return;
+    void SpriteBatch::TextureObject::buildVertices(const Rectangle& dstRect, float rot, const Color& color) {
+        float u1 = 0, u2 = 0, v1 = 0, v2 = 0;
+        if(texture) {
+            u1 = srcRect.x1 / texture->getWidth();
+            u2 = srcRect.x2 / texture->getWidth();
+            v1 = srcRect.y1 / texture->getHeight();
+            v2 = srcRect.y2 / texture->getHeight();
+        }
         
         Vertex2D tmpVert[4];
-        
-        float u1 = srcRect.x1 / texture->getWidth();
-        float u2 = srcRect.x2 / texture->getWidth();
-        float v1 = srcRect.y1 / texture->getHeight();
-        float v2 = srcRect.y2 / texture->getHeight();
-        
         tmpVert[0].u = u1; tmpVert[0].v = v1;
         tmpVert[1].u = u2; tmpVert[1].v = v1;
         tmpVert[2].u = u2; tmpVert[2].v = v2;
         tmpVert[3].u = u1; tmpVert[3].v = v2;
+        
+        tmpVert[0].x = dstRect.x1; tmpVert[0].y = dstRect.y1; tmpVert[0].z = layerDepth;
+        tmpVert[1].x = dstRect.x2; tmpVert[1].y = dstRect.y1; tmpVert[0].z = layerDepth;
+        tmpVert[2].x = dstRect.x2; tmpVert[2].y = dstRect.y2; tmpVert[0].z = layerDepth;
+        tmpVert[3].x = dstRect.x1; tmpVert[3].y = dstRect.y2; tmpVert[0].z = layerDepth;
+        
+        for(int i=0; i<4; ++i) {
+            tmpVert[i].color = color.toHWColor();
+        }
+        
+        vertices[0] = tmpVert[0];
+        vertices[1] = tmpVert[1];
+        vertices[2] = tmpVert[2];
+        
+        vertices[3] = tmpVert[2];
+        vertices[4] = tmpVert[3];
+        vertices[5] = tmpVert[0];
+    }
+        
+    void SpriteBatch::TextureObject::buildVertices(float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color) {  
+        Vertex2D tmpVert[4];
+        
+        float u1 = 0, u2 = 0, v1 = 0, v2 = 0;
+        if(texture) {
+            u1 = srcRect.x1 / texture->getWidth();
+            u2 = srcRect.x2 / texture->getWidth();
+            v1 = srcRect.y1 / texture->getHeight();
+            v2 = srcRect.y2 / texture->getHeight();
+        }
+        
+        tmpVert[0].u = u1; tmpVert[0].v = v1; tmpVert[0].z = layerDepth;
+        tmpVert[1].u = u2; tmpVert[1].v = v1; tmpVert[0].z = layerDepth;
+        tmpVert[2].u = u2; tmpVert[2].v = v2; tmpVert[0].z = layerDepth;
+        tmpVert[3].u = u1; tmpVert[3].v = v2; tmpVert[0].z = layerDepth;
         
         float tx1 = -cx*scalex;
         float ty1 = -cx*scaley;
@@ -116,6 +148,9 @@ namespace ukn {
         ukn_assert(mVertexBuffer);
         
         mRenderBuffer->bindVertexStream(mVertexBuffer, Vertex2D::Format());
+        
+        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+        ukn::Matrix4::OrthoMat(0, gd.getCurrFrameBuffer()->width(), gd.getCurrFrameBuffer()->height(), 0, 0, 1);
     }
     
     SpriteBatch::~SpriteBatch() {
@@ -143,14 +178,24 @@ namespace ukn {
         mRenderQueue.clear();
     }
     
+    Matrix4& SpriteBatch::getTransformMatrix() {
+        return mTransformMatrix;
+    }
+    
+    const Matrix4& SpriteBatch::getTransformMatrix() const {
+        return mTransformMatrix;
+    }
+    
     void SpriteBatch::render() {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         gd.pushProjectionMatrix();
         gd.pushViewMatrix();
         
-        gd.setProjectionMatrix(ukn::Matrix4::OrthoMat(0, gd.getCurrFrameBuffer()->width(), gd.getCurrFrameBuffer()->height(), 0, 0, 1));
-        gd.setViewMatrix(ukn::Matrix4());
+        Camera* cam = gd.getCurrFrameBuffer()->getViewport().camera.get();
+        
+        gd.setProjectionMatrix(cam->getProjMatrix());
+        gd.setViewMatrix(mTransformMatrix * cam->getViewMatrix());
         
         RenderQueue::iterator it = mRenderQueue.begin();
         while(it != mRenderQueue.end()) { 
@@ -211,34 +256,34 @@ namespace ukn {
     void SpriteBatch::draw(const TexturePtr& texture, Rectangle dstRect, float layerDepth, const Color& color) {
         TextureObject obj(texture, layerDepth);
         
-        obj.buildVertices(dstRect.x1, 
-                          dstRect.y1, 
+        if(dstRect.x2 == dstRect.x1)
+            dstRect.x2 = texture->getWidth() + dstRect.x1;
+        if(dstRect.y2 == dstRect.y1)
+            dstRect.y2 = texture->getHeight() + dstRect.y1;
+        
+        obj.buildVertices(dstRect,
                           0.f,
-                          0.f,
-                          0.f, 
-                          (dstRect.x2 - dstRect.x1) / texture->getWidth(), 
-                          (dstRect.y2 - dstRect.y1) / texture->getHeight(),
                           color);
                           
-        
         mRenderQueue.insert(obj);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, float rot, const Color& color) {
         TextureObject obj(texture, 0.f);
+        if(srcRect.x2 == 0 && srcRect.y2 == 0) {
+            srcRect.x2 = texture->getWidth();
+            srcRect.y2 = texture->getHeight();
+        }
+        
         obj.srcRect = srcRect;
         
-        float w = srcRect.x2 - srcRect.x1;
-        float h = srcRect.y2 - srcRect.y1;
-        float sx = (dstRect.x2 - dstRect.x1) / w;
-        float sy = (dstRect.y2 - dstRect.y1) / h;
-        obj.buildVertices(dstRect.x1 + w / 2 * sx, 
-                          dstRect.y1 + h / 2 * sy, 
-                          w / 2,
-                          h / 2,
-                          rot, 
-                          sx, 
-                          sy,
+        if(dstRect.x2 == dstRect.x1)
+            dstRect.x2 = texture->getWidth() + dstRect.x1;
+        if(dstRect.y2 == dstRect.y1)
+            dstRect.y2 = texture->getHeight() + dstRect.y1;
+        
+        obj.buildVertices(dstRect,
+                          rot,
                           color);
         
         mRenderQueue.insert(obj);
@@ -261,19 +306,20 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, float rot, float layerDepth, const Color& color) {
         TextureObject obj(texture, layerDepth);
+        if(srcRect.x2 == 0 && srcRect.y2 == 0) {
+            srcRect.x2 = texture->getWidth();
+            srcRect.y2 = texture->getHeight();
+        }
+        
         obj.srcRect = srcRect;
         
-        float w = srcRect.x2 - srcRect.x1;
-        float h = srcRect.y2 - srcRect.y1;
-        float sx = (dstRect.x2 - dstRect.x1) / w;
-        float sy = (dstRect.y2 - dstRect.y1) / h;
-        obj.buildVertices(dstRect.x1 + w / 2 * sx, 
-                          dstRect.y1 + h / 2 * sy, 
-                          w / 2,
-                          h / 2,
-                          rot, 
-                          sx, 
-                          sy,
+        if(dstRect.x2 == dstRect.x1)
+            dstRect.x2 = texture->getWidth() + dstRect.x1;
+        if(dstRect.y2 == dstRect.y1)
+            dstRect.y2 = texture->getHeight() + dstRect.y1;
+        
+        obj.buildVertices(dstRect,
+                          rot,
                           color);
         
         mRenderQueue.insert(obj);

@@ -7,19 +7,28 @@
 //
 
 #include "GLFrameBuffer.h"
+#include "GLPreq.h"
 
 namespace ukn {
     
     GLFrameBuffer::GLFrameBuffer(bool offscreen):
-    mOffscreen(offscreen),
-    mFBO(0) {
+    mFBO(0),
+    mOffscreen(offscreen) {
         if(mOffscreen) {
-			//glGenBuffers(1, &mFBO); 
+			glGenBuffers(1, &mFBO);
         }
+    }
+    
+    GLFrameBuffer::~GLFrameBuffer() {
+        
     }
     
     bool GLFrameBuffer::requiresFlipping() const {
         return false;
+    }
+    
+    void GLFrameBuffer::swapBuffers() {
+        glfwSwapBuffers();
     }
     
     void GLFrameBuffer::clear(uint32 flags, const class Color& clr, float depth, int32 stencil) {

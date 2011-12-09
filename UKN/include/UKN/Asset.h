@@ -9,27 +9,29 @@
 #ifndef Project_Unknown_Asset_h
 #define Project_Unknown_Asset_h
 
-#include "UKN/Platformh.h"
+#include "UKN/Platform.h"
 #include "UKN/Uncopyable.h"
 #include "UKN/PreDeclare.h"
 
+#include <map>
+
 namespace ukn {
+    
+    enum AssetType {
+        // Font
+        RT_Font,
+        // Texture2D
+        RT_Texture2D,
+        // ConfigParser
+        RT_Config,
+        // RawData
+        RT_Raw,
+    };
     
     class AssetManager: Uncopyable {
     public:
         static AssetManager& Instance();
         
-        enum AssetType {
-            // Font
-            RT_Font,
-            // Texture2D
-            RT_Texture2D,
-            // ConfigParser
-            RT_Config,
-            // RawData
-            RT_Raw,
-        };
-    
         struct AssetInfo {
             AssetInfo():
             type(RT_Raw),
@@ -44,6 +46,7 @@ namespace ukn {
             }
             
             AssetType   type;
+            ukn_wstring name;
             ukn_wstring fullPath;
         };
         
@@ -52,6 +55,10 @@ namespace ukn {
     public:
         template<typename T>
         SharedPtr<T> load(const ukn_wstring& name);
+        
+        void add(const ukn_wstring& name, const ukn_wstring& path, AssetType type);
+        
+        const AssetNameMap& getAssets() const;        
         
     protected:
         AssetManager();

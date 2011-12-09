@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "Renderable.h"
+#include "UKN/Renderable.h"
 
 namespace ukn {
     

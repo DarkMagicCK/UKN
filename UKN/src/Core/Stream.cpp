@@ -144,7 +144,7 @@ namespace ukn {
             // faster
            memBuffer->set(dataBuffer, readSize);
             
-            return (memBuffer);
+            return StreamPtr(memBuffer);
         } else 
             // return null memorystream
             return MakeSharedPtr<MemoryStream>();

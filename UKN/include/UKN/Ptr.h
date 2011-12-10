@@ -497,6 +497,10 @@ namespace ukn {
             return this->ptr;
         }
         
+        operator bool() const {
+            return ptr != 0;
+        }
+        
         void swap(ScopedPtr& b);
         
     private:

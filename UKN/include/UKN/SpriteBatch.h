@@ -42,6 +42,7 @@ namespace ukn {
         void draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, const Color& color=ColorWhite);
         void draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, float rot, const Color& color=ColorWhite);
         void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color=ColorWhite);
+        void draw(const TexturePtr& texture, Rectangle srcRect, float x, float y, const Color& color=ColorWhite);
         
         void draw(const TexturePtr& texture, float x, float y, float layerDepth, const Color& color=ColorWhite);
         void draw(const TexturePtr& texture, Rectangle dstRect, float layerDepth, const Color& color=ColorWhite);

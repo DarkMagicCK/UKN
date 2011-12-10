@@ -14,6 +14,8 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/Renderable.h"
 
+#include <vector>
+
 namespace ukn {
     
     /**
@@ -53,21 +55,28 @@ namespace ukn {
          * set font style 
          **/
         void setStyle(FontStyle style, bool flag);
-        void setStyleProperty(FontStyle style, FontStyleProperty prop);
+        void setStyleProperty(FontStyleProperty sp, int32 prop);
         
-        void draw(const ukn_wstring& str, float x, float y, FontAlignment alignment);
+        void draw(const wchar_t* str, float x, float y, FontAlignment alignment);
         
         // inherited from Renderable
         void render();
         
-        const ukn_string& getName() const = 0;
+        void onRenderBegin();
+        void onRenderEnd();
         
-        Rectangle getBound() const = 0;
-        RenderBufferPtr getRenderBuffer() const = 0;
+        float getCharWidth(wchar_t chr);
+        float2 getStringDimensions(const wchar_t* str, float kw=0, float kh=0);
+        
+        const ukn_string& getName() const;
+        
+        Rectangle getBound() const;
+        RenderBufferPtr getRenderBuffer() const;
         
     private:
+        uint32 getGlyphByChar(wchar_t chr);
+        
         uint32 mFontSize;
-        ResourcePtr mFontData;
         
         bool mIsBold;
         bool mIsItalic;
@@ -78,11 +87,21 @@ namespace ukn {
         int32 mShadowXOffset;
         int32 mShadowYOffset;
         
-        Rectangle mBoundingBox;
-        RenderBufferPtr mRenderBuffer;
+        SpriteBatchPtr mSpriteBatch;
         
         struct StringData;
         Array<StringData> mRenderQueue;
+        
+        void doRender(const StringData& data);
+        
+        struct FTLibrary;
+        struct FTFace;
+        struct FTGlyph;
+        
+        friend struct FTGlyph;
+        
+        ScopedPtr<FTFace> mFace;
+        std::vector<FTGlyph> mGlyphs;
     };
     
 } // namespace ukn  

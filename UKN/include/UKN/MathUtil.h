@@ -55,6 +55,13 @@ namespace ukn {
         }
     }
     
+    inline int32 to2spow(int32 n) {
+        int32 t = 1;
+        while(t < n)
+            t <<= 1;
+        return t;
+    }
+    
     // compress a unit float to nBits integer
 	// there would be some data loss but good for some condition
 	// it is safe to cast the result to nBits integer, such as uint16 if you pass nBits as 16

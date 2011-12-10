@@ -133,7 +133,7 @@ namespace ukn {
                          vertexBuffer->count());
             return;
         }
-        
+
         vertexBuffer->activate();
         
         if(format.checkFormat(VF_XYZ)) {

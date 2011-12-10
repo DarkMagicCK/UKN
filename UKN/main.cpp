@@ -30,6 +30,7 @@
 #include "UKN/SpriteBatch.h"
 #include "UKN/RenderBuffer.h"
 #include "UKN/MathUtil.h"
+#include "UKN/Font.h"
 
 #include "../Plugins/GL/GLPreq.h"
 
@@ -54,7 +55,10 @@ public:
     void onInit() {
         mSpriteBatch = ukn::Context::Instance().getGraphicFactory().createSpriteBatch();
         
-        mTexture = ukn::Context::Instance().getGraphicFactory().load2DTexture(L"pong3d_title.tga");
+        mTexture = ukn::Context::Instance().getGraphicFactory().load2DTexture(L"sora.png");
+        
+        mFont = new ukn::Font();
+        mFont->load(L"liheipro.ttf", 20);
     }
     
     void onUpdate() {
@@ -62,29 +66,27 @@ public:
     }
     
     void onRender() {
-        ukn::Context::Instance().getGraphicFactory().getGraphicDevice().getCurrFrameBuffer()->clear(ukn::CM_Color, ukn::ColorBurlywood, 0, 0);
-       
+        ukn::Context::Instance().getGraphicFactory().getGraphicDevice().getCurrFrameBuffer()->clear(ukn::CM_Color, ukn::ColorBlack, 0, 0);
         
         ukn::Timestamp time;
         
         mSpriteBatch->onRenderBegin();
-        
-        ukn::RandomArea randomobj(ukn::Vector2(0, 0), ukn::Vector2(1024, 768));
-        
-        mSpriteBatch->draw(mTexture, ukn::Rectangle(0, 0, 0, 0), ukn::Rectangle(0, 00, 0, 0));
-        
+        mSpriteBatch->draw(mTexture, 0.f, 0.f);
         mSpriteBatch->render();
-
         mSpriteBatch->onRenderEnd();
         
-        printf("%lld\n", time.elapsed());
+        mFont->onRenderBegin();
+        mFont->draw(L"测试", 0, 0, ukn::FA_Left);
+
+        mFont->render();
+        mFont->onRenderEnd();
     }
     
 private:
     ukn::SharedPtr<ukn::SpriteBatch> mSpriteBatch;
+
     
-    ukn::RenderBufferPtr mRenderBuffer;
-    ukn::GraphicBufferPtr mVertexBuffer;
+    ukn::FontPtr mFont;
     
     ukn::TexturePtr mTexture;
 };
@@ -100,12 +102,6 @@ int CALLBACK WinMain(
   __in  int nCmdShow
 ) {
 #endif
-    
-    ukn::RandomRange range(0, 1000);
-    for(int i=0; i<10; ++i) {
-        printf("%f, ", range.randomize());
-    }
-
     // register plugins by hand for testing purpose
     ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);

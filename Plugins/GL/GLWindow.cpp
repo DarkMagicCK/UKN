@@ -155,8 +155,7 @@ namespace ukn {
 			UKN_THROW_EXCEPTION(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err)));
 		}
 #endif
-        
-        
+    
         // if wnd pos is (0, 0), then put it in the center of current screen
         int32 wndPosX = settings.left, wndPosY = settings.top;
         if(wndPosX == 0 && wndPosY == 0) {

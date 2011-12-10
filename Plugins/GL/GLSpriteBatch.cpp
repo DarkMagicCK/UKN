@@ -45,6 +45,11 @@ namespace ukn {
         
         Array<Vertex2D> buffer;
         TexturePtr prevTexture = it->texture;
+
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);    
+        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        
         while(it != mRenderQueue.end()) { 
             if(it->texture != prevTexture) {
                 gd.bindTexture(prevTexture);
@@ -59,10 +64,8 @@ namespace ukn {
                 
                 prevTexture = it->texture;
                 buffer.clear();
-                
-            } else {
-                buffer.append(&it->vertices[0], 6);
             }
+            buffer.append(&it->vertices[0], 6);
             
             ++it;
         }
@@ -78,6 +81,8 @@ namespace ukn {
                          0, 
                          (GLsizei)buffer.size());
         }
+        
+        glDisable(GL_BLEND);
         
         gd.bindTexture(TexturePtr());
         

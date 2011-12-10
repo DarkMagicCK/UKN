@@ -33,7 +33,10 @@ namespace ukn {
     typedef PointTemplate<2, uint32> uint2;
     typedef PointTemplate<3, uint32> uint3;
     typedef PointTemplate<4, uint32> uint4;
+
+    struct VertexFormat;
     
+    struct ContextCfg;
     
     class GraphicDevice;
     typedef SharedPtr<GraphicDevice> GraphicDevicePtr;
@@ -93,12 +96,20 @@ namespace ukn {
     class ResourceLoader;
     typedef SharedPtr<ResourceLoader> ResourceLoaderPtr;
     
-    struct VertexFormat;
-    
-    struct ContextCfg;
-    
     class SpriteBatch;
     typedef SharedPtr<SpriteBatch> SpriteBatchPtr;
+    
+    class SceneNode;
+    typedef SharedPtr<SceneNode> SceneNodePtr;
+    
+    class Scene;
+    typedef SharedPtr<Scene> ScenePtr;
+    
+    class Entity;
+    typedef SharedPtr<Entity> EntityPtr;
+    
+    class Component;
+    typedef SharedPtr<Component> ComponentPtr;
     
 } // namespace ukn
 

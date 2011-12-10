@@ -349,6 +349,11 @@
 		88C308B71492DFCB001262DF /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		88C308B81492DFCB001262DF /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
 		88C308B91492DFCB001262DF /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
+		88C3091114936612001262DF /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transform.h; sourceTree = "<group>"; };
+		88C3091314936617001262DF /* Sensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sensor.h; sourceTree = "<group>"; };
+		88C309141493661C001262DF /* Trigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trigger.h; sourceTree = "<group>"; };
+		88C3091514936622001262DF /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Component.h; sourceTree = "<group>"; };
+		88C309161493662A001262DF /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		88CC31191477915700558EA1 /* Project Unknown */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Project Unknown"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88CC311F1477915700558EA1 /* Project_Unknown.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Project_Unknown.1; sourceTree = "<group>"; };
 		88E3C3DC147F2BBD00E8754D /* GLGraphicDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGraphicDevice.h; sourceTree = "<group>"; };
@@ -610,6 +615,11 @@
 				88260E661488570100142365 /* SysUtil.h */,
 				8832D14B1488F89100D08C15 /* Property.h */,
 				884CE3F2148F32F000F58E2E /* SpriteBatch.h */,
+				88C3091114936612001262DF /* Transform.h */,
+				88C3091314936617001262DF /* Sensor.h */,
+				88C309141493661C001262DF /* Trigger.h */,
+				88C3091514936622001262DF /* Component.h */,
+				88C309161493662A001262DF /* Entity.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";

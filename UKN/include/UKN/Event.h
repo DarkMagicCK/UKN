@@ -37,8 +37,7 @@ namespace ukn {
     };
     
     /**
-     * Event object class that overrides operator +=
-     * Similar to EventHandler in c#
+     * Event object class that overrides operator += and +
      * Would disconnect every connection when destructs
      **/
     template<typename SIG>

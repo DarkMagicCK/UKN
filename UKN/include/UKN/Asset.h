@@ -39,8 +39,9 @@ namespace ukn {
             
             }
             
-            AssetInfo(AssetType t, const ukn_wstring& path):
+            AssetInfo(AssetType t, const ukn_wstring& n, const ukn_wstring& path):
             type(t),
+            name(n),
             fullPath(path) { 
             
             }
@@ -50,15 +51,18 @@ namespace ukn {
             ukn_wstring fullPath;
         };
         
-        typedef std::map<ukn_wstring, AssetInfo> AssetNameMap;
+        typedef ukn_hash_map<ukn_wstring, AssetInfo> AssetNameMap;
         
     public:
         template<typename T>
-        SharedPtr<T> load(const ukn_wstring& name);
+        SharedPtr<T> load(const ukn_wstring& name) const;
         
         void add(const ukn_wstring& name, const ukn_wstring& path, AssetType type);
         
-        const AssetNameMap& getAssets() const;        
+        const AssetNameMap& getAssets() const;   
+        
+        ConfigParserPtr serialize();
+        void            unserialize(const ConfigParserPtr& config);
         
     protected:
         AssetManager();

@@ -16,11 +16,9 @@ namespace ukn {
     
     UKN_API ConfigParserPtr MakeConfigParser(ResourcePtr resource) {
         if(*resource) {
-            if(resource->getName().find(L".xml") != ukn_string::npos) {
-                ConfigParserPtr ptr = MakeSharedPtr<ConfigParserXmlImpl>();
-                if(ptr && ptr->open(resource)) {
-                    return ptr;
-                }
+            ConfigParserPtr ptr = MakeSharedPtr<ConfigParserXmlImpl>();
+            if(ptr && ptr->open(resource)) {
+                return ptr;
             }
         } else {
             return ConfigParserPtr();

@@ -31,19 +31,11 @@
 #include "UKN/RenderBuffer.h"
 #include "UKN/MathUtil.h"
 #include "UKN/Font.h"
+#include "UKN/Asset.h"
 
 #include "../Plugins/GL/GLPreq.h"
 
 #include <vector>
-
-class MyClassTest {
-public:
-    UKN_DEF_CLASS_2(MyClassTest, (UKN_DEF_PROP("hello", ukn::ukn_string, "hello world"), UKN_DEF_PROP("i", int, 0)));
-    
-    
-    ukn::EventObject<void(MyClassTest, ukn::Event*)> TestEvent;
-    
-};
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -57,8 +49,8 @@ public:
         
         mTexture = ukn::Context::Instance().getGraphicFactory().load2DTexture(L"sora.png");
         
-        mFont = new ukn::Font();
-        mFont->load(L"liheipro.ttf", 20);
+        ukn::AssetManager::Instance().add(L"liheipro", L"liheipro.uknfnt", ukn::RT_Font);
+        mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
     }
     
     void onUpdate() {
@@ -76,7 +68,7 @@ public:
         mSpriteBatch->onRenderEnd();
         
         mFont->onRenderBegin();
-        mFont->draw(L"测试", 0, 0, ukn::FA_Left);
+        mFont->draw(L"Hello World!", 0, 0, ukn::FA_Left);
 
         mFont->render();
         mFont->onRenderEnd();

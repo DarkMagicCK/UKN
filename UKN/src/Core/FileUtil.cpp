@@ -19,12 +19,17 @@
 #include <sys/stat.h>
 #else
 #include <sys/stat.h>
-#endif
+#endif // UKN_OS_FAMILTY_APPLe
+
+#ifdef UKN_OS_FAMILY_UNIX   
+#include <pwd.h>
+#endif // UKN_OS_FAMILTY_UNIX
 
 #include <cstdio>
 #include <fstream>
 
 #include "UKN/StringUtil.h"
+#include "UKN/Asset.h"
 
 namespace ukn {
     
@@ -60,14 +65,6 @@ namespace ukn {
         return false;
     }
     
-    UKN_API ukn_wstring get_writtable_path(const ukn_wstring& filePath) {
-#ifndef UKN_OS_FAMILY_APPLE
-        return get_application_path() + filePath;
-#else
-        return ukn_apple_documents_path() + filePath;
-#endif
-    }
-    
     UKN_API ukn_wstring get_application_path() {
 #ifdef UKN_OS_WINDOWS
         wchar_t buffer[MAX_PATH];
@@ -82,6 +79,273 @@ namespace ukn {
         return L"./";
     }
     
+    UKN_API ukn_wstring check_and_get_font_path(const ukn_wstring& name) {
+        
+        if(file_exists(L"./"+name))
+            return L"./"+name;
+        
+        // resource path
+        {
+            ukn_wstring fullpath(Path::GetResource() + name);
+            
+            if(file_exists(fullpath)) {
+                return fullpath;
+            }
+        }
+        
+        // system font path
+        {
+            ukn_wstring fullpath(Path::GetFont() + name);
+        
+            if(file_exists(fullpath)) {
+                return fullpath;
+            }
+        }
+        
+        // document path for ios and osx
+        {
+#if defined(UKN_OS_FAMILY_APPLE)
+            ukn_wstring fullpath(ukn_apple_documents_path());
+            
+            if(file_exists(fullpath)) {
+                return fullpath;
+            }
+#endif
+        }
+      
+        // check asset names
+        {
+            const AssetManager::AssetNameMap& assets = AssetManager::Instance().getAssets();
+            
+            AssetManager::AssetNameMap::const_iterator it = assets.find(name);
+            if(it != assets.end()) {
+                return it->second.fullPath;
+            }
+        }
+        
+        return ukn_wstring();
+    }
+    
+    ukn_wstring Path::GetEnv(const ukn_string& env) {
+#if defined(UKN_OS_WINDOWS)
+        DWORD len = GetEnvironmentVariableW(env.c_str(), 0, 0);
+        if (len != 0) {
+            wchar_t* buffer = new wchar_t[len];
+            GetEnvironmentVariableW(env.c_str(), buffer, len);
+            ukn_wstring result(buffer);
+            delete [] buffer;
+            return result;
+        }
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        return string_to_wstring_fast(getenv(env.c_str()));
+#endif
+        
+        return ukn_wstring();
+    }
+    
+    ukn_wstring Path::GetCurrent() {
+#if defined(UKN_OS_WINDOWS)
+        wchar_t buffer[_MAX_PATH];
+        DWORD n = GetCurrentDirectoryW(sizeof(buffer), buffer);
+        if(n > 0 && n < sizeof(buffer)) {
+            ukn_wstring result(buffer, n);
+            if(result[n-1] != L'\\')
+                result.append(L"\\");
+            return result;
+        }
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        ukn_string path;
+        char cwd[PATH_MAX];
+        if(getcwd(cwd, sizeof(cwd)))
+            path = cwd;
+        
+        size_t n = path.size();
+        if(n > 0 && path[n-1] != '/')
+            path.append("/");
+        return string_to_wstring_fast(path);
+#endif      
+    }
+    
+    ukn_wstring Path::GetHome() {
+#if defined(UKN_OS_WINDOWS)
+        ukn_wstring result = Path::GetEnv(L"HOMEDRIVE");
+        result.append(Path::GetEnv(L"HOMEPATH"));
+       
+        size_t n = result.size();
+        if(n > 0 && result[n-1] != L'\\')
+            result.append(L"\\");
+        return result;
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        ukn_string path;
+        struct passwd* pwd = getpwuid(getuid());
+        if(pwd)
+            path = pwd->pw_dir;
+        else {
+            pwd = getpwuid(getuid());
+            if(pwd) 
+                path = pwd->pw_dir;
+            else 
+                return Path::GetEnv("HOME") + L"/";
+        }
+        
+        size_t n = path.size();
+        if(n > 0 && path[n-1] != '/')
+            path.append("/");
+        return string_to_wstring_fast(path);
+#endif           
+    }
+    
+    ukn_wstring Path::GetRoot() {
+#if defined(UKN_OS_WINDOWS)
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        ukn_string path;
+        char* tmp = getenv("TMPDIR");
+        if(tmp) {
+            path = tmp;
+            size_t n = path.size();
+            if(n > 0 && path[n-1] != '/')
+                path.append("/");
+            else 
+                path = "/tmp/";
+        }
+        return string_to_wstring_fast(path);
+#endif       
+        return ukn_wstring();
+    }
+    
+    ukn_wstring Path::GetTemp() {
+#if defined(UKN_OS_WINDOWS)
+        wchar_t buffer[_MAX_PATH];
+        DWORD n = GetTempPathW(sizeof(buffer), buffer);
+        if(n > 0 && n < sizeof(buffer)) {
+            ukn_wstring result(buffer, n);
+            if(result[n-1] != L'\\')
+                result.append(L"\\");
+            return result;
+        } 
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        std::string path;
+        char* tmp = getenv("TMPDIR");
+        if(tmp) {
+            path = tmp;
+            std::string::size_type n = path.size();
+            if(n > 0 && path[n-1] != '/')
+                path.append("/");
+            else 
+                path = "/tmp/";
+        }
+        return string_to_wstring_fast(path);
+        
+#endif    
+        return ukn_wstring();
+    }
+    
+    ukn_wstring Path::GetWrittable() {
+#if defined(UKN_OS_WINDOWS)
+        return L"./";
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return ukn_apple_documents_path();
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        return L"./";
+#endif
+    }
+    
+    ukn_wstring Path::GetResource() {
+#if defined(UKN_OS_WINDOWS)
+        return L"./";
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return get_application_path() + L"/Contents/Resources/";
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        return L"./";
+#endif  
+    }
+    
+    ukn_wstring Path::GetFont() {
+#if defined(UKN_OS_WINDOWS)
+        wchar_t buffer[_MAX_PATH];
+        GetWindowsDirectoryW(buffer, _MAX_PATH-1);
+        ukn_wstring path(buffer);
+        return path + "\\Fonts\\";
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return L"/Library/Fonts/";
+        
+#elif defined(UKN_OS_LINUX)
+        return L"/usr/share/fonts/";
+        
+#endif
+        return L"./";
+    }
+    
+    void Path::ListRoots(std::vector<ukn_string>& arr) {
+        arr.clear();
+        
+#if defined(UKN_OS_WINDOWS)
+        char buffer[128];
+        DWORD n = GetLogicalDriveStringsA(sizeof(buffer)-1, buffer);
+        char* it = buffer;
+        char* end = buffer + (n > sizeof(buffer) ? sizeof(buffer): n);
+        while(it < end) {
+            std::string dev;
+            while(it < end && *it)
+                dev += *it++;
+            arr.push_back(dev);
+            ++it;
+        }
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        arr.push_back("/");
+#endif    
+    }
+    
+    ukn_wstring Path::ExpandPath(const ukn_wstring& path) {
+#if defined(UKN_OS_WINDOWS)
+        wchar_t buffer[_MAX_PATH];
+        DWORD n = ExpandEnvironmentStringsW(path.c_str(), buffer, sizeof(buffer));
+        if(n > 0 && n < sizeof(buffer)) {
+            return ukn_wstring(buffer, n-1);
+        } else
+            return path;
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        ukn_wstring result;
+        ukn_wstring::const_iterator it  = path.begin();
+        ukn_wstring::const_iterator end = path.end();
+        if (it != end && *it == L'~') {
+            ++it;
+            if (it != end && *it == L'/') {
+                result += Path::GetHome(); ++it;
+            }
+            else result += '~';
+        }
+        while (it != end) {
+            if (*it == L'$') {
+                std::string var;
+                ++it;
+                if (it != end && *it == L'{') {
+                    ++it;
+                    while (it != end && *it != L'}') var += *it++;
+                    if (it != end) ++it;
+                }
+                else {
+                    while (it != end && (((*it >= L'a' && *it <= L'z') || (*it >= L'A' && *it <= L'Z') || (*it >= L'0' && *it <= L'9')) || *it == L'_')) var += *it++;
+                }
+                result += Path::GetEnv(var);
+            }
+            else result += *it++;
+        }
+        return result;
+#endif    
+    }
     
 } // namespace ukn
 

@@ -26,11 +26,11 @@ namespace ukn {
     class Any {
     public:
         Any():
-        mContent(NULL) {
+        mContent(0) {
         }
         
         template<typename ValueType>
-        Any(const ValueType& value):
+        explicit Any(const ValueType& value):
         mContent(new Holder<ValueType>(value)) {
         }
         
@@ -52,6 +52,10 @@ namespace ukn {
         Any& operator=(const ValueType& rhs) {
             Any(rhs).swap(*this);
             return *this;
+        }
+        
+        bool operator()() const {
+            return mContent != 0;
         }
         
         bool empty() const {

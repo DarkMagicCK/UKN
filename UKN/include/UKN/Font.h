@@ -46,11 +46,13 @@ namespace ukn {
     class Font: Uncopyable, public Renderable {
     public:
         Font();
-        explicit Font(const ukn_wstring& font_name, uint32 font_size);
         ~Font();
-        
-        bool load(const ukn_wstring& name, uint32 size);
-        
+           
+        /**
+         * load from font config resource
+         * should be .uknfnt
+         **/
+        bool loadFromResource(const ResourcePtr& resource);
         /**
          * set font style 
          **/
@@ -73,7 +75,11 @@ namespace ukn {
         Rectangle getBound() const;
         RenderBufferPtr getRenderBuffer() const;
         
+        bool isValid() const;
+        
     private:
+        friend class AssetManager;
+        
         uint32 getGlyphByChar(wchar_t chr);
         
         uint32 mFontSize;

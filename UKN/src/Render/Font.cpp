@@ -18,6 +18,8 @@
 #include "UKN/Logger.h"
 #include "UKN/SpriteBatch.h"
 #include "UKN/Texture.h"
+#include "UKN/ConfigParser.h"
+#include "UKN/FileUtil.h"
 
 #include <ft2build.h>
 #include <freetype/freetype.h>
@@ -57,7 +59,7 @@ namespace ukn {
         FT_Face     face;
         StreamPtr   font_data;
 
-        bool load(const ukn_wstring& name) {
+        bool load(const ResourcePtr& resource) {
             if(!Font::FTLibrary::Instance().library)
                 return false;
             
@@ -65,10 +67,8 @@ namespace ukn {
                 FT_Done_Face(face);
             }
             
-            ResourcePtr data = ResourceLoader::Instance().loadResource(name);
-            
-            if(data && data->getResourceStream()) {
-                font_data = stream_to_memory_stream(data->getResourceStream());
+            if(resource && resource->getResourceStream()) {
+                font_data = stream_to_memory_stream(resource->getResourceStream());
                 if(FT_New_Memory_Face(Font::FTLibrary::Instance().library, 
                                       static_cast<MemoryStream*>(font_data.get())->get(), 
                                       font_data->getSize(),
@@ -79,7 +79,7 @@ namespace ukn {
                 return true;
             } else {
                 if(FT_New_Face(Font::FTLibrary::Instance().library,
-                               wstring_to_string(name).c_str(),
+                               wstring_to_string(resource->getName()).c_str(),
                                0,
                                &face)) {
                     return false;
@@ -233,42 +233,55 @@ namespace ukn {
             log_error("ukn::Font::Font Error creating sprite batch for font rendering");
     }
     
-    Font::Font(const ukn_wstring& font_name, uint32 font_size):
-    mFontSize(0),
-    mIsBold(false),
-    mIsItalic(false),
-    mEnableStroke(false),
-    mEnableShadow(false),
-    mStrokeWidth(0),
-    mShadowXOffset(0),
-    mShadowYOffset(0),
-    mFace(new Font::FTFace) {
-        mSpriteBatch = Context::Instance().getGraphicFactory().createSpriteBatch();
-        if(!mSpriteBatch)
-            log_error("ukn::Font::Font Error creating sprite batch for font rendering");
-        
-        if(!load(font_name, font_size))
-            log_error(L"ukn::Font::Font: error loading font " + font_name);
-    }
-
-    
     Font::~Font() {
         
     }
     
-    bool Font::load(const ukn_wstring& name, uint32 size) {
-        mFontSize = size;
-        bool result = mFace->load(name);
+    bool Font::loadFromResource(const ResourcePtr& resource) {
+        mGlyphs.clear();
         
-        if(result) {
-            mGlyphs.resize(mFace->face->num_glyphs);
+        ConfigParserPtr config = MakeConfigParser(resource);
+        
+        if(config && config->toNode("/font")) {            
+            ukn_string font_name = config->getString("name");
+            
+            if(!font_name.empty()) {
+                ukn_wstring fullFontPath = check_and_get_font_path(string_to_wstring(font_name));
+                
+                if(fullFontPath.empty()) {
+                    log_error("ukn::Font::loadFromResource: error finding font name " + font_name);
+                    return false;
+                }
+                ResourcePtr fontResource = ResourceLoader::Instance().loadResource(fullFontPath);
+                if(fontResource && fontResource->getResourceStream()) {
+                    bool result = mFace->load(fontResource);
                     
-            for(int i = 0; i < mFace->face->num_glyphs; ++i) {
-                mGlyphs[i].size = mFontSize;
-                mGlyphs[i].face = &mFace->face;
+                    if(result) {
+                        mGlyphs.resize(mFace->face->num_glyphs);
+                        
+                        for(int i = 0; i < mFace->face->num_glyphs; ++i) {
+                            mGlyphs[i].size = mFontSize;
+                            mGlyphs[i].face = &mFace->face;
+                        }
+                    }
+                }
             }
+            
+            mIsBold = config->getBool("bold", false);
+            mIsItalic = config->getBool("italic", false);
+            mEnableShadow = config->getBool("shadow", false);
+            mEnableStroke = config->getBool("stroke", false);
+            
+            mShadowXOffset = config->getInt("shadow_offset_x", 0);
+            mShadowYOffset = config->getInt("shadow_offset_y", 0);
+            
+            mStrokeWidth = config->getInt("stroke_width", 0);
+            
+            mFontSize = config->getInt("size", 14);
+            
+            return true;
         }
-        return result;
+        return false;
     }
     
     void Font::setStyle(ukn::FontStyle style, bool flag) {
@@ -287,6 +300,10 @@ namespace ukn {
             case FSP_Shadow_YOffset: mShadowYOffset = prop; break;
         }
         
+    }
+    
+    bool Font::isValid() const {
+        return !mGlyphs.empty();
     }
     
     void Font::doRender(const StringData& data) {
@@ -322,6 +339,8 @@ namespace ukn {
     void Font::render() {
         if(!mSpriteBatch)
             return;
+        if(mGlyphs.size() == 0)
+            return;
         
         Array<StringData>::const_iterator it = mRenderQueue.begin();
         while(it != mRenderQueue.end()) {
@@ -356,9 +375,9 @@ namespace ukn {
         
         // cache chars to render
         const wchar_t* sptr = str;
-        while(sptr) {
+        while(sptr && *sptr) {
             getGlyphByChar(*sptr);
-            sptr ++;
+            ++sptr;
         }
     }
     

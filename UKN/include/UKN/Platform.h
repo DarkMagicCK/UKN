@@ -79,10 +79,12 @@
     #endif
     
     #define UKN_OS_FAMILY_APPLE
+    #define UKN_OS_FAMILY_UNIX
 
 // android
 #elif defined(__ANDROID__)
     #define UKN_OS_ANDROID
+    #define UKN_OS_FAMILY_UNIX
 
 // windows
 #elif defined(_WIN32) || defined(_MSC_VER)
@@ -110,6 +112,7 @@
 // linux
 #elif defined(linux) || defined(__linux)
     #define UKN_OS_LINUX
+    #define UKN_OS_FAMILY_UNIX
 
 // psp
 #elif defined(_PSP)

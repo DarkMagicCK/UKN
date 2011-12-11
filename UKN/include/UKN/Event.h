@@ -28,12 +28,19 @@ namespace ukn {
             
         }
         
+        bool    isConsumed() const { return mConsumed; }
+        void    comsume() { mConsumed = true; }
+        
+        void    setData(Any t) { mData = t; }
+        Any     getData() const { return mData; }
+        
         UKN_DEF_CLASS(Event);
         
     private:
         ukn_string mName;
         
         bool mConsumed;
+        Any mData;
     };
     
     /**

@@ -11,14 +11,34 @@
 
 #include "UKN/Platform.h"
 
+#include <vector>
+
 namespace ukn {
     
     UKN_API bool file_exists(const ukn_wstring& filepath);
     UKN_API bool path_exists(const ukn_wstring& path);
-    
-    UKN_API ukn_wstring get_writtable_path(const ukn_wstring& filePath);
-    
+        
     UKN_API ukn_wstring get_application_path();
+    
+    // check and get path of a font
+    // priority follows current path, resource path, system font folder, asset resource name
+    UKN_API ukn_wstring check_and_get_font_path(const ukn_wstring& name);
+    
+    class UKN_API Path {
+    public:
+        static ukn_wstring GetEnv(const ukn_string& env);
+        static ukn_wstring GetCurrent();
+        static ukn_wstring GetHome();
+        static ukn_wstring GetRoot();
+        static ukn_wstring GetTemp();
+        static ukn_wstring GetFont();
+        static ukn_wstring GetWrittable();
+        static ukn_wstring GetResource();
+        
+        static void ListRoots(std::vector<ukn_string>& arr);
+        
+        static ukn_wstring ExpandPath(const ukn_wstring& path);
+    };
             
     class UKN_API DirectoryIterator {
     public:

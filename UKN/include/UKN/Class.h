@@ -38,27 +38,24 @@ namespace ukn {
     struct RegisteredProperty;
     
 #define UKN_REGISTER_PROPERTY_TYPE(type) \
-template<> struct RegisteredProperty<type> { \
-operator ukn_string() { \
-return detail::get_registered_property_map().find(#type)->first; \
-} \
-}; \
-static struct UKN_JOIN(_register_ukn_property_impl_, type) { \
-UKN_JOIN(_register_ukn_property_impl_, type)() { \
-detail::PropertyNameIdMap::iterator it = detail::get_registered_property_map().find(#type); \
-if(it == detail::get_registered_property_map().end()) { \
-detail::get_registered_property_map().insert(std::make_pair(#type, detail::NextPropertyId()));\
-}\
-} \
-} UKN_JOIN(_register_ukn_property_impl_instance_, type); \
-struct UKN_JOIN(_ukn_is_property_registered, type) { \
-operator bool() { \
-return detail::get_registered_property_map().find(#type) != detail::get_registered_property_map().end(); \
-} \
-};
-    
-    UKN_REGISTER_PROPERTY_TYPE(int);
-    UKN_REGISTER_PROPERTY_TYPE(ukn_string);
+    template<> struct RegisteredProperty<type> { \
+        operator ukn_string() { \
+            return detail::get_registered_property_map().find(#type)->first; \
+        } \
+    }; \
+    static struct UKN_JOIN(_register_ukn_property_impl_, type) { \
+        UKN_JOIN(_register_ukn_property_impl_, type)() { \
+            detail::PropertyNameIdMap::iterator it = detail::get_registered_property_map().find(#type); \
+            if(it == detail::get_registered_property_map().end()) { \
+                detail::get_registered_property_map().insert(std::make_pair(#type, detail::NextPropertyId()));\
+            }\
+        } \
+    } UKN_JOIN(_register_ukn_property_impl_instance_, type); \
+    struct UKN_JOIN(_ukn_is_property_registered, type) { \
+        operator bool() { \
+            return detail::get_registered_property_map().find(#type) != detail::get_registered_property_map().end(); \
+        } \
+    };
     
 #define UKN_IS_PROPERTY_TYPE_REGISTERD(type) \
 UKN_JOIN(_ukn_is_property_registered, type)()
@@ -160,8 +157,7 @@ prop->getTypeName() == #type
     
     class PropertyBuilder {
     public:  
-        PropertyBuilder(PropertyBase* prop)
-        {
+        PropertyBuilder(PropertyBase* prop) {
             mProperties.push_back(prop);
         }
         
@@ -187,37 +183,41 @@ prop->getTypeName() == #type
     public:
         Class(const ukn_string& name):
         mName(name) {
-            mNameHash = crc32(name);
+            this->mNameHash = crc32(name);
         }
         
         Class(const ukn_string& name, PropertyBuilder proplist) {
             std::vector<PropertyBase*>::const_iterator it = proplist.mProperties.begin();
             while(it != proplist.mProperties.end()) {
-                mProperties.insert(std::make_pair((*it)->getName(), *it));
+                this->mProperties.insert(std::make_pair((*it)->getName(), *it));
                 
                 ++it;
             }
         }
         
         const ukn_string& name() const { 
-            return mName;
+            return this->mName;
+        }
+        
+        bool operator==(const Class& rhs) const {
+            return this->mName == rhs.mName;
         }
         
         typedef std::map<ukn_string, PropertyPtr> PropertyMap;
         const PropertyMap& getPropertyMap() const {
-            return mProperties;
+            return this->mProperties;
         }
         
         PropertyPtr operator[](const ukn_string& name) {
-            PropertyMap::iterator it = mProperties.find(name);
-            if(it != mProperties.end()) {
+            PropertyMap::iterator it = this->mProperties.find(name);
+            if(it != this->mProperties.end()) {
                 return it->second;
             }
             return PropertyPtr();
         }
         
         void addProperty(const PropertyPtr& prop) {
-            mProperties.insert(std::make_pair(prop->getName(), prop));
+            this->mProperties.insert(std::make_pair(prop->getName(), prop));
         }
         
     private:
@@ -228,18 +228,18 @@ prop->getTypeName() == #type
     };
     
 #define UKN_DEF_CLASS(class) \
-public: \
-static ukn::Class& GetClass() { \
-static ukn::Class _class_instance(#class); \
-return _class_instance; \
-}
+    public: \
+        static ukn::Class& GetClass() { \
+        static ukn::Class _class_instance(#class); \
+            return _class_instance; \
+        }
     
 #define UKN_DEF_CLASS_2(class, prop) \
-public: \
-static ukn::Class& GetClass() { \
-static ukn::Class _class_instance(#class, prop); \
-return _class_instance; \
-}
+    public: \
+        static ukn::Class& GetClass() { \
+        static ukn::Class _class_instance(#class, prop); \
+            return _class_instance; \
+        }
     
 } // namespace ukn
 

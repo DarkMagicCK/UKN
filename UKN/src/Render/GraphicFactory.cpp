@@ -67,7 +67,7 @@ namespace ukn {
             return Texture::NullObject();
         }
         
-        TexturePtr load2DTexture(const ukn_wstring& name, bool generateMipmaps=false) {
+        TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) {
             return Texture::NullObject();
         }
         

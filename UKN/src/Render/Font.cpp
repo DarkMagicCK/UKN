@@ -364,7 +364,7 @@ namespace ukn {
         return idx;
     }
     
-    void Font::draw(const wchar_t* str, float x, float y, FontAlignment alignment) {
+    void Font::draw(const ukn_wstring& str, float x, float y, FontAlignment alignment) {
         Font::StringData data;
         data.string_to_render = str;
         data.x = x;
@@ -374,7 +374,7 @@ namespace ukn {
         mRenderQueue.push_back(data);
         
         // cache chars to render
-        const wchar_t* sptr = str;
+        const wchar_t* sptr = str.c_str();
         while(sptr && *sptr) {
             getGlyphByChar(*sptr);
             ++sptr;
@@ -401,13 +401,14 @@ namespace ukn {
 		}
     }
     
-    float2 Font::getStringDimensions(const wchar_t* str, float kw, float kh) {
+    float2 Font::getStringDimensions(const ukn_wstring& str, float kw, float kh) {
         float2 dim(0.f, 0.f);
         
         float tmpw = 0.f;
-        while(str) {
-            if(*str != L'\n') {
-                tmpw += getCharWidth(*str) + kw;
+        const wchar_t* pstr = str.c_str();
+        while(pstr) {
+            if(*pstr != L'\n') {
+                tmpw += getCharWidth(*pstr) + kw;
                 if(dim[0] < tmpw) 
                     dim[0] = tmpw;
             }
@@ -416,7 +417,7 @@ namespace ukn {
                 tmpw = 0.f;
             }
             
-            str++;
+            pstr++;
         }
         return dim;
     }

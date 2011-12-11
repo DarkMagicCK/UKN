@@ -32,8 +32,8 @@
 #include "UKN/MathUtil.h"
 #include "UKN/Font.h"
 #include "UKN/Asset.h"
-
-#include "../Plugins/GL/GLPreq.h"
+#include "UKN/ConfigParser.h"
+#include "UKN/Resource.h"
 
 #include <vector>
 
@@ -47,10 +47,11 @@ public:
     void onInit() {
         mSpriteBatch = ukn::Context::Instance().getGraphicFactory().createSpriteBatch();
         
-        mTexture = ukn::Context::Instance().getGraphicFactory().load2DTexture(L"sora.png");
+        ukn::ConfigParserPtr cfg = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"asset.xml"));
+        ukn::AssetManager::Instance().unserialize(cfg);
         
-        ukn::AssetManager::Instance().add(L"liheipro", L"liheipro.uknfnt", ukn::RT_Font);
         mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
+        mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
     }
     
     void onUpdate() {
@@ -63,15 +64,18 @@ public:
         ukn::Timestamp time;
         
         mSpriteBatch->onRenderBegin();
-        mSpriteBatch->draw(mTexture, 0.f, 0.f);
+        if(mTexture)
+            mSpriteBatch->draw(mTexture, 0.f, 0.f);
         mSpriteBatch->render();
         mSpriteBatch->onRenderEnd();
         
-        mFont->onRenderBegin();
-        mFont->draw(L"Hello World!", 0, 0, ukn::FA_Left);
+        if(mFont) {
+            mFont->onRenderBegin();
+            mFont->draw(L"是的是的 Hello World!", 0, 0, ukn::FA_Left);
 
-        mFont->render();
-        mFont->onRenderEnd();
+            mFont->render();
+            mFont->onRenderEnd();
+        }
     }
     
 private:

@@ -28,7 +28,7 @@ namespace ukn {
             if(!mDocument) {
                 mDocument = new pugi::xml_document;
             }
-            bool result = mDocument->load_buffer((void*)static_cast<MemoryStream*>(dataStream.get())->get(), dataStream->getSize());
+            bool result = mDocument->load_buffer((void*)static_cast<MemoryStream*>(dataStream.get())->get(), dataStream->getSize(), pugi::encoding_wchar);
             if(result) {
                 mCurrNode = mDocument->root();
                 return result;
@@ -348,7 +348,7 @@ namespace ukn {
             return ukn_string();
         
         myWritter writter(indent);
-        mDocument->save(writter, PUGIXML_TEXT("\t"), pugi::format_indent, pugi::encoding_utf8);
+        mDocument->save(writter, PUGIXML_TEXT("\t"), pugi::format_indent, pugi::encoding_wchar);
         return writter.str;
     }
     
@@ -366,7 +366,7 @@ namespace ukn {
             return MakeSharedPtr<MemoryStream>();
         
         myStreamWritter writter(indent);
-        mDocument->save(writter, PUGIXML_TEXT("\t"), pugi::format_indent, pugi::encoding_utf8);
+        mDocument->save(writter, PUGIXML_TEXT("\t"), pugi::format_indent, pugi::encoding_wchar);
         return writter.stream;
     }
     

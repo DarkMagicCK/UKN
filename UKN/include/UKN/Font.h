@@ -59,7 +59,7 @@ namespace ukn {
         void setStyle(FontStyle style, bool flag);
         void setStyleProperty(FontStyleProperty sp, int32 prop);
         
-        void draw(const wchar_t* str, float x, float y, FontAlignment alignment);
+        void draw(const ukn_wstring& str, float x, float y, FontAlignment alignment);
         
         // inherited from Renderable
         void render();
@@ -68,7 +68,7 @@ namespace ukn {
         void onRenderEnd();
         
         float getCharWidth(wchar_t chr);
-        float2 getStringDimensions(const wchar_t* str, float kw=0, float kh=0);
+        float2 getStringDimensions(const ukn_wstring& str, float kw=0, float kh=0);
         
         const ukn_string& getName() const;
         

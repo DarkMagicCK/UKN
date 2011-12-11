@@ -18,14 +18,15 @@
 namespace ukn {
     
     enum AssetType {
+        AT_Unknown = -1,
         // Font
-        RT_Font,
+        AT_Font = 0,
         // Texture2D
-        RT_Texture2D,
+        AT_Texture2D,
         // ConfigParser
-        RT_Config,
+        AT_Config,
         // RawData
-        RT_Raw,
+        AT_Raw,
     };
     
     class AssetManager: Uncopyable {
@@ -34,7 +35,7 @@ namespace ukn {
         
         struct AssetInfo {
             AssetInfo():
-            type(RT_Raw),
+            type(AT_Unknown),
             fullPath(ukn_wstring()) { 
             
             }
@@ -62,7 +63,10 @@ namespace ukn {
         const AssetNameMap& getAssets() const;   
         
         ConfigParserPtr serialize();
-        void            unserialize(const ConfigParserPtr& config);
+        void            unserialize(ConfigParserPtr& config);
+        
+        static ukn_string AssetTypeToString(AssetType type);
+        static AssetType  StringToAssetType(const ukn_string& name);
         
     protected:
         AssetManager();

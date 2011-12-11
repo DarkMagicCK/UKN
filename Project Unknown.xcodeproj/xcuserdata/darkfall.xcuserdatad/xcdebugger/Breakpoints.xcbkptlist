@@ -23,11 +23,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "Plugins/GL/GLTexture.cpp"
-         timestampString = "345176044.660429"
+         timestampString = "345275311.523734"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "36"
-         endingLineNumber = "36"
+         startingLineNumber = "35"
+         endingLineNumber = "35"
          landmarkName = "GLTexture2D::load(const ukn_wstring&amp; name, bool mipmap)"
          landmarkType = "5">
       </FileBreakpoint>
@@ -71,20 +71,6 @@
          startingLineNumber = "2427"
          endingLineNumber = "2427"
          landmarkName = "parse_png_file()"
-         landmarkType = "7">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "UKN/main.cpp"
-         timestampString = "345267917.764119"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "71"
-         endingLineNumber = "71"
-         landmarkName = "onRender()"
          landmarkType = "7">
       </FileBreakpoint>
    </FileBreakpoints>

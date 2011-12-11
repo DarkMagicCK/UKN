@@ -18,7 +18,7 @@ namespace ukn {
         GLTexture2D();
         ~GLTexture2D();
         
-        bool load(const ukn_wstring& name, bool createMipmap);
+        bool load(const ResourcePtr& rsrc, bool createMipmap);
         bool create(uint32 w, uint32 h, uint32 mipmas, ElementFormat format, const uint8* initialData);
         
         uint32 getWidth(uint32 level = 0) const;

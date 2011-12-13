@@ -67,6 +67,32 @@ namespace ukn {
         return SharedPtr<Texture>();
     }
     
+    template<>
+    SharedPtr<ConfigParser> AssetManager::load(const ukn_wstring& name) const {
+        AssetNameMap::const_iterator it = mAssetMap.find(name);
+        if(it != mAssetMap.end() && it->second.type == AT_Config) {
+            ResourcePtr resource = ResourceLoader::Instance().loadResource(it->second.fullPath);
+            
+            if(resource) {
+                return MakeConfigParser(resource); 
+            }
+        }
+        return SharedPtr<ConfigParser>();
+    }
+    
+    template<>
+    SharedPtr<Resource> AssetManager::load(const ukn_wstring& name) const {
+        AssetNameMap::const_iterator it = mAssetMap.find(name);
+        if(it != mAssetMap.end() && it->second.type == AT_Config) {
+            ResourcePtr resource = ResourceLoader::Instance().loadResource(it->second.fullPath);
+            
+            if(resource) {
+                return resource;
+            }
+        }
+        return SharedPtr<Resource>();
+    }
+    
     ukn_string AssetManager::AssetTypeToString(AssetType type) {
         switch(type) {
             case AT_Font:       return "font"; break;

@@ -34,8 +34,10 @@
 #include "UKN/Asset.h"
 #include "UKN/ConfigParser.h"
 #include "UKN/Resource.h"
+#include "UKN/Profiler.h"
 
 #include <vector>
+
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -71,11 +73,14 @@ public:
         
         if(mFont) {
             mFont->onRenderBegin();
-            mFont->draw(L"是的是的 Hello World!", 0, 0, ukn::FA_Left);
+            mFont->draw(L"Hello World!", 0, 0, ukn::FA_Left);
 
             mFont->render();
             mFont->onRenderEnd();
         }
+        
+        ukn::ProfileData data = ukn::Profiler::Instance().get("MainFrame");
+        printf("%s\n", data.toFormattedString().c_str());
     }
     
 private:

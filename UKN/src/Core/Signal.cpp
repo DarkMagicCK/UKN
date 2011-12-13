@@ -11,51 +11,51 @@
 namespace ukn {
 
     Connection::Connection():
-        isControlling(false) {
+    isControlling(false) {
+        
+    }
 
+    Connection::~Connection() {
+        if(isControlling) {
+            disconnect();
         }
+    }
 
-        Connection::~Connection() {
-            if(isControlling) {
-                disconnect();
-            }
-        }
+    bool Connection::isValid() {
+        if(con.get())
+            return con->isValid();
+        return false;
+    }
 
-        bool Connection::isValid() {
-            if(con.get())
-                return con->isValid();
-            return false;
-        }
+    void Connection::disconnect() {
+        if(con.get())
+            con->disconnect();
+    }
 
-        void Connection::disconnect() {
-            if(con.get())
-                con->disconnect();
-        }
+    bool Connection::operator ==(const Connection &rhs) {
+        ukn_assert(con.get());
+        return con.get() == rhs.con.get();
+    }
 
-        bool Connection::operator ==(const Connection &rhs) {
-            ukn_assert(con.get());
-            return con.get() == rhs.con.get();
-        }
+    detail::ConnectionBase* Connection::get_con_base() const {
+        return con.get();
+    }
 
-        detail::ConnectionBase* Connection::get_con_base() const {
-            return con.get();
+    Connection& Connection::operator=(const Connection& rhs) {
+        if(this != &rhs) {
+            isControlling = false;
+            con = rhs.con;
         }
+        return *this;
+    }
 
-        Connection& Connection::operator=(const Connection& rhs) {
-            if(this != &rhs) {
-                isControlling = false;
-                con = rhs.con;
-            }
-            return *this;
-        }
+    void Connection::setControl(bool flag) {
+        isControlling = flag;
+    }
 
-        void Connection::setControl(bool flag) {
-            isControlling = flag;
-        }
-
-        void Connection::reset(detail::ConnectionBase* _con) {
-            con.reset(_con);
-        }
+    void Connection::reset(detail::ConnectionBase* _con) {
+        con.reset(_con);
+    }
 
     namespace detail {
 

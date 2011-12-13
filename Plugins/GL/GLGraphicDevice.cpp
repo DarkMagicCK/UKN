@@ -23,6 +23,7 @@
 #include "UKN/App.h"
 #include "UKN/SysUtil.h"
 #include "UKN/Stream.h"
+#include "UKN/Profiler.h"
 
 #include "GLFrameBuffer.h"
 #include "GLRenderView.h"
@@ -237,21 +238,26 @@ namespace ukn {
             if(fb.isActive()) {
                 counter.waitToNextFrame();
                 
-                glViewport(fb.getViewport().left,
-                           fb.getViewport().top,
-                           fb.getViewport().width,
-                           fb.getViewport().height);
+                {
+                    UKN_PROFILE("MainFrame");
+                    
+                    glViewport(fb.getViewport().left,
+                               fb.getViewport().top,
+                               fb.getViewport().width,
+                               fb.getViewport().height);
+                    
+                    setViewMatrix(fb.getViewport().camera->getViewMatrix());
+                    setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
+                    
+                    app.update();
+                    app.render();
+                    
+                    if(mWindow->pullEvents())
+                        break;
+                    
+                    fb.swapBuffers();
+                }
                 
-                setViewMatrix(fb.getViewport().camera->getViewMatrix());
-                setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
-                
-                app.update();
-                app.render();
-                
-                if(mWindow->pullEvents())
-                    break;
-                
-                fb.swapBuffers();
             }
         }
     }

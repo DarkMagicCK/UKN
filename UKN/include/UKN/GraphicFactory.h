@@ -42,7 +42,6 @@ namespace ukn {
         virtual RenderBufferPtr createRenderBuffer() = 0;
         
         // FBOs
-        // todo with more format, 3d render view with 3d textures etc
         virtual RenderViewPtr create2DRenderView(TexturePtr texture) = 0;
         virtual RenderViewPtr create2DDepthStencilView(TexturePtr texture) = 0;
         

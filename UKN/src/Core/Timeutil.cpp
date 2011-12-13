@@ -8,6 +8,7 @@
 
 #include "UKN/TimeUtil.h"
 #include "UKN/Platform.h"
+#include "UKN/Profiler.h"
 
 #if !defined(UKN_OS_WINDOWS)
 #include <time.h>
@@ -436,7 +437,8 @@ namespace ukn {
     mDesiredFps(FpsUnlimited),
     mPrevDelta(0),
     mCurrentFps(0),
-    mFrameCount(0) {
+    mFrameCount(0),
+    mDelta(0) {
         getRunningTime();
     }
     
@@ -463,11 +465,20 @@ namespace ukn {
         return mCurrentFps;
     }
     
+    uint64 FrameCounter::getDeltaTime() const {
+        return mDelta;
+    }
+    
     void FrameCounter::waitToNextFrame() {
+        mDelta = mDetalTime.elapsed();
+        Profiler::Instance().updateTimeRatio(FrameCounter::Instance().getDeltaTime());
+
         mPrevDelta = doWaitToNextFrame();
         mCurrentFps = 1.0f / mPrevDelta;
         
         ++mFrameCount;
+        
+        mDetalTime.update();
     }
     
     uint64 FrameCounter::getFrameCount() const {

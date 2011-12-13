@@ -15,6 +15,7 @@
 #include "UKN/StringUtil.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/Context.h"
+#include "UKN/Logger.h"
 
 namespace ukn {
     
@@ -116,9 +117,7 @@ namespace ukn {
         return AT_Unknown;
     }
     
-    ConfigParserPtr AssetManager::serialize() {
-        ConfigParserPtr config = MakeEmptyConfigParser(CPT_XML);
-        
+    void AssetManager::serialize(const ConfigParserPtr& config) {        
         if(config) {
             config->beginNode("assets");
             
@@ -135,11 +134,12 @@ namespace ukn {
             }
             
             config->endNode();
+        } else {
+            log_error("ukn::AssetManager::serialize: unable to serialize asset manager, invalid config ptr");
         }
-        return config;
     }
     
-    void AssetManager::unserialize(ConfigParserPtr& config) {
+    void AssetManager::unserialize(const ConfigParserPtr& config) {
         if(config && config->toNode("/assets")) {
             if(config->toFirstChild()) {
                 do {
@@ -157,6 +157,8 @@ namespace ukn {
                     }
                 } while( config->toNextChild() );
             }
+        } else {
+            log_error("ukn::AssetManager::unserialize: unable to unserialize asset manager, invalid config state");
         }
     }
     

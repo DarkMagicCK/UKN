@@ -10,6 +10,7 @@
 #define Project_Unknown_FSM_h
 
 #include "UKN/Platform.h"
+#include "UKN/Function.h"
 
 namespace ukn {
     
@@ -180,6 +181,17 @@ namespace ukn {
         FSMState(): 
         mInitiated(false), 
         mManager(NULL) {
+       
+        }
+        
+        virtual ~FSMState() {
+            
+        }
+        
+        void destroy() {
+            this->onDestroy();
+            
+            delete this;
         }
         
         virtual void onInitiate() {}
@@ -188,10 +200,7 @@ namespace ukn {
         virtual void onEnter() {}
         virtual void onLeave() {}
         
-        virtual void onDestroy() {
-            this->mManager = 0;
-            delete this;
-        }
+        virtual void onDestroy() {}
         
         FSMManager* getManager() const {
             return this->mManager;
@@ -200,6 +209,82 @@ namespace ukn {
     private:
         bool mInitiated;
         FSMManager* mManager;
+    };
+    
+    void fsm_do_nothing(FSMState&) {
+            
+    }
+        
+    static Function<void(FSMState&)> fsm_do_nothing_func = fsm_do_nothing;
+    
+    class FunctionFSMState: public FSMState {
+    public:
+        friend class FSMManager;
+        
+        typedef Function<void(FSMState&)> InitiateFunc;
+        typedef Function<void(FSMState&)> UpdateFunc;
+        typedef Function<void(FSMState&)> EnterFunc;
+        typedef Function<void(FSMState&)> LeaveFunc;
+        typedef Function<void(FSMState&)> DestroyFunc;
+        
+    public:
+        FunctionFSMState():
+        mOnInit(fsm_do_nothing_func),
+        mOnUpdate(fsm_do_nothing_func),
+        mOnEnter(fsm_do_nothing_func),
+        mOnLeave(fsm_do_nothing_func),
+        mOnDestroy(fsm_do_nothing_func) {
+        
+        }
+        
+        FunctionFSMState(const InitiateFunc& init = fsm_do_nothing_func,
+                         const UpdateFunc& update = fsm_do_nothing_func,
+                         const EnterFunc& enter = fsm_do_nothing_func,
+                         const LeaveFunc& leave = fsm_do_nothing_func,
+                         const DestroyFunc& destroy = fsm_do_nothing_func):
+        mOnInit(init),
+        mOnUpdate(update),
+        mOnEnter(enter),
+        mOnLeave(leave),
+        mOnDestroy(destroy) {
+            
+        }
+        
+        virtual ~FunctionFSMState() {
+            
+        }
+        
+        virtual void onInitiate() {
+            if(mOnInit != fsm_do_nothing_func)
+                mOnInit(*this);
+        }
+        
+        virtual void onUpdate() {
+            if(mOnUpdate != fsm_do_nothing_func)
+                mOnUpdate(*this);
+        }
+        
+        virtual void onEnter() {
+            if(mOnEnter != fsm_do_nothing_func)
+                mOnEnter(*this);
+        }
+        
+        virtual void onLeave() {
+            if(mOnLeave != fsm_do_nothing_func)
+                mOnLeave(*this);
+        }
+        
+        virtual void onDestroy() {
+            if(mOnDestroy != fsm_do_nothing_func)
+                mOnDestroy(*this);
+        }
+        
+    private:
+        InitiateFunc    mOnInit;
+        UpdateFunc      mOnUpdate;
+        EnterFunc       mOnEnter;
+        LeaveFunc       mOnLeave;
+        DestroyFunc     mOnDestroy;
     };
     
     class FSMManager {
@@ -215,7 +300,7 @@ namespace ukn {
         ~FSMManager() {
             FSMStateMap::iterator itState = this->mStates.begin();
             while(itState != mStates.end()) {
-                itState->second->onDestroy();
+                itState->second->destroy();
                 itState->second->mManager = 0;
                 ++itState;
             }
@@ -231,7 +316,7 @@ namespace ukn {
         void delState(const ukn_string& name) {
             FSMStateMap::iterator itState = this->mStates.find(name);
             if(itState != this->mStates.end()) {
-                itState->second->onDestroy();
+                itState->second->destroy();
                 itState->second->mManager = NULL;
                 this->mStates.erase(itState);
             }

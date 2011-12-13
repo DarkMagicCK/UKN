@@ -219,6 +219,8 @@
     #define snprintf _snprintf
 #endif
 
+// #define UKN_ENABLE_MULTI_THREAD
+
 #include "Type.h"
 
 #endif // Project_Unknown_Platform_h

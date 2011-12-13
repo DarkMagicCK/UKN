@@ -53,6 +53,7 @@ namespace ukn {
          * should be .uknfnt
          **/
         bool loadFromResource(const ResourcePtr& resource);
+        
         /**
          * set font style 
          **/
@@ -70,12 +71,14 @@ namespace ukn {
         float getCharWidth(wchar_t chr);
         float2 getStringDimensions(const ukn_wstring& str, float kw=0, float kh=0);
         
-        const ukn_string& getName() const;
+        const ukn_wstring& getName() const;
         
         Rectangle getBound() const;
         RenderBufferPtr getRenderBuffer() const;
         
         bool isValid() const;
+        
+        void serialize(const ConfigParserPtr& cfg);
         
     private:
         friend class AssetManager;
@@ -83,6 +86,7 @@ namespace ukn {
         uint32 getGlyphByChar(wchar_t chr);
         
         uint32 mFontSize;
+        ukn_wstring mFontName;
         
         bool mIsBold;
         bool mIsItalic;

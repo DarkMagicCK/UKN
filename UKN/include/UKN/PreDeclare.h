@@ -111,6 +111,12 @@ namespace ukn {
     class Component;
     typedef SharedPtr<Component> ComponentPtr;
     
+    class Task;
+    typedef SharedPtr<Task> TaskPtr;
+    
+    class FSMState;
+    typedef SharedPtr<FSMState> FSMStatePtr;
+    
 } // namespace ukn
 
 

@@ -20,7 +20,7 @@ namespace ukn {
         Renderable();
         virtual ~Renderable();
         
-        virtual const ukn_string& getName() const = 0;
+        virtual const ukn_wstring& getName() const = 0;
         
         virtual Rectangle getBound() const = 0;
         virtual RenderBufferPtr getRenderBuffer() const = 0;

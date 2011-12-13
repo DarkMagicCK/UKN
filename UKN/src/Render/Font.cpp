@@ -278,10 +278,29 @@ namespace ukn {
             mStrokeWidth = config->getInt("stroke_width", 0);
             
             mFontSize = config->getInt("size", 14);
+            mFontName = string_to_wstring(font_name);
             
             return true;
         }
         return false;
+    }
+    
+    void Font::serialize(const ConfigParserPtr& cfg) {
+        if(cfg && !mGlyphs.empty()) {
+            cfg->beginNode("font");
+            cfg->setString("name", wstring_to_string(mFontName));
+            cfg->setBool("bold", mIsBold);
+            cfg->setBool("italic", mIsItalic);
+            cfg->setBool("shadow", mEnableShadow);
+            cfg->setBool("stroke", mEnableStroke);
+            cfg->setInt("shadow_offset_x", mShadowXOffset);
+            cfg->setInt("shadow_offset_y", mShadowYOffset);
+            cfg->setInt("stroke_width", mStrokeWidth);
+            cfg->setInt("size", mFontSize);
+            cfg->endNode();
+        } else {
+            log_error(L"ukn::Font::serialize: unable to serialize font "+mFontName);
+        }
     }
     
     void Font::setStyle(ukn::FontStyle style, bool flag) {
@@ -299,7 +318,6 @@ namespace ukn {
             case FSP_Shadow_XOffset: mShadowXOffset = prop; break;
             case FSP_Shadow_YOffset: mShadowYOffset = prop; break;
         }
-        
     }
     
     bool Font::isValid() const {
@@ -381,9 +399,8 @@ namespace ukn {
         }
     }
     
-    const ukn_string& Font::getName() const {
-        static ukn_string name("freetype_font");
-        return name;
+    const ukn_wstring& Font::getName() const {
+        return mFontName;
     }
     
     float Font::getCharWidth(wchar_t chr) {

@@ -62,8 +62,8 @@ namespace ukn {
         
         const AssetNameMap& getAssets() const;   
         
-        ConfigParserPtr serialize();
-        void            unserialize(ConfigParserPtr& config);
+        void    serialize(const ConfigParserPtr& config);
+        void    unserialize(const ConfigParserPtr& config);
         
         static ukn_string AssetTypeToString(AssetType type);
         static AssetType  StringToAssetType(const ukn_string& name);

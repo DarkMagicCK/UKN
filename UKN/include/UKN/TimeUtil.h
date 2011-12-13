@@ -201,6 +201,7 @@ namespace ukn {
         void waitToNextFrame();
         uint64 getFrameCount() const; 
         uint64 getRunningTime() const;
+        uint64 getDeltaTime() const;
         
     protected:    
         void setDelta(float delta);
@@ -216,6 +217,9 @@ namespace ukn {
         float mPrevDelta;
         float mCurrentFps;
         uint64 mFrameCount;
+        
+        uint64 mDelta;
+        Timestamp mDetalTime;
     };
     
     inline void msleep(uint32 msec);

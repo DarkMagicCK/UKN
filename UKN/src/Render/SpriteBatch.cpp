@@ -157,8 +157,8 @@ namespace ukn {
         
     }
     
-    const ukn_string& SpriteBatch::getName() const {
-        static ukn_string name("SpriteBatch");
+    const ukn_wstring& SpriteBatch::getName() const {
+        static ukn_wstring name(L"SpriteBatch");
         return name;
     }
     

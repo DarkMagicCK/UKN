@@ -12,6 +12,8 @@
 #include "UKN/Platform.h"
 
 #include <vector>
+#include <string>
+#include <sstream>
 
 namespace ukn {
     
@@ -63,6 +65,12 @@ namespace ukn {
     UKN_API ukn_string get_file_name(const ukn_string& str);
     UKN_API ukn_wstring get_file_name(const ukn_wstring& str);
     
+    template<typename T>
+    ukn_string any_to_string(const T& val) {
+        std::ostringstream sstr;
+        sstr << val;
+        return sstr.str();
+    }
     
 } // namespace ukn
 

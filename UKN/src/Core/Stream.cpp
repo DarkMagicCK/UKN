@@ -11,6 +11,23 @@
 #include "UKN/StringUtil.h"
 
 namespace ukn {
+    
+    template<>
+    Stream& Stream::operator<< <ukn_string>(const ukn_string& val) {
+        write((const uint8*)val.c_str(), val.size());
+        return *this;
+    }
+    
+    template<>
+    Stream& Stream::operator>> <ukn_string>(ukn_string& val) {
+        char buffer;
+        *this >> buffer;
+        while(buffer != 0) {
+            val += buffer;
+            *this >> buffer;
+        }
+        return *this;
+    }
  
     MemoryStream::MemoryStream():  
     mCurrPos(0) {

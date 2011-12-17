@@ -15,6 +15,8 @@
 		88260E681488583300142365 /* SysUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E671488583200142365 /* SysUtil.cpp */; };
 		882D3CB414974BB500963AAD /* Task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 882D3CB314974BB500963AAD /* Task.cpp */; };
 		882D3CB71497C85000963AAD /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 882D3CB61497C85000963AAD /* Thread.cpp */; };
+		882D3CBA1498BA1D00963AAD /* Serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 882D3CB91498BA1D00963AAD /* Serializer.cpp */; };
+		88322E261499E5A60007C936 /* Trigger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88322E251499E5A60007C936 /* Trigger.cpp */; };
 		8832D1461488C9F700D08C15 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1451488C9F700D08C15 /* GLTexture.cpp */; };
 		8832D14A1488CFDC00D08C15 /* GLFrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */; };
 		8832D1531489A47E00D08C15 /* GLRenderView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1521489A47E00D08C15 /* GLRenderView.cpp */; };
@@ -105,16 +107,19 @@
 		88260E641488541E00142365 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		88260E661488570100142365 /* SysUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SysUtil.h; sourceTree = "<group>"; };
 		88260E671488583200142365 /* SysUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SysUtil.cpp; sourceTree = "<group>"; };
+		88278EDC149B7DB700C7ED8A /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		882D3CB11497369700963AAD /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		882D3CB314974BB500963AAD /* Task.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Task.cpp; sourceTree = "<group>"; };
 		882D3CB51497C83800963AAD /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
 		882D3CB61497C85000963AAD /* Thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
+		882D3CB81498A74500963AAD /* Serializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Serializer.h; sourceTree = "<group>"; };
+		882D3CB91498BA1D00963AAD /* Serializer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Serializer.cpp; sourceTree = "<group>"; };
+		88322E251499E5A60007C936 /* Trigger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Trigger.cpp; sourceTree = "<group>"; };
 		8832D1431488C87C00D08C15 /* GLConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLConvert.h; sourceTree = "<group>"; };
 		8832D1441488C9F200D08C15 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
 		8832D1451488C9F700D08C15 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
 		8832D1481488CFD400D08C15 /* GLFrameBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFrameBuffer.h; sourceTree = "<group>"; };
 		8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLFrameBuffer.cpp; sourceTree = "<group>"; };
-		8832D14B1488F89100D08C15 /* Property.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Property.h; sourceTree = "<group>"; };
 		8832D1501489A47800D08C15 /* GLRenderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderView.h; sourceTree = "<group>"; };
 		8832D1521489A47E00D08C15 /* GLRenderView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderView.cpp; sourceTree = "<group>"; };
 		8832D1541489B53100D08C15 /* GLPreq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLPreq.h; sourceTree = "<group>"; };
@@ -399,6 +404,7 @@
 		88038F44149776E500C8ACE0 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				88322E251499E5A60007C936 /* Trigger.cpp */,
 			);
 			name = Game;
 			path = UKN/src/Game;
@@ -590,6 +596,7 @@
 				88871FE7148CB2E60026B2B8 /* Asset.h */,
 				88871FE8148CB9DB0026B2B8 /* TypeInfo.h */,
 				88871FF0148CC6130026B2B8 /* Class.h */,
+				882D3CB81498A74500963AAD /* Serializer.h */,
 				88871FE9148CBB670026B2B8 /* Hashing.h */,
 				88AAC11A14868751007A80A4 /* Exception.h */,
 				88AAC11B14868751007A80A4 /* Factory.h */,
@@ -635,7 +642,6 @@
 				88AAC14214868751007A80A4 /* Viewport.h */,
 				88AAC14314868751007A80A4 /* Window.h */,
 				88260E661488570100142365 /* SysUtil.h */,
-				8832D14B1488F89100D08C15 /* Property.h */,
 				884CE3F2148F32F000F58E2E /* SpriteBatch.h */,
 				88C3091114936612001262DF /* Transform.h */,
 				88C3091314936617001262DF /* Sensor.h */,
@@ -650,6 +656,7 @@
 				88221BCA1497217C00325DC9 /* Profiler.h */,
 				882D3CB11497369700963AAD /* Task.h */,
 				882D3CB51497C83800963AAD /* Thread.h */,
+				88278EDC149B7DB700C7ED8A /* Singleton.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -733,6 +740,7 @@
 				88221BCC1497225400325DC9 /* Profiler.cpp */,
 				882D3CB314974BB500963AAD /* Task.cpp */,
 				882D3CB61497C85000963AAD /* Thread.cpp */,
+				882D3CB91498BA1D00963AAD /* Serializer.cpp */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1008,6 +1016,8 @@
 				88221BCD1497225400325DC9 /* Profiler.cpp in Sources */,
 				882D3CB414974BB500963AAD /* Task.cpp in Sources */,
 				882D3CB71497C85000963AAD /* Thread.cpp in Sources */,
+				882D3CBA1498BA1D00963AAD /* Serializer.cpp in Sources */,
+				88322E261499E5A60007C936 /* Trigger.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

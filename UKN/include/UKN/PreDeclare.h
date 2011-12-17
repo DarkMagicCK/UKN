@@ -117,6 +117,21 @@ namespace ukn {
     class FSMState;
     typedef SharedPtr<FSMState> FSMStatePtr;
     
+    class Condition;
+    typedef SharedPtr<Condition> ConditionPtr;
+    
+    class Operator;
+    typedef SharedPtr<Operator> OperatorPtr;
+    
+    class Event;
+    typedef SharedPtr<Event> EventPtr;
+    
+    class Action;
+    typedef SharedPtr<Action> ActionPtr;
+    
+    class Trigger;
+    typedef SharedPtr<Trigger> TriggerPtr;
+    
 } // namespace ukn
 
 

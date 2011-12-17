@@ -14,6 +14,7 @@
 #include "UKN/Hashing.h"
 #include "UKN/Ptr.h"
 #include "UKN/Preprocessor.h"
+#include "UKN/Serializer.h"
 
 #include <map>
 #include <vector>
@@ -127,10 +128,11 @@ prop->getTypeName() == #type
         }
         
         void fromString(const ukn_string& str) {
+            mValue = SerializeHelper::FromString<T>(str);
         }
         
-        ukn_string  toString() const { 
-            return ukn_string();
+        ukn_string toString() const { 
+            return SerializeHelper::ToString<T>(mValue);
         }
         
         template<typename Y>

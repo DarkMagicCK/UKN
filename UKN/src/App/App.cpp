@@ -19,6 +19,7 @@
 #include "UKN/Common.h"
 #include "UKN/SysUtil.h"
 #include "UKN/Camera.h"
+#include "UKN/Stream.h"
 
 #include "UKN/UKN.h"
 

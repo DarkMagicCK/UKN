@@ -38,14 +38,18 @@ namespace ukn {
         virtual void render();
         
         void draw(const TexturePtr& texture, float x, float y, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, Rectangle dstRect, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, float rot, const Color& color=ColorWhite);
+        void draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color=ColorWhite);
+        void draw(const TexturePtr& texture, float x, float y, const Rectangle& src, const Color& color=ColorWhite);
+        
+        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color=ColorWhite);
+        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, const Color& color=ColorWhite);
         void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color=ColorWhite);
         
         void draw(const TexturePtr& texture, float x, float y, float layerDepth, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, Rectangle dstRect, float layerDepth, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, float rot, float layerDepth, const Color& color=ColorWhite);
+        void draw(const TexturePtr& texture, float x, float y, const Rectangle& src, float layerDetph, const Color& color=ColorWhite);
+
+        void draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color=ColorWhite);
+        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, float layerDepth, const Color& color=ColorWhite);
         void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, float layerDepth, const Color& color=ColorWhite);
         
         Matrix4& getTransformMatrix();

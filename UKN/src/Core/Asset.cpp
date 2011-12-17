@@ -117,7 +117,7 @@ namespace ukn {
         return AT_Unknown;
     }
     
-    void AssetManager::serialize(const ConfigParserPtr& config) {        
+    bool AssetManager::serialize(const ConfigParserPtr& config) {        
         if(config) {
             config->beginNode("assets");
             
@@ -134,12 +134,15 @@ namespace ukn {
             }
             
             config->endNode();
+            
+            return true;
         } else {
             log_error("ukn::AssetManager::serialize: unable to serialize asset manager, invalid config ptr");
         }
+        return false;
     }
     
-    void AssetManager::unserialize(const ConfigParserPtr& config) {
+    bool AssetManager::unserialize(const ConfigParserPtr& config) {
         if(config && config->toNode("/assets")) {
             if(config->toFirstChild()) {
                 do {
@@ -156,10 +159,13 @@ namespace ukn {
                         }
                     }
                 } while( config->toNextChild() );
+                
+                return true;
             }
         } else {
             log_error("ukn::AssetManager::unserialize: unable to unserialize asset manager, invalid config state");
         }
+        return false;
     }
     
 } // namespace ukn

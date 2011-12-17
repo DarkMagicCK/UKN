@@ -13,6 +13,7 @@
 #include "UKN/Uncopyable.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/Renderable.h"
+#include "UKN/Serializer.h"
 
 #include <vector>
 
@@ -31,8 +32,6 @@ namespace ukn {
     };
     
     enum FontStyle {
-        FS_Bold,
-        FS_Italic,
         FS_Shadow,
         FS_Stroke,
     };
@@ -43,7 +42,7 @@ namespace ukn {
         FSP_Stroke_Width,
     };
     
-    class Font: Uncopyable, public Renderable {
+    class Font: Uncopyable, public Renderable, public ConfigSerializable {
     public:
         Font();
         ~Font();
@@ -78,7 +77,8 @@ namespace ukn {
         
         bool isValid() const;
         
-        void serialize(const ConfigParserPtr& cfg);
+        bool unserialize(const ConfigParserPtr& cfg);
+        bool serialize(const ConfigParserPtr& cfg);
         
     private:
         friend class AssetManager;
@@ -88,8 +88,6 @@ namespace ukn {
         uint32 mFontSize;
         ukn_wstring mFontName;
         
-        bool mIsBold;
-        bool mIsItalic;
         bool mEnableStroke;
         bool mEnableShadow;
         

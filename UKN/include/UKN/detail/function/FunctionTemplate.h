@@ -150,13 +150,13 @@ namespace ukn {
                 this->assign_to(f, tag());
             }
 
-            inline R operator()(UKN_FUNCTION_PARAMS) {
+            inline R operator()(UKN_FUNCTION_PARAMS) const {
                 assert(mInvoker);
 
                 return mInvoker(mPtr UKN_FUNCTION_COMMA UKN_FUNCTION_ARGS);
             }
 
-            operator bool() {
+            operator bool() const {
                 return mInvoker != NULL;
             }
 
@@ -253,13 +253,13 @@ namespace ukn {
                 this->assign_to(f, tag());
             }
 
-            inline void operator()(UKN_FUNCTION_PARAMS) {
+            inline void operator()(UKN_FUNCTION_PARAMS) const {
                 assert(mInvoker);
 
                 mInvoker(mPtr UKN_FUNCTION_COMMA UKN_FUNCTION_ARGS);
             }
 
-            operator bool() {
+            operator bool() const {
                 return mInvoker != NULL;
             }
 

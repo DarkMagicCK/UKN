@@ -52,7 +52,7 @@ namespace ukn {
             *this = col;
         }
         
-        void Set(float _r, float _g, float _b, float _a) { 
+        void set(float _r, float _g, float _b, float _a) { 
             this->r = _r; 
             this->g = _g; 
             this->b = _b; 
@@ -173,7 +173,7 @@ namespace ukn {
             return toHWColor();
         }
         
-        Color normalize() {
+        Color& normalize() {
             this->r = clamp(0.f, 1.f, r);
             this->g = clamp(0.f, 1.f, g);
             this->b = clamp(0.f, 1.f, b);

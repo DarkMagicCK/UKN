@@ -14,13 +14,19 @@
 
 #ifndef UKN_OS_WINDOWS
 #include <pthread.h>
+#include <signal.h>
+#include <sched.h>
+#include <unistd.h>
 #else
 #include <Window.h>
 #endif // UKN_OS_WINDOWS
 
 #include "UKN/Exception.h"
+#include "UKN/Function.h"
 
+#include <vector>
 #include <deque>
+#include <queue>
 
 namespace ukn {
     
@@ -28,68 +34,48 @@ namespace ukn {
         
         class Mutex {
         public:
-            Mutex() {
-#ifdef UKN_OS_WINDOWS
-                InitializeCriticalSectionAndSpinCount(&cs, 4000);
-#else
-                pthread_mutex_init(&mutex, NULL);
-#endif
-            }
+            Mutex();
+            ~Mutex();
             
-            ~Mutex() {
-#ifdef UKN_OS_WINDOWS
-                DeleteCriticalSection(&cs);
-#else
-                pthread_mutex_destroy(&mutex);
-#endif
-            }
+            void lock();
+            bool tryLock();
             
-            void lock() {
-#ifdef UKN_OS_WINDOWS
-                try {
-                    EnterCriticalSection(&cs);
-                } catch(...) {
-                    UKN_THROW_EXCEPTION("ukn::Thread::Mutex: Cannot lock mutex");
-                }
-#else
-                if(pthread_mutex_lock(&mutex))
-                    UKN_THROW_EXCEPTION("ukn::Thread::Mutex: Cannot lock mutex");
-#endif
-            }
-            
-            void unlock() {
-#ifdef UKN_OS_WINDOWS
-                try {
-                    LeaveCriticalSection(&cs);
-                } catch(...) {
-                    UKN_THROW_EXCEPTION("ukn::Thread::Mutex: Cannot unlock mutex");
-                }
-#else
-                if(pthread_mutex_unlock(&mutex))
-                    UKN_THROW_EXCEPTION("ukn::Thread::Mutex: Cannot unlock mutex");
-#endif
-            }
-            
-            void* getSysMutex() {
-#ifdef UKN_OS_WINDOWS
-                return &cs;
-#else
-                return &mutex;
-#endif
-            }
+            void unlock();
+            void* getSysMutex();
             
         private:
 #ifdef UKN_OS_WINDOWS
             CRITICAL_SECTION cs;
-#else
+            bool mLocked;
+#elif defined(UKN_OS_FAMILY_UNIX)
             pthread_mutex_t mutex;
 #endif
-            
         };
         
+        class RecursiveMutex {
+        public:
+            RecursiveMutex();
+            ~RecursiveMutex();
+            
+            void lock();
+            bool try_lock();
+            void unlock();
+            
+        private:
+#ifdef UKN_OS_WINDOWS
+            CRITICAL_SECTION cs;
+#elif defined(UKN_OS_FAMILY_UNIX)
+            pthread_mutex_t mutex;
+#endif
+            friend class Condition;
+        };
+        
+        template<typename T>
         class MutexGuard: Uncopyable {
         public:
-            explicit MutexGuard(Mutex& mutex): _mutex(mutex) {
+            typedef T mutex_type;
+            
+            explicit MutexGuard(mutex_type& mutex): _mutex(mutex) {
                 _mutex.lock();
             }
             
@@ -98,188 +84,18 @@ namespace ukn {
             }
             
         private:
-            Mutex& _mutex;
+            mutex_type& _mutex;
         };
-        
-#ifdef UKN_OS_WINDOWS
-        typedef struct {
-            int waiters_count_;
-            // Number of waiting threads.
-            
-            CRITICAL_SECTION waiters_count_lock_;
-            // Serialize access to <waiters_count_>.
-            
-            HANDLE sema_;
-            // Semaphore used to queue up threads waiting for the condition to
-            // become signaled. 
-            
-            HANDLE waiters_done_;
-            // An auto-reset event used by the broadcast/signal thread to wait
-            // for all the waiting thread(s) to wake up and be released from the
-            // semaphore. 
-            
-            size_t was_broadcast_;
-            // Keeps track of whether we were broadcasting or signaling.  This
-            // allows us to optimize the code if we're just signaling.
-        } pthread_cond_t;
-        
-        typedef HANDLE pthread_mutex_t;
-        
-        static int 
-        _win32_pthread_cond_init (pthread_cond_t *cv,
-                                  const void *) {
-            cv->waiters_count_ = 0;
-            cv->was_broadcast_ = 0;
-            cv->sema_ = CreateSemaphoreA (NULL,       // no security
-                                          0,          // initially 0
-                                          0x7fffffff, // max count
-                                          NULL);      // unnamed 
-            InitializeCriticalSection (&cv->waiters_count_lock_);
-            cv->waiters_done_ = CreateEventA (NULL,  // no security
-                                              FALSE, // auto-reset
-                                              FALSE, // non-signaled initially
-                                              NULL); // unnamed
-            return 0;
-        }
-        
-        static void _win32_pthread_cont_destroy(pthread_cont_t *cv) {
-            CloseHandle(cv->waiters_done_);
-            DeleteCriticalSectionA(cv->waiters_count_lock_);
-        }
-        
-        static int
-        _win32_pthread_cond_wait (pthread_cond_t *cv, 
-                                  pthread_mutex_t *external_mutex) {
-            // Avoid race conditions.
-            EnterCriticalSection (&cv->waiters_count_lock_);
-            cv->waiters_count_++;
-            LeaveCriticalSection (&cv->waiters_count_lock_);
-            
-            // This call atomically releases the mutex and waits on the
-            // semaphore until <pthread_cond_signal> or <pthread_cond_broadcast>
-            // are called by another thread.
-            SignalObjectAndWait (*external_mutex, cv->sema_, INFINITE, FALSE);
-            
-            // Reacquire lock to avoid race conditions.
-            EnterCriticalSection (&cv->waiters_count_lock_);
-            
-            // We're no longer waiting...
-            cv->waiters_count_--;
-            
-            // Check to see if we're the last waiter after <pthread_cond_broadcast>.
-            int last_waiter = cv->was_broadcast_ && cv->waiters_count_ == 0;
-            
-            LeaveCriticalSection (&cv->waiters_count_lock_);
-            
-            // If we're the last waiter thread during this particular broadcast
-            // then let all the other threads proceed.
-            if (last_waiter)
-                // This call atomically signals the <waiters_done_> event and waits until
-                // it can acquire the <external_mutex>.  This is required to ensure fairness. 
-                SignalObjectAndWait (cv->waiters_done_, *external_mutex, INFINITE, FALSE);
-            else
-                // Always regain the external mutex since that's the guarantee we
-                // give to our callers. 
-                WaitForSingleObject (*external_mutex, INFINITE);
-            return 0;
-        }
-        
-        static int
-        _win32_pthread_cond_signal (pthread_cond_t *cv) {
-            EnterCriticalSection (&cv->waiters_count_lock_);
-            int have_waiters = cv->waiters_count_ > 0;
-            LeaveCriticalSection (&cv->waiters_count_lock_);
-            
-            // If there aren't any waiters, then this is a no-op.  
-            if (have_waiters)
-                ReleaseSemaphore (cv->sema_, 1, 0);
-            return 0;
-        }
-        
-        static int
-        _win32_pthread_cond_broadcast (pthread_cond_t *cv) {
-            // This is needed to ensure that <waiters_count_> and <was_broadcast_> are
-            // consistent relative to each other.
-            EnterCriticalSection (&cv->waiters_count_lock_);
-            int have_waiters = 0;
-            
-            if (cv->waiters_count_ > 0) {
-                // We are broadcasting, even if there is just one waiter...
-                // Record that we are broadcasting, which helps optimize
-                // <pthread_cond_wait> for the non-broadcast case.
-                cv->was_broadcast_ = 1;
-                have_waiters = 1;
-            }
-            
-            if (have_waiters) {
-                // Wake up all the waiters atomically.
-                ReleaseSemaphore (cv->sema_, cv->waiters_count_, 0);
-                
-                LeaveCriticalSection (&cv->waiters_count_lock_);
-                
-                // Wait for all the awakened threads to acquire the counting
-                // semaphore. 
-                WaitForSingleObject (cv->waiters_done_, INFINITE);
-                // This assignment is okay, even without the <waiters_count_lock_> held 
-                // because no other waiter threads can wake up to access it.
-                cv->was_broadcast_ = 0;
-            }
-            else
-                LeaveCriticalSection (&cv->waiters_count_lock_);
-            return 0;
-        }
-#endif // UKN_OS_WINDOWS
         
         class Condition: Uncopyable {
         public:
-            explicit Condition(Mutex& mutex):
-            _mutex(mutex) {
-#ifdef UKN_OS_WINDOWS
-                _win32_pthread_cond_init(&cond, NULL);
-#else
-                pthread_cond_init(&cond, NULL);
-#endif
-            }
+            explicit Condition(Mutex& mutex);
             
-            ~Condition() {
-#if UKN_OS_WINDOWS
-                _win32_pthread_cond_destroy(&cond);
-#else
-                pthread_cond_destroy(&cond);
-#endif
-            }
+            ~Condition();
             
-            void wait() {
-#ifndef UKN_OS_WINDOWS
-                if(pthread_cond_wait(&cond,
-                                     static_cast<pthread_mutex_t*>(_mutex.getSysMutex())))
-                    UKN_THROW_EXCEPTION("ukn::Thread::Condition: error wait");
-#else
-                if(_win32_pthread_cond_wait(&cond,
-                                            static_cast<pthread_mutex_t*>(_mutex.getSysMutex())))
-                    UKN_THROW_EXCEPTION("ukn::Thread::Condition: error wait");
-#endif
-            }
-            
-            void notify() {
-#ifndef UKN_OS_WINDOWS
-                if(pthread_cond_signal(&cond))
-                    UKN_THROW_EXCEPTION("ukn::Thread::Condition: error notify");
-#else
-                if(_win32_pthread_cond_signal(&cond))
-                    UKN_THROW_EXCEPTION("ukn::Thread::Condition: error notify");
-#endif
-            }
-            
-            void notifyAll() {
-#ifndef UKN_OS_WINDOWS
-                if(pthread_cond_broadcast(&cond))
-                    UKN_THROW_EXCEPTION("ukn::Thread::Condition: error broadcast");
-#else
-                if(_win32_pthread_cond_broadcast(&cond))
-                    UKN_THROW_EXCEPTION("ukn::Thread::Condition: error broadcast");
-#endif
-            }
+            void wait();
+            void notify();
+            void notifyAll();
             
         private:
             pthread_cond_t cond;
@@ -289,85 +105,140 @@ namespace ukn {
         };
         
         
+        class Thread;
+        
+        class ThreadId {
+        public:
+            ThreadId(): mId(0) { }
+            
+            ThreadId(uint32 aid): mId(aid) { }
+            
+            ThreadId(const ThreadId& rhs): mId(rhs.mId) { }
+            
+            inline ThreadId& operator=(const ThreadId& rhs) {
+                if(this != &rhs) {
+                    mId  = rhs.mId;
+                }
+                return *this;
+            }
+            
+            inline friend bool operator==(const ThreadId& id1, const ThreadId& id2) {
+                return id1.mId == id2.mId;
+            }
+            
+            inline friend bool operator!=(const ThreadId& id1, const ThreadId& id2) {
+                return id1.mId != id2.mId;
+            }
+            
+            inline friend bool operator<=(const ThreadId& id1, const ThreadId& id2) {
+                return id1.mId <= id2.mId;
+            }
+            
+            inline friend bool operator>=(const ThreadId& id1, const ThreadId& id2) {
+                return id1.mId >= id2.mId;
+            }
+            
+            inline friend bool operator<(const ThreadId& id1, const ThreadId& id2) {
+                return id1.mId < id2.mId;
+            }
+            
+            inline friend bool operator>(const ThreadId& id1, const ThreadId& id2) {
+                return id1.mId > id2.mId;
+            }
+            
+            inline friend std::ostream& operator<<(std::ostream& os, const ThreadId& aid) {
+                os << aid.mId;
+                return os;
+            }
+            
+        private:
+            uint32 mId;
+        };
+        
+        class ThreadTask {
+        public:
+            typedef Function<void(void*)> ThreadFunc;
+            
+            ThreadTask();
+            ThreadTask(const ThreadFunc& func);
+            ThreadTask(const ThreadFunc& func, void* arg);
+            
+            void    setArg(void* arg);
+            void*   getArg() const;
+            
+            void operator()() const;
+            
+            bool isValid() const;
+            
+            
+        private:
+            void* mArg;
+            ThreadFunc mFunc;
+        };
+        
+        class Thread {
+        public:
+#ifdef UKN_OS_WINDOWS
+            typedef Handle native_handle_type;
+#elif defined(UKN_OS_FAMILY_UNIX)
+            typedef pthread_t native_handle_type;
+#endif
+            
+        public:
+            Thread();
+            ~Thread();
+            
+            bool start(const ThreadTask& task);
+            
+            bool isActive() const;
+            
+            void exit();
+            void join();
+            
+            bool joinable();
+            
+            ThreadId getId() const;
+            
+            native_handle_type getNativeHandle() {
+                return mHandle;
+            }
+            
+            static uint32 HardwareConcurrency();
+            static ThreadId GetCurrentThreadId();
+            
+        private:
+            ThreadTask mTask;
+            bool mIsActive;
+            Mutex mDataMutex;
+            
+            ThreadId mId;
+            
+#ifdef UKN_OS_WINDOWS
+            uint32 mWin32ThreadId;
+            HANDLE mHandle;
+            
+            static DWORD WINAPI WrapperFunc(LPVOID param);
+#elif defined(UKN_OS_FAMILY_UNIX)
+            static void* WrapperFunc(void* pthis);
+            
+            pthread_t mHandle;
+            pthread_attr_t mAttr;
+#endif
+        };
+                
         class Semaphore {
-            Semaphore(int _n)
-#ifndef UKN_OS_WINDOWS
-            :
-            mutex(),
-            cond(mutex),
-            n(_n),
-            max(_n) {     
-#endif
-                
-#ifdef UKN_OS_WINDOWS             
-            {
-                sema = CreateSemaphoreW(NULL, n, n, NULL);
-#endif
-            }
+        public:
+            Semaphore(int _n);
+            Semaphore(int _n, int _max);
+            ~Semaphore();
             
-            Semaphore(int _n, int _max)
-#ifndef UKN_OS_WINDOWS
-            :
-            mutex(),
-            cond(mutex),
-            n(_n),
-            max(_max) {
-                assert( n >= 0 && max > 0 && n <= max);
-#endif
-                
-#ifdef UKN_OS_WINDOWS
-            {
-                assert( n>=0 && max>0 && n<=max);
-                
-                sema = CreateSemaphoreW(NULL, n, max, NULL);
-#endif
-            }
-            
-            ~Semaphore() { 
-#ifdef UKN_OS_WINDOWS
-                CloseHandle(sema);
-#else
-                
-#endif
-            }
-            
-            void wait() {
-#ifdef UKN_OS_WINDOWS
-                switch(WaitForSingleObject(sema,INFINITE)) {
-                    case WAIT_OBJECT_0:
-                        return;
-                    default:
-                        UKN_THROW_EXCEPTION("ukn::Thread::Semaphore: error wait");
-                }
-#else
-                MutexGuard lock(mutex);
-                while(n < 1) {
-                    cond.wait();
-                }
-                --n;
-#endif
-            }
-            
-            void set() {
-#ifdef UKN_OS_WINDOWS
-                if(!ReleaseSemaphore(sema, 1, NULL)) {
-                    UKN_THROW_EXCEPTION("ukn::Thread::Semaphore: error set");
-                }
-#else
-                MutexGuard lock(mutex);
-                if(n < max) {
-                    ++n;
-                } else {
-                    UKN_THROW_EXCEPTION("ukn::Thread::Semaphore: Cannot signal semaphore, exceed maximun");
-                }
-                cond.notify();
-#endif
-            }
+            void wait();
+            void set();
             
         private:
 #ifdef UKN_OS_WINDOWS
             HANDLE sema;
-#else
+#elif defined(UKN_OS_FAMILY_UNIX)
             volatile int n;
             int max;
             
@@ -386,7 +257,7 @@ namespace ukn {
             }
             
             void put(const T& x) {
-                MutexGuard lock(mutex);
+                MutexGuard<Mutex> lock(mutex);
                 queue.push_back(x);
                 cond.notify();
             }
@@ -395,7 +266,7 @@ namespace ukn {
                 while(queue.empty())  
                     cond.wait();
                 
-                MutexGuard lock(mutex);
+                MutexGuard<Mutex> lock(mutex);
                 assert(!queue.empty());
                 T front(queue.front());
                 queue.pop_front();
@@ -403,7 +274,7 @@ namespace ukn {
             }
             
             size_t size() const {
-                MutexGuard lock(mutex);
+                MutexGuard<Mutex> lock(mutex);
                 return queue.size();
             }
             
@@ -413,7 +284,7 @@ namespace ukn {
             
             std::deque<T> queue;
         };
-        
+                
         class CountDownLatch: Uncopyable {
         public:
             explicit CountDownLatch(int32 _count):
@@ -424,21 +295,21 @@ namespace ukn {
             }
             
             void wait() {
-                MutexGuard lock(mutex);
+                MutexGuard<Mutex> lock(mutex);
                 while(count > 0) {
                     condition.wait();
                 }
             }
             
             void countDown() {
-                MutexGuard lock(mutex);
+                MutexGuard<Mutex> lock(mutex);
                 --count;
                 if(count == 0)
                     condition.notifyAll();
             }
             
             int32 getCount() const {
-                MutexGuard lock(mutex);
+                MutexGuard<Mutex> lock(mutex);
                 return count;
             }
             
@@ -449,145 +320,63 @@ namespace ukn {
         };
         
         class RWLock {
-            RWLock() {
-#ifdef UKN_OS_WINDOWS
-            :
-            readers(0),
-            writersWaiting(0),
-            writers(0) {
-                mutex = CreateMutexW(NULL, FALSE, NULL);
-                if(mutex != NULL) {
-                    readEvent = CreateEventW(NULL, TRUE, TRUE, NULL);
-                    if(readEvent != NULL) {
-                        writeEvent = CreateEventW(NULL, TRUE, TRUE, NULL);
-                    }
-                }
-#endif
+        public:
+            RWLock();
+            ~RWLock();
+            
+            void readLock();
+            void writeLock();
+            void unlock();
                 
-#ifndef UKN_OS_WINDOWS
-                pthread_rwlock_init(&rwl, NULL);
-#endif          
-            }
-            
-            ~RWLock() {
-#ifdef UKN_OS_WINDOWS
-                CloseHandle(mutex);
-                CloseHandle(readEvent);
-                Closehandle(writeEvent);
-#else
-                pthread_rwlock_destroy(&rwl);
-  
-#endif
-            }
-            
-            void readLock() {
-#ifdef UKN_OS_WINDOWS
-                HANDLE h[2];
-                h[0] = mutex;
-                h[1] = readEvent;
-                switch(WaitForMultipleObjects(2, h, TRUE, INFINITE)) {
-                    case WAIT_OBJECT_0:
-                    case WAIT_OBJECT_0+1:
-                        ++readers;
-                        ResetEvent(writeEvent);
-                        ReleaseMutex(mutex);
-                        break;
-                    default:
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot lock reader/writer lock");
-                }
-#else
-                if(pthread_rwlock_rdlock(&rwl))
-                    UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot lock reader/writer lock");
-#endif
-            }
-            
-            void writeLock() {
-#ifdef UKN_OS_WINDOWS
-                addWriter();
-                HANDLE h[2];
-                h[0] = mutex;
-                h[1] = writeEvent;
-                switch(WaitForMultipleObjects(2, h, TRUE, INFINITE)) {
-                    case WAIT_OBJECT_0:
-                    case WAIT_OBJECT_0+1:
-                        --writersWaiting;
-                        ++readers;
-                        ++writers;
-                        ResetEvent(readEvent);
-                        ResetEvent(writeEvent);
-                        ReleaseMutex(mutex);
-                        break;
-                    default:
-                        removeWriter();
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot lock reader/writer lock");
-                }
-#else
-                if(pthread_rwlock_wrlock(&rwl))
-                    UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot lock reader/writer lock");
-#endif     
-            }
-            
-            void unlock() {
-#ifdef UKN_OS_WINDOWS
-                switch(WaitForSingleObject(mutex, INFINITE)) {
-                    case WAIT_OBJECT_0:
-                        writers = 0;
-                        if(writersWaiting == 0)
-                            SetEvent(readEvent);
-                        if(--readers == 0)
-                            SetEvent(writeEvent);
-                        ReleaseMutex(mutex);
-                        break;
-                    default:
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot unlock reader/writer lock");
-                }
-#else
-                if(pthread_rwlock_unlock(&rwl))
-                    UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot lock reader/writer lock");
-#endif   
-            }
-            
         private:
+            bool isValid() const;            
+            void addWriter();
+            
+            void removeWriter();
+                
 #ifdef UKN_OS_WINDOWS
-            inline bool isValid() const {
-                return mutex && readEvent && writeEvent;
-            }
-            
-            inline void addWriter() {
-                switch(WaitForSingleObject(mutex, INFINITE)) {
-                    case WAIT_OBJECT_0:
-                        if(++writersWaiting == 1)
-                            ResetEvent(readEvent);
-                        ReleaseMutex(mutex);
-                        break;
-                    default:
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot lock reader/writer lock");
-                }
-            }
-            
-            inline void removeWriter() {
-                switch(WaitForSingleObject(mutex, INFINITE)) {
-                    case WAIT_OBJECT_0:
-                        if(--writersWaiting == 0 && writes == 0)
-                            SetEvent(readEvent);
-                        ReleaseMutex(mutex);
-                        break;
-                    default:
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot lock reader/writers lock");
-                }
-            }
-            
             HANDLE mutex;
             HANDLE readEvent;
             HANDLE writeEvent;
             unsigned readers;
             unsigned writersWaiting;
             unsigned writers;
-#else
+#elif defined(UKN_OS_FAMILY_UNIX)
             pthread_rwlock_t rwl;
 #endif
         };
         
+        class ThreadPool: Uncopyable {
+        public:
+            ThreadPool();
+            ~ThreadPool();
+            
+            void start(uint32 numThreads);
+            void join();
+            
+            void run(const ThreadTask&);
+            
+            bool isRunning() const;
+            
+            static ThreadPool& DefaultPool();
+            
+        private:
+            void runInThread(void* arg);
+            
+            ThreadTask take();
+            
+            Mutex mMutex;
+            Condition mCond;
+            
+            typedef std::vector<Thread*> ThreadList;
+            ThreadList mThreads;
+            
+            typedef std::queue<ThreadTask> ThreadTaskQueue;
+            ThreadTaskQueue mTasks;
+            
+            bool mRunning;
+        };
+            
     } // namespace thread
     
 } // namespace ukn

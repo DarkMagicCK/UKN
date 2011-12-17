@@ -100,8 +100,16 @@ namespace ukn {
        
         };
         
-        bool operator < (const TaskInfo& rhs) {
+        bool operator < (const TaskInfo& rhs) const {
             return this->priority < rhs.priority;
+        }
+        
+        bool operator > (const TaskInfo& rhs) const {
+            return this->priority > rhs.priority;
+        }
+        
+        bool operator != (const TaskInfo& rhs) const {
+            return this->priority != rhs.priority;
         }
         
         operator TaskPtr() {

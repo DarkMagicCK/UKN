@@ -35,6 +35,7 @@
 #include "UKN/ConfigParser.h"
 #include "UKN/Resource.h"
 #include "UKN/Profiler.h"
+#include "UKN/Thread.h"
 
 #include <vector>
 

@@ -45,21 +45,6 @@ namespace ukn {
             read((uint8*)&val, sizeof(T));
             return *this;
         }
-        
-        Stream& operator<<(const ukn_string& val) {
-            write((const uint8*)val.c_str(), val.size());
-            return *this;
-        }
-        Stream& operator>>(ukn_string& val) {
-            char buffer;
-            *this >> buffer;
-            while(buffer != 0) {
-                val += buffer;
-                *this >> buffer;
-            }
-            return *this;
-        }
-        
         Stream& operator<<(const char* val) {
             write((const uint8*)val, strlen(val));
             return *this;

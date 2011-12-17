@@ -340,7 +340,7 @@ namespace ukn {
 		}
         
 		bool operator == (const SharedPtr<T>& rhs) {
-			return this->mPtr == rhs.ptr;
+			return this->mPtr == rhs.mPtr;
 		}
 		
         T* deref() const {

@@ -14,6 +14,7 @@
 #include "UKN/Preprocessor.h"
 
 #include <algorithm>
+#include <list>
 
 namespace ukn {
 
@@ -1675,7 +1676,7 @@ namespace ukn {
         typedef typename T::iterator IteratorType;
         typedef typename T::value_type ValueType;
 
-        VectorIterator(const T& container):
+        VectorIterator(T& container):
         mCurr(container.begin()),
         mEnd(container.end()) {
 
@@ -1755,6 +1756,34 @@ namespace ukn {
 
         Array<T> mQueue;
     };
+    
+    template<typename T>
+    class AutoListElement {
+    public:
+        AutoListElement();
+        virtual ~AutoListElement();
+        
+        typedef std::list<T*> ListType;
+        static const ListType& GetList() {
+            return list_instance;
+        }
+        
+    private:
+        static ListType list_instance;
+    };
+    
+    template<typename T>
+    typename AutoListElement<T>::ListType AutoListElement<T>::list_instance;
+    
+    template<typename T>
+    AutoListElement<T>::AutoListElement() {
+        list_instance.push_back(this);
+    }
+    
+    template<typename T>
+    AutoListElement<T>::~AutoListElement() {
+        list_instance.remove(this);
+    }
 
 } // namespace ukn
 

@@ -12,6 +12,7 @@
 #include "UKN/Platform.h"
 #include "UKN/Uncopyable.h"
 #include "UKN/PreDeclare.h"
+#include "UKN/Serializer.h"
 
 #include <map>
 
@@ -29,7 +30,7 @@ namespace ukn {
         AT_Raw,
     };
     
-    class AssetManager: Uncopyable {
+    class AssetManager: Uncopyable, public ConfigSerializable {
     public:
         static AssetManager& Instance();
         
@@ -62,8 +63,8 @@ namespace ukn {
         
         const AssetNameMap& getAssets() const;   
         
-        void    serialize(const ConfigParserPtr& config);
-        void    unserialize(const ConfigParserPtr& config);
+        bool serialize(const ConfigParserPtr& config);
+        bool unserialize(const ConfigParserPtr& config);
         
         static ukn_string AssetTypeToString(AssetType type);
         static AssetType  StringToAssetType(const ukn_string& name);

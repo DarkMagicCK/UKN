@@ -234,11 +234,11 @@ namespace ukn {
         draw(texture, x, y, 0.f);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, Rectangle dstRect, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color) {
         draw(texture, dstRect, 0.f);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color) {
         draw(texture, srcRect, dstRect, 0.f);
     }
     
@@ -253,36 +253,38 @@ namespace ukn {
         mRenderQueue.insert(obj);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, Rectangle dstRect, float layerDepth, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color) {
         TextureObject obj(texture, layerDepth);
         
-        if(dstRect.x2 == dstRect.x1)
-            dstRect.x2 = texture->getWidth() + dstRect.x1;
+        Rectangle rdst = dstRect;
+        if(rdst.x2 == dstRect.x1)
+            rdst.x2 = texture->getWidth() + dstRect.x1;
         if(dstRect.y2 == dstRect.y1)
-            dstRect.y2 = texture->getHeight() + dstRect.y1;
+            rdst.y2 = texture->getHeight() + dstRect.y1;
         
-        obj.buildVertices(dstRect,
+        obj.buildVertices(rdst,
                           0.f,
                           color);
                           
         mRenderQueue.insert(obj);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, float rot, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, const Color& color) {
         TextureObject obj(texture, 0.f);
-        if(srcRect.x2 == 0 && srcRect.y2 == 0) {
-            srcRect.x2 = texture->getWidth();
-            srcRect.y2 = texture->getHeight();
-        }
         
         obj.srcRect = srcRect;
+        if(obj.srcRect.x2 == 0 && srcRect.y2 == 0) {
+            obj.srcRect.x2 = texture->getWidth();
+            obj.srcRect.y2 = texture->getHeight();
+        }
         
+        Rectangle rdst = dstRect;
         if(dstRect.x2 == dstRect.x1)
-            dstRect.x2 = texture->getWidth() + dstRect.x1;
+            rdst.x2 = texture->getWidth() + dstRect.x1;
         if(dstRect.y2 == dstRect.y1)
-            dstRect.y2 = texture->getHeight() + dstRect.y1;
+            rdst.y2 = texture->getHeight() + dstRect.y1;
         
-        obj.buildVertices(dstRect,
+        obj.buildVertices(rdst,
                           rot,
                           color);
         
@@ -304,25 +306,49 @@ namespace ukn {
         mRenderQueue.insert(obj);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, Rectangle srcRect, Rectangle dstRect, float rot, float layerDepth, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, float layerDepth, const Color& color) {
         TextureObject obj(texture, layerDepth);
-        if(srcRect.x2 == 0 && srcRect.y2 == 0) {
-            srcRect.x2 = texture->getWidth();
-            srcRect.y2 = texture->getHeight();
-        }
         
         obj.srcRect = srcRect;
+        if(obj.srcRect.x2 == 0 && srcRect.y2 == 0) {
+            obj.srcRect.x2 = texture->getWidth();
+            obj.srcRect.y2 = texture->getHeight();
+        }
         
+        Rectangle rdst = dstRect;
         if(dstRect.x2 == dstRect.x1)
-            dstRect.x2 = texture->getWidth() + dstRect.x1;
+            rdst.x2 = texture->getWidth() + dstRect.x1;
         if(dstRect.y2 == dstRect.y1)
-            dstRect.y2 = texture->getHeight() + dstRect.y1;
+            rdst.y2 = texture->getHeight() + dstRect.y1;
         
-        obj.buildVertices(dstRect,
+        obj.buildVertices(rdst,
                           rot,
                           color);
         
         mRenderQueue.insert(obj);
+    }
+    
+    void SpriteBatch::draw(const TexturePtr& texture, float x, float y, const Rectangle& src, const Color& color) {
+        draw(texture, x, y, src, 0.f, color);
+    }
+    
+    void SpriteBatch::draw(const TexturePtr& texture, float x, float y, const Rectangle& srcRect, float layerDepth, const Color& color) {        
+        TextureObject obj(texture, layerDepth);
+        
+        obj.srcRect = srcRect;
+        if(obj.srcRect.x2 == 0 && srcRect.y2 == 0) {
+            obj.srcRect.x2 = texture->getWidth();
+            obj.srcRect.y2 = texture->getHeight();
+        }
+
+        obj.buildVertices(x,
+                          y,
+                          0.f,
+                          0.f,
+                          0.f, 
+                          1.f, 
+                          1.f,
+                          color);
     }
     
 } // namespace ukn

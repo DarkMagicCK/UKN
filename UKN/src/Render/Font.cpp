@@ -220,8 +220,6 @@ namespace ukn {
     
     Font::Font():
     mFontSize(0),
-    mIsBold(false),
-    mIsItalic(false),
     mEnableStroke(false),
     mEnableShadow(false),
     mStrokeWidth(0),
@@ -237,11 +235,19 @@ namespace ukn {
         
     }
     
-    bool Font::loadFromResource(const ResourcePtr& resource) {
-        mGlyphs.clear();
-        
+    bool Font::loadFromResource(const ResourcePtr& resource) {        
         ConfigParserPtr config = MakeConfigParser(resource);
         
+        if(config)  
+            return unserialize(config);
+        else
+            log_error(L"ukn::Font::loadFromResource: invalid resource ptr, with resource name" + resource->getName());
+        return false;
+    }
+    
+    bool Font::unserialize(const ConfigParserPtr& config) {
+        mGlyphs.clear();
+
         if(config && config->toNode("/font")) {            
             ukn_string font_name = config->getString("name");
             
@@ -249,7 +255,7 @@ namespace ukn {
                 ukn_wstring fullFontPath = check_and_get_font_path(string_to_wstring(font_name));
                 
                 if(fullFontPath.empty()) {
-                    log_error("ukn::Font::loadFromResource: error finding font name " + font_name);
+                    log_error("ukn::Font::unserialize: error finding font name " + font_name);
                     return false;
                 }
                 ResourcePtr fontResource = ResourceLoader::Instance().loadResource(fullFontPath);
@@ -267,8 +273,6 @@ namespace ukn {
                 }
             }
             
-            mIsBold = config->getBool("bold", false);
-            mIsItalic = config->getBool("italic", false);
             mEnableShadow = config->getBool("shadow", false);
             mEnableStroke = config->getBool("stroke", false);
             
@@ -285,12 +289,10 @@ namespace ukn {
         return false;
     }
     
-    void Font::serialize(const ConfigParserPtr& cfg) {
+    bool Font::serialize(const ConfigParserPtr& cfg) {
         if(cfg && !mGlyphs.empty()) {
             cfg->beginNode("font");
             cfg->setString("name", wstring_to_string(mFontName));
-            cfg->setBool("bold", mIsBold);
-            cfg->setBool("italic", mIsItalic);
             cfg->setBool("shadow", mEnableShadow);
             cfg->setBool("stroke", mEnableStroke);
             cfg->setInt("shadow_offset_x", mShadowXOffset);
@@ -298,15 +300,16 @@ namespace ukn {
             cfg->setInt("stroke_width", mStrokeWidth);
             cfg->setInt("size", mFontSize);
             cfg->endNode();
+            
+            return true;
         } else {
             log_error(L"ukn::Font::serialize: unable to serialize font "+mFontName);
         }
+        return false;
     }
     
     void Font::setStyle(ukn::FontStyle style, bool flag) {
         switch(style) {
-            case FS_Bold: mIsBold = flag; break;
-            case FS_Italic: mIsItalic = flag; break;
             case FS_Shadow: mEnableShadow = flag; break;
             case FS_Stroke: mEnableStroke = flag; break;
         }

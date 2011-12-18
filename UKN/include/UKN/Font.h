@@ -42,7 +42,7 @@ namespace ukn {
         FSP_Stroke_Width,
     };
     
-    class Font: Uncopyable, public Renderable, public ConfigSerializable {
+    class UKN_API Font: Uncopyable, public Renderable, public ConfigSerializable {
     public:
         Font();
         ~Font();
@@ -72,7 +72,7 @@ namespace ukn {
         
         const ukn_wstring& getName() const;
         
-        Rectangle getBound() const;
+        Box getBound() const;
         RenderBufferPtr getRenderBuffer() const;
         
         bool isValid() const;

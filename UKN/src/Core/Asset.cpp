@@ -2,7 +2,7 @@
 //  Asset.cpp
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/9/11.
+//  Created by Robert Bu on 12/9/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -18,6 +18,53 @@
 #include "UKN/Logger.h"
 
 namespace ukn {
+    
+    SharedPtr<Font> AssetLoader<Font>::Load(const ukn_wstring& name, const ukn_wstring& path) {
+        ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
+        
+        if(resource) {
+            resource->setName(name);
+            
+            SharedPtr<Font> font = new Font();
+            if(font && font->loadFromResource(resource))
+                return font;
+        }
+        
+        return SharedPtr<Font>();
+    }
+    
+    SharedPtr<Texture> AssetLoader<Texture>::Load(const ukn_wstring& name, const ukn_wstring& path) {
+        ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
+        
+        if(resource) {
+            resource->setName(name);
+            
+            return Context::Instance().getGraphicFactory().load2DTexture(resource);
+        }
+        
+        return SharedPtr<Texture>();
+    }
+    
+    SharedPtr<ConfigParser> AssetLoader<ConfigParser>::Load(const ukn_wstring& name, const ukn_wstring& path) {
+        ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
+        
+        if(resource) {
+            resource->setName(name);
+            
+            return MakeConfigParser(resource); 
+        }
+        
+        return SharedPtr<ConfigParser>();
+    }
+    
+    SharedPtr<Resource> AssetLoader<Resource>::Load(const ukn_wstring& name, const ukn_wstring& path) {
+        ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
+        
+        if(resource)
+            resource->setName(name);
+        
+        return resource;
+    }
     
     AssetManager& AssetManager::Instance() {
         static AssetManager instance;
@@ -38,60 +85,6 @@ namespace ukn {
     
     void AssetManager::add(const ukn_wstring& name, const ukn_wstring& path, AssetType type) {
         mAssetMap.insert(std::make_pair(name, AssetInfo(type, name, path)));
-    }
-    
-    template<>
-    SharedPtr<Font> AssetManager::load(const ukn_wstring& name) const {
-        AssetNameMap::const_iterator it = mAssetMap.find(name);
-        if(it != mAssetMap.end() && it->second.type == AT_Font) {
-            ResourcePtr resource = ResourceLoader::Instance().loadResource(it->second.fullPath);
-            
-            if(resource) {
-                SharedPtr<Font> font = new Font();
-                if(font && font->loadFromResource(resource))
-                    return font;
-            }
-        }
-        return SharedPtr<Font>();
-    }
-    
-    template<>
-    SharedPtr<Texture> AssetManager::load(const ukn_wstring& name) const {
-        AssetNameMap::const_iterator it = mAssetMap.find(name);
-        if(it != mAssetMap.end() && it->second.type == AT_Texture2D) {
-            ResourcePtr resource = ResourceLoader::Instance().loadResource(it->second.fullPath);
-            
-            if(resource) {
-                return Context::Instance().getGraphicFactory().load2DTexture(resource);
-            }
-        }
-        return SharedPtr<Texture>();
-    }
-    
-    template<>
-    SharedPtr<ConfigParser> AssetManager::load(const ukn_wstring& name) const {
-        AssetNameMap::const_iterator it = mAssetMap.find(name);
-        if(it != mAssetMap.end() && it->second.type == AT_Config) {
-            ResourcePtr resource = ResourceLoader::Instance().loadResource(it->second.fullPath);
-            
-            if(resource) {
-                return MakeConfigParser(resource); 
-            }
-        }
-        return SharedPtr<ConfigParser>();
-    }
-    
-    template<>
-    SharedPtr<Resource> AssetManager::load(const ukn_wstring& name) const {
-        AssetNameMap::const_iterator it = mAssetMap.find(name);
-        if(it != mAssetMap.end() && it->second.type == AT_Config) {
-            ResourcePtr resource = ResourceLoader::Instance().loadResource(it->second.fullPath);
-            
-            if(resource) {
-                return resource;
-            }
-        }
-        return SharedPtr<Resource>();
     }
     
     ukn_string AssetManager::AssetTypeToString(AssetType type) {

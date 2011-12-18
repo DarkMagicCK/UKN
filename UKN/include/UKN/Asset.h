@@ -2,7 +2,7 @@
 //  Asset.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/5/11.
+//  Created by Robert Bu on 12/5/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 #include "UKN/Uncopyable.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/Serializer.h"
+#include "UKN/Ptr.h"
 
 #include <map>
 
@@ -28,6 +29,33 @@ namespace ukn {
         AT_Config,
         // RawData
         AT_Raw,
+    };
+    
+    template<typename T>
+    class AssetLoader;
+    
+    template<>
+    class AssetLoader<Font> {
+    public:
+        static SharedPtr<Font> Load(const ukn_wstring& name, const ukn_wstring& path);
+    };
+    
+    template<>
+    class AssetLoader<Texture> {
+    public:
+        static SharedPtr<Texture> Load(const ukn_wstring& name, const ukn_wstring& path);
+    };
+    
+    template<>
+    class AssetLoader<ConfigParser> {
+    public:
+        static SharedPtr<ConfigParser> Load(const ukn_wstring& name, const ukn_wstring& path);
+    };
+    
+    template<>
+    class AssetLoader<Resource> {
+    public:
+        static SharedPtr<Resource> Load(const ukn_wstring& name, const ukn_wstring& path);
     };
     
     class AssetManager: Uncopyable, public ConfigSerializable {
@@ -76,6 +104,16 @@ namespace ukn {
     private:
         AssetNameMap mAssetMap;
     };
+    
+    
+    template<typename T>
+    SharedPtr<T> AssetManager::load(const ukn_wstring& name) const {
+        AssetNameMap::const_iterator it = mAssetMap.find(name);
+        if(it != mAssetMap.end()) {
+            return AssetLoader<T>::Load(name, it->second.fullPath);
+        }
+        return SharedPtr<T>();
+    }
     
 } // namespace ukn
 

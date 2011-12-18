@@ -66,18 +66,14 @@ public:
         
         ukn::Timestamp time;
         
-        mSpriteBatch->onRenderBegin();
         if(mTexture)
             mSpriteBatch->draw(mTexture, 0.f, 0.f);
         mSpriteBatch->render();
-        mSpriteBatch->onRenderEnd();
         
         if(mFont) {
-            mFont->onRenderBegin();
             mFont->draw(L"Hello World!", 0, 0, ukn::FA_Left);
 
             mFont->render();
-            mFont->onRenderEnd();
         }
         
         ukn::ProfileData data = ukn::Profiler::Instance().get("MainFrame");

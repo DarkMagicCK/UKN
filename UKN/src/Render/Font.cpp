@@ -2,7 +2,7 @@
 //  Font.cpp
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/9/11.
+//  Created by Robert Bu on 12/9/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -363,6 +363,8 @@ namespace ukn {
         if(mGlyphs.size() == 0)
             return;
         
+        onRenderBegin();
+        
         Array<StringData>::const_iterator it = mRenderQueue.begin();
         while(it != mRenderQueue.end()) {
             doRender(*it);
@@ -371,6 +373,8 @@ namespace ukn {
         }
         
         mSpriteBatch->render();
+        
+        onRenderEnd();
     }
     
     uint32 Font::getGlyphByChar(wchar_t chr) {
@@ -454,7 +458,7 @@ namespace ukn {
             mSpriteBatch->onRenderEnd();
     }
     
-    Rectangle Font::getBound() const {
+    Box Font::getBound() const {
         return mSpriteBatch->getBound();
     }
     

@@ -2,7 +2,7 @@
 //  GLSpriteBatch.cpp
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/8/11.
+//  Created by Robert Bu on 12/8/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -27,9 +27,11 @@ namespace ukn {
         
     }
     
-    void GLSpriteBatch::render() {
+    void GLSpriteBatch::onRender() {
         if(mRenderQueue.size() == 0)
             return ;
+        
+        onRenderBegin();
         
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
@@ -88,6 +90,8 @@ namespace ukn {
         
         gd.popProjectionMatrix();
         gd.popViewMatrix();
+        
+        onRenderEnd();
     }
     
 } // namespace ukn

@@ -13,6 +13,8 @@
 		88260E631488450200142365 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E621488450100142365 /* Logger.cpp */; };
 		88260E651488541E00142365 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E641488541E00142365 /* Window.cpp */; };
 		88260E681488583300142365 /* SysUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E671488583200142365 /* SysUtil.cpp */; };
+		88278EE0149C947B00C7ED8A /* Scene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88278EDF149C947B00C7ED8A /* Scene.cpp */; };
+		88278EE2149D97AA00C7ED8A /* Event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88278EE1149D97AA00C7ED8A /* Event.cpp */; };
 		882D3CB414974BB500963AAD /* Task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 882D3CB314974BB500963AAD /* Task.cpp */; };
 		882D3CB71497C85000963AAD /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 882D3CB61497C85000963AAD /* Thread.cpp */; };
 		882D3CBA1498BA1D00963AAD /* Serializer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 882D3CB91498BA1D00963AAD /* Serializer.cpp */; };
@@ -108,6 +110,9 @@
 		88260E661488570100142365 /* SysUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SysUtil.h; sourceTree = "<group>"; };
 		88260E671488583200142365 /* SysUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SysUtil.cpp; sourceTree = "<group>"; };
 		88278EDC149B7DB700C7ED8A /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
+		88278EDE149C89EB00C7ED8A /* RefCounted.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RefCounted.h; sourceTree = "<group>"; };
+		88278EDF149C947B00C7ED8A /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
+		88278EE1149D97AA00C7ED8A /* Event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Event.cpp; sourceTree = "<group>"; };
 		882D3CB11497369700963AAD /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		882D3CB314974BB500963AAD /* Task.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Task.cpp; sourceTree = "<group>"; };
 		882D3CB51497C83800963AAD /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
@@ -405,6 +410,7 @@
 			isa = PBXGroup;
 			children = (
 				88322E251499E5A60007C936 /* Trigger.cpp */,
+				88278EE1149D97AA00C7ED8A /* Event.cpp */,
 			);
 			name = Game;
 			path = UKN/src/Game;
@@ -657,6 +663,7 @@
 				882D3CB11497369700963AAD /* Task.h */,
 				882D3CB51497C83800963AAD /* Thread.h */,
 				88278EDC149B7DB700C7ED8A /* Singleton.h */,
+				88278EDE149C89EB00C7ED8A /* RefCounted.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -761,6 +768,7 @@
 				884CE3F4148F735700F58E2E /* Renderable.cpp */,
 				884CE3F6148F74D600F58E2E /* SpriteBatch.cpp */,
 				88029B091491DB8B00AB1490 /* Font.cpp */,
+				88278EDF149C947B00C7ED8A /* Scene.cpp */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -1018,6 +1026,8 @@
 				882D3CB71497C85000963AAD /* Thread.cpp in Sources */,
 				882D3CBA1498BA1D00963AAD /* Serializer.cpp in Sources */,
 				88322E261499E5A60007C936 /* Trigger.cpp in Sources */,
+				88278EE0149C947B00C7ED8A /* Scene.cpp in Sources */,
+				88278EE2149D97AA00C7ED8A /* Event.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

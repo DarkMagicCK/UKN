@@ -12,35 +12,65 @@
 #include "UKN/Platform.h"
 #include "UKN/Class.h"
 #include "UKN/Any.h"
-
+#include "UKN/PreDeclare.h"
 #include "UKN/Signal.h"
 #include <vector>
 
 namespace ukn {
     
-    class EventHandler;
-    
+    class UKN_API EventHandler {
+    public:
+        virtual ~EventHandler() { }
+        
+        virtual void onHandleEvent(const EventPtr& event) = 0;
+        
+        EventWorld* getEventWorld() const;
+        
+    protected:
+        friend class EventWorld;
+        
+        EventWorldPtr mEventWorld;
+    };
+        
     class UKN_API Event {
     public:
-        Event(const ukn_string& name):
-        mName(name),
-        mConsumed(false) {
-            
-        }
+        Event(const ukn_string& name);
+        virtual ~Event();
         
-        bool    isConsumed() const { return mConsumed; }
-        void    comsume() { mConsumed = true; }
+        bool    isConsumed() const;
+        void    comsume();
         
-        void    setData(Any t) { mData = t; }
-        Any     getData() const { return mData; }
+        void    setData(Any t);
+        Any     getData() const;
         
-        UKN_DEF_CLASS(Event);
+        EventHandler* getReceiver() const;
+        void setReceiver(const EventHandlerPtr& ptr);
+        
+        virtual Event* clone();
         
     private:
         ukn_string mName;
         
         bool mConsumed;
         Any mData;
+        
+        // event handler observer
+        WeakPtr<EventHandler> mReceiver;
+    };
+    
+    class UKN_API EventWorld {
+    public:
+        EventWorld();
+        ~EventWorld();
+        
+        static EventWorld& DefaultObject();
+        
+        void enterHandler(EventHandler* handler);
+        void leaveHandler(EventHandler* handler);
+        
+    private:
+        typedef std::vector<EventHandler*> EventHandlerList;
+        EventHandlerList mEventHandlers;
     };
     
     /**

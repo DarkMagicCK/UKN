@@ -2,7 +2,7 @@
 //  GLSpriteBatch.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/8/11.
+//  Created by Robert Bu on 12/8/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -21,7 +21,7 @@ namespace ukn {
         GLSpriteBatch();
         virtual ~GLSpriteBatch();
         
-        void render();
+        void onRender();
     };
     
     

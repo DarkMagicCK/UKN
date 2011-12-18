@@ -2,7 +2,7 @@
 //  SpriteBatch.cpp
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/7/11.
+//  Created by Robert Bu on 12/7/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 #include "UKN/Texture.h"
 #include "UKN/GraphicBuffer.h"
 #include "UKN/FrameBuffer.h"
+#include "UKN/Singleton.h"
 
 namespace ukn {
     
@@ -162,7 +163,7 @@ namespace ukn {
         return name;
     }
     
-    Rectangle SpriteBatch::getBound() const {
+    Box SpriteBatch::getBound() const {
         return mBoundingBox;
     }
     
@@ -186,7 +187,7 @@ namespace ukn {
         return mTransformMatrix;
     }
     
-    void SpriteBatch::render() {
+    void SpriteBatch::onRender() {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         gd.pushProjectionMatrix();
@@ -215,18 +216,32 @@ namespace ukn {
         gd.popViewMatrix();
     }
     
-    void SpriteBatch::updateBoundingBox(float x, float y, float x2, float y2) {
-        if(mBoundingBox.x1 > x) {
-            mBoundingBox.x1 = x;
+    void SpriteBatch::render() {
+        onRenderBegin();
+        
+        onRender();
+        
+        onRenderEnd();
+    }
+    
+    void SpriteBatch::updateBoundingBox(float x, float y, float z) {
+        if(mBoundingBox.min.x > x) {
+            mBoundingBox.min.x = x;
         }
-        if(mBoundingBox.y1 > y) {
-            mBoundingBox.y1 = y;
+        if(mBoundingBox.min.y > y) {
+            mBoundingBox.min.y = y;
         }
-        if(mBoundingBox.x2 < x2) {
-            mBoundingBox.x2 = x2;
+        if(mBoundingBox.max.x < x) {
+            mBoundingBox.max.x = x;
         }
-        if(mBoundingBox.y2 < y2) {
-            mBoundingBox.y2 = y2;
+        if(mBoundingBox.max.y < y) {
+            mBoundingBox.max.y = y;
+        }
+        if(mBoundingBox.min.z > z) {
+            mBoundingBox.min.z = z;
+        }
+        if(mBoundingBox.max.z < z) {
+            mBoundingBox.max.z = z;
         }
     }
     
@@ -267,6 +282,13 @@ namespace ukn {
                           color);
                           
         mRenderQueue.insert(obj);
+        
+        for(int i=0; i<6; ++i) {
+            updateBoundingBox(obj.vertices[i].x,
+                              obj.vertices[i].y, 
+                              obj.vertices[i].z);
+        }
+        
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, const Color& color) {
@@ -289,6 +311,12 @@ namespace ukn {
                           color);
         
         mRenderQueue.insert(obj);
+        
+        for(int i=0; i<6; ++i) {
+            updateBoundingBox(obj.vertices[i].x,
+                              obj.vertices[i].y, 
+                              obj.vertices[i].z);
+        }
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, float layerDepth, const Color& color) {
@@ -304,6 +332,12 @@ namespace ukn {
                           color);
         
         mRenderQueue.insert(obj);
+        
+        for(int i=0; i<6; ++i) {
+            updateBoundingBox(obj.vertices[i].x,
+                              obj.vertices[i].y, 
+                              obj.vertices[i].z);
+        }
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, float layerDepth, const Color& color) {
@@ -326,6 +360,12 @@ namespace ukn {
                           color);
         
         mRenderQueue.insert(obj);
+        
+        for(int i=0; i<6; ++i) {
+            updateBoundingBox(obj.vertices[i].x,
+                              obj.vertices[i].y, 
+                              obj.vertices[i].z);
+        }
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, float x, float y, const Rectangle& src, const Color& color) {
@@ -349,6 +389,17 @@ namespace ukn {
                           1.f, 
                           1.f,
                           color);
+        
+        for(int i=0; i<6; ++i) {
+            updateBoundingBox(obj.vertices[i].x,
+                              obj.vertices[i].y, 
+                              obj.vertices[i].z);
+        }
+    }
+    
+    SpriteBatch& SpriteBatch::DefaultObject() {
+        static SpriteBatch* instance = Context::Instance().getGraphicFactory().createSpriteBatch();
+        return *instance;
     }
     
 } // namespace ukn

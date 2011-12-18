@@ -32,6 +32,10 @@ namespace ukn {
             return this->mName;
         }
         
+        void setName(const ukn_wstring& name) {
+            this->mName = name;
+        }
+        
         uint32 getUniqueId() const {
             return this->mUniqueId;
         }

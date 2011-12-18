@@ -2,7 +2,7 @@
 //  ConfigParserXml.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 11/30/11.
+//  Created by Robert Bu on 11/30/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 

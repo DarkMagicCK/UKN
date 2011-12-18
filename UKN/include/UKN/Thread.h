@@ -2,7 +2,7 @@
 //  Thread.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/13/11.
+//  Created by Robert Bu on 12/13/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -32,7 +32,7 @@ namespace ukn {
     
     namespace thread {
         
-        class Mutex {
+        class UKN_API Mutex {
         public:
             Mutex();
             ~Mutex();
@@ -87,7 +87,7 @@ namespace ukn {
             mutex_type& _mutex;
         };
         
-        class Condition: Uncopyable {
+        class UKN_API Condition: Uncopyable {
         public:
             explicit Condition(Mutex& mutex);
             
@@ -107,7 +107,7 @@ namespace ukn {
         
         class Thread;
         
-        class ThreadId {
+        class UKN_API ThreadId {
         public:
             ThreadId(): mId(0) { }
             
@@ -155,7 +155,7 @@ namespace ukn {
             uint32 mId;
         };
         
-        class ThreadTask {
+        class UKN_API ThreadTask {
         public:
             typedef Function<void(void*)> ThreadFunc;
             
@@ -176,7 +176,7 @@ namespace ukn {
             ThreadFunc mFunc;
         };
         
-        class Thread {
+        class UKN_API Thread {
         public:
 #ifdef UKN_OS_WINDOWS
             typedef Handle native_handle_type;
@@ -199,9 +199,7 @@ namespace ukn {
             
             ThreadId getId() const;
             
-            native_handle_type getNativeHandle() {
-                return mHandle;
-            }
+            native_handle_type getNativeHandle();
             
             static uint32 HardwareConcurrency();
             static ThreadId GetCurrentThreadId();
@@ -226,7 +224,7 @@ namespace ukn {
 #endif
         };
                 
-        class Semaphore {
+        class UKN_API Semaphore {
         public:
             Semaphore(int _n);
             Semaphore(int _n, int _max);
@@ -285,7 +283,7 @@ namespace ukn {
             std::deque<T> queue;
         };
                 
-        class CountDownLatch: Uncopyable {
+        class UKN_API CountDownLatch: Uncopyable {
         public:
             explicit CountDownLatch(int32 _count):
             mutex(),
@@ -319,7 +317,7 @@ namespace ukn {
             int32 count;
         };
         
-        class RWLock {
+        class UKN_API RWLock {
         public:
             RWLock();
             ~RWLock();
@@ -346,7 +344,7 @@ namespace ukn {
 #endif
         };
         
-        class ThreadPool: Uncopyable {
+        class UKN_API ThreadPool: Uncopyable {
         public:
             ThreadPool();
             ~ThreadPool();
@@ -358,7 +356,7 @@ namespace ukn {
             
             bool isRunning() const;
             
-            static ThreadPool& DefaultPool();
+            static ThreadPool& DefaultObject();
             
         private:
             void runInThread(void* arg);

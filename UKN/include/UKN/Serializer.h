@@ -2,7 +2,7 @@
 //  Serializer.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/14/11.
+//  Created by Robert Bu on 12/14/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 #include "UKN/StringUtil.h"
 #include "UKN/MathUtil.h"
 #include "UKN/Logger.h"
+#include "UKN/Stream.h"
 
 #include <iostream>
 #include <string>

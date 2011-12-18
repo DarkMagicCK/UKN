@@ -2,7 +2,7 @@
 //  SpriteBatch.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/6/11.
+//  Created by Robert Bu on 12/6/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -26,16 +26,19 @@ namespace ukn {
     
     public:
         virtual ~SpriteBatch();
+        
+        static SpriteBatch& DefaultObject();
 
         const ukn_wstring& getName() const;
         
-        Rectangle getBound() const;
+        Box getBound() const;
         RenderBufferPtr getRenderBuffer() const;
         
         virtual void onRenderBegin();
         virtual void onRenderEnd();
+        virtual void onRender();
         
-        virtual void render();
+        void render();
         
         void draw(const TexturePtr& texture, float x, float y, const Color& color=ColorWhite);
         void draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color=ColorWhite);
@@ -56,7 +59,7 @@ namespace ukn {
         const Matrix4& getTransformMatrix() const;
                 
     protected:
-        void updateBoundingBox(float x, float y, float x2, float y2);
+        void updateBoundingBox(float x, float y, float z);
         
         struct TextureObject {
             TextureObject();
@@ -79,7 +82,7 @@ namespace ukn {
         RenderBufferPtr mRenderBuffer;
         GraphicBufferPtr mVertexBuffer;
         
-        Rectangle mBoundingBox;
+        Box mBoundingBox;
         Matrix4 mTransformMatrix;
     };
     

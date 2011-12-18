@@ -15,14 +15,14 @@
 
 namespace ukn {
     
-    class Renderable {
+    class UKN_API Renderable {
     public:
         Renderable();
         virtual ~Renderable();
         
         virtual const ukn_wstring& getName() const = 0;
         
-        virtual Rectangle getBound() const = 0;
+        virtual Box getBound() const = 0;
         virtual RenderBufferPtr getRenderBuffer() const = 0;
         
         virtual void onRenderBegin();

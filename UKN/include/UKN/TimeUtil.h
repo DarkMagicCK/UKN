@@ -204,6 +204,7 @@ namespace ukn {
         uint64 getRunningTime() const;
         
         // actual running delta time, not frame delta
+        // in ms
         uint64 getDeltaTime() const;
         
     protected:    

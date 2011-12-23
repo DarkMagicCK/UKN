@@ -18,8 +18,8 @@ namespace ukn {
             ModuleManager::AddModule(this);
         }
         
-        const ukn_string& getName() const {
-            static ukn_string name("AutoUpdate");
+        const String& getName() const {
+            static String name("AutoUpdate");
             return name;
         }
         

@@ -12,6 +12,7 @@
 #include "UKN/Platform.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/Util.h"
+#include "UKN/StringUtil.h"
 
 #include <map>
 #include <vector>
@@ -20,7 +21,7 @@ namespace ukn {
     
     class UKN_API Resource {
     public:
-        Resource(const ukn_wstring& name, StreamPtr resourceStream):
+        Resource(const String& name, StreamPtr resourceStream):
         mName(name),
         mResourceStream(resourceStream) {
             
@@ -28,11 +29,11 @@ namespace ukn {
         
         virtual ~Resource() { }
         
-        const ukn_wstring& getName() const {
+        const String& getName() const {
             return this->mName;
         }
         
-        void setName(const ukn_wstring& name) {
+        void setName(const String& name) {
             this->mName = name;
         }
         
@@ -49,7 +50,7 @@ namespace ukn {
         operator bool();
         
     private:
-        ukn_wstring mName;
+        String mName;
         
         // unique id for the resource
         uint32 mUniqueId;
@@ -59,19 +60,19 @@ namespace ukn {
     
     class UKN_API ResourceFactory {
     public:
-        virtual bool resourceExists(const ukn_wstring& resource) = 0;
-        virtual bool pathExists(const ukn_wstring& path) = 0;
-        virtual ResourcePtr onResourceLoad(const ukn_wstring& path) = 0;
+        virtual bool resourceExists(const String& resource) = 0;
+        virtual bool pathExists(const String& path) = 0;
+        virtual ResourcePtr onResourceLoad(const String& path) = 0;
         
-        typedef std::vector<ukn_wstring> ResourceNames;
-        virtual void enumResourceNamesInPath(const ukn_wstring& path, ResourceNames& names) = 0;
+        typedef std::vector<String> ResourceNames;
+        virtual void enumResourceNamesInPath(const String& path, ResourceNames& names) = 0;
     };
     
     class UKN_API ResourceLoader {
     public:
-        typedef std::vector<ukn_wstring> ResourcePaths;
+        typedef std::vector<String> ResourcePaths;
         typedef std::vector<ResourceFactoryPtr> ResourceFactories;
-        typedef std::vector<ukn_wstring> FileList;
+        typedef std::vector<String> FileList;
 
     public:
         ResourceLoader();
@@ -79,21 +80,21 @@ namespace ukn {
         
         static ResourceLoader& Instance();
         
-        void    addPath(const ukn_wstring& path);
-        void    removePath(const ukn_wstring& path);
+        void    addPath(const String& path);
+        void    removePath(const String& path);
         const   ResourcePaths& getResourcePaths() const;
         
         void    registerResourceFactory(ResourceFactoryPtr rfac);
         const   ResourceFactories& getResourceFactories() const;
         
-        ResourcePtr loadResource(const ukn_wstring& name_or_path, bool isFullPath=false /* search resource paths? */);
-        ResourcePtr createMemoryResource(const uint8* data, size_t size, const ukn_wstring& name=L"memory_buffer");
-        ResourcePtr createFileResource(const ukn_wstring& name);
+        ResourcePtr loadResource(const String& name_or_path, bool isFullPath=false /* search resource paths? */);
+        ResourcePtr createMemoryResource(const uint8* data, size_t size, const String& name=L"memory_buffer");
+        ResourcePtr createFileResource(const String& name);
         
-        void enumResourceNamesInPath(const ukn_wstring& path, FileList& names);
+        void enumResourceNamesInPath(const String& path, FileList& names);
         
     private:
-        ResourcePtr onResourceLoad(const ukn_wstring& name, bool isFullPath);
+        ResourcePtr onResourceLoad(const String& name, bool isFullPath);
         
         ResourceFactories mResourceFactories;
       

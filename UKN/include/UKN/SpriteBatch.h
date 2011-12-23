@@ -15,6 +15,7 @@
 #include "UKN/Color.h"
 #include "UKN/Vertex.h"
 #include "UKN/Renderable.h"
+#include "UKN/StringUtil.h"
 
 namespace ukn {
         
@@ -29,7 +30,7 @@ namespace ukn {
         
         static SpriteBatch& DefaultObject();
 
-        const ukn_wstring& getName() const;
+        const String& getName() const;
         
         Box getBound() const;
         RenderBufferPtr getRenderBuffer() const;

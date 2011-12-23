@@ -196,13 +196,12 @@ namespace ukn {
             uint32 pass_time;
         };
         
-        
         struct AnimationInfo {
             uint32 start_time;
-            Animation* animation_ptr;
+            SharedPtr<Animation> animation_ptr;
             void* property_ptr;
             
-            AnimationInfo(uint32 start, Animation* anime, void* property):
+            AnimationInfo(uint32 start, const SharedPtr<Animation>& anime, void* property):
             start_time(start),
             animation_ptr(anime),
             property_ptr(property) {

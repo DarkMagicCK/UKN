@@ -12,6 +12,7 @@
 #include "UKN/Platform.h"
 #include "UKN/Util.h"
 #include "UKN/PreDeclare.h"
+#include "UKN/StringUtil.h"
 
 namespace ukn {
     
@@ -173,7 +174,7 @@ namespace ukn {
         };
         
         virtual ~FileStreamBasic() {}
-        virtual bool open(const ukn_wstring& filename, bool canwrite = false, bool append = false, bool nocache = false) = 0;
+        virtual bool open(const String& filename, bool canwrite = false, bool append = false, bool nocache = false) = 0;
         
         StreamType getStreamType() const {
             return ST_File;
@@ -201,7 +202,7 @@ namespace ukn {
     public:
         FileStreamWin32();
         virtual ~FileStreamWin32();
-        virtual bool open(const ukn_wstring& filename, bool canwrite = false, bool append = false, bool nocache = false);
+        virtual bool open(const String& filename, bool canwrite = false, bool append = false, bool nocache = false);
 
         
         virtual void close();
@@ -229,7 +230,7 @@ namespace ukn {
     public:
         FileStreamPosix();
         virtual ~FileStreamPosix();
-        virtual bool open(const ukn_wstring& filename, bool canwrite = false, bool append = false, bool nocache = false);
+        virtual bool open(const String& filename, bool canwrite = false, bool append = false, bool nocache = false);
         
         virtual void close();
         virtual void truncate();
@@ -252,9 +253,9 @@ namespace ukn {
 #endif //OS_WIN32
     
     StreamPtr stream_to_memory_stream(const StreamPtr& stream);
-    bool write_stream_to_file(const StreamPtr& stream, const ukn_wstring& file);
+    bool write_stream_to_file(const StreamPtr& stream, const String& file);
     
-    bool write_stream_to_file(Stream& stream, const ukn_wstring& file);
+    bool write_stream_to_file(Stream& stream, const String& file);
     
     /**
      * simple stream that receives / sends data through internet

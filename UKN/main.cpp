@@ -36,6 +36,7 @@
 #include "UKN/Resource.h"
 #include "UKN/Profiler.h"
 #include "UKN/Thread.h"
+#include "UKN/Animation.h"
 
 #include <vector>
 
@@ -55,10 +56,19 @@ public:
         
         mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
+        
+        ukn::FloatLinearAnimation* anim = new ukn::FloatLinearAnimation;
+        anim->setTo(10);
+        anim->setFrom(0);
+        anim->setDuration(1000);
+        mAnimation.children().push_back(ukn::StoryBoard::AnimationInfo(0, anim, &x));
+        
+        mAnimation.play();
+        
     }
     
     void onUpdate() {
-        
+        printf("%f\n", x);
     }
     
     void onRender() {
@@ -71,13 +81,10 @@ public:
         mSpriteBatch->render();
         
         if(mFont) {
-            mFont->draw(L"Hello World!", 0, 0, ukn::FA_Left);
+            mFont->draw("测试 Hello World!", 0, 0, ukn::FA_Left);
 
             mFont->render();
         }
-        
-        ukn::ProfileData data = ukn::Profiler::Instance().get("MainFrame");
-        printf("%s\n", data.toFormattedString().c_str());
     }
     
 private:
@@ -87,6 +94,8 @@ private:
     ukn::FontPtr mFont;
     
     ukn::TexturePtr mTexture;
+    ukn::StoryBoard mAnimation;
+    float x, y;
 };
 
 #ifndef UKN_OS_WINDOWS

@@ -12,6 +12,7 @@
 #include "UKN/Platform.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/MathUtil.h"
+#include "UKN/StringUtil.h"
 
 namespace ukn {
     
@@ -20,7 +21,7 @@ namespace ukn {
         Renderable();
         virtual ~Renderable();
         
-        virtual const ukn_wstring& getName() const = 0;
+        virtual const String& getName() const = 0;
         
         virtual Box getBound() const = 0;
         virtual RenderBufferPtr getRenderBuffer() const = 0;

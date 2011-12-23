@@ -7,7 +7,6 @@
 //
 
 #include "UKN/Scene.h"
-#include "UKN/Renderable.h"
 
 namespace ukn {
     

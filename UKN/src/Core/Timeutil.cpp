@@ -512,7 +512,7 @@ namespace ukn {
     
     uint64 FrameCounter::getRunningTime() const {
         static Timestamp starttime = Timestamp();
-        return starttime.elapsed();
+        return starttime.elapsed() / 1000;
     }
     
 } // namespace ukn

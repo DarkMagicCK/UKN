@@ -47,7 +47,7 @@ namespace ukn {
 		return mMainWindow;
 	}
     
-    void AppInstance::create(const ukn_wstring& cfgname) {
+    void AppInstance::create(const String& cfgname) {
         mInited = true;
         
         Context::Instance().loadCfgFile(cfgname);
@@ -109,7 +109,7 @@ namespace ukn {
         Logger::Instance().setFeature(LF_PrependRunningTime, true);
         
         // on init
-        mMainWindow->onInit().raise(this, NullEventArgs());
+        mMainWindow->onInit().raise(mMainWindow, NullEventArgs());
         onInit();
     }
     
@@ -131,7 +131,7 @@ namespace ukn {
     }
     
     void AppInstance::render() {
-        mMainWindow->onRender().raise(this, NullEventArgs());
+        mMainWindow->onRender().raise(mMainWindow, NullEventArgs());
         
         onRender();
     }

@@ -10,34 +10,35 @@
 #define Project_Unknown_FileUtil_h
 
 #include "UKN/Platform.h"
+#include "UKN/StringUtil.h"
 
 #include <vector>
 
 namespace ukn {
     
-    UKN_API bool file_exists(const ukn_wstring& filepath);
-    UKN_API bool path_exists(const ukn_wstring& path);
+    UKN_API bool file_exists(const String& filepath);
+    UKN_API bool path_exists(const String& path);
         
-    UKN_API ukn_wstring get_application_path();
+    UKN_API String get_application_path();
     
     // check and get path of a font
     // priority follows current path, resource path, system font folder, asset resource name
-    UKN_API ukn_wstring check_and_get_font_path(const ukn_wstring& name);
+    UKN_API String check_and_get_font_path(const String& name);
     
     class UKN_API Path {
     public:
-        static ukn_wstring GetEnv(const ukn_string& env);
-        static ukn_wstring GetCurrent();
-        static ukn_wstring GetHome();
-        static ukn_wstring GetRoot();
-        static ukn_wstring GetTemp();
-        static ukn_wstring GetFont();
-        static ukn_wstring GetWrittable();
-        static ukn_wstring GetResource();
+        static String GetEnv(const ukn_string& env);
+        static String GetCurrent();
+        static String GetHome();
+        static String GetRoot();
+        static String GetTemp();
+        static String GetFont();
+        static String GetWrittable();
+        static String GetResource();
         
         static void ListRoots(std::vector<ukn_string>& arr);
         
-        static ukn_wstring ExpandPath(const ukn_wstring& path);
+        static String ExpandPath(const String& path);
     };
             
     class UKN_API DirectoryIterator {
@@ -45,7 +46,7 @@ namespace ukn {
         DirectoryIterator();
         DirectoryIterator(const DirectoryIterator& iterator);
         explicit DirectoryIterator(const ukn_string& path);
-        explicit DirectoryIterator(const ukn_wstring& path);
+        explicit DirectoryIterator(const String& path);
         ~DirectoryIterator();
         
         const ukn_string& file() const;

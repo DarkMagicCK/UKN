@@ -184,7 +184,7 @@ namespace ukn {
     };
     
     struct Font::StringData {
-        ukn_wstring string_to_render;
+        String string_to_render;
         float x;
         float y;
         float char_rot;
@@ -194,7 +194,7 @@ namespace ukn {
         FontAlignment alignment;
         
         StringData():
-        string_to_render(ukn_wstring()),
+        string_to_render(String()),
         x(0),
         y(0),
         char_rot(0),
@@ -205,7 +205,7 @@ namespace ukn {
         
         }
         
-        StringData(const ukn_wstring& str, float _x, float _y, FontAlignment align):
+        StringData(const String& str, float _x, float _y, FontAlignment align):
         string_to_render(str),
         x(_x),
         y(_y),
@@ -252,7 +252,7 @@ namespace ukn {
             ukn_string font_name = config->getString("name");
             
             if(!font_name.empty()) {
-                ukn_wstring fullFontPath = check_and_get_font_path(string_to_wstring(font_name));
+                String fullFontPath = check_and_get_font_path(string_to_wstring(font_name));
                 
                 if(fullFontPath.empty()) {
                     log_error("ukn::Font::deserialize: error finding font name " + font_name);
@@ -331,7 +331,7 @@ namespace ukn {
         float x = data.x;
         float y = data.y;
         
-        ukn_wstring::const_iterator it = data.string_to_render.begin();
+        String::const_iterator it = data.string_to_render.begin();
         while(it != data.string_to_render.end()) {
             if(*it != L'\n') {
                 uint32 gidx = getGlyphByChar(*it);
@@ -389,7 +389,7 @@ namespace ukn {
         return idx;
     }
     
-    void Font::draw(const ukn_wstring& str, float x, float y, FontAlignment alignment) {
+    void Font::draw(const String& str, float x, float y, FontAlignment alignment) {
         Font::StringData data;
         data.string_to_render = str;
         data.x = x;
@@ -406,7 +406,7 @@ namespace ukn {
         }
     }
     
-    const ukn_wstring& Font::getName() const {
+    const String& Font::getName() const {
         return mFontName;
     }
     
@@ -425,7 +425,7 @@ namespace ukn {
 		}
     }
     
-    float2 Font::getStringDimensions(const ukn_wstring& str, float kw, float kh) {
+    float2 Font::getStringDimensions(const String& str, float kw, float kh) {
         float2 dim(0.f, 0.f);
         
         float tmpw = 0.f;

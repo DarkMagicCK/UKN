@@ -58,10 +58,10 @@ namespace ukn {
     
     class Task {
     public:
-        Task(const ukn_string& name);
+        Task(const String& name);
         virtual ~Task();
         
-        const ukn_string& getName() const;
+        const String& getName() const;
         
         void run();
         void cancel();
@@ -82,7 +82,7 @@ namespace ukn {
     private:
         friend class TaskManager;
         
-        ukn_string mName;
+        String mName;
         
         int32 mPriority;
         float mProgress;
@@ -126,7 +126,7 @@ namespace ukn {
         void removeTask(const TaskPtr& task);
         
         // run a added task manually
-        void runTask(const ukn_string& name);
+        void runTask(const String& name);
         
         void onUpdate(float dt);
         
@@ -137,7 +137,7 @@ namespace ukn {
         void taskProgress(Task* task);
         
     public:
-        TaskPtr taskByName(const ukn_string& name) const;
+        TaskPtr taskByName(const String& name) const;
         
         size_t count() const;
         

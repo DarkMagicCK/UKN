@@ -37,25 +37,25 @@ namespace ukn {
     template<>
     class AssetLoader<Font> {
     public:
-        static SharedPtr<Font> Load(const ukn_wstring& name, const ukn_wstring& path);
+        static SharedPtr<Font> Load(const String& name, const String& path);
     };
     
     template<>
     class AssetLoader<Texture> {
     public:
-        static SharedPtr<Texture> Load(const ukn_wstring& name, const ukn_wstring& path);
+        static SharedPtr<Texture> Load(const String& name, const String& path);
     };
     
     template<>
     class AssetLoader<ConfigParser> {
     public:
-        static SharedPtr<ConfigParser> Load(const ukn_wstring& name, const ukn_wstring& path);
+        static SharedPtr<ConfigParser> Load(const String& name, const String& path);
     };
     
     template<>
     class AssetLoader<Resource> {
     public:
-        static SharedPtr<Resource> Load(const ukn_wstring& name, const ukn_wstring& path);
+        static SharedPtr<Resource> Load(const String& name, const String& path);
     };
     
     class AssetManager: Uncopyable, public ConfigSerializable {
@@ -65,11 +65,11 @@ namespace ukn {
         struct AssetInfo {
             AssetInfo():
             type(AT_Unknown),
-            fullPath(ukn_wstring()) { 
+            fullPath(String()) { 
             
             }
             
-            AssetInfo(AssetType t, const ukn_wstring& n, const ukn_wstring& path):
+            AssetInfo(AssetType t, const String& n, const String& path):
             type(t),
             name(n),
             fullPath(path) { 
@@ -77,17 +77,17 @@ namespace ukn {
             }
             
             AssetType   type;
-            ukn_wstring name;
-            ukn_wstring fullPath;
+            String name;
+            String fullPath;
         };
         
-        typedef ukn_hash_map<ukn_wstring, AssetInfo> AssetNameMap;
+        typedef ukn_hash_map<String, AssetInfo> AssetNameMap;
         
     public:
         template<typename T>
-        SharedPtr<T> load(const ukn_wstring& name) const;
+        SharedPtr<T> load(const String& name) const;
         
-        void add(const ukn_wstring& name, const ukn_wstring& path, AssetType type);
+        void add(const String& name, const String& path, AssetType type);
         
         const AssetNameMap& getAssets() const;   
         
@@ -107,7 +107,7 @@ namespace ukn {
     
     
     template<typename T>
-    SharedPtr<T> AssetManager::load(const ukn_wstring& name) const {
+    SharedPtr<T> AssetManager::load(const String& name) const {
         AssetNameMap::const_iterator it = mAssetMap.find(name);
         if(it != mAssetMap.end()) {
             return AssetLoader<T>::Load(name, it->second.fullPath);

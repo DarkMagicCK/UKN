@@ -19,7 +19,7 @@
 
 namespace ukn {
     
-    SharedPtr<Font> AssetLoader<Font>::Load(const ukn_wstring& name, const ukn_wstring& path) {
+    SharedPtr<Font> AssetLoader<Font>::Load(const String& name, const String& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
         if(resource) {
@@ -33,7 +33,7 @@ namespace ukn {
         return SharedPtr<Font>();
     }
     
-    SharedPtr<Texture> AssetLoader<Texture>::Load(const ukn_wstring& name, const ukn_wstring& path) {
+    SharedPtr<Texture> AssetLoader<Texture>::Load(const String& name, const String& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
         if(resource) {
@@ -45,7 +45,7 @@ namespace ukn {
         return SharedPtr<Texture>();
     }
     
-    SharedPtr<ConfigParser> AssetLoader<ConfigParser>::Load(const ukn_wstring& name, const ukn_wstring& path) {
+    SharedPtr<ConfigParser> AssetLoader<ConfigParser>::Load(const String& name, const String& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
         if(resource) {
@@ -57,7 +57,7 @@ namespace ukn {
         return SharedPtr<ConfigParser>();
     }
     
-    SharedPtr<Resource> AssetLoader<Resource>::Load(const ukn_wstring& name, const ukn_wstring& path) {
+    SharedPtr<Resource> AssetLoader<Resource>::Load(const String& name, const String& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
         if(resource)
@@ -83,7 +83,7 @@ namespace ukn {
         return mAssetMap;
     }
     
-    void AssetManager::add(const ukn_wstring& name, const ukn_wstring& path, AssetType type) {
+    void AssetManager::add(const String& name, const String& path, AssetType type) {
         mAssetMap.insert(std::make_pair(name, AssetInfo(type, name, path)));
     }
     

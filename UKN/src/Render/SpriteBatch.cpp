@@ -158,8 +158,8 @@ namespace ukn {
         
     }
     
-    const ukn_wstring& SpriteBatch::getName() const {
-        static ukn_wstring name(L"SpriteBatch");
+    const String& SpriteBatch::getName() const {
+        static String name(L"SpriteBatch");
         return name;
     }
     

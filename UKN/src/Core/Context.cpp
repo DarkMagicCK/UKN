@@ -16,6 +16,7 @@
 #include "UKN/Stream.h"
 #include "UKN/Logger.h"
 #include "UKN/Common.h"
+#include "UKN/Scene.h"
 
 namespace ukn {
     
@@ -41,6 +42,15 @@ namespace ukn {
     
     AppInstance& Context::getApp() const {
         return *mApp;
+    }
+    
+    void Context::setScene(const SceneManagerPtr& ptr) {
+        mScene = ptr;
+    }
+    
+    SceneManager& Context::getScene() {
+        ukn_assert(mScene);
+        return *mScene;
     }
     
     bool Context::isAppAvailable() const {
@@ -84,7 +94,7 @@ namespace ukn {
         return "unknown_fmt";
     }
     
-    void Context::loadCfgFile(const ukn_wstring& name) {
+    void Context::loadCfgFile(const String& name) {
         ContextCfg cfg;
         cfg.render_cfg.width = 800;
         cfg.render_cfg.height = 600;
@@ -156,7 +166,7 @@ namespace ukn {
 		}
     }
     
-    void Context::saveCfgFile(const ukn_wstring& name) {
+    void Context::saveCfgFile(const String& name) {
         ConfigParserPtr configParser = MakeEmptyConfigParser(CPT_XML);
         if(configParser) {
             configParser->beginNode("cfg");

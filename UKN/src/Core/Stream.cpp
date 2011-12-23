@@ -256,7 +256,7 @@ namespace ukn {
         close();
     }
     
-    bool FileStreamPosix::open(const ukn_wstring& filename, bool canwrite, bool append, bool nocache) {
+    bool FileStreamPosix::open(const String& filename, bool canwrite, bool append, bool nocache) {
         if(file != NULL)
             return false;
         
@@ -330,7 +330,7 @@ namespace ukn {
         return stream;
     }
     
-    bool write_stream_to_file(const StreamPtr& stream, const ukn_wstring& file) {
+    bool write_stream_to_file(const StreamPtr& stream, const String& file) {
         FileStream output;
         if(output.open(file, true)) {
             if(stream->getStreamType() == Stream::ST_Memory) {
@@ -350,7 +350,7 @@ namespace ukn {
         return false;
     }
     
-    bool write_stream_to_file(Stream& stream, const ukn_wstring& file) {
+    bool write_stream_to_file(Stream& stream, const String& file) {
         FileStream output;
         if(output.open(file, true)) {
             if(stream.getStreamType() == Stream::ST_Memory) {

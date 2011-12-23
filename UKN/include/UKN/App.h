@@ -28,7 +28,7 @@ namespace ukn {
         Window&     getMainWindow() const;
 		WindowPtr   getMainWindowPtr() const;
         
-        void create(const ukn_wstring& cfgname=L"config.xml");
+        void create(const String& cfgname=L"config.xml");
         void create(const ContextCfg& cfg);
         
         void run();

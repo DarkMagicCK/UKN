@@ -73,5 +73,19 @@
          landmarkName = "parse_png_file()"
          landmarkType = "7">
       </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "UKN/main.cpp"
+         timestampString = "346348060.479461"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "84"
+         endingLineNumber = "84"
+         landmarkName = "onRender()"
+         landmarkType = "7">
+      </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>

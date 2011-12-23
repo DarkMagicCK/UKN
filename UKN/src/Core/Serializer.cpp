@@ -219,45 +219,23 @@ namespace ukn {
     
     // string
     template<>
-    void SerializeHelper::FromString<ukn_string>(const ukn_string& str, ukn_string* val) {
-        ukn_assert(val);
-        *val = str;
-    }
-    
-    template<>
-    ukn_string SerializeHelper::ToString<ukn_string>(ukn_string* val) {
-        return *val;
-    }
-    
-    template<>
-    ukn_string SerializeHelper::DefaultValue<ukn_string>() {
-        return ukn_string();
-    }
-    
-    template<>
-    SerializableTypeId SerializeHelper::GetTypeId<ukn_string>() {
-        return STI_STRING;
-    }
-    
-    // wstring
-    template<>
-    void SerializeHelper::FromString<ukn_wstring>(const ukn_string& str, ukn_wstring* val) {
+    void SerializeHelper::FromString<String>(const ukn_string& str, String* val) {
         ukn_assert(val);
         *val = string_to_wstring(str);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<ukn_wstring>(ukn_wstring* val) {
+    ukn_string SerializeHelper::ToString<String>(String* val) {
         return wstring_to_string(*val);
     }
     
     template<>
-    ukn_wstring SerializeHelper::DefaultValue<ukn_wstring>() {
-        return ukn_wstring();
+    String SerializeHelper::DefaultValue<String>() {
+        return String();
     }
     
     template<>
-    SerializableTypeId SerializeHelper::GetTypeId<ukn_wstring>() {
+    SerializableTypeId SerializeHelper::GetTypeId<String>() {
         return STI_WSTRING;
     }
     

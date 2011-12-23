@@ -310,7 +310,7 @@ namespace ukn {
         StoryBoardList::iterator it = mStoryBoards.begin();
         StoryBoardList::iterator end = mStoryBoards.end();
         
-        for(; it != end; ++it) {
+        while(it != end) {
             if((*it)->getStatus() == AS_Stop) {
                 it = mStoryBoards.erase(it);
             } else {

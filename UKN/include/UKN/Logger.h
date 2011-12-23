@@ -11,6 +11,7 @@
 
 #include "UKN/Platform.h"
 #include "UKN/PreDeclare.h"
+#include "UKN/StringUtil.h"
 
 #include <deque>
 
@@ -24,6 +25,8 @@ namespace ukn {
         LF_PrependRunningTime,
         // prepend log level name except LL_Info
         LF_PrependLevelName,
+        // also output to console
+        LF_OutputToConsole,
     };
     
     enum LogLevel {
@@ -46,36 +49,30 @@ namespace ukn {
         void redirect(StreamPtr);
         void setFeature(LoggerFeature feature, bool flag);
         
-        void log(const ukn_string& log, LogLevel level=LL_Info);
-        void log(const ukn_wstring& log, LogLevel level=LL_Info);
+        void log(const String& log, LogLevel level=LL_Info);
 
         // log with LL_Info level
-        Logger& operator<<(const ukn_string& log);
-        Logger& operator<<(const ukn_wstring& log);
+        Logger& operator<<(const String& log);
         
         void clear();
         
         size_t getLogSize() const;
-        const std::deque<ukn_string>& getLogQueue() const;
+        const std::deque<String>& getLogQueue() const;
         
     private:
-        std::deque<ukn_string> mLogQueue;
+        std::deque<String> mLogQueue;
         
         StreamPtr mOutputStream;
         
         bool mPrependTime;
         bool mPrependLevel;
+        bool mOutputToConsole;
     };
     
-    void log_error(const ukn_string& log);
-    void log_notice(const ukn_string& log);
-    void log_warning(const ukn_string& log);
-    void log_info(const ukn_string& log);
-    
-    void log_error(const ukn_wstring& log);
-    void log_notice(const ukn_wstring& log);
-    void log_warning(const ukn_wstring& log);
-    void log_info(const ukn_wstring& log);
+    void log_error(const String& log);
+    void log_notice(const String& log);
+    void log_warning(const String& log);
+    void log_info(const String& log);
     
 } // namespace ukn
 

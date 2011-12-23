@@ -20,7 +20,7 @@ namespace ukn {
     
     class Module: Uncopyable {
     public:
-        virtual const ukn_string& getName() const = 0;
+        virtual const String& getName() const = 0;
         
         virtual void init() = 0;
         

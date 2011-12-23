@@ -49,10 +49,13 @@ namespace ukn {
             case LF_PrependLevelName:
                 mPrependLevel = flag;
                 break;
+            case LF_OutputToConsole:
+                mOutputToConsole = flag;
+                break;
         }
     }
     
-    inline ukn_string loglevel_to_string(LogLevel level) {
+    inline String loglevel_to_string(LogLevel level) {
         switch(level) {
             case LL_Error:
                 return "*Error* ";
@@ -62,14 +65,14 @@ namespace ukn {
                 return "*Notice* ";
             case LL_Info:
             default:
-                return ukn_string();
+                return String();
         }
     }
     
-    void Logger::log(const ukn_string& log, LogLevel level) {
-        ukn_string realLog;
+    void Logger::log(const String& log, LogLevel level) {
+        String realLog;
         if(mPrependTime) {
-            realLog += format_string("[%.3f] ", (float)FrameCounter::Instance().getRunningTime() / Timestamp::Resolution());
+            realLog += String(format_string("[%.3f] ", (float)FrameCounter::Instance().getRunningTime() / Timestamp::Resolution()));
         }
         if(mPrependLevel) {
             realLog += loglevel_to_string(level);
@@ -84,19 +87,13 @@ namespace ukn {
 #else
 			*mOutputStream<<realLog<<"\n";
 #endif // UKN_OS_WINDOWS
+            if(mOutputToConsole) {
+                printf("%ls\n", realLog.c_str());
+            }
         }
     }
     
-    void Logger::log(const ukn_wstring& log, LogLevel level) {
-        this->log(wstring_to_string(log), level);
-    }
-    
-    Logger& Logger::operator<<(const ukn_string& log) {
-        this->log(log, LL_Info);
-        return *this;
-    }
-    
-    Logger& Logger::operator<<(const ukn_wstring& log) {
+    Logger& Logger::operator<<(const String& log) {
         this->log(log, LL_Info);
         return *this;
     }
@@ -109,39 +106,23 @@ namespace ukn {
         return mLogQueue.size();
     }
    
-    const std::deque<ukn_string>& Logger::getLogQueue() const {
+    const std::deque<String>& Logger::getLogQueue() const {
         return mLogQueue;
     }
     
-    void log_error(const ukn_string& log) {
+    void log_error(const String& log) {
         Logger::Instance().log(log, LL_Error);
     }
     
-    void log_notice(const ukn_string& log) {
+    void log_notice(const String& log) {
         Logger::Instance().log(log, LL_Notice);
     }
     
-    void log_warning(const ukn_string& log) {
+    void log_warning(const String& log) {
         Logger::Instance().log(log, LL_Warning);
     }
     
-    void log_info(const ukn_string& log) {
-        Logger::Instance().log(log, LL_Info);
-    }
-    
-    void log_error(const ukn_wstring& log) {
-        Logger::Instance().log(log, LL_Error);
-    }
-    
-    void log_notice(const ukn_wstring& log) {
-        Logger::Instance().log(log, LL_Notice);
-    }
-    
-    void log_warning(const ukn_wstring& log) {
-        Logger::Instance().log(log, LL_Warning);
-    }
-    
-    void log_info(const ukn_wstring& log) {
+    void log_info(const String& log) {
         Logger::Instance().log(log, LL_Info);
     }
     

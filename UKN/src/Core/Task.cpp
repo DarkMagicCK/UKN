@@ -12,7 +12,7 @@
 
 namespace ukn {
     
-    Task::Task(const ukn_string& name):
+    Task::Task(const String& name):
     mName(name),
     mProgress(0),
     mState(TS_Idle),
@@ -26,7 +26,7 @@ namespace ukn {
         
     }
     
-    const ukn_string& Task::getName() const {
+    const String& Task::getName() const {
         return mName;
     }
 
@@ -181,7 +181,7 @@ namespace ukn {
         }
     }
     
-    void TaskManager::runTask(const ukn_string& name) {
+    void TaskManager::runTask(const String& name) {
         TaskPtr task = taskByName(name);
         if(task) {
             start(task, task->mPriority);
@@ -256,7 +256,7 @@ namespace ukn {
         mNoficationEvent.raise(this, notification);
     }
     
-    TaskPtr TaskManager::taskByName(const ukn_string& name) const {
+    TaskPtr TaskManager::taskByName(const String& name) const {
         TaskList::const_iterator it = mTasks.begin();
         TaskList::const_iterator end = mTasks.end();
         

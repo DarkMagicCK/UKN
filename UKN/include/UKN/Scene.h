@@ -14,6 +14,7 @@
 #include "UKN/MathUtil.h"
 #include "UKN/Uncopyable.h"
 #include "UKN/Frustum.h"
+#include "UKN/Renderable.h"
 
 #include <vector>
 

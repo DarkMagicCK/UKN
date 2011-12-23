@@ -13,6 +13,7 @@
 #include "UKN/GraphicSettings.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/DllLoader.h"
+#include "UKN/StringUtil.h"
 
 namespace ukn {
         
@@ -35,11 +36,14 @@ namespace ukn {
         void        setCfg(const ContextCfg& cfg);
         ContextCfg  getCfg() const;
         
-        void loadCfgFile(const ukn_wstring& name);
-        void saveCfgFile(const ukn_wstring& name);
+        void loadCfgFile(const String& name);
+        void saveCfgFile(const String& name);
         
         GraphicFactoryPtr getGraphicFactoryPtr() const;
         GraphicFactory&   getGraphicFactory() const;
+        
+        void setScene(const SceneManagerPtr& ptr);
+        SceneManager& getScene();
         
         void registerGraphicFactory(GraphicFactoryPtr factory);
         
@@ -62,6 +66,8 @@ namespace ukn {
         DllLoader mGraphicFactoryLoader;
         
         GraphicFactoryPtr mGraphicFactory;
+        
+        SceneManagerPtr mScene;
     };
     
     

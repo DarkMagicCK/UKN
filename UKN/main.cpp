@@ -51,7 +51,7 @@ public:
         mSpriteBatch = ukn::Context::Instance().getGraphicFactory().createSpriteBatch();
         
         ukn::ConfigParserPtr cfg = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"asset.xml"));
-        ukn::AssetManager::Instance().unserialize(cfg);
+        ukn::AssetManager::Instance().deserialize(cfg);
         
         mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");

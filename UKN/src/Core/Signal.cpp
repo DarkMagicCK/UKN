@@ -67,6 +67,18 @@ namespace ukn {
             }
             mConnections.clear();
         }
+        
+        void SignalImpl::disconnect(void* con, void* data) {
+            if(!__in_distribute) {
+                std::auto_ptr<IteratorType> slot(reinterpret_cast<IteratorType*>(data));
+                mConnections.erase(*slot);
+                
+            } else {
+                __to_delete.push_back(data);
+                
+                ((ConnectionBase*)con)->__in_delete_list = true;
+            }
+        }
 
     } // namespace detail
 

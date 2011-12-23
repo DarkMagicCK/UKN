@@ -61,7 +61,7 @@ namespace ukn {
         ~BinarySerializer() { }
         
         template<typename T> void serialize(T* obj);
-        template<typename T> void unserialize(T* obj);
+        template<typename T> void deserialize(T* obj);
         
         const StreamPtr& getStream() const {
             return this->mSerializeStream;
@@ -79,24 +79,30 @@ namespace ukn {
 #endif
             *mSerializeStream << *obj;
         } else 
-            log_error("ukn::Serializer::unserialize: invalid stream");
+            log_error("ukn::Serializer::deserialize: invalid stream");
     }
     
     template<typename T>
-    void BinarySerializer::unserialize(T* obj) {
+    void BinarySerializer::deserialize(T* obj) {
         if(this->mSerializeStream) {
 #ifdef UKN_DEBUG
 
 #endif
             *mSerializeStream >> *obj;
         } else 
-            log_error("ukn::Serializer::unserialize: invalid stream");
+            log_error("ukn::Serializer::deserialize: invalid stream");
     }
+    
+    class Serializable {
+    public:
+        virtual bool serialize(BinarySerializer& serializer) = 0;
+        virtual bool deserialize(BinarySerializer& serializer) = 0;
+    };
     
     class ConfigSerializable {
     public:
         virtual bool serialize(const ConfigParserPtr& config) = 0;
-        virtual bool unserialize(const ConfigParserPtr& config) = 0;
+        virtual bool deserialize(const ConfigParserPtr& config) = 0;
     };
     
 } // namespace ukn

@@ -195,12 +195,15 @@ namespace ukn {
         void setDesiredFps(int32 fps);
         
         float getDesiredFps() const;
+        // frame delta
         float getPrevDelta() const;
         float getCurrentFps() const;
         
         void waitToNextFrame();
         uint64 getFrameCount() const; 
         uint64 getRunningTime() const;
+        
+        // actual running delta time, not frame delta
         uint64 getDeltaTime() const;
         
     protected:    

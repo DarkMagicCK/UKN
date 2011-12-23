@@ -24,32 +24,31 @@ namespace ukn {
     static void WindowSizeFunc(GLFWwindow window, int w, int h) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onResize().getEvent()(*glwnd, w, h);
+        glwnd->onResize().raise(glwnd, WindowResizeEventArgs(w, h));
     }
     
     static int WindowCloseFunc(GLFWwindow window) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onClose().getEvent()(*glwnd);
+        glwnd->onClose().raise(glwnd, NullEventArgs());
         return 1;
     }
     
     static void WindowRefreshFunc(GLFWwindow window) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onRender().getEvent()(*glwnd);
     }
     
     static void WindowFocusFunc(GLFWwindow window, int f) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onActive().getEvent()(*glwnd, f > 0 ? true: false);
+        glwnd->onActive().raise(glwnd, WindowBoolEventArgs(f > 0 ? true: false));
     }
     
     static void WindowIconifyFunc(GLFWwindow window, int f) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onIconify().getEvent()(*glwnd, f > 0 ? true : false);
+        glwnd->onIconify().raise(glwnd, WindowBoolEventArgs(f > 0 ? true: false));
     }
     
     static void MouseButtonFunc(GLFWwindow window, int a, int b) {
@@ -65,7 +64,7 @@ namespace ukn {
     static void ScrollFunc(GLFWwindow window, int a, int b) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onScroll().getEvent()(*glwnd, a, b);
+  //      glwnd->onScroll().getSignal()(*glwnd, a, b);
     }
     
     static void KeyFunc(GLFWwindow window, int a, int b) {
@@ -76,7 +75,6 @@ namespace ukn {
     static void CharFunc(GLFWwindow window, int c) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onChar().getEvent()(*glwnd, c);
     }
     
     GLWindow::GLWindow(const ukn_string& name, const RenderSettings& settings):
@@ -224,8 +222,8 @@ namespace ukn {
         vp.camera->update();
     }
     
-    void GLWindow::onWindowResize(Window& wnd, uint32 w, uint32 h) {
-        updateWindowProperties(getLeft(), getTop(), w, h);
+    void GLWindow::onWindowResize(void* wnd, WindowResizeEventArgs* args) {
+        updateWindowProperties(getLeft(), getTop(), args->width, args->height);
 
     }
     

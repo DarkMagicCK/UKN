@@ -12,6 +12,22 @@
 
 namespace ukn {
     
+    template<typename T>
+    struct ClassInstantiator {
+        static T* instantiate() {
+            return new T();
+        }
+        
+        template<typename R>
+        static T* instantiate(R arg) {
+            return new T(arg);
+        }
+        
+        static void release(T* obj) {
+            delete obj;
+        }
+    };
+    
     // class for allocating singleton on the heap
     template<typename T, typename R>
     class SingletonHolder {
@@ -23,11 +39,11 @@ namespace ukn {
         
         ~SingletonHolder() {
             if(this->mInstance)
-                delete this->mInstance;
+                ClassInstantiator<T>::release(this->mInstance);
         }
         
         T* get(R arg) {
-            if(!mInstance) mInstance = new T(arg);
+            if(!mInstance) mInstance = ClassInstantiator<T>::template instantiate<R>(arg);
             return mInstance;
         }
         
@@ -45,11 +61,11 @@ namespace ukn {
         
         ~SingletonHolder() {
             if(this->mInstance)
-                delete this->mInstance;
+                ClassInstantiator<T>::release(this->mInstance);
         }
         
         T* get(void) {
-            if(!mInstance) mInstance = new T();
+            if(!mInstance) mInstance = ClassInstantiator<T>::instantiate();
             return mInstance;
         }
         
@@ -61,13 +77,17 @@ namespace ukn {
     class Singleton {
     public:
         static T& Instance() {
-            if(!mInstance) mInstance = new T();
-            return *mInstance;
+            return *InstancePtr();
+        }
+        
+        static T* InstancePtr() {
+            if(!mInstance) mInstance = ClassInstantiator<T>::instantiate();
+            return mInstance;
         }
         
         static void Destroy() {
             if(mInstance) 
-                delete mInstance;
+                ClassInstantiator<T>::release(mInstance);
             mInstance = 0;
         }
         

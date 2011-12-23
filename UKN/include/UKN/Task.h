@@ -26,9 +26,9 @@ namespace ukn {
         TN_Progress,
     };
     
-    class TaskNotification {
+    class TaskNotificationEventArgs {
     public:
-        TaskNotification(TaskNotificationType type, const TaskPtr& task):
+        TaskNotificationEventArgs(TaskNotificationType type, const TaskPtr& task):
         mTask(task),
         mType(type) {
         }
@@ -107,7 +107,7 @@ namespace ukn {
     public:
         typedef Array<TaskInfo>  TaskList;
         typedef Array<TaskInfo>  PendingTaskList;
-        typedef EventObject<void(TaskNotification&)> NotificationEvent;
+        typedef Event<TaskNotificationEventArgs> NotificationEvent;
         
     public:
         TaskManager(bool multithreaded=false);
@@ -141,6 +141,7 @@ namespace ukn {
         
         size_t count() const;
         
+        // todo
         bool isMultiThreaded() const;
         
         const TaskList& allTasks() const;

@@ -229,9 +229,9 @@ namespace ukn {
     }
     
     void TaskManager::taskFinished(Task* task) {
-        TaskNotification notification(TN_Finished, task);
+        TaskNotificationEventArgs notification(TN_Finished, task);
         
-        mNoficationEvent.getEvent()(notification);
+        mNoficationEvent.raise(this, notification);
         
         // remove the task from the task list
         if(task->mPeriodical == false)
@@ -239,21 +239,21 @@ namespace ukn {
     }
     
     void TaskManager::taskStarted(Task* task) {
-        TaskNotification notification(TN_Started, task);
+        TaskNotificationEventArgs notification(TN_Started, task);
         
-        mNoficationEvent.getEvent()(notification);
+        mNoficationEvent.raise(this, notification);
     }
     
     void TaskManager::taskCanceld(Task* task) {
-        TaskNotification notification(TN_Canceled, task);
+        TaskNotificationEventArgs notification(TN_Canceled, task);
         
-        mNoficationEvent.getEvent()(notification);
+        mNoficationEvent.raise(this, notification);
     }
     
     void TaskManager::taskProgress(Task* task) {
-        TaskNotification notification(TN_Progress, task);
+        TaskNotificationEventArgs notification(TN_Progress, task);
         
-        mNoficationEvent.getEvent()(notification);
+        mNoficationEvent.raise(this, notification);
     }
     
     TaskPtr TaskManager::taskByName(const ukn_string& name) const {

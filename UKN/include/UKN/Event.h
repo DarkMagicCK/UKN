@@ -17,115 +17,52 @@
 #include <vector>
 
 namespace ukn {
-    
-    class UKN_API EventHandler {
+  
+    class EventBase {
     public:
-        virtual ~EventHandler() { }
-        
-        virtual void onHandleEvent(const EventPtr& event) = 0;
-        
-        EventWorld* getEventWorld() const;
-        
-    protected:
-        friend class EventWorld;
-        
-        EventWorldPtr mEventWorld;
-    };
-        
-    class UKN_API Event {
-    public:
-        Event(const ukn_string& name);
-        virtual ~Event();
-        
-        bool    isConsumed() const;
-        void    comsume();
-        
-        void    setData(Any t);
-        Any     getData() const;
-        
-        EventHandler* getReceiver() const;
-        void setReceiver(const EventHandlerPtr& ptr);
-        
-        virtual Event* clone();
-        
-    private:
-        ukn_string mName;
-        
-        bool mConsumed;
-        Any mData;
-        
-        // event handler observer
-        WeakPtr<EventHandler> mReceiver;
+        virtual ~EventBase() { };
     };
     
-    class UKN_API EventWorld {
-    public:
-        EventWorld();
-        ~EventWorld();
+    struct NullEventArgs {
         
-        static EventWorld& DefaultObject();
-        
-        void enterHandler(EventHandler* handler);
-        void leaveHandler(EventHandler* handler);
-        
-    private:
-        typedef std::vector<EventHandler*> EventHandlerList;
-        EventHandlerList mEventHandlers;
     };
     
-    /**
-     * Event object class that overrides operator += and +
-     * Would disconnect every connection when destructs
-     **/
-    template<typename SIG>
-    class UKN_API EventObject {
+    template<typename EventArgs>
+    class UKN_API Event: public EventBase {
     public:
-        typedef Signal<SIG> SignalType;
+        typedef EventArgs event_args_type;
+        typedef Signal<void(void* /* sender */, EventArgs*)> signal_type;
         
-        EventObject() { }
-        EventObject(const EventObject& rhs) {
-            
-        }
+        Event() { }
         
-        ~EventObject() {
-            std::vector<Connection>::iterator it = mConnectedEvent.begin();
-            while(it != mConnectedEvent.end()) {
-                it->disconnect();
-                ++it;
-            }
-        }
+        ~Event() { }
         
         template<typename F>
         Connection connect(const F& func) {
-            Connection conn = mEvent.connect(func);
-            mConnectedEvent.push_back(conn);
-            return conn;
+            return mSignal.connect(func);
         }
         
         template<typename F>
-        EventObject& operator += (const F& func) {
-            Connection conn = mEvent.connect(func);
-            mConnectedEvent.push_back(conn);
-            return *this;
+        void operator += (const F& func) {
+            mSignal.connect(func);
         }
         
         template<typename F>
-        Connection operator + (const F& func) {
-            return connect(func);
+        void operator -= (const F& func) {
+            mSignal.disconnect(func);
         }
         
-        const SignalType& getEvent() const {
-            return mEvent;
+        const signal_type& getSignal() const {
+            return mSignal;
         }
         
-        EventObject& operator=(const EventObject& rhs) {
-            return *this;
+        void raise(void* sender, EventArgs args) {
+            EventArgs copy = args;
+            mSignal(sender, &copy);
         }
         
     private:
-        SignalType mEvent;
-        
-        std::vector<Connection> mConnectedEvent;
+        signal_type mSignal;
     };
     
 } // namespace ukn

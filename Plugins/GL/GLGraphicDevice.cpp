@@ -78,6 +78,8 @@ namespace ukn {
         GraphicDevice::bindFrameBuffer(((GLWindow*)mWindow.get())->getFrameBuffer());
         mScreenFrameBuffer = mCurrFrameBuffer;
         
+        //
+        
         return mWindow;
     }
     
@@ -181,7 +183,7 @@ namespace ukn {
         if(buffer->isUseIndexStream()) {
             GraphicBufferPtr indexBuffer = buffer->getIndexStream();
             if(!indexBuffer.isValid()) {
-                log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid vertex buffer format");
+                log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid index stream");
                 return;
             }
             
@@ -217,11 +219,11 @@ namespace ukn {
     }
     
     void GLGraphicDevice::beginFrame() {
-        mWindow->onFrameStart().getEvent()(*mWindow);
+        mWindow->onFrameStart().raise(this, NullEventArgs());
     }
     
     void GLGraphicDevice::endFrame() {
-        mWindow->onFrameEnd().getEvent()(*mWindow);
+        mWindow->onFrameEnd().raise(this, NullEventArgs());
     }
     
     void GLGraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {

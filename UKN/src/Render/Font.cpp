@@ -239,13 +239,13 @@ namespace ukn {
         ConfigParserPtr config = MakeConfigParser(resource);
         
         if(config)  
-            return unserialize(config);
+            return deserialize(config);
         else
             log_error(L"ukn::Font::loadFromResource: invalid resource ptr, with resource name" + resource->getName());
         return false;
     }
     
-    bool Font::unserialize(const ConfigParserPtr& config) {
+    bool Font::deserialize(const ConfigParserPtr& config) {
         mGlyphs.clear();
 
         if(config && config->toNode("/font")) {            
@@ -255,7 +255,7 @@ namespace ukn {
                 ukn_wstring fullFontPath = check_and_get_font_path(string_to_wstring(font_name));
                 
                 if(fullFontPath.empty()) {
-                    log_error("ukn::Font::unserialize: error finding font name " + font_name);
+                    log_error("ukn::Font::deserialize: error finding font name " + font_name);
                     return false;
                 }
                 ResourcePtr fontResource = ResourceLoader::Instance().loadResource(fullFontPath);

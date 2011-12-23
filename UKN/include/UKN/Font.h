@@ -77,7 +77,7 @@ namespace ukn {
         
         bool isValid() const;
         
-        bool unserialize(const ConfigParserPtr& cfg);
+        bool deserialize(const ConfigParserPtr& cfg);
         bool serialize(const ConfigParserPtr& cfg);
         
     private:

@@ -123,9 +123,6 @@ namespace ukn {
     class Operator;
     typedef SharedPtr<Operator> OperatorPtr;
     
-    class Event;
-    typedef SharedPtr<Event> EventPtr;
-    
     class Action;
     typedef SharedPtr<Action> ActionPtr;
     
@@ -144,14 +141,6 @@ namespace ukn {
     class SceneManager;
     typedef SharedPtr<SceneManager> SceneManagerPtr;
     
-    class Event;
-    typedef SharedPtr<Event> EventPtr;
-    
-    class EventHandler;
-    typedef SharedPtr<EventHandler> EventHandlerPtr;
-    
-    class EventWorld;
-    typedef SharedPtr<EventWorld> EventWorldPtr;
     
 } // namespace ukn
 

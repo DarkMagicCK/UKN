@@ -135,7 +135,7 @@ namespace ukn {
         return false;
     }
     
-    bool AssetManager::unserialize(const ConfigParserPtr& config) {
+    bool AssetManager::deserialize(const ConfigParserPtr& config) {
         if(config && config->toNode("/assets")) {
             if(config->toFirstChild()) {
                 do {
@@ -156,7 +156,7 @@ namespace ukn {
                 return true;
             }
         } else {
-            log_error("ukn::AssetManager::unserialize: unable to unserialize asset manager, invalid config state");
+            log_error("ukn::AssetManager::deserialize: unable to deserialize asset manager, invalid config state");
         }
         return false;
     }

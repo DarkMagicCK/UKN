@@ -14,6 +14,7 @@
 #include "UKN/Uncopyable.h"
 #include "UKN/Signal.h"
 #include "UKN/GraphicSettings.h"
+#include "UKN/Event.h"
 
 namespace ukn {
     
@@ -46,15 +47,13 @@ namespace ukn {
         
     private:
         void doCreate();
-        void onWindowClose(Window& wnd);
+        void onWindowClose(void* wnd, NullEventArgs*);
         
         ukn_string mName;
         bool mInited;    
 
         WindowPtr mMainWindow;
         CameraPtr mCamera;
-        
-        Connection mCloseConn;
     };
     
 } // namespace ukn

@@ -80,6 +80,9 @@
 		88E3C435147F2F1F00E8754D /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E3C434147F2F1D00E8754D /* OpenGL.framework */; };
 		88E3C438147F30F200E8754D /* GLWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C437147F30F100E8754D /* GLWindow.cpp */; };
 		88E507721491CE080055B5C0 /* Signal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E507711491CE070055B5C0 /* Signal.cpp */; };
+		88EA1C4714A34FB90079CCC4 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C4614A34FB90079CCC4 /* Animation.cpp */; };
+		88EA1C4A14A38C090079CCC4 /* Module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C4914A38C090079CCC4 /* Module.cpp */; };
+		88EA1C6414A4AA780079CCC4 /* AutoUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -286,7 +289,6 @@
 		88AAC12414868751007A80A4 /* GraphicSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicSettings.h; sourceTree = "<group>"; };
 		88AAC12514868751007A80A4 /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Input.h; sourceTree = "<group>"; };
 		88AAC12614868751007A80A4 /* Key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Key.h; sourceTree = "<group>"; };
-		88AAC12714868751007A80A4 /* KeyFrameAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyFrameAnimation.h; sourceTree = "<group>"; };
 		88AAC12814868751007A80A4 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
 		88AAC12914868751007A80A4 /* MathUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtil.h; sourceTree = "<group>"; };
 		88AAC12A14868751007A80A4 /* MemoryUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryUtil.h; sourceTree = "<group>"; };
@@ -389,6 +391,12 @@
 		88E3C436147F30EC00E8754D /* GLWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLWindow.h; sourceTree = "<group>"; };
 		88E3C437147F30F100E8754D /* GLWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLWindow.cpp; sourceTree = "<group>"; };
 		88E507711491CE070055B5C0 /* Signal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Signal.cpp; sourceTree = "<group>"; };
+		88EA1C4214A34D0D0079CCC4 /* Module.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Module.h; sourceTree = "<group>"; };
+		88EA1C4414A34F970079CCC4 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animation.h; sourceTree = "<group>"; };
+		88EA1C4614A34FB90079CCC4 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Animation.cpp; sourceTree = "<group>"; };
+		88EA1C4814A38A440079CCC4 /* AutoUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoUpdate.h; sourceTree = "<group>"; };
+		88EA1C4914A38C090079CCC4 /* Module.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Module.cpp; sourceTree = "<group>"; };
+		88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AutoUpdate.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -617,7 +625,6 @@
 				88AAC12414868751007A80A4 /* GraphicSettings.h */,
 				88AAC12514868751007A80A4 /* Input.h */,
 				88AAC12614868751007A80A4 /* Key.h */,
-				88AAC12714868751007A80A4 /* KeyFrameAnimation.h */,
 				88AAC12814868751007A80A4 /* Logger.h */,
 				88AAC12914868751007A80A4 /* MathUtil.h */,
 				884CE3FC14901F0900F58E2E /* RandomUtil.h */,
@@ -664,6 +671,9 @@
 				882D3CB51497C83800963AAD /* Thread.h */,
 				88278EDC149B7DB700C7ED8A /* Singleton.h */,
 				88278EDE149C89EB00C7ED8A /* RefCounted.h */,
+				88EA1C4214A34D0D0079CCC4 /* Module.h */,
+				88EA1C4814A38A440079CCC4 /* AutoUpdate.h */,
+				88EA1C4414A34F970079CCC4 /* Animation.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -708,6 +718,7 @@
 			children = (
 				88AAC14514868751007A80A4 /* App */,
 				88AAC14814868751007A80A4 /* Core */,
+				88EA1C4514A34FB40079CCC4 /* Presentation */,
 				88AAC15114868751007A80A4 /* Render */,
 				88038F44149776E500C8ACE0 /* Game */,
 			);
@@ -748,6 +759,8 @@
 				882D3CB314974BB500963AAD /* Task.cpp */,
 				882D3CB61497C85000963AAD /* Thread.cpp */,
 				882D3CB91498BA1D00963AAD /* Serializer.cpp */,
+				88EA1C4914A38C090079CCC4 /* Module.cpp */,
+				88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -909,6 +922,14 @@
 			path = "Project Unknown";
 			sourceTree = "<group>";
 		};
+		88EA1C4514A34FB40079CCC4 /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				88EA1C4614A34FB90079CCC4 /* Animation.cpp */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1028,6 +1049,9 @@
 				88322E261499E5A60007C936 /* Trigger.cpp in Sources */,
 				88278EE0149C947B00C7ED8A /* Scene.cpp in Sources */,
 				88278EE2149D97AA00C7ED8A /* Event.cpp in Sources */,
+				88EA1C4714A34FB90079CCC4 /* Animation.cpp in Sources */,
+				88EA1C4A14A38C090079CCC4 /* Module.cpp in Sources */,
+				88EA1C6414A4AA780079CCC4 /* AutoUpdate.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

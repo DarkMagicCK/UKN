@@ -35,7 +35,7 @@ namespace ukn {
         
     }
     
-    void AppInstance::onWindowClose(Window& wnd) {
+    void AppInstance::onWindowClose(void* wnd, NullEventArgs*) {
         terminate();
     }
     
@@ -71,7 +71,7 @@ namespace ukn {
         if(!mMainWindow)
             return terminate();
         
-        mCloseConn = mMainWindow->onClose().connect(Bind(this, &AppInstance::onWindowClose));
+        mMainWindow->onClose() += Bind(this, &AppInstance::onWindowClose);
         
         // log basic information
         Logger::Instance().setFeature(LF_PrependRunningTime, false);
@@ -109,7 +109,7 @@ namespace ukn {
         Logger::Instance().setFeature(LF_PrependRunningTime, true);
         
         // on init
-        mMainWindow->onInit().getEvent()(*mMainWindow);
+        mMainWindow->onInit().raise(this, NullEventArgs());
         onInit();
     }
     
@@ -123,13 +123,15 @@ namespace ukn {
     }
     
     void AppInstance::update() {
-        mMainWindow->onUpdate().getEvent()(*mMainWindow);
+        mMainWindow->onGlobalUpdate().raise(0, NullEventArgs());
 
+        mMainWindow->onUpdate().raise(mMainWindow, NullEventArgs());
+    
         onUpdate();
     }
     
     void AppInstance::render() {
-        mMainWindow->onRender().getEvent()(*mMainWindow);
+        mMainWindow->onRender().raise(this, NullEventArgs());
         
         onRender();
     }

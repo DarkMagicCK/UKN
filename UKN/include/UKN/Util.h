@@ -1758,31 +1758,39 @@ namespace ukn {
     };
     
     template<typename T>
+    class ResGuard {
+    public:
+        static T& GetRes() {
+            static T res_instance;
+            return res_instance;
+        }
+    };
+    
+    template<typename T>
     class AutoListElement {
     public:
         AutoListElement();
         virtual ~AutoListElement();
         
         typedef std::list<T*> ListType;
-        static const ListType& GetList() {
-            return list_instance;
+        static ListType& GetList() {
+            return ResGuard<ListType>::GetRes();
         }
         
-    private:
-        static ListType list_instance;
+    public:
+        typedef typename ListType::iterator iterator;
+        typedef typename ListType::const_iterator const_iterator;
+    
     };
     
     template<typename T>
-    typename AutoListElement<T>::ListType AutoListElement<T>::list_instance;
-    
-    template<typename T>
     AutoListElement<T>::AutoListElement() {
-        list_instance.push_back(this);
+        GetList().push_back(static_cast<T*>(this));
     }
     
     template<typename T>
     AutoListElement<T>::~AutoListElement() {
-        list_instance.remove(this);
+        GetList().remove(static_cast<T*>(this));
     }
 
 } // namespace ukn

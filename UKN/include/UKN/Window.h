@@ -25,6 +25,26 @@ namespace ukn {
      * Implementations depends on platforms and APIs
      **/
     
+    struct WindowBoolEventArgs {
+        bool flag;
+        
+        WindowBoolEventArgs(bool f):
+        flag(f) {
+            
+        }
+    };
+    
+    struct WindowResizeEventArgs {
+        int32 width;
+        int32 height;
+        
+        WindowResizeEventArgs(int32 w, int32 h):
+        width(w),
+        height(h) {
+            
+        }
+    };
+    
     class UKN_API Window {
     public:
         explicit Window(const ukn_string& name);
@@ -63,45 +83,36 @@ namespace ukn {
         uint32 mHeight;
         
     public:
-        typedef EventObject<void(Window&, bool)>               ActiveEvent;
-        typedef EventObject<void(Window&, bool)>               IconifyEvent;
-        typedef EventObject<void(Window&)>                     RenderEvent;
-        typedef EventObject<void(Window&)>                     UpdateEvent;
-        typedef EventObject<void(Window&, uint32, uint32)>     ResizeEvent;
-        typedef EventObject<void(Window&, int32, int32)>       ScrollEvent;
-        typedef EventObject<void(Window&)>                     SetCursorEvent;
-        typedef EventObject<void(Window&)>                     SetIconEvent;
-        typedef EventObject<void(Window&, int32 /* char */)>   CharEvent;
-        typedef EventObject<void(Window&, uint32 /* key */)>   KeyDownEvent;
-        typedef EventObject<void(Window&, uint32 /* key */)>   KeyUpEvent;
-        typedef EventObject<void(Window&, uint32 /* btn */)>   MouseDownEvent;
-        typedef EventObject<void(Window&, uint32 /* btn */)>   MouseUpEvent;
-        typedef EventObject<void(Window&, uint32 /* wheel */)> MouseWheelEvent;
-        typedef EventObject<void(Window&)>                     CloseEvent;
-        typedef EventObject<void(Window&)>                     FrameEndEvent;
-        typedef EventObject<void(Window&)>                     FrameStartEvent;
-        typedef EventObject<void(Window&)>                     InitializeEvent;
-        typedef EventObject<void(Window&, uint32 /* btn */, uint32, uint32 /* pos */)>   MouseDraggedEvent;
+        typedef Event<NullEventArgs>            WindowCreateEvent;
+        typedef Event<WindowBoolEventArgs>      ActiveEvent;
+        typedef Event<WindowBoolEventArgs>      IconifyEvent;
+        typedef Event<NullEventArgs>            RenderEvent;
+        typedef Event<NullEventArgs>            UpdateEvent;
+        typedef Event<WindowResizeEventArgs>    ResizeEvent;
+        typedef Event<NullEventArgs>            SetCursorEvent;
+        typedef Event<NullEventArgs>            SetIconEvent;
+        typedef Event<NullEventArgs>            CloseEvent;
+        typedef Event<NullEventArgs>            FrameEndEvent;
+        typedef Event<NullEventArgs>            FrameStartEvent;
+        typedef Event<NullEventArgs>            InitializeEvent;
+        
+        typedef Event<NullEventArgs>            GlobalUpdateEvent;
         
     private:
+        WindowCreateEvent mWindowCreateEvent;
         ActiveEvent     mActiveEvent;
         RenderEvent     mRenderEvent;
         UpdateEvent     mUpdateEvent;
         ResizeEvent     mResizeEvent;
         SetCursorEvent  mSetCursorEvent;
         SetIconEvent    mSetIconEvent;
-        KeyDownEvent    mKeyDownEvent;
-        KeyUpEvent      mKeyUpEvent;
-        MouseDownEvent  mMouseDownEvent;
-        MouseUpEvent    mMouseUpEvent;
-        MouseWheelEvent mMouseWheelEvent;
         CloseEvent      mCloseEvent;
         IconifyEvent    mIconifyEvent;
-        ScrollEvent     mScrollEvent;
-        CharEvent       mCharEvent;
         FrameStartEvent mFrameStart;
         FrameEndEvent   mFrameEnd;
         InitializeEvent mInitEvent;
+        
+        static GlobalUpdateEvent mGlobalUpdate;
         
     public:
         ActiveEvent& onActive() {
@@ -127,37 +138,13 @@ namespace ukn {
         SetIconEvent& onSetIcon() {
             return mSetIconEvent;
         }
-        
-        KeyDownEvent& onKeyDown() {
-            return mKeyDownEvent;
-        }
-        
-        KeyUpEvent& onKeyUp() {
-            return mKeyUpEvent;
-        }
-        
-        MouseDownEvent& onMouseDown() {
-            return mMouseDownEvent;
-        }
-        
-        MouseUpEvent& onMouseUp() {
-            return mMouseUpEvent;
-        }
-        
+            
         CloseEvent& onClose() {
             return mCloseEvent;
         }
         
         IconifyEvent& onIconify() {
             return mIconifyEvent;
-        }
-        
-        CharEvent& onChar() {
-            return mCharEvent;
-        }
-        
-        ScrollEvent& onScroll() {
-            return mScrollEvent;
         }
         
         FrameStartEvent& onFrameStart() {
@@ -170,6 +157,14 @@ namespace ukn {
         
         InitializeEvent& onInit() {
             return mInitEvent;
+        }
+        
+        WindowCreateEvent& onWindowCreate() {
+            return mWindowCreateEvent;
+        }
+        
+        static GlobalUpdateEvent& onGlobalUpdate() {
+            return mGlobalUpdate;
         }
     
     protected:

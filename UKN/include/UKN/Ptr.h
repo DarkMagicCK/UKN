@@ -538,6 +538,7 @@ namespace ukn {
                 mCounter->incWeakRef();
             }
         }
+        
         template<class Y> WeakPtr(const WeakPtr<Y>& ptr):
         mCounter(ptr.mCounter) {
             if(mCounter) {
@@ -557,30 +558,38 @@ namespace ukn {
             mCounter = r.mCounter;
             if(mCounter)
                 mCounter->incWeakRef();
+            return *this;
         }
+        
         template<class Y> WeakPtr & operator=(const WeakPtr<Y>& r) {
             mPtr = r.lock().get();
             mCounter = r.mCounter;
             if(mCounter)
                 mCounter->incWeakRef();
+            return *this;
         }
+        
         template<class Y> WeakPtr & operator=(const SharedPtr<Y>& r) {
             mPtr = r.get();
             mCounter = r.mCounter;
             
             if(mCounter)
                 mCounter->incWeakRef();
+            return *this;
         }
         
         int32 use_count() const {
             return mCounter ? mCounter->getRef() : 0;
         }
+        
         int32 weak_count() const {
             return mCounter ? mCounter->getWeakRef() : 0;
         }
+        
         bool expired() const {
             return (mCounter && mCounter->getRef() == 0) || !mCounter;
         }
+        
         SharedPtr<T> lock() const {
             return SharedPtr<T>(mPtr, mCounter);
         }

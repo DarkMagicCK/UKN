@@ -1196,6 +1196,10 @@ namespace ukn {
             
             set(center - dist, center + dist);
         }
+        
+        operator AABB2() {
+            return AABB2(min.x, min.y, max.x, max.y);
+        }
     };
 
     typedef AABB3 Box;

@@ -398,6 +398,7 @@
 		88EA1C4914A38C090079CCC4 /* Module.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Module.cpp; sourceTree = "<group>"; };
 		88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AutoUpdate.cpp; sourceTree = "<group>"; };
 		88EA1C6514A4DE370079CCC4 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
+		88EA1C6A14A606DD0079CCC4 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -676,6 +677,7 @@
 				88EA1C4814A38A440079CCC4 /* AutoUpdate.h */,
 				88EA1C4414A34F970079CCC4 /* Animation.h */,
 				88EA1C6514A4DE370079CCC4 /* Sprite.h */,
+				88EA1C6A14A606DD0079CCC4 /* Audio.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";

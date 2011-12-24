@@ -115,9 +115,9 @@ namespace ukn {
             Period		= 0xBE,
             Slash		= 0xBF,
             
-            LeftWin = 0x5B,
-            RightWin = 0x5C,
-            Apps = 0x5D,
+            LeftWin     = 0x5B,
+            RightWin    = 0x5C,
+            Apps        = 0x5D,
         };
         
         // mouse

@@ -26,6 +26,63 @@
 
 namespace ukn {
     
+    static uint16 *UTF8_to_UNICODE(uint16 *unicode, const char *utf8, int len)
+    {
+        int i, j;
+        uint16 ch;
+        
+        for ( i=0, j=0; i < len; ++i, ++j ) {
+            ch = ((const unsigned char *)utf8)[i];
+            if ( ch >= 0xF0 ) {
+                ch  =  (uint16)(utf8[i]&0x07) << 18;
+                ch |=  (uint16)(utf8[++i]&0x3F) << 12;
+                ch |=  (uint16)(utf8[++i]&0x3F) << 6;
+                ch |=  (uint16)(utf8[++i]&0x3F);
+            } else
+                if ( ch >= 0xE0 ) {
+                    ch  =  (uint16)(utf8[i]&0x0F) << 12;
+                    ch |=  (uint16)(utf8[++i]&0x3F) << 6;
+                    ch |=  (uint16)(utf8[++i]&0x3F);
+                } else
+                    if ( ch >= 0xC0 ) {
+                        ch  =  (uint16)(utf8[i]&0x1F) << 6;
+                        ch |=  (uint16)(utf8[++i]&0x3F);
+                    }
+            unicode[j] = ch;
+        }
+        unicode[j] = 0;
+        
+        return unicode;
+    }
+    
+    static __inline__ int UNICODE_strlen(const uint16 *text)
+    {
+        int size = 0;
+        while ( *text++ ) {
+            ++size;
+        }
+        return size;
+    }
+    
+    static __inline__ void UNICODE_strcpy(uint16 *dst, const uint16 *src, int swap)
+    {
+        if ( swap ) {
+            while ( *src ) {
+                *dst = flip_bytes(*src);
+                ++src;
+                ++dst;
+            }
+            *dst = '\0';
+        } else {
+            while ( *src ) {
+                *dst = *src;
+                ++src;
+                ++dst;
+            }
+            *dst = '\0';
+        }
+    }
+    
     struct Font::FTLibrary {
         static FTLibrary& Instance() {
             static Font::FTLibrary* lib = 0;
@@ -76,6 +133,7 @@ namespace ukn {
                                       &face)) {
                     return false;
                 }
+                FT_Select_Charmap(face, FT_ENCODING_UNICODE);
                 return true;
             } else {
                 if(FT_New_Face(Font::FTLibrary::Instance().library,
@@ -119,7 +177,7 @@ namespace ukn {
                 return;
             
             FT_Set_Pixel_Sizes(*face, 0, size);
-            if(!FT_Load_Glyph(*face, index, FT_LOAD_FORCE_AUTOHINT)) {
+            if(!FT_Load_Glyph(*face, index, FT_LOAD_DEFAULT)) {
                 FT_GlyphSlot glyph = (*face)->glyph;
                 FT_Bitmap bits;
                 if(glyph->format == ft_glyph_format_outline) {
@@ -184,7 +242,7 @@ namespace ukn {
     };
     
     struct Font::StringData {
-        String string_to_render;
+        Array<uint16> string_to_render;
         float x;
         float y;
         float char_rot;
@@ -194,7 +252,6 @@ namespace ukn {
         FontAlignment alignment;
         
         StringData():
-        string_to_render(String()),
         x(0),
         y(0),
         char_rot(0),
@@ -205,8 +262,7 @@ namespace ukn {
         
         }
         
-        StringData(const String& str, float _x, float _y, FontAlignment align):
-        string_to_render(str),
+        StringData(const char* str, float _x, float _y, FontAlignment align):
         x(_x),
         y(_y),
         char_rot(0),
@@ -214,7 +270,10 @@ namespace ukn {
         kerning_height(0),
         line_width(0),
         alignment(align) {
-            
+            uint32 len = strlen(str);
+            uint16* unicodestr = ukn_malloc_t(uint16, len+1);
+            UTF8_to_UNICODE(unicodestr, str, len);
+            string_to_render.set(unicodestr, len+1);
         }
     };
     
@@ -308,10 +367,25 @@ namespace ukn {
         return false;
     }
     
+    void Font::flushCache() {
+        mGlyphs.clear();
+    }
+    
+    void Font::setFTStyle(uint32 style) {
+        mFace->face->style_flags = mFace->face->style_flags | style;
+     //   flushCache();
+    }
+    
     void Font::setStyle(ukn::FontStyle style, bool flag) {
         switch(style) {
             case FS_Shadow: mEnableShadow = flag; break;
             case FS_Stroke: mEnableStroke = flag; break;
+            case FS_Bold:
+                setFTStyle(FT_STYLE_FLAG_BOLD);
+                break;
+            case FS_Italic:
+                setFTStyle(FT_STYLE_FLAG_ITALIC);
+                break;
         }
     }
     
@@ -331,8 +405,8 @@ namespace ukn {
         float x = data.x;
         float y = data.y;
         
-        String::const_iterator it = data.string_to_render.begin();
-        while(it != data.string_to_render.end()) {
+        Array<uint16>::const_iterator it = data.string_to_render.begin();
+        while(it != data.string_to_render.end() && *it != 0) {
             if(*it != L'\n') {
                 uint32 gidx = getGlyphByChar(*it);
                 
@@ -377,7 +451,7 @@ namespace ukn {
         onRenderEnd();
     }
     
-    uint32 Font::getGlyphByChar(wchar_t chr) {
+    uint32 Font::getGlyphByChar(uint16 chr) {
         uint32 idx = FT_Get_Char_Index(mFace->face, chr);
         if(idx == 0)
             return idx;
@@ -389,50 +463,28 @@ namespace ukn {
         return idx;
     }
     
-    void Font::draw(const String& str, float x, float y, FontAlignment alignment) {
-        Font::StringData data;
-        data.string_to_render = str;
-        data.x = x;
-        data.y = y;
-        data.alignment = alignment;
+    void Font::draw(const char* str, float x, float y, FontAlignment alignment) {
+        // in windows, gbk -> utf8
+        Font::StringData data(str, x, y, alignment);
         
         mRenderQueue.push_back(data);
-        
-        // cache chars to render
-        const wchar_t* sptr = str.c_str();
-        while(sptr && *sptr) {
-            getGlyphByChar(*sptr);
-            ++sptr;
-        }
+       
     }
     
     const String& Font::getName() const {
         return mFontName;
     }
     
-    float Font::getCharWidth(wchar_t chr) {
-        uint32 idx = getGlyphByChar(chr);
-        
-        if(idx > 0 && idx < mGlyphs.size()) {
-			int w = mGlyphs[idx-1].texw;
-			int left = mGlyphs[idx-1].left;
-			if (w + left > 0) return (float)(w+left);
-		}
-		if(chr >= 0x2000) {
-			return (float)mGlyphs[0].size;
-		} else {
-			return (float)mGlyphs[0].size / 2;
-		}
-    }
-    
-    float2 Font::getStringDimensions(const String& str, float kw, float kh) {
+    float2 Font::getStringDimensions(const char* str, float kw, float kh) {
         float2 dim(0.f, 0.f);
         
         float tmpw = 0.f;
-        const wchar_t* pstr = str.c_str();
-        while(pstr) {
-            if(*pstr != L'\n') {
-                tmpw += getCharWidth(*pstr) + kw;
+        uint32 size = strlen(str);
+        uint16* ustr = ukn_malloc_t(uint16, size+1);
+        UTF8_to_UNICODE(ustr, str, size);
+        while(ustr && *ustr) {
+            if(*ustr != L'\n') {
+                tmpw += mGlyphs[getGlyphByChar(*ustr)].imgw + kw;
                 if(dim[0] < tmpw) 
                     dim[0] = tmpw;
             }
@@ -441,8 +493,9 @@ namespace ukn {
                 tmpw = 0.f;
             }
             
-            pstr++;
+            ustr++;
         }
+        ukn_free(ustr);
         return dim;
     }
     

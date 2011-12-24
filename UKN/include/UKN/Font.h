@@ -34,6 +34,8 @@ namespace ukn {
     enum FontStyle {
         FS_Shadow,
         FS_Stroke,
+        FS_Italic,
+        FS_Bold,
     };
     
     enum FontStyleProperty {
@@ -59,7 +61,7 @@ namespace ukn {
         void setStyle(FontStyle style, bool flag);
         void setStyleProperty(FontStyleProperty sp, int32 prop);
         
-        void draw(const String& str, float x, float y, FontAlignment alignment);
+        void draw(const char* str, float x, float y, FontAlignment alignment);
         
         // inherited from Renderable
         void render();
@@ -67,8 +69,7 @@ namespace ukn {
         void onRenderBegin();
         void onRenderEnd();
         
-        float getCharWidth(wchar_t chr);
-        float2 getStringDimensions(const String& str, float kw=0, float kh=0);
+        float2 getStringDimensions(const char* str, float kw=0, float kh=0);
         
         const String& getName() const;
         
@@ -83,7 +84,9 @@ namespace ukn {
     private:
         friend class AssetManager;
         
-        uint32 getGlyphByChar(wchar_t chr);
+        uint32 getGlyphByChar(uint16 chr);
+        void flushCache();
+        void setFTStyle(uint32 style);
         
         uint32 mFontSize;
         String mFontName;

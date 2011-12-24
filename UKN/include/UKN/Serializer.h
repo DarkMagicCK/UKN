@@ -40,7 +40,6 @@ namespace ukn {
         STI_INT64,
         
         STI_STRING,
-        STI_WSTRING,
         
         STI_RAW
     };

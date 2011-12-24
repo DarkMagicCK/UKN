@@ -236,7 +236,7 @@ namespace ukn {
     
     template<>
     SerializableTypeId SerializeHelper::GetTypeId<String>() {
-        return STI_WSTRING;
+        return STI_STRING;
     }
     
 } // namespace ukn

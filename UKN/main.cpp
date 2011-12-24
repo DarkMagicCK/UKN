@@ -55,20 +55,13 @@ public:
         ukn::AssetManager::Instance().deserialize(cfg);
         
         mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
+        
+        mFont->setStyle(ukn::FS_Bold, true);
+        mFont->setStyle(ukn::FS_Italic, true);
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
-        
-        ukn::FloatLinearAnimation* anim = new ukn::FloatLinearAnimation;
-        anim->setTo(10);
-        anim->setFrom(0);
-        anim->setDuration(1000);
-        mAnimation.children().push_back(ukn::StoryBoard::AnimationInfo(0, anim, &x));
-        
-        mAnimation.play();
-        
     }
     
     void onUpdate() {
-        printf("%f\n", x);
     }
     
     void onRender() {
@@ -81,7 +74,7 @@ public:
         mSpriteBatch->render();
         
         if(mFont) {
-            mFont->draw("测试 Hello World!", 0, 0, ukn::FA_Left);
+            mFont->draw("Hello World! 测试 ", 0, 0, ukn::FA_Left);
 
             mFont->render();
         }

@@ -57,6 +57,7 @@ namespace ukn {
         void stopAnimation();
         void pauseAnimation();
         
+        void render(SpriteBatch& sprBatch, const Vector2& basePos);
         TexturePtr getTexture() const;
         
     private:
@@ -68,13 +69,20 @@ namespace ukn {
         ChildrenList mChildren;
         
         float mLength;
-        float mAngle;
+        float mAngle, mBaseAngle;
+        float mMaxAngle, mMinAngle;
+        float mTextureAngle;
         Vector2 mPostion;
+        Vector2 mOffset;
+        bool mAbsoluteAngle;
+        bool mAbsolutePosition;
         
         AnimationPlayer mAnimation;
         
         void* mUserData;
         TexturePtr mTexture;
+        Vector2 mScale;
+        Vector2 mBasePoint;
     };
         
     class SkeletalAnimation: public ConfigSerializable {
@@ -101,13 +109,13 @@ namespace ukn {
         size_t size() const;
         
         // render the skeletal into a spritebatch
-        void render(const SpriteBatch& spriteBatch = SpriteBatch::DefaultObject());
-        
-        TexturePtr getTexture() const;
+        void render(SpriteBatch& spriteBatch = SpriteBatch::DefaultObject());
         
     private:
         // root bone
         BonePtr mRoot;
+        
+        Vector2 mPosition;
     };
     
 } // namespace ukn

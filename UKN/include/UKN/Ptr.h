@@ -244,21 +244,21 @@ namespace ukn {
             return SharedPtr<Other, OtherRP>(this->mCounter, other);
         }
         
-        T* get() const {
+        inline T* get() const {
             return this->mPtr;
         }
         
-		T* operator->() {
+		inline T* operator->() {
 			return this->deref();
 		}
-        T* operator->() const {
+        inline T* operator->() const {
             return this->deref();
         }
     
-		T& operator*() {
+		inline T& operator*() {
 			return *this->deref();
 		}
-        T& operator*() const {
+        inline T& operator*() const {
 			return *this->deref();
 		}
         
@@ -343,7 +343,7 @@ namespace ukn {
 			return this->mPtr == rhs.mPtr;
 		}
 		
-        T* deref() const {
+        inline T* deref() const {
             if(!this->mPtr)
                 UKN_THROW_EXCEPTION("ukn::SharedPtr: invalid ptr to deref");
             return this->mPtr;

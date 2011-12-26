@@ -67,11 +67,10 @@ public:
         skAnim.deserialize(cfg2);
         
         skAnim.play("walk");
+        skAnim.setPosition(ukn::Vector2(300, 200));
     }
     
     void onUpdate() {
-        ukn::BonePtr bone = skAnim.getBone("body");
-        printf("%f, %f\n", bone->getPosition().x, bone->getPosition().y);
     }
     
     void onRender() {
@@ -79,8 +78,7 @@ public:
         
         ukn::Timestamp time;
         
-        if(mTexture)
-            mSpriteBatch->draw(mTexture, 0.f, 0.f);
+        skAnim.render(*mSpriteBatch.get());
         mSpriteBatch->render();
         
         if(mFont) {

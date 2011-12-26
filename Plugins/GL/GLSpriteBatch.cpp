@@ -30,9 +30,7 @@ namespace ukn {
     void GLSpriteBatch::onRender() {
         if(mRenderQueue.size() == 0)
             return ;
-        
-        onRenderBegin();
-        
+                
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         gd.pushProjectionMatrix();
@@ -90,8 +88,6 @@ namespace ukn {
         
         gd.popProjectionMatrix();
         gd.popViewMatrix();
-        
-        onRenderEnd();
     }
     
 } // namespace ukn

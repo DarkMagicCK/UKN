@@ -90,7 +90,7 @@ namespace ukn {
         tmpVert[3].u = u1; tmpVert[3].v = v2; tmpVert[0].z = layerDepth;
         
         float tx1 = -cx*scalex;
-        float ty1 = -cx*scaley;
+        float ty1 = -cy*scaley;
         float tx2 = (srcRect.x2-cx)*scalex;
         float ty2 = (srcRect.y2-cy)*scaley;
         

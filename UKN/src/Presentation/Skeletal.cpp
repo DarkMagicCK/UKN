@@ -15,12 +15,26 @@
 namespace ukn {
     
     Bone::Bone(const ukn_string& name):
-    mName(name) {
+    mName(name),
+    mParent(0),
+    mLength(0),
+    mAngle(0),
+    mBaseAngle(0),
+    mTextureAngle(0),
+    mMaxAngle(pi * 2),
+    mMinAngle(-pi * 2),
+    mPostion(Vector2()),
+    mUserData(0),
+    mAbsoluteAngle(false),
+    mAbsolutePosition(false),
+    mScale(Vector2(1.f, 1.f)) {
         // register properties for animation
         mAnimation.addProperty("x", &mPostion.x);
         mAnimation.addProperty("y", &mPostion.y);
         mAnimation.addProperty("length", &mLength);
         mAnimation.addProperty("angle", &mAngle);
+        mAnimation.addProperty("scalex", &mScale.x);
+        mAnimation.addProperty("scaley", &mScale.y);
     }
     
     Bone::~Bone() {
@@ -40,10 +54,18 @@ namespace ukn {
     }
     
     float Bone::getAngle() const {
-        return mAngle;
+        if(mAbsoluteAngle)
+            return mAngle;
+        else
+            return mAngle + (mParent != 0 ? mParent->getAngle() : 0);
     }
     
     Vector2 Bone::getPosition() const {
+        if(mParent && !mAbsolutePosition) {
+            Vector2 v2 = mParent->getPosition() + Vector2(mParent->mLength * cosf(mParent->getAngle()),
+                                                          -mParent->mLength * sinf(mParent->getAngle()));
+            return mPostion + v2;
+        }
         return mPostion;
     }
     
@@ -148,6 +170,34 @@ namespace ukn {
         }
     }
     
+    void Bone::render(SpriteBatch& sprBatch, const Vector2& basePos) {
+        if(mTexture) {
+            Vector2 pos = basePos + getPosition() + mOffset;
+            printf("%s, (%f, %f), %f, %f, %f\n", mName.c_str(), pos.x, pos.y, getAngle(), mBaseAngle, mTextureAngle);
+            
+            float angle = getAngle() - mBaseAngle + mTextureAngle;
+            if(angle > mMaxAngle) angle = mMaxAngle;
+            if(angle < mMinAngle) angle = mMinAngle;
+            sprBatch.draw(mTexture, 
+                          pos.x, 
+                          pos.y,
+                          mBasePoint.x, 
+                          mBasePoint.y,
+                          angle,
+                          1.f,
+                          1.f);
+        }
+        
+        if(!mChildren.empty()) {
+            ChildrenList::const_iterator it = mChildren.begin();
+            while(it != mChildren.end()) {
+                (*it)->render(sprBatch, basePos);
+                
+                ++it;
+            }
+        }
+    }
+    
     SkeletalAnimation::SkeletalAnimation() {
         // create root bone for all child bones
         // use for positioning
@@ -169,13 +219,32 @@ namespace ukn {
                 do {
                     ukn_string bone_name = config->getString("name");
                     if(!bone_name.empty()) {
-                        BonePtr bone = new Bone(bone_name);
-                        
+                        BonePtr bone;
+
+                        if(bone_name != "root") {
+                            bone = new Bone(bone_name);
+                        } else {
+                            bone = mRoot;
+                        }
+                           
                         // parse basic properties
                         bone->setPosition(Vector2(config->getFloat("x"),
                                                   config->getFloat("y")));
                         bone->setLength(config->getFloat("length"));
                         bone->setAngle(config->getFloat("angle"));
+                                                
+                        bone->mOffset = Vector2(config->getFloat("offx"),
+                                                config->getFloat("offy"));
+                        
+                        bone->mTextureAngle = config->getFloat("texture_angle");
+                        
+                        bone->mBaseAngle = bone->getAngle();
+                        
+                        bone->mAbsolutePosition = config->getBool("absolute_pos");
+                        bone->mAbsoluteAngle = config->getBool("absolute_angle");
+                        
+                        bone->mBasePoint = Vector2(config->getFloat("basex"),
+                                                   config->getFloat("basey"));
                         
                         ukn_string texture_name = config->getString("texture");
                         bone->mTexture = AssetManager::Instance().load<Texture>(texture_name);
@@ -184,8 +253,10 @@ namespace ukn {
                         bone->mAnimation.deserialize(config);
                         
                         // add bone
-                        ukn_string parent = config->getString("parent");
-                        addBone(bone, parent);
+                        if(bone_name != "root") {
+                            ukn_string parent = config->getString("parent");
+                            addBone(bone, parent);
+                        }
                     }
                     
                 } while(config->toNextChild());
@@ -207,11 +278,11 @@ namespace ukn {
     }
     
     void SkeletalAnimation::setPosition(const Vector2& pos) {
-        mRoot->setPosition(pos);
+        mPosition = pos;
     }
     
     Vector2 SkeletalAnimation::getPosition() const {
-        return mRoot->getPosition();
+        return mPosition;
     }
     
     BonePtr SkeletalAnimation::getRoot() const {
@@ -229,12 +300,15 @@ namespace ukn {
         BonePtr parent = getBone(parent_name.empty() ? "root" : parent_name);
         if(parent) {
             parent->getChildren().push_back(bone);
+            bone->mParent = parent;
         } else 
             log_error(ukn_string("ukn::SkeletalAnimation:addBone: no parent bone with name ")+parent_name+" found");
     }
     
-    void SkeletalAnimation::render(const SpriteBatch& spriteBatch) {
-        
+    void SkeletalAnimation::render(SpriteBatch& spriteBatch) {
+        if(mRoot) {
+            mRoot->render(spriteBatch, mPosition);
+        }
     }
     
     size_t SkeletalAnimation::size() const {

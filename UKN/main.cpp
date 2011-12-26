@@ -37,6 +37,8 @@
 #include "UKN/Profiler.h"
 #include "UKN/Thread.h"
 #include "UKN/Animation.h"
+#include "UKN/Class.h"
+#include "UKN/Skeletal.h"
 
 #include <vector>
 
@@ -59,9 +61,17 @@ public:
         mFont->setStyle(ukn::FS_Bold, true);
         mFont->setStyle(ukn::FS_Italic, true);
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
+        
+        
+        ukn::ConfigParserPtr cfg2 = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"test.uknanim"));
+        skAnim.deserialize(cfg2);
+        
+        skAnim.play("walk");
     }
     
     void onUpdate() {
+        ukn::BonePtr bone = skAnim.getBone("body");
+        printf("%f, %f\n", bone->getPosition().x, bone->getPosition().y);
     }
     
     void onRender() {
@@ -84,11 +94,12 @@ private:
     ukn::SharedPtr<ukn::SpriteBatch> mSpriteBatch;
 
     
+    ukn::SkeletalAnimation skAnim;
     ukn::FontPtr mFont;
     
     ukn::TexturePtr mTexture;
     ukn::StoryBoard mAnimation;
-    float x, y;
+    int x, y;
 };
 
 #ifndef UKN_OS_WINDOWS

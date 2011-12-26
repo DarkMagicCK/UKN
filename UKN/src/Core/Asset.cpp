@@ -136,7 +136,7 @@ namespace ukn {
     }
     
     bool AssetManager::deserialize(const ConfigParserPtr& config) {
-        if(config && config->toNode("/assets")) {
+        if(config && config->toNode("assets")) {
             if(config->toFirstChild()) {
                 do {
                     AssetInfo info;
@@ -153,6 +153,7 @@ namespace ukn {
                     }
                 } while( config->toNextChild() );
                 
+                config->toParent();
                 return true;
             }
         } else {

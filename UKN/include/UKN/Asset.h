@@ -77,8 +77,8 @@ namespace ukn {
             }
             
             AssetType   type;
-            String name;
-            String fullPath;
+            String      name;
+            String      fullPath;
         };
         
         typedef ukn_hash_map<String, AssetInfo> AssetNameMap;
@@ -105,12 +105,14 @@ namespace ukn {
         AssetNameMap mAssetMap;
     };
     
-    
     template<typename T>
     SharedPtr<T> AssetManager::load(const String& name) const {
         AssetNameMap::const_iterator it = mAssetMap.find(name);
         if(it != mAssetMap.end()) {
             return AssetLoader<T>::Load(name, it->second.fullPath);
+        } else {
+            // try to load as resource 
+            return AssetLoader<T>::Load(name, name);
         }
         return SharedPtr<T>();
     }

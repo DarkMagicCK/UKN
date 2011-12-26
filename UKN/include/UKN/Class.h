@@ -21,48 +21,66 @@
 
 namespace ukn {
     
+    // requires rtti
+    
+    class TypeInfo {
+    public:
+        explicit TypeInfo(const std::type_info& info) : _typeInfo(info) {};
+        
+        bool operator < (const TypeInfo& rhs) const {
+            return _typeInfo.before(rhs._typeInfo) != 0;
+        }
+        
+        std::string name() {
+            return _typeInfo.name();
+        }
+        
+    private:
+        const std::type_info& _typeInfo;
+    };
+    
     namespace detail {
         
-        static uint32 NextPropertyId() {
-            static uint32 curr_id = 0;
-            return curr_id++;
-        }
+        struct type_name_map {
+        protected:
+            type_name_map() { }
         
-        typedef std::map<ukn_string, uint32> PropertyNameIdMap;
-        static PropertyNameIdMap& get_registered_property_map()  {
-            static PropertyNameIdMap* g_map = new PropertyNameIdMap;
-            return *g_map;
-        }
-    }
+        public:
+            static type_name_map& Instance() {
+                static type_name_map instance;
+                return instance;
+            }
+            
+            std::map<TypeInfo, ukn_string>& get_name_map() {
+                return name_map;
+            }
+            
+        private:
+            std::map<TypeInfo, ukn_string> name_map;
+        };
+        
+    } // namespace detail
+
     
     template<typename T>
-    struct RegisteredProperty;
+    struct RegisteredType;
     
-#define UKN_REGISTER_PROPERTY_TYPE(type) \
-    template<> struct RegisteredProperty<type> { \
+#define UKN_REGISTER_TYPE(type) \
+    static struct UKN_JOIN(__ukn_type_registration_, type) { \
+        UKN_JOIN(__ukn_type_registration_, type)() {\
+            detail::type_name_map::Instance().get_name_map()[TypeInfo(typeid(type))] = #type; \
+        }\
+    } UKN_JOIN(__ukn_type_registration_instance_, type); \
+    template<> struct RegisteredType<type> {    \
         operator ukn_string() { \
-            return detail::get_registered_property_map().find(#type)->first; \
-        } \
-    }; \
-    static struct UKN_JOIN(_register_ukn_property_impl_, type) { \
-        UKN_JOIN(_register_ukn_property_impl_, type)() { \
-            detail::PropertyNameIdMap::iterator it = detail::get_registered_property_map().find(#type); \
-            if(it == detail::get_registered_property_map().end()) { \
-                detail::get_registered_property_map().insert(std::make_pair(#type, detail::NextPropertyId()));\
-            }\
-        } \
-    } UKN_JOIN(_register_ukn_property_impl_instance_, type); \
-    struct UKN_JOIN(_ukn_is_property_registered, type) { \
-        operator bool() { \
-            return detail::get_registered_property_map().find(#type) != detail::get_registered_property_map().end(); \
+            return detail::type_name_map::Instance().get_name_map()[TypeInfo(typeid(type))]; \
         } \
     };
     
-#define UKN_IS_PROPERTY_TYPE_REGISTERD(type) \
-UKN_JOIN(_ukn_is_property_registered, type)()
-    
-#define UKN_IS_PROPRTY_TYPE_OF(prop, type) \
-prop->getTypeName() == #type
+    template<typename T>
+    inline ukn_string get_type_name() {
+        return detail::type_name_map::Instance().get_name_map()[TypeInfo(typeid(T))];
+    }
     
     class PropertyBase {
     public:  
@@ -94,17 +112,52 @@ prop->getTypeName() == #type
     };
     
     template<typename T>
+    class PropertyRef: public PropertyBase {
+    public:
+        PropertyRef(const ukn_string& name, T* prop_ptr):
+        PropertyBase(RegisteredType<T>()),
+        mName(name),
+        mPropPtr(prop_ptr()) {
+            
+        }
+        
+        T* getProperty() const {
+            return mPropPtr;
+        }
+        
+        ukn_string getName() const { 
+            return this->mName;
+        }
+        
+        bool isNull() const {
+            return mPropPtr != 0;
+        }
+        
+        void fromString(const ukn_string& str) {
+            *mPropPtr = SerializeHelper::FromString<T>(str);
+        }
+        
+        ukn_string toString() const { 
+            return SerializeHelper::ToString<T>(*mPropPtr);
+        }
+        
+    private:
+        ukn_string mName;
+        T* mPropPtr;
+    };
+    
+    template<typename T>
     class Property: public PropertyBase {
     public:
         Property(const ukn_string& name):
-        PropertyBase(RegisteredProperty<T>()),
+        PropertyBase(RegisteredType<T>()),
         mIsDefault(true),
         mName(name) {
             
         }
         
         Property(const ukn_string& name, const T& val):
-        PropertyBase(RegisteredProperty<T>()),
+        PropertyBase(RegisteredType<T>()),
         mIsDefault(false),
         mName(name),
         mValue(val) {
@@ -112,7 +165,7 @@ prop->getTypeName() == #type
         }
         
         Property(const Property<T>& rhs):
-        PropertyBase(RegisteredProperty<T>()),
+        PropertyBase(RegisteredType<T>()),
         mIsDefault(rhs.mIsDefault),
         mName(rhs.mName),
         mValue(rhs.mValue) {

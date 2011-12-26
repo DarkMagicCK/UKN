@@ -23,9 +23,9 @@ namespace ukn {
         virtual ~EventBase() { };
     };
     
-    struct NullEventArgs {
+    static struct NullEventArgs {
         
-    };
+    } _NullEventArgs;
     
     template<typename EventArgs>
     class UKN_API Event: public EventBase {
@@ -56,9 +56,8 @@ namespace ukn {
             return mSignal;
         }
         
-        void raise(void* sender, EventArgs args) {
-            EventArgs copy = args;
-            mSignal(sender, &copy);
+        void raise(void* sender, EventArgs& args) {
+            mSignal(sender, &args);
         }
         
     private:

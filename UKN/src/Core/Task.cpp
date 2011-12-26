@@ -292,4 +292,6 @@ namespace ukn {
         DefaultManager(false).start(task, priority, periodical);
     }
     
+    size_t size();
+    
 } // namespace ukn

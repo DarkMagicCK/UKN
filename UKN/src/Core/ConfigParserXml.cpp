@@ -79,13 +79,13 @@ namespace ukn {
     }
     
     ukn_string ConfigParserXmlImpl::getCurrentNodeName() const {
-        if(!mDocument)
+        if(mDocument)
             return mCurrNode.name();
         return ukn_string();
     }
     
     ukn_string ConfigParserXmlImpl::getCurrentNodePath() const {
-        if(!mDocument)
+        if(mDocument)
             return mCurrNode.path();
         return ukn_string();
     }

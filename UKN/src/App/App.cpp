@@ -109,7 +109,7 @@ namespace ukn {
         Logger::Instance().setFeature(LF_PrependRunningTime, true);
         
         // on init
-        mMainWindow->onInit().raise(mMainWindow, NullEventArgs());
+        mMainWindow->onInit().raise(mMainWindow, _NullEventArgs);
         onInit();
     }
     
@@ -123,15 +123,15 @@ namespace ukn {
     }
     
     void AppInstance::update() {
-        mMainWindow->onGlobalUpdate().raise(0, NullEventArgs());
+        mMainWindow->onGlobalUpdate().raise(0, _NullEventArgs);
 
-        mMainWindow->onUpdate().raise(mMainWindow, NullEventArgs());
+        mMainWindow->onUpdate().raise(mMainWindow, _NullEventArgs);
     
         onUpdate();
     }
     
     void AppInstance::render() {
-        mMainWindow->onRender().raise(mMainWindow, NullEventArgs());
+        mMainWindow->onRender().raise(mMainWindow, _NullEventArgs);
         
         onRender();
     }

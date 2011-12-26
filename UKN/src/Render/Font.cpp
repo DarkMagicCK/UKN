@@ -307,7 +307,7 @@ namespace ukn {
     bool Font::deserialize(const ConfigParserPtr& config) {
         mGlyphs.clear();
 
-        if(config && config->toNode("/font")) {            
+        if(config && config->toNode("font")) {            
             ukn_string font_name = config->getString("name");
             
             if(!font_name.empty()) {
@@ -342,6 +342,8 @@ namespace ukn {
             
             mFontSize = config->getInt("size", 14);
             mFontName = string_to_wstring(font_name);
+            
+            config->toParent();
             
             return true;
         }

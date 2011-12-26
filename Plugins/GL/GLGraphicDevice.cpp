@@ -219,11 +219,11 @@ namespace ukn {
     }
     
     void GLGraphicDevice::beginFrame() {
-        mWindow->onFrameStart().raise(this, NullEventArgs());
+        mWindow->onFrameStart().raise(this, _NullEventArgs);
     }
     
     void GLGraphicDevice::endFrame() {
-        mWindow->onFrameEnd().raise(this, NullEventArgs());
+        mWindow->onFrameEnd().raise(this, _NullEventArgs);
     }
     
     void GLGraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {

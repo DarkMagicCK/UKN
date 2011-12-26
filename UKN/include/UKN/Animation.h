@@ -15,6 +15,8 @@
 #include "UKN/Color.h"
 #include "UKN/Event.h"
 #include "UKN/AutoUpdate.h"
+#include "UKN/Serializer.h"
+#include "UKN/Class.h"
 
 #include <vector>
 
@@ -103,19 +105,16 @@ namespace ukn {
         struct KeyFrame {
             T               value;
             uint32          duration;
-            uint32          time_stamp;
             KeyFrameType    frame_type;
             
             KeyFrame() {
                 duration = 0;
-                time_stamp = 0;
                 frame_type = KFT_Discrete;
             }
             
-            KeyFrame(T val, uint32 dur, uint32 ts, KeyFrameType type):
+            KeyFrame(T val, uint32 dur, KeyFrameType type):
             value(val),
             duration(dur),
-            time_stamp(ts),
             frame_type(type) {
                 
             }
@@ -143,13 +142,13 @@ namespace ukn {
             return mKeyFrames;
         }
         
-        size_t getTimePos(uint32 time) {
+        size_t getTimePos(uint32 time, uint32& prev_time) {
             size_t i = 0;
-            uint32 ttime = 0;
+            prev_time = 0;
             while(i < mKeyFrames.size() && 
-                  ttime + mKeyFrames[i].duration <= time) {
+                  prev_time + mKeyFrames[i].duration <= time) {
+                prev_time += mKeyFrames[i].duration;
                 ++i;
-                ttime += mKeyFrames[i].duration;
             }
             return i;
         }
@@ -190,12 +189,13 @@ namespace ukn {
         AS_Paused,
     };
     
+    
+    struct StoryBoardCompletedEventArgs {
+        uint32 pass_time;
+    };
+    
     class StoryBoard {
     public:
-        struct StoryBoardCompletedEventArgs {
-            uint32 pass_time;
-        };
-        
         struct AnimationInfo {
             uint32 start_time;
             SharedPtr<Animation> animation_ptr;
@@ -265,6 +265,53 @@ namespace ukn {
         
     private:
         StoryBoardList mStoryBoards;
+    };
+    
+    typedef SharedPtr<StoryBoard> StoryBoardPtr;
+    
+    class AnimationPlayer: public ConfigSerializable {
+    public:
+        AnimationPlayer();
+        ~AnimationPlayer();
+        
+        virtual bool serialize(const ConfigParserPtr& parser);
+        virtual bool deserialize(const ConfigParserPtr& parser);
+        
+        bool isStoryBoardExist(const ukn_string& name) const;
+        
+        StoryBoardPtr getStoryBoard(const ukn_string& name) const;
+        
+        void play(const ukn_string& name);
+        void pause();
+        void stop();
+        
+        // property references
+        // required for deserialization
+        void  addProperty(const ukn_string& name, void* prop);
+        void  delProperty(const ukn_string& name);
+        void* getProperty(const ukn_string& name) const;
+        
+        size_t size() const;
+        
+        Event<StoryBoardCompletedEventArgs>& onComplete();
+        
+        void       setDefault(const ukn_string& name);
+        ukn_string getDefault() const;
+        ukn_string getCurrent() const;
+                
+    private:
+        typedef std::map<ukn_string, StoryBoardPtr> StoryBoardMap;
+        StoryBoardMap mStoryBoards;
+        
+        Event<StoryBoardCompletedEventArgs> mCompleteEvent;
+        
+        typedef std::map<ukn_string, void*> PropertyMap;
+        PropertyMap mProperties;
+        
+        ukn_string mDefault;
+        ukn_string mCurrent;
+        
+        void onAnimationFinished(void* sender, StoryBoardCompletedEventArgs* args);
     };
        
 } // namespace ukn

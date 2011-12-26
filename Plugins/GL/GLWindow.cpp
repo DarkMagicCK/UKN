@@ -24,13 +24,14 @@ namespace ukn {
     static void WindowSizeFunc(GLFWwindow window, int w, int h) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onResize().raise(glwnd, WindowResizeEventArgs(w, h));
+        WindowResizeEventArgs args(w, h);
+        glwnd->onResize().raise(glwnd, args);
     }
     
     static int WindowCloseFunc(GLFWwindow window) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onClose().raise(glwnd, NullEventArgs());
+        glwnd->onClose().raise(glwnd, _NullEventArgs);
         return 1;
     }
     
@@ -42,13 +43,15 @@ namespace ukn {
     static void WindowFocusFunc(GLFWwindow window, int f) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onActive().raise(glwnd, WindowBoolEventArgs(f > 0 ? true: false));
+        WindowBoolEventArgs args(f > 0 ? true: false);
+        glwnd->onActive().raise(glwnd, args);
     }
     
     static void WindowIconifyFunc(GLFWwindow window, int f) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onIconify().raise(glwnd, WindowBoolEventArgs(f > 0 ? true: false));
+        WindowBoolEventArgs args(f > 0 ? true: false);
+        glwnd->onIconify().raise(glwnd, args);
     }
     
     static void MouseButtonFunc(GLFWwindow window, int a, int b) {

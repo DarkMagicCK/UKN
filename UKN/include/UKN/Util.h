@@ -587,7 +587,7 @@ namespace ukn {
                     if(elm < this->mElements[mid]) {
                         hi = mid - 1;
                         num = num & 1 ? half : half - 1;
-                    } else if(elm > this->mElements[mid]) {
+                    } else if(this->mElements[mid] < elm) {
                         lo = mid + 1;
                         num = half;
                     } else {
@@ -605,7 +605,7 @@ namespace ukn {
                     if(elm < this->mElements[lo]) {
                         this->insert(lo, elm);
                         return;
-                    } else if(elm > this->mElements[lo]) {
+                    } else if(this->mElements[lo] < elm) {
                         this->insert(lo+1, elm);
                         return;
                     } else {
@@ -629,7 +629,7 @@ namespace ukn {
             if(elm < this->mElements[lo]) {
                 this->insert(lo, elm);
                 return;
-            } else if(elm > this->mElements[lo]) {
+            } else if(this->mElements[lo] < elm) {
                 this->insert(lo+1, elm);
                 return;
             } else {

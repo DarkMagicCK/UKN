@@ -83,6 +83,8 @@
 		88EA1C4714A34FB90079CCC4 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C4614A34FB90079CCC4 /* Animation.cpp */; };
 		88EA1C4A14A38C090079CCC4 /* Module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C4914A38C090079CCC4 /* Module.cpp */; };
 		88EA1C6414A4AA780079CCC4 /* AutoUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */; };
+		88F7219B14A6EB2400568FBE /* Skeletal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88F7219A14A6EB2400568FBE /* Skeletal.cpp */; };
+		88F7219D14A75C6600568FBE /* Class.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88F7219C14A75C6600568FBE /* Class.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -399,6 +401,9 @@
 		88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AutoUpdate.cpp; sourceTree = "<group>"; };
 		88EA1C6514A4DE370079CCC4 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		88EA1C6A14A606DD0079CCC4 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio.h; sourceTree = "<group>"; };
+		88F7219814A6E9EF00568FBE /* Skeletal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeletal.h; sourceTree = "<group>"; };
+		88F7219A14A6EB2400568FBE /* Skeletal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skeletal.cpp; sourceTree = "<group>"; };
+		88F7219C14A75C6600568FBE /* Class.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Class.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -676,6 +681,7 @@
 				88EA1C4214A34D0D0079CCC4 /* Module.h */,
 				88EA1C4814A38A440079CCC4 /* AutoUpdate.h */,
 				88EA1C4414A34F970079CCC4 /* Animation.h */,
+				88F7219814A6E9EF00568FBE /* Skeletal.h */,
 				88EA1C6514A4DE370079CCC4 /* Sprite.h */,
 				88EA1C6A14A606DD0079CCC4 /* Audio.h */,
 			);
@@ -765,6 +771,7 @@
 				882D3CB91498BA1D00963AAD /* Serializer.cpp */,
 				88EA1C4914A38C090079CCC4 /* Module.cpp */,
 				88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */,
+				88F7219C14A75C6600568FBE /* Class.cpp */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -930,6 +937,7 @@
 			isa = PBXGroup;
 			children = (
 				88EA1C4614A34FB90079CCC4 /* Animation.cpp */,
+				88F7219A14A6EB2400568FBE /* Skeletal.cpp */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -1056,6 +1064,8 @@
 				88EA1C4714A34FB90079CCC4 /* Animation.cpp in Sources */,
 				88EA1C4A14A38C090079CCC4 /* Module.cpp in Sources */,
 				88EA1C6414A4AA780079CCC4 /* AutoUpdate.cpp in Sources */,
+				88F7219B14A6EB2400568FBE /* Skeletal.cpp in Sources */,
+				88F7219D14A75C6600568FBE /* Class.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

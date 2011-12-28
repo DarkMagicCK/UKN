@@ -37,10 +37,12 @@ namespace ukn {
         float   getLength() const;
         float   getAngle() const;
         Vector2 getPosition() const;
+        bool    isVisible() const;
         
         void setLength(float length);
         void setAngle(float angle);
         void setPosition(const Vector2& pos);
+        void setVisible(bool flag);
         
         AnimationPlayer& getAnimation();
         const AnimationPlayer& getAnimation() const;
@@ -57,6 +59,16 @@ namespace ukn {
         void stopAnimation();
         void pauseAnimation();
         
+        bool isInheritAngle() const;
+        bool isInheritPosition() const;
+        bool isInheritVisibility() const;
+        bool isInheritScale() const;
+        
+        void setInheritAngle(bool flag);
+        void setInheritPosition(bool flag);
+        void setInheritVisibility(bool flag);
+        void setInheritScale(bool flag);
+        
         void render(SpriteBatch& sprBatch, const Vector2& basePos);
         TexturePtr getTexture() const;
         
@@ -69,19 +81,22 @@ namespace ukn {
         ChildrenList mChildren;
         
         float mLength;
-        float mAngle, mBaseAngle;
+        float mAngle;
         float mMaxAngle, mMinAngle;
-        float mTextureAngle;
         Vector2 mPostion;
         Vector2 mOffset;
-        bool mAbsoluteAngle;
-        bool mAbsolutePosition;
+        Vector2 mScale;
+        bool mVisible;
+
+        bool mInheritAngle;
+        bool mInheritPosition;
+        bool mInheritVisibility;
+        bool mInheritScale;
         
         AnimationPlayer mAnimation;
         
         void* mUserData;
         TexturePtr mTexture;
-        Vector2 mScale;
         Vector2 mBasePoint;
     };
         

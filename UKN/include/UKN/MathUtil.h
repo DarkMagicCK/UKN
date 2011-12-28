@@ -33,6 +33,18 @@ namespace ukn {
         return (real)((180.0 * rad) / d_pi);
     }
     
+    inline real sin_dgr(real dgr) {
+        return (real)(sin(degree_to_radius(dgr)));
+    }
+                      
+    inline real cos_dgr(real dgr) {
+        return (real)(cos(degree_to_radius(dgr)));
+    }
+    
+    inline real tan_dgr(real dgr) {
+        return (real)(tan(degree_to_radius(dgr)));
+    }
+    
 #ifndef UKN_TINY
 #define UKN_TINY 0.00000001f
 #endif
@@ -41,6 +53,7 @@ namespace ukn {
         return fabs(f1 - f2) < UKN_TINY;
     }
     
+    // fast inv sqrt by Join Carmack
     inline real fast_inv_sqrt(real x) {
         {
             union
@@ -55,11 +68,19 @@ namespace ukn {
         }
     }
     
-    inline int32 to2spow(int32 n) {
-        int32 t = 1;
-        while(t < n)
-            t <<= 1;
-        return t;
+    static inline int is_pow_of_2(uint32 x) {
+        return !(x & (x-1));
+    }
+    
+    static inline uint32 next_pow_of_2(uint32 x) {
+        if ( is_pow_of_2(x) )
+            return x;
+        x |= x>>1;
+        x |= x>>2;
+        x |= x>>4;
+        x |= x>>8;
+        x |= x>>16;
+        return x+1;
     }
     
     // compress a unit float to nBits integer

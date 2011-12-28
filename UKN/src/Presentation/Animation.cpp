@@ -21,163 +21,8 @@ namespace ukn {
     Animation::~Animation() {
         
     }
-    
-    void IntLinearAnimation::update(uint32 past_time, void* property_ptr) {
-        *(int32*)property_ptr = (int32)(lerp((float)getFrom(), (float)getTo(), (real)past_time/getDuration())+0.5);
-    }
-    
-    void UIntLinearAnimation::update(uint32 past_time, void* property_ptr) {
-        *(uint32*)property_ptr = (uint32)(lerp((float)getFrom(), (float)getTo(), (real)past_time/getDuration())+0.5);
-    }
-    
-    void DoubleLinearAnimation::update(uint32 past_time, void* property_ptr) {
-         *(double*)property_ptr = lerp(getFrom(), getTo(), (real)past_time/getDuration());
-    }
-    
-    void FloatLinearAnimation::update(uint32 past_time, void* property_ptr) {
-         *(float*)property_ptr = lerp(getFrom(), getTo(), (real)past_time/getDuration());
-    }
-    
-    void ColorLinearAnimation::update(uint32 past_time, void* property_ptr) {
-        ((Color*)property_ptr)->r = lerp(getFrom().r, getTo().r, (real)past_time/getDuration());
-        ((Color*)property_ptr)->g = lerp(getFrom().g, getTo().g, (real)past_time/getDuration());
-        ((Color*)property_ptr)->b = lerp(getFrom().b, getTo().b, (real)past_time/getDuration());
-        ((Color*)property_ptr)->a = lerp(getFrom().a, getTo().a, (real)past_time/getDuration());
-    }
-    
-    void IntKeyFrameAnimation::update(uint32 past_time, void* property_ptr) {
-        uint32 prevtime;
-        size_t timepos = getTimePos(past_time, prevtime);
-
-        if(0 < timepos && timepos < mKeyFrames.size()) {
-            KeyFrame& kf = mKeyFrames[timepos-1];
-            switch(mKeyFrames[timepos].frame_type) {
-                case KFT_Discrete:
-                    *(int32*)property_ptr = kf.value;
-                    break;
-                case KFT_Linear:
-                    *(int32*)property_ptr = (int32)(lerp((float)kf.value, 
-                                                          (float)mKeyFrames[timepos].value,
-                                                          (real)(past_time-prevtime)/mKeyFrames[timepos].duration)+0.5);
-                    break;
-                    
-            }
-        } else if(timepos == 0) {
-            
-        } else {
-            *(int32*)property_ptr = mKeyFrames[timepos-1].value;
-        }
-    }
-    
-    void UIntKeyFrameAnimation::update(uint32 past_time, void* property_ptr) {
-        uint32 prevtime;
-        size_t timepos = getTimePos(past_time, prevtime);
         
-        if(0 < timepos && timepos < mKeyFrames.size()) {
-            KeyFrame& kf = mKeyFrames[timepos-1];
-            switch(mKeyFrames[timepos].frame_type) {
-                case KFT_Discrete:
-                    *(uint32*)property_ptr = kf.value;
-                    break;
-                case KFT_Linear:
-                    *(uint32*)property_ptr = (uint32)(lerp((float)kf.value,
-                                                            (float)mKeyFrames[timepos].value, 
-                                                            (real)(past_time-prevtime)/mKeyFrames[timepos].duration)+0.5);
-                    break;
-                    
-            }
-        } else if(timepos == 0) {
-            
-        } else {
-            *(uint32*)property_ptr = mKeyFrames[timepos-1].value;
-        }
-    }
-    
-    void DoubleKeyFrameAnimation::update(uint32 past_time, void* property_ptr) {
-        uint32 prevtime;
-        size_t timepos = getTimePos(past_time, prevtime);
-        
-        if(0 < timepos && timepos < mKeyFrames.size()) {
-            KeyFrame& kf = mKeyFrames[timepos-1];
-            switch(mKeyFrames[timepos].frame_type) {
-                case KFT_Discrete:
-                    *(double*)property_ptr = kf.value;
-                    break;
-                case KFT_Linear:
-                    *(double*)property_ptr = lerp(kf.value, 
-                                                   mKeyFrames[timepos].value,
-                                                   (real)(past_time-prevtime)/mKeyFrames[timepos].duration);
-                    break;
-                    
-            }
-        } else if(timepos == 0) {
-            
-        } else {
-            *(double*)property_ptr = mKeyFrames[timepos-1].value;
-        }
-    }
-    
-    void FloatKeyFrameAnimation::update(uint32 past_time, void* property_ptr) {
-        uint32 prevtime;
-        size_t timepos = getTimePos(past_time, prevtime);
-        
-        if(0 < timepos && timepos < mKeyFrames.size()) {
-            KeyFrame& kf = mKeyFrames[timepos-1];
-            switch(mKeyFrames[timepos].frame_type) {
-                case KFT_Discrete:
-                    *(float*)property_ptr = kf.value;
-                    break;
-                case KFT_Linear:
-                    *(float*)property_ptr = lerp(kf.value,
-                                                  mKeyFrames[timepos].value, 
-                                                  (real)(past_time-prevtime)/mKeyFrames[timepos].duration);
-                    break;
-                    
-            }
-        } else if(timepos == 0) {
-            
-        } else {
-            *(float*)property_ptr = mKeyFrames[timepos-1].value;
-        }
-    }
-    
-    void ColorKeyFrameAnimation::update(uint32 past_time, void* property_ptr) {
-        uint32 prevtime;
-        size_t timepos = getTimePos(past_time, prevtime);
-        if(0 < timepos && timepos < mKeyFrames.size()) {
-            KeyFrame& kf = mKeyFrames[timepos-1];
-            switch(mKeyFrames[timepos].frame_type) {
-                case KFT_Discrete:
-                    *(Color*)property_ptr = kf.value;
-                    break;
-                case KFT_Linear:
-                    ((Color*)property_ptr)->r = lerp(kf.value.r, 
-                                                      mKeyFrames[timepos].value.r, 
-                                                      (real)(past_time-prevtime)/mKeyFrames[timepos].duration);
-                    
-                    ((Color*)property_ptr)->g = lerp(kf.value.g, 
-                                                      mKeyFrames[timepos].value.g, 
-                                                      (real)(past_time-prevtime)/mKeyFrames[timepos].duration);
-                    
-                    ((Color*)property_ptr)->b = lerp(kf.value.b, 
-                                                      mKeyFrames[timepos].value.b,
-                                                      (real)(past_time-prevtime)/mKeyFrames[timepos].duration);
-                    
-                    ((Color*)property_ptr)->a = lerp(kf.value.a, 
-                                                      mKeyFrames[timepos].value.a,
-                                                      (real)(past_time-prevtime)/mKeyFrames[timepos].duration);
-                    break;
-                    
-            }
-        } else if(timepos == 0) {
-            
-        } else {
-            *(Color*)property_ptr = mKeyFrames[timepos-1].value;
-        }
-    }
-    
     // storyboard
-    
     StoryBoard::StoryBoard():
     mDuration(0),
     mStatus(AS_Stop),
@@ -359,7 +204,7 @@ namespace ukn {
     
     inline void create_linear_animation(const ukn_string& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
         if(type == "int") {
-            IntLinearAnimation* anim = new IntLinearAnimation;
+            LinearAnimation<int>* anim = new LinearAnimation<int>;
             anim->setFrom(parser->getInt("from", 0));
             anim->setTo(parser->getInt("to", 0));
             anim->setDuration(parser->getInt("duration", 0));
@@ -370,7 +215,7 @@ namespace ukn {
         }
         
         if(type == "float") {
-            FloatLinearAnimation* anim = new FloatLinearAnimation;
+            LinearAnimation<float>* anim = new LinearAnimation<float>;
             anim->setFrom(parser->getFloat("from", 0));
             anim->setTo(parser->getFloat("to", 0));
             anim->setDuration(parser->getInt("duration", 0));
@@ -381,7 +226,7 @@ namespace ukn {
         }
         
         if(type == "uint") {
-            UIntLinearAnimation* anim = new UIntLinearAnimation;
+            LinearAnimation<uint32>* anim = new LinearAnimation<uint32>;
             anim->setFrom(parser->getInt("from", 0));
             anim->setTo(parser->getInt("to", 0));
             anim->setDuration(parser->getInt("duration", 0));
@@ -392,7 +237,7 @@ namespace ukn {
         }
         
         if(type == "double") {
-            DoubleLinearAnimation* anim = new DoubleLinearAnimation;
+            LinearAnimation<double>* anim = new LinearAnimation<double>;
             anim->setFrom(parser->getFloat("from", 0));
             anim->setTo(parser->getFloat("to", 0));
             anim->setDuration(parser->getInt("duration", 0));
@@ -411,7 +256,7 @@ namespace ukn {
     inline void create_key_frame_animation(const ukn_string& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
         
         if(type == "int") {
-            IntKeyFrameAnimation* anim = new IntKeyFrameAnimation;
+            KeyFrameAnimation<int>* anim = new KeyFrameAnimation<int>;
             
             int32 time = parser->getInt("time", 0);
             int32 duration = parser->getInt("duration", 0);
@@ -428,7 +273,7 @@ namespace ukn {
                         int32 dur = parser->getInt("duration", 0);
                         int32 type = parser->getInt("type", 0);
                     
-                        anim->getKeyFrames().push_back(IntKeyFrameAnimation::KeyFrame(val, 
+                        anim->getKeyFrames().push_back(KeyFrameAnimation<int>::KeyFrame(val, 
                                                                                       dur, 
                                                                                       type == 0 ? KFT_Linear : KFT_Discrete));
                     }
@@ -443,7 +288,7 @@ namespace ukn {
         } 
         
         if(type == "float") {
-            FloatKeyFrameAnimation* anim = new FloatKeyFrameAnimation;
+            KeyFrameAnimation<float>* anim = new KeyFrameAnimation<float>;
             
             int32 time = parser->getInt("time", 0);
             int32 duration = parser->getInt("duration", 0);
@@ -460,7 +305,7 @@ namespace ukn {
                         int32 dur = parser->getInt("duration", 0);
                         int32 type = parser->getInt("type", 0);
                         
-                        anim->getKeyFrames().push_back(FloatKeyFrameAnimation::KeyFrame(val, 
+                        anim->getKeyFrames().push_back(KeyFrameAnimation<float>::KeyFrame(val, 
                                                                                         dur, 
                                                                                         type == 0 ? KFT_Linear : KFT_Discrete));
                     }
@@ -475,7 +320,7 @@ namespace ukn {
         } 
         
         if(type == "double") {
-            DoubleKeyFrameAnimation* anim = new DoubleKeyFrameAnimation;
+            KeyFrameAnimation<double>* anim = new KeyFrameAnimation<double>;
             
             int32 time = parser->getInt("time", 0);
             int32 duration = parser->getInt("duration", 0);
@@ -491,7 +336,7 @@ namespace ukn {
                         int32 dur = parser->getInt("duration", 0);
                         int32 type = parser->getInt("type", 0);
                         
-                        anim->getKeyFrames().push_back(DoubleKeyFrameAnimation::KeyFrame(val, 
+                        anim->getKeyFrames().push_back(KeyFrameAnimation<double>::KeyFrame(val, 
                                                                                          dur, 
                                                                                          type == 0 ? KFT_Linear : KFT_Discrete));
                     }
@@ -506,7 +351,7 @@ namespace ukn {
         } 
         
         if(type == "uint") {
-            UIntKeyFrameAnimation* anim = new UIntKeyFrameAnimation;
+            KeyFrameAnimation<uint32>* anim = new KeyFrameAnimation<uint32>;
             
             int32 time = parser->getInt("time", 0);
             int32 duration = parser->getInt("duration", 0);
@@ -523,7 +368,7 @@ namespace ukn {
                         int32 dur = parser->getInt("duration", 0);
                         int32 type = parser->getInt("type", 0);
                     
-                        anim->getKeyFrames().push_back(UIntKeyFrameAnimation::KeyFrame(val, 
+                        anim->getKeyFrames().push_back(KeyFrameAnimation<uint32>::KeyFrame(val, 
                                                                                        dur, 
                                                                                        type == 0 ? KFT_Linear : KFT_Discrete));
                         

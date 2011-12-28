@@ -45,6 +45,8 @@ namespace ukn {
     template<typename T>
     class LinearAnimation: public Animation {
     public:
+        typedef T value_type;
+        
         virtual T getFrom() const {
             return mFrom;
         }
@@ -61,36 +63,15 @@ namespace ukn {
             mTo = to;
         }
         
+        virtual void update(uint32 past_time, void* property_ptr) {
+            *(T*)property_ptr = (uint32)(lerp((float)getFrom(), (float)getTo(), (real)past_time/getDuration())+0.5);
+        }
+        
     protected:
         T mFrom;
         T mTo;
     };
-    
-    class IntLinearAnimation: public LinearAnimation<int32> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
-    
-    class UIntLinearAnimation: public LinearAnimation<uint32> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
-    
-    class DoubleLinearAnimation: public LinearAnimation<double> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
-    
-    class FloatLinearAnimation: public LinearAnimation<float> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
-    
-    class ColorLinearAnimation: public LinearAnimation<Color> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
-    
+        
     enum KeyFrameType {
         // linear
         KFT_Linear,
@@ -119,6 +100,8 @@ namespace ukn {
                 
             }
         };
+        
+        typedef T value_type;
         
     private:
         typedef std::vector<KeyFrame> KeyFrameList;
@@ -153,36 +136,39 @@ namespace ukn {
             return i;
         }
         
+    private:
+        
+        void update(uint32 past_time, void* property_ptr) {
+            uint32 prevtime;
+            size_t timepos = getTimePos(past_time, prevtime);
+            
+            if(0 < timepos && timepos < mKeyFrames.size()) {
+                KeyFrame& kf = mKeyFrames[timepos-1];
+                switch(mKeyFrames[timepos].frame_type) {
+                    case KFT_Discrete:
+                        *(int32*)property_ptr = kf.value;
+                        break;
+                    case KFT_Linear:
+                        *(int32*)property_ptr = (int32)(lerp((float)kf.value, 
+                                                             (float)mKeyFrames[timepos].value,
+                                                             (real)(past_time-prevtime)/mKeyFrames[timepos].duration)+0.5);
+                        break;
+                        
+                }
+            } else if(timepos == 0) {
+                
+            } else {
+                *(int32*)property_ptr = mKeyFrames[timepos-1].value;
+            }
+
+        }
+        
     protected:
         KeyFrameList mKeyFrames;
     };
     
-    class IntKeyFrameAnimation: public KeyFrameAnimation<int32> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
     
-    class UIntKeyFrameAnimation: public KeyFrameAnimation<uint32> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
-    
-    class DoubleKeyFrameAnimation: public KeyFrameAnimation<double> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
-    
-    class FloatKeyFrameAnimation: public KeyFrameAnimation<float> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
-    
-    class ColorKeyFrameAnimation: public KeyFrameAnimation<Color> {
-    public:
-        virtual void update(uint32 past_time, void* property_ptr);
-    };
-    
-    
+        
     enum AnimationStatus {
         AS_Stop,
         AS_Playing,

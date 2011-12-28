@@ -19,15 +19,15 @@ namespace ukn {
     mParent(0),
     mLength(0),
     mAngle(0),
-    mBaseAngle(0),
-    mTextureAngle(0),
     mMaxAngle(pi * 2),
     mMinAngle(-pi * 2),
     mPostion(Vector2()),
-    mUserData(0),
-    mAbsoluteAngle(false),
-    mAbsolutePosition(false),
-    mScale(Vector2(1.f, 1.f)) {
+    mScale(Vector2(1.f, 1.f)),
+    mInheritAngle(true),
+    mInheritPosition(true),
+    mInheritVisibility(true),
+    mInheritScale(true),
+    mUserData(0) {
         // register properties for animation
         mAnimation.addProperty("x", &mPostion.x);
         mAnimation.addProperty("y", &mPostion.y);
@@ -54,19 +54,26 @@ namespace ukn {
     }
     
     float Bone::getAngle() const {
-        if(mAbsoluteAngle)
+        if(!mInheritAngle)
             return mAngle;
         else
             return mAngle + (mParent != 0 ? mParent->getAngle() : 0);
     }
     
     Vector2 Bone::getPosition() const {
-        if(mParent && !mAbsolutePosition) {
+        if(mParent && !mInheritPosition) {
             Vector2 v2 = mParent->getPosition() + Vector2(mParent->mLength * cosf(mParent->getAngle()),
                                                           -mParent->mLength * sinf(mParent->getAngle()));
             return mPostion + v2;
         }
         return mPostion;
+    }
+    
+    bool Bone::isVisible() const {
+        if(!mInheritVisibility)
+            return mVisible;
+        else
+            return mParent->isVisible();
     }
     
     void Bone::setLength(float length) {
@@ -79,6 +86,10 @@ namespace ukn {
     
     void Bone::setPosition(const Vector2& pos) {
         mPostion = pos;
+    }
+    
+    void Bone::setVisible(bool flag) {
+        mVisible = flag;
     }
     
     AnimationPlayer& Bone::getAnimation() {
@@ -95,6 +106,38 @@ namespace ukn {
     
     void* Bone::getUserData() const {
         return mUserData;
+    }
+    
+    bool Bone::isInheritAngle() const {
+        return mInheritAngle;
+    }
+    
+    bool Bone::isInheritPosition() const {
+        return mInheritPosition;
+    }
+    
+    bool Bone::isInheritVisibility() const {
+        return mInheritVisibility;
+    }
+    
+    bool Bone::isInheritScale() const {
+        return mInheritScale;
+    }
+    
+    void Bone::setInheritAngle(bool flag) {
+        mInheritAngle = flag;
+    }
+    
+    void Bone::setInheritPosition(bool flag) {
+        mInheritPosition = flag;
+    }
+    
+    void Bone::setInheritVisibility(bool flag) {
+        mInheritVisibility = flag;
+    }
+    
+    void Bone::setInheritScale(bool flag) {
+        mInheritScale = flag;
     }
     
     BonePtr Bone::findChild(const ukn_string& name) const {
@@ -173,9 +216,8 @@ namespace ukn {
     void Bone::render(SpriteBatch& sprBatch, const Vector2& basePos) {
         if(mTexture) {
             Vector2 pos = basePos + getPosition() + mOffset;
-            printf("%s, (%f, %f), %f, %f, %f\n", mName.c_str(), pos.x, pos.y, getAngle(), mBaseAngle, mTextureAngle);
             
-            float angle = getAngle() - mBaseAngle + mTextureAngle;
+            float angle = getAngle();
             if(angle > mMaxAngle) angle = mMaxAngle;
             if(angle < mMinAngle) angle = mMinAngle;
             sprBatch.draw(mTexture, 
@@ -183,7 +225,7 @@ namespace ukn {
                           pos.y,
                           mBasePoint.x, 
                           mBasePoint.y,
-                          angle,
+                          angle + pi_2,
                           1.f,
                           1.f);
         }
@@ -236,12 +278,10 @@ namespace ukn {
                         bone->mOffset = Vector2(config->getFloat("offx"),
                                                 config->getFloat("offy"));
                         
-                        bone->mTextureAngle = config->getFloat("texture_angle");
-                        
-                        bone->mBaseAngle = bone->getAngle();
-                        
-                        bone->mAbsolutePosition = config->getBool("absolute_pos");
-                        bone->mAbsoluteAngle = config->getBool("absolute_angle");
+                        bone->mInheritVisibility = config->getBool("inherit_visibility");
+                        bone->mInheritAngle = config->getBool("inherit_angle");
+                        bone->mInheritPosition = config->getBool("inherit_position");
+                        bone->mInheritScale = config->getBool("inherit_scale");
                         
                         bone->mBasePoint = Vector2(config->getFloat("basex"),
                                                    config->getFloat("basey"));

@@ -192,8 +192,8 @@ namespace ukn {
                         texw = bits.width;
                         texh = bits.rows;
                         
-                        imgw = to2spow(texw);
-                        imgh = to2spow(texh);
+                        imgw = next_pow_of_2(texw);
+                        imgh = next_pow_of_2(texh);
                         imgw > imgh ? imgh = imgw : imgw = imgh;
                         
                         uint32* texd = (uint32*)ukn_malloc(imgw * imgh * 4);

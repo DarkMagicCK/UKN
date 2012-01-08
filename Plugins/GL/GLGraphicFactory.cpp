@@ -36,24 +36,24 @@ namespace ukn {
                                             GraphicBuffer::Usage, 
                                             uint32 count, 
                                             const void* initialData, 
-                                            const VertexFormat& format);
+                                            const VertexFormat& format) const;
         
         GraphicBufferPtr createIndexBuffer(GraphicBuffer::Access, 
                                            GraphicBuffer::Usage, 
                                            uint32 count, 
-                                           const void* initialData);
+                                           const void* initialData) const;
         
         
-        RenderBufferPtr createRenderBuffer();
+        RenderBufferPtr createRenderBuffer() const;
         
-        RenderViewPtr create2DRenderView(TexturePtr texture);
-        RenderViewPtr create2DDepthStencilView(TexturePtr texture);
+        RenderViewPtr create2DRenderView(TexturePtr texture) const;
+        RenderViewPtr create2DDepthStencilView(TexturePtr texture) const;
         
-        FrameBufferPtr createFrameBuffer();
+        FrameBufferPtr createFrameBuffer() const;
         
-        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData);
+        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const;
         
-        TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false);
+        TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const;
         
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -87,7 +87,7 @@ namespace ukn {
                                                           GraphicBuffer::Usage usage,
                                                           uint32 count, 
                                                           const void* initialData, 
-                                                          const VertexFormat& format) {
+                                                          const VertexFormat& format) const {
         return GraphicBufferPtr(new GLVertexBuffer(access,
                                                    usage,
                                                    count,
@@ -98,7 +98,7 @@ namespace ukn {
     GraphicBufferPtr GLGraphicFactory::createIndexBuffer(GraphicBuffer::Access access, 
                                                          GraphicBuffer::Usage usage, 
                                                          uint32 count, 
-                                                         const void* initialData) {
+                                                         const void* initialData) const {
         return GraphicBufferPtr(new GLIndexBuffer(access,
                                                   usage,
                                                   count,
@@ -106,23 +106,23 @@ namespace ukn {
     }
     
     
-    RenderBufferPtr GLGraphicFactory::createRenderBuffer() {
+    RenderBufferPtr GLGraphicFactory::createRenderBuffer() const {
         return RenderBufferPtr(new GLRenderBuffer());
     }
     
-    RenderViewPtr GLGraphicFactory::create2DRenderView(TexturePtr texture) {
+    RenderViewPtr GLGraphicFactory::create2DRenderView(TexturePtr texture) const {
         return RenderView::NullObject();
     }
     
-    RenderViewPtr GLGraphicFactory::create2DDepthStencilView(TexturePtr texture) {
+    RenderViewPtr GLGraphicFactory::create2DDepthStencilView(TexturePtr texture) const {
         return RenderView::NullObject();
     }
     
-    FrameBufferPtr GLGraphicFactory::createFrameBuffer() {
+    FrameBufferPtr GLGraphicFactory::createFrameBuffer() const {
         return FrameBufferPtr(new GLFrameBuffer(true));
     }
     
-    TexturePtr GLGraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) {
+    TexturePtr GLGraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const {
         GLTexture2D* texture = new GLTexture2D();
         if(texture->create(width, height, numMipmaps, format, initialData)) {
             return TexturePtr(texture);
@@ -131,7 +131,7 @@ namespace ukn {
         return TexturePtr();
     }
     
-    TexturePtr GLGraphicFactory::load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps) {
+    TexturePtr GLGraphicFactory::load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps) const {
         GLTexture2D* texture = new GLTexture2D();
         if(texture->load(rsrc, generateMipmaps)) {
             return TexturePtr(texture);

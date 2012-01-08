@@ -225,8 +225,8 @@ namespace ukn {
         vp.camera->update();
     }
     
-    void GLWindow::onWindowResize(void* wnd, WindowResizeEventArgs* args) {
-        updateWindowProperties(getLeft(), getTop(), args->width, args->height);
+    void GLWindow::onWindowResize(void* wnd, WindowResizeEventArgs& args) {
+        updateWindowProperties(getLeft(), getTop(), args.width, args.height);
 
     }
     

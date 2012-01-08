@@ -293,6 +293,10 @@ namespace ukn {
             
             return normal;
         }
+        
+        friend Vector2 operator * (const Vector2& lhs, const Vector2& rhs) {
+            return Vector2(lhs.x * rhs.x, lhs.y * rhs.y);
+        }
     };
     
     class Vector3 {
@@ -377,6 +381,10 @@ namespace ukn {
         
         bool operator==(const Vector3& rhs) const {
             return this->x == rhs.x && this->y == rhs.y && this->z == rhs.z;
+        }
+        
+        friend Vector3 operator *(const Vector3& lhs, const Vector3& rhs) {
+            return Vector3(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
         }
         
 		real x, y, z;

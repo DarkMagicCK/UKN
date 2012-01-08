@@ -92,6 +92,8 @@ namespace ukn {
         void clearDepth(float depth);
         void clearStencil(int32 stencil);
         
+        void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
+        
     protected:
         FrameBufferPtr mCurrFrameBuffer;
         FrameBufferPtr mScreenFrameBuffer;

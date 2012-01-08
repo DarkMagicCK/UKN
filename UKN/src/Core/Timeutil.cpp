@@ -186,7 +186,6 @@ namespace ukn {
 
 namespace ukn {
     
-    // 500 nanoseconds
     static uint64 TIME_PRECISION = 1000000;
     
     static void mach_absolute_difference(uint64_t end, uint64_t start, struct timespec *tp) {  
@@ -419,7 +418,7 @@ namespace ukn {
 				deltaTime = fpsInterval / (double)(1000*1000);
 				oldtime += fpsInterval;
 			} else {
-				deltaTime = (time-oldtime) / (double)(1000*1000);
+				deltaTime = (time - oldtime) / (double)(1000*1000);
 				oldtime = time;
 			}
 			/* too long */
@@ -471,7 +470,7 @@ namespace ukn {
     
     void FrameCounter::waitToNextFrame() {
         mDelta = mDetalTime.elapsed();
-        Profiler::Instance().updateTimeRatio(FrameCounter::Instance().getDeltaTime());
+        Profiler::Instance().updateTimeRatio(FrameCounter::Instance().getDeltaTime(), getPrevDelta() * 1000 * 1000);
 
         mPrevDelta = doWaitToNextFrame();
         mCurrentFps = 1.0f / mPrevDelta;

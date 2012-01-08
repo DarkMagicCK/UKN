@@ -31,7 +31,7 @@ namespace ukn {
     class UKN_API Event: public EventBase {
     public:
         typedef EventArgs event_args_type;
-        typedef Signal<void(void* /* sender */, EventArgs*)> signal_type;
+        typedef Signal<void(void* /* sender */, EventArgs&)> signal_type;
         
         Event() { }
         
@@ -57,7 +57,7 @@ namespace ukn {
         }
         
         void raise(void* sender, EventArgs& args) {
-            mSignal(sender, &args);
+            mSignal(sender, args);
         }
         
     private:

@@ -38,10 +38,17 @@ namespace ukn {
         uint64 recored_frames;
         
         float time_ratio;
+        float time_ratio_frame;
         
         ukn_string name;
         
         ukn_string toFormattedString() const;
+        
+        ProfileData():
+        // avoid divid-by-zero
+        recored_frames(1) {
+            
+        }
     };
         
     class Profiler {
@@ -59,7 +66,7 @@ namespace ukn {
         friend class FrameCounter;
         
         void record(const ukn_string& name, uint64 time);
-        void updateTimeRatio(uint64 frametime);
+        void updateTimeRatio(uint64 frametime, uint64 frameDelta);
         
         typedef ukn_hash_map<ukn_string, ProfileData> ProfileDataMap;
         ProfileDataMap mProfiles;

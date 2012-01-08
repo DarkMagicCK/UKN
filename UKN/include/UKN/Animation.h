@@ -297,7 +297,7 @@ namespace ukn {
         ukn_string mDefault;
         ukn_string mCurrent;
         
-        void onAnimationFinished(void* sender, StoryBoardCompletedEventArgs* args);
+        void onAnimationFinished(void* sender, StoryBoardCompletedEventArgs& args);
     };
        
 } // namespace ukn

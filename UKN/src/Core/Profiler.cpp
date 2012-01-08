@@ -71,10 +71,12 @@ namespace ukn {
         }
     }
     
-    void Profiler::updateTimeRatio(uint64 frametime) {
+    void Profiler::updateTimeRatio(uint64 frametime, uint64 frameDelta) {
         ProfileDataMap::iterator it = mProfiles.begin();
         while(it != mProfiles.end()) {
             it->second.time_ratio = (it->second.time_ratio * (it->second.recored_frames - 1) + (double)it->second.time / frametime) / it->second.recored_frames;
+            
+            it->second.time_ratio_frame = (it->second.time_ratio_frame * (it->second.recored_frames - 1) + (double)it->second.time / frameDelta) / it->second.recored_frames;
             
             ++it;
         }

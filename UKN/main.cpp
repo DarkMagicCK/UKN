@@ -41,7 +41,7 @@
 #include "UKN/Skeletal.h"
 
 #include <vector>
-
+#include <map>
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -63,7 +63,7 @@ public:
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
         
         
-        ukn::ConfigParserPtr cfg2 = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"test.uknanim"));
+        ukn::ConfigParserPtr cfg2 = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"SmallRobot.uknanm"));
         skAnim.deserialize(cfg2);
         
         skAnim.play("walk");
@@ -74,18 +74,30 @@ public:
     }
     
     void onRender() {
-        ukn::Context::Instance().getGraphicFactory().getGraphicDevice().getCurrFrameBuffer()->clear(ukn::CM_Color, ukn::ColorBlack, 0, 0);
+        ukn::Context::Instance().getGraphicFactory().getGraphicDevice().clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Lightskyblue, 0, 0);
         
         ukn::Timestamp time;
         
-        skAnim.render(*mSpriteBatch.get());
-        mSpriteBatch->render();
+        mSpriteBatch->begin(ukn::SBS_BackToFront);
         
+        {
+            UKN_PROFILE("sk_anim");
+            skAnim.update();
+            skAnim.render(*mSpriteBatch.get());
+            
+            ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
+            printf("%d, %f, %f\n", data.average_time, data.time_ratio, data.time_ratio_frame);
+        }       
+        mSpriteBatch->end();
+
         if(mFont) {
-            mFont->draw("Hello World! 测试 ", 0, 0, ukn::FA_Left);
+            
+            mFont->draw("Hello World! 测试 ", 0, 0, ukn::FA_Left, ukn::color::Black);
 
             mFont->render();
         }
+        
+
     }
     
 private:
@@ -123,7 +135,7 @@ int CALLBACK WinMain(
     instance.create(L"config.xml");
     
     
-    ukn::FrameCounter::Instance().setDesiredFps(0);
+    ukn::FrameCounter::Instance().setDesiredFps(60);
     
     // run app
     instance.run();

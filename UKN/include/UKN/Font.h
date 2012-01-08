@@ -14,6 +14,7 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/Renderable.h"
 #include "UKN/Serializer.h"
+#include "UKN/Color.h"
 
 #include <vector>
 
@@ -61,7 +62,7 @@ namespace ukn {
         void setStyle(FontStyle style, bool flag);
         void setStyleProperty(FontStyleProperty sp, int32 prop);
         
-        void draw(const char* str, float x, float y, FontAlignment alignment);
+        void draw(const char* str, float x, float y, FontAlignment alignment, const Color& clr = color::White);
         
         // inherited from Renderable
         void render();

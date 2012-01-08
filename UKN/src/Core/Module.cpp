@@ -30,7 +30,7 @@ namespace ukn {
         }
     }
     
-    void ModuleManager::OnUpdate(void*, NullEventArgs*) {
+    void ModuleManager::OnUpdate(void*, NullEventArgs&) {
         ModuleList::const_iterator it = mModules.begin();
         while(it != mModules.end()) {
             (*it)->update();

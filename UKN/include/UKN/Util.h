@@ -610,7 +610,7 @@ namespace ukn {
                         return;
                     } else {
                         size_t i = lo +1;
-                        for(; i<this->mSize; ++i) {
+                        for(; i < this->mSize; ++i) {
                             if(this->mElements[i] != elm) {
                                 this->insert(i, elm);
                                 return;
@@ -669,7 +669,7 @@ namespace ukn {
                     if(elm < this->mElements[mid]) {
                         hi = mid-1;
                         num = num & 1 ? half : half - 1;
-                    } else if(elm > this->mElements[mid]) {
+                    } else if(this->mElements[mid] < elm) {
                         lo = mid+1;
                         num = half;
                     } else {

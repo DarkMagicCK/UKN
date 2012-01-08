@@ -34,7 +34,7 @@ namespace ukn {
         static void AddModule(Module* module);
         static void DelModule(Module* module);
         
-        static void OnUpdate(void*, NullEventArgs*);
+        static void OnUpdate(void*, NullEventArgs&);
         
     private:
         typedef std::vector<Module*> ModuleList;

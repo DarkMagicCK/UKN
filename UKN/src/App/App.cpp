@@ -35,7 +35,7 @@ namespace ukn {
         
     }
     
-    void AppInstance::onWindowClose(void* wnd, NullEventArgs*) {
+    void AppInstance::onWindowClose(void* wnd, NullEventArgs&) {
         terminate();
     }
     

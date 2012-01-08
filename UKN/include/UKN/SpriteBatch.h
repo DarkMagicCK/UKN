@@ -18,6 +18,13 @@
 #include "UKN/StringUtil.h"
 
 namespace ukn {
+    
+    enum SpriteBatchSortMode {
+        SBS_None,
+        SBS_Deffered,
+        SBS_BackToFront,
+        SBS_FrontToBack
+    };
         
     class UKN_API SpriteBatch: public Renderable {
     protected:
@@ -40,21 +47,28 @@ namespace ukn {
         virtual void onRender();
         
         void render();
-        
-        void draw(const TexturePtr& texture, float x, float y, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, float x, float y, const Rectangle& src, const Color& color=ColorWhite);
-        
-        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color=ColorWhite);
-        
-        void draw(const TexturePtr& texture, float x, float y, float layerDepth, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, float x, float y, const Rectangle& src, float layerDetph, const Color& color=ColorWhite);
 
-        void draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, float layerDepth, const Color& color=ColorWhite);
-        void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, float layerDepth, const Color& color=ColorWhite);
+        // must be called before any draw call
+        void begin(SpriteBatchSortMode mode = SBS_Deffered);
+        void begin(SpriteBatchSortMode mode, const Matrix4& transformMat);
+        
+        // must be called after render
+        void end();
+        
+        void draw(const TexturePtr& texture, float x, float y, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color=color::White);
+        void draw(const TexturePtr& texture, float x, float y, const Rectangle& src, const Color& color=color::White);
+        
+        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, const Color& color=color::White);
+        void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color=color::White);
+        
+        void draw(const TexturePtr& texture, float x, float y, float layerDepth, const Color& color=color::White);
+        void draw(const TexturePtr& texture, float x, float y, const Rectangle& src, float layerDetph, const Color& color=color::White);
+
+        void draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, float layerDepth, const Color& color=color::White);
+        void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, float layerDepth, const Color& color=color::White);
         
         Matrix4& getTransformMatrix();
         const Matrix4& getTransformMatrix() const;
@@ -69,7 +83,10 @@ namespace ukn {
             
             void buildVertices(float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color);
             void buildVertices(const Rectangle& dstRect, float rot, const Color& color);
+            
             bool operator<(const SpriteBatch::TextureObject& rhs) const;
+            bool operator>(const SpriteBatch::TextureObject& rhs) const;
+            bool operator!=(const SpriteBatch::TextureObject& rhs) const;
             
             TexturePtr  texture;
             float       layerDepth;
@@ -85,6 +102,9 @@ namespace ukn {
         
         Box mBoundingBox;
         Matrix4 mTransformMatrix;
+        
+        bool mBegan;
+        SpriteBatchSortMode mCurrMode;
     };
     
 } // namespace ukn

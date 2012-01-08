@@ -137,6 +137,14 @@ namespace ukn {
         return this->layerDepth < rhs.layerDepth;
     }
     
+    bool SpriteBatch::TextureObject::operator>(const SpriteBatch::TextureObject& rhs) const {
+        return this->layerDepth > rhs.layerDepth;
+    }
+    
+    bool SpriteBatch::TextureObject::operator!=(const SpriteBatch::TextureObject& rhs) const {
+        return this->layerDepth != rhs.layerDepth;
+    }
+    
     SpriteBatch::SpriteBatch() {
         mRenderBuffer = Context::Instance().getGraphicFactory().createRenderBuffer();
         ukn_assert(mRenderBuffer);
@@ -150,8 +158,8 @@ namespace ukn {
         
         mRenderBuffer->bindVertexStream(mVertexBuffer, Vertex2D::Format());
         
-        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-        ukn::Matrix4::OrthoMat(0, gd.getCurrFrameBuffer()->width(), gd.getCurrFrameBuffer()->height(), 0, 0, 1);
+        mBegan = false;
+        mCurrMode = SBS_None;
     }
     
     SpriteBatch::~SpriteBatch() {
@@ -262,13 +270,27 @@ namespace ukn {
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, float x, float y, float layerDepth, const Color& color) {
+        if(!mBegan) {
+            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+        }
+        
         TextureObject obj(texture, layerDepth);
         obj.buildVertices(x, y, 0.f, 0.f, 0.f, 1.f, 1.f, color);
-        
+            
         mRenderQueue.insert(obj);
+        
+        for(int i=0; i<6; ++i) {
+            updateBoundingBox(obj.vertices[i].x,
+                              obj.vertices[i].y, 
+                              obj.vertices[i].z);
+        }
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color) {
+        if(!mBegan) {
+            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+        }
+        
         TextureObject obj(texture, layerDepth);
         
         Rectangle rdst = dstRect;
@@ -292,6 +314,10 @@ namespace ukn {
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, const Color& color) {
+        if(!mBegan) {
+            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+        }
+        
         TextureObject obj(texture, 0.f);
         
         obj.srcRect = srcRect;
@@ -320,6 +346,9 @@ namespace ukn {
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, float layerDepth, const Color& color) {
+        if(!mBegan) {
+            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+        }
         TextureObject obj(texture, layerDepth);
         
         obj.buildVertices(x,
@@ -341,6 +370,9 @@ namespace ukn {
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, float layerDepth, const Color& color) {
+        if(!mBegan) {
+            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+        }
         TextureObject obj(texture, layerDepth);
         
         obj.srcRect = srcRect;
@@ -373,6 +405,10 @@ namespace ukn {
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, float x, float y, const Rectangle& srcRect, float layerDepth, const Color& color) {        
+        if(!mBegan) {
+            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+        }
+        
         TextureObject obj(texture, layerDepth);
         
         obj.srcRect = srcRect;
@@ -390,11 +426,42 @@ namespace ukn {
                           1.f,
                           color);
         
+        mRenderQueue.insert(obj);
+        
         for(int i=0; i<6; ++i) {
             updateBoundingBox(obj.vertices[i].x,
                               obj.vertices[i].y, 
                               obj.vertices[i].z);
         }
+    }
+    
+    void SpriteBatch::begin(SpriteBatchSortMode mode) {
+        mBegan = true;
+        mCurrMode = mode;
+    }
+    
+    void SpriteBatch::begin(SpriteBatchSortMode mode, const Matrix4& transformMat) {
+        mBegan = true;
+        mCurrMode = mode;
+        mTransformMatrix = transformMat;
+    }
+    
+    void SpriteBatch::end() {
+        switch(mCurrMode) {
+            case SBS_FrontToBack:
+                std::sort(mRenderQueue.begin(), mRenderQueue.end(), std::less<TextureObject>());
+                break;
+            case SBS_BackToFront:
+                std::sort(mRenderQueue.begin(), mRenderQueue.end(), std::greater<TextureObject>());
+                break;
+            case SBS_Deffered:
+            case SBS_None:
+                break;
+        }
+        render();
+
+        mBegan = false;
+        mTransformMatrix = Matrix4();
     }
     
     SpriteBatch& SpriteBatch::DefaultObject() {

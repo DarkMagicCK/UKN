@@ -516,7 +516,7 @@ namespace ukn {
         return mDefault;
     }
     
-    void AnimationPlayer::onAnimationFinished(void* sender, StoryBoardCompletedEventArgs* args) {
+    void AnimationPlayer::onAnimationFinished(void* sender, StoryBoardCompletedEventArgs& args) {
         if(!mDefault.empty()) {
             play(mDefault);
         }

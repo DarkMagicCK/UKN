@@ -250,6 +250,7 @@ namespace ukn {
         float kerning_height;
         float line_width;
         FontAlignment alignment;
+        Color clr;
         
         StringData():
         x(0),
@@ -415,7 +416,7 @@ namespace ukn {
                 if(gidx > 0 && gidx < mGlyphs.size()) {
                     FTGlyph& glyph = mGlyphs[gidx-1];
 
-                    mSpriteBatch->draw(glyph.texture, x+glyph.left, y+glyph.size-glyph.top, data.char_rot);
+                    mSpriteBatch->draw(glyph.texture, x+glyph.left, y+glyph.size-glyph.top, data.char_rot, data.clr);
                     
                     x += mGlyphs[gidx-1].texw + mGlyphs[gidx-1].left + data.kerning_width;
                 }
@@ -438,8 +439,10 @@ namespace ukn {
             return;
         if(mGlyphs.size() == 0)
             return;
-        
+    
         onRenderBegin();
+        
+        mSpriteBatch->begin();
         
         Array<StringData>::const_iterator it = mRenderQueue.begin();
         while(it != mRenderQueue.end()) {
@@ -448,7 +451,7 @@ namespace ukn {
             ++it;
         }
         
-        mSpriteBatch->render();
+        mSpriteBatch->end();
         
         onRenderEnd();
     }
@@ -465,9 +468,10 @@ namespace ukn {
         return idx;
     }
     
-    void Font::draw(const char* str, float x, float y, FontAlignment alignment) {
+    void Font::draw(const char* str, float x, float y, FontAlignment alignment, const Color& clr) {
         // in windows, gbk -> utf8
         Font::StringData data(str, x, y, alignment);
+        data.clr = clr;
         
         mRenderQueue.push_back(data);
        

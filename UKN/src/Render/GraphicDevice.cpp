@@ -159,4 +159,11 @@ namespace ukn {
         }
     }
     
+    
+    void GraphicDevice::clear(uint32 flags, const class Color& clr, float depth, int32 stencil) {
+        if(mCurrFrameBuffer) {
+            mCurrFrameBuffer->clear(flags, clr, depth, stencil);
+        }
+    }
+    
 } // namespace ukn

@@ -31,7 +31,7 @@ namespace ukn {
         
         bool pullEvents();
 
-        void onWindowResize(void* wnd, WindowResizeEventArgs*);
+        void onWindowResize(void* wnd, WindowResizeEventArgs&);
         void onWindowMove(Window& wnd, uint32 x, uint32 y);
         
         GLFrameBufferPtr getFrameBuffer() const;

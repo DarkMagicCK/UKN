@@ -47,7 +47,7 @@ namespace ukn {
         
     private:
         void doCreate();
-        void onWindowClose(void* wnd, NullEventArgs*);
+        void onWindowClose(void* wnd, NullEventArgs&);
         
         ukn_string mName;
         bool mInited;    

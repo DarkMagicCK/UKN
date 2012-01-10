@@ -405,7 +405,7 @@ namespace ukn {
     
     template<typename T>
     static SharedPtr<T> MakeCOMPtr(T* pointer) {
-        return SharedPtr<T>(pointer);
+        return SharedPtr<T, COMReleasePolicy<T> >(pointer);
     }
 	
 	template<typename T>

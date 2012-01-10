@@ -92,20 +92,6 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "UKN/src/Render/Font.cpp"
-         timestampString = "347702013.742824"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "473"
-         endingLineNumber = "473"
-         landmarkName = "Font::draw(const char* str, float x, float y, FontAlignment alignment)"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
          filePath = "UKN/src/Presentation/Skeletal.cpp"
          timestampString = "347699909.815545"
          startingColumnNumber = "9223372036854775807"

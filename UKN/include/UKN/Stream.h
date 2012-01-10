@@ -16,14 +16,14 @@
 
 namespace ukn {
     
+    enum StreamType {
+        ST_Memory,
+        ST_File,
+        ST_Net,
+    };
+    
     class UKN_API Stream {
     public:
-        enum StreamType {
-            ST_Memory,
-            ST_File,
-            ST_Net,
-        };
-        
         virtual bool    seek(size_t pos) = 0;
         virtual size_t  read(uint8* buffer, size_t length) = 0;
         virtual size_t  write(const uint8* buffer, size_t length) = 0;

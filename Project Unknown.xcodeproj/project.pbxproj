@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		88029B0A1491DB8B00AB1490 /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88029B091491DB8B00AB1490 /* Font.cpp */; };
 		88029B0D1491DF9F00AB1490 /* Asset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88029B0C1491DF9F00AB1490 /* Asset.cpp */; };
+		88093C2B14BB218600C6152F /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88093C2A14BB218600C6152F /* Component.cpp */; };
+		88093C2D14BB218B00C6152F /* Entity.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88093C2C14BB218B00C6152F /* Entity.cpp */; };
 		88221BCD1497225400325DC9 /* Profiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88221BCC1497225400325DC9 /* Profiler.cpp */; };
 		88260E631488450200142365 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E621488450100142365 /* Logger.cpp */; };
 		88260E651488541E00142365 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E641488541E00142365 /* Window.cpp */; };
@@ -27,6 +29,7 @@
 		884CE3FB148F843A00F58E2E /* GLGraphicBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE3FA148F843800F58E2E /* GLGraphicBuffer.cpp */; };
 		884CE3FE14902BC400F58E2E /* RandomUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE3FD14902BC300F58E2E /* RandomUtil.cpp */; };
 		884CE4011490905900F58E2E /* GLSpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE4001490905600F58E2E /* GLSpriteBatch.cpp */; };
+		8850F0D714B9DA33001A250C /* Port.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8850F0D614B9DA31001A250C /* Port.cpp */; };
 		8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885449981491E253006B8B60 /* libfreetype.a */; };
 		88871FE2148CB1800026B2B8 /* libglfw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88871FD5148CB1800026B2B8 /* libglfw.a */; };
 		88871FE3148CB1800026B2B8 /* image_DXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FD7148CB1800026B2B8 /* image_DXT.c */; };
@@ -108,6 +111,9 @@
 		88038F46149778A200C8ACE0 /* Scripting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Scripting.h; sourceTree = "<group>"; };
 		88038F47149778AA00C8ACE0 /* Physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Physics.h; sourceTree = "<group>"; };
 		88038F48149778C300C8ACE0 /* Binding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Binding.h; sourceTree = "<group>"; };
+		88093C2914BB1C2400C6152F /* Message.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Message.h; sourceTree = "<group>"; };
+		88093C2A14BB218600C6152F /* Component.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Component.cpp; sourceTree = "<group>"; };
+		88093C2C14BB218B00C6152F /* Entity.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Entity.cpp; sourceTree = "<group>"; };
 		88221BCA1497217C00325DC9 /* Profiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Profiler.h; sourceTree = "<group>"; };
 		88221BCC1497225400325DC9 /* Profiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Profiler.cpp; sourceTree = "<group>"; };
 		88260E621488450100142365 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
@@ -143,6 +149,8 @@
 		884CE3FD14902BC300F58E2E /* RandomUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RandomUtil.cpp; sourceTree = "<group>"; };
 		884CE3FF14908FDC00F58E2E /* GLSpriteBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLSpriteBatch.h; sourceTree = "<group>"; };
 		884CE4001490905600F58E2E /* GLSpriteBatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLSpriteBatch.cpp; sourceTree = "<group>"; };
+		8850F0D414B9D095001A250C /* Port.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Port.h; sourceTree = "<group>"; };
+		8850F0D614B9DA31001A250C /* Port.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Port.cpp; sourceTree = "<group>"; };
 		885449411491E253006B8B60 /* ftconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ftconfig.h; sourceTree = "<group>"; };
 		885449421491E253006B8B60 /* ftheader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ftheader.h; sourceTree = "<group>"; };
 		885449431491E253006B8B60 /* ftmodule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ftmodule.h; sourceTree = "<group>"; };
@@ -426,9 +434,18 @@
 			children = (
 				88322E251499E5A60007C936 /* Trigger.cpp */,
 				88278EE1149D97AA00C7ED8A /* Event.cpp */,
+				88093C2A14BB218600C6152F /* Component.cpp */,
+				88093C2C14BB218B00C6152F /* Entity.cpp */,
 			);
 			name = Game;
 			path = UKN/src/Game;
+			sourceTree = SOURCE_ROOT;
+		};
+		88093C2714BAFFEC00C6152F /* DF */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = DF;
 			sourceTree = SOURCE_ROOT;
 		};
 		8854493E1491E253006B8B60 /* freetype */ = {
@@ -639,6 +656,7 @@
 				88AAC12B14868751007A80A4 /* Platform.h */,
 				88AAC12D14868751007A80A4 /* Preprocessor.h */,
 				88AAC12C14868751007A80A4 /* PreDeclare.h */,
+				88093C2914BB1C2400C6152F /* Message.h */,
 				88AAC12E14868751007A80A4 /* Renderable.h */,
 				88AAC12F14868751007A80A4 /* RenderBuffer.h */,
 				88AAC13014868751007A80A4 /* RenderEffect.h */,
@@ -684,6 +702,7 @@
 				88F7219814A6E9EF00568FBE /* Skeletal.h */,
 				88EA1C6514A4DE370079CCC4 /* Sprite.h */,
 				88EA1C6A14A606DD0079CCC4 /* Audio.h */,
+				8850F0D414B9D095001A250C /* Port.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -772,6 +791,7 @@
 				88EA1C4914A38C090079CCC4 /* Module.cpp */,
 				88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */,
 				88F7219C14A75C6600568FBE /* Class.cpp */,
+				8850F0D614B9DA31001A250C /* Port.cpp */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -879,6 +899,7 @@
 		88CC311C1477915700558EA1 /* Project Unknown */ = {
 			isa = PBXGroup;
 			children = (
+				88093C2714BAFFEC00C6152F /* DF */,
 				88AAC0F514868751007A80A4 /* include */,
 				88AAC14414868751007A80A4 /* src */,
 				88AAC170148689ED007A80A4 /* External */,
@@ -1066,6 +1087,9 @@
 				88EA1C6414A4AA780079CCC4 /* AutoUpdate.cpp in Sources */,
 				88F7219B14A6EB2400568FBE /* Skeletal.cpp in Sources */,
 				88F7219D14A75C6600568FBE /* Class.cpp in Sources */,
+				8850F0D714B9DA33001A250C /* Port.cpp in Sources */,
+				88093C2B14BB218600C6152F /* Component.cpp in Sources */,
+				88093C2D14BB218B00C6152F /* Entity.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

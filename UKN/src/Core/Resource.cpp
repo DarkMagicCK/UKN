@@ -14,7 +14,7 @@
 namespace ukn {
     
     void Resource::readIntoMemory() {
-        if(mResourceStream->getStreamType() == Stream::ST_File) {
+        if(mResourceStream->getStreamType() == ST_File) {
             mResourceStream = static_cast<FileStream*>(mResourceStream.get())->readIntoMemory();
         }
     }

@@ -141,6 +141,15 @@ namespace ukn {
     class SceneManager;
     typedef SharedPtr<SceneManager> SceneManagerPtr;
     
+    class Entity;
+    typedef SharedPtr<Entity> EntityPtr;
+    
+    class Component;
+    typedef SharedPtr<Component> ComponentPtr;
+    
+    class ComponentHolder;
+    typedef SharedPtr<ComponentHolder> ComponentHolderPtr;
+    
     
 } // namespace ukn
 

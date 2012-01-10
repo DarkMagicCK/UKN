@@ -324,7 +324,7 @@ namespace ukn {
 #endif // OS_WIN32
     
     StreamPtr stream_to_memory_stream(const StreamPtr& stream) {
-        if(stream->getStreamType() == Stream::ST_File) {
+        if(stream->getStreamType() == ST_File) {
             return static_cast<FileStream*>(stream.get())->readIntoMemory();
         }
         return stream;
@@ -333,9 +333,9 @@ namespace ukn {
     bool write_stream_to_file(const StreamPtr& stream, const String& file) {
         FileStream output;
         if(output.open(file, true)) {
-            if(stream->getStreamType() == Stream::ST_Memory) {
+            if(stream->getStreamType() == ST_Memory) {
                 output.write(static_cast<MemoryStream*>(stream.get())->get(), stream->getSize());
-            } else if(stream->getStreamType() == Stream::ST_File) {
+            } else if(stream->getStreamType() == ST_File) {
                 uint8* buffer = ukn_malloc_t(uint8, stream->getSize());
                 if(buffer) {
                     size_t readSize = stream->read(buffer, stream->getSize());
@@ -353,9 +353,9 @@ namespace ukn {
     bool write_stream_to_file(Stream& stream, const String& file) {
         FileStream output;
         if(output.open(file, true)) {
-            if(stream.getStreamType() == Stream::ST_Memory) {
+            if(stream.getStreamType() == ST_Memory) {
                 output.write(static_cast<MemoryStream*>(&stream)->get(), stream.getSize());
-            } else if(stream.getStreamType() == Stream::ST_File) {
+            } else if(stream.getStreamType() == ST_File) {
                 uint8* buffer = ukn_malloc_t(uint8, stream.getSize());
                 if(buffer) {
                     size_t readSize = stream.read(buffer, stream.getSize());

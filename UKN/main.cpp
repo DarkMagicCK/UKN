@@ -76,7 +76,6 @@ public:
     void onRender() {
         ukn::Context::Instance().getGraphicFactory().getGraphicDevice().clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Lightskyblue, 0, 0);
         
-        ukn::Timestamp time;
         
         mSpriteBatch->begin(ukn::SBS_BackToFront);
         
@@ -91,7 +90,6 @@ public:
         mSpriteBatch->end();
 
         if(mFont) {
-            
             mFont->draw("Hello World! 测试 ", 0, 0, ukn::FA_Left, ukn::color::Black);
 
             mFont->render();

@@ -16,6 +16,10 @@
 #include "UKN/Texture.h"
 
 #include "GLTexture.h"
+#include "GLRenderBuffer.h"
+#include "GLFrameBuffer.h"
+#include "GLGraphicBuffer.h"
+#include "GLSpriteBatch.h"
 
 namespace ukn {
     
@@ -26,28 +30,30 @@ namespace ukn {
         
         GraphicDevice& getGraphicDevice() const;
         
-        GraphicBufferPtr createVertexBuffer(GraphicBuffer::Usage, 
-                                            GraphicBuffer::Access, 
+        SpriteBatchPtr createSpriteBatch() const;
+        
+        GraphicBufferPtr createVertexBuffer(GraphicBuffer::Access, 
+                                            GraphicBuffer::Usage, 
                                             uint32 count, 
                                             const void* initialData, 
-                                            const VertexFormat& format);
+                                            const VertexFormat& format) const;
         
-        GraphicBufferPtr createIndexBuffer(GraphicBuffer::Usage, 
-                                           GraphicBuffer::Access, 
+        GraphicBufferPtr createIndexBuffer(GraphicBuffer::Access, 
+                                           GraphicBuffer::Usage, 
                                            uint32 count, 
-                                           const void* initialData);
+                                           const void* initialData) const;
         
         
-        RenderBufferPtr createRenderBuffer();
+        RenderBufferPtr createRenderBuffer() const;
         
-        RenderViewPtr create2DRenderView(TexturePtr texture);
-        RenderViewPtr create2DDepthStencilView(TexturePtr texture);
+        RenderViewPtr create2DRenderView(TexturePtr texture) const;
+        RenderViewPtr create2DDepthStencilView(TexturePtr texture) const;
         
-        FrameBufferPtr createFrameBuffer();
+        FrameBufferPtr createFrameBuffer() const;
         
-        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData);
+        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const;
         
-        TexturePtr load2DTexture(const ukn_wstring& name, bool generateMipmaps=false);
+        TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const;
         
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -73,51 +79,62 @@ namespace ukn {
         return *mGraphicDevice;
     }
     
-    GraphicBufferPtr GLGraphicFactory::createVertexBuffer(GraphicBuffer::Usage, 
-                                                          GraphicBuffer::Access, 
+    SpriteBatchPtr GLGraphicFactory::createSpriteBatch() const {
+        return SpriteBatchPtr(new GLSpriteBatch());
+    }
+    
+    GraphicBufferPtr GLGraphicFactory::createVertexBuffer(GraphicBuffer::Access access, 
+                                                          GraphicBuffer::Usage usage,
                                                           uint32 count, 
                                                           const void* initialData, 
-                                                          const VertexFormat& format) {
-        return GraphicBuffer::NullObject();
+                                                          const VertexFormat& format) const {
+        return GraphicBufferPtr(new GLVertexBuffer(access,
+                                                   usage,
+                                                   count,
+                                                   initialData,
+                                                   format));
     }
     
-    GraphicBufferPtr GLGraphicFactory::createIndexBuffer(GraphicBuffer::Usage, 
-                                                         GraphicBuffer::Access, 
+    GraphicBufferPtr GLGraphicFactory::createIndexBuffer(GraphicBuffer::Access access, 
+                                                         GraphicBuffer::Usage usage, 
                                                          uint32 count, 
-                                                         const void* initialData) {
-        return GraphicBuffer::NullObject();
+                                                         const void* initialData) const {
+        return GraphicBufferPtr(new GLIndexBuffer(access,
+                                                  usage,
+                                                  count,
+                                                  initialData));
     }
     
     
-    RenderBufferPtr GLGraphicFactory::createRenderBuffer() {
-        return RenderBuffer::NullObject();
+    RenderBufferPtr GLGraphicFactory::createRenderBuffer() const {
+        return RenderBufferPtr(new GLRenderBuffer());
     }
     
-    RenderViewPtr GLGraphicFactory::create2DRenderView(TexturePtr texture) {
+    RenderViewPtr GLGraphicFactory::create2DRenderView(TexturePtr texture) const {
         return RenderView::NullObject();
     }
     
-    RenderViewPtr GLGraphicFactory::create2DDepthStencilView(TexturePtr texture) {
+    RenderViewPtr GLGraphicFactory::create2DDepthStencilView(TexturePtr texture) const {
         return RenderView::NullObject();
     }
     
-    FrameBufferPtr GLGraphicFactory::createFrameBuffer() {
-        return FrameBuffer::NullObject();
+    FrameBufferPtr GLGraphicFactory::createFrameBuffer() const {
+        return FrameBufferPtr(new GLFrameBuffer(true));
     }
     
-    TexturePtr GLGraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) {
+    TexturePtr GLGraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const {
         GLTexture2D* texture = new GLTexture2D();
         if(texture->create(width, height, numMipmaps, format, initialData)) {
-            return texture;
+            return TexturePtr(texture);
         }
 		delete texture;
         return TexturePtr();
     }
     
-    TexturePtr GLGraphicFactory::load2DTexture(const ukn_wstring& name, bool generateMipmaps) {
+    TexturePtr GLGraphicFactory::load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps) const {
         GLTexture2D* texture = new GLTexture2D();
-        if(texture->load(name, generateMipmaps)) {
-            return texture;
+        if(texture->load(rsrc, generateMipmaps)) {
+            return TexturePtr(texture);
         }
 		delete texture;
         return TexturePtr();

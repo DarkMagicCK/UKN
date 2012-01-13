@@ -9,22 +9,10 @@
 #ifndef Project_Unknown_Function_h
 #define Project_Unknown_Function_h
 
-#include "detail/function/Memfun.h"
-#include "detail/function/Bind.h"
+#include "UKN/detail/function/Memfun.h"
+#include "UKN/detail/function/Bind.h"
 
-#include "detail/function/Function0.h"
-#include "detail/function/Function1.h"
-#include "detail/function/Function2.h"
-#include "detail/function/Function3.h"
-#include "detail/function/Function4.h"
-#include "detail/function/Function5.h"
-#include "detail/function/Function6.h"
-#include "detail/function/Function7.h"
-#include "detail/function/Function8.h"
-#include "detail/function/Function9.h"
-#include "detail/function/Function10.h"
-#include "detail/function/Function11.h"
-#include "detail/function/Function12.h"
+#include "UKN/detail/function/FunctionDetail.h"
 
 
 #endif

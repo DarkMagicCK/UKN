@@ -22,6 +22,8 @@
 #include "UKN/Context.h"
 #include "UKN/App.h"
 #include "UKN/SysUtil.h"
+#include "UKN/Stream.h"
+#include "UKN/Profiler.h"
 
 #include "GLFrameBuffer.h"
 #include "GLRenderView.h"
@@ -32,7 +34,6 @@ namespace ukn {
     GLGraphicDevice::GLGraphicDevice():
     mCurrTexture(TexturePtr()),
     mCurrGLFrameBuffer(0) {
-        
     }
     
     GLGraphicDevice::~GLGraphicDevice() {
@@ -40,26 +41,29 @@ namespace ukn {
     }
     
     ukn_string GLGraphicDevice::description() const {
-        static ukn_string des = format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s", 
+        static ukn_string des = format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s",
                                               (char*)glGetString(GL_VERSION),
                                               (char*)glGetString(GL_VENDOR),
-                                              (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
-//#ifdef UKN_DEBUG
-
-#if UKN_OPENGL_VERSION >= 30
+                                             (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+/* #ifdef UKN_DEBUG
+        
+#if UKN_OPENGL_VERSION >= 30 && defined(UKN_REQUEST_OPENGL_3_2_PROFILE)
 		int NumberOfExtensions;
         glGetIntegerv(GL_NUM_EXTENSIONS, &NumberOfExtensions);
-		
+        
 		des += "\n\nGL Extensions:\n";
         for(int i=0; i<NumberOfExtensions; i++) {
             des += (const char*)glGetStringi(GL_EXTENSIONS, i);
 			des += "\n";
 		}
 #else
-		des += format_string("\n\nGL Extensions:\n %s\n", glGetString(GL_EXTENSIONS));
+		des += "GL Extensions:\n ";
+        des += (char*)glGetString(GL_EXTENSIONS);
+        des += "\n\n";
 #endif
-
-//#endif
+        
+#endif
+       */
         return des;
     }
     
@@ -72,8 +76,10 @@ namespace ukn {
             return WindowPtr();
         }
         
-        bindFrameBuffer(checked_cast<GLWindow*>(mWindow.get()));
+        GraphicDevice::bindFrameBuffer(((GLWindow*)mWindow.get())->getFrameBuffer());
         mScreenFrameBuffer = mCurrFrameBuffer;
+        
+        //
         
         return mWindow;
     }
@@ -93,6 +99,19 @@ namespace ukn {
     
     void GLGraphicDevice::bindTexture(TexturePtr texture) {
         mCurrTexture = texture;
+        
+        if(mCurrTexture) {
+            if(mCurrTexture->getType() == TT_Texture2D) {
+                glEnable(GL_TEXTURE_2D);
+                glBindTexture(GL_TEXTURE_2D, (GLuint)mCurrTexture->getTextureId());
+            } else if(mCurrTexture->getType() == TT_Texture3D) {
+                glEnable(GL_TEXTURE_3D);
+                glBindTexture(GL_TEXTURE_3D, (GLuint)mCurrTexture->getTextureId());
+            }
+        } else {
+            glDisable(GL_TEXTURE_2D);
+            glDisable(GL_TEXTURE_3D);
+        }
     }
     
     void GLGraphicDevice::onRenderBuffer(const RenderBufferPtr& buffer) {
@@ -106,57 +125,56 @@ namespace ukn {
             return;
         }
         
-        if(mCurrTexture) {
-            if(mCurrTexture->getType() == TT_Texture2D) {
-                glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, (GLuint)mCurrTexture->getTextureId());
-            } else if(mCurrTexture->getType() == TT_Texture3D) {
-                glEnable(GL_TEXTURE_3D);
-                glBindTexture(GL_TEXTURE_3D, (GLuint)mCurrTexture->getTextureId());
-            } 
-        } else {
-            glDisable(GL_TEXTURE_2D);
-        }
-        
         const VertexFormat& format = buffer->getVertexFormat();
-        
+        if(format == Vertex2D::Format()) {
+            // acceleration for 2d vertices
+            Array<Vertex2D> vtxArr((Vertex2D*)vertexBuffer->map(), vertexBuffer->count());
+            vertexBuffer->unmap();
+            
+            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vtxArr.begin());
+            glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
+                         0,
+                         vertexBuffer->count());
+            return;
+        }
+
         vertexBuffer->activate();
         
         if(format.checkFormat(VF_XYZ)) {
             glEnableClientState(GL_VERTEX_ARRAY);
-            glVertexPointer(3, 
-                            GL_FLOAT, 
-                            format.totalSize(), 
+            glVertexPointer(3,
+                            GL_FLOAT,
+                            format.totalSize(),
                             BUFFER_OFFSET(format.offsetXYZ()));
         }
         
         if(format.checkFormat(VF_Normal)) {
             glEnableClientState(GL_NORMAL_ARRAY);
-            glNormalPointer(GL_FLOAT, 
-                            format.totalSize(), 
+            glNormalPointer(GL_FLOAT,
+                            format.totalSize(),
                             BUFFER_OFFSET(format.offsetNormal()));
         }
         
         if(format.checkFormat(VF_Color0)) {
             glEnableClientState(GL_COLOR_ARRAY);
-            glColorPointer(4, 
-                           GL_UNSIGNED_BYTE, 
+            glColorPointer(4,
+                           GL_UNSIGNED_BYTE,
                            format.totalSize(),
                            BUFFER_OFFSET(format.offsetColor0()));
         }
         
         if(format.checkFormat(VF_Color1)) {
             glEnableClientState(GL_SECONDARY_COLOR_ARRAY);
-            glSecondaryColorPointer(4, 
-                                    GL_UNSIGNED_BYTE, 
+            glSecondaryColorPointer(4,
+                                    GL_UNSIGNED_BYTE,
                                     format.totalSize(),
                                     BUFFER_OFFSET(format.offsetColor1()));
         }
         
         if(format.checkFormat(VF_UV)) {
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-            glTexCoordPointer(2, 
-                              GL_FLOAT, 
+            glTexCoordPointer(2,
+                              GL_FLOAT,
                               format.totalSize(),
                               BUFFER_OFFSET(format.offsetUV()));
         } else {
@@ -166,21 +184,21 @@ namespace ukn {
         if(buffer->isUseIndexStream()) {
             GraphicBufferPtr indexBuffer = buffer->getIndexStream();
             if(!indexBuffer.isValid()) {
-                log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid vertex buffer format");
+                log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid index stream");
                 return;
             }
             
             indexBuffer->activate();
             
-            glDrawRangeElements(render_mode_to_gl_mode(buffer->getRenderMode()), 
+            glDrawRangeElements(render_mode_to_gl_mode(buffer->getRenderMode()),
                                 0,
                                 0xffffffff,
                                 indexBuffer->count(),
                                 GL_UNSIGNED_INT,
                                 BUFFER_OFFSET(0));
         } else {
-            glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()), 
-                         0, 
+            glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
+                         0,
                          vertexBuffer->count());
         }
         
@@ -194,11 +212,6 @@ namespace ukn {
         glDisableClientState(GL_SECONDARY_COLOR_ARRAY);
     }
     
-    void GLGraphicDevice::setViewMatrix(const Matrix4& mat) {
-        glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(&mat.x[0]);
-    }
-    
     void GLGraphicDevice::bindGLFrameBuffer(GLuint fbo) {
         if(mCurrGLFrameBuffer != fbo) {
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
@@ -207,11 +220,11 @@ namespace ukn {
     }
     
     void GLGraphicDevice::beginFrame() {
-        mWindow->onFrameStart()(*mWindow);
+        mWindow->onFrameStart().raise(this, _NullEventArgs);
     }
     
     void GLGraphicDevice::endFrame() {
-        mWindow->onFrameEnd()(*mWindow);
+        mWindow->onFrameEnd().raise(this, _NullEventArgs);
     }
     
     void GLGraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
@@ -228,19 +241,37 @@ namespace ukn {
             if(fb.isActive()) {
                 counter.waitToNextFrame();
                 
-                app.update();
-                app.render();
+                {
+                    UKN_PROFILE("MainFrame");
+                    
+                    glViewport(fb.getViewport().left,
+                               fb.getViewport().top,
+                               fb.getViewport().width,
+                               fb.getViewport().height);
+                    
+                    setViewMatrix(fb.getViewport().camera->getViewMatrix());
+                    setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
+                    
+                    app.update();
+                    app.render();
+                    
+                    if(mWindow->pullEvents())
+                        break;
+                    
+                    fb.swapBuffers();
+                }
                 
-                if(mWindow->pullEvents())
-                    break;
-                
-                fb.swapBuffers();
             }
         }
     }
     
     GLuint GLGraphicDevice::getBindedGLFrameBuffer() const {
         return mCurrGLFrameBuffer;
+    }
+    
+    void GLGraphicDevice::setViewMatrix(const Matrix4& mat) {
+        glMatrixMode(GL_MODELVIEW);
+        glLoadMatrixf(&mat.x[0]);
     }
     
     void GLGraphicDevice::setProjectionMatrix(const Matrix4& mat) {
@@ -251,7 +282,7 @@ namespace ukn {
     void GLGraphicDevice::getViewMatrix(Matrix4& mat) {
         glGetFloatv(GL_MODELVIEW_MATRIX, &mat.x[0]);
     }
-   
+    
     void GLGraphicDevice::getProjectionMatrix(Matrix4& mat) {
         glGetFloatv(GL_PROJECTION_MATRIX, &mat.x[0]);
     }

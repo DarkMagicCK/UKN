@@ -7,8 +7,142 @@
 //
 
 #include "UKN/StringUtil.h"
+#include "UKN/MemoryUtil.h"
 
 namespace ukn {
+    
+    static size_t utf8_strlen(const char* s) {
+        size_t len = 0;
+        for(; *s; ) {
+            if(*s <= 0x7f)
+                s += 1;
+            else if(*s <= 0xc0)
+                s += 2;
+            else 
+                s += 3;
+            len ++;
+        }
+        return len;
+    }
+    
+    String::String():
+    mStrBuff(0),
+    mStrBuffSize(0) {
+        
+    }
+    
+    String::String(const char* str, StringFormat format):
+    mStrBuff(0),
+    mStrBuffSize(0) {
+        convert(str, format);
+    }
+    
+    String::String(const wchar_t* str):
+    mStrBuff(0),
+    mStrBuffSize(0) {
+        assign(str);
+    }
+    
+    String::String(const std::string& str, StringFormat format):
+    mStrBuff(0),
+    mStrBuffSize(0) {
+        convert(str.c_str(), format);
+    }
+    
+    String::String(const std::wstring& str):
+    mStrBuff(0),
+    mStrBuffSize(0) {
+        assign(str);
+    }
+    
+    bool String::convert(const char* str, StringFormat format) {
+        mFormat = format;
+        this->clear();
+        switch(format) {
+            case SF_ANSI:
+                this->assign(string_to_wstring(str));
+                break;
+                
+            case SF_UTF8: {
+                wchar_t temp;
+                unsigned char* ptemp = (unsigned char*)&temp;
+                for(; *str; ) {
+                    // 0xxxxxxx
+                    if(((*str) & 0x80) == 0) {
+                        ptemp[0] = *str;
+                        ptemp[1] = 0;
+                        str++;
+                    // 110xxxxx 10xxxxxx
+                    } else if(((*str) & 0xE0) == 0xC0) {
+                        ptemp[0] = ((*str) << 6) | ((*(str+1)) & 0x3F);
+                        ptemp[1] = ((*str) >> 2) & 0x07;
+                        str += 2;
+                    // 1110xxxx 10xxxxxx 10xxxxxx
+                    } else {
+                        ptemp[0] = ((*(str+1)) << 6) | ((*(str + 2)) & 0x3F);
+                        ptemp[1] = ((*str) << 4) | (((*(str + 1)) >> 2) & 0x0F);
+                        str += 3;
+                    }
+                    this->push_back(temp);
+                }
+                break;
+            }
+                
+            case SF_Unicode: {
+                wchar_t temp;
+                unsigned char* ptemp = (unsigned char*)&temp;
+                
+                for(; *str; str += 2) {
+                    ptemp[0] = *(str + 1);
+                    ptemp[1] = *str;
+                    this->push_back(temp);
+                }
+                break;
+            }
+        }
+        return true;
+    }
+    
+    StringFormat String::format() const {
+        return mFormat;
+    }
+    
+    const char* String::ansi_str() {
+        return wstring_to_string(*this).c_str();
+    }
+    
+    const char* String::utf8_str() {
+        if(mStrBuffSize < size() * 3 + 1) {
+            if(mStrBuff != 0)
+                ukn_free(mStrBuff);
+            mStrBuff = (char*)malloc(size() * 3 + 1);
+            mStrBuffSize = size() * 3 + 1;
+        }
+        char* pstr = mStrBuff;
+        size_t i = 0, len = size();
+        for(const wchar_t* s = c_str(); i < len; s++, i++) {
+            if(*s < 0x80) {
+                *pstr = 0 | (char)(*s);
+                pstr += 1;
+            } else if(*s < 0x800) {
+                pstr[0] = 0xE0 | (char)((*s) >> 6);
+                pstr[1] = 0x80 | ((*s) & 0x3F);
+                pstr += 2;
+            } else {
+                pstr[0] = 0xE0 | ((*s) >> 12);
+                pstr[1] = 0x80 | (((*s) >> 6) & 0x3F);
+                pstr[2] = 0x80 | ((*s) & 0x3F);
+                pstr += 3;
+            }
+        }
+        *pstr = '\0';
+        return mStrBuff;
+    }
+    
+    std::ostream& operator<<(std::ostream& os, const String& val) {
+        os << wstring_to_string(val);
+        return os;
+    }
     
     StringTokenlizer::StringTokenlizer() {
         
@@ -148,7 +282,7 @@ namespace ukn {
 namespace ukn {
     
 #ifdef UKN_OS_WINDOWS
-	static ukn_string ukn_win_wstring_to_string(const ukn_wstring& pwszSrc) {
+	static ukn_string ukn_win_wstring_to_string(const String& pwszSrc) {
 		int nLen = WideCharToMultiByte(CP_ACP, 0, pwszSrc.c_str(), -1, NULL, 0, NULL, NULL);
 		if (nLen<= 0) return std::string("");
 		char* pszDst = new char[nLen];
@@ -178,7 +312,7 @@ namespace ukn {
 	}
 #endif
     
-    static ukn_string ukn_normal_wstring_to_string(const ukn_wstring& ws) {
+    static ukn_string ukn_normal_wstring_to_string(const String& ws) {
         std::string curLocale = setlocale(LC_ALL, NULL);        // curLocale = "C";
         setlocale(LC_ALL, "chs");
         const wchar_t* _Source = ws.c_str();
@@ -205,11 +339,10 @@ namespace ukn {
         return result;
     }
     
-    
     UKN_API ukn_string wstring_to_string(const ukn_wstring& str) {
 #if defined(UKN_OS_WINDOWS)
         return ukn_win_wstring_to_string(str);
-#elif defined(UKN_OS_FAMILY_APPLE)
+#elif defined(UKN_OS_IOS)
         return ukn_apple_wstring_to_string(str);
 #else
         return ukn_normal_wstring_to_string(str);
@@ -219,7 +352,7 @@ namespace ukn {
     UKN_API ukn_wstring string_to_wstring(const ukn_string& str) {
 #if defined(UKN_OS_WINDOWS)
         return ukn_win_string_to_wstring(str);
-#elif defined(UKN_OS_FAMILY_APPLE)
+#elif defined(UKN_OS_IOS)
         return ukn_apple_string_to_wstring(str);
 #else
         return ukn_normal_string_to_wstring(str);
@@ -256,6 +389,30 @@ namespace ukn {
             --it;
         }
         return ukn_wstring(it, str.end());
+    }
+    
+    UKN_API ukn_string get_file_path(const ukn_string& str) {
+        ukn_string::const_iterator it = str.end();
+        it--;
+        
+        while(it != str.begin() && *it != '/' && *it != '\\') {
+            --it;
+        }
+        if(it != str.begin())
+            return ukn_string(str.begin(), it);
+        return ukn_string();
+    }
+
+    UKN_API ukn_wstring get_file_path(const ukn_wstring& str) {
+        ukn_wstring::const_iterator it = str.end();
+        it--;
+        
+        while(it != str.begin() && *it != L'/' && *it != L'\\') {
+            --it;
+        }
+        if(it != str.begin())
+            return ukn_wstring(str.begin(), it);
+        return ukn_wstring();
     }
     
     

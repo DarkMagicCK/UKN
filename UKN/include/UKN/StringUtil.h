@@ -9,11 +9,44 @@
 #ifndef Project_Unknown_StringUtil_h
 #define Project_Unknown_StringUtil_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 
 #include <vector>
+#include <string>
+#include <sstream>
 
 namespace ukn {
+    
+    enum StringFormat {
+        SF_ANSI,
+        SF_UTF8,
+        SF_Unicode,
+    };
+    
+    class UKN_API String: public std::wstring {
+    public:
+        String();
+        String(const char* cstr, StringFormat format = SF_ANSI);
+        String(const wchar_t* wcstr);
+        String(const std::string& str, StringFormat format = SF_ANSI);
+        String(const std::wstring& wstr);
+        
+        bool convert(const char* str, StringFormat format = SF_ANSI);
+        
+        StringFormat format() const;
+        
+        const char* ansi_str();
+        const char* utf8_str();
+        
+        friend std::ostream& operator<<(std::ostream& os, const String& val);
+        
+    protected:
+        StringFormat mFormat;
+        
+    private:
+        char* mStrBuff;
+        size_t mStrBuffSize;
+    };
     
     class UKN_API StringTokenlizer {
     public:
@@ -63,6 +96,15 @@ namespace ukn {
     UKN_API ukn_string get_file_name(const ukn_string& str);
     UKN_API ukn_wstring get_file_name(const ukn_wstring& str);
     
+    UKN_API ukn_string get_file_path(const ukn_string& str);
+    UKN_API ukn_wstring get_file_path(const ukn_wstring& str);
+
+    template<typename T>
+    ukn_string any_to_string(const T& val) {
+        std::ostringstream sstr;
+        sstr << val;
+        return sstr.str();
+    }
     
 } // namespace ukn
 

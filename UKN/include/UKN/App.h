@@ -14,6 +14,7 @@
 #include "UKN/Uncopyable.h"
 #include "UKN/Signal.h"
 #include "UKN/GraphicSettings.h"
+#include "UKN/Event.h"
 
 namespace ukn {
     
@@ -24,13 +25,11 @@ namespace ukn {
         AppInstance(const ukn_string& name);
         ~AppInstance();
         
-        Window& getMainWindow() const;
-		WindowPtr getMainWindowPtr() const;
+        Window&     getMainWindow() const;
+		WindowPtr   getMainWindowPtr() const;
         
-        void init(const ukn_wstring& cfgname=L"config.xml");
-        void init(const ContextCfg& cfg);
-        
-        void create();
+        void create(const String& cfgname=L"config.xml");
+        void create(const ContextCfg& cfg);
         
         void run();
         void terminate();
@@ -38,8 +37,8 @@ namespace ukn {
         void update();
         void render();
         
-        void setCamera(CameraPtr camera);
-        CameraPtr getCamera() const;
+        void        setCamera(CameraPtr camera);
+        CameraPtr   getCamera() const;
         
     protected:
         virtual void onRender();
@@ -47,15 +46,14 @@ namespace ukn {
         virtual void onInit();
         
     private:
-        void onWindowClose(Window& wnd);
+        void doCreate();
+        void onWindowClose(void* wnd, NullEventArgs&);
         
         ukn_string mName;
         bool mInited;    
 
         WindowPtr mMainWindow;
         CameraPtr mCamera;
-        
-        Connection mCloseConn;
     };
     
 } // namespace ukn

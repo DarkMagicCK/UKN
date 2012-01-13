@@ -19,6 +19,9 @@
 #include "UKN/Common.h"
 #include "UKN/SysUtil.h"
 #include "UKN/Camera.h"
+#include "UKN/Stream.h"
+
+#include "UKN/UKN.h"
 
 namespace ukn {
     
@@ -32,7 +35,7 @@ namespace ukn {
         
     }
     
-    void AppInstance::onWindowClose(Window& wnd) {
+    void AppInstance::onWindowClose(void* wnd, NullEventArgs&) {
         terminate();
     }
     
@@ -44,19 +47,21 @@ namespace ukn {
 		return mMainWindow;
 	}
     
-    void AppInstance::init(const ukn_wstring& cfgname) {
+    void AppInstance::create(const String& cfgname) {
         mInited = true;
         
         Context::Instance().loadCfgFile(cfgname);
+        doCreate();
     }
     
-    void AppInstance::init(const ContextCfg& cfg) {
+    void AppInstance::create(const ContextCfg& cfg) {
         mInited = true;
         
         Context::Instance().setCfg(cfg);
+        doCreate();
     }
     
-    void AppInstance::create() {
+    void AppInstance::doCreate() {
         ukn_assert(mInited);
         
         GraphicDevice& graphic_device = Context::Instance().getGraphicFactory().getGraphicDevice();
@@ -66,13 +71,13 @@ namespace ukn {
         if(!mMainWindow)
             return terminate();
         
-        mCloseConn = mMainWindow->onClose().connect(Bind(this, &AppInstance::onWindowClose));
+        mMainWindow->onClose() += Bind(this, &AppInstance::onWindowClose);
         
         // log basic information
         Logger::Instance().setFeature(LF_PrependRunningTime, false);
         
         log_info(format_string("Project Unknown %d.%d Rev %d", 
-                               UKN_VERSION_MARJOR,
+                               UKN_VERSION_MAJOR,
                                UKN_VERSION_MINOR,
                                UKN_VERSION_REV));
         log_info(get_os_version());
@@ -104,7 +109,7 @@ namespace ukn {
         Logger::Instance().setFeature(LF_PrependRunningTime, true);
         
         // on init
-        mMainWindow->onInit()(*mMainWindow);
+        mMainWindow->onInit().raise(mMainWindow, _NullEventArgs);
         onInit();
     }
     
@@ -118,13 +123,15 @@ namespace ukn {
     }
     
     void AppInstance::update() {
-        mMainWindow->onUpdate()(*mMainWindow);
+        mMainWindow->onGlobalUpdate().raise(0, _NullEventArgs);
 
+        mMainWindow->onUpdate().raise(mMainWindow, _NullEventArgs);
+    
         onUpdate();
     }
     
     void AppInstance::render() {
-        mMainWindow->onRender()(*mMainWindow);
+        mMainWindow->onRender().raise(mMainWindow, _NullEventArgs);
         
         onRender();
     }

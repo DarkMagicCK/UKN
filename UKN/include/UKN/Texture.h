@@ -9,9 +9,9 @@
 #ifndef Project_Unknown_Texture_h
 #define Project_Unknown_Texture_h
 
-#include "Platform.h"
-#include "PreDeclare.h"
-#include "GraphicSettings.h"
+#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
+#include "UKN/GraphicSettings.h"
 
 namespace ukn {
     
@@ -38,7 +38,6 @@ namespace ukn {
     
     /**
      * Abstract texture class
-     * Implementations differs on plugins
      **/
     class UKN_API Texture {
     public:
@@ -54,7 +53,7 @@ namespace ukn {
         virtual uint32 getHeight(uint32 level = 0) const = 0;
         
         virtual uintPtr getTextureId() const = 0;
-        
+                
     protected:
         TextureType mType;
         uint32 mNumMipmaps;

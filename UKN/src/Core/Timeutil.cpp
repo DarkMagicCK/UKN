@@ -8,6 +8,7 @@
 
 #include "UKN/TimeUtil.h"
 #include "UKN/Platform.h"
+#include "UKN/Profiler.h"
 
 #if !defined(UKN_OS_WINDOWS)
 #include <time.h>
@@ -185,7 +186,6 @@ namespace ukn {
 
 namespace ukn {
     
-    // 500 nanoseconds
     static uint64 TIME_PRECISION = 1000000;
     
     static void mach_absolute_difference(uint64_t end, uint64_t start, struct timespec *tp) {  
@@ -418,7 +418,7 @@ namespace ukn {
 				deltaTime = fpsInterval / (double)(1000*1000);
 				oldtime += fpsInterval;
 			} else {
-				deltaTime = (time-oldtime) / (double)(1000*1000);
+				deltaTime = (time - oldtime) / (double)(1000*1000);
 				oldtime = time;
 			}
 			/* too long */
@@ -436,7 +436,8 @@ namespace ukn {
     mDesiredFps(FpsUnlimited),
     mPrevDelta(0),
     mCurrentFps(0),
-    mFrameCount(0) {
+    mFrameCount(0),
+    mDelta(0) {
         getRunningTime();
     }
     
@@ -463,11 +464,20 @@ namespace ukn {
         return mCurrentFps;
     }
     
+    uint64 FrameCounter::getDeltaTime() const {
+        return mDelta;
+    }
+    
     void FrameCounter::waitToNextFrame() {
+        mDelta = mDetalTime.elapsed();
+        Profiler::Instance().updateTimeRatio(FrameCounter::Instance().getDeltaTime(), getPrevDelta() * 1000 * 1000);
+
         mPrevDelta = doWaitToNextFrame();
         mCurrentFps = 1.0f / mPrevDelta;
         
         ++mFrameCount;
+        
+        mDetalTime.update();
     }
     
     uint64 FrameCounter::getFrameCount() const {
@@ -501,7 +511,7 @@ namespace ukn {
     
     uint64 FrameCounter::getRunningTime() const {
         static Timestamp starttime = Timestamp();
-        return starttime.elapsed();
+        return starttime.elapsed() / 1000;
     }
     
 } // namespace ukn

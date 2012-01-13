@@ -9,9 +9,9 @@
 #ifndef Project_Unknown_Camera_h
 #define Project_Unknown_Camera_h
 
-#include "Platform.h"
-#include "MathUtil.h"
-#include "Frustum.h"
+#include "UKN/Platform.h"
+#include "UKN/MathUtil.h"
+#include "UKN/Frustum.h"
 
 namespace ukn {
     
@@ -34,7 +34,7 @@ namespace ukn {
     public:
         Camera2D();
         virtual ~Camera2D();
-        
+                
         void setTransformParams(float x, float y, float displaceX, float displaceY, float rot, float scaleV, float scaleH);
         void setOrthoParams(float left, float right, float bottom, float top, float near=0.f, float far=1.f);
         
@@ -73,7 +73,7 @@ namespace ukn {
     public:
         Camera3D();
         virtual ~Camera3D();
-    
+            
         void setViewParams(const Vector3& eye, const Vector3& lookat, const Vector3& up = Vector3(0, 1, 0));
         void setProjParams(float fov, float aspect, float near, float far);
     

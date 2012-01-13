@@ -9,12 +9,15 @@
 #ifndef UKN_Signal_h
 #define UKN_Signal_h
 
-#include "Platform.h"
-#include "Any.h"
-#include "Ptr.h"
-#include "Function.h"
+#include "UKN/Platform.h"
+#include "UKN/Any.h"
+#include "UKN/Ptr.h"
+#include "UKN/Function.h"
 
 #include <map>
+#include <memory>
+#include <utility>
+#include <vector>
 
 namespace ukn {
     
@@ -22,15 +25,46 @@ namespace ukn {
      * A Simple Signal Implementation
      **/
     
-    class Connection;
+    namespace detail {
+        class ConnectionBase;
+        class SignalImpl;
+    }
+    
+    class Connection {
+    public:
+        friend class detail::SignalImpl;
+        
+        Connection();
+        
+        ~Connection();
+        bool isValid();
+        void disconnect() ;
+        
+        bool operator ==(const Connection &rhs);
+        
+        detail::ConnectionBase* get_con_base() const ;
+        
+        Connection& operator=(const Connection& rhs);
+        void setControl(bool flag) ;
+        
+        void reset(detail::ConnectionBase* _con) ;
+        
+    private:
+        bool isControlling;
+        SharedPtr<detail::ConnectionBase> con;
+    };
     
     namespace detail {
         
         class SignalImpl {
-        public:                        
-            typedef std::multimap<int, Connection> ConnectionMap;
-            typedef std::multimap<int, Connection>::iterator IteratorType;
+        public:
+            typedef std::multimap<int, ukn::Connection> ConnectionMap;
+            typedef std::multimap<int, ukn::Connection>::iterator IteratorType;
             ConnectionMap mConnections;
+            
+            SignalImpl() {
+                __in_distribute = false;
+            }
             
             // set controlling flag to false to avoid repeat destruction in disconnect
             virtual ~SignalImpl() {
@@ -39,10 +73,13 @@ namespace ukn {
             
             void clearConnection();
             
-            void disconnect(void* sig, void* data) {                
-                std::auto_ptr<IteratorType> slot(reinterpret_cast<IteratorType*>(data));
-                mConnections.erase(*slot);
-            }
+            void disconnect(void* con, void* data);
+            
+            
+        protected:
+            typedef std::vector<void*> ToDelete;
+            ToDelete __to_delete;
+            bool __in_distribute;
         };
         
         template<typename SIG>
@@ -58,11 +95,16 @@ namespace ukn {
         
         class ConnectionBase {
         public:
+            ConnectionBase() {
+                __in_delete_list = false;
+            }
+            
             virtual bool isValid() = 0;
             virtual void disconnect() = 0;
             
             SignalImpl* signal;
             SignalImpl::IteratorType* iter;
+            bool __in_delete_list;
             
             typedef void (SignalImpl::*DisconnectFunc)(void*, void*);
             DisconnectFunc signal_disconnet;
@@ -81,7 +123,7 @@ namespace ukn {
             
             void disconnect() {
                 if(isValid()) {
-                    (signal->*signal_disconnet)(signal, iter);
+                    (signal->*signal_disconnet)(this, iter);
                     signal = NULL;
                     signal_disconnet = NULL;
                 }
@@ -94,80 +136,10 @@ namespace ukn {
         
     } // namespace detail
     
-    class Connection {
-    public:
-        friend class detail::SignalImpl;
-        
-        Connection():
-        isControlling(false) {
-            
-        }
-        
-        ~Connection() {
-            if(isControlling) {
-                disconnect();
-            }
-        }
-        
-        bool isValid() {
-            if(con.get())
-                return con->isValid();
-            return false;
-        }
-        
-        void disconnect() {
-            if(con.get())
-                con->disconnect();
-        }
-        
-        bool operator ==(const Connection &rhs) {
-            ukn_assert(con.get());
-            return con.get() == rhs.con.get();
-        }
-        
-        detail::ConnectionBase* get_con_base() {
-            return con.get();
-        }
-        
-        Connection& operator=(const Connection& rhs) {
-            if(this != &rhs) {
-                isControlling = false;
-                con = rhs.con;
-            }
-            return *this;
-        }
-        
-        void setControl(bool flag) {
-            isControlling = flag;
-        }
-        
-        void reset(detail::ConnectionBase* _con) {
-            con.reset(_con);
-        }
-        
-    private:
-        
-        bool isControlling;
-        SharedPtr<detail::ConnectionBase> con;
-    };
-    
-    namespace detail {
-        
-        inline void SignalImpl::clearConnection() {
-            IteratorType it = mConnections.begin();
-            while(it != mConnections.end()) {
-                it->second.setControl(false);
-                ++it;
-            }
-            mConnections.clear();
-        }
-        
-    } // namespace detail
-    
     template<typename SIG>
     class SignalBase: public detail::SignalImpl {
     public:
-        typedef Connection ConnectionType; 
+        typedef Connection ConnectionType;
         typedef typename detail::BasicConnection<SIG>::FuncType slot_type;
         
         template<typename F>
@@ -196,6 +168,26 @@ namespace ukn {
             
             return slotcon;
         }
+        
+        template<typename F>
+        void disconnect(const F& f) {
+            IteratorType iter = mConnections.begin();
+            while(iter != mConnections.end()) {
+                detail::BasicConnection<SIG>* con = static_cast<detail::BasicConnection<SIG> >(iter->second.con);
+                if(con && con->slot->fn == f) {
+                    con->disconnect();
+                    break;
+                }
+                
+                ++iter;
+            }
+        }
+        
+        template<typename F>
+        SignalBase& operator+=(const F& f) {
+            this->connect(0, f);
+            return *this;
+        }
     };
     
     template<typename SIG>
@@ -208,7 +200,9 @@ namespace ukn {
         RT sig() {
             typedef SignalBase<RT(void)> base_type;
             
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            
+            detail::SignalImpl::__in_distribute = true;
             
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
@@ -216,10 +210,13 @@ namespace ukn {
                 rtVal = con->slot.get()->fn();
                 ++itConnection;
             }
+            
+            detail::SignalImpl::__in_distribute = false;
+            
             return rtVal;
         }
         
-        RT operator()() { sig(); }
+        RT operator()() const { sig(); }
     };
     
     // signal 1 void
@@ -228,13 +225,18 @@ namespace ukn {
     public:
         void sig() {
             typedef SignalBase<void(void)> base_type;
-            base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
                 detail::BasicConnection<void()>* con = static_cast<detail::BasicConnection<void()>* >(itConnection->second.get_con_base());
                 con->slot.get()->fn();
                 ++itConnection;
             }
+            
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()() { sig(); }
@@ -245,16 +247,21 @@ namespace ukn {
     public:
         RT sig(T0 a0) {
             typedef SignalBase<RT(T0)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0)>* con = 
+                detail::BasicConnection<RT(T0)>* con =
                 static_cast<detail::BasicConnection<RT(T0)>* >(itConnection->second.get_con_base());
                 
-                rtVal = con->slot.get()->fn(a0);
+                if(!con->__in_delete_list)
+                    rtVal = con->slot.get()->fn(a0);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
             return rtVal;
         }
         
@@ -266,15 +273,20 @@ namespace ukn {
     public:
         void sig(T0 a0) {
             typedef SignalBase<void(T0)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0)>* con = 
+                detail::BasicConnection<void(T0)>* con =
                 static_cast<detail::BasicConnection<void(T0)>* >(itConnection->second.get_con_base());
                 
-                con->slot.get()->fn(a0);
+                if(!con->__in_delete_list)
+                    con->slot.get()->fn(a0);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()(T0 a0) { sig(a0); }
@@ -285,16 +297,21 @@ namespace ukn {
     public:
         RT sig(T0 a0, T1 a1) {
             typedef SignalBase<RT(T0, T1)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1)>* con = 
+                detail::BasicConnection<RT(T0, T1)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1)>* >(itConnection->second.get_con_base());
                 
-                rtVal = con->slot.get()->fn(a0, a1);
+                if(!con->__in_delete_list)
+                    rtVal = con->slot.get()->fn(a0, a1);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
             return rtVal;
         }
         
@@ -306,15 +323,20 @@ namespace ukn {
     public:
         void sig(T0 a0, T1 a1) {
             typedef SignalBase<void(T0, T1)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1)>* con = 
+                detail::BasicConnection<void(T0, T1)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1)>* >(itConnection->second.get_con_base());
                 
-                con->slot.get()->fn(a0, a1);
+                if(!con->__in_delete_list)
+                    con->slot.get()->fn(a0, a1);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()(T0 a0, T1 a1) { sig(a0, a1); }
@@ -325,16 +347,21 @@ namespace ukn {
     public:
         RT sig(T0 a0, T1 a1, T2 a2) {
             typedef SignalBase<RT(T0, T1, T2)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2)>* >(itConnection->second.get_con_base());
                 
-                rtVal = con->slot.get()->fn(a0, a1, a2);
+                if(!con->__in_delete_list)
+                    rtVal = con->slot.get()->fn(a0, a1, a2);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
             return rtVal;
         }
         
@@ -346,15 +373,20 @@ namespace ukn {
     public:
         void sig(T0 a0, T1 a1, T2 a2) {
             typedef SignalBase<void(T0, T1, T2)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2)>* con = 
+                detail::BasicConnection<void(T0, T1, T2)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2)>* >(itConnection->second.get_con_base());
                 
-                con->slot.get()->fn(a0, a1, a2);
+                if(!con->__in_delete_list)
+                    con->slot.get()->fn(a0, a1, a2);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()(T0 a0, T1 a1, T2 a2) { sig(a0, a1, a2); }
@@ -365,16 +397,21 @@ namespace ukn {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3) {
             typedef SignalBase<RT(T0, T1, T2, T3)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3)>* >(itConnection->second.get_con_base());
                 
-                rtVal = con->slot.get()->fn(a0, a1, a2, a3);
+                if(!con->__in_delete_list)
+                    rtVal = con->slot.get()->fn(a0, a1, a2, a3);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
             return rtVal;
         }
         
@@ -386,15 +423,20 @@ namespace ukn {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3) {
             typedef SignalBase<void(T0, T1, T2, T3)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3)>* >(itConnection->second.get_con_base());
                 
-                con->slot.get()->fn(a0, a1, a2, a3);
+                if(!con->__in_delete_list)
+                    con->slot.get()->fn(a0, a1, a2, a3);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()(T0 a0, T1 a1, T2 a2, T3 a3) { sig(a0, a1, a2, a3); }
@@ -405,16 +447,21 @@ namespace ukn {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4)>* >(itConnection->second.get_con_base());
                 
-                rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4);
+                if(!con->__in_delete_list)
+                    rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
             return rtVal;
         }
         
@@ -426,15 +473,20 @@ namespace ukn {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) {
             typedef SignalBase<void(T0, T1, T2, T3, T4)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4)>* >(itConnection->second.get_con_base());
                 
-                con->slot.get()->fn(a0, a1, a2, a3, a4);
+                if(!con->__in_delete_list)
+                    con->slot.get()->fn(a0, a1, a2, a3, a4);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) { sig(a0, a1, a2, a3, a4); }
@@ -445,16 +497,21 @@ namespace ukn {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4, T5)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5)>* >(itConnection->second.get_con_base());
                 
-                rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5);
+                if(!con->__in_delete_list)
+                    rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
             return rtVal;
         }
         
@@ -466,15 +523,20 @@ namespace ukn {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) {
             typedef SignalBase<void(T0, T1, T2, T3, T4, T5)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4, T5)>* >(itConnection->second.get_con_base());
                 
-                con->slot.get()->fn(a0, a1, a2, a3, a4, a5);
+                if(!con->__in_delete_list)
+                    con->slot.get()->fn(a0, a1, a2, a3, a4, a5);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) { sig(a0, a1, a2, a3, a4, a5); }
@@ -485,16 +547,21 @@ namespace ukn {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4, T5, T6)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6)>* >(itConnection->second.get_con_base());
                 
-                rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6);
+                if(!con->__in_delete_list)
+                    rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
             return rtVal;
         }
         
@@ -506,15 +573,20 @@ namespace ukn {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) {
             typedef SignalBase<void(T0, T1, T2, T3, T4, T5, T6)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6)>* >(itConnection->second.get_con_base());
                 
-                con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6);
+                if(!con->__in_delete_list)
+                    con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) { sig(a0, a1, a2, a3, a4, a5, a6); }
@@ -525,16 +597,21 @@ namespace ukn {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4, T5, T6, T7 a7)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7)>* >(itConnection->second.get_con_base());
                 
-                rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7);
+                if(!con->__in_delete_list)
+                    rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
             return rtVal;
         }
         
@@ -546,15 +623,20 @@ namespace ukn {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) {
             typedef SignalBase<void(T0, T1, T2, T3, T4, T5, T6, T7)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7)>* >(itConnection->second.get_con_base());
                 
-                con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7);
+                if(!con->__in_delete_list)
+                    con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) { sig(a0, a1, a2, a3, a4, a5, a6, a7); }
@@ -565,16 +647,21 @@ namespace ukn {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4, T5, T6, T7 a7, T8 a8)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             RT rtVal;
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* con = 
+                detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* con =
                 static_cast<detail::BasicConnection<RT(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* >(itConnection->second.get_con_base());
                 
-                rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7, a8);
+                if(!con->__in_delete_list)
+                    rtVal = con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7, a8);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
             return rtVal;
         }
         
@@ -586,15 +673,20 @@ namespace ukn {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) {
             typedef SignalBase<void(T0, T1, T2, T3, T4, T5, T6, T7, T8)> base_type;
-            typename base_type::ConnectionMap::iterator itConnection = base_type::mConnections.begin();
+            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
             
+            detail::SignalImpl::__in_distribute = true;
+
             while(itConnection != base_type::mConnections.end()) {
-                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* con = 
+                detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* con =
                 static_cast<detail::BasicConnection<void(T0, T1, T2, T3, T4, T5, T6, T7, T8)>* >(itConnection->second.get_con_base());
                 
-                con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7, a8);
+                if(!con->__in_delete_list)
+                    con->slot.get()->fn(a0, a1, a2, a3, a4, a5, a6, a7, a8);
                 ++itConnection;
             }
+            detail::SignalImpl::__in_distribute = false;
+
         }
         
         void operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) { sig(a0, a1, a2, a3, a4, a5, a6, a7, a8); }

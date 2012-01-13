@@ -11,117 +11,160 @@
 #include "UKN/StringUtil.h"
 
 namespace ukn {
+    
+    template<>
+    IStream& IStream::operator<< <ukn_string>(const ukn_string& val) {
+        write((const uint8*)val.c_str(), val.size());
+        return *this;
+    }
+    
+    template<>
+    IStream& IStream::operator>> <ukn_string>(ukn_string& val) {
+        char buffer;
+        *this >> buffer;
+        while(buffer != 0) {
+            val += buffer;
+            *this >> buffer;
+        }
+        return *this;
+    }
  
     MemoryStream::MemoryStream():  
     mCurrPos(0) {
-        
+    }
+    
+    MemoryStream::MemoryStream(const MemoryStream& rhs):
+    mCurrPos(rhs.mCurrPos),
+    mData(rhs.mData) {
+
     }
     
 	MemoryStream::MemoryStream(const uint8* data, size_t length):
-	mCurrPos(0),
-    mData(data, length) {
+	mCurrPos(0) {
 	}
 	
 	MemoryStream::~MemoryStream() {
+        
+    }
+    
+    MemoryStream& MemoryStream::operator=(const MemoryStream& rhs) {
+        if(this != &rhs) {
+            this->mCurrPos = rhs.mCurrPos;
+            this->mData = rhs.mData;
+        }
+        return *this;
     }
     
     void MemoryStream::close() {
-        mData.clear();
     }
     
     uint8 MemoryStream::operator[](size_t index) {
-        ukn_assert(index < this->getSize());
+        ukn_assert(index < this->size());
         
         return mData[index];
     }
 	
 	void MemoryStream::set(uint8* data, size_t length) {
-        mData.set(data, length);
+         mData.set(data, length);
         mCurrPos = 0;
 	}
 	
     void MemoryStream::map(uint8* data, size_t length) {        
-        mData.map(data, length);
+         mData.map(data, length);
         mCurrPos = 0;
     }
     
 	bool MemoryStream::alloc(size_t size) {
-		mData.realloc(size, 0);
+		 mData.realloc(size, 0);
         
 		seek(0);
 		return true;
 	}
 	
 	void MemoryStream::resize() {
-		if(getSize() != getRealsize() && getRealsize() != 0) {
-			uint8* tmpData = (uint8*)ukn_malloc(getSize());
+		if(size() != capacity() && capacity() != 0) {
+			uint8* tmpData = (uint8*)ukn_malloc(size());
             seek(0);
-			memcpy(tmpData, (void*)(get()), getSize());
+			memcpy(tmpData, (void*)(data()), size());
 			
-            mData.set(tmpData, getSize());
+            mData.set(tmpData, size());
             
             ukn_free(tmpData);
 		}
 	}
+        
+    void MemoryStream::resize(size_t newsize) {
+         mData.growTo(newsize);
+    }
 	
-	size_t MemoryStream::write(const uint8* data, size_t size) {
-		mData.append(data, size);
-		return size;
+	size_t MemoryStream::write(const uint8* data, size_t length) {
+		 mData.append(data, length);
+		return length;
 	}
 	
-	size_t MemoryStream::read(uint8* pv, size_t size) {
+	size_t MemoryStream::read(uint8* pv, size_t length) {
 		if(!isValid()) return 0;
-		if(mCurrPos == getSize()) return 0;
+		if(mCurrPos == size()) return 0;
 		
 		assert(pv != NULL);
 		
-		if(mCurrPos+size > getSize()) {
-			size = getSize() - mCurrPos;
+		if(mCurrPos+length > size()) {
+			length = size() - mCurrPos;
 		}
-		memcpy(pv, (void*)(get()+mCurrPos), size);
-		mCurrPos += size;
-		return size;
+		memcpy(pv, (void*)(data()+mCurrPos), length);
+		mCurrPos += length;
+		return length;
 	}
 	
-	size_t MemoryStream::read(size_t offset, uint8* pv, size_t size) {
+	size_t MemoryStream::read(size_t offset, uint8* pv, size_t length) {
 		if(!isValid()) return false;
 		
 		size_t tempPos = mCurrPos;
 		if(!seek(offset))
 			seek(0);
-		size_t result = read(pv, size);
+		size_t result = read(pv, length);
 		seek(tempPos);
 		return result;
 	}
 	
-	const uint8* MemoryStream::get() const { 
+	const uint8* MemoryStream::data() const { 
         return mData.begin();
     }
     
-	const uint8* MemoryStream::get(size_t offset) const { 
-		if(offset > getSize()) 
+	const uint8* MemoryStream::dataOf(size_t offset) const { 
+		if(offset > size()) 
             offset = 0;
-		return (mData.begin()+offset);
+		return ( mData.begin()+offset);
 	}
 	
 	bool MemoryStream::seek(size_t pos) {
-		if(pos <= getSize()) {
+		if(pos <= size()) {
 			mCurrPos = pos;
 			return true;
 		}
 		return false;
 	}
 	
-	size_t MemoryStream::getSize() const { 
+	size_t MemoryStream::size() const { 
         return mData.size();
     }
     
-	size_t MemoryStream::getRealsize() const { 
+	size_t MemoryStream::capacity() const { 
         return mData.capacity();
     }
     
-	size_t MemoryStream::getPos() const { 
+	size_t MemoryStream::pos() const { 
         return mCurrPos; 
+    }
+    
+    uint8* MemoryStream::data() {
+        return mData.begin();
+    }
+    
+    uint8* MemoryStream::dataOf(size_t offset) {
+        if(offset > size()) 
+            offset = 0;
+		return ( mData.begin()+offset);
     }
     
 	bool MemoryStream::isValid() const { 
@@ -130,12 +173,12 @@ namespace ukn {
     
     StreamPtr FileStreamBasic::readIntoMemory() {
         if(isValid()) {
-            uint8* dataBuffer = (uint8*)ukn_malloc(getSize());
+            uint8* dataBuffer = (uint8*)ukn_malloc(size());
             ukn_assert(dataBuffer != 0);
             
             this->seek(0);
-            size_t readSize = this->read(dataBuffer, getSize());
-            if(readSize != getSize()) {
+            size_t readSize = this->read(dataBuffer, size());
+            if(readSize != size()) {
                 // log error
             }
             
@@ -144,7 +187,7 @@ namespace ukn {
             // faster
            memBuffer->set(dataBuffer, readSize);
             
-            return (memBuffer);
+            return StreamPtr(memBuffer);
         } else 
             // return null memorystream
             return MakeSharedPtr<MemoryStream>();
@@ -187,13 +230,13 @@ namespace ukn {
         SetEndOfFile(file);
     }
     
-    size_t FileStreamWin32::getSize() const {
+    size_t FileStreamWin32::size() const {
         DWORD low, high;
         low = GetFileSize(file, &high);
         return (uint64)low + (((uint64)high)<<32);
     }
     
-    size_t FileStreamWin32::getPos() const {
+    size_t FileStreamWin32::pos() const {
         DWORD low;
         LONG high = 0;
         low = SetFilePointer(file, 0, &high, FILE_CURRENT);
@@ -239,7 +282,7 @@ namespace ukn {
         close();
     }
     
-    bool FileStreamPosix::open(const ukn_wstring& filename, bool canwrite, bool append, bool nocache) {
+    bool FileStreamPosix::open(const String& filename, bool canwrite, bool append, bool nocache) {
         if(file != NULL)
             return false;
         
@@ -265,7 +308,7 @@ namespace ukn {
         
     }
     
-    size_t FileStreamPosix::getSize() const {
+    size_t FileStreamPosix::size() const {
         size_t pos = ftell(file);
         fseek(file, 0, SEEK_END);
         size_t size = ftell(file);
@@ -273,7 +316,7 @@ namespace ukn {
         return size;
     }
     
-    size_t FileStreamPosix::getPos() const {
+    size_t FileStreamPosix::pos() const {
         return ftell(file);
     }
     
@@ -307,21 +350,21 @@ namespace ukn {
 #endif // OS_WIN32
     
     StreamPtr stream_to_memory_stream(const StreamPtr& stream) {
-        if(stream->getStreamType() == Stream::ST_File) {
+        if(stream->getStreamType() == ST_File) {
             return static_cast<FileStream*>(stream.get())->readIntoMemory();
         }
         return stream;
     }
     
-    bool write_stream_to_file(const StreamPtr& stream, const ukn_wstring& file) {
+    bool write_stream_to_file(const StreamPtr& stream, const String& file) {
         FileStream output;
         if(output.open(file, true)) {
-            if(stream->getStreamType() == Stream::ST_Memory) {
-                output.write(static_cast<MemoryStream*>(stream.get())->get(), stream->getSize());
-            } else if(stream->getStreamType() == Stream::ST_File) {
-                uint8* buffer = ukn_malloc_t(uint8, stream->getSize());
+            if(stream->getStreamType() == ST_Memory) {
+                output.write(static_cast<MemoryStream*>(stream.get())->data(), stream->size());
+            } else if(stream->getStreamType() == ST_File) {
+                uint8* buffer = ukn_malloc_t(uint8, stream->size());
                 if(buffer) {
-                    size_t readSize = stream->read(buffer, stream->getSize());
+                    size_t readSize = stream->read(buffer, stream->size());
                     output.write(buffer, readSize);
                     
                     ukn_free(buffer);
@@ -333,15 +376,15 @@ namespace ukn {
         return false;
     }
     
-    bool write_stream_to_file(Stream& stream, const ukn_wstring& file) {
+    bool write_stream_to_file(IStream& stream, const String& file) {
         FileStream output;
         if(output.open(file, true)) {
-            if(stream.getStreamType() == Stream::ST_Memory) {
-                output.write(static_cast<MemoryStream*>(&stream)->get(), stream.getSize());
-            } else if(stream.getStreamType() == Stream::ST_File) {
-                uint8* buffer = ukn_malloc_t(uint8, stream.getSize());
+            if(stream.getStreamType() == ST_Memory) {
+                output.write(static_cast<MemoryStream*>(&stream)->data(), stream.size());
+            } else if(stream.getStreamType() == ST_File) {
+                uint8* buffer = ukn_malloc_t(uint8, stream.size());
                 if(buffer) {
-                    size_t readSize = stream.read(buffer, stream.getSize());
+                    size_t readSize = stream.read(buffer, stream.size());
                     output.write(buffer, readSize);
                     
                     ukn_free(buffer);
@@ -819,11 +862,11 @@ namespace ukn {
         return 0;
     }
     
-    size_t NetStream::getPos() const {
+    size_t NetStream::pos() const {
         return 0;
     }
     
-    size_t NetStream::getSize() const {
+    size_t NetStream::size() const {
         return 0;
     }
     

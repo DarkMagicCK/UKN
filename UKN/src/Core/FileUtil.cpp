@@ -2,7 +2,7 @@
 //  FileUtil.cpp
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 11/30/11.
+//  Created by Robert Bu on 11/30/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -19,16 +19,21 @@
 #include <sys/stat.h>
 #else
 #include <sys/stat.h>
-#endif
+#endif // UKN_OS_FAMILTY_APPLe
+
+#ifdef UKN_OS_FAMILY_UNIX   
+#include <pwd.h>
+#endif // UKN_OS_FAMILTY_UNIX
 
 #include <cstdio>
 #include <fstream>
 
 #include "UKN/StringUtil.h"
+#include "UKN/Asset.h"
 
 namespace ukn {
     
-    UKN_API bool file_exists(const ukn_wstring& filepath) {
+    UKN_API bool file_exists(const String& filepath) {
 #ifdef UKN_OS_WINDOWS
         return PathFileExistsW(filepath.c_str())?true:false;
         
@@ -45,7 +50,7 @@ namespace ukn {
         return false;
     }
     
-    UKN_API bool path_exists(const ukn_wstring& path) {
+    UKN_API bool path_exists(const String& path) {
 #ifdef UKN_OS_WINDOWS
         return PathFileExistsW(path.c_str())?true:false;
 
@@ -60,20 +65,12 @@ namespace ukn {
         return false;
     }
     
-    UKN_API ukn_wstring get_writtable_path(const ukn_wstring& filePath) {
-#ifndef UKN_OS_FAMILY_APPLE
-        return get_application_path() + filePath;
-#else
-        return ukn_apple_documents_path() + filePath;
-#endif
-    }
-    
-    UKN_API ukn_wstring get_application_path() {
+    UKN_API String get_application_path() {
 #ifdef UKN_OS_WINDOWS
         wchar_t buffer[MAX_PATH];
         GetCurrentDirectoryW(MAX_PATH, buffer);
         
-        return ukn_wstring(buffer)+L"/";
+        return String(buffer)+L"/";
         
 #elif defined(UKN_OS_FAMILY_APPLE)
         return ukn_apple_application_path() + L"/";
@@ -82,6 +79,273 @@ namespace ukn {
         return L"./";
     }
     
+    UKN_API String check_and_get_font_path(const String& name) {
+        
+        if(file_exists(L"./"+name))
+            return L"./"+name;
+        
+        // resource path
+        {
+            String fullpath(Path::GetResource() + name);
+            
+            if(file_exists(fullpath)) {
+                return fullpath;
+            }
+        }
+        
+        // system font path
+        {
+            String fullpath(Path::GetFont() + name);
+        
+            if(file_exists(fullpath)) {
+                return fullpath;
+            }
+        }
+        
+        // document path for ios and osx
+        {
+#if defined(UKN_OS_FAMILY_APPLE)
+            String fullpath(ukn_apple_documents_path());
+            
+            if(file_exists(fullpath)) {
+                return fullpath;
+            }
+#endif
+        }
+      
+        // check asset names
+        {
+            const AssetManager::AssetNameMap& assets = AssetManager::Instance().getAssets();
+            
+            AssetManager::AssetNameMap::const_iterator it = assets.find(name);
+            if(it != assets.end()) {
+                return it->second.fullPath;
+            }
+        }
+        
+        return String();
+    }
+    
+    String Path::GetEnv(const ukn_string& env) {
+#if defined(UKN_OS_WINDOWS)
+        DWORD len = GetEnvironmentVariableW(env.c_str(), 0, 0);
+        if (len != 0) {
+            wchar_t* buffer = new wchar_t[len];
+            GetEnvironmentVariableW(env.c_str(), buffer, len);
+            String result(buffer);
+            delete [] buffer;
+            return result;
+        }
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        return string_to_wstring_fast(getenv(env.c_str()));
+#endif
+        
+        return String();
+    }
+    
+    String Path::GetCurrent() {
+#if defined(UKN_OS_WINDOWS)
+        wchar_t buffer[_MAX_PATH];
+        DWORD n = GetCurrentDirectoryW(sizeof(buffer), buffer);
+        if(n > 0 && n < sizeof(buffer)) {
+            String result(buffer, n);
+            if(result[n-1] != L'\\')
+                result.append(L"\\");
+            return result;
+        }
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        ukn_string path;
+        char cwd[PATH_MAX];
+        if(getcwd(cwd, sizeof(cwd)))
+            path = cwd;
+        
+        size_t n = path.size();
+        if(n > 0 && path[n-1] != '/')
+            path.append("/");
+        return string_to_wstring_fast(path);
+#endif      
+    }
+    
+    String Path::GetHome() {
+#if defined(UKN_OS_WINDOWS)
+        String result = Path::GetEnv(L"HOMEDRIVE");
+        result.append(Path::GetEnv(L"HOMEPATH"));
+       
+        size_t n = result.size();
+        if(n > 0 && result[n-1] != L'\\')
+            result.append(L"\\");
+        return result;
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        ukn_string path;
+        struct passwd* pwd = getpwuid(getuid());
+        if(pwd)
+            path = pwd->pw_dir;
+        else {
+            pwd = getpwuid(getuid());
+            if(pwd) 
+                path = pwd->pw_dir;
+            else 
+                return Path::GetEnv("HOME") + L"/";
+        }
+        
+        size_t n = path.size();
+        if(n > 0 && path[n-1] != '/')
+            path.append("/");
+        return string_to_wstring_fast(path);
+#endif           
+    }
+    
+    String Path::GetRoot() {
+#if defined(UKN_OS_WINDOWS)
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        ukn_string path;
+        char* tmp = getenv("TMPDIR");
+        if(tmp) {
+            path = tmp;
+            size_t n = path.size();
+            if(n > 0 && path[n-1] != '/')
+                path.append("/");
+            else 
+                path = "/tmp/";
+        }
+        return string_to_wstring_fast(path);
+#endif       
+        return String();
+    }
+    
+    String Path::GetTemp() {
+#if defined(UKN_OS_WINDOWS)
+        wchar_t buffer[_MAX_PATH];
+        DWORD n = GetTempPathW(sizeof(buffer), buffer);
+        if(n > 0 && n < sizeof(buffer)) {
+            String result(buffer, n);
+            if(result[n-1] != L'\\')
+                result.append(L"\\");
+            return result;
+        } 
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        std::string path;
+        char* tmp = getenv("TMPDIR");
+        if(tmp) {
+            path = tmp;
+            std::string::size_type n = path.size();
+            if(n > 0 && path[n-1] != '/')
+                path.append("/");
+            else 
+                path = "/tmp/";
+        }
+        return string_to_wstring_fast(path);
+        
+#endif    
+        return String();
+    }
+    
+    String Path::GetWrittable() {
+#if defined(UKN_OS_WINDOWS)
+        return L"./";
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return ukn_apple_documents_path();
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        return L"./";
+#endif
+    }
+    
+    String Path::GetResource() {
+#if defined(UKN_OS_WINDOWS)
+        return L"./";
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return get_application_path() + L"/Contents/Resources/";
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        return L"./";
+#endif  
+    }
+    
+    String Path::GetFont() {
+#if defined(UKN_OS_WINDOWS)
+        wchar_t buffer[_MAX_PATH];
+        GetWindowsDirectoryW(buffer, _MAX_PATH-1);
+        String path(buffer);
+        return path + "\\Fonts\\";
+        
+#elif defined(UKN_OS_FAMILY_APPLE)
+        return L"/Library/Fonts/";
+        
+#elif defined(UKN_OS_LINUX)
+        return L"/usr/share/fonts/";
+        
+#endif
+        return L"./";
+    }
+    
+    void Path::ListRoots(std::vector<ukn_string>& arr) {
+        arr.clear();
+        
+#if defined(UKN_OS_WINDOWS)
+        char buffer[128];
+        DWORD n = GetLogicalDriveStringsA(sizeof(buffer)-1, buffer);
+        char* it = buffer;
+        char* end = buffer + (n > sizeof(buffer) ? sizeof(buffer): n);
+        while(it < end) {
+            std::string dev;
+            while(it < end && *it)
+                dev += *it++;
+            arr.push_back(dev);
+            ++it;
+        }
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        arr.push_back("/");
+#endif    
+    }
+    
+    String Path::ExpandPath(const String& path) {
+#if defined(UKN_OS_WINDOWS)
+        wchar_t buffer[_MAX_PATH];
+        DWORD n = ExpandEnvironmentStringsW(path.c_str(), buffer, sizeof(buffer));
+        if(n > 0 && n < sizeof(buffer)) {
+            return String(buffer, n-1);
+        } else
+            return path;
+        
+#elif defined(UKN_OS_FAMILY_UNIX)
+        String result;
+        String::const_iterator it  = path.begin();
+        String::const_iterator end = path.end();
+        if (it != end && *it == L'~') {
+            ++it;
+            if (it != end && *it == L'/') {
+                result += Path::GetHome(); ++it;
+            }
+            else result += '~';
+        }
+        while (it != end) {
+            if (*it == L'$') {
+                std::string var;
+                ++it;
+                if (it != end && *it == L'{') {
+                    ++it;
+                    while (it != end && *it != L'}') var += *it++;
+                    if (it != end) ++it;
+                }
+                else {
+                    while (it != end && (((*it >= L'a' && *it <= L'z') || (*it >= L'A' && *it <= L'Z') || (*it >= L'0' && *it <= L'9')) || *it == L'_')) var += *it++;
+                }
+                result += Path::GetEnv(var);
+            }
+            else result += *it++;
+        }
+        return result;
+#endif    
+    }
     
 } // namespace ukn
 
@@ -239,7 +503,7 @@ namespace ukn {
         mFile = mPath + mImpl->get();
     }
     
-    DirectoryIterator::DirectoryIterator(const ukn_wstring& path):
+    DirectoryIterator::DirectoryIterator(const String& path):
     mPath(wstring_to_string(path+L"/")) {
         mIsEnd = false;
         mImpl = new DirectoryIteratorImpl(mPath.c_str());

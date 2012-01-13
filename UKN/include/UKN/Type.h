@@ -227,6 +227,13 @@ namespace ukn {
     typedef     double          real;
 #endif
     
+    
+#if defined(UKN_CXX0X_SUPPORT)
+    #define ukn_hash_map std::unordered_map    
+#else 
+    #define ukn_hash_map std::map
+#endif // UKN_CXX0X_SUPPORT
+    
 } // namespace ukn
 
 #endif // Project_Unknown_Config_h

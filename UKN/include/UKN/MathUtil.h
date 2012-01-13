@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_Math_h
 #define Project_Unknown_Math_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 #include <cmath>
 
 namespace ukn {
@@ -33,6 +33,18 @@ namespace ukn {
         return (real)((180.0 * rad) / d_pi);
     }
     
+    inline real sin_dgr(real dgr) {
+        return (real)(sin(degree_to_radius(dgr)));
+    }
+                      
+    inline real cos_dgr(real dgr) {
+        return (real)(cos(degree_to_radius(dgr)));
+    }
+    
+    inline real tan_dgr(real dgr) {
+        return (real)(tan(degree_to_radius(dgr)));
+    }
+    
 #ifndef UKN_TINY
 #define UKN_TINY 0.00000001f
 #endif
@@ -41,6 +53,7 @@ namespace ukn {
         return fabs(f1 - f2) < UKN_TINY;
     }
     
+    // fast inv sqrt by Join Carmack
     inline real fast_inv_sqrt(real x) {
         {
             union
@@ -53,6 +66,21 @@ namespace ukn {
             convertor.intPart = 0x5f3759df - (convertor.intPart >> 1);
             return convertor.realPart*(1.5f - 0.4999f*x*convertor.realPart*convertor.realPart);
         }
+    }
+    
+    static inline int is_pow_of_2(uint32 x) {
+        return !(x & (x-1));
+    }
+    
+    static inline uint32 next_pow_of_2(uint32 x) {
+        if ( is_pow_of_2(x) )
+            return x;
+        x |= x>>1;
+        x |= x>>2;
+        x |= x>>4;
+        x |= x>>8;
+        x |= x>>16;
+        return x+1;
     }
     
     // compress a unit float to nBits integer
@@ -135,7 +163,8 @@ namespace ukn {
         return (sin(1-t) * a) / sina * t1 + sin(t * a) / sina * t2;
     }
     
-    inline float clamp(float t1, float t2, real v) {
+    template<typename T>
+    inline T clamp(T t1, T t2, real v) {
         if(v > t2) return t2;
         else if(v < t1) return t1;
         return v;
@@ -144,7 +173,7 @@ namespace ukn {
 #define ukn_min(a, b) a < b ? a : b
 #define ukn_max(a, b) a > b ? a : b
 #define ukn_abs(x) x < 0 ? -x : x
-    
+
     class Vector2 {
     public:
         real x, y;
@@ -264,6 +293,10 @@ namespace ukn {
             
             return normal;
         }
+        
+        friend Vector2 operator * (const Vector2& lhs, const Vector2& rhs) {
+            return Vector2(lhs.x * rhs.x, lhs.y * rhs.y);
+        }
     };
     
     class Vector3 {
@@ -348,6 +381,10 @@ namespace ukn {
         
         bool operator==(const Vector3& rhs) const {
             return this->x == rhs.x && this->y == rhs.y && this->z == rhs.z;
+        }
+        
+        friend Vector3 operator *(const Vector3& lhs, const Vector3& rhs) {
+            return Vector3(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
         }
         
 		real x, y, z;
@@ -451,7 +488,9 @@ namespace ukn {
             
         }
         
-        AABB2() {   
+        AABB2():
+        x1(0), y1(0),
+        x2(0), y2(0) {   
         }
         
         AABB2(const Vector2& upper, const Vector2& lower):
@@ -508,12 +547,12 @@ namespace ukn {
             if(y>this->y2) this->y2 = y;
         }
         
-        bool testPoint(real x, real y) const {
+        bool contains(real x, real y) const {
             return x>=x1 && x<=x2 && y>=y1 && y<=y2;
         }
         
-        bool testPoint(const Vector2& pos) const {
-            return testPoint(pos.x, pos.y);
+        bool contains(const Vector2& pos) const {
+            return contains(pos.x, pos.y);
         }
         
         bool intersect(const AABB2& rhs) const {
@@ -525,11 +564,17 @@ namespace ukn {
             return false;
         }
         
+        bool isEmpty() const {
+            return (x1 == x2) && (y1 == y2);
+        }
+        
         Vector2 getPosition() const {
             return Vector2((this->x1 + this->x2)/2,
                               (this->y1 + this->y2)/2);
         }
     };
+    
+    typedef AABB2 Rectangle;
   
     class Quaternion {
 	public:
@@ -1186,6 +1231,10 @@ namespace ukn {
             
             set(center - dist, center + dist);
         }
+        
+        operator AABB2() {
+            return AABB2(min.x, min.y, max.x, max.y);
+        }
     };
 
     typedef AABB3 Box;
@@ -1339,7 +1388,7 @@ namespace ukn {
             return distantce <= mRadius * mRadius;
         }
         
-        bool testPoint(const Vector3& point) {
+        bool contains(const Vector3& point) {
             return vecInBound(point);
         }
         
@@ -1347,6 +1396,80 @@ namespace ukn {
         real mRadius;
         Vector3 mCenter;
     };
+    
+    class UKN_API PerlinNoise {
+    public:
+        static float Gen(float x, float y, float z);
+        
+    private:
+        static float fade(float t);
+        static float lerp(float t, float a, float b);
+        static float grad(int hash, float x, float y, float z);
+    };
+    
+    static int _ukn_perlin_noise_perm[512] = {60,137,91,90,15,
+        131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
+        190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
+        88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
+        77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
+        102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
+        135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
+        5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
+        223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
+        129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
+        251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
+        49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
+        138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
+    };
+    
+    inline float PerlinNoise::fade(float t) {
+        return t*t*t*(t*(t*6.0f-15.0f)+10.f);
+    }
+    
+    inline float PerlinNoise::lerp(float t, float a, float b) {
+        return a + t * (b-a);
+    }
+    
+    inline float PerlinNoise::grad(int hash, float x, float y, float z) {
+        int h = hash & 15;
+        float u = h < 8 ? x : y;
+        float v = h < 4 ? y : ((h == 12) || (h == 14)) ? x : z;
+        return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+    }
+    
+    inline float PerlinNoise::Gen(float x, float y, float z) {
+        float floorX = floorf(x);
+        float floorY = floorf(y);
+        float floorZ = floorf(z);
+        
+        int X = int(floorX) & 255;
+        int Y = int(floorY) & 255;
+        int Z = int(floorZ) & 255;
+        
+        x -= floorX;
+        y -= floorY;
+        z -= floorZ;
+        
+        float u = fade(x);
+        float v = fade(y);
+        float w = fade(z);
+        
+        int A = _ukn_perlin_noise_perm[X] + Y;
+        int AA = _ukn_perlin_noise_perm[A] + Z;
+        int AB = _ukn_perlin_noise_perm[A+1] + Z;
+        int B = _ukn_perlin_noise_perm[X+1] + Y;
+        int BA = _ukn_perlin_noise_perm[B] + Z;
+        int BB = _ukn_perlin_noise_perm[B+1] + Z;
+        
+        return lerp(w,  lerp(v, lerp(u, grad(_ukn_perlin_noise_perm[AA], x, y, z),
+                                        grad(_ukn_perlin_noise_perm[BA], x-1, y, z)),
+                                lerp(u, grad(_ukn_perlin_noise_perm[AB], x, y-1, z),
+                                        grad(_ukn_perlin_noise_perm[BB], x-1, y-1, z))),
+                        lerp(v, lerp(u, grad(_ukn_perlin_noise_perm[AA+1], x, y, z-1),
+                                        grad(_ukn_perlin_noise_perm[BA+1], x-1, y, z-1)),
+                                lerp(u, grad(_ukn_perlin_noise_perm[AB+1], x, y-1, z-1),
+                                        grad(_ukn_perlin_noise_perm[BB+1], x-1, y-1, z-1))));    
+    }
     
     
 } // namespace ukn

@@ -115,9 +115,9 @@ namespace ukn {
             Period		= 0xBE,
             Slash		= 0xBF,
             
-            LeftWin = 0x5B,
-            RightWin = 0x5C,
-            Apps = 0x5D,
+            LeftWin     = 0x5B,
+            RightWin    = 0x5C,
+            Apps        = 0x5D,
         };
         
         // mouse
@@ -149,13 +149,13 @@ namespace ukn {
         
         // event type
         enum {
-            KeyPressed = 0,
-            KeyDown = 1,
-            KeyUp = 2,
-            MouseDown =3,
-            MouseUp = 4,
-            MouseMove = 5,
-            MouseWheel = 6,
+            KeyPressed  = 0,
+            KeyDown     = 1,
+            KeyUp       = 2,
+            MouseDown   = 3,
+            MouseUp     = 4,
+            MouseMove   = 5,
+            MouseWheel  = 6,
         };
         
         // keyflag

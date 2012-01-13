@@ -9,27 +9,59 @@
 #ifndef Project_Unknown_Event_h
 #define Project_Unknown_Event_h
 
-#include "Platform.h"
-#include "Any.h"
+#include "UKN/Platform.h"
+#include "UKN/Class.h"
+#include "UKN/Any.h"
+#include "UKN/PreDeclare.h"
+#include "UKN/Signal.h"
+#include <vector>
 
 namespace ukn {
-    
-    class EventHandler;
-    
-    class Event {
+  
+    class EventBase {
     public:
-        Event(const ukn_string& name):
-        mName(name);
+        virtual ~EventBase() { };
+    };
+    
+    static struct NullEventArgs {
         
+    } _NullEventArgs;
+    
+    template<typename EventArgs>
+    class UKN_API Event: public EventBase {
+    public:
+        typedef EventArgs event_args_type;
+        typedef Signal<void(void* /* sender */, EventArgs&)> signal_type;
         
+        Event() { }
+        
+        ~Event() { }
+        
+        template<typename F>
+        Connection connect(const F& func) {
+            return mSignal.connect(func);
+        }
+        
+        template<typename F>
+        void operator += (const F& func) {
+            mSignal.connect(func);
+        }
+        
+        template<typename F>
+        void operator -= (const F& func) {
+            mSignal.disconnect(func);
+        }
+        
+        const signal_type& getSignal() const {
+            return mSignal;
+        }
+        
+        void raise(void* sender, EventArgs& args) {
+            mSignal(sender, args);
+        }
         
     private:
-        ukn_string mName;
-        
-        bool mConsumed;
-        
-        EventHandler* mSender;
-        EventHandler* mReceiver;
+        signal_type mSignal;
     };
     
 } // namespace ukn

@@ -2,24 +2,33 @@
 //  GLFrameBuffer.cpp
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/2/11.
+//  Created by Robert Bu on 12/2/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
 #include "GLFrameBuffer.h"
+#include "GLPreq.h"
 
 namespace ukn {
     
     GLFrameBuffer::GLFrameBuffer(bool offscreen):
-    mOffscreen(offscreen),
-    mFBO(0) {
+    mFBO(0),
+    mOffscreen(offscreen) {
         if(mOffscreen) {
-			//glGenBuffers(1, &mFBO); 
+			glGenBuffers(1, &mFBO);
         }
+    }
+    
+    GLFrameBuffer::~GLFrameBuffer() {
+        
     }
     
     bool GLFrameBuffer::requiresFlipping() const {
         return false;
+    }
+    
+    void GLFrameBuffer::swapBuffers() {
+        glfwSwapBuffers();
     }
     
     void GLFrameBuffer::clear(uint32 flags, const class Color& clr, float depth, int32 stencil) {
@@ -31,7 +40,6 @@ namespace ukn {
             glflags |= GL_COLOR_BUFFER_BIT;
         }
         if(flags & CM_Depth) {
-            glDepthMask(true);
             glClearDepth(depth);
             
             glflags |= GL_DEPTH_BUFFER_BIT;
@@ -42,7 +50,7 @@ namespace ukn {
             glflags |= GL_STENCIL_BUFFER_BIT;
         }
         
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(glflags);
     }
     
     GLuint GLFrameBuffer::getGLFBO() const {

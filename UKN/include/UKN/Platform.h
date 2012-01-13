@@ -13,19 +13,11 @@
     #error C++ compiler required.
 #endif
 
-#if defined(DEBUG) | defined(_DEBUG)
+#if defined(DEBUG) || defined(_DEBUG)
     #define UKN_DEBUG
 #endif
 
-#define UKN_VERSION_MARJOR  0
-#define UKN_VERSION_MINOR   1
-#define UKN_VERSION_REV     2
 
-/*
- if gcc version >= 4
- then there is tr1 support
- visual studio 2008 sp1 or above also has tr1 support
- */
 #if defined(__GNUC__)
 
     #define UKN_COMPILER_GCC
@@ -83,16 +75,16 @@
     #endif
 
     #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
-        #include <OpenGL/gl3.h>     
         #define UKN_APPLE_OSX_LION
     #endif
-
     
     #define UKN_OS_FAMILY_APPLE
+    #define UKN_OS_FAMILY_UNIX
 
 // android
 #elif defined(__ANDROID__)
     #define UKN_OS_ANDROID
+    #define UKN_OS_FAMILY_UNIX
 
 // windows
 #elif defined(_WIN32) || defined(_MSC_VER)
@@ -120,6 +112,7 @@
 // linux
 #elif defined(linux) || defined(__linux)
     #define UKN_OS_LINUX
+    #define UKN_OS_FAMILY_UNIX
 
 // psp
 #elif defined(_PSP)
@@ -197,18 +190,18 @@
     #define UKN_CALL
 #endif
 
-#if defined(_WIN32)
+#if defined(UKN_OS_WINDOWS)
     #define strcmpnocase stricmp
 #else
     #define strcmpnocase strcasecmp
 #endif
 
 // are we building a dll or not
-#if defined(UKN_UKN_OS_WINDOWS) && defined(UKN_HAS_DECLSPEC)
+#if defined(UKN_OS_WINDOWS) && defined(UKN_HAS_DECLSPEC)
     #if defined(UKN_DLL_EXPORT)
         #define UKN_API __declspec(dllexport)
         #define UKN_EXTERN extern
-    #elif
+    #elif defined(UKN_DLL_IMPORT)
         #define UKN_API __declspec(dllimport)
         #define UKN_EXTERN extern
     #else
@@ -225,6 +218,8 @@
 #ifndef __GNUC__
     #define snprintf _snprintf
 #endif
+
+// #define UKN_ENABLE_MULTI_THREAD
 
 #include "Type.h"
 

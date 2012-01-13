@@ -9,8 +9,8 @@
 #ifndef Project_Unknown_PreDeclare_h
 #define Project_Unknown_PreDeclare_h
 
-#include "Platform.h"
-#include "Ptr.h"
+#include "UKN/Platform.h"
+#include "UKN/Ptr.h"
 
 #include <string>
 
@@ -33,7 +33,10 @@ namespace ukn {
     typedef PointTemplate<2, uint32> uint2;
     typedef PointTemplate<3, uint32> uint3;
     typedef PointTemplate<4, uint32> uint4;
+
+    struct VertexFormat;
     
+    struct ContextCfg;
     
     class GraphicDevice;
     typedef SharedPtr<GraphicDevice> GraphicDevicePtr;
@@ -72,8 +75,8 @@ namespace ukn {
     class Texture;
     typedef SharedPtr<Texture> TexturePtr;
     
-    class Stream;
-    typedef SharedPtr<Stream> StreamPtr;
+    class IStream;
+    typedef SharedPtr<IStream> StreamPtr;
     
     class Camera;
     typedef SharedPtr<Camera> CameraPtr;
@@ -93,9 +96,60 @@ namespace ukn {
     class ResourceLoader;
     typedef SharedPtr<ResourceLoader> ResourceLoaderPtr;
     
-    struct VertexFormat;
+    class SpriteBatch;
+    typedef SharedPtr<SpriteBatch> SpriteBatchPtr;
     
-    struct ContextCfg;
+    class SceneNode;
+    typedef SharedPtr<SceneNode> SceneNodePtr;
+    
+    class Scene;
+    typedef SharedPtr<Scene> ScenePtr;
+    
+    class Entity;
+    typedef SharedPtr<Entity> EntityPtr;
+    
+    class Component;
+    typedef SharedPtr<Component> ComponentPtr;
+    
+    class Task;
+    typedef SharedPtr<Task> TaskPtr;
+    
+    class FSMState;
+    typedef SharedPtr<FSMState> FSMStatePtr;
+    
+    class Condition;
+    typedef SharedPtr<Condition> ConditionPtr;
+    
+    class Operator;
+    typedef SharedPtr<Operator> OperatorPtr;
+    
+    class Action;
+    typedef SharedPtr<Action> ActionPtr;
+    
+    class Trigger;
+    typedef SharedPtr<Trigger> TriggerPtr;
+    
+    class Renderable;
+    typedef SharedPtr<Renderable> RenderablePtr;
+    
+    class SceneNode;
+    typedef SharedPtr<SceneNode> SceneNodePtr;
+    
+    class SceneObject;
+    typedef SharedPtr<SceneObject> SceneObjectPtr;
+    
+    class SceneManager;
+    typedef SharedPtr<SceneManager> SceneManagerPtr;
+    
+    class Entity;
+    typedef SharedPtr<Entity> EntityPtr;
+    
+    class Component;
+    typedef SharedPtr<Component> ComponentPtr;
+    
+    class ComponentHolder;
+    typedef SharedPtr<ComponentHolder> ComponentHolderPtr;
+    
     
 } // namespace ukn
 

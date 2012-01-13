@@ -10,11 +10,11 @@
 #ifndef ukn_ptr_h_
 #define ukn_ptr_h_
 
-#include "Platform.h"
-#include "Exception.h"
-#include "MemoryUtil.h"
-#include "Function.h"
-#include "Uncopyable.h"
+#include "UKN/Platform.h"
+#include "UKN/Exception.h"
+#include "UKN/MemoryUtil.h"
+#include "UKN/Function.h"
+#include "UKN/Uncopyable.h"
 
 namespace ukn {
     
@@ -244,21 +244,21 @@ namespace ukn {
             return SharedPtr<Other, OtherRP>(this->mCounter, other);
         }
         
-        T* get() const {
+        inline T* get() const {
             return this->mPtr;
         }
         
-		T* operator->() {
+		inline T* operator->() {
 			return this->deref();
 		}
-        T* operator->() const {
+        inline T* operator->() const {
             return this->deref();
         }
     
-		T& operator*() {
+		inline T& operator*() {
 			return *this->deref();
 		}
-        T& operator*() const {
+        inline T& operator*() const {
 			return *this->deref();
 		}
         
@@ -340,10 +340,10 @@ namespace ukn {
 		}
         
 		bool operator == (const SharedPtr<T>& rhs) {
-			return this->mPtr == rhs.ptr;
+			return this->mPtr == rhs.mPtr;
 		}
 		
-        T* deref() const {
+        inline T* deref() const {
             if(!this->mPtr)
                 UKN_THROW_EXCEPTION("ukn::SharedPtr: invalid ptr to deref");
             return this->mPtr;
@@ -405,7 +405,7 @@ namespace ukn {
     
     template<typename T>
     static SharedPtr<T> MakeCOMPtr(T* pointer) {
-        return SharedPtr<T>(pointer);
+        return SharedPtr<T, COMReleasePolicy<T> >(pointer);
     }
 	
 	template<typename T>
@@ -497,6 +497,10 @@ namespace ukn {
             return this->ptr;
         }
         
+        operator bool() const {
+            return ptr != 0;
+        }
+        
         void swap(ScopedPtr& b);
         
     private:
@@ -534,6 +538,7 @@ namespace ukn {
                 mCounter->incWeakRef();
             }
         }
+        
         template<class Y> WeakPtr(const WeakPtr<Y>& ptr):
         mCounter(ptr.mCounter) {
             if(mCounter) {
@@ -553,30 +558,38 @@ namespace ukn {
             mCounter = r.mCounter;
             if(mCounter)
                 mCounter->incWeakRef();
+            return *this;
         }
+        
         template<class Y> WeakPtr & operator=(const WeakPtr<Y>& r) {
             mPtr = r.lock().get();
             mCounter = r.mCounter;
             if(mCounter)
                 mCounter->incWeakRef();
+            return *this;
         }
+        
         template<class Y> WeakPtr & operator=(const SharedPtr<Y>& r) {
             mPtr = r.get();
             mCounter = r.mCounter;
             
             if(mCounter)
                 mCounter->incWeakRef();
+            return *this;
         }
         
         int32 use_count() const {
             return mCounter ? mCounter->getRef() : 0;
         }
+        
         int32 weak_count() const {
             return mCounter ? mCounter->getWeakRef() : 0;
         }
+        
         bool expired() const {
             return (mCounter && mCounter->getRef() == 0) || !mCounter;
         }
+        
         SharedPtr<T> lock() const {
             return SharedPtr<T>(mPtr, mCounter);
         }

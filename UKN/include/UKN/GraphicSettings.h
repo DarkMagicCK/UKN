@@ -145,11 +145,6 @@ namespace ukn {
         Disable, 
     };
     
-    enum MatrixMode {
-        ProjectionMatrix,
-        TransformMatrix,
-    };
-    
 } // namespace ukn  
 
 #endif

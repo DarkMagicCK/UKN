@@ -18,7 +18,7 @@
 
 namespace ukn {
     
-    class GLWindow: public Window, public GLFrameBuffer {
+    class GLWindow: public Window  {
     public:
         GLWindow(const ukn_string& name, const RenderSettings& settings);
         ~GLWindow();
@@ -30,10 +30,18 @@ namespace ukn {
 #endif
         
         bool pullEvents();
-        void swapBuffers();
+
+        void onWindowResize(void* wnd, WindowResizeEventArgs&);
+        void onWindowMove(Window& wnd, uint32 x, uint32 y);
+        
+        GLFrameBufferPtr getFrameBuffer() const;
         
     private:
+        void updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h);
+        
         void* mGlfwWindow;
+        
+        GLFrameBufferPtr mFrameBuffer;
     };
     
 } // namespace ukn

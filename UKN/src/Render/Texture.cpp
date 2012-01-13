@@ -9,7 +9,7 @@
 #include "UKN/Texture.h"
 
 namespace ukn {
-    
+        
     class NullTexture: public Texture {
     public:
         NullTexture():

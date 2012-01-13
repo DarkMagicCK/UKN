@@ -9,10 +9,10 @@
 #ifndef Project_Unknown_RenderView_h
 #define Project_Unknown_RenderView_h
 
-#include "Platform.h"
-#include "PreDeclare.h"
-#include "GraphicSettings.h"
-#include "Color.h"
+#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
+#include "UKN/GraphicSettings.h"
+#include "UKN/Color.h"
 
 namespace ukn {
     

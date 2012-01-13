@@ -10,10 +10,11 @@
 #ifndef ukn_exception_h
 #define ukn_exception_h
 
-#include "Platform.h"
-#include "StackTrace.h"
+#include "UKN/Platform.h"
+#include "UKN/StackTrace.h"
 #include <string>
 #include <sstream>
+#include <typeinfo>
 
 #define UKN_THROW_EXCEPTION(mess) throw ukn::Exception(mess,   \
                                                         __FUNCTION__,     \
@@ -21,27 +22,27 @@
                                                         __LINE__)
 
 namespace ukn {
-    
+
 	class Exception: public std::exception {
 	public:
 		Exception(const ukn_string& mssg, const ukn_string& function, const ukn_string& file, int line):
-        mMssg(mssg), 
-        mFunction(function), 
-        mFile(file), 
+        mMssg(mssg),
+        mFunction(function),
+        mFile(file),
         mLine(line) {
-            
+
         }
-		
+
         Exception(const ukn_string& mssg):
-        mMssg(mssg), 
-        mFunction("?"), 
-        mFile("?"), 
+        mMssg(mssg),
+        mFunction("?"),
+        mFile("?"),
         mLine(-1) {
-            
+
         }
-        
+
         virtual ~Exception() throw() {}
-		
+
 		// get a formatted exception mssg
 		virtual const char* what() const throw() {
             std::ostringstream mssg;
@@ -49,20 +50,20 @@ namespace ukn {
             if(mFunction[0] != '?') mssg << "\nFunction=" << mFunction;
             if(mFile[0] != '?') mssg << "\nFile=" << mFile;
             if(mLine != -1) mssg << "\nLine=" << mLine;
-            
+
             return mssg.str().c_str();
         }
-        
+
         // the name of the exception
         virtual const char* name() const throw() {
             return "ukn::Exception";
         }
-        
+
         // the class name of the exception
         virtual const char* className() const throw() {
             return typeid(*this).name();
         }
-        
+
 		const ukn_string& mssg() const {
             return mMssg;
         }
@@ -72,25 +73,25 @@ namespace ukn {
 		const ukn_string& file() const {
             return mFile;
         }
-        
+
 		int32 line() const {
             return mLine;
         }
-        
+
         virtual void rethrow() {
             throw *this;
         }
-        
+
         ukn_string getFormattedCallStack() const {
             return ukn_get_formatted_stack_trace_string();
         }
-        
+
 	private:
 		ukn_string mMssg, mFunction, mFile;
         int32 mLine;
 	};
 
-    
+
 } // namespace sora
 
 #endif

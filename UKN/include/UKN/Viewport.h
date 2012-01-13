@@ -9,8 +9,8 @@
 #ifndef Project_Unknown_Viewport_h
 #define Project_Unknown_Viewport_h
 
-#include "Platform.h"
-#include "Camera.h"
+#include "UKN/Platform.h"
+#include "UKN/Camera.h"
 
 namespace ukn {
 
@@ -22,8 +22,7 @@ namespace ukn {
         
         CameraPtr camera;
         
-        Viewport():
-        camera(MakeSharedPtr<Camera2D>()) {
+        Viewport() {
             
         }
         
@@ -31,8 +30,7 @@ namespace ukn {
         left(l),
         top(t),
         width(w),
-        height(h),
-        camera(MakeSharedPtr<Camera2D>()) {
+        height(h) {
             
         }
     };

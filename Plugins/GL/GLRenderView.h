@@ -2,7 +2,7 @@
 //  GLRenderView.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/2/11.
+//  Created by Robert Bu on 12/2/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -81,6 +81,13 @@ namespace ukn {
     };
     
     typedef SharedPtr<GLTexture2DRenderView> GLTexture2DRenderViewPtr;
+    
+    class GLTexture2DDepthStencilView: Uncopyable, public GLRenderView {
+    public:
+        GLTexture2DDepthStencilView(uint32 width, uint32 height, ElementFormat ef);
+    };
+    
+    typedef SharedPtr<GLTexture2DDepthStencilView> GLTexture2DDepthStencilViewPtr;
     
 } // namespace ukn
 

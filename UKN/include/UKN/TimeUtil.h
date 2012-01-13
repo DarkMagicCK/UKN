@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_TimeUtil_h
 #define Project_Unknown_TimeUtil_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
 
 #include <ctime>
 
@@ -195,12 +195,17 @@ namespace ukn {
         void setDesiredFps(int32 fps);
         
         float getDesiredFps() const;
+        // frame delta
         float getPrevDelta() const;
         float getCurrentFps() const;
         
         void waitToNextFrame();
         uint64 getFrameCount() const; 
         uint64 getRunningTime() const;
+        
+        // actual running delta time, not frame delta
+        // in ms
+        uint64 getDeltaTime() const;
         
     protected:    
         void setDelta(float delta);
@@ -216,6 +221,9 @@ namespace ukn {
         float mPrevDelta;
         float mCurrentFps;
         uint64 mFrameCount;
+        
+        uint64 mDelta;
+        Timestamp mDetalTime;
     };
     
     inline void msleep(uint32 msec);

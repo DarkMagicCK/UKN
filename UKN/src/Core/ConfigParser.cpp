@@ -2,7 +2,7 @@
 //  Config.cpp
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 11/30/11.
+//  Created by Robert Bu on 11/30/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
@@ -16,11 +16,9 @@ namespace ukn {
     
     UKN_API ConfigParserPtr MakeConfigParser(ResourcePtr resource) {
         if(*resource) {
-            if(resource->getName().find(L".xml") != ukn_string::npos) {
-                ConfigParserPtr ptr = MakeSharedPtr<ConfigParserXmlImpl>();
-                if(ptr && ptr->open(resource)) {
-                    return ptr;
-                }
+            ConfigParserPtr ptr = MakeSharedPtr<ConfigParserXmlImpl>();
+            if(ptr && ptr->open(resource)) {
+                return ptr;
             }
         } else {
             return ConfigParserPtr();

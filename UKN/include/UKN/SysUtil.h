@@ -2,14 +2,15 @@
 //  SysUtil.h
 //  Project Unknown
 //
-//  Created by Ruiwei Bu on 12/1/11.
+//  Created by Robert Bu on 12/1/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
 #ifndef Project_Unknown_SysUtil_h
 #define Project_Unknown_SysUtil_h
 
-#include "Platform.h"
+#include "UKN/Platform.h"
+#include "UKN/Util.h"
 
 namespace ukn {
     
@@ -36,6 +37,16 @@ namespace ukn {
     // formatted string
     UKN_API ukn_string get_os_version();
     
+    struct DesktopMode {
+        uint32 width;
+        uint32 height;
+        
+        uint32 bpp;
+    };
+    
+    // array size at least 1
+    // and the first one is current desktop resolution
+    UKN_API Array<DesktopMode> enum_desktop_mode();
    
     /**
      * Retrives cpuinfo from current platform

@@ -9,7 +9,12 @@
 #include "GLWindow.h"
 #include "GLRenderView.h"
 
-#include "glfw/glfw3.h"
+#include "UKN/Context.h"
+#include "UKN/SysUtil.h"
+#include "UKN/GraphicFactory.h"
+#include "UKN/GraphicDevice.h"
+
+#include "GLPreq.h"
 
 namespace ukn {
     
@@ -19,32 +24,34 @@ namespace ukn {
     static void WindowSizeFunc(GLFWwindow window, int w, int h) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onResize()(*glwnd, w, h);
+        WindowResizeEventArgs args(w, h);
+        glwnd->onResize().raise(glwnd, args);
     }
     
     static int WindowCloseFunc(GLFWwindow window) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onClose()(*glwnd);
+        glwnd->onClose().raise(glwnd, _NullEventArgs);
         return 1;
     }
     
     static void WindowRefreshFunc(GLFWwindow window) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onRender()(*glwnd);
     }
     
     static void WindowFocusFunc(GLFWwindow window, int f) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onActive()(*glwnd, f > 0 ? true: false);
+        WindowBoolEventArgs args(f > 0 ? true: false);
+        glwnd->onActive().raise(glwnd, args);
     }
     
     static void WindowIconifyFunc(GLFWwindow window, int f) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onIconify()(*glwnd, f > 0 ? true : false);
+        WindowBoolEventArgs args(f > 0 ? true: false);
+        glwnd->onIconify().raise(glwnd, args);
     }
     
     static void MouseButtonFunc(GLFWwindow window, int a, int b) {
@@ -60,7 +67,7 @@ namespace ukn {
     static void ScrollFunc(GLFWwindow window, int a, int b) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onScroll()(*glwnd, a, b);
+  //      glwnd->onScroll().getSignal()(*glwnd, a, b);
     }
     
     static void KeyFunc(GLFWwindow window, int a, int b) {
@@ -71,11 +78,10 @@ namespace ukn {
     static void CharFunc(GLFWwindow window, int c) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
-        glwnd->onChar()(*glwnd, c);
     }
     
     GLWindow::GLWindow(const ukn_string& name, const RenderSettings& settings):
-    GLFrameBuffer(false),
+    mFrameBuffer(new GLFrameBuffer(false)),
     Window(name) {
         glfwInit();
        
@@ -96,29 +102,41 @@ namespace ukn {
             case EF_D16:
                 glfwOpenWindowHint(GLFW_DEPTH_BITS, 16);
                 glfwOpenWindowHint(GLFW_STENCIL_BITS, 0);
+                
+                mFrameBuffer->mIsDepthBuffered = true;
+                mFrameBuffer->mDepthBits = 16;
+                mFrameBuffer->mStencilBits = 0;
                 break;
                 
             case EF_D24S8:
                 glfwOpenWindowHint(GLFW_DEPTH_BITS, 24);
                 glfwOpenWindowHint(GLFW_STENCIL_BITS, 8);
+                
+                mFrameBuffer->mIsDepthBuffered = true;
+                mFrameBuffer->mDepthBits = 24;
+                mFrameBuffer->mStencilBits = 8;
                 break;
                 
             default:
                 glfwOpenWindowHint(GLFW_DEPTH_BITS, 0);
                 glfwOpenWindowHint(GLFW_STENCIL_BITS, 0);
+                
+                mFrameBuffer->mIsDepthBuffered = false;
+                mFrameBuffer->mDepthBits = 0;
+                mFrameBuffer->mStencilBits = 0;
                 break;
         }
-        
+
         if(settings.fsaa_samples > 0) {
             glfwOpenWindowHint(GLFW_FSAA_SAMPLES, settings.fsaa_samples);
         }
         
         glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, settings.resizable);
         
-#if defined(UKN_HAS_OPENGL_3_2)
+#if defined(UKN_OPENGL_3_2) && defined(UKN_REQUEST_OPENGL_3_2_PROFILE)
         
-        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
-        glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
+         glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
+         glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
         
 #endif // UKN_HAS_OPENGL_3_2
         
@@ -132,12 +150,24 @@ namespace ukn {
             UKN_THROW_EXCEPTION("GLWindow::GLWindow: Error opening window");
         } 
 
+#if defined(UKN_OS_WINDOWS)
 		GLenum err = glewInit();
 		if (GLEW_OK != err) {
 			UKN_THROW_EXCEPTION(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err)));
 		}
+#endif
+    
+        // if wnd pos is (0, 0), then put it in the center of current screen
+        int32 wndPosX = settings.left, wndPosY = settings.top;
+        if(wndPosX == 0 && wndPosY == 0) {
+            Array<DesktopMode> desktop_modes = enum_desktop_mode();
+            
+            wndPosX = (desktop_modes[0].width - settings.width) / 2;
+            wndPosY = (desktop_modes[0].height - settings.height) / 2;
+        }
+        
 
-		glfwSetWindowPos(mGlfwWindow, settings.left, settings.top);
+		glfwSetWindowPos(mGlfwWindow, wndPosX, wndPosY);
         
         glfwSetWindowUserPointer(mGlfwWindow, this);
         
@@ -156,13 +186,52 @@ namespace ukn {
         
         glfwSwapInterval(0);
         
-        this->attach(ATT_Color0, new GLScreenColorRenderView(settings.width, 
-                                                             settings.height,
-                                                             settings.color_fmt));
-        this->attach(ATT_DepthStencil, new GLScreenDepthStencilRenderView(settings.width, 
-																		settings.height,
-																		settings.depth_stencil_fmt));
+        mFrameBuffer->attach(ATT_Color0, RenderViewPtr(new GLScreenColorRenderView(settings.width, 
+                                                                                   settings.height,
+                                                                                   settings.color_fmt)));
+        mFrameBuffer->attach(ATT_DepthStencil, RenderViewPtr(new GLScreenDepthStencilRenderView(settings.width, 
+                                                                                                settings.height,
+                                                                                                settings.depth_stencil_fmt)));
         
+        onResize() += Bind(this, &GLWindow::onWindowResize);
+        
+        updateWindowProperties(wndPosX, wndPosY, settings.width, settings.height);
+    }
+    
+    GLFrameBufferPtr GLWindow::getFrameBuffer() const {
+        return mFrameBuffer;
+    }
+    
+    void GLWindow::updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h) {
+        mFrameBuffer->mLeft = 0;
+        mFrameBuffer->mTop = 0;
+        mFrameBuffer->mWidth = w;
+        mFrameBuffer->mHeight = h;
+        
+        Window::mLeft = x;
+        Window::mTop = y;
+        Window::mWidth = w;
+        Window::mHeight = h;
+        
+        mFrameBuffer->mViewPort.left = 0;
+        mFrameBuffer->mViewPort.top = 0;
+        mFrameBuffer->mViewPort.width = w;
+        mFrameBuffer->mViewPort.height = h;
+        
+        Viewport& vp = mFrameBuffer->getViewport();
+        vp.camera = MakeSharedPtr<Camera2D>();
+        ((Camera2D*)vp.camera.get())->setOrthoParams(0, mFrameBuffer->width(), mFrameBuffer->height(), 0);
+
+        vp.camera->update();
+    }
+    
+    void GLWindow::onWindowResize(void* wnd, WindowResizeEventArgs& args) {
+        updateWindowProperties(getLeft(), getTop(), args.width, args.height);
+
+    }
+    
+    void GLWindow::onWindowMove(Window& wnd, uint32 x, uint32 y) {
+        updateWindowProperties(x, y, getWidth(), getHeight());
     }
     
     bool GLWindow::pullEvents() { 
@@ -187,10 +256,6 @@ namespace ukn {
         
         glfwPollEvents();
         return false;
-    }
-
-    void GLWindow::swapBuffers() {
-        glfwSwapBuffers();
     }
 
 #ifdef UKN_OS_WINDOWS

@@ -9,10 +9,10 @@
 #ifndef Project_Unknown_GraphicFactory_h
 #define Project_Unknown_GraphicFactory_h
 
-#include "Platform.h"
-#include "PreDeclare.h"
-#include "GraphicBuffer.h"
-#include "GraphicSettings.h"
+#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
+#include "UKN/GraphicBuffer.h"
+#include "UKN/GraphicSettings.h"
 
 namespace ukn {
     
@@ -25,32 +25,34 @@ namespace ukn {
         
         virtual GraphicDevice& getGraphicDevice() const = 0;
         
-        virtual GraphicBufferPtr createVertexBuffer(GraphicBuffer::Usage, 
-                                                    GraphicBuffer::Access, 
+        virtual SpriteBatchPtr createSpriteBatch() const;
+        
+        
+        virtual GraphicBufferPtr createVertexBuffer(GraphicBuffer::Access, 
+                                                    GraphicBuffer::Usage, 
                                                     uint32 count, 
                                                     const void* initialData, 
-                                                    const VertexFormat& format) = 0;
+                                                    const VertexFormat& format) const = 0;
         
-        virtual GraphicBufferPtr createIndexBuffer(GraphicBuffer::Usage, 
-                                                   GraphicBuffer::Access, 
+        virtual GraphicBufferPtr createIndexBuffer(GraphicBuffer::Access, 
+                                                   GraphicBuffer::Usage, 
                                                    uint32 count, 
-                                                   const void* initialData) = 0;
+                                                   const void* initialData) const = 0;
         
         
-        virtual RenderBufferPtr createRenderBuffer() = 0;
+        virtual RenderBufferPtr createRenderBuffer() const = 0;
         
         // FBOs
-        // todo with more format, 3d render view with 3d textures etc
-        virtual RenderViewPtr create2DRenderView(TexturePtr texture) = 0;
-        virtual RenderViewPtr create2DDepthStencilView(TexturePtr texture) = 0;
+        virtual RenderViewPtr create2DRenderView(TexturePtr texture) const = 0;
+        virtual RenderViewPtr create2DDepthStencilView(TexturePtr texture) const = 0;
         
         // FrameBuffer
-        virtual FrameBufferPtr createFrameBuffer() = 0;
+        virtual FrameBufferPtr createFrameBuffer() const = 0;
         
         // textures
-        virtual TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) = 0;
+        virtual TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const = 0;
         
-        virtual TexturePtr load2DTexture(const ukn_wstring& name, bool generateMipmaps=false) = 0; 
+        virtual TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const = 0; 
     };
     
 } // namespace ukn

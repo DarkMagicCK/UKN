@@ -18,7 +18,7 @@
 #include <sched.h>
 #include <unistd.h>
 #else
-#include <Window.h>
+#include <Windows.h>
 #endif // UKN_OS_WINDOWS
 
 #include "UKN/Exception.h"
@@ -69,6 +69,19 @@ namespace ukn {
 #endif
             friend class Condition;
         };
+
+#ifdef UKN_OS_WINDOWS
+        typedef struct {
+            int waiters_count_;            
+            CRITICAL_SECTION waiters_count_lock_;
+            
+            HANDLE sema_;
+            HANDLE waiters_done_;
+            size_t was_broadcast_;
+        } pthread_cond_t;
+        
+        typedef HANDLE pthread_mutex_t;
+#endif
         
         template<typename T>
         class MutexGuard: Uncopyable {
@@ -179,7 +192,7 @@ namespace ukn {
         class UKN_API Thread {
         public:
 #ifdef UKN_OS_WINDOWS
-            typedef Handle native_handle_type;
+            typedef HANDLE native_handle_type;
 #elif defined(UKN_OS_FAMILY_UNIX)
             typedef pthread_t native_handle_type;
 #endif
@@ -215,7 +228,7 @@ namespace ukn {
             uint32 mWin32ThreadId;
             HANDLE mHandle;
             
-            static DWORD WINAPI WrapperFunc(LPVOID param);
+            static unsigned int WINAPI WrapperFunc(LPVOID param);
 #elif defined(UKN_OS_FAMILY_UNIX)
             static void* WrapperFunc(void* pthis);
             

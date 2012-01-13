@@ -128,11 +128,11 @@ namespace ukn {
     
     String Path::GetEnv(const ukn_string& env) {
 #if defined(UKN_OS_WINDOWS)
-        DWORD len = GetEnvironmentVariableW(env.c_str(), 0, 0);
+        DWORD len = GetEnvironmentVariableA(env.c_str(), 0, 0);
         if (len != 0) {
-            wchar_t* buffer = new wchar_t[len];
-            GetEnvironmentVariableW(env.c_str(), buffer, len);
-            String result(buffer);
+            char* buffer = new char[len];
+            GetEnvironmentVariableA(env.c_str(), buffer, len);
+            ukn_string result(buffer);
             delete [] buffer;
             return result;
         }
@@ -149,7 +149,7 @@ namespace ukn {
         wchar_t buffer[_MAX_PATH];
         DWORD n = GetCurrentDirectoryW(sizeof(buffer), buffer);
         if(n > 0 && n < sizeof(buffer)) {
-            String result(buffer, n);
+            ukn_wstring result(buffer, n);
             if(result[n-1] != L'\\')
                 result.append(L"\\");
             return result;
@@ -170,8 +170,8 @@ namespace ukn {
     
     String Path::GetHome() {
 #if defined(UKN_OS_WINDOWS)
-        String result = Path::GetEnv(L"HOMEDRIVE");
-        result.append(Path::GetEnv(L"HOMEPATH"));
+        String result = Path::GetEnv("HOMEDRIVE");
+        result.append(Path::GetEnv("HOMEPATH"));
        
         size_t n = result.size();
         if(n > 0 && result[n-1] != L'\\')
@@ -222,7 +222,7 @@ namespace ukn {
         wchar_t buffer[_MAX_PATH];
         DWORD n = GetTempPathW(sizeof(buffer), buffer);
         if(n > 0 && n < sizeof(buffer)) {
-            String result(buffer, n);
+            ukn_wstring result(buffer, n);
             if(result[n-1] != L'\\')
                 result.append(L"\\");
             return result;
@@ -273,8 +273,8 @@ namespace ukn {
 #if defined(UKN_OS_WINDOWS)
         wchar_t buffer[_MAX_PATH];
         GetWindowsDirectoryW(buffer, _MAX_PATH-1);
-        String path(buffer);
-        return path + "\\Fonts\\";
+        ukn_wstring path(buffer);
+        return path + L"\\Fonts\\";
         
 #elif defined(UKN_OS_FAMILY_APPLE)
         return L"/Library/Fonts/";
@@ -312,7 +312,7 @@ namespace ukn {
         wchar_t buffer[_MAX_PATH];
         DWORD n = ExpandEnvironmentStringsW(path.c_str(), buffer, sizeof(buffer));
         if(n > 0 && n < sizeof(buffer)) {
-            return String(buffer, n-1);
+            return ukn_wstring(buffer, n-1);
         } else
             return path;
         

@@ -123,7 +123,7 @@ namespace ukn {
     }
     
     void AppInstance::update() {
-        mMainWindow->onGlobalUpdate().raise(0, _NullEventArgs);
+        mMainWindow->OnGlobalUpdate().raise(0, _NullEventArgs);
 
         mMainWindow->onUpdate().raise(mMainWindow, _NullEventArgs);
     

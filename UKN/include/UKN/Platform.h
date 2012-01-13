@@ -215,6 +215,10 @@
 
 #define ukn_assert assert
 
+#ifdef UKN_OS_WINDOWS
+#define __inline__ inline
+#endif
+
 #ifndef __GNUC__
     #define snprintf _snprintf
 #endif

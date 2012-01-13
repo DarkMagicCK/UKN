@@ -178,7 +178,8 @@ namespace ukn {
     mInheritVisibility(true),
     mInheritScale(true),
     mInheritOpacity(true),
-    mUserData(0) {
+    mUserData(0)
+	{
     }
     
     Bone::~Bone() {
@@ -358,6 +359,9 @@ namespace ukn {
     }
     
     void Bone::update(uint32 past_time) {
+		if(mAnimations.empty())
+			return;
+
         if(mCurrentAnimation != mAnimations.end())
             mCurrentAnimation->second.update(past_time);
         

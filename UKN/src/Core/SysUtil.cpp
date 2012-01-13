@@ -100,6 +100,7 @@ namespace ukn {
         currMode.width = (uint32)GetSystemMetrics(SM_CXSCREEN);
 		currMode.height = (uint32)GetSystemMetrics(SM_CYSCREEN);
         
+		HDC screenDC;
         screenDC = GetDC(NULL);
         currMode.bpp = GetDeviceCaps(screenDC,BITSPIXEL);
         ReleaseDC(NULL,screenDC);
@@ -109,11 +110,14 @@ namespace ukn {
         DEVMODE devmode;
 		devmode.dmSize = sizeof(DEVMODE);
         
+		DWORD n = 0;
 		while(EnumDisplaySettings(0, n, &devmode) != 0) {
 			DesktopMode mode;
             mode.width  = devmode.dmPelsWidth;
             mode.height = devmode.dmPelsHeight;
             mode.bpp    = devmode.dmBitsPerPel;
+
+			n++;
             
             arr.push_back(mode);
 		}

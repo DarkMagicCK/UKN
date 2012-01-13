@@ -15,6 +15,7 @@
     <ClInclude Include="..\..\External\glew\glxew.h" />
     <ClInclude Include="..\..\External\glew\wglew.h" />
     <ClInclude Include="..\..\External\glfw\glfw3.h" />
+    <ClInclude Include="..\..\External\md5lib\md5lib.h" />
     <ClInclude Include="..\..\External\pugixml\pugiconfig.hpp" />
     <ClInclude Include="..\..\External\pugixml\pugixml.hpp" />
     <ClInclude Include="..\..\External\soil\image_DXT.h" />
@@ -23,6 +24,22 @@
     <ClInclude Include="..\..\External\soil\stbi_DDS_aug.h" />
     <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h" />
     <ClInclude Include="..\..\External\soil\stb_image_aug.h" />
+    <ClInclude Include="..\..\External\zlib\crc32.h" />
+    <ClInclude Include="..\..\External\zlib\crypt.h" />
+    <ClInclude Include="..\..\External\zlib\deflate.h" />
+    <ClInclude Include="..\..\External\zlib\inffast.h" />
+    <ClInclude Include="..\..\External\zlib\inffixed.h" />
+    <ClInclude Include="..\..\External\zlib\inflate.h" />
+    <ClInclude Include="..\..\External\zlib\inftrees.h" />
+    <ClInclude Include="..\..\External\zlib\ioapi.h" />
+    <ClInclude Include="..\..\External\zlib\mztools.h" />
+    <ClInclude Include="..\..\External\zlib\trees.h" />
+    <ClInclude Include="..\..\External\zlib\unzip.h" />
+    <ClInclude Include="..\..\External\zlib\zconf.h" />
+    <ClInclude Include="..\..\External\zlib\zconf.in.h" />
+    <ClInclude Include="..\..\External\zlib\zip.h" />
+    <ClInclude Include="..\..\External\zlib\zlib.h" />
+    <ClInclude Include="..\..\External\zlib\zutil.h" />
     <ClInclude Include="..\..\Plugins\DirectX\DXConvert.h" />
     <ClInclude Include="..\..\Plugins\DirectX\DXFrameBuffer.h" />
     <ClInclude Include="..\..\Plugins\DirectX\DXGraphicDevice.h" />
@@ -33,42 +50,42 @@
     <ClInclude Include="..\..\Plugins\DirectX\DXWindow.h" />
     <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLGraphicBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h" />
     <ClInclude Include="..\..\Plugins\GL\GLGraphicFactory.h" />
     <ClInclude Include="..\..\Plugins\GL\GLPreq.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLRenderBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLRenderView.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLSpriteBatch.h" />
     <ClInclude Include="..\..\Plugins\GL\GLTexture.h" />
     <ClInclude Include="..\..\Plugins\GL\GLWindow.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Action.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Animation.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Any.h" />
     <ClInclude Include="..\..\UKN\include\UKN\App.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Asset.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Audio.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\AutoUpdate.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Base64.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Binding.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Camera.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Class.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Color.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Common.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Component.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Condition.h" />
     <ClInclude Include="..\..\UKN\include\UKN\ConfigParser.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Context.h" />
     <ClInclude Include="..\..\UKN\include\UKN\detail\function\Bind.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function0.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function1.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function10.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function11.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function12.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function2.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function3.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function4.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function5.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function6.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function7.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function8.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Function9.h" />
     <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionBase.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionDetail.h" />
     <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionFoward.h" />
     <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionInclude.h" />
     <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionTemplate.h" />
     <ClInclude Include="..\..\UKN\include\UKN\detail\function\Memfun.h" />
     <ClInclude Include="..\..\UKN\include\UKN\detail\TypeTraits.h" />
     <ClInclude Include="..\..\UKN\include\UKN\DllLoader.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Entity.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Event.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Exception.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Factory.h" />
@@ -82,48 +99,86 @@
     <ClInclude Include="..\..\UKN\include\UKN\GraphicDevice.h" />
     <ClInclude Include="..\..\UKN\include\UKN\GraphicFactory.h" />
     <ClInclude Include="..\..\UKN\include\UKN\GraphicSettings.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Hashing.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Input.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Key.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\KeyFrameAnimation.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Logger.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Material.h" />
     <ClInclude Include="..\..\UKN\include\UKN\MathUtil.h" />
     <ClInclude Include="..\..\UKN\include\UKN\MemoryUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Mesh.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Message.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Module.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Physics.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Platform.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Port.h" />
     <ClInclude Include="..\..\UKN\include\UKN\PreDeclare.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Preprocessor.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Property.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Profiler.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Ptr.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\RandomUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\RefCounted.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Renderable.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderBuffer.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderEffect.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderView.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Resource.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Scene.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Scripting.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Sensor.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Serializer.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Shader.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Signal.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Singleton.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Skeletal.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Sprite.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\SpriteBatch.h" />
     <ClInclude Include="..\..\UKN\include\UKN\StackTrace.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Stream.h" />
     <ClInclude Include="..\..\UKN\include\UKN\StringUtil.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SysUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Task.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Texture.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Thread.h" />
     <ClInclude Include="..\..\UKN\include\UKN\TimeUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Transform.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Trigger.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Type.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\TypeInfo.h" />
     <ClInclude Include="..\..\UKN\include\UKN\UKN.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Uncopyable.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Util.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Vertex.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Viewport.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Window.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\ZipUtil.h" />
     <ClInclude Include="..\..\UKN\src\Core\AppleStuff.h" />
     <ClInclude Include="..\..\UKN\src\Core\ConfigParserXml.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\External\glew\glew.c" />
+    <ClCompile Include="..\..\External\md5lib\md5lib.cpp" />
     <ClCompile Include="..\..\External\pugixml\pugixml.cpp" />
     <ClCompile Include="..\..\External\soil\image_DXT.c" />
     <ClCompile Include="..\..\External\soil\image_helper.c" />
     <ClCompile Include="..\..\External\soil\SOIL.c" />
     <ClCompile Include="..\..\External\soil\stb_image_aug.c" />
+    <ClCompile Include="..\..\External\zlib\adler32.c" />
+    <ClCompile Include="..\..\External\zlib\compress.c" />
+    <ClCompile Include="..\..\External\zlib\crc32.c" />
+    <ClCompile Include="..\..\External\zlib\deflate.c" />
+    <ClCompile Include="..\..\External\zlib\gzio.c" />
+    <ClCompile Include="..\..\External\zlib\infback.c" />
+    <ClCompile Include="..\..\External\zlib\inffast.c" />
+    <ClCompile Include="..\..\External\zlib\inflate.c" />
+    <ClCompile Include="..\..\External\zlib\inftrees.c" />
+    <ClCompile Include="..\..\External\zlib\ioapi.c" />
+    <ClCompile Include="..\..\External\zlib\mztools.c" />
+    <ClCompile Include="..\..\External\zlib\trees.c" />
+    <ClCompile Include="..\..\External\zlib\uncompr.c" />
+    <ClCompile Include="..\..\External\zlib\unzip.c" />
+    <ClCompile Include="..\..\External\zlib\zip.c" />
+    <ClCompile Include="..\..\External\zlib\zutil.c" />
     <ClCompile Include="..\..\Plugins\DirectX\DXFrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\DirectX\DXGraphicDevice.cpp" />
     <ClCompile Include="..\..\Plugins\DirectX\DXGraphicFactory.cpp" />
@@ -131,32 +186,58 @@
     <ClCompile Include="..\..\Plugins\DirectX\DXTexture.cpp" />
     <ClCompile Include="..\..\Plugins\DirectX\DXWindow.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicFactory.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLRenderView.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLSpriteBatch.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLTexture.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLWindow.cpp" />
     <ClCompile Include="..\..\UKN\main.cpp" />
     <ClCompile Include="..\..\UKN\src\App\App.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Asset.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\AutoUpdate.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Base64.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Class.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\ConfigParser.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\ConfigParserXml.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\Context.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\DllLoader.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\FileUtil.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Hashing.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\Logger.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Module.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Port.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Profiler.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\RandomUtil.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\Resource.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Serializer.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Signal.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\Stream.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\StringUtil.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\SysUtil.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Task.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Thread.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\Timeutil.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\ZipUtil.cpp" />
+    <ClCompile Include="..\..\UKN\src\Game\Component.cpp" />
+    <ClCompile Include="..\..\UKN\src\Game\Entity.cpp" />
+    <ClCompile Include="..\..\UKN\src\Game\Event.cpp" />
+    <ClCompile Include="..\..\UKN\src\Game\Trigger.cpp" />
+    <ClCompile Include="..\..\UKN\src\Presentation\Animation.cpp" />
+    <ClCompile Include="..\..\UKN\src\Presentation\Skeletal.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Font.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\FrameBuffer.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Frustum.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\GraphicBuffer.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\GraphicDevice.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\GraphicFactory.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Renderable.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderBuffer.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderView.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Scene.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Texture.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Window.cpp" />
   </ItemGroup>
@@ -189,13 +270,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)/../Plugins/GL;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)/../External/freetype/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)/../Plugins;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)/../../Plugins/GL/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)/../External/freetype/;$(SolutionDir)/../../Plugins/GL/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

@@ -24,6 +24,10 @@
 #include <ft2build.h>
 #include <freetype/freetype.h>
 
+#ifdef UKN_OS_WINDOWS
+#pragma comment(lib, "freetype244ST.lib")
+#endif
+
 namespace ukn {
     
     static uint16 *UTF8_to_UNICODE(uint16 *unicode, const char *utf8, int len)

@@ -14,6 +14,7 @@
 #include "UKN/Preprocessor.h"
 
 #include <map>
+#include <unordered_map>
 
 namespace ukn {
     
@@ -68,7 +69,7 @@ namespace ukn {
         ProfileData get(const ukn_string& name) const;
         
     private:
-        friend class detail::Profile;
+        friend struct detail::Profile;
         friend class FrameCounter;
         
         void record(const ukn_string& name, uint64 time);

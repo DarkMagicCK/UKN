@@ -38,7 +38,7 @@ namespace ukn {
         }
     }
     
-    UKN_STATIC_RUN_CODE(Window::onGlobalUpdate() += &ModuleManager::OnUpdate);
+    UKN_STATIC_RUN_CODE(Window::OnGlobalUpdate() += &ModuleManager::OnUpdate);
     
 
      

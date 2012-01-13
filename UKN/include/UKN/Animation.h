@@ -64,7 +64,7 @@ namespace ukn {
         }
         
         virtual void update(uint32 past_time, void* property_ptr) {
-            *(T*)property_ptr = (uint32)(lerp((float)getFrom(), (float)getTo(), (real)past_time/getDuration())+0.5);
+            *(T*)property_ptr = (lerp((float)getFrom(), (float)getTo(), (real)past_time/getDuration())+0.5);
         }
         
     protected:
@@ -146,10 +146,10 @@ namespace ukn {
                 KeyFrame& kf = mKeyFrames[timepos-1];
                 switch(mKeyFrames[timepos].frame_type) {
                     case KFT_Discrete:
-                        *(int32*)property_ptr = kf.value;
+                        *(double*)property_ptr = kf.value;
                         break;
                     case KFT_Linear:
-                        *(int32*)property_ptr = (int32)(lerp((float)kf.value, 
+                        *(double*)property_ptr = (int32)(lerp((float)kf.value, 
                                                              (float)mKeyFrames[timepos].value,
                                                              (real)(past_time-prevtime)/mKeyFrames[timepos].duration)+0.5);
                         break;
@@ -158,7 +158,7 @@ namespace ukn {
             } else if(timepos == 0) {
                 
             } else {
-                *(int32*)property_ptr = mKeyFrames[timepos-1].value;
+                *(double*)property_ptr = mKeyFrames[timepos-1].value;
             }
 
         }

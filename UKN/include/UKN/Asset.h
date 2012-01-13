@@ -16,6 +16,7 @@
 #include "UKN/Ptr.h"
 
 #include <map>
+#include <unordered_map>
 
 namespace ukn {
     
@@ -81,7 +82,7 @@ namespace ukn {
             String      fullPath;
         };
         
-        typedef ukn_hash_map<String, AssetInfo> AssetNameMap;
+        typedef ukn_hash_map<ukn_wstring, AssetInfo> AssetNameMap;
         
     public:
         template<typename T>

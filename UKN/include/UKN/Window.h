@@ -112,8 +112,6 @@ namespace ukn {
         FrameEndEvent   mFrameEnd;
         InitializeEvent mInitEvent;
         
-        static GlobalUpdateEvent mGlobalUpdate;
-        
     public:
         ActiveEvent& onActive() {
             return mActiveEvent;
@@ -163,8 +161,9 @@ namespace ukn {
             return mWindowCreateEvent;
         }
         
-        static GlobalUpdateEvent& onGlobalUpdate() {
-            return mGlobalUpdate;
+        static GlobalUpdateEvent& OnGlobalUpdate() {
+			static GlobalUpdateEvent globalUpdate;
+            return globalUpdate;
         }
     
     protected:

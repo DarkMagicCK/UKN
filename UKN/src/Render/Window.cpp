@@ -10,8 +10,6 @@
 
 namespace ukn {
 
-    Window::GlobalUpdateEvent Window::mGlobalUpdate;
-    
     Window::Window(const ukn_string& name):
     mName(name) {
         

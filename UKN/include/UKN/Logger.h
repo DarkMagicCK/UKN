@@ -49,18 +49,18 @@ namespace ukn {
         void redirect(StreamPtr);
         void setFeature(LoggerFeature feature, bool flag);
         
-        void log(const String& log, LogLevel level=LL_Info);
+        void log(const ukn_wstring& log, LogLevel level=LL_Info);
 
         // log with LL_Info level
-        Logger& operator<<(const String& log);
+        Logger& operator<<(const ukn_wstring& log);
         
         void clear();
         
         size_t getLogSize() const;
-        const std::deque<String>& getLogQueue() const;
+        const std::deque<ukn_wstring>& getLogQueue() const;
         
     private:
-        std::deque<String> mLogQueue;
+        std::deque<ukn_wstring> mLogQueue;
         
         StreamPtr mOutputStream;
         
@@ -69,10 +69,15 @@ namespace ukn {
         bool mOutputToConsole;
     };
     
-    void log_error(const String& log);
-    void log_notice(const String& log);
-    void log_warning(const String& log);
-    void log_info(const String& log);
+    void log_error(const ukn_wstring& log);
+    void log_notice(const ukn_wstring& log);
+    void log_warning(const ukn_wstring& log);
+    void log_info(const ukn_wstring& log);
+
+	void log_error(const ukn_string& log);
+    void log_notice(const ukn_string& log);
+    void log_warning(const ukn_string& log);
+    void log_info(const ukn_string& log);
 
 #define ukn_logged_assert(cond, log) \
     if(!(cond)) { \

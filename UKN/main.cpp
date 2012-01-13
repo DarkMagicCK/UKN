@@ -59,17 +59,15 @@ public:
         ukn::AssetManager::Instance().deserialize(cfg);
         
         mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
-        
-        mFont->setStyle(ukn::FS_Bold, true);
-        mFont->setStyle(ukn::FS_Italic, true);
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
         
-        
         ukn::ConfigParserPtr cfg2 = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"text/girl.uknanm"));
-        skAnim.deserialize(cfg2);
+		if(cfg2) {
+			skAnim.deserialize(cfg2);
         
-        skAnim.play("NewAnim");
-        skAnim.setPosition(ukn::Vector2(300, 200));
+			skAnim.play("NewAnim");
+			skAnim.setPosition(ukn::Vector2(300, 200));
+		}
     }
     
     void onUpdate() {
@@ -116,6 +114,8 @@ private:
 int main (int argc, const char * argv[])
 {
 #else
+#pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
+
 int CALLBACK WinMain(
   __in  HINSTANCE hInstance,
   __in  HINSTANCE hPrevInstance,

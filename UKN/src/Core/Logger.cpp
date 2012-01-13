@@ -69,7 +69,7 @@ namespace ukn {
         }
     }
     
-    void Logger::log(const String& log, LogLevel level) {
+    void Logger::log(const ukn_wstring& log, LogLevel level) {
         String realLog;
         if(mPrependTime) {
             realLog += String(format_string("[%.3f] ", (float)FrameCounter::Instance().getRunningTime() / Timestamp::Resolution()));
@@ -83,9 +83,9 @@ namespace ukn {
         
         if(mOutputStream) {
 #ifdef UKN_OS_WINDOWS
-            *mOutputStream<<realLog.ansi_str()<<"\r\n";
+            *mOutputStream<<wstring_to_string(realLog).c_str()<<"\r\n";
 #else
-			*mOutputStream<<realLog.ansi_str()<<"\n";
+			*mOutputStream<<wstring_to_string(realLog).c_str()<<"\n";
 #endif // UKN_OS_WINDOWS
             if(mOutputToConsole) {
                 printf("%s\n", realLog.ansi_str());
@@ -93,7 +93,7 @@ namespace ukn {
         }
     }
     
-    Logger& Logger::operator<<(const String& log) {
+    Logger& Logger::operator<<(const ukn_wstring& log) {
         this->log(log, LL_Info);
         return *this;
     }
@@ -106,25 +106,40 @@ namespace ukn {
         return mLogQueue.size();
     }
    
-    const std::deque<String>& Logger::getLogQueue() const {
+    const std::deque<ukn_wstring>& Logger::getLogQueue() const {
         return mLogQueue;
     }
     
-    void log_error(const String& log) {
+    void log_error(const ukn_wstring& log) {
         Logger::Instance().log(log, LL_Error);
     }
     
-    void log_notice(const String& log) {
+    void log_notice(const ukn_wstring& log) {
         Logger::Instance().log(log, LL_Notice);
     }
     
-    void log_warning(const String& log) {
+    void log_warning(const ukn_wstring& log) {
         Logger::Instance().log(log, LL_Warning);
     }
     
-    void log_info(const String& log) {
+    void log_info(const ukn_wstring& log) {
         Logger::Instance().log(log, LL_Info);
     }
+
+	 void log_error(const ukn_string& log) {
+        Logger::Instance().log(string_to_wstring(log), LL_Error);
+    }
     
+    void log_notice(const ukn_string& log) {
+        Logger::Instance().log(string_to_wstring(log), LL_Notice);
+    }
+    
+    void log_warning(const ukn_string& log) {
+        Logger::Instance().log(string_to_wstring(log), LL_Warning);
+    }
+    
+    void log_info(const ukn_string& log) {
+        Logger::Instance().log(string_to_wstring(log), LL_Info);
+    }
     
 } // namespace ukn

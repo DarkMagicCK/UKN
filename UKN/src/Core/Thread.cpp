@@ -135,7 +135,7 @@ namespace ukn {
         {
                 
 #ifdef UKN_OS_WINDOWS
-            sema = CreateSemaphoreW(NULL, n, n, NULL);
+            sema = CreateSemaphoreW(NULL, _n, _n, NULL);
 #endif
         }
                 
@@ -148,11 +148,11 @@ namespace ukn {
         max(_max)
 #endif
         {
-            assert( n>=0 && max>0 && n<=max);
+            assert( _n>=0 && _max>0 && _n<=_max);
 
 #ifdef UKN_OS_WINDOWS
                     
-            sema = CreateSemaphoreW(NULL, n, max, NULL);
+            sema = CreateSemaphoreW(NULL, _n, _max, NULL);
 #endif
         }
                     
@@ -196,16 +196,6 @@ namespace ukn {
         }
              
 #ifdef UKN_OS_WINDOWS
-        typedef struct {
-            int waiters_count_;            
-            CRITICAL_SECTION waiters_count_lock_;
-            
-            HANDLE sema_;
-            HANDLE waiters_done_;
-            size_t was_broadcast_;
-        } pthread_cond_t;
-        
-        typedef HANDLE pthread_mutex_t;
         
         static int 
         _win32_pthread_cond_init (pthread_cond_t *cv,
@@ -224,9 +214,9 @@ namespace ukn {
             return 0;
         }
         
-        static void _win32_pthread_cont_destroy(pthread_cont_t *cv) {
+        static void _win32_pthread_cond_destroy(pthread_cond_t *cv) {
             CloseHandle(cv->waiters_done_);
-            DeleteCriticalSectionA(cv->waiters_count_lock_);
+            DeleteCriticalSection (&cv->waiters_count_lock_);
         }
         
         static int
@@ -297,7 +287,7 @@ namespace ukn {
         }
         
         Condition::~Condition() {
-#if UKN_OS_WINDOWS
+#ifdef UKN_OS_WINDOWS
             _win32_pthread_cond_destroy(&cond);
 #elif defined(UKN_OS_FAMILY_UNIX)
             pthread_cond_destroy(&cond);
@@ -385,7 +375,7 @@ namespace ukn {
         
 #ifdef UKN_OS_WINDOWS
         
-        DWORD WINAPI Thread::WrapperFunc(LPVOID param) {
+        unsigned int WINAPI Thread::WrapperFunc(LPVOID pthis) {
             
 #elif defined(UKN_OS_FAMILY_UNIX)
             
@@ -462,7 +452,7 @@ namespace ukn {
             
             ThreadId Thread::getId() const {
 #ifdef UKN_OS_WINDOWS
-                return ThreadId(mWin32ThreaDId);
+                return ThreadId(mWin32ThreadId);
 #elif defined(UKN_OS_FAMILY_UNIX)
                 return _pthread_t_to_ID(mHandle);
 #endif
@@ -520,7 +510,7 @@ namespace ukn {
 #ifdef UKN_OS_WINDOWS
                 CloseHandle(mutex);
                 CloseHandle(readEvent);
-                Closehandle(writeEvent);
+                CloseHandle(writeEvent);
 #elif defined(UKN_OS_FAMILY_UNIX)
                 pthread_rwlock_destroy(&rwl);
 #endif
@@ -539,7 +529,7 @@ namespace ukn {
                         ReleaseMutex(mutex);
                         break;
                     default:
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot lock reader/writer lock");
+                        UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot lock reader/writer lock");
                 }
 #elif defined(UKN_OS_FAMILY_UNIX)
                 if(pthread_rwlock_rdlock(&rwl))
@@ -565,7 +555,7 @@ namespace ukn {
                         break;
                     default:
                         removeWriter();
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot lock reader/writer lock");
+                        UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot lock reader/writer lock");
                 }
 #elif defined(UKN_OS_FAMILY_UNIX)
                 if(pthread_rwlock_wrlock(&rwl))
@@ -585,11 +575,11 @@ namespace ukn {
                         ReleaseMutex(mutex);
                         break;
                     default:
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot unlock reader/writer lock");
+                        UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot unlock reader/writer lock");
                 }
 #elif defined(UKN_OS_FAMILY_UNIX)
                 if(pthread_rwlock_unlock(&rwl))
-                    UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot lock reader/writer lock");
+                    UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot unlock reader/writer lock");
 #endif   
             }
             
@@ -607,26 +597,24 @@ namespace ukn {
                         ReleaseMutex(mutex);
                         break;
                     default:
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot lock reader/writer lock");
+                        UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot add writer");
                 }
             }
             
             inline void RWLock::removeWriter() {
                 switch(WaitForSingleObject(mutex, INFINITE)) {
                     case WAIT_OBJECT_0:
-                        if(--writersWaiting == 0 && writes == 0)
+                        if(--writersWaiting == 0 && writers == 0)
                             SetEvent(readEvent);
                         ReleaseMutex(mutex);
                         break;
                     default:
-                        THROW_SORA_EXCEPTION(RuntimeException, "Cannot lock reader/writers lock");
+                        UKN_THROW_EXCEPTION("ukn::Thread::RWLock: Cannot remove writer");
                 }
             }  
-        }
-        
+			  
 #endif
-        
-        
+
         ThreadPool::ThreadPool():
         mMutex(),
         mCond(mMutex),

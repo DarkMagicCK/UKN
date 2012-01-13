@@ -301,7 +301,7 @@ namespace ukn {
                 do {
                     if(parser->hasAttribute("val")) {
                         
-                        float val = parser->getInt("val", 0);
+                        float val = parser->getFloat("val", 0);
                         int32 dur = parser->getInt("duration", 0);
                         int32 type = parser->getInt("type", 0);
                         

@@ -203,7 +203,7 @@ namespace ukn {
         close();
     }
     
-    bool FileStreamWin32::open(const std::wstring& filename, bool canwrite, bool append, bool nocache) {
+    bool FileStreamWin32::open(const String& filename, bool canwrite, bool append, bool nocache) {
         if(file)
             return false;
         

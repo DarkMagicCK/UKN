@@ -339,7 +339,7 @@ namespace ukn {
         return result;
     }
     
-    UKN_API ukn_string wstring_to_string(const String& str) {
+    UKN_API ukn_string wstring_to_string(const ukn_wstring& str) {
 #if defined(UKN_OS_WINDOWS)
         return ukn_win_wstring_to_string(str);
 #elif defined(UKN_OS_IOS)
@@ -359,7 +359,7 @@ namespace ukn {
 #endif  
     }
     
-    UKN_API ukn_string wstring_to_string_fast(const String& str) {
+    UKN_API ukn_string wstring_to_string_fast(const ukn_wstring& str) {
         ukn_string buffer(str.length(), ' ');
 		std::copy(str.begin(), str.end(), buffer.begin());
 		return buffer;
@@ -381,14 +381,38 @@ namespace ukn {
         return ukn_string(it, str.end());
     }
     
-    UKN_API ukn_wstring get_file_name(const String& str) {
-        String::const_iterator it = str.end();
+    UKN_API ukn_wstring get_file_name(const ukn_wstring& str) {
+        ukn_wstring::const_iterator it = str.end();
         it--;
         
         while(it != str.begin() && *it != L'/' && *it != L'\\') {
             --it;
         }
         return ukn_wstring(it, str.end());
+    }
+    
+    UKN_API ukn_string get_file_path(const ukn_string& str) {
+        ukn_string::const_iterator it = str.end();
+        it--;
+        
+        while(it != str.begin() && *it != '/' && *it != '\\') {
+            --it;
+        }
+        if(it != str.begin())
+            return ukn_string(str.begin(), it);
+        return ukn_string();
+    }
+
+    UKN_API ukn_wstring get_file_path(const ukn_wstring& str) {
+        ukn_wstring::const_iterator it = str.end();
+        it--;
+        
+        while(it != str.begin() && *it != L'/' && *it != L'\\') {
+            --it;
+        }
+        if(it != str.begin())
+            return ukn_wstring(str.begin(), it);
+        return ukn_wstring();
     }
     
     

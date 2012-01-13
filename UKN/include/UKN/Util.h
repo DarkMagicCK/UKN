@@ -93,12 +93,13 @@ namespace ukn {
         void map(T* mappedPtr, size_t size);
         void set(T* ptr, size_t size);
 
+        void growTo(size_t capacity);
+
     private:
         void destroyAll();
         void destroy(T* elm);
         void copy(const Array<T>& src);
         void grow();
-        void growTo(size_t capacity);
         void move(size_t index1, size_t index2);
 
         size_t mGrow;
@@ -270,7 +271,8 @@ namespace ukn {
 
         T* newArray = new T[newCapacity];
         if(this->mElements) {
-            for(size_t i=0; i<this->mSize; ++i)
+            size_t capa = this->mCapacity < newCapacity ? this->mCapacity : newCapacity;
+            for(size_t i=0; i<capa; ++i)
                 newArray[i] = this->mElements[i];
         }
         this->mElements = newArray;

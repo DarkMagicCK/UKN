@@ -49,6 +49,8 @@ namespace ukn {
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);    
         glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        glDisable(GL_DEPTH_TEST);
+        glDepthMask(GL_FALSE);
         
         while(it != mRenderQueue.end()) { 
             if(it->texture != prevTexture) {

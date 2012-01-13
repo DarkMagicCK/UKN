@@ -26,12 +26,12 @@ namespace ukn {
     class UKN_API String: public std::wstring {
     public:
         String();
-        String(const char* cstr, StringFormat format = SF_UTF8);
+        String(const char* cstr, StringFormat format = SF_ANSI);
         String(const wchar_t* wcstr);
-        String(const std::string& str, StringFormat format = SF_UTF8);
+        String(const std::string& str, StringFormat format = SF_ANSI);
         String(const std::wstring& wstr);
         
-        bool convert(const char* str, StringFormat format = SF_UTF8);
+        bool convert(const char* str, StringFormat format = SF_ANSI);
         
         StringFormat format() const;
         
@@ -86,16 +86,19 @@ namespace ukn {
         TokenContainer mTokens;
     };
     
-    UKN_API ukn_string wstring_to_string(const String& str);
+    UKN_API ukn_string wstring_to_string(const ukn_wstring& str);
     UKN_API ukn_wstring string_to_wstring(const ukn_string& str);
     
     // by direct data copy
-    UKN_API ukn_string wstring_to_string_fast(const String& str);
+    UKN_API ukn_string wstring_to_string_fast(const ukn_wstring& str);
     UKN_API ukn_wstring string_to_wstring_fast(const ukn_string& str);
     
     UKN_API ukn_string get_file_name(const ukn_string& str);
-    UKN_API ukn_wstring get_file_name(const String& str);
+    UKN_API ukn_wstring get_file_name(const ukn_wstring& str);
     
+    UKN_API ukn_string get_file_path(const ukn_string& str);
+    UKN_API ukn_wstring get_file_path(const ukn_wstring& str);
+
     template<typename T>
     ukn_string any_to_string(const T& val) {
         std::ostringstream sstr;

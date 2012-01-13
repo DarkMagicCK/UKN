@@ -488,7 +488,9 @@ namespace ukn {
             
         }
         
-        AABB2() {   
+        AABB2():
+        x1(0), y1(0),
+        x2(0), y2(0) {   
         }
         
         AABB2(const Vector2& upper, const Vector2& lower):
@@ -560,6 +562,10 @@ namespace ukn {
                 }
             }
             return false;
+        }
+        
+        bool isEmpty() const {
+            return (x1 == x2) && (y1 == y2);
         }
         
         Vector2 getPosition() const {

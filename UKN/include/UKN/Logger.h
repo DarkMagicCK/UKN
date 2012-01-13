@@ -73,7 +73,11 @@ namespace ukn {
     void log_notice(const String& log);
     void log_warning(const String& log);
     void log_info(const String& log);
-    
+
+#define ukn_logged_assert(cond, log) \
+    if(!(cond)) { \
+        ukn::log_error(ukn::format_string("ukn::assertion failed with mssg %s at function %s, file %s, line %d", log, __FUNCTION__, __FILE__, __LINE__)); \
+    }
 } // namespace ukn
 
 #endif

@@ -39,6 +39,8 @@
 #include "UKN/Animation.h"
 #include "UKN/Class.h"
 #include "UKN/Skeletal.h"
+#include "UKN/Base64.h"
+#include "UKN/ZipUtil.h"
 
 #include <vector>
 #include <map>
@@ -63,10 +65,10 @@ public:
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
         
         
-        ukn::ConfigParserPtr cfg2 = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"SmallRobot.uknanm"));
+        ukn::ConfigParserPtr cfg2 = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"text/girl.uknanm"));
         skAnim.deserialize(cfg2);
         
-        skAnim.play("walk");
+        skAnim.play("NewAnim");
         skAnim.setPosition(ukn::Vector2(300, 200));
     }
     
@@ -85,7 +87,7 @@ public:
             skAnim.render(*mSpriteBatch.get());
             
             ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
-            printf("%d, %f, %f\n", data.average_time, data.time_ratio, data.time_ratio_frame);
+            printf("%s\n", data.toFormattedString().c_str());
         }       
         mSpriteBatch->end();
 
@@ -121,9 +123,18 @@ int CALLBACK WinMain(
   __in  int nCmdShow
 ) {
 #endif
+    ukn_logged_assert(1 == 0, "just a test");
+
     // register plugins by hand for testing purpose
     ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);
+    
+    ukn::Array<ukn::uint8> data(ukn::base64_decode("eJzt1jsKgDAQQEELtVKvYuGvEDvvfya3MBeQQAzMwCPdsum2af5lL71AJv7xL7X+Y46WtzXayq7z2RGd0f2+V6a5bdRFfaZ5pQzRGE2lFwEAoArpDk7Veg+nOzjlHgYAAAAAIIcHvboDlQ=="));
+    ukn::log_info((const char*)data.begin());
+    ukn::Array<ukn::uint8> cpdata = ukn::zlib_compress(data.begin(), data.size());
+    ukn::Array<ukn::uint8> dedata = ukn::zlib_decompress((ukn::uint8*)cpdata.begin(), cpdata.size());
+    
+    ukn::log_info((const char*)dedata.begin());
     
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
     

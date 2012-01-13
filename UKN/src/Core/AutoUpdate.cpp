@@ -28,11 +28,9 @@ namespace ukn {
         }
         
         void update() {
-            AutoListElement<AutoUpdate>::ListType::const_iterator it = AutoListElement<AutoUpdate>::GetList().begin();
-            while(it != AutoListElement<AutoUpdate>::GetList().end()) {
-                (*it)->onUpdate();
-                
-                ++it;
+            UKN_FOR_EACH(AutoUpdate* item, AutoListElement<AutoUpdate>::GetList()) {
+                if(item->isEnabled())
+                    item->onUpdate();
             }
         }
         

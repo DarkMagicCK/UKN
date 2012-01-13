@@ -83,12 +83,12 @@ namespace ukn {
         
         if(mOutputStream) {
 #ifdef UKN_OS_WINDOWS
-            *mOutputStream<<realLog<<"\r\n";
+            *mOutputStream<<realLog.ansi_str()<<"\r\n";
 #else
-			*mOutputStream<<realLog<<"\n";
+			*mOutputStream<<realLog.ansi_str()<<"\n";
 #endif // UKN_OS_WINDOWS
             if(mOutputToConsole) {
-                printf("%ls\n", realLog.c_str());
+                printf("%s\n", realLog.ansi_str());
             }
         }
     }

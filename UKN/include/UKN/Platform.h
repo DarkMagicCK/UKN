@@ -197,11 +197,11 @@
 #endif
 
 // are we building a dll or not
-#if defined(UKN_UKN_OS_WINDOWS) && defined(UKN_HAS_DECLSPEC)
+#if defined(UKN_OS_WINDOWS) && defined(UKN_HAS_DECLSPEC)
     #if defined(UKN_DLL_EXPORT)
         #define UKN_API __declspec(dllexport)
         #define UKN_EXTERN extern
-    #elif
+    #elif defined(UKN_DLL_IMPORT)
         #define UKN_API __declspec(dllimport)
         #define UKN_EXTERN extern
     #else

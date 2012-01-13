@@ -228,7 +228,7 @@ namespace ukn {
             if(mCurrentAnimation != mAnimations.end()) {
                 return mCurrentAnimation->second.getCurrentFrameData().Scale * mParent->getScale();
             }
-            return mScale + mParent->getScale();
+            return mScale * mParent->getScale();
         }
         if(mCurrentAnimation != mAnimations.end()) {
             return mCurrentAnimation->second.getCurrentFrameData().Scale;
@@ -486,7 +486,7 @@ namespace ukn {
                         bone->setRotation(config->getFloat("rotation"));
                         bone->setVisible(config->getBool("visible", true));
                         bone->setOpacity(config->getFloat("opacity", 1.f));
-                        bone->setLayerDepth(config->getFloat("layer_depth", 0.5f));
+                        bone->setLayerDepth(config->getFloat("layer_depth", 0.f));
                    
                         bone->mInheritVisibility = config->getBool("inherit_visibility");
                         bone->mInheritRotation = config->getBool("inherit_rotation");
@@ -514,7 +514,7 @@ namespace ukn {
                                                 if(duration != 0) {
                                                     BoneKeyFrameData data;
                                                     data.Duration = duration;
-                                                    data.LayerDepth = config->getFloat("layer_depth");
+                                                    data.LayerDepth = config->getFloat("layer_depth", 0.f);
                                                     data.Visible = config->getBool("visible", true);
                                                     data.Opacity = config->getFloat("opacity", 1.f);
                                                     data.Rotation = config->getFloat("rotation");
@@ -609,18 +609,12 @@ namespace ukn {
     }
     
     inline void render_bone(SpriteBatch& spriteBatch, Bone& bone) {
-        Vector2 pos = bone.getPosition();
-        Vector2 scale = bone.getScale();
-        
         if(bone.getTexture()) {
             spriteBatch.draw(bone.getTexture(),
-                             pos.x,
-                             pos.y,
-                             bone.getTextureCenter().x,
-                             bone.getTextureCenter().y,
+                             bone.getPosition(),
+                             bone.getTextureCenter(),
                              bone.getRotation() * pi / 180.f,
-                             scale.x,
-                             scale.y,
+                             bone.getScale(),
                              bone.getLayerDepth());
         }
         

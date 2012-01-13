@@ -28,7 +28,7 @@ namespace ukn {
             if(!mDocument) {
                 mDocument = new pugi::xml_document;
             }
-            bool result = mDocument->load_buffer((void*)static_cast<MemoryStream*>(dataStream.get())->get(), dataStream->getSize(), pugi::encoding_wchar);
+            bool result = mDocument->load_buffer((void*)static_cast<MemoryStream*>(dataStream.get())->data(), dataStream->size(), pugi::encoding_wchar);
             if(result) {
                 mCurrNode = mDocument->root();
                 return result;

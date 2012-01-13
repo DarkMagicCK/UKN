@@ -25,6 +25,30 @@ namespace ukn {
         SBS_BackToFront,
         SBS_FrontToBack
     };
+    
+    struct SpriteDescriptor {
+        Vector2     position;
+        Vector2     scale;
+        Vector2     center;
+        float       rotation;
+        float       layer_depth;
+        Color       color;
+        Rectangle   source_rect;
+        Rectangle   dest_rect;
+        
+        bool    vflip;
+        bool    hflip;
+        
+        SpriteDescriptor();
+        SpriteDescriptor(const Vector2& pos,
+                         const Vector2& center,
+                         float rot,
+                         const Vector2& scale, 
+                         Color clr,
+                         float depth,
+                         bool vflip=false,
+                         bool hflip=false);
+    };
         
     class UKN_API SpriteBatch: public Renderable {
     protected:
@@ -52,23 +76,30 @@ namespace ukn {
         void begin(SpriteBatchSortMode mode = SBS_Deffered);
         void begin(SpriteBatchSortMode mode, const Matrix4& transformMat);
         
-        // must be called after render
+        // must be called after draw to render the SpriteBatch
         void end();
-        
-        void draw(const TexturePtr& texture, float x, float y, const Color& color=color::White);
-        void draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color=color::White);
-        void draw(const TexturePtr& texture, float x, float y, const Rectangle& src, const Color& color=color::White);
-        
-        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color=color::White);
-        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, const Color& color=color::White);
-        void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color=color::White);
-        
-        void draw(const TexturePtr& texture, float x, float y, float layerDepth, const Color& color=color::White);
-        void draw(const TexturePtr& texture, float x, float y, const Rectangle& src, float layerDetph, const Color& color=color::White);
+            
+        // draw with position
+        void draw(const TexturePtr& texture, const Vector2& pos, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const Vector2& pos, float layerDepth, const Color& color=color::White);
 
+        // draw with a custom destination rect
+        void draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color=color::White);
         void draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color=color::White);
-        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, float layerDepth, const Color& color=color::White);
-        void draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, float layerDepth, const Color& color=color::White);
+
+        // draw with custom source rect and position
+        void draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Color& color=color::White);        
+        void draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, float layerDetph, const Color& color=color::White);
+
+        // draw with custom source and destination rect
+        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color=color::White);
+        
+        // draw with position, center, rotation and scale
+        void draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color=color::White);
+        
+        // draw with custom descriptor
+        void draw(const TexturePtr& texture, const SpriteDescriptor& descriptor);
         
         Matrix4& getTransformMatrix();
         const Matrix4& getTransformMatrix() const;
@@ -79,20 +110,16 @@ namespace ukn {
         struct TextureObject {
             TextureObject();
             TextureObject(const TexturePtr& tex);
-            TextureObject(const TexturePtr& tex, float depth);
             
-            void buildVertices(float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color);
-            void buildVertices(const Rectangle& dstRect, float rot, const Color& color);
+            void buildVertices(const SpriteDescriptor&);
             
             bool operator<(const SpriteBatch::TextureObject& rhs) const;
             bool operator>(const SpriteBatch::TextureObject& rhs) const;
             bool operator!=(const SpriteBatch::TextureObject& rhs) const;
             
             TexturePtr  texture;
-            float       layerDepth;
-            
+            float       layer_depth;
             Vertex2D    vertices[6];
-            Rectangle   srcRect;
         };
         typedef Array<TextureObject> RenderQueue;
         RenderQueue mRenderQueue;

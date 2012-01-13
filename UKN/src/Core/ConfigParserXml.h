@@ -28,9 +28,9 @@ namespace ukn {
         
         virtual void close();
         
-        virtual bool hasNode(const ukn_string& node) const;
-        virtual ukn_string getCurrentNodeName() const;
-        virtual ukn_string getCurrentNodePath() const;
+        virtual bool        hasNode(const ukn_string& node) const;
+        virtual ukn_string  getCurrentNodeName() const;
+        virtual ukn_string  getCurrentNodePath() const;
         
         virtual bool toNode(const ukn_string& node);
         
@@ -41,17 +41,17 @@ namespace ukn {
         virtual bool hasAttribute(const ukn_string& attr) const;
         virtual std::vector<ukn_string> getAttributes() const;
         
-        virtual ukn_string getString(const ukn_string& attr) const;
-        virtual bool getBool(const ukn_string& attr) const;
-        virtual int32 getInt(const ukn_string& attr) const;
-        virtual float getFloat(const ukn_string& attr) const;
+        virtual ukn_string  getString(const ukn_string& attr) const;
+        virtual bool        getBool(const ukn_string& attr) const;
+        virtual int32       getInt(const ukn_string& attr) const;
+        virtual float       getFloat(const ukn_string& attr) const;
         
-        virtual ukn_string getString(const ukn_string& attr, const ukn_string& opt) const;
-        virtual bool getBool(const ukn_string& attr, bool opt) const;
-        virtual int32 getInt(const ukn_string& attr, int32 opt) const;
-        virtual float getFloat(const ukn_string& attr, float opt) const;
+        virtual ukn_string  getString(const ukn_string& attr, const ukn_string& opt) const;
+        virtual bool        getBool(const ukn_string& attr, bool opt) const;
+        virtual int32       getInt(const ukn_string& attr, int32 opt) const;
+        virtual float       getFloat(const ukn_string& attr, float opt) const;
         
-        ukn_string getFormattedString() const;
+        ukn_string  getFormattedString() const;
         
         virtual bool beginNode(const ukn_string& name);
         virtual void endNode();

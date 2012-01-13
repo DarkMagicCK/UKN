@@ -35,7 +35,7 @@ namespace ukn {
         uint64 max_time;
         uint64 min_time;
         
-        uint64 recored_frames;
+        uint64 recorded_frames;
         
         float time_ratio;
         float time_ratio_frame;
@@ -45,8 +45,14 @@ namespace ukn {
         ukn_string toFormattedString() const;
         
         ProfileData():
-        // avoid divid-by-zero
-        recored_frames(1) {
+        time(0),
+        average_time(0),
+        max_time(0),
+        min_time(0),
+        recorded_frames(1),
+        time_ratio(0),
+        time_ratio_frame(0),
+        name(ukn_string()) {
             
         }
     };

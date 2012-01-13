@@ -18,50 +18,118 @@
 
 namespace ukn {
     
+    SpriteDescriptor::SpriteDescriptor():
+    scale(Vector2(1.f, 1.f)),
+    rotation(0.f),
+    layer_depth(0.f),
+    color(color::White),
+    vflip(false),
+    hflip(false) {
+        
+    }
+    
+    SpriteDescriptor::SpriteDescriptor(const Vector2& pos,
+                                       const Vector2& ct,
+                                       float rot,
+                                       const Vector2& sc, 
+                                       Color clr,
+                                       float depth,
+                                       bool vf,
+                                       bool hf):
+    position(pos),
+    scale(sc),
+    center(ct),
+    rotation(rot),
+    layer_depth(depth),
+    color(clr),
+    vflip(vf),
+    hflip(hf) {
+        
+    }
+    
     SpriteBatch::TextureObject::TextureObject():
-    layerDepth(0.f),
-    srcRect(Rectangle(0, 0, 0, 0)) { 
+    layer_depth(0.f) { 
      
     }
         
     SpriteBatch::TextureObject::TextureObject(const TexturePtr& tex):
     texture(tex),
-    layerDepth(0.f) {
-        if(texture) {
-            srcRect.set(0, 0, texture->getWidth(), texture->getHeight());
-        }
+    layer_depth(0.f) {
     }
-        
-    SpriteBatch::TextureObject::TextureObject(const TexturePtr& tex, float depth):
-    texture(tex),
-    layerDepth(depth) {
-        if(texture) {
-            srcRect.set(0, 0, texture->getWidth(), texture->getHeight());
-        }
-    }
-       
-    void SpriteBatch::TextureObject::buildVertices(const Rectangle& dstRect, float rot, const Color& color) {
-        float u1 = 0, u2 = 0, v1 = 0, v2 = 0;
-        if(texture) {
-            u1 = srcRect.x1 / texture->getWidth();
-            u2 = srcRect.x2 / texture->getWidth();
-            v1 = srcRect.y1 / texture->getHeight();
-            v2 = srcRect.y2 / texture->getHeight();
-        }
-        
+    
+    void SpriteBatch::TextureObject::buildVertices(const SpriteDescriptor& descriptor) {
         Vertex2D tmpVert[4];
-        tmpVert[0].u = u1; tmpVert[0].v = v1;
-        tmpVert[1].u = u2; tmpVert[1].v = v1;
-        tmpVert[2].u = u2; tmpVert[2].v = v2;
-        tmpVert[3].u = u1; tmpVert[3].v = v2;
         
-        tmpVert[0].x = dstRect.x1; tmpVert[0].y = dstRect.y1; tmpVert[0].z = layerDepth;
-        tmpVert[1].x = dstRect.x2; tmpVert[1].y = dstRect.y1; tmpVert[0].z = layerDepth;
-        tmpVert[2].x = dstRect.x2; tmpVert[2].y = dstRect.y2; tmpVert[0].z = layerDepth;
-        tmpVert[3].x = dstRect.x1; tmpVert[3].y = dstRect.y2; tmpVert[0].z = layerDepth;
+        float u1 = 0, u2 = 1, v1 = 0, v2 = 1;
+        if(texture) {
+            if(!descriptor.source_rect.isEmpty()) {
+                u1 = descriptor.source_rect.x1 / texture->getWidth();
+                u2 = descriptor.source_rect.x2 / texture->getWidth();
+                v1 = descriptor.source_rect.y1 / texture->getHeight();
+                v2 = descriptor.source_rect.y2 / texture->getHeight();
+            }
+        }
+        
+        tmpVert[0].u = u1; tmpVert[0].v = v1; tmpVert[0].z = descriptor.layer_depth;
+        tmpVert[1].u = u2; tmpVert[1].v = v1; tmpVert[0].z = descriptor.layer_depth;
+        tmpVert[2].u = u2; tmpVert[2].v = v2; tmpVert[0].z = descriptor.layer_depth;
+        tmpVert[3].u = u1; tmpVert[3].v = v2; tmpVert[0].z = descriptor.layer_depth;
+        
+        if(descriptor.dest_rect.isEmpty()) {
+            float tx1 = -descriptor.center.x * descriptor.scale.x;
+            float ty1 = -descriptor.center.y * descriptor.scale.y;
+            float tx2, ty2;
+            
+            if(descriptor.source_rect.isEmpty()) {
+                tx2 = (texture->getWidth() - descriptor.center.x) * descriptor.scale.x;
+                ty2 = (texture->getHeight() - descriptor.center.y) * descriptor.scale.y;
+            } else {
+                tx2 = (descriptor.source_rect.x2 - descriptor.center.x) * descriptor.scale.x;
+                ty2 = (descriptor.source_rect.y2 - descriptor.center.x) * descriptor.scale.y;
+            }
+                        
+            if(descriptor.rotation != 0.0f) {
+                float cost = cosf(descriptor.rotation);
+                float sint = sinf(descriptor.rotation);
+                
+                tmpVert[0].x  = tx1*cost - ty1*sint + descriptor.position.x;
+                tmpVert[1].x  = tx2*cost - ty1*sint + descriptor.position.x;
+                tmpVert[2].x  = tx2*cost - ty2*sint + descriptor.position.x;
+                tmpVert[3].x  = tx1*cost - ty2*sint + descriptor.position.x;
+                
+                tmpVert[0].y  = tx1*sint + ty1*cost + descriptor.position.y;	
+                tmpVert[1].y  = tx2*sint + ty1*cost + descriptor.position.y;	
+                tmpVert[2].y  = tx2*sint + ty2*cost + descriptor.position.y;	
+                tmpVert[3].y  = tx1*sint + ty2*cost + descriptor.position.y;
+            }
+            else {
+                tmpVert[0].x = tx1 + descriptor.position.x; 
+                tmpVert[1].x = tx2 + descriptor.position.x; 
+                tmpVert[2].x = tmpVert[1].x; 
+                tmpVert[3].x = tmpVert[0].x; 
+                
+                tmpVert[0].y = ty1 + descriptor.position.y;
+                tmpVert[1].y = tmpVert[0].y;
+                tmpVert[2].y = ty2 + descriptor.position.y;
+                tmpVert[3].y = tmpVert[2].y;
+            }
+            
+        } else {
+            tmpVert[0].x = descriptor.dest_rect.x1; 
+            tmpVert[0].y = descriptor.dest_rect.y1; 
+            
+            tmpVert[1].x = descriptor.dest_rect.x2; 
+            tmpVert[1].y = descriptor.dest_rect.y1; 
+            
+            tmpVert[2].x = descriptor.dest_rect.x2; 
+            tmpVert[2].y = descriptor.dest_rect.y2; 
+            
+            tmpVert[3].x = descriptor.dest_rect.x1; 
+            tmpVert[3].y = descriptor.dest_rect.y2; 
+        }
         
         for(int i=0; i<4; ++i) {
-            tmpVert[i].color = color.toHWColor();
+            tmpVert[i].color = descriptor.color.toHWColor();
         }
         
         vertices[0] = tmpVert[0];
@@ -71,78 +139,20 @@ namespace ukn {
         vertices[3] = tmpVert[2];
         vertices[4] = tmpVert[3];
         vertices[5] = tmpVert[0];
+        
+        layer_depth = descriptor.layer_depth;
     }
-        
-    void SpriteBatch::TextureObject::buildVertices(float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color) {  
-        Vertex2D tmpVert[4];
-        
-        float u1 = 0, u2 = 0, v1 = 0, v2 = 0;
-        if(texture) {
-            u1 = srcRect.x1 / texture->getWidth();
-            u2 = srcRect.x2 / texture->getWidth();
-            v1 = srcRect.y1 / texture->getHeight();
-            v2 = srcRect.y2 / texture->getHeight();
-        }
-        
-        tmpVert[0].u = u1; tmpVert[0].v = v1; tmpVert[0].z = layerDepth;
-        tmpVert[1].u = u2; tmpVert[1].v = v1; tmpVert[0].z = layerDepth;
-        tmpVert[2].u = u2; tmpVert[2].v = v2; tmpVert[0].z = layerDepth;
-        tmpVert[3].u = u1; tmpVert[3].v = v2; tmpVert[0].z = layerDepth;
-        
-        float tx1 = -cx*scalex;
-        float ty1 = -cy*scaley;
-        float tx2 = (srcRect.x2-cx)*scalex;
-        float ty2 = (srcRect.y2-cy)*scaley;
-        
-        if(rot != 0.0f) {
-            float cost = cosf(rot);
-            float sint = sinf(rot);
-            
-            tmpVert[0].x  = tx1*cost - ty1*sint + x;
-            tmpVert[1].x  = tx2*cost - ty1*sint + x;
-            tmpVert[2].x  = tx2*cost - ty2*sint + x;
-            tmpVert[3].x  = tx1*cost - ty2*sint + x;
-            
-            tmpVert[0].y  = tx1*sint + ty1*cost + y;	
-            tmpVert[1].y  = tx2*sint + ty1*cost + y;	
-            tmpVert[2].y  = tx2*sint + ty2*cost + y;	
-            tmpVert[3].y  = tx1*sint + ty2*cost + y;
-        }
-        else {
-            tmpVert[0].x = tx1 + x; 
-            tmpVert[1].x = tx2 + x; 
-            tmpVert[2].x = tmpVert[1].x; 
-            tmpVert[3].x = tmpVert[0].x; 
-            
-            tmpVert[0].y = ty1 + y;
-            tmpVert[1].y = tmpVert[0].y;
-            tmpVert[2].y = ty2 + y;
-            tmpVert[3].y = tmpVert[2].y;
-        }
-        
-        for(int i=0; i<4; ++i) {
-            tmpVert[i].color = color.toHWColor();
-        }
-        
-        vertices[0] = tmpVert[0];
-        vertices[1] = tmpVert[1];
-        vertices[2] = tmpVert[2];
-        
-        vertices[3] = tmpVert[2];
-        vertices[4] = tmpVert[3];
-        vertices[5] = tmpVert[0];
-    }
-        
+         
     bool SpriteBatch::TextureObject::operator<(const SpriteBatch::TextureObject& rhs) const {
-        return this->layerDepth < rhs.layerDepth;
+        return this->layer_depth < rhs.layer_depth;
     }
     
     bool SpriteBatch::TextureObject::operator>(const SpriteBatch::TextureObject& rhs) const {
-        return this->layerDepth > rhs.layerDepth;
+        return this->layer_depth > rhs.layer_depth;
     }
     
     bool SpriteBatch::TextureObject::operator!=(const SpriteBatch::TextureObject& rhs) const {
-        return this->layerDepth != rhs.layerDepth;
+        return this->layer_depth != rhs.layer_depth;
     }
     
     SpriteBatch::SpriteBatch() {
@@ -180,7 +190,6 @@ namespace ukn {
     }
     
     void SpriteBatch::onRenderBegin() {
-        mRenderQueue.sort();
     }
     
     void SpriteBatch::onRenderEnd() {
@@ -253,8 +262,8 @@ namespace ukn {
         }
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, float x, float y, const Color& color) {
-        draw(texture, x, y, 0.f);
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Color& color) {
+        draw(texture, pos, 0.f);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color) {
@@ -265,17 +274,22 @@ namespace ukn {
         draw(texture, srcRect, dstRect, 0.f);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, const Color& color) {
-        draw(texture, x, y, cx, cy, rot, scalex, scaley, 0.f);
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, const Color& color) {
+        draw(texture, pos, center, rot, scale, 0.f);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, float x, float y, float layerDepth, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, float layerDepth, const Color& color) {
         if(!mBegan) {
             UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
-        TextureObject obj(texture, layerDepth);
-        obj.buildVertices(x, y, 0.f, 0.f, 0.f, 1.f, 1.f, color);
+        TextureObject obj(texture);
+        obj.buildVertices(SpriteDescriptor(pos,
+                                           Vector2(0.f, 0.f),
+                                           0.f,
+                                           Vector2(1.f, 1.f),
+                                           color,
+                                           layerDepth));
             
         mRenderQueue.insert(obj);
         
@@ -291,17 +305,13 @@ namespace ukn {
             UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
-        TextureObject obj(texture, layerDepth);
-        
-        Rectangle rdst = dstRect;
-        if(rdst.x2 == dstRect.x1)
-            rdst.x2 = texture->getWidth() + dstRect.x1;
-        if(dstRect.y2 == dstRect.y1)
-            rdst.y2 = texture->getHeight() + dstRect.y1;
-        
-        obj.buildVertices(rdst,
-                          0.f,
-                          color);
+        TextureObject obj(texture);
+               
+        SpriteDescriptor descriptor;
+        descriptor.dest_rect = dstRect;
+        descriptor.layer_depth = layerDepth;
+        descriptor.color = color;
+        obj.buildVertices(descriptor);
                           
         mRenderQueue.insert(obj);
         
@@ -313,28 +323,39 @@ namespace ukn {
         
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {
+        if(!mBegan) {
+            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+        }
+        TextureObject obj(texture);
+        
+        obj.buildVertices(SpriteDescriptor(pos,
+                                           center,
+                                           rot,
+                                           scale,
+                                           color,
+                                           layerDepth));
+        
+        mRenderQueue.insert(obj);
+        
+        for(int i=0; i<6; ++i) {
+            updateBoundingBox(obj.vertices[i].x,
+                              obj.vertices[i].y, 
+                              obj.vertices[i].z);
+        }
+    }
+        
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Color& color) {
+        draw(texture, pos, src, 0.f, color);
+    }
+    
+    void SpriteBatch::draw(const TexturePtr& texture, const SpriteDescriptor& descriptor) {
         if(!mBegan) {
             UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
-        TextureObject obj(texture, 0.f);
-        
-        obj.srcRect = srcRect;
-        if(obj.srcRect.x2 == 0 && srcRect.y2 == 0) {
-            obj.srcRect.x2 = texture->getWidth();
-            obj.srcRect.y2 = texture->getHeight();
-        }
-        
-        Rectangle rdst = dstRect;
-        if(dstRect.x2 == dstRect.x1)
-            rdst.x2 = texture->getWidth() + dstRect.x1;
-        if(dstRect.y2 == dstRect.y1)
-            rdst.y2 = texture->getHeight() + dstRect.y1;
-        
-        obj.buildVertices(rdst,
-                          rot,
-                          color);
+        TextureObject obj(texture);
+        obj.buildVertices(descriptor);
         
         mRenderQueue.insert(obj);
         
@@ -345,86 +366,22 @@ namespace ukn {
         }
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, float x, float y, float cx, float cy, float rot, float scalex, float scaley, float layerDepth, const Color& color) {
-        if(!mBegan) {
-            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
-        }
-        TextureObject obj(texture, layerDepth);
-        
-        obj.buildVertices(x,
-                          y,
-                          cx,
-                          cy,
-                          rot, 
-                          scalex, 
-                          scaley,
-                          color);
-        
-        mRenderQueue.insert(obj);
-        
-        for(int i=0; i<6; ++i) {
-            updateBoundingBox(obj.vertices[i].x,
-                              obj.vertices[i].y, 
-                              obj.vertices[i].z);
-        }
-    }
-    
-    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, float rot, float layerDepth, const Color& color) {
-        if(!mBegan) {
-            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
-        }
-        TextureObject obj(texture, layerDepth);
-        
-        obj.srcRect = srcRect;
-        if(obj.srcRect.x2 == 0 && srcRect.y2 == 0) {
-            obj.srcRect.x2 = texture->getWidth();
-            obj.srcRect.y2 = texture->getHeight();
-        }
-        
-        Rectangle rdst = dstRect;
-        if(dstRect.x2 == dstRect.x1)
-            rdst.x2 = texture->getWidth() + dstRect.x1;
-        if(dstRect.y2 == dstRect.y1)
-            rdst.y2 = texture->getHeight() + dstRect.y1;
-        
-        obj.buildVertices(rdst,
-                          rot,
-                          color);
-        
-        mRenderQueue.insert(obj);
-        
-        for(int i=0; i<6; ++i) {
-            updateBoundingBox(obj.vertices[i].x,
-                              obj.vertices[i].y, 
-                              obj.vertices[i].z);
-        }
-    }
-    
-    void SpriteBatch::draw(const TexturePtr& texture, float x, float y, const Rectangle& src, const Color& color) {
-        draw(texture, x, y, src, 0.f, color);
-    }
-    
-    void SpriteBatch::draw(const TexturePtr& texture, float x, float y, const Rectangle& srcRect, float layerDepth, const Color& color) {        
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& srcRect, float layerDepth, const Color& color) {        
         if(!mBegan) {
             UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
-        TextureObject obj(texture, layerDepth);
+        TextureObject obj(texture);
         
-        obj.srcRect = srcRect;
-        if(obj.srcRect.x2 == 0 && srcRect.y2 == 0) {
-            obj.srcRect.x2 = texture->getWidth();
-            obj.srcRect.y2 = texture->getHeight();
-        }
-
-        obj.buildVertices(x,
-                          y,
-                          0.f,
-                          0.f,
-                          0.f, 
-                          1.f, 
-                          1.f,
-                          color);
+        SpriteDescriptor descriptor(pos,
+                                    Vector2(0.f, 0.f),
+                                    0.f,
+                                    Vector2(1.f, 1.f),
+                                    color,
+                                    layerDepth);
+        
+        descriptor.source_rect = srcRect;
+        obj.buildVertices(descriptor);
         
         mRenderQueue.insert(obj);
         

@@ -127,8 +127,8 @@ namespace ukn {
             if(resource && resource->getResourceStream()) {
                 font_data = stream_to_memory_stream(resource->getResourceStream());
                 if(FT_New_Memory_Face(Font::FTLibrary::Instance().library, 
-                                      static_cast<MemoryStream*>(font_data.get())->get(), 
-                                      font_data->getSize(),
+                                      static_cast<MemoryStream*>(font_data.get())->data(), 
+                                      font_data->size(),
                                       0,
                                       &face)) {
                     return false;
@@ -416,7 +416,7 @@ namespace ukn {
                 if(gidx > 0 && gidx < mGlyphs.size()) {
                     FTGlyph& glyph = mGlyphs[gidx-1];
 
-                    mSpriteBatch->draw(glyph.texture, x+glyph.left, y+glyph.size-glyph.top, data.char_rot, data.clr);
+                    mSpriteBatch->draw(glyph.texture, Vector2(x+glyph.left, y+glyph.size-glyph.top), data.char_rot, data.clr);
                     
                     x += mGlyphs[gidx-1].texw + mGlyphs[gidx-1].left + data.kerning_width;
                 }

@@ -56,6 +56,9 @@ namespace ukn {
             if(it->texture != prevTexture) {
                 gd.bindTexture(prevTexture);
                 
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                
                 glInterleavedArrays(GL_T2F_C4UB_V3F, 
                                     0, 
                                     buffer.begin());

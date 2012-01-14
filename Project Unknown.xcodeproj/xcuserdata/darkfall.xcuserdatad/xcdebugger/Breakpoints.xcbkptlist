@@ -97,7 +97,9 @@
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "450"
-         endingLineNumber = "450">
+         endingLineNumber = "450"
+         landmarkName = "SkeletalAnimation::deserialize(const ConfigParserPtr&amp; config)"
+         landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
@@ -110,8 +112,8 @@
          endingColumnNumber = "9223372036854775807"
          startingLineNumber = "613"
          endingLineNumber = "613"
-         landmarkName = "SkeletalAnimation::addBone(const BonePtr&amp; bone, const ukn_string&amp; parent_name)"
-         landmarkType = "5">
+         landmarkName = "render_bone(SpriteBatch&amp; spriteBatch, Bone&amp; bone)"
+         landmarkType = "7">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"

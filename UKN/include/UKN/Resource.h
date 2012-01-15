@@ -21,7 +21,10 @@
 #include <map>
 #include <vector>
 #include <set>
+
+#ifdef UKN_OS_WINDOWS
 #include <unordered_map>
+#endif
 
 namespace ukn {
     

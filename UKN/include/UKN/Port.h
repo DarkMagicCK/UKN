@@ -13,7 +13,10 @@
 #include "UKN/RefCounted.h"
 
 #include <map>
+
+#ifdef UKN_OS_WINDOWS
 #include <unordered_map>
+#endif
 
 namespace ukn {
     

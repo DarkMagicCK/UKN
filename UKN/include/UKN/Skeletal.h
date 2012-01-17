@@ -22,54 +22,48 @@ namespace ukn {
     class Bone;
     
     struct BoneKeyFrameData {
-        Vector2 Scale;
-        Vector2 Position;
-        float   Rotation;
-        float   Opacity;
-        float   LayerDepth;
-        bool    Visible;
+        Vector2 scale;
+        Vector2 position;
+        float   rotation;
+        float   opacity;
+        float   layer_depth;
+        bool    visible;
         
-        int32   Duration;
+        int32   duration;
         
         BoneKeyFrameData():
-        Scale(Vector2(1.f, 1.f)),
-        Position(Vector2()),
-        Rotation(0),
-        Opacity(0),
-        LayerDepth(0),
-        Visible(true),
-        Duration(500) {
+        scale(Vector2(1.f, 1.f)),
+        position(Vector2()),
+        rotation(0),
+        opacity(0),
+        layer_depth(0),
+        visible(true),
+        duration(500) {
             
         }
     };
     
     inline BoneKeyFrameData lerp(const BoneKeyFrameData& t1, const BoneKeyFrameData& t2, real t) {
         BoneKeyFrameData data;
-        data.Scale = lerp(t1.Scale, t2.Scale, t);
-        data.Position = lerp(t1.Position, t2.Position, t);
-        data.Rotation = lerp(t1.Rotation, t2.Rotation, t);
-        data.Opacity = lerp(t1.Opacity, t2.Opacity, t);
-        data.LayerDepth = lerp(t1.LayerDepth, t2.LayerDepth, t);
+        data.scale = lerp(t1.scale, t2.scale, t);
+        data.position = lerp(t1.position, t2.position, t);
+        data.rotation = lerp(t1.rotation, t2.rotation, t);
+        data.opacity = lerp(t1.opacity, t2.opacity, t);
+        data.layer_depth = lerp(t1.layer_depth, t2.layer_depth, t);
         
         if(t < 1.0f)
-            data.Visible = t1.Visible;
+            data.visible = t1.visible;
         else
-            data.Visible = t2.Visible;
+            data.visible = t2.visible;
         
         return data;
     }
     
-    enum BoneAnimationStatus {
-        BAS_Playing,
-        BAS_Paused,
-        BAS_Stopped,
-    };
-    
     struct BoneAnimationCompleteArgs {
-        uint32 PastTime;
+        uint32 past_time;
         
         BoneAnimationCompleteArgs(uint32 past_time):
-        PastTime(past_time) {
+        past_time(past_time) {
             
         }
     };
@@ -77,13 +71,13 @@ namespace ukn {
     struct BoneAnimation {
         typedef std::vector<BoneKeyFrameData> KeyFrameList;
         
-        KeyFrameList KeyFrames;
+        KeyFrameList key_frames;
         
-        ukn_string  Name;
-        int         RepeatCount;
-        bool        Default;
+        ukn_string  name;
+        int         repeat_count;
+        bool        is_default;
         
-        Event<BoneAnimationCompleteArgs> CompleteEvent;
+        Event<BoneAnimationCompleteArgs> complete_event;
         
         BoneAnimation();
         ~BoneAnimation();
@@ -101,17 +95,17 @@ namespace ukn {
         uint32 getPausedTime() const;
         uint32 getTotalPlayedTime() const;
         
-        BoneAnimationStatus getStatus() const;
+        AnimationStatus getStatus() const;
         
         const BoneKeyFrameData& getCurrentFrameData() const;
         
     private:
-        void setStatus(BoneAnimationStatus status);
+        void setStatus(AnimationStatus status);
         
         int32               mCurrentTime;
         int32               mCurrentFrameIndex;
         int32               mCurrentRepeatCount;
-        BoneAnimationStatus mCurrentStatus;
+        AnimationStatus     mCurrentStatus;
         BoneKeyFrameData    mCurrentTransform;
         
         int32               mTotalPlayedTime;

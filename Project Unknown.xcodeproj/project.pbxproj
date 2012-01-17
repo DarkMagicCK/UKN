@@ -78,6 +78,7 @@
 		88AAC17814868AF5007A80A4 /* ConfigParserXml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17714868AF5007A80A4 /* ConfigParserXml.cpp */; };
 		88AAC17B1486EBDA007A80A4 /* AppleStuff.mm in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17A1486EBD9007A80A4 /* AppleStuff.mm */; };
 		88AAC17E1486F7FC007A80A4 /* FileUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */; };
+		88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */; };
 		88CC31201477915700558EA1 /* Project_Unknown.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88CC311F1477915700558EA1 /* Project_Unknown.1 */; };
 		88E3C3DE147F2CD400E8754D /* GLGraphicDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */; };
 		88E3C3E1147F2D6200E8754D /* GLGraphicFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3E0147F2D6200E8754D /* GLGraphicFactory.cpp */; };
@@ -274,6 +275,12 @@
 		885449951491E253006B8B60 /* ttunpat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ttunpat.h; sourceTree = "<group>"; };
 		885449971491E253006B8B60 /* ft2build.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ft2build.h; sourceTree = "<group>"; };
 		885449981491E253006B8B60 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfreetype.a; sourceTree = "<group>"; };
+		886DBA3C14C43DCB00652729 /* Basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Basic.h; sourceTree = "<group>"; };
+		886DBA3D14C43DCB00652729 /* Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
+		886DBA3E14C43DCB00652729 /* Interfaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interfaces.h; sourceTree = "<group>"; };
+		886DBA3F14C43DCB00652729 /* Lazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lazy.h; sourceTree = "<group>"; };
+		886DBA4014C43DCB00652729 /* OperationForEach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationForEach.h; sourceTree = "<group>"; };
+		886DBA4114C43DCB00652729 /* UnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitTest.h; sourceTree = "<group>"; };
 		88871FD4148CB1800026B2B8 /* glfw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glfw3.h; sourceTree = "<group>"; };
 		88871FD5148CB1800026B2B8 /* libglfw.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw.a; sourceTree = "<group>"; };
 		88871FD7148CB1800026B2B8 /* image_DXT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = image_DXT.c; sourceTree = "<group>"; };
@@ -379,6 +386,8 @@
 		88AAC17A1486EBD9007A80A4 /* AppleStuff.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppleStuff.mm; sourceTree = "<group>"; };
 		88AAC17C1486F787007A80A4 /* FileUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUtil.h; sourceTree = "<group>"; };
 		88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileUtil.cpp; sourceTree = "<group>"; };
+		88B0FD4814C5F38800346AC5 /* SequencialAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencialAnimation.h; sourceTree = "<group>"; };
+		88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequencialAnimation.cpp; sourceTree = "<group>"; };
 		88C3091114936612001262DF /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transform.h; sourceTree = "<group>"; };
 		88C3091314936617001262DF /* Sensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sensor.h; sourceTree = "<group>"; };
 		88C309141493661C001262DF /* Trigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trigger.h; sourceTree = "<group>"; };
@@ -632,6 +641,12 @@
 				88871FE9148CBB670026B2B8 /* Hashing.h */,
 				88AAC11A14868751007A80A4 /* Exception.h */,
 				88AAC11B14868751007A80A4 /* Factory.h */,
+				886DBA3C14C43DCB00652729 /* Basic.h */,
+				886DBA3D14C43DCB00652729 /* Error.h */,
+				886DBA3E14C43DCB00652729 /* Interfaces.h */,
+				886DBA3F14C43DCB00652729 /* Lazy.h */,
+				886DBA4014C43DCB00652729 /* OperationForEach.h */,
+				886DBA4114C43DCB00652729 /* UnitTest.h */,
 				88AAC11C14868751007A80A4 /* Font.h */,
 				88AAC11D14868751007A80A4 /* FrameBuffer.h */,
 				88AAC11E14868751007A80A4 /* Frustum.h */,
@@ -694,6 +709,7 @@
 				88EA1C4814A38A440079CCC4 /* AutoUpdate.h */,
 				88EA1C4414A34F970079CCC4 /* Animation.h */,
 				88F7219814A6E9EF00568FBE /* Skeletal.h */,
+				88B0FD4814C5F38800346AC5 /* SequencialAnimation.h */,
 				88EA1C6514A4DE370079CCC4 /* Sprite.h */,
 				88EA1C6A14A606DD0079CCC4 /* Audio.h */,
 				8850F0D414B9D095001A250C /* Port.h */,
@@ -945,6 +961,7 @@
 			children = (
 				88EA1C4614A34FB90079CCC4 /* Animation.cpp */,
 				88F7219A14A6EB2400568FBE /* Skeletal.cpp */,
+				88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -1078,6 +1095,7 @@
 				88093C9E14BC258000C6152F /* unzip.c in Sources */,
 				88093C9F14BC258000C6152F /* zip.c in Sources */,
 				88093CA014BC258000C6152F /* zutil.c in Sources */,
+				88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

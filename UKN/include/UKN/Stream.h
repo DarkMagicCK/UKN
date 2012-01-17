@@ -24,6 +24,10 @@ namespace ukn {
     
     class UKN_API IStream {
     public:
+    	virtual bool	canRead() const = 0;
+    	virtual bool	canWrite() const = 0;
+    	virtual bool 	canSeek() const = 0;
+    	
         virtual bool    seek(size_t pos) = 0;
         virtual size_t  read(uint8* buffer, size_t length) = 0;
         virtual size_t  write(const uint8* buffer, size_t length) = 0;
@@ -41,11 +45,13 @@ namespace ukn {
             write((uint8*)&val, sizeof(T));
             return *this;
         }
+        
         template<typename T>
         IStream& operator>>(T& val) {
             read((uint8*)&val, sizeof(T));
             return *this;
         }
+        
         IStream& operator<<(const char* val) {
             write((const uint8*)val, strlen(val));
             return *this;
@@ -78,7 +84,7 @@ namespace ukn {
 		
         // give memory management to MemoryStream
 		void set(uint8* data, size_t length);
-        // only holds the data pointer, do not hold memory management
+        // only holds the data pointer, does not hold memory management
         void map(uint8* data, size_t length);
         size_t write(const uint8* data, size_t length);
 
@@ -135,6 +141,10 @@ namespace ukn {
         
         uint8 operator[](size_t index);
         
+        bool canRead() const;
+        bool canWrite() const;
+        bool canSeek() const;
+        
 	private:
 		size_t mCurrPos;
         Array<uint8> mData;
@@ -146,7 +156,7 @@ namespace ukn {
         if(this->mCurrPos == this->size()) return 0;
         
         uint32 size = sizeof(T);
-        if(this->mCurrPos+size <= this->size()) {
+        if(this->mCurrPos + size <= this->size()) {
             T t;
             memcpy(&t, (void*)(data()+this->mCurrPos), size);
             this->mCurrPos += size;
@@ -207,7 +217,10 @@ namespace ukn {
         FileStreamWin32();
         virtual ~FileStreamWin32();
         virtual bool open(const String& filename, bool canwrite = false, bool append = false, bool nocache = false);
-
+	
+		bool canRead() const;
+        bool canWrite() const;
+        bool canSeek() const;
         
         virtual void close();
         virtual void truncate();
@@ -222,6 +235,7 @@ namespace ukn {
         
     private:
         HANDLE file;
+        bool canwrite;
     };
     
     typedef FileStreamWin32 FileStream;
@@ -236,6 +250,10 @@ namespace ukn {
         virtual ~FileStreamPosix();
         virtual bool open(const String& filename, bool canwrite = false, bool append = false, bool nocache = false);
         
+        bool canRead() const;
+        bool canWrite() const;
+        bool canSeek() const;
+        
         virtual void close();
         virtual void truncate();
         virtual size_t size() const;
@@ -249,6 +267,7 @@ namespace ukn {
         
     private:
         bool nocache;
+        bool canwrite;
         FILE* file;
     };
     
@@ -274,6 +293,10 @@ namespace ukn {
         explicit NetStream(uint16 port);
 
         ~NetStream();
+        
+        bool canRead() const;
+        bool canWrite() const;
+        bool canSeek() const;
         
         // wait for a connection
         // port no. 0-32767

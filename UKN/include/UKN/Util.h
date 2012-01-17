@@ -12,6 +12,7 @@
 #include "UKN/Platform.h"
 #include "UKN/Ptr.h"
 #include "UKN/Preprocessor.h"
+#include "UKN/Interfaces.h"
 
 #include <algorithm>
 #include <list>
@@ -21,7 +22,7 @@ namespace ukn {
     // array for POD
     // *** does NOT call constructors
     template<typename T>
-    class Array {
+    class Array: public IEnumerable<T> {
     public:
         typedef T* iterator;
         typedef const T* const_iterator;
@@ -92,11 +93,60 @@ namespace ukn {
 
         void map(T* mappedPtr, size_t size);
         void set(T* ptr, size_t size);
-
-        void growTo(size_t capacity);
+        
+        // Enumerator;
+    public:
+        
+        class Enumerator: public IEnumerator<T> {
+        public:
+            Enumerator(const Array<T>& parent):
+            mIndex(0),
+            mParent(parent) {
+                
+            }
+            
+            IEnumerator<T>* clone() const {
+                return new Array<T>::Enumerator(mParent);
+            }
+            
+            const T& current() const {
+                return mParent[mIndex];
+            }
+            
+            intPtr index() const {
+                return mIndex;
+            }
+            
+            bool next() {
+                if(mIndex < mParent.size()) {
+                    mIndex++;
+                    return true;
+                }
+                return false;
+            }
+            
+            bool available() const {
+                return mIndex < mParent.size();
+            }
+            
+            void reset() {
+                mIndex = 0;
+            }
+            
+        private:
+            T* mCurrent;
+            intPtr mIndex;
+            const Array<T>& mParent;
+        };
+        
+        IEnumerator<T>* createEnumerator() const {
+            return new Array<T>::Enumerator(*this);
+        }
 
     private:
         void destroyAll();
+        void growTo(size_t capacity);
+
         void destroy(T* elm);
         void copy(const Array<T>& src);
         void grow();
@@ -1166,23 +1216,23 @@ namespace ukn {
     } // namespace tuple
 
     template<typename T1, typename T2, typename T3, typename T4, typename T5>
-    struct SimpleTuple;
+    struct Tuple;
 
     template<typename T>
-    struct SimpleTuple<T, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type> {
-        SimpleTuple() { }
+    struct Tuple<T, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type> {
+        Tuple() { }
 
-        SimpleTuple(T a0):
+        Tuple(T a0):
         mA0(a0) {
 
         }
 
-        typedef SimpleTuple<T, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type> SelfType;
+        typedef Tuple<T, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type> SelfType;
 
         T get0() { return this->mA0; }
 
         template<typename AT>
-        SimpleTuple& operator=(const SimpleTuple<AT, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type>& rhs) {
+        Tuple& operator=(const Tuple<AT, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type>& rhs) {
             this->mA0 = rhs.mA0;
             return *this;
         }
@@ -1191,22 +1241,22 @@ namespace ukn {
     };
 
     template<typename T, typename T1>
-    struct SimpleTuple<T, T1, tuple::null_type, tuple::null_type, tuple::null_type> {
-        SimpleTuple() { }
+    struct Tuple<T, T1, tuple::null_type, tuple::null_type, tuple::null_type> {
+        Tuple() { }
 
-        SimpleTuple(T a0, T1 a1):
+        Tuple(T a0, T1 a1):
         mA0(a0),
         mA1(a1) {
 
         }
 
-        typedef SimpleTuple<T, T1, tuple::null_type, tuple::null_type, tuple::null_type> SelfType;
+        typedef Tuple<T, T1, tuple::null_type, tuple::null_type, tuple::null_type> SelfType;
 
         T get0() { return this->mA0; }
         T1 get1() { return this->mA1; }
 
         template<typename AT, typename AT1>
-        SimpleTuple& operator=(const SimpleTuple<AT, AT1, tuple::null_type, tuple::null_type, tuple::null_type>& rhs) {
+        Tuple& operator=(const Tuple<AT, AT1, tuple::null_type, tuple::null_type, tuple::null_type>& rhs) {
             this->mA0 = rhs.mA0;
             this->mA1 = rhs.mA1;
             return *this;
@@ -1217,24 +1267,24 @@ namespace ukn {
     };
 
     template<typename T, typename T1, typename T2>
-    struct SimpleTuple<T, T1, T2, tuple::null_type, tuple::null_type> {
-        SimpleTuple() { }
+    struct Tuple<T, T1, T2, tuple::null_type, tuple::null_type> {
+        Tuple() { }
 
-        SimpleTuple(T a0, T1 a1, T2 a2):
+        Tuple(T a0, T1 a1, T2 a2):
         mA0(a0),
         mA1(a1),
         mA2(a2) {
 
         }
 
-        typedef SimpleTuple<T, T1, T2, tuple::null_type, tuple::null_type> SelfType;
+        typedef Tuple<T, T1, T2, tuple::null_type, tuple::null_type> SelfType;
 
         T get0() { return this->mA0; }
         T1 get1() { return this->mA1; }
         T2 get2() { return this->mA2; }
 
         template<typename AT, typename AT1, typename AT2>
-        SimpleTuple& operator=(const SimpleTuple<AT, AT1, AT2, tuple::null_type, tuple::null_type>& rhs) {
+        Tuple& operator=(const Tuple<AT, AT1, AT2, tuple::null_type, tuple::null_type>& rhs) {
             this->mA0 = rhs.mA0;
             this->mA1 = rhs.mA1;
             this->mA2 = rhs.mA2;
@@ -1247,10 +1297,10 @@ namespace ukn {
     };
 
     template<typename T, typename T1, typename T2, typename T3>
-    struct SimpleTuple<T, T1, T2, T3, tuple::null_type> {
-        SimpleTuple() { }
+    struct Tuple<T, T1, T2, T3, tuple::null_type> {
+        Tuple() { }
 
-        SimpleTuple(T a0, T1 a1, T2 a2, T3 a3):
+        Tuple(T a0, T1 a1, T2 a2, T3 a3):
         mA0(a0),
         mA1(a1),
         mA2(a2),
@@ -1258,7 +1308,7 @@ namespace ukn {
 
         }
 
-        typedef SimpleTuple<T, T1, T2, T3, tuple::null_type> SelfType;
+        typedef Tuple<T, T1, T2, T3, tuple::null_type> SelfType;
 
         T get0() { return this->mA0; }
         T1 get1() { return this->mA1; }
@@ -1266,7 +1316,7 @@ namespace ukn {
         T3 get3() { return this->mA3; }
 
         template<typename AT, typename AT1, typename AT2, typename AT3>
-        SimpleTuple& operator=(const SimpleTuple<AT, AT1, AT2, AT3, tuple::null_type>& rhs) {
+        Tuple& operator=(const Tuple<AT, AT1, AT2, AT3, tuple::null_type>& rhs) {
             this->mA0 = rhs.mA0;
             this->mA1 = rhs.mA1;
             this->mA2 = rhs.mA2;
@@ -1281,10 +1331,10 @@ namespace ukn {
     };
 
     template<typename T, typename T1, typename T2, typename T3, typename T4>
-    struct SimpleTuple {
-        SimpleTuple() { }
+    struct Tuple {
+        Tuple() { }
 
-        SimpleTuple(T a0, T1 a1, T2 a2, T3 a3, T4 a4):
+        Tuple(T a0, T1 a1, T2 a2, T3 a3, T4 a4):
         mA0(a0),
         mA1(a1),
         mA2(a2),
@@ -1293,7 +1343,7 @@ namespace ukn {
 
         }
 
-        typedef SimpleTuple<T, T1, T2, T3, T4> SelfType;
+        typedef Tuple<T, T1, T2, T3, T4> SelfType;
 
         T get0() { return this->mA0; }
         T1 get1() { return this->mA1; }
@@ -1302,7 +1352,7 @@ namespace ukn {
         T4 get4() { return this->mA4; }
 
         template<typename AT, typename AT1, typename AT2, typename AT3, typename AT4>
-        SimpleTuple& operator=(const SimpleTuple<AT, AT1, AT2, AT3, AT4>& rhs) {
+        Tuple& operator=(const Tuple<AT, AT1, AT2, AT3, AT4>& rhs) {
             this->mA0 = rhs.mA0;
             this->mA1 = rhs.mA1;
             this->mA2 = rhs.mA2;

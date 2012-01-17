@@ -55,6 +55,18 @@ namespace ukn {
         return *this;
     }
     
+    bool MemoryStream::canRead() const {
+    	return true;
+    }
+    
+	bool MemoryStream::canWrite() const {
+		return true;
+	}
+	
+    bool MemoryStream::canSeek() const {
+    	return true;
+    }
+    
     void MemoryStream::close() {
     }
     
@@ -94,7 +106,7 @@ namespace ukn {
 	}
         
     void MemoryStream::resize(size_t newsize) {
-         mData.growTo(newsize);
+         mData.realloc(newsize, 0);
     }
 	
 	size_t MemoryStream::write(const uint8* data, size_t length) {
@@ -206,6 +218,8 @@ namespace ukn {
     bool FileStreamWin32::open(const String& filename, bool canwrite, bool append, bool nocache) {
         if(file)
             return false;
+            
+        this->canwrite = canwrite;
         
         file = CreateFileW(filename.c_str(), 
                            (canwrite ? GENERIC_WRITE : 0) | GENERIC_READ, FILE_SHARE_READ, NULL, canwrite ? OPEN_ALWAYS : OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL | (nocache ? FILE_FLAG_WRITE_THROUGH : 0), 
@@ -217,6 +231,18 @@ namespace ukn {
             SetFilePointer(file, 0, NULL, FILE_END);
         }
 		return true;
+    }
+    
+    bool FileStreamWin32::canRead() const {
+    	return true;
+    }
+    
+	bool FileStreamWin32::canWrite() const {
+		return canwrite;
+	}
+	
+    bool FileStreamWin32::canSeek() const {
+    	return true;
     }
     
     void FileStreamWin32::close() {
@@ -282,11 +308,24 @@ namespace ukn {
         close();
     }
     
+    bool FileStreamPosix::canRead() const {
+    	return true;
+    }
+    
+	bool FileStreamPosix::canWrite() const {
+		return canwrite;
+	}
+	
+    bool FileStreamPosix::canSeek() const {
+    	return true;
+    }
+    
     bool FileStreamPosix::open(const String& filename, bool canwrite, bool append, bool nocache) {
         if(file != NULL)
             return false;
         
         this->nocache = nocache;
+        this->canwrite = canwrite;
         file = fopen(wstring_to_string(filename).c_str(), canwrite ? (append ? "a+b" : "r+b") : "rb");
         if(file == NULL) {
             if(canwrite)
@@ -843,6 +882,18 @@ namespace ukn {
     void NetStream::close() {
         if(!connection->close())
             setstate(ios_base::failbit);
+    }
+    
+    bool NetStream::canRead() const {
+    	return true;
+    }
+    
+	bool NetStream::canWrite() const {
+		return true;
+	}
+	
+    bool NetStream::canSeek() const {
+    	return false;
     }
     
     bool NetStream::is_open() const {

@@ -16,13 +16,13 @@
 namespace ukn {
     
     BoneAnimation::BoneAnimation():
-    Name(ukn_string()),
-    RepeatCount(1),
-    Default(false),
+    name(ukn_string()),
+    repeat_count(1),
+    is_default(false),
     mCurrentTime(0),
     mCurrentFrameIndex(-1),
     mCurrentRepeatCount(0),
-    mCurrentStatus(BAS_Stopped),
+    mCurrentStatus(AS_Stopped),
     mCurrentTransform(BoneKeyFrameData()),
     mTotalPlayedTime(0),
     mPausedTime(0) {
@@ -34,48 +34,48 @@ namespace ukn {
     }
     
     void BoneAnimation::play() {
-        setStatus(BAS_Playing);
+        setStatus(AS_Playing);
     }
     
     void BoneAnimation::stop() {
-        setStatus(BAS_Stopped);
+        setStatus(AS_Stopped);
     }
     
     void BoneAnimation::pause() {
-        setStatus(BAS_Paused);
+        setStatus(AS_Paused);
     }
     
     void BoneAnimation::update(uint32 deltaTime) {
         switch(mCurrentStatus) {
-            case BAS_Playing: {
+            case AS_Playing: {
                 mCurrentTime += deltaTime;
                 mTotalPlayedTime += deltaTime;
                 
-                BoneKeyFrameData& data = KeyFrames[mCurrentFrameIndex];
+                BoneKeyFrameData& data = key_frames[mCurrentFrameIndex];
                                 
-                if(mCurrentTime >= data.Duration) {
+                if(mCurrentTime >= data.duration) {
                     mCurrentTime = 0;
                     
                     ++mCurrentFrameIndex;
-                    if(mCurrentFrameIndex >= KeyFrames.size()-1) {
+                    if(mCurrentFrameIndex >= key_frames.size()-1) {
                         mCurrentFrameIndex = 0;
                         
                         ++mCurrentRepeatCount;
                         
-                        if(mCurrentRepeatCount > RepeatCount) {
-                            setStatus(BAS_Stopped);
+                        if(mCurrentRepeatCount > repeat_count) {
+                            setStatus(AS_Stopped);
                         }
                     }
                 } else {
                     mCurrentTransform = lerp(data,
-                                             KeyFrames[mCurrentFrameIndex+1],
-                                             (float) mCurrentTime / data.Duration);
+                                             key_frames[mCurrentFrameIndex+1],
+                                             (float) mCurrentTime / data.duration);
                     
                 }
                 break;
             }
                 
-            case BAS_Paused:
+            case AS_Paused:
                 mPausedTime += deltaTime;
                 break;
                 
@@ -87,8 +87,8 @@ namespace ukn {
     size_t BoneAnimation::getTimePos(uint32 time) const {
         uint32 prevTime = 0;
         size_t i = 0;
-        while(i < KeyFrames.size() && prevTime + KeyFrames[i].Duration < time) {
-            prevTime += KeyFrames[i].Duration;
+        while(i < key_frames.size() && prevTime + key_frames[i].duration < time) {
+            prevTime += key_frames[i].duration;
             ++i;
         }
         return i;
@@ -97,8 +97,8 @@ namespace ukn {
     size_t BoneAnimation::getTimePos(uint32 time, uint32& prevTime) const {
         prevTime = 0;
         size_t i = 0;
-        while(i < KeyFrames.size() && prevTime + KeyFrames[i].Duration < time) {
-            prevTime += KeyFrames[i].Duration;
+        while(i < key_frames.size() && prevTime + key_frames[i].duration < time) {
+            prevTime += key_frames[i].duration;
             ++i;
         }
         return i;
@@ -106,8 +106,8 @@ namespace ukn {
     
     uint32 BoneAnimation::getDuration() const {
         uint32 duration = 0;
-        UKN_FOR_EACH(BoneKeyFrameData& data, KeyFrames) {
-            duration += data.Duration;
+        UKN_FOR_EACH(BoneKeyFrameData& data, key_frames) {
+            duration += data.duration;
         }
         return duration;
     }
@@ -120,7 +120,7 @@ namespace ukn {
         return mTotalPlayedTime;
     }
     
-    BoneAnimationStatus BoneAnimation::getStatus() const {
+    AnimationStatus BoneAnimation::getStatus() const {
         return mCurrentStatus;
     }
     
@@ -128,29 +128,29 @@ namespace ukn {
         return mCurrentTransform;
     }
     
-    void BoneAnimation::setStatus(BoneAnimationStatus status) {
+    void BoneAnimation::setStatus(AnimationStatus status) {
         mCurrentStatus = status;
         
         switch(status) {
-            case BAS_Playing:
-                if(KeyFrames.size() > 0) {
+            case AS_Playing:
+                if(key_frames.size() > 0) {
                     mCurrentTime = 0;
                     mCurrentFrameIndex = 0;
                     mCurrentRepeatCount = 0;
                     
-                    mCurrentTransform = KeyFrames[0];
+                    mCurrentTransform = key_frames[0];
                 
                     mPausedTime = 0;
                     mTotalPlayedTime = 0;
                 } else 
-                    mCurrentStatus = BAS_Stopped;
+                    mCurrentStatus = AS_Stopped;
                 break;
                 
-            case BAS_Paused:
+            case AS_Paused:
                 mPausedTime = 0;
                 break;
                 
-            case BAS_Stopped:   
+            case AS_Stopped:   
                 mCurrentTime = 0;
                 mCurrentFrameIndex = -1;
                 mPausedTime = 0;
@@ -158,7 +158,7 @@ namespace ukn {
                 mTotalPlayedTime = 0;
                 
                 BoneAnimationCompleteArgs args(mTotalPlayedTime);
-                CompleteEvent.raise(this, args);
+                complete_event.raise(this, args);
                 break;
         }
     }
@@ -201,12 +201,12 @@ namespace ukn {
     float Bone::getRotation() const {
         if(mInheritRotation && mParent) {
             if(mCurrentAnimation != mAnimations.end()) {
-                return mCurrentAnimation->second.getCurrentFrameData().Rotation + mParent->getRotation();
+                return mCurrentAnimation->second.getCurrentFrameData().rotation + mParent->getRotation();
             }
             return mRotation + mParent->getRotation();
         }
         if(mCurrentAnimation != mAnimations.end()) {
-            return mCurrentAnimation->second.getCurrentFrameData().Rotation;
+            return mCurrentAnimation->second.getCurrentFrameData().rotation;
         }
         return mRotation;
     }
@@ -214,12 +214,12 @@ namespace ukn {
     float Bone::getOpacity() const {
         if(mInheritOpacity && mParent) {
             if(mCurrentAnimation != mAnimations.end()) {
-                return mCurrentAnimation->second.getCurrentFrameData().Opacity + mParent->getOpacity();
+                return mCurrentAnimation->second.getCurrentFrameData().opacity + mParent->getOpacity();
             }
             return mRotation + mParent->getOpacity();
         }
         if(mCurrentAnimation != mAnimations.end()) {
-            return mCurrentAnimation->second.getCurrentFrameData().Opacity;
+            return mCurrentAnimation->second.getCurrentFrameData().opacity;
         }
         return mRotation;
     }
@@ -227,12 +227,12 @@ namespace ukn {
     Vector2 Bone::getScale() const {
         if(mInheritScale && mParent) {
             if(mCurrentAnimation != mAnimations.end()) {
-                return mCurrentAnimation->second.getCurrentFrameData().Scale * mParent->getScale();
+                return mCurrentAnimation->second.getCurrentFrameData().scale * mParent->getScale();
             }
             return mScale * mParent->getScale();
         }
         if(mCurrentAnimation != mAnimations.end()) {
-            return mCurrentAnimation->second.getCurrentFrameData().Scale;
+            return mCurrentAnimation->second.getCurrentFrameData().scale;
         }
         return mScale;
     }
@@ -247,12 +247,12 @@ namespace ukn {
         
         if(mInheritPosition && mParent) {
             if(mCurrentAnimation != mAnimations.end()) {
-                return mCurrentAnimation->second.getCurrentFrameData().Position + mParent->getPosition();
+                return mCurrentAnimation->second.getCurrentFrameData().position + mParent->getPosition();
             }
             return mPosition + mParent->getPosition();
         }
         if(mCurrentAnimation != mAnimations.end()) {
-            return mCurrentAnimation->second.getCurrentFrameData().Position;
+            return mCurrentAnimation->second.getCurrentFrameData().position;
         }
         return mPosition;
     }
@@ -260,12 +260,12 @@ namespace ukn {
     bool Bone::isVisible() const {
         if(mInheritVisibility && mParent) {
             if(mCurrentAnimation != mAnimations.end()) {
-                return mCurrentAnimation->second.getCurrentFrameData().Visible & mParent->isVisible();
+                return mCurrentAnimation->second.getCurrentFrameData().visible & mParent->isVisible();
             }
             return mVisible & mParent->isVisible();
         }
         if(mCurrentAnimation != mAnimations.end()) {
-            return mCurrentAnimation->second.getCurrentFrameData().Visible;
+            return mCurrentAnimation->second.getCurrentFrameData().visible;
         }
         return mVisible;
     }
@@ -506,29 +506,29 @@ namespace ukn {
                                     ukn_string anim_name = config->getString("name");
                                     if(!anim_name.empty()) {
                                         BoneAnimation anim;
-                                        anim.Name = anim_name;
-                                        anim.RepeatCount = config->getInt("repeat_count");
-                                        anim.Default = config->getBool("default");
-                                        if(anim.Default)
-                                            mDefaultAnimation = anim.Name;
+                                        anim.name = anim_name;
+                                        anim.repeat_count = config->getInt("repeat_count");
+                                        anim.is_default = config->getBool("default");
+                                        if(anim.is_default)
+                                            mDefaultAnimation = anim.name;
                                         
                                         if(config->toFirstChild()) {
                                             do {
                                                 uint32 duration = config->getInt("duration");
                                                 if(duration != 0) {
                                                     BoneKeyFrameData data;
-                                                    data.Duration = duration;
-                                                    data.LayerDepth = config->getFloat("layer_depth", 0.f);
-                                                    data.Visible = config->getBool("visible", true);
-                                                    data.Opacity = config->getFloat("opacity", 1.f);
-                                                    data.Rotation = config->getFloat("rotation");
+                                                    data.duration = duration;
+                                                    data.layer_depth = config->getFloat("layer_depth", 0.f);
+                                                    data.visible = config->getBool("visible", true);
+                                                    data.opacity = config->getFloat("opacity", 1.f);
+                                                    data.rotation = config->getFloat("rotation");
                                                     
-                                                    data.Position = Vector2(config->getFloat("x"),
+                                                    data.position = Vector2(config->getFloat("x"),
                                                                             config->getFloat("y"));
-                                                    data.Scale = Vector2(config->getFloat("scale_x", 1.f),
+                                                    data.scale = Vector2(config->getFloat("scale_x", 1.f),
                                                                         config->getFloat("scale_y", 1.f));
                                                     
-                                                    anim.KeyFrames.push_back(data);
+                                                    anim.key_frames.push_back(data);
                                                 }
                                             } while(config->toNextChild());
                                             
@@ -539,7 +539,7 @@ namespace ukn {
                                         
                                         if(bone == mRoot) {
                                             std::pair<Bone::AnimationMap::iterator, bool> it = bone->getAnimation().insert(std::make_pair(anim_name, anim));
-                                            it.first->second.CompleteEvent += Bind(this, &SkeletalAnimation::onAnimationComplete);
+                                            it.first->second.complete_event += Bind(this, &SkeletalAnimation::onAnimationComplete);
                                         } else {
                                             bone->getAnimation().insert(std::make_pair(anim_name, anim));
                                         }

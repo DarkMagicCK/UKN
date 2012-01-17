@@ -25,13 +25,13 @@ namespace ukn {
     // storyboard
     StoryBoard::StoryBoard():
     mDuration(0),
-    mStatus(AS_Stop),
+    mStatus(AS_Stopped),
     mLastUpdateTime(0) {
         
     }
     
     StoryBoard::~StoryBoard() {
-        setStatus(AS_Stop);
+        setStatus(AS_Stopped);
     }
     
     StoryBoard::AnimationSet& StoryBoard::children() {
@@ -49,7 +49,7 @@ namespace ukn {
     void StoryBoard::setStatus(AnimationStatus status) {
         switch(status) {
             case AS_Playing:
-                if(AS_Stop == mStatus) {
+                if(AS_Stopped == mStatus) {
                     mStoryBoardStartTime = FrameCounter::Instance().getRunningTime();
                     getDuration();
                     mLastUpdateTime = 0;
@@ -68,9 +68,9 @@ namespace ukn {
                 }
                 break;
                 
-            case AS_Stop:
+            case AS_Stopped:
                 if(AS_Playing == mStatus || AS_Paused == mStatus) {
-                    mStatus = AS_Stop;
+                    mStatus = AS_Stopped;
                     StoryBoardManager::Instance().delStoryBoard(this);
 
                     StoryBoardCompletedEventArgs args;
@@ -90,7 +90,7 @@ namespace ukn {
     }
     
     void StoryBoard::stop() {
-        setStatus(AS_Stop);
+        setStatus(AS_Stopped);
     }
     
     uint32 StoryBoard::getDuration() {
@@ -131,7 +131,7 @@ namespace ukn {
         }
         mLastUpdateTime = pass_time;
         if(pass_time > mDuration) {
-            mStatus = AS_Stop;
+            mStatus = AS_Stopped;
             StoryBoardCompletedEventArgs args;
             args.pass_time = mDuration;
             mCompleteEvent.raise(this, args);
@@ -170,7 +170,7 @@ namespace ukn {
         StoryBoardList::iterator end = mStoryBoards.end();
         
         while(it != end) {
-            if((*it)->getStatus() == AS_Stop) {
+            if((*it)->getStatus() == AS_Stopped) {
                 it = mStoryBoards.erase(it);
             } else {
                 (*it)->update(curr_time);

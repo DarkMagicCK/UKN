@@ -22,6 +22,12 @@
 
 namespace ukn {
     
+    enum AnimationStatus {
+        AS_Playing,
+        AS_Paused,
+        AS_Stopped,
+    };
+    
     class Animation {
     public:
         virtual ~Animation();
@@ -166,15 +172,6 @@ namespace ukn {
     protected:
         KeyFrameList mKeyFrames;
     };
-    
-    
-        
-    enum AnimationStatus {
-        AS_Stop,
-        AS_Playing,
-        AS_Paused,
-    };
-    
     
     struct StoryBoardCompletedEventArgs {
         uint32 pass_time;

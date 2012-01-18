@@ -252,7 +252,7 @@ namespace ukn {
     
     typedef SharedPtr<StoryBoard> StoryBoardPtr;
     
-    class AnimationPlayer: public ConfigSerializable {
+    class AnimationPlayer: public IConfigSerializable {
     public:
         AnimationPlayer();
         ~AnimationPlayer();

@@ -33,7 +33,7 @@ namespace ukn {
         return compo_name; \
     }
     
-    class Component: Uncopyable, public ConfigSerializable {
+    class Component: Uncopyable, public IConfigSerializable {
     public:
         Component();
         // force base class

@@ -1,3 +1,6 @@
+#ifndef Project_Unknown_Basic_H_
+#define Project_Unknown_Basic_H_
+
 #include "UKN/Uncopyable.h"
 #include "UKN/Platform.h"
 
@@ -44,3 +47,5 @@ namespace ukn {
     template<typename T> struct POD<volatile T> { enum { Value = POD<T>::Value }; };
 
 } // namespace ukn
+
+#endif

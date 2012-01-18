@@ -128,26 +128,31 @@ namespace ukn {
         return mCurrentTransform;
     }
     
-    void BoneAnimation::setStatus(AnimationStatus status) {
-        mCurrentStatus = status;
-        
+    void BoneAnimation::setStatus(AnimationStatus status) {        
         switch(status) {
             case AS_Playing:
-                if(key_frames.size() > 0) {
-                    mCurrentTime = 0;
-                    mCurrentFrameIndex = 0;
-                    mCurrentRepeatCount = 0;
+                if(mCurrentStatus != AS_Paused) {
+                    if(key_frames.size() > 0) {
+                        mCurrentTime = 0;
+                        mCurrentFrameIndex = 0;
+                        mCurrentRepeatCount = 0;
                     
-                    mCurrentTransform = key_frames[0];
+                        mCurrentTransform = key_frames[0];
                 
+                        mPausedTime = 0;
+                        mTotalPlayedTime = 0;
+                    } else 
+                        mCurrentStatus = AS_Stopped;
+                } else {
                     mPausedTime = 0;
-                    mTotalPlayedTime = 0;
-                } else 
-                    mCurrentStatus = AS_Stopped;
+                }
+                mCurrentStatus = status;
+
                 break;
                 
             case AS_Paused:
                 mPausedTime = 0;
+                mCurrentStatus = status;
                 break;
                 
             case AS_Stopped:   
@@ -156,6 +161,7 @@ namespace ukn {
                 mPausedTime = 0;
                 mCurrentRepeatCount = 0;
                 mTotalPlayedTime = 0;
+                mCurrentStatus = status;
                 
                 BoneAnimationCompleteArgs args(mTotalPlayedTime);
                 complete_event.raise(this, args);

@@ -61,7 +61,7 @@ namespace ukn {
         static SharedPtr<Resource> Load(const String& name, const String& path);
     };
     
-    class AssetManager: Uncopyable, public ConfigSerializable {
+    class AssetManager: Uncopyable, public IConfigSerializable {
     public:
         static AssetManager& Instance();
         

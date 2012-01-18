@@ -1,3 +1,6 @@
+#ifndef Project_Unknown_Error_H_
+#define Project_Unknown_Error_H_
+
 namespace ukn {
 
 	class Error {
@@ -18,3 +21,5 @@ namespace ukn {
 
 
 } // namespace ukn
+
+#endif

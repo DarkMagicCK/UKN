@@ -1,3 +1,6 @@
+#ifndef Project_Unknown_Lazy_h_
+#define Project_Unknown_Lazy_h_
+
 #include "UKN/Function.h"
 #include "UKN/SharedPtr.h"
 
@@ -72,3 +75,5 @@ namespace ukn {
 	};
 
 } // namespace ukn
+
+#endif

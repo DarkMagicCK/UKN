@@ -205,7 +205,7 @@ namespace ukn {
         TexturePtr mTexture;
     };
         
-    class SkeletalAnimation: public ConfigSerializable {
+    class SkeletalAnimation: public IConfigSerializable {
     public:
         SkeletalAnimation();
         ~SkeletalAnimation();

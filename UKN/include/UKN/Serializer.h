@@ -15,6 +15,7 @@
 #include "UKN/MathUtil.h"
 #include "UKN/Logger.h"
 #include "UKN/Stream.h"
+#include "UKN/Basic.h"
 
 #include <iostream>
 #include <string>
@@ -92,13 +93,13 @@ namespace ukn {
             log_error("ukn::Serializer::deserialize: invalid stream");
     }
     
-    class Serializable {
+    class IBinarySerializable: public Interface {
     public:
         virtual bool serialize(BinarySerializer& serializer) = 0;
         virtual bool deserialize(BinarySerializer& serializer) = 0;
     };
     
-    class ConfigSerializable {
+    class IConfigSerializable: public Interface {
     public:
         virtual bool serialize(const ConfigParserPtr& config) = 0;
         virtual bool deserialize(const ConfigParserPtr& config) = 0;

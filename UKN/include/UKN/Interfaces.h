@@ -1,3 +1,6 @@
+#ifndef Project_Unknown_Interfaces_H_
+#define Project_Unknown_Interfaces_H_
+
 #include "UKN/Basic.h"
 
 namespace ukn {
@@ -19,6 +22,6 @@ namespace ukn {
 		virtual IEnumerator<T>*	createEnumerator() const = 0;
 	};
 	
-	
-
 } // namespace ukn
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef Project_Unknown_UnitTest_H_
+#define Project_Unknown_UnitTest_H_
+
 #include "UKN/Error.h"
 #include "UKN/Logger.h"
 
@@ -29,3 +32,5 @@ namespace ukn {
 	} // namespace unittest
 	
 } // namespace ukn
+
+#endif

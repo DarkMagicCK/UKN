@@ -45,7 +45,7 @@ namespace ukn {
         FSP_Stroke_Width,
     };
     
-    class UKN_API Font: Uncopyable, public Renderable, public IConfigSerializable {
+    class UKN_API Font: Uncopyable, public IRenderable, public IConfigSerializable {
     public:
         Font();
         ~Font();

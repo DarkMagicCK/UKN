@@ -25,26 +25,6 @@ namespace ukn {
         
     }
     
-    void Component::onComponentAdded(Component* compo) {
-        
-    }
-    
-    void Component::onComponentRemoved(Component* compo) {
-        
-    }
-    
-    void Component::onMessageReceived(MessageEventArgs& args) {
-        
-    }
-    
-    bool Component::serialize(const ConfigParserPtr& config) {
-        return false;
-    }
-    
-    bool Component::deserialize(const ConfigParserPtr& config) {
-        return false;
-    }
-    
     ComponentHolder* Component::getOwner() const {
         return mOwner;
     }
@@ -66,14 +46,14 @@ namespace ukn {
     void ComponentHolder::sendMessage(MessageEventArgs& args) {
         ComponentMap::iterator it = mComponents.begin();
         for(; it != mComponents.end(); ++it)
-            it->second->onMessageReceived(args);
+            it->second->onReceiveMessage(args);
     }
     
     void ComponentHolder::sendMessage(const ukn_string& to, MessageEventArgs& args) {
         ComponentMap::iterator it = mComponents.begin();
         for(; it != mComponents.end(); ++it)
             if(it->second->getName() == to)
-                it->second->onMessageReceived(args);
+                it->second->onReceiveMessage(args);
     }
     
     void ComponentHolder::addComponent(ComponentPtr comp) {

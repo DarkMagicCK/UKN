@@ -62,6 +62,8 @@ namespace ukn {
         virtual void setInt(const ukn_string& attr, int32 val);
         virtual void setFloat(const ukn_string& attr, float val);
         
+        const String& getName() const;
+        
     private:
         struct myWritter: public pugi::xml_writer {
             void write(const void* data, size_t size);
@@ -79,6 +81,8 @@ namespace ukn {
             StreamPtr stream;
             ukn_string indent;
         };
+        
+        String mName;
 
         pugi::xml_document* mDocument;
         pugi::xml_node mCurrNode;

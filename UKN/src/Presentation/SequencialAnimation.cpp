@@ -9,6 +9,8 @@
 #include "UKN/SequencialAnimation.h"
 #include "UKN/TimeUtil.h"
 #include "UKN/Texture.h"
+#include "UKN/ConfigParser.h"
+#include "UKN/Asset.h"
 
 namespace ukn {
     
@@ -33,8 +35,58 @@ namespace ukn {
         return false;
     }
     
+    inline SequencialAnimationMode name_to_mode(const char* name) {
+        if(strcmpnocase(name, "grid") == 0)
+            return SA_Grid;
+        if(strcmpnocase(name, "grid_custom") == 0)
+            return SA_GridCustom;
+        if(strcmpnocase(name, "seperate_files") == 0)
+            return SA_SeperateFiles;
+        return SA_Unknown;
+    }
+    
     bool SequencialAnimation::deserialize(const ConfigParserPtr& config) {
-        
+        if(config->toNode("SpriteSheet")) {
+            ukn_string name = config->getString("name");
+            if(!name.empty()) {
+                mName = name;
+                
+                mGrids[0].mode = name_to_mode(config->getString("mode").c_str());
+                if(mGrids[0].mode == SA_Unknown)
+                    return false;
+                
+                switch(mGrids[0].mode) {
+                    case SA_Grid:
+                        mGrids[0].grid_width = config->getInt("width");
+                        mGrids[0].grid_height = config->getInt("height");
+                        mGrids[0].count = config->getInt("count");
+                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(config->getString("texture"));
+                        
+                        mFrameRate = config->getInt("frame_rate", 25);
+                        break;
+                        
+                    case SA_GridCustom:
+                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(config->getString("texture"));
+                        mFrameRate = config->getInt("frame_rate", 25);
+                        
+                        if(config->toFirstChild()) {
+                            do {
+                                
+                                
+                            } while(config->toNextChild());
+                        }
+                        
+                        break;
+                        
+                    case SA_SeperateFiles:
+                        break;
+                        
+                    case SA_Unknown:
+                        break;
+                }
+            } else 
+                return false;
+        }
         return false;
     }
     
@@ -51,7 +103,7 @@ namespace ukn {
     }
     
     void SequencialAnimation::play() {
-        if(mTotalCount > 0 && mGrids[0].type != SA_Unknown)
+        if(mTotalCount > 0 && mGrids[0].mode != SA_Unknown)
             setStatus(AS_Playing);
     }
     
@@ -119,13 +171,13 @@ namespace ukn {
                 }
             }
             
-            switch(mGrids[0].type) {
+            switch(mGrids[0].mode) {
                 case SA_Grid: {
                     GridInfo& root = mGrids[0];
                     int32 wcount = root.texture->getWidth() / root.grid_width;
                     
-                    mCurrentGridInfo.texture_pos_x = (mCurrentGridIndex % wcount) * root.grid_width;
-                    mCurrentGridInfo.texture_pos_y = (mCurrentGridIndex / wcount) * root.grid_height;
+                    mCurrentGridInfo.texture_pos_x = (int32)(mCurrentGridIndex % wcount) * root.grid_width;
+                    mCurrentGridInfo.texture_pos_y = (int32)(mCurrentGridIndex / wcount) * root.grid_height;
                     
                     break;
                 }

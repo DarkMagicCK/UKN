@@ -17,7 +17,7 @@
 
 namespace ukn {
 	
-	class ISensor: public Interface {
+	class ISensor: public virtual Interface {
 	public:
 		virtual bool isAvailable() const = 0;
 		virtual bool isActive() const = 0;

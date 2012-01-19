@@ -10,23 +10,23 @@
 
 namespace ukn {
     
-    Renderable::Renderable() {
+    IRenderable::IRenderable() {
         
     }
     
-    Renderable::~Renderable() {
+    IRenderable::~IRenderable() {
         
     }
     
-    void Renderable::onRenderBegin() {
+    void IRenderable::onRenderBegin() {
         
     }
     
-    void Renderable::onRenderEnd() {
+    void IRenderable::onRenderEnd() {
         
     }
     
-    void Renderable::render() {
+    void IRenderable::render() {
         
     }
     

@@ -33,6 +33,8 @@ namespace ukn {
                 mCurrNode = mDocument->root();
                 return result;
             }
+            
+            mName = resource->getName();
         }
         return false;
     }
@@ -443,6 +445,10 @@ namespace ukn {
             attribute = mCurrNode.append_attribute(attr.c_str());
             attribute.set_value(val);
         }
+    }
+    
+    const String& ConfigParserXmlImpl::getName() const {
+        return mName;
     }
     
     

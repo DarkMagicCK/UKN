@@ -19,7 +19,7 @@
 
 namespace ukn {
     
-    enum SequencialAnimationType {
+    enum SequencialAnimationMode {
         // continous grids
         SA_Grid,
         
@@ -44,10 +44,10 @@ namespace ukn {
             TexturePtr texture;
             uint32 count;
             
-            SequencialAnimationType type;
+            SequencialAnimationMode mode;
             
             GridInfo():
-            type(SA_Unknown) { }
+            mode(SA_Unknown) { }
         };
     
     public:
@@ -87,6 +87,7 @@ namespace ukn {
     private:
         GridList mGrids;
         uint32   mTotalCount;
+        ukn_string mName;
         CompleteEvent mCompleteEvent;
         
         AnimationStatus mCurrentStatus;

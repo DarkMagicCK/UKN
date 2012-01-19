@@ -129,8 +129,8 @@ namespace ukn {
     class Trigger;
     typedef SharedPtr<Trigger> TriggerPtr;
     
-    class Renderable;
-    typedef SharedPtr<Renderable> RenderablePtr;
+    class IRenderable;
+    typedef SharedPtr<IRenderable> RenderablePtr;
     
     class SceneNode;
     typedef SharedPtr<SceneNode> SceneNodePtr;

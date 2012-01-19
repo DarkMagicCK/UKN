@@ -275,7 +275,7 @@ namespace ukn {
         kerning_height(0),
         line_width(0),
         alignment(align) {
-            uint32 len = strlen(str);
+            uint32 len = (uint32)strlen(str);
             uint16* unicodestr = ukn_malloc_t(uint16, len+1);
             UTF8_to_UNICODE(unicodestr, str, len);
             string_to_render.set(unicodestr, len+1);
@@ -489,7 +489,7 @@ namespace ukn {
         float2 dim(0.f, 0.f);
         
         float tmpw = 0.f;
-        uint32 size = strlen(str);
+        uint32 size = (uint32)strlen(str);
         uint16* ustr = ukn_malloc_t(uint16, size+1);
         UTF8_to_UNICODE(ustr, str, size);
         while(ustr && *ustr) {

@@ -11,7 +11,7 @@
 
 #include "UKN/Platform.h"
 #include "UKN/Uncopyable.h"
-    
+#include "UKN/Resource.h"
 #include "UKN/PreDeclare.h"
 
 #include <vector>
@@ -27,13 +27,15 @@ namespace ukn {
         CPT_JSON,
     };
     
-    class UKN_API ConfigParser: Uncopyable {       
+    class UKN_API ConfigParser: public IResource, Uncopyable {       
     public:
         virtual ~ConfigParser() { }
         
         virtual bool open(ResourcePtr resource) = 0;
 
         virtual bool create() = 0;
+        
+        virtual const String& getName() const = 0;
         
         virtual StreamPtr  writeToStream(const char* indent="\n") const = 0;
         virtual ukn_string writeToString(const char* indent="\n") const = 0;

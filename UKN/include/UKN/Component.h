@@ -33,26 +33,26 @@ namespace ukn {
         return compo_name; \
     }
     
-    class Component: Uncopyable, public IConfigSerializable {
+    class IComponent: public virtual Interface {
+    public:        
+        virtual const ukn_string& getName() const = 0;
+
+        virtual void onComponentAdded(Component* compo) = 0;
+        virtual void onComponentRemoved(Component* compo) = 0;
+        
+        virtual void onReceiveMessage(MessageEventArgs& args) = 0;
+            };
+    
+    class Component: Uncopyable, public IComponent, public IConfigSerializable {
     public:
         Component();
         // force base class
         virtual ~Component() = 0;
         
-        virtual void onSetOwner(ComponentHolder* owner);
-      
-        virtual void onComponentAdded(Component* compo);
-        virtual void onComponentRemoved(Component* compo);
-        
-        virtual void onMessageReceived(MessageEventArgs& args);
-        
-        virtual bool serialize(const ConfigParserPtr& config);
-        virtual bool deserialize(const ConfigParserPtr& config);
-        
         ComponentHolder* getOwner() const;
         
-        virtual const ukn_string& getName() const = 0;
-        
+        virtual void onSetOwner(ComponentHolder* owner);
+
     private:
         void setOwner(ComponentHolder* owner);
         

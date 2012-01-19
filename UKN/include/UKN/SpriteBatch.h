@@ -50,7 +50,7 @@ namespace ukn {
                          bool hflip=false);
     };
         
-    class UKN_API SpriteBatch: public Renderable {
+    class UKN_API SpriteBatch: public IRenderable {
     protected:
         SpriteBatch();
         

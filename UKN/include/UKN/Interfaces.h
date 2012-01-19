@@ -2,6 +2,7 @@
 #define Project_Unknown_Interfaces_H_
 
 #include "UKN/Basic.h"
+#include "UKN/StringUtil.h"
 
 namespace ukn {
 
@@ -22,6 +23,10 @@ namespace ukn {
 		virtual IEnumerator<T>*	createEnumerator() const = 0;
 	};
 	
+    class IResource: public virtual Interface {
+    public:
+        virtual const String& getName() const = 0;
+    };
 } // namespace ukn
 
 #endif

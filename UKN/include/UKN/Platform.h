@@ -62,6 +62,11 @@
 
 #endif
 
+// vc++ override specification
+#if !defined(UKN_COMPILER_MSVC)
+#define override
+#endif
+
 
 // apple os ( osx / ios )
 #if defined(__APPLE__) || defined(__APPLE_CC__)

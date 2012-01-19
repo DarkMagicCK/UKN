@@ -16,10 +16,10 @@
 
 namespace ukn {
     
-    class UKN_API Renderable {
+    class UKN_API IRenderable: public virtual Interface {
     public:
-        Renderable();
-        virtual ~Renderable();
+        IRenderable();
+        virtual ~IRenderable();
         
         virtual const String& getName() const = 0;
         

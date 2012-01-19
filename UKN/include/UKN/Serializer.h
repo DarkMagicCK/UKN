@@ -77,7 +77,7 @@ namespace ukn {
 #ifdef UKN_DEBUG
           //  *mSerializeStream << SerializeHelper::GetTypeId<T>();
 #endif
-            *mSerializeStream << *obj;
+            mSerializeStream->write(obj, sizeof(T));
         } else 
             log_error("ukn::Serializer::deserialize: invalid stream");
     }
@@ -88,18 +88,18 @@ namespace ukn {
 #ifdef UKN_DEBUG
 
 #endif
-            *mSerializeStream >> *obj;
+            mSerializeStream->read(obj, sizeof(T));
         } else 
             log_error("ukn::Serializer::deserialize: invalid stream");
     }
     
-    class IBinarySerializable: public Interface {
+    class IBinarySerializable: public virtual Interface {
     public:
         virtual bool serialize(BinarySerializer& serializer) = 0;
         virtual bool deserialize(BinarySerializer& serializer) = 0;
     };
     
-    class IConfigSerializable: public Interface {
+    class IConfigSerializable: public virtual Interface {
     public:
         virtual bool serialize(const ConfigParserPtr& config) = 0;
         virtual bool deserialize(const ConfigParserPtr& config) = 0;

@@ -28,7 +28,7 @@
 
 namespace ukn {
     
-    class UKN_API Resource {
+    class UKN_API Resource: public IResource {
     public:
         Resource(const String& name, StreamPtr resourceStream):
         mName(name),

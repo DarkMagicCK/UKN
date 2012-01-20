@@ -300,7 +300,7 @@ namespace ukn {
     }
     
     bool Font::loadFromResource(const ResourcePtr& resource) {        
-        ConfigParserPtr config = MakeConfigParser(resource);
+        ConfigParserPtr config = ConfigParser::MakeParser(resource);
         
         if(config)  
             return deserialize(config);

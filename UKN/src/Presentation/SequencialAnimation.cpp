@@ -60,7 +60,7 @@ namespace ukn {
                         mGrids[0].grid_width = config->getInt("width");
                         mGrids[0].grid_height = config->getInt("height");
                         mGrids[0].count = config->getInt("count");
-                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(config->getString("texture"));
+                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(get_file_path(config->getName()) + string_to_wstring(config->getString("texture")));
                         
                         mFrameRate = config->getInt("frame_rate", 25);
                         break;
@@ -71,19 +71,58 @@ namespace ukn {
                         
                         if(config->toFirstChild()) {
                             do {
-                                
+                                int childcount = config->getInt("count", 0);
+                                if(childcount != 0) {
+                                    for(int i=0; i<childcount; ++i) {
+                                        GridInfo info;
+                                        info.grid_width = config->getInt("width");
+                                        info.grid_height = config->getInt("height");
+                                        info.texture_pos_x = config->getInt("x") + info.grid_width * i;
+                                        info.texture_pos_y = config->getInt("y");
+                                        
+                                        info.texture = mGrids[0].texture;
+                                        
+                                        mGrids.push_back(info);
+                                    }
+                                }
                                 
                             } while(config->toNextChild());
+                            
+                            // to SpriteSheet
+                            config->toParent();
                         }
+                        mTotalCount = (uint32)mGrids.size();
                         
                         break;
                         
                     case SA_SeperateFiles:
+                        if(config->toFirstChild()) {
+                            do {
+                                ukn_string texture_path = config->getString("texture");
+                                if(!texture_path.empty()) {
+                                    GridInfo info;
+                                    info.texture = AssetManager::Instance().load<ukn::Texture>(get_file_path(config->getName()) + string_to_wstring(texture_path));
+                                    info.texture_pos_x = 0;
+                                    info.texture_pos_y = 0;
+                                    if(info.texture) {
+                                        info.grid_width = info.texture->getWidth();
+                                        info.grid_height = info.texture->getHeight();
+                                    }
+                                }
+                                
+                            } while(config->toNextChild());
+                            
+                            // to SpriteSheet
+                            config->toParent();
+                        }
+                        mTotalCount = (uint32)mGrids.size();
                         break;
                         
                     case SA_Unknown:
                         break;
                 }
+                
+                config->toParent();
             } else 
                 return false;
         }
@@ -181,9 +220,11 @@ namespace ukn {
                     
                     break;
                 }
+                    
                 case SA_GridCustom:
                 case SA_SeperateFiles:
-                    mCurrentGridInfo = mGrids[mCurrentGridIndex];
+                    // root info takes mGrids[0]
+                    mCurrentGridInfo = mGrids[mCurrentGridIndex+1];
                     break;
                     
                 case SA_Unknown:

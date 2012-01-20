@@ -10,6 +10,7 @@
 #include "UKN/Stream.h"
 #include "UKN/Resource.h"
 #include "UKN/StringUtil.h"
+#include "UKN/SysUtil.h"
 
 namespace ukn {
     
@@ -30,11 +31,10 @@ namespace ukn {
             }
             bool result = mDocument->load_buffer((void*)static_cast<MemoryStream*>(dataStream.get())->data(), dataStream->size(), pugi::encoding_wchar);
             if(result) {
+                mName = resource->getName();
                 mCurrNode = mDocument->root();
                 return result;
             }
-            
-            mName = resource->getName();
         }
         return false;
     }

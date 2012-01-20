@@ -18,13 +18,12 @@
 #include "UKN/Logger.h"
 
 namespace ukn {
+
     
     SharedPtr<Font> AssetLoader<Font>::Load(const String& name, const String& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
-        if(resource) {
-            resource->setName(name);
-            
+        if(resource) {            
             SharedPtr<Font> font = new Font();
             if(font && font->loadFromResource(resource))
                 return font;
@@ -36,9 +35,7 @@ namespace ukn {
     SharedPtr<Texture> AssetLoader<Texture>::Load(const String& name, const String& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
-        if(resource) {
-            resource->setName(name);
-            
+        if(resource) {            
             return Context::Instance().getGraphicFactory().load2DTexture(resource);
         }
         
@@ -48,10 +45,8 @@ namespace ukn {
     SharedPtr<ConfigParser> AssetLoader<ConfigParser>::Load(const String& name, const String& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
-        if(resource) {
-            resource->setName(name);
-            
-            return MakeConfigParser(resource); 
+        if(resource) {            
+            return ConfigParser::MakeParser(resource); 
         }
         
         return SharedPtr<ConfigParser>();
@@ -59,9 +54,6 @@ namespace ukn {
     
     SharedPtr<Resource> AssetLoader<Resource>::Load(const String& name, const String& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
-        
-        if(resource)
-            resource->setName(name);
         
         return resource;
     }

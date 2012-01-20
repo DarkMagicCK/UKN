@@ -42,10 +42,6 @@ namespace ukn {
             return this->mName;
         }
         
-        void setName(const String& name) {
-            this->mName = name;
-        }
-        
         uint32 getUniqueId() const {
             return this->mUniqueId;
         }
@@ -57,6 +53,13 @@ namespace ukn {
         void readIntoMemory();
         
         operator bool();
+        
+    private:
+        friend class ResourceLoader;
+        
+        void setName(const String& name) {
+            this->mName = name;
+        }
         
     private:
         String mName;

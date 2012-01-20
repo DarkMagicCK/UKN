@@ -36,7 +36,8 @@ namespace ukn {
         ResourcePtr onResourceLoad(const String& path) {
             FileStream* pfs = new FileStream;
             if(pfs->open(path)) {
-                return MakeSharedPtr<Resource>(path, StreamPtr(pfs));
+                ResourcePtr ptr = MakeSharedPtr<Resource>(path, StreamPtr(pfs));
+                return ptr;
             }
             return MakeSharedPtr<Resource>(path, StreamPtr());
         }
@@ -99,14 +100,18 @@ namespace ukn {
                     String fullPath = *itPath + L"/" + name;
                     
                     if((*itFac)->resourceExists(fullPath)) {
-                        return (*itFac)->onResourceLoad(fullPath);
+                        ResourcePtr ptr = (*itFac)->onResourceLoad(fullPath);
+                        ptr->setName(fullPath);
+                        return ptr;
                     }
                     
                     ++itPath;
                 }
             }
             if((*itFac)->resourceExists(name)) {
-                return (*itFac)->onResourceLoad(name);
+                ResourcePtr ptr = (*itFac)->onResourceLoad(name);
+                ptr->setName(name);
+                return ptr;
             }
             
             ++itFac;

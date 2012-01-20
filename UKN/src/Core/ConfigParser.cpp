@@ -14,7 +14,7 @@
 
 namespace ukn {
     
-    UKN_API ConfigParserPtr MakeConfigParser(ResourcePtr resource) {
+    UKN_API ConfigParserPtr ConfigParser::MakeParser(ResourcePtr resource) {
         if(*resource) {
             ConfigParserPtr ptr = MakeSharedPtr<ConfigParserXmlImpl>();
             if(ptr && ptr->open(resource)) {
@@ -27,7 +27,7 @@ namespace ukn {
         return ConfigParserPtr();
     }
 
-    UKN_API ConfigParserPtr MakeEmptyConfigParser(ConfigParserType type) {
+    UKN_API ConfigParserPtr ConfigParser::MakeEmptyParser(ConfigParserType type) {
         switch(type) {
             case CPT_XML: {
                 ConfigParserPtr ptr = MakeSharedPtr<ConfigParserXmlImpl>();

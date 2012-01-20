@@ -134,10 +134,12 @@ namespace ukn {
          * set a float attribute under current node
          **/
         virtual void setFloat(const ukn_string& attr, float val) = 0;
+        
+        UKN_API static ConfigParserPtr MakeEmptyParser(ConfigParserType type);
+        UKN_API static ConfigParserPtr MakeParser(ResourcePtr resource);
     };
     
-    UKN_API ConfigParserPtr MakeConfigParser(ResourcePtr resource);
-    UKN_API ConfigParserPtr MakeEmptyConfigParser(ConfigParserType type);
+    
     
 } // namespace ukn
 

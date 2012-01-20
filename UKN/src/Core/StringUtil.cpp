@@ -392,6 +392,9 @@ namespace ukn {
     }
     
     UKN_API ukn_string get_file_path(const ukn_string& str) {
+        if(str.empty())
+            return str;
+        
         ukn_string::const_iterator it = str.end();
         it--;
         
@@ -399,11 +402,14 @@ namespace ukn {
             --it;
         }
         if(it != str.begin())
-            return ukn_string(str.begin(), it);
+            return ukn_string(str.begin(), it+1);
         return ukn_string();
     }
 
     UKN_API ukn_wstring get_file_path(const ukn_wstring& str) {
+        if(str.empty())
+            return str;
+        
         ukn_wstring::const_iterator it = str.end();
         it--;
         
@@ -411,7 +417,7 @@ namespace ukn {
             --it;
         }
         if(it != str.begin())
-            return ukn_wstring(str.begin(), it);
+            return ukn_wstring(str.begin(), it+1);
         return ukn_wstring();
     }
     

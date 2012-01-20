@@ -55,13 +55,13 @@ public:
     void onInit() {
         mSpriteBatch = ukn::Context::Instance().getGraphicFactory().createSpriteBatch();
         
-        ukn::ConfigParserPtr cfg = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"asset.xml"));
+        ukn::ConfigParserPtr cfg = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"asset.xml");
         ukn::AssetManager::Instance().deserialize(cfg);
         
         mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
         
-        ukn::ConfigParserPtr cfg2 = ukn::MakeConfigParser(ukn::ResourceLoader::Instance().loadResource(L"text/girl.uknanm"));
+        ukn::ConfigParserPtr cfg2 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"text/girl.uknanm");
 		if(cfg2) {
 			skAnim.deserialize(cfg2);
         

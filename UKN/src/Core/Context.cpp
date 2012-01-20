@@ -17,6 +17,7 @@
 #include "UKN/Logger.h"
 #include "UKN/Common.h"
 #include "UKN/Scene.h"
+#include "UKN/Asset.h"
 
 namespace ukn {
     
@@ -109,65 +110,59 @@ namespace ukn {
         cfg.render_cfg.sample_quality = 0;
         cfg.render_cfg.fsaa_samples = 0;
         
-        ResourcePtr configData = ResourceLoader::Instance().loadResource(name); 
-		bool configAvail = false;
-        if(configData) {
-            ConfigParserPtr configParser = MakeConfigParser(configData);
-            if(configParser) {
-				configAvail = true;
-
-                if(configParser->toNode("/cfg/graphics")) {
-                    cfg.render_cfg.width        = configParser->getInt("width", cfg.render_cfg.width);
-                    cfg.render_cfg.height       = configParser->getInt("height", cfg.render_cfg.height);
-                    cfg.render_cfg.top          = configParser->getInt("top", cfg.render_cfg.top);
-                    cfg.render_cfg.left         = configParser->getInt("left", cfg.render_cfg.left);
+        ConfigParserPtr configParser = AssetManager::Instance().load<ConfigParser>(name);
+        if(configParser) {            
+            if(configParser->toNode("/cfg/graphics")) {
+                cfg.render_cfg.width        = configParser->getInt("width", cfg.render_cfg.width);
+                cfg.render_cfg.height       = configParser->getInt("height", cfg.render_cfg.height);
+                cfg.render_cfg.top          = configParser->getInt("top", cfg.render_cfg.top);
+                cfg.render_cfg.left         = configParser->getInt("left", cfg.render_cfg.left);
+                
+                cfg.render_cfg.resizable    = configParser->getBool("resizable", cfg.render_cfg.resizable);
+                cfg.render_cfg.show_mouse   = configParser->getBool("show_mouse", cfg.render_cfg.show_mouse);
+                cfg.render_cfg.full_screen  = configParser->getBool("full_screen", cfg.render_cfg.full_screen);
+                
+                cfg.render_cfg.sample_count     = configParser->getInt("sample_count", cfg.render_cfg.sample_count);
+                cfg.render_cfg.sample_quality   = configParser->getInt("sample_quality", cfg.render_cfg.sample_quality);
+                cfg.render_cfg.fsaa_samples     = configParser->getInt("fsaa_samples", cfg.render_cfg.fsaa_samples);
+                
+                ukn_string fmt_string;
+                int fmt_id;
+                
+                fmt_string = configParser->getString("color_fmt", "EF_ARGB8");
+                fmt_id = fmt_string_to_element_format(fmt_string);
+                if(fmt_id == -1) {
+                    log_warning(format_string("ukn::Context::loadCfgFile: unknown color format %s, using EF_ARGB8", fmt_string.c_str()));
                     
-                    cfg.render_cfg.resizable    = configParser->getBool("resizable", cfg.render_cfg.resizable);
-                    cfg.render_cfg.show_mouse   = configParser->getBool("show_mouse", cfg.render_cfg.show_mouse);
-                    cfg.render_cfg.full_screen  = configParser->getBool("full_screen", cfg.render_cfg.full_screen);
-
-                    cfg.render_cfg.sample_count     = configParser->getInt("sample_count", cfg.render_cfg.sample_count);
-                    cfg.render_cfg.sample_quality   = configParser->getInt("sample_quality", cfg.render_cfg.sample_quality);
-                    cfg.render_cfg.fsaa_samples     = configParser->getInt("fsaa_samples", cfg.render_cfg.fsaa_samples);
-                    
-                    ukn_string fmt_string;
-                    int fmt_id;
-                    
-                    fmt_string = configParser->getString("color_fmt", "EF_ARGB8");
-                    fmt_id = fmt_string_to_element_format(fmt_string);
-                    if(fmt_id == -1) {
-                        log_warning(format_string("ukn::Context::loadCfgFile: unknown color format %s, using EF_ARGB8", fmt_string.c_str()));
-                        
-                        cfg.render_cfg.color_fmt = (ElementFormat)fmt_id;
-                    }
-                    
-                    fmt_string = configParser->getString("depth_stencil_fmt", "EF_D16");
-                    fmt_id = fmt_string_to_element_format(fmt_string);
-                    if(fmt_id == -1) {
-                        log_warning(format_string("ukn::Context::loadCfgFile: unknown depth stencil format %s, using EF_D16", fmt_string.c_str()));
-
-                        cfg.render_cfg.depth_stencil_fmt = (ElementFormat)fmt_id;
-                    }
+                    cfg.render_cfg.color_fmt = (ElementFormat)fmt_id;
                 }
                 
-                if(configParser->toNode("/cfg/plugins")) {
-                    cfg.graphic_factory_name = configParser->getString("graphic_factory", "");
+                fmt_string = configParser->getString("depth_stencil_fmt", "EF_D16");
+                fmt_id = fmt_string_to_element_format(fmt_string);
+                if(fmt_id == -1) {
+                    log_warning(format_string("ukn::Context::loadCfgFile: unknown depth stencil format %s, using EF_D16", fmt_string.c_str()));
+                    
+                    cfg.render_cfg.depth_stencil_fmt = (ElementFormat)fmt_id;
                 }
-            } else {
-                log_warning(L"ukn::Context::loadCfgFile: unable to open config file "+configData->getName());
             }
-		}
+            
+            if(configParser->toNode("/cfg/plugins")) {
+                cfg.graphic_factory_name = configParser->getString("graphic_factory", "");
+            }
+        } else {
+            log_warning(L"ukn::Context::loadCfgFile: unable to open config file "+configParser->getName());
+        }
         
         setCfg(cfg);
 
 		
-		if(!configAvail) {
+		if(!configParser) {
 			saveCfgFile(L"config.xml");
 		}
     }
     
     void Context::saveCfgFile(const String& name) {
-        ConfigParserPtr configParser = MakeEmptyConfigParser(CPT_XML);
+        ConfigParserPtr configParser = ConfigParser::MakeEmptyParser(CPT_XML);
         if(configParser) {
             configParser->beginNode("cfg");
             configParser->beginNode("graphics");

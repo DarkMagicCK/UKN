@@ -12,6 +12,7 @@
 #include "UKN/Asset.h"
 #include "UKN/ConfigParser.h"
 #include "UKN/TimeUtil.h"
+#include "UKN/SysUtil.h"
 
 namespace ukn {
     
@@ -477,7 +478,7 @@ namespace ukn {
                             texture_path = config->getString("texture");
                         }
                         if (!texture_path.empty()) {
-                            bone->mTexture = AssetManager::Instance().load<Texture>(texture_path);
+                            bone->mTexture = AssetManager::Instance().load<Texture>(get_file_path(config->getName()) + string_to_wstring(texture_path));
                         }
                            
                         // parse basic properties

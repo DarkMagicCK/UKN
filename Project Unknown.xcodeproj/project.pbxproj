@@ -42,7 +42,6 @@
 		8832D1461488C9F700D08C15 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1451488C9F700D08C15 /* GLTexture.cpp */; };
 		8832D14A1488CFDC00D08C15 /* GLFrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */; };
 		8832D1531489A47E00D08C15 /* GLRenderView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1521489A47E00D08C15 /* GLRenderView.cpp */; };
-		884CE3F5148F735700F58E2E /* Renderable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE3F4148F735700F58E2E /* Renderable.cpp */; };
 		884CE3F7148F74D600F58E2E /* SpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE3F6148F74D600F58E2E /* SpriteBatch.cpp */; };
 		884CE3FB148F843A00F58E2E /* GLGraphicBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE3FA148F843800F58E2E /* GLGraphicBuffer.cpp */; };
 		884CE3FE14902BC400F58E2E /* RandomUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE3FD14902BC300F58E2E /* RandomUtil.cpp */; };
@@ -78,6 +77,7 @@
 		88AAC17814868AF5007A80A4 /* ConfigParserXml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17714868AF5007A80A4 /* ConfigParserXml.cpp */; };
 		88AAC17B1486EBDA007A80A4 /* AppleStuff.mm in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17A1486EBD9007A80A4 /* AppleStuff.mm */; };
 		88AAC17E1486F7FC007A80A4 /* FileUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */; };
+		88AAD16514CA0DD9007D3732 /* TMXTiledMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAD16414CA0DD9007D3732 /* TMXTiledMap.cpp */; };
 		88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */; };
 		88CC31201477915700558EA1 /* Project_Unknown.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88CC311F1477915700558EA1 /* Project_Unknown.1 */; };
 		88E3C3DE147F2CD400E8754D /* GLGraphicDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */; };
@@ -179,7 +179,6 @@
 		8832D1521489A47E00D08C15 /* GLRenderView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderView.cpp; sourceTree = "<group>"; };
 		8832D1541489B53100D08C15 /* GLPreq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLPreq.h; sourceTree = "<group>"; };
 		884CE3F2148F32F000F58E2E /* SpriteBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatch.h; sourceTree = "<group>"; };
-		884CE3F4148F735700F58E2E /* Renderable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Renderable.cpp; sourceTree = "<group>"; };
 		884CE3F6148F74D600F58E2E /* SpriteBatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteBatch.cpp; sourceTree = "<group>"; };
 		884CE3F8148F82E600F58E2E /* GLRenderBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderBuffer.h; sourceTree = "<group>"; };
 		884CE3F9148F838100F58E2E /* GLGraphicBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGraphicBuffer.h; sourceTree = "<group>"; };
@@ -386,6 +385,8 @@
 		88AAC17A1486EBD9007A80A4 /* AppleStuff.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppleStuff.mm; sourceTree = "<group>"; };
 		88AAC17C1486F787007A80A4 /* FileUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUtil.h; sourceTree = "<group>"; };
 		88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileUtil.cpp; sourceTree = "<group>"; };
+		88AAD16214CA0921007D3732 /* TMXTiledMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMXTiledMap.h; sourceTree = "<group>"; };
+		88AAD16414CA0DD9007D3732 /* TMXTiledMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMXTiledMap.cpp; sourceTree = "<group>"; };
 		88B0FD4814C5F38800346AC5 /* SequencialAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencialAnimation.h; sourceTree = "<group>"; };
 		88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequencialAnimation.cpp; sourceTree = "<group>"; };
 		88C3091114936612001262DF /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transform.h; sourceTree = "<group>"; };
@@ -715,6 +716,7 @@
 				8850F0D414B9D095001A250C /* Port.h */,
 				88093C3214BC167900C6152F /* Base64.h */,
 				88093C3614BC182E00C6152F /* ZipUtil.h */,
+				88AAD16214CA0921007D3732 /* TMXTiledMap.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -811,7 +813,6 @@
 				88AAC15814868751007A80A4 /* RenderBuffer.cpp */,
 				88AAC15914868751007A80A4 /* RenderView.cpp */,
 				88AAC15A14868751007A80A4 /* Texture.cpp */,
-				884CE3F4148F735700F58E2E /* Renderable.cpp */,
 				884CE3F6148F74D600F58E2E /* SpriteBatch.cpp */,
 				88029B091491DB8B00AB1490 /* Font.cpp */,
 				88278EDF149C947B00C7ED8A /* Scene.cpp */,
@@ -962,6 +963,7 @@
 				88EA1C4614A34FB90079CCC4 /* Animation.cpp */,
 				88F7219A14A6EB2400568FBE /* Skeletal.cpp */,
 				88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */,
+				88AAD16414CA0DD9007D3732 /* TMXTiledMap.cpp */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -1054,7 +1056,6 @@
 				88871FE6148CB1800026B2B8 /* stb_image_aug.c in Sources */,
 				88871FEB148CBC390026B2B8 /* Hashing.cpp in Sources */,
 				88871FEF148CBCA30026B2B8 /* md5lib.cpp in Sources */,
-				884CE3F5148F735700F58E2E /* Renderable.cpp in Sources */,
 				884CE3F7148F74D600F58E2E /* SpriteBatch.cpp in Sources */,
 				884CE3FB148F843A00F58E2E /* GLGraphicBuffer.cpp in Sources */,
 				884CE3FE14902BC400F58E2E /* RandomUtil.cpp in Sources */,
@@ -1096,6 +1097,7 @@
 				88093C9F14BC258000C6152F /* zip.c in Sources */,
 				88093CA014BC258000C6152F /* zutil.c in Sources */,
 				88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */,
+				88AAD16514CA0DD9007D3732 /* TMXTiledMap.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

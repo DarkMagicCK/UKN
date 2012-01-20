@@ -18,18 +18,15 @@ namespace ukn {
     
     class UKN_API IRenderable: public virtual Interface {
     public:
-        IRenderable();
-        virtual ~IRenderable();
-        
         virtual const String& getName() const = 0;
         
         virtual Box getBound() const = 0;
         virtual RenderBufferPtr getRenderBuffer() const = 0;
         
-        virtual void onRenderBegin();
-        virtual void onRenderEnd();
+        virtual void onRenderBegin() = 0;
+        virtual void onRenderEnd() = 0;
         
-        virtual void render();
+        virtual void render() = 0;
     };
     
     

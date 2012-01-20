@@ -64,16 +64,13 @@ namespace ukn {
             
             if (err == Z_OK) {
                 // More output space needed
-                uint32 oldSize = buffer_size;
-                buffer_size *= 2;
-                
-                uint8* tmpBuffer = ukn_malloc_t(uint8, buffer_size);
-                memcpy(tmpBuffer, buffer, buffer_size / 2);
                 ukn_free(buffer);
-                buffer = tmpBuffer;
+                buffer = ukn_malloc_t(uint8, buffer_size * 2);
                 
-                strm.next_out = (Bytef *)(buffer + oldSize);
-                strm.avail_out = oldSize;
+                strm.next_out = (Bytef *)(buffer + buffer_size);
+                strm.avail_out = buffer_size;
+                buffer_size *= 2;
+
             }
         } while (err == Z_OK);
         
@@ -116,7 +113,7 @@ namespace ukn {
         }
         
         do {
-            ret = inflate(&strm, Z_NO_FLUSH);
+            ret = inflate(&strm, Z_FINISH);
             
             switch (ret) {
                 case Z_NEED_DICT:

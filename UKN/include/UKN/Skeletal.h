@@ -172,7 +172,8 @@ namespace ukn {
         void setInheritOpacity(bool flag);
             
         void update(uint32 past_time);
-        TexturePtr  getTexture() const;
+        
+        SequencialAnimationPtr  getTexture() const;
         
     private:
         friend class SkeletalAnimation;
@@ -202,7 +203,8 @@ namespace ukn {
         AnimationMap::iterator mCurrentAnimation;
         
         void* mUserData;
-        TexturePtr mTexture;
+        /* for both texture and SequencialAnimation */
+        SequencialAnimationPtr mTexture;
     };
         
     class SkeletalAnimation: public IConfigSerializable {

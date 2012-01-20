@@ -40,6 +40,7 @@
 #include "UKN/Class.h"
 #include "UKN/Skeletal.h"
 #include "UKN/Base64.h"
+#include "UKN/RandomUtil.h"
 #include "UKN/ZipUtil.h"
 
 #include <vector>
@@ -85,8 +86,9 @@ public:
             skAnim.render(*mSpriteBatch.get());
             
             ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
-            printf("%s\n", data.toFormattedString().c_str());
+         //   printf("%s\n", data.toFormattedString().c_str());
         }       
+        
         mSpriteBatch->end();
 
         if(mFont) {

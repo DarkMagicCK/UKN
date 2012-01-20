@@ -35,6 +35,8 @@ namespace ukn {
         
     class SequencialAnimation: public IConfigSerializable, public virtual Object {
     public:
+        static const uint32 DefaultFrameRate = 4;
+        
         struct GridInfo {
             int32 texture_pos_x;
             int32 texture_pos_y;
@@ -55,6 +57,8 @@ namespace ukn {
         typedef Event<NullEventArgs> CompleteEvent;
         
         SequencialAnimation();
+        /* fast setup a texture as a simple grid based SequencialAnimation */
+        SequencialAnimation(const TexturePtr& texture, int32 grid_width, int32 grid_height, uint32 count, uint32 framerate=DefaultFrameRate);
         virtual ~SequencialAnimation();
         
         virtual bool serialize(const ConfigParserPtr& config);
@@ -101,7 +105,7 @@ namespace ukn {
         int32 mCurrentRepeatCount;
         GridInfo mCurrentGridInfo;
     };
-    
+        
 } // namespace ukn
 
 #endif

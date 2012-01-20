@@ -19,11 +19,31 @@ namespace ukn {
     mCurrentGridIndex(0),
     mTotalCount(0),
     mFrameRate(25),
-    mRepeatCount(1),
+    mRepeatCount(-1),
     mFrameDelta(0.f),
     mCurrentDelta(0.f),
     mCurrentRepeatCount(0) {
         mGrids.append(GridInfo());
+    }
+    
+    SequencialAnimation::SequencialAnimation(const TexturePtr& texture, int32 grid_width, int32 grid_height, uint32 count, uint32 framerate):
+    mCurrentStatus(AS_Stopped),
+    mCurrentGridIndex(0),
+    mTotalCount(count),
+    mFrameRate(framerate),
+    mRepeatCount(-1),
+    mCurrentDelta(0.f),
+    mCurrentRepeatCount(0) {
+        GridInfo info;
+        info.texture = texture;
+        info.grid_width = grid_width;
+        info.grid_height = grid_height;
+        info.count = count;
+        info.texture_pos_x = info.texture_pos_y = 0;
+        info.mode = SA_Grid;
+        mGrids.append(info);
+        
+        play();
     }
     
     SequencialAnimation::~SequencialAnimation() {
@@ -62,18 +82,18 @@ namespace ukn {
                         mGrids[0].count = config->getInt("count");
                         mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(get_file_path(config->getName()) + string_to_wstring(config->getString("texture")));
                         
-                        mFrameRate = config->getInt("frame_rate", 25);
+                        mFrameRate = config->getInt("frame_rate", DefaultFrameRate);
                         break;
                         
                     case SA_GridCustom:
                         mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(config->getString("texture"));
-                        mFrameRate = config->getInt("frame_rate", 25);
+                        mFrameRate = config->getInt("frame_rate", DefaultFrameRate);
                         
                         if(config->toFirstChild()) {
                             do {
                                 int childcount = config->getInt("count", 0);
                                 if(childcount != 0) {
-                                    for(int i=0; i<childcount; ++i) {
+                                    for(int i = 0; i < childcount; ++i) {
                                         GridInfo info;
                                         info.grid_width = config->getInt("width");
                                         info.grid_height = config->getInt("height");
@@ -123,6 +143,7 @@ namespace ukn {
                 }
                 
                 config->toParent();
+                return true;
             } else 
                 return false;
         }
@@ -167,10 +188,14 @@ namespace ukn {
                 if(mFrameRate != 0)
                     mFrameDelta = 1.f / mFrameRate;
                 else 
-                    mFrameRate = 0.f;
+                    mFrameDelta = 0.f;
                 
                 mCurrentStatus = AS_Playing;
-                mCurrentGridInfo = mGrids[0];
+                
+                if(mGrids[0].mode == SA_Grid)
+                    mCurrentGridInfo = mGrids[0];
+                else
+                    mCurrentGridInfo = mGrids[1];
                 
                 break;
                 
@@ -195,40 +220,42 @@ namespace ukn {
     
     void SequencialAnimation::update() {
         if(mCurrentStatus == AS_Playing) {
-            mCurrentDelta += FrameCounter::Instance().getPrevDelta();
-            if(mCurrentDelta >= mFrameDelta) {
-                ++mCurrentGridIndex;
-                if(mCurrentGridIndex >= mTotalCount) {
-                    mCurrentGridIndex = 0;
-                    
-                    if(mRepeatCount != -1) {
-                        mCurrentRepeatCount++;
-                        if(mCurrentRepeatCount >= mRepeatCount) {
-                            setStatus(AS_Stopped);
+            if(mTotalCount != 1) {
+                mCurrentDelta += FrameCounter::Instance().getPrevDelta();
+                if(mCurrentDelta >= mFrameDelta) {
+                    ++mCurrentGridIndex;
+                    if(mCurrentGridIndex >= mTotalCount) {
+                        mCurrentGridIndex = 0;
+                        
+                        if(mRepeatCount != -1) {
+                            mCurrentRepeatCount++;
+                            if(mCurrentRepeatCount >= mRepeatCount) {
+                                setStatus(AS_Stopped);
+                            }
                         }
                     }
                 }
-            }
-            
-            switch(mGrids[0].mode) {
-                case SA_Grid: {
-                    GridInfo& root = mGrids[0];
-                    int32 wcount = root.texture->getWidth() / root.grid_width;
-                    
-                    mCurrentGridInfo.texture_pos_x = (int32)(mCurrentGridIndex % wcount) * root.grid_width;
-                    mCurrentGridInfo.texture_pos_y = (int32)(mCurrentGridIndex / wcount) * root.grid_height;
-                    
-                    break;
+                
+                switch(mGrids[0].mode) {
+                    case SA_Grid: {
+                        GridInfo& root = mGrids[0];
+                        int32 wcount = root.texture->getWidth() / root.grid_width;
+                        
+                        mCurrentGridInfo.texture_pos_x = (int32)(mCurrentGridIndex % wcount) * root.grid_width;
+                        mCurrentGridInfo.texture_pos_y = (int32)(mCurrentGridIndex / wcount) * root.grid_height;
+                        
+                        break;
+                    }
+                        
+                    case SA_GridCustom:
+                    case SA_SeperateFiles:
+                        // root info takes mGrids[0]
+                        mCurrentGridInfo = mGrids[mCurrentGridIndex+1];
+                        break;
+                        
+                    case SA_Unknown:
+                        break;
                 }
-                    
-                case SA_GridCustom:
-                case SA_SeperateFiles:
-                    // root info takes mGrids[0]
-                    mCurrentGridInfo = mGrids[mCurrentGridIndex+1];
-                    break;
-                    
-                case SA_Unknown:
-                    break;
             }
         }
     }

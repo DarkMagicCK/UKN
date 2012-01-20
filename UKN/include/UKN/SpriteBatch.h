@@ -88,8 +88,9 @@ namespace ukn {
         void draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color=color::White);
 
         // draw with custom source rect and position
-        void draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Color& color=color::White);        
-        void draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, float layerDetph, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Vector2& center, float rot, const Vector2& scale, const Color& color=color::White);        
+        void draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Vector2& center, float rot, const Vector2& scale, float layerDetph, const Color& color=color::White);
+
 
         // draw with custom source and destination rect
         void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color=color::White);
@@ -100,6 +101,11 @@ namespace ukn {
         
         // draw with custom descriptor
         void draw(const TexturePtr& texture, const SpriteDescriptor& descriptor);
+        
+        // start/end a batch rendering
+        // during the batch rendering, all draw calls must have the same texture param
+        void startBatch();
+        void endBatch();
         
         Matrix4& getTransformMatrix();
         const Matrix4& getTransformMatrix() const;
@@ -131,6 +137,8 @@ namespace ukn {
         Matrix4 mTransformMatrix;
         
         bool mBegan;
+        bool mBatchRendering;
+        size_t mCurrentBatchIndex;
         SpriteBatchSortMode mCurrMode;
     };
     

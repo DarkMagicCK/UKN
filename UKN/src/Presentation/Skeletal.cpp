@@ -12,6 +12,7 @@
 #include "UKN/Asset.h"
 #include "UKN/ConfigParser.h"
 #include "UKN/TimeUtil.h"
+#include "UKN/SequencialAnimation.h"
 #include "UKN/SysUtil.h"
 
 namespace ukn {
@@ -372,6 +373,9 @@ namespace ukn {
         if(mCurrentAnimation != mAnimations.end())
             mCurrentAnimation->second.update(past_time);
         
+        if(mTexture)
+            mTexture->update();
+        
         UKN_FOR_EACH(BonePtr& ptr, mChildren) {
             ptr->update(past_time);
         }
@@ -427,7 +431,7 @@ namespace ukn {
         }
     }
     
-    TexturePtr Bone::getTexture() const {
+    SequencialAnimationPtr Bone::getTexture() const {
         return mTexture;
     }
     
@@ -478,7 +482,22 @@ namespace ukn {
                             texture_path = config->getString("texture");
                         }
                         if (!texture_path.empty()) {
-                            bone->mTexture = AssetManager::Instance().load<Texture>(get_file_path(config->getName()) + string_to_wstring(texture_path));
+                            TexturePtr texture = AssetManager::Instance().load<Texture>(get_file_path(config->getName()) + string_to_wstring(texture_path));
+                            if(texture) {
+                                if(config->getString("mode", "texture") == "texture") {
+                                    bone->mTexture = new SequencialAnimation(texture,
+                                                                            texture->getWidth(),
+                                                                            texture->getHeight(),
+                                                                            1,
+                                                                            0);
+                                } else {
+                                    bone->mTexture = new SequencialAnimation(texture,
+                                                                             config->getInt("grid_width"),
+                                                                             config->getInt("grid_height"),
+                                                                             config->getInt("count"),
+                                                                             config->getInt("frame_rate", SequencialAnimation::DefaultFrameRate));
+                                }
+                            }
                         }
                            
                         // parse basic properties
@@ -621,8 +640,13 @@ namespace ukn {
     
     inline void render_bone(SpriteBatch& spriteBatch, Bone& bone) {
         if(bone.getTexture()) {
-            spriteBatch.draw(bone.getTexture(),
+            const SequencialAnimation::GridInfo& current_info = bone.getTexture()->getCurrentGridInfo();
+            spriteBatch.draw(current_info.texture,
                              bone.getPosition(),
+                             Rectangle(current_info.texture_pos_x,
+                                       current_info.texture_pos_y,
+                                       current_info.grid_width + current_info.texture_pos_x,
+                                       current_info.grid_height + current_info.texture_pos_y),
                              bone.getTextureCenter(),
                              bone.getRotation() * pi / 180.f,
                              bone.getScale(),

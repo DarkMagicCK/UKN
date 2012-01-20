@@ -32,15 +32,7 @@ namespace ukn {
             return ;
                 
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-        
-        gd.pushProjectionMatrix();
-        gd.pushViewMatrix();
-        
-        Camera* cam = gd.getCurrFrameBuffer()->getViewport().camera.get();
-        
-        gd.setProjectionMatrix(cam->getProjMatrix());
-        gd.setViewMatrix(mTransformMatrix * cam->getViewMatrix());
-        
+            
         RenderQueue::iterator it = mRenderQueue.begin();
         
         Array<Vertex2D> buffer;
@@ -88,11 +80,6 @@ namespace ukn {
         }
         
         glDisable(GL_BLEND);
-        
-        gd.bindTexture(TexturePtr());
-        
-        gd.popProjectionMatrix();
-        gd.popViewMatrix();
     }
     
 } // namespace ukn

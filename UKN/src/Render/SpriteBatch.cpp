@@ -63,10 +63,18 @@ namespace ukn {
         float u1 = 0, u2 = 1, v1 = 0, v2 = 1;
         if(texture) {
             if(!descriptor.source_rect.isEmpty()) {
-                u1 = descriptor.source_rect.x1 / texture->getWidth();
-                u2 = descriptor.source_rect.x2 / texture->getWidth();
-                v1 = descriptor.source_rect.y1 / texture->getHeight();
-                v2 = descriptor.source_rect.y2 / texture->getHeight();
+                u1 = descriptor.source_rect.x() / texture->getWidth();
+                u2 = descriptor.source_rect.right() / texture->getWidth();
+                v1 = descriptor.source_rect.y() / texture->getHeight();
+                v2 = descriptor.source_rect.bottom() / texture->getHeight();
+                
+                if(descriptor.hflip)
+                    std::swap(v1, v2);
+                
+                if(descriptor.vflip)
+                    std::swap(u1, u2);
+                
+                printf("%f, %f, %f, %f\n", u1, u2, v1, v2);
             }
         }
         
@@ -84,8 +92,8 @@ namespace ukn {
                 tx2 = (texture->getWidth() - descriptor.center.x) * descriptor.scale.x;
                 ty2 = (texture->getHeight() - descriptor.center.y) * descriptor.scale.y;
             } else {
-                tx2 = (descriptor.source_rect.x2 - descriptor.center.x) * descriptor.scale.x;
-                ty2 = (descriptor.source_rect.y2 - descriptor.center.x) * descriptor.scale.y;
+                tx2 = (descriptor.source_rect.width() - descriptor.center.x) * descriptor.scale.x;
+                ty2 = (descriptor.source_rect.height() - descriptor.center.y) * descriptor.scale.y;
             }
                         
             if(descriptor.rotation != 0.0f) {
@@ -169,6 +177,7 @@ namespace ukn {
         mRenderBuffer->bindVertexStream(mVertexBuffer, Vertex2D::Format());
         
         mBegan = false;
+        mBatchRendering = false;
         mCurrMode = SBS_None;
     }
     
@@ -190,10 +199,29 @@ namespace ukn {
     }
     
     void SpriteBatch::onRenderBegin() {
+        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+        
+        gd.pushProjectionMatrix();
+        gd.pushViewMatrix();
+        
+        Camera* cam = gd.getCurrFrameBuffer()->getViewport().camera.get();
+        
+        gd.setProjectionMatrix(cam->getProjMatrix());
+        gd.setViewMatrix(mTransformMatrix * cam->getViewMatrix());
     }
     
     void SpriteBatch::onRenderEnd() {
-        mRenderQueue.clear();
+        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+
+        gd.bindTexture(TexturePtr());
+        
+        gd.popProjectionMatrix();
+        gd.popViewMatrix();
+        
+        if(!mBatchRendering)
+            mRenderQueue.clear();
+        else  
+            mRenderQueue.erase(mCurrentBatchIndex, mRenderQueue.size());
     }
     
     Matrix4& SpriteBatch::getTransformMatrix() {
@@ -207,14 +235,6 @@ namespace ukn {
     void SpriteBatch::onRender() {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
-        gd.pushProjectionMatrix();
-        gd.pushViewMatrix();
-        
-        Camera* cam = gd.getCurrFrameBuffer()->getViewport().camera.get();
-        
-        gd.setProjectionMatrix(cam->getProjMatrix());
-        gd.setViewMatrix(mTransformMatrix * cam->getViewMatrix());
-        
         RenderQueue::iterator it = mRenderQueue.begin();
         while(it != mRenderQueue.end()) { 
             Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
@@ -226,11 +246,6 @@ namespace ukn {
             
             ++it;
         }
-        
-        gd.bindTexture(TexturePtr());
-        
-        gd.popProjectionMatrix();
-        gd.popViewMatrix();
     }
     
     void SpriteBatch::render() {
@@ -239,6 +254,32 @@ namespace ukn {
         onRender();
         
         onRenderEnd();
+    }
+    
+    void SpriteBatch::startBatch() {
+        mBatchRendering = true;
+        mCurrentBatchIndex = mRenderQueue.size();
+    }
+    
+    void SpriteBatch::endBatch() {
+        if(mCurrentBatchIndex > mRenderQueue.size()) {
+            // alloc vertex buffer
+            mVertexBuffer->resize((uint32)(mRenderQueue.size() - mCurrentBatchIndex) * 6);
+            Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
+            for(size_t i=mCurrentBatchIndex; i<mRenderQueue.size(); ++i) {
+                memcpy(vertices + i*6, &mRenderQueue[i].vertices[0], sizeof(Vertex2D)*6);
+            }
+            mVertexBuffer->unmap();
+
+            onRenderBegin();
+            GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+
+            gd.bindTexture(mRenderQueue[mCurrentBatchIndex].texture);
+            gd.onRenderBuffer(mRenderBuffer);
+            
+            onRenderEnd();
+        }
+        mBatchRendering = false;
     }
     
     void SpriteBatch::updateBoundingBox(float x, float y, float z) {
@@ -345,8 +386,8 @@ namespace ukn {
         }
     }
         
-    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Color& color) {
-        draw(texture, pos, src, 0.f, color);
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Vector2& center, float rot, const Vector2& scale, const Color& color) {
+        draw(texture, pos, src, center, rot, scale, 0.f, color);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const SpriteDescriptor& descriptor) {
@@ -366,7 +407,7 @@ namespace ukn {
         }
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& srcRect, float layerDepth, const Color& color) {        
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& srcRect, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {        
         if(!mBegan) {
             UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
@@ -374,9 +415,9 @@ namespace ukn {
         TextureObject obj(texture);
         
         SpriteDescriptor descriptor(pos,
-                                    Vector2(0.f, 0.f),
-                                    0.f,
-                                    Vector2(1.f, 1.f),
+                                    center,
+                                    rot,
+                                    scale,
                                     color,
                                     layerDepth);
         

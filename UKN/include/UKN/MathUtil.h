@@ -524,20 +524,44 @@ namespace ukn {
             this->y2 = y + r;
         }
         
-        real getWidth() const {
+        real width() const {
             return this->x2 - this->x1;
         }
         
-        real getHeight() const {
+        real height() const {
             return this->y2 - this->y1;
         }
         
-        Vector2 getUpper() const {
+        Vector2 upper() const {
             return Vector2(this->x1, this->y1);
         }
         
-        Vector2 getLower() const {
+        Vector2 lower() const {
             return Vector2(this->x2, this->y2);
+        }
+        
+        real right() const {
+            return this->x2;
+        }
+        
+        real bottom() const {
+            return this->y2;
+        }
+        
+        real left() const {
+            return this->x1;
+        }
+        
+        real top() const {
+            return this->y1;
+        }
+        
+        real x() const {
+            return this->x1;
+        }
+        
+        real y() const {
+            return this->y1;
         }
         
         void encapsulate(real x, real y) {

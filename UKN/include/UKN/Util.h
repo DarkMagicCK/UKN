@@ -62,6 +62,9 @@ namespace ukn {
         void erase(size_t index);
         iterator erase(iterator iter);
 
+        void erase(size_t begin, size_t end);
+        void erase(iterator begin, iterator end);
+
         void insert(size_t index, const T& elm);
         void insert(const T& elm);
 
@@ -504,6 +507,16 @@ namespace ukn {
         this->erase(uint32(iter - this->mElements));
         return iter;
     }
+    
+    template<typename T>
+    void Array<T>::erase(typename Array<T>::iterator begin, typename Array<T>::iterator end) {
+        ukn_assert(this->mElements);
+        ukn_assert(begin < (this->mElements + this->mSize) && end < (this->mElements + this->mSize));
+        ukn_assert(begin >= this->mElements && end >= this->mElements);
+        ukn_assert(!this->mMapped);
+        
+        this->erase(uint32(begin - this->mElements));
+    }
 
     template<typename T>
     void Array<T>::erase(size_t index) {
@@ -517,6 +530,15 @@ namespace ukn {
         } else {
             this->move(index+1, index);
         }
+    }
+    
+    template<typename T>
+    void Array<T>::erase(size_t begin, size_t end) {
+        ukn_assert(this->mElements);
+        ukn_assert(begin < this->mSize && end < this->mSize && begin < end);
+        ukn_assert(!this->mMapped);
+        
+        this->move(end, begin);
     }
 
     template<typename T>

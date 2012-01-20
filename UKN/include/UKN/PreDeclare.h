@@ -150,6 +150,9 @@ namespace ukn {
     class ComponentHolder;
     typedef SharedPtr<ComponentHolder> ComponentHolderPtr;
     
+    class SequencialAnimation;
+    typedef SharedPtr<SequencialAnimation> SequencialAnimationPtr;
+    
     
 } // namespace ukn
 

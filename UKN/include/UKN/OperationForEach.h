@@ -50,15 +50,15 @@ namespace ukn {
 	
 	#define UKN_SCOPE_VARIABLE(TYPE, VARIABLE, VALUE) \
 		if(bool __scope_variable_flag__=true) \
-			for(TYPE VARIABLE = VALUE; __scope_variable_flag__; __scope_variable_flag=false)
+			for(TYPE VARIABLE = VALUE; __scope_variable_flag__; __scope_variable_flag__=false)
 			
 	#define UKN_ENUMERABLE_FOREACH(TYPE, VARIABLE, COLLECTION) \
-		SCOPE_VARIABLE(const ForEachIterator<TYPE>&, __foreach_iterator__, CreateForEachIterator(COLLECTION))\
+		UKN_SCOPE_VARIABLE(const ForEachIterator<TYPE>&, __foreach_iterator__, CreateForEachIterator(COLLECTION))\
 		for(TYPE VARIABLE; __foreach_iterator__.available(VARIABLE); __foreach_iterator__.next())
 		
 	#define UKN_ENUMERABLE_FOREACH_INDEXED(TYPE, VARIABLE, INDEXER, COLLECTION)\
-		SCOPE_VARIABLE(const ForEachIterator<TYPE>&, __foreach_iterator__, CreateForEachIterator(COLLECTION))\
-		SCOPE_VARiABLE(intPtr, indexer, 0) \
+		UKN_SCOPE_VARIABLE(const ForEachIterator<TYPE>&, __foreach_iterator__, CreateForEachIterator(COLLECTION))\
+		UKN_SCOPE_VARIABLE(intPtr, indexer, 0) \
 		for(TYPE VARIABLE; __foreach_iterator__.available(VARIABLE); __foreach_iterator__.next(), INDEXER++)
     
 } // namespace ukn

@@ -73,8 +73,6 @@ namespace ukn {
                 
                 if(descriptor.vflip)
                     std::swap(u1, u2);
-                
-                printf("%f, %f, %f, %f\n", u1, u2, v1, v2);
             }
         }
         

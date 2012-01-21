@@ -41,7 +41,8 @@ namespace ukn {
         ~Array();
 
         void operator=(const Array<T>& rhs);
-        T& operator[](size_t index) const;
+        const T& operator[](size_t index) const;
+        T& operator[](size_t index);
 
         bool operator==(const Array<T>& rhs) const;
         bool operator!=(const Array<T>& rhs) const;
@@ -51,6 +52,7 @@ namespace ukn {
         void append(const T* arr, size_t size);
 
         void reserve(size_t num);
+        void resize(size_t size);
         size_t size() const;
         size_t capacity() const;
 
@@ -324,7 +326,7 @@ namespace ukn {
 
         T* newArray = new T[newCapacity];
         if(this->mElements) {
-            size_t capa = this->mCapacity < newCapacity ? this->mCapacity : newCapacity;
+            size_t capa = this->mSize < newCapacity ? this->mSize : newCapacity;
             for(size_t i=0; i<capa; ++i)
                 newArray[i] = this->mElements[i];
         }
@@ -440,6 +442,14 @@ namespace ukn {
             this->growTo(neededCapacity);
         }
     }
+    
+    template<typename T>
+    void Array<T>::resize(size_t size) {
+        ukn_assert(size > 0);
+        this->growTo(size);
+        
+        this->mSize = size;
+    }
 
     template<typename T>
     size_t Array<T>::size() const {
@@ -452,10 +462,18 @@ namespace ukn {
     }
 
     template<typename T>
-    T& Array<T>::operator[](size_t index) const {
-        ukn_assert(index < this->mSize);
+    T& Array<T>::operator[](size_t index) {
+        ukn_assert(index < this->mCapacity);
         ukn_assert(this->mElements);
 
+        return this->mElements[index];
+    }
+    
+    template<typename T>
+    const T& Array<T>::operator[](size_t index) const {
+        ukn_assert(index < this->mCapacity);
+        ukn_assert(this->mElements);
+        
         return this->mElements[index];
     }
 

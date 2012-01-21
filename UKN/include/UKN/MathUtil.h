@@ -503,6 +503,13 @@ namespace ukn {
             setAsBox(pos.x, pos.y, r);
         }
         
+        AABB2(const AABB2& rhs) {
+            this->x1 = rhs.x1;
+            this->y1 = rhs.y1;
+            this->x2 = rhs.x2;
+            this->y2 = rhs.y2;
+        }
+        
         void set(const Vector2& upper, const Vector2& lower) {
             this->x1 = upper.x;
             this->y1 = upper.y;
@@ -522,6 +529,16 @@ namespace ukn {
             this->y1 = y - r;
             this->x2 = x + r;
             this->y2 = y + r;
+        }
+        
+        AABB2& operator=(const AABB2& rhs) {
+            if(this != &rhs) {
+                this->x1 = rhs.x1;
+                this->y1 = rhs.y1;
+                this->x2 = rhs.x2;
+                this->y2 = rhs.y2;
+            }
+            return *this;
         }
         
         real width() const {

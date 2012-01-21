@@ -37,7 +37,9 @@ namespace ukn {
     Array<uint8> zlib_compress(uint8* input, uint32 input_length, ZlibCompressionMethod method) {
 
         uint32 buffer_size = 1024;
-        uint8* buffer = ukn_malloc_t(uint8, buffer_size);
+        Array<uint8> buffer;
+        buffer.resize(buffer_size);
+        
         int err;
         z_stream strm;
         strm.zalloc = Z_NULL;
@@ -46,7 +48,7 @@ namespace ukn {
         
         strm.next_in  = input;
 		strm.avail_in = input_length;
-		strm.next_out = buffer;
+		strm.next_out = buffer.begin();
 		strm.avail_out = buffer_size;
         
         const int windowBits = (method == ZCM_Gzip) ? 15 + 16 : 15;
@@ -63,11 +65,9 @@ namespace ukn {
             ukn_assert(err != Z_STREAM_ERROR);
             
             if (err == Z_OK) {
-                // More output space needed
-                ukn_free(buffer);
-                buffer = ukn_malloc_t(uint8, buffer_size * 2);
-                
-                strm.next_out = (Bytef *)(buffer + buffer_size);
+                buffer.resize(buffer_size * 2);
+
+                strm.next_out = (Bytef *)(buffer.begin() + buffer_size);
                 strm.avail_out = buffer_size;
                 buffer_size *= 2;
 
@@ -81,14 +81,11 @@ namespace ukn {
         }
         
         size_t outLength = buffer_size - strm.avail_out;
-        uint8* tmpBuffer = ukn_malloc_t(uint8, outLength);
-        memcpy(tmpBuffer, buffer, outLength);
-        ukn_free(buffer);
-        buffer = tmpBuffer;
-        
         deflateEnd(&strm);
         
-        return Array<uint8>(buffer, outLength);
+        buffer.resize(outLength);
+
+        return buffer;
     }
     
     Array<uint8> zlib_decompress(uint8* input, uint32 input_length) {        
@@ -98,11 +95,12 @@ namespace ukn {
 		strm.opaque = Z_NULL;
         
         uint32 buffer_size = 1024;
-        uint8* buffer = ukn_malloc_t(uint8, buffer_size);
+        Array<uint8> buffer;
+        buffer.resize(buffer_size);
         
 		strm.next_in  = input;
 		strm.avail_in = input_length;
-		strm.next_out = buffer;
+		strm.next_out = buffer.begin();
 		strm.avail_out = buffer_size;
         
 		int ret = inflateInit2(&strm, 15 + 32);
@@ -113,7 +111,7 @@ namespace ukn {
         }
         
         do {
-            ret = inflate(&strm, Z_FINISH);
+            ret = inflate(&strm, Z_NO_FLUSH);
             
             switch (ret) {
                 case Z_NEED_DICT:
@@ -128,10 +126,9 @@ namespace ukn {
             }
             
             if (ret != Z_STREAM_END) {
-                ukn_free(buffer);
-                buffer = ukn_malloc_t(uint8, buffer_size * 2);
+                buffer.resize(buffer_size * 2);
                 
-                strm.next_out = (Bytef *)(buffer + buffer_size);
+                strm.next_out = (Bytef *)(buffer.begin() + buffer_size);
                 strm.avail_out = buffer_size;
                 buffer_size *= 2;
             }
@@ -144,14 +141,11 @@ namespace ukn {
         }
                         
         size_t outLength = buffer_size - strm.avail_out;
-        uint8* tmpBuffer = ukn_malloc_t(uint8, outLength);
-        memcpy(tmpBuffer, buffer, outLength);
-        ukn_free(buffer);
-        buffer = tmpBuffer;
-        
         inflateEnd(&strm);
         
-        return Array<uint8>(buffer, outLength);
+        buffer.resize(outLength);
+        
+        return buffer;
     }
     
 } // namespace ukn

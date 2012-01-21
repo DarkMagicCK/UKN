@@ -19,7 +19,7 @@ namespace ukn {
 	template<typename T, size_t minSize>
 	union BinaryRetriever {
 		T 		data;
-		char 	binary[sizeof(T)>minSize?sizeof(T):minSize]; 
+		uint8 	binary[sizeof(T)>minSize?sizeof(T):minSize]; 
 	};
     
     template<typename T>

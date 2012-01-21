@@ -41,10 +41,13 @@
 #include "UKN/Skeletal.h"
 #include "UKN/Base64.h"
 #include "UKN/RandomUtil.h"
+#include "UKN/TMXTiledMap.h"
 #include "UKN/ZipUtil.h"
 
 #include <vector>
 #include <map>
+
+int x =0 , y=0;
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -69,40 +72,53 @@ public:
 			skAnim.play("NewAnim");
 			skAnim.setPosition(ukn::Vector2(300, 200));
 		}
+        
+        ukn::ConfigParserPtr cfg3 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"perspective_walls.tmx");
+
+        mMap = new ukn::tmx::Map();
+        mMap->deserialize(cfg3);
+        
+        mMap->setMapViewSize(ukn::Vector2(this->getMainWindow().getWidth() / mMap->getTileWidth() + 1,
+                                          this->getMainWindow().getHeight() / mMap->getTileHeight()+ 1));
     }
     
     void onUpdate() {
+        x++;
+        y++;
+     //   mMap->setMapPosition(ukn::Vector2(x, 0));
     }
     
     void onRender() {
         ukn::Context::Instance().getGraphicFactory().getGraphicDevice().clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Lightskyblue, 0, 0);
         
-        
+        mMap->render();
+
         mSpriteBatch->begin(ukn::SBS_BackToFront);
-        
         {
             UKN_PROFILE("sk_anim");
             skAnim.update();
             skAnim.render(*mSpriteBatch.get());
-            
-            ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
-         //   printf("%s\n", data.toFormattedString().c_str());
-        }       
-        
-        mSpriteBatch->end();
+            mMap->render();
 
+            ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
+            
+
+            printf("%s\n", data.toFormattedString().c_str());
+        }       
+        mSpriteBatch->end();
+        
+        
         if(mFont) {
             mFont->draw("Hello World! 测试 ", 0, 0, ukn::FA_Left, ukn::color::Black);
 
             mFont->render();
         }
-        
-
     }
     
 private:
     ukn::SharedPtr<ukn::SpriteBatch> mSpriteBatch;
 
+    ukn::tmx::Map* mMap;
     
     ukn::SkeletalAnimation skAnim;
     ukn::FontPtr mFont;

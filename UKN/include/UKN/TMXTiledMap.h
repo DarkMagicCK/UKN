@@ -15,6 +15,7 @@
 #include "UKN/Serializer.h"
 #include "UKN/Renderable.h"
 #include "UKN/Util.h"
+#include "UKN/Color.h"
 
 namespace ukn {
     
@@ -24,10 +25,28 @@ namespace ukn {
          Tiled tmx map reader & renderer
          see www.mapeditor.org for more information about tiled and tmx
          **/
+        
+        struct Property {
+            ukn_string name;
+            ukn_string value;
+            
+            Property() { }
+            Property(const ukn_string& name, const ukn_string& value):
+            name(name),
+            value(value) { 
+            }
+        };
+        
+        struct PropertyContainer {
+            typedef std::vector<Property> PropertyList;
+            PropertyList properties;
+        };
+        
+        struct TileSet;
 
         struct Tile {
             /* local id of the tile, equals to global_id - tileset.first_grid_id */
-            uint32 tile_id;
+            int32 tile_id;
             
             /* texture rectangle of the tile */
             /* 
@@ -35,39 +54,54 @@ namespace ukn {
                 y = local_id / (image_width / tile_width) * tile_height
              */
             Rectangle tile_texture_rect;
+            Rectangle tile_bounding_rect;
             
             /* bit 32 - 30 in tile data */
             bool flipped_horizontally;
             bool flipped_vertically;
             bool flipped_diagonally;
+            
+            /* parent tileset id */
+            uint32 tileset_id;
+            
+            /* tile properties */
+            PropertyContainer property;
         };
         
         struct TileSet {
             /* name of the tileset */
             ukn_string name;
             /* first tileset grid id */
-            uint32 first_grid;
+            int32 first_grid;
             
             /* dimensions of the tileset */
-            uint32 tile_width;
-            uint32 tile_height;
+            int32 tile_width;
+            int32 tile_height;
             
             /* though not documented in tmx file format, but shown in examples
                 offset between the tile grids */
-            uint32 tile_offset_x;
-            uint32 tile_offset_y;
+            int32 tile_offset_x;
+            int32 tile_offset_y;
+            
+            /* gird margin and spacing */
+            int32 margin;
+            int32 spacing;
             
             /* texture contains the image size */
             TexturePtr image;
             
-            /* generated tiles, for faster load */
             /* size = map_width * map_height */
-            Tile* tiles;
+            std::vector<Tile> tiles;
+            
+            /* properties */
+            PropertyContainer property;
             
             Tile* tileAt(uint32 local_id) {
                 return &tiles[local_id];
             }
         };
+        
+        class Map;
         
         struct Layer {
             /* name of the layer */
@@ -77,22 +111,62 @@ namespace ukn {
             uint32 width;
             uint32 height;
             
-            /* id of the tileset to use */
-            uint32 tile_set_id;
+            /* position of the layer */
+            int32 x;
+            int32 y;
             
-            /* local tiles, maps to tiles in TileSet */
-            Tile* tiles;
+            /* opacity of the layer */
+            float opacity;
+            bool  visible;
+            
+            const Map* parent;
+            
+            /* local tiles */
+            std::vector<Tile> tiles;
+            
+            Tile& getTileAt(const Vector2& pos);
         };  
+        
+        enum ObjectType {
+            OT_Image,
+            OT_Polygon,
+            OT_Polyline,
+        };
+        
+        struct Object {
+            ukn_string name;
+            ObjectType type;
+
+            /* coordinate of the object in pixels */
+            int32 x;
+            int32 y;
+            
+            /* size of the object in pixels */
+            int32 width;
+            int32 height;
+            
+            /* tileid reference of the object, optional */
+            int32 gid;
+            
+        };
+        
+        /* Obj group is a kind of layer */
+        struct ObjectGroup: public Layer {
+            /* color of objects */
+            Color color;
+            
+            std::vector<Object> objects;
+        };
         
         enum MapOrientation {
             MO_Isometric,
-            MO_orthogonall
+            MO_Orthogonal
         };
         
         class Map: public virtual IRenderable, public virtual IConfigSerializable, public virtual Object {
         public:
             typedef Array<TileSet> TileSetList;
-            typedef Array<Layer> LayerList;
+            typedef Array<SharedPtr<Layer> > LayerList;
             
         public:
             Map();
@@ -104,6 +178,26 @@ namespace ukn {
             
             SpriteBatchPtr  getMapRenderer() const;
             void            setMapRenderer(SpriteBatchPtr renderer);
+            
+            MapOrientation  getOrientation() const;
+            
+            // in tiles
+            uint32          getMapWidth() const;
+            uint32          getMapHeight() const;
+            
+            // ion pixel
+            int32          getTileWidth() const;
+            int32          getTileHeight() const;
+                        
+            Tile& getTileAt(uint32 layer_index, const Vector2& pos);
+
+            // in pixel
+            void            setMapPosition(const Vector2& pos);
+            Vector2         getMapPosition() const;
+            
+            // in tiles
+            void            setMapViewSize(const Vector2& size);
+            Vector2         getMapViewSize() const;
             
             // IConfigSerializable
             virtual bool serialize(const ConfigParserPtr& config) override;
@@ -121,6 +215,9 @@ namespace ukn {
             virtual void render() override;
             
         private:
+            void orthogonalRender();
+            void isometricRender();
+            
             TileSetList mTileSets;
             LayerList mLayers;
             
@@ -130,9 +227,13 @@ namespace ukn {
             
             uint32 mMapWidth;
             uint32 mMapHeight;
-            uint32 mTileWidth;
-            uint32 mTileHeight;
+            int32 mTileWidth;
+            int32 mTileHeight;
             MapOrientation mOrientation;
+            
+            Vector2 mPosition;
+            Vector2 mMapPosition;
+            Vector2 mMapViewSize;
         };
         
     } // namespace tmx

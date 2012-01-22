@@ -415,19 +415,23 @@ namespace ukn {
         Array<uint16>::const_iterator it = data.string_to_render.begin();
         while(it != data.string_to_render.end() && *it != 0) {
             if(*it != L'\n') {
-                uint32 gidx = getGlyphByChar(*it);
-                
-                if(gidx > 0 && gidx < mGlyphs.size()) {
-                    FTGlyph& glyph = mGlyphs[gidx-1];
-
-                    mSpriteBatch->draw(glyph.texture, Vector2(x+glyph.left, y+glyph.size-glyph.top), data.char_rot, data.clr);
+                if(*it == L' ') {
+                    x += mFontSize;
+                } else {
+                    uint32 gidx = getGlyphByChar(*it);
                     
-                    x += mGlyphs[gidx-1].texw + mGlyphs[gidx-1].left + data.kerning_width;
-                }
-                
-                if(data.line_width != 0.f && (x - data.x) > data.line_width) {
-                    y += mFontSize + data.kerning_height;
-                    x = data.x;
+                    if(gidx > 0 && gidx < mGlyphs.size()) {
+                        FTGlyph& glyph = mGlyphs[gidx-1];
+                        
+                        mSpriteBatch->draw(glyph.texture, Vector2(x+glyph.left, y+glyph.size-glyph.top), data.char_rot, data.clr);
+                        
+                        x += mGlyphs[gidx-1].texw + mGlyphs[gidx-1].left + data.kerning_width;
+                    }
+                    
+                    if(data.line_width != 0.f && (x - data.x) > data.line_width) {
+                        y += mFontSize + data.kerning_height;
+                        x = data.x;
+                    }
                 }
             } else {
                 y += mFontSize + data.kerning_height;

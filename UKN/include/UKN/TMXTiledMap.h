@@ -147,7 +147,8 @@ namespace ukn {
             
             /* tileid reference of the object, optional */
             int32 gid;
-            
+
+            PropertyContainer properties;
         };
         
         /* Obj group is a kind of layer */

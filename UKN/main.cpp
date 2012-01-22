@@ -75,11 +75,14 @@ public:
         
         ukn::ConfigParserPtr cfg3 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"perspective_walls.tmx");
 
-        mMap = new ukn::tmx::Map();
-        mMap->deserialize(cfg3);
+        if(cfg3) {
+            mMap = new ukn::tmx::Map();
+            mMap->deserialize(cfg3);
         
-        mMap->setMapViewSize(ukn::Vector2(this->getMainWindow().getWidth() / mMap->getTileWidth() + 1,
-                                          this->getMainWindow().getHeight() / mMap->getTileHeight()+ 1));
+            mMap->setMapViewSize(ukn::Vector2(this->getMainWindow().getWidth() / mMap->getTileWidth() + 1,
+                                              this->getMainWindow().getHeight() / mMap->getTileHeight()+ 1));
+        } else 
+            mMap = 0;
     }
     
     void onUpdate() {
@@ -91,14 +94,14 @@ public:
     void onRender() {
         ukn::Context::Instance().getGraphicFactory().getGraphicDevice().clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Lightskyblue, 0, 0);
         
-        mMap->render();
+        if(mMap) 
+            mMap->render();
 
         mSpriteBatch->begin(ukn::SBS_BackToFront);
         {
             UKN_PROFILE("sk_anim");
             skAnim.update();
             skAnim.render(*mSpriteBatch.get());
-            mMap->render();
 
             ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
             
@@ -109,7 +112,7 @@ public:
         
         
         if(mFont) {
-            mFont->draw("Hello World! 测试 ", 0, 0, ukn::FA_Left, ukn::color::Black);
+            mFont->draw("HAPPY NEW YEAR", 0, 0, ukn::FA_Left, ukn::color::Black);
 
             mFont->render();
         }

@@ -30,7 +30,7 @@ namespace ukn {
 
     bool GLTexture2D::load(const ResourcePtr& resource, bool mipmap) {
         if(resource->getResourceStream()) {
-            StreamPtr memStream = stream_to_memory_stream(resource->getResourceStream());
+            StreamPtr memStream = resource->getResourceStream()->readIntoMemory();
 
             if(memStream) {
                 MemoryStream* memData = static_cast<MemoryStream*>(memStream.get());

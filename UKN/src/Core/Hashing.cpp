@@ -122,7 +122,7 @@ namespace ukn {
 	}
     
     ukn_string stream_get_md5(const StreamPtr stream) {
-        StreamPtr memData = stream_to_memory_stream(stream);
+        StreamPtr memData = stream->readIntoMemory();
         
         MD5 md5((const char*)(static_cast<MemoryStream*>(memData.get())->data()), (uint32)memData->size());
         return md5.hex_digest();

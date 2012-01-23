@@ -82,6 +82,7 @@ namespace ukn {
 #define ukn_logged_assert(cond, log) \
     if(!(cond)) { \
         ukn::log_error(ukn::format_string("ukn::assertion failed with mssg %s at function %s, file %s, line %d", log, __FUNCTION__, __FILE__, __LINE__)); \
+        ukn_assert(0); \
     }
 } // namespace ukn
 

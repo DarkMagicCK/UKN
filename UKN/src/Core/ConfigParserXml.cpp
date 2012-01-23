@@ -24,7 +24,7 @@ namespace ukn {
     }
     
     bool ConfigParserXmlImpl::open(ResourcePtr resource) {
-        StreamPtr dataStream = stream_to_memory_stream(resource->getResourceStream());
+        StreamPtr dataStream = resource->getResourceStream()->readIntoMemory();
         if(dataStream) {
             if(!mDocument) {
                 mDocument = new pugi::xml_document;
@@ -192,78 +192,6 @@ namespace ukn {
             attributes.push_back(ukn_string(it->value()));
         }
         return attributes;
-    }
-    
-    ukn_string ConfigParserXmlImpl::getString(const ukn_string& attr) const {
-        if(!mDocument)
-            return ukn_string();
-        
-        if(attr.empty()) {
-            return mCurrNode.child_value();
-        }
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
-        if(attribute) {
-            return ukn_string(attribute.value());
-        } else {
-            ukn_string c = mCurrNode.child_value(attr.c_str());
-            return c;
-        }
-        return ukn_string();
-    }
-    
-    
-    bool ConfigParserXmlImpl::getBool(const ukn_string& attr) const {
-        if(!mDocument)
-            return false;
-        
-        if(attr.empty()) {
-            return false;
-        }
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
-        if(attribute) {
-            return attribute.as_bool();
-        } else {
-            ukn_string c = mCurrNode.child_value(attr.c_str());
-            if(!c.empty())
-                return false;
-        }
-        return false;
-    }
-    
-    int32 ConfigParserXmlImpl::getInt(const ukn_string& attr) const {
-        if(!mDocument)
-            return 0;
-        
-        if(attr.empty()) {
-            return 0;
-        }
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
-        if(attribute) {
-            return attribute.as_int();
-        } else {
-            ukn_string c = mCurrNode.child_value(attr.c_str());
-            if(!c.empty())
-                return 0;
-        }
-        return 0;
-    }
-    
-    float ConfigParserXmlImpl::getFloat(const ukn_string& attr) const {
-        if(!mDocument)
-            return 0.f;
-        
-        if(attr.empty()) {
-            return 0.f;
-        }
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
-        if(attribute) {
-            return attribute.as_float();
-        } else {
-            ukn_string c = mCurrNode.child_value(attr.c_str());
-            if(!c.empty())
-                return 0.f;
-        }
-        return 0.f;
     }
     
     ukn_string ConfigParserXmlImpl::getString(const ukn_string& attr, const ukn_string& opt) const {

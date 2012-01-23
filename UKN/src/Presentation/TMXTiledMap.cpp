@@ -19,6 +19,7 @@
 #include "UKN/Base64.h"
 #include "UKN/ZipUtil.h"
 #include "UKN/Context.h"
+#include "UKN/RenderBuffer.h"
 
 namespace ukn {
     

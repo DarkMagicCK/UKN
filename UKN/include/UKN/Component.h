@@ -67,11 +67,11 @@ namespace ukn {
         void sendMessage(MessageEventArgs& args);
         void sendMessage(const ukn_string& to, MessageEventArgs& args);
         
-        void addComponent(ComponentPtr comp);
-        ComponentPtr removeComponent(const ukn_string& name);
+        void            addComponent(ComponentPtr comp);
+        ComponentPtr    removeComponent(const ukn_string& name);
         
-        bool hasComponent(const ukn_string& name);
-        Component* getComponent(const ukn_string& name);
+        bool        hasComponent(const ukn_string& name);
+        Component*  getComponent(const ukn_string& name);
         
         virtual void onComponentAdded(Component* compo);
         virtual void onComponentRemoved(Component* compo);

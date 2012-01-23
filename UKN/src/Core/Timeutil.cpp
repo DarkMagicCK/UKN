@@ -470,14 +470,14 @@ namespace ukn {
     
     void FrameCounter::waitToNextFrame() {
         mDelta = mDetalTime.elapsed();
-        Profiler::Instance().updateTimeRatio(FrameCounter::Instance().getDeltaTime(), getPrevDelta() * 1000 * 1000);
+        Profiler::Instance().updateTimeRatio(FrameCounter::Instance().getDeltaTime(), mDelta);
+
+        mDetalTime.update();
 
         mPrevDelta = doWaitToNextFrame();
         mCurrentFps = 1.0f / mPrevDelta;
         
         ++mFrameCount;
-        
-        mDetalTime.update();
     }
     
     uint64 FrameCounter::getFrameCount() const {

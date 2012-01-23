@@ -11,13 +11,35 @@
 
 namespace ukn {
     
-    BinarySerializer::BinarySerializer(const StreamPtr& stream):
-    mSerializeStream(stream) {
-        if(!mSerializeStream) {
-            mSerializeStream = new MemoryStream();
-        }
+    // bool
+    template<>
+    void SerializeHelper::FromString<bool>(const ukn_string& str, bool* val) {
+        ukn_assert(val);
+        if((str.size() == 1 && str[0] == '1') ||
+           strcmpnocase(str.c_str(), "true") ||
+           strcmpnocase(str.c_str(), "yes"))
+            *val = true;
+        else
+            *val = false;
     }
     
+    template<>
+    ukn_string SerializeHelper::ToString<bool>(bool* val) {
+        if(*val)
+            return "true";
+        else
+            return "false";
+    }
+    
+    template<>
+    bool SerializeHelper::DefaultValue<bool>() {
+        return false;
+    }
+    
+    template<>
+    SerializableTypeId SerializeHelper::GetTypeId<bool>() {
+        return STI_BOOL;
+    }
     
     // int32
     template<>
@@ -36,12 +58,56 @@ namespace ukn {
         return 0;
     }
     
-    // uint32
     template<>
     SerializableTypeId SerializeHelper::GetTypeId<int32>() {
         return STI_INT;
     }
     
+    // int16
+    template<>
+    void SerializeHelper::FromString<int16>(const ukn_string& str, int16* val) {
+        ukn_assert(val);
+        sscanf(str.c_str(), "%hd", val);
+    }
+    
+    template<>
+    ukn_string SerializeHelper::ToString<int16>(int16* val) {
+        return any_to_string(*val);
+    }
+    
+    template<>
+    int16 SerializeHelper::DefaultValue<int16>() {
+        return 0;
+    }
+    
+    template<>
+    SerializableTypeId SerializeHelper::GetTypeId<int16>() {
+        return STI_INT16;
+    }
+    
+    // uint16
+    template<>
+    void SerializeHelper::FromString<uint16>(const ukn_string& str, uint16* val) {
+        ukn_assert(val);
+        sscanf(str.c_str(), "%hu", val);
+    }
+    
+    template<>
+    ukn_string SerializeHelper::ToString<uint16>(uint16* val) {
+        return any_to_string(*val);
+    }
+    
+    template<>
+    uint16 SerializeHelper::DefaultValue<uint16>() {
+        return 0;
+    }
+    
+    template<>
+    SerializableTypeId SerializeHelper::GetTypeId<uint16>() {
+        return STI_INT;
+    }
+    
+    // uint32
     template<>
     void SerializeHelper::FromString<uint32>(const ukn_string& str, uint32* val) {
         ukn_assert(val);
@@ -121,12 +187,34 @@ namespace ukn {
     
     template<>
     char SerializeHelper::DefaultValue<char>() {
-        return 0.0;
+        return 0;
     }
     
     template<>
     SerializableTypeId SerializeHelper::GetTypeId<char>() {
         return STI_CHAR;
+    }
+    
+    // byte
+    template<>
+    void SerializeHelper::FromString<uint8>(const ukn_string& str, uint8* val) {
+        ukn_assert(val);
+        sscanf(str.c_str(), "%c", val);
+    }
+    
+    template<>
+    ukn_string SerializeHelper::ToString<uint8>(uint8* val) {
+        return any_to_string(*val);
+    }
+    
+    template<>
+    uint8 SerializeHelper::DefaultValue<uint8>() {
+        return 0;
+    }
+    
+    template<>
+    SerializableTypeId SerializeHelper::GetTypeId<uint8>() {
+        return STI_BYTE;
     }
     
     // long

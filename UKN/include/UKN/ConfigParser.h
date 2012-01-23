@@ -73,38 +73,21 @@ namespace ukn {
         virtual std::vector<ukn_string> getAttributes() const = 0;
         
         /**
-         * get node attribute as string
-         */
-        virtual ukn_string getString(const ukn_string& attr) const = 0;
-        /**
-         * get node attribute as bool
-         */
-        virtual bool getBool(const ukn_string& attr) const = 0;
-        /**
-         * get node attribute as bool
-         */
-        virtual int32 getInt(const ukn_string& attr) const = 0;
-        /**
-         * get node attribute as bool
-         */
-        virtual float getFloat(const ukn_string& attr) const = 0;
-        
-        /**
          * get node attribute as optinal string
          */
-        virtual ukn_string getString(const ukn_string& attr, const ukn_string& opt) const = 0;
+        virtual ukn_string getString(const ukn_string& attr, const ukn_string& opt = ukn_string()) const = 0;
         /**
          * get node attribute as optinal bool
          */
-        virtual bool getBool(const ukn_string& attr, bool opt) const = 0;
+        virtual bool getBool(const ukn_string& attr, bool opt = false) const = 0;
         /**
          * get node attribute as optinal bool
          */
-        virtual int32 getInt(const ukn_string& attr, int32 opt) const = 0;
+        virtual int32 getInt(const ukn_string& attr, int32 opt = 0) const = 0;
         /**
          * get node attribute as optinal bool
          */
-        virtual float getFloat(const ukn_string& attr, float opt) const = 0;
+        virtual float getFloat(const ukn_string& attr, float opt = 0.f) const = 0;
         
         
         /**

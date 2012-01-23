@@ -22,7 +22,7 @@ namespace ukn {
         ST_Net,
     };
     
-    class UKN_API IStream {
+    class UKN_API Stream {
     public:
     	virtual bool	canRead() const = 0;
     	virtual bool	canWrite() const = 0;
@@ -31,42 +31,24 @@ namespace ukn {
         virtual bool    seek(size_t pos) = 0;
         virtual size_t  read(uint8* buffer, size_t length) = 0;
         virtual size_t  write(const uint8* buffer, size_t length) = 0;
-
+        
         virtual size_t  pos() const = 0;
         virtual size_t  size() const = 0;
         virtual bool    isValid() const = 0;
         
-        virtual void close() = 0;
+        virtual void    close() = 0;
+        virtual void    flush() = 0;
         
         virtual StreamType getStreamType() const = 0;
         
-        template<typename T>
-        IStream& operator<<(const T& val) {
-            write((uint8*)&val, sizeof(T));
-            return *this;
-        }
+        virtual uint8       readByte();
+        virtual void        writeByte(uint8 byte);
         
-        template<typename T>
-        IStream& operator>>(T& val) {
-            read((uint8*)&val, sizeof(T));
-            return *this;
-        }
-        
-        IStream& operator<<(const char* val) {
-            write((const uint8*)val, strlen(val));
-            return *this;
-        }
-        
-        template<typename T>
-        IStream& operator<<(const Array<T>& array) {
-            for(size_t i=0; i<array.size(); ++i) {
-                *this<<array[i];
-            }
-            return *this;
-        }
+        virtual bool        saveToFile(const String& file);
+        virtual StreamPtr   readIntoMemory();
     };
 
-    class UKN_API MemoryStream: public IStream {
+    class UKN_API MemoryStream: public Stream {
 	public:
 		MemoryStream();
         MemoryStream(const MemoryStream& rhs);
@@ -76,56 +58,33 @@ namespace ukn {
         
         MemoryStream& operator=(const MemoryStream& rhs);
         
-        void close();
+        void close() override;
+        void flush() override;
         
-        StreamType getStreamType() const {
-            return ST_Memory;
-        }
-		
+        StreamType getStreamType() const override;
+        
         // give memory management to MemoryStream
-		void set(uint8* data, size_t length);
-        // only holds the data pointer, does not hold memory management
-        void map(uint8* data, size_t length);
-        size_t write(const uint8* data, size_t length);
+		void    set(uint8* data, size_t length);
+        // only holds the data pointer, does not do memory management
+        void    map(uint8* data, size_t length);
+        size_t  write(const uint8* data, size_t length) override;
 
-        bool seek(size_t pos);
+        bool    seek(size_t pos) override;
 		
-		size_t size() const;
-		size_t capacity() const;
-		size_t pos() const;
-		bool isValid() const;
-		
-		/* alloc a block of memory */
+		size_t  size() const override;
+		size_t  capacity() const;
+		size_t  pos() const override;
+		bool    isValid() const override;
+        
 		bool alloc(size_t size);
 		
-		// reduce size to real size
 		void resize();
         void resize(size_t newsize);
-				
-		template<typename T>
-		bool push(T t) {
-			return push(&t, sizeof(t));
-		}
 		        
-		/* 
-		 read a block of memory, size = sizeof(T) 
-		 */
 		template<typename T>
 		T read();
         
-        template<typename T>
-        bool read(T* t);
-        
-		/* 
-		 read a block of memory, size specified
-		 the memory would be copied to pv
-		 so remember to free
-		 if buffersize < size, then the size would be set to the bytes accuraly read
-		 */
-		size_t read(uint8* pv, size_t size);		
-		/*
-		 read a block of memory from offset 
-		 */
+		size_t read(uint8* pv, size_t size) override;		
 		size_t read(size_t offset, uint8* pv, size_t size);
 		
         uint8* data();
@@ -141,9 +100,11 @@ namespace ukn {
         
         uint8 operator[](size_t index);
         
-        bool canRead() const;
-        bool canWrite() const;
-        bool canSeek() const;
+        bool canRead() const override;
+        bool canWrite() const override;
+        bool canSeek() const override;
+        
+        StreamPtr readIntoMemory() override;
         
 	private:
 		size_t mCurrPos;
@@ -161,109 +122,47 @@ namespace ukn {
             memcpy(&t, (void*)(data()+this->mCurrPos), size);
             this->mCurrPos += size;
             return t;
-        }
+        } else 
+            UKN_THROW_EXCEPTION("ukn::MemoryStream::read<T>: stream length not enough");
         return 0;
     }
     
-    template<typename T>
-    bool MemoryStream::read(T* t) {
-        if(!isValid()) return 0;
-        if(this->mCurrPos == this->size()) return 0;
-        
-        uint32 size = sizeof(T);
-        if(this->mCurrPos+size <= this->size()) {
-            memcpy(t, (void*)(data()+this->mCurrPos), size);
-            this->mCurrPos += size;
-            return true;
-        }
-        return false;
-    }
-    
-    class UKN_API FileStreamBasic: public IStream {
-    public:
-        enum SeekType {
-            Begin = 0,
-            Current = 1,
-            End = 2,
-        };
-        
-        virtual ~FileStreamBasic() {}
-        virtual bool open(const String& filename, bool canwrite = false, bool append = false, bool nocache = false) = 0;
-        
-        StreamType getStreamType() const {
-            return ST_File;
-        }
-        
-        virtual void close() = 0;
-        virtual void truncate() = 0;
-        virtual size_t size() const = 0;
-        virtual size_t pos() const = 0;
-        
-        virtual bool isValid() const = 0;
-        virtual bool seek(size_t pos) = 0;
-        virtual bool seek(size_t pos, SeekType type) = 0;
-        virtual size_t read(uint8* data, size_t len) = 0;
-        virtual size_t write(const uint8* data, size_t len) = 0;
-        
-        StreamPtr readIntoMemory();
-    };
-    
-#ifdef UKN_OS_WINDOWS
-    /*
-     Win32 implemention
-     */
-    class UKN_API FileStreamWin32: public FileStreamBasic {
-    public:
-        FileStreamWin32();
-        virtual ~FileStreamWin32();
-        virtual bool open(const String& filename, bool canwrite = false, bool append = false, bool nocache = false);
-	
-		bool canRead() const;
-        bool canWrite() const;
-        bool canSeek() const;
-        
-        virtual void close();
-        virtual void truncate();
-        virtual size_t size() const;
-        virtual size_t pos() const;
-        
-        virtual bool isValid() const;
-        virtual bool seek(size_t pos);
-        virtual bool seek(size_t pos, SeekType type);
-        virtual size_t read(uint8* data, size_t len);
-        virtual size_t write(const uint8* data, size_t len);
-        
-    private:
-        HANDLE file;
-        bool canwrite;
-    };
-    
-    typedef FileStreamWin32 FileStream;
-    
-#else
     /*
      POSIX implemention
      */
-    class UKN_API FileStreamPosix: public FileStreamBasic {
+    class UKN_API FileStream: public Stream {
     public:
-        FileStreamPosix();
-        virtual ~FileStreamPosix();
+        enum SeekType {
+            Begin,
+            Pos,
+            End
+        };
+        
+    public:
+        
+        FileStream();
+        virtual ~FileStream();
         virtual bool open(const String& filename, bool canwrite = false, bool append = false, bool nocache = false);
         
-        bool canRead() const;
-        bool canWrite() const;
-        bool canSeek() const;
+        bool canRead() const override;
+        bool canWrite() const override;
+        bool canSeek() const override;
         
-        virtual void close();
-        virtual void truncate();
-        virtual size_t size() const;
-        virtual size_t pos() const;
+        void close() override;
+        void flush() override;
+
+        void truncate();
+        size_t size() const override;
+        size_t pos() const override;
         
-        virtual bool isValid() const;
-        virtual bool seek(size_t pos);
-        virtual bool seek(size_t pos, SeekType type);
-        virtual size_t read(uint8* data, size_t len);
-        virtual size_t write(const uint8* data, size_t len);
+        bool isValid() const override;
+        bool seek(size_t pos) override;
+        bool seek(size_t pos, SeekType type);
+        size_t read(uint8* data, size_t len) override;
+        size_t write(const uint8* data, size_t len) override;
+        
+        StreamType getStreamType() const override;
+        StreamPtr readIntoMemory() override;
         
     private:
         bool nocache;
@@ -271,22 +170,42 @@ namespace ukn {
         FILE* file;
     };
     
-    typedef FileStreamPosix FileStream;
-    
-#endif //OS_WIN32
-    
-    StreamPtr stream_to_memory_stream(const StreamPtr& stream);
-    bool write_stream_to_file(const StreamPtr& stream, const String& file);
-    
-    bool write_stream_to_file(IStream& stream, const String& file);
-    
+    class BufferedStream: public Stream {
+    public:
+        BufferedStream(const StreamPtr& stream);
+        BufferedStream(const StreamPtr& stream, size_t buffer_size);
+        virtual ~BufferedStream();
+        
+        bool	canRead() const override;
+        bool	canWrite() const override;
+        bool 	canSeek() const override;
+    	
+        bool    seek(size_t pos) override;
+        size_t  read(uint8* buffer, size_t length) override;
+        size_t  write(const uint8* buffer, size_t length) override;
+        
+        size_t  pos() const override;
+        size_t  size() const override;
+        bool    isValid() const override;
+        
+        void    close() override;
+        void    flush() override;
+        
+        StreamType getStreamType() const override;
+        StreamPtr readIntoMemory() override;
+        
+    private:
+        Array<uint8> mBuffer;
+        StreamPtr mStream;
+    };
+        
     /**
      * simple stream that receives / sends data through internet
      * some stream actions may not available for net stream
      * such as size and pos
      * implementation from http://www.keithschwarz.com/interesting/code/?dir=nstream by Keith Schwarz
      **/
-    class NetStream: public IStream, public std::iostream {
+    class NetStream: public Stream, public std::iostream {
     public:
         NetStream();
         explicit NetStream(const ukn_string& hostName, uint16 portNum);
@@ -308,6 +227,7 @@ namespace ukn {
         bool is_open() const;
         
         void close();
+        void flush();
         
         bool    seek(size_t pos);
         size_t  read(uint8* buffer, size_t length);

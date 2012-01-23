@@ -1590,34 +1590,6 @@ namespace ukn {
 #undef UKN_POINT_TEMP_PARAM_ARGS
 #undef UKN_POINT_PARAM_EXPAND
 
-    class RefCounted {
-    public:
-        RefCounted(): mCounter(1) {}
-
-        void duplicate() const;
-        void release() const;
-        int refCount() const;
-
-    protected:
-        virtual ~RefCounted() {}
-
-    private:
-        mutable int mCounter;
-    };
-
-    inline int RefCounted::refCount() const {
-        return this->mCounter;
-    }
-
-    inline void RefCounted::duplicate() const {
-        ++this->mCounter;
-    }
-
-    inline void RefCounted::release() const {
-        if(--this->mCounter == 0)
-            delete this;
-    }
-
     class FourCC {
     public:
         FourCC();

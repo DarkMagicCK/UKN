@@ -82,10 +82,13 @@ namespace ukn {
         mLogQueue.push_back(realLog);
         
         if(mOutputStream) {
+            ukn_string log = wstring_to_string(realLog);
 #ifdef UKN_OS_WINDOWS
-            *mOutputStream<<wstring_to_string(realLog).c_str()<<"\r\n";
+            log += "\r\n";
+            mOutputStream->write(log.c_str(), log.size());
 #else
-			*mOutputStream<<wstring_to_string(realLog).c_str()<<"\n";
+			log += "\n";
+            mOutputStream->write((uint8*)log.c_str(), log.size());
 #endif // UKN_OS_WINDOWS
             if(mOutputToConsole) {
                 printf("%s\n", realLog.ansi_str());

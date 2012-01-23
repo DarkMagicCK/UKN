@@ -13,7 +13,6 @@
 #include "FunctionBase.h"
 #include "FunctionFoward.h"
 
-#include <functional>
 #include <cassert>
 
 namespace ukn {

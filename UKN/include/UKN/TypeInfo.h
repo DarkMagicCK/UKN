@@ -17,7 +17,7 @@ namespace ukn {
 	public:
 		explicit TypeInfo(const std::type_info& info) : _typeInfo(info) { };
         
-		bool operator < (const SoraTypeInfo& rhs) const {
+		bool operator < (const TypeInfo& rhs) const {
 			return _typeInfo.before(rhs._typeInfo) != 0;
 		}
         

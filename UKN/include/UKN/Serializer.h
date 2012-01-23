@@ -26,12 +26,18 @@ namespace ukn {
     enum SerializableTypeId {
         STI_Unknown = -1,
         
-        STI_UINT = 1,
+        STI_BOOL,
+        
+        STI_UINT16,
+        STI_INT16,
+        
+        STI_UINT,
         STI_INT,
         
         STI_ULONG,
         STI_LONG,
         
+        STI_BYTE,
         STI_CHAR,
         
         STI_FLOAT,

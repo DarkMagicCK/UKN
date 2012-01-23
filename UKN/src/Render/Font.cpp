@@ -30,63 +30,6 @@
 
 namespace ukn {
     
-    static uint16 *UTF8_to_UNICODE(uint16 *unicode, const char *utf8, int len)
-    {
-        int i, j;
-        uint16 ch;
-        
-        for ( i=0, j=0; i < len; ++i, ++j ) {
-            ch = ((const unsigned char *)utf8)[i];
-            if ( ch >= 0xF0 ) {
-                ch  =  (uint16)(utf8[i]&0x07) << 18;
-                ch |=  (uint16)(utf8[++i]&0x3F) << 12;
-                ch |=  (uint16)(utf8[++i]&0x3F) << 6;
-                ch |=  (uint16)(utf8[++i]&0x3F);
-            } else
-                if ( ch >= 0xE0 ) {
-                    ch  =  (uint16)(utf8[i]&0x0F) << 12;
-                    ch |=  (uint16)(utf8[++i]&0x3F) << 6;
-                    ch |=  (uint16)(utf8[++i]&0x3F);
-                } else
-                    if ( ch >= 0xC0 ) {
-                        ch  =  (uint16)(utf8[i]&0x1F) << 6;
-                        ch |=  (uint16)(utf8[++i]&0x3F);
-                    }
-            unicode[j] = ch;
-        }
-        unicode[j] = 0;
-        
-        return unicode;
-    }
-    
-    static __inline__ int UNICODE_strlen(const uint16 *text)
-    {
-        int size = 0;
-        while ( *text++ ) {
-            ++size;
-        }
-        return size;
-    }
-    
-    static __inline__ void UNICODE_strcpy(uint16 *dst, const uint16 *src, int swap)
-    {
-        if ( swap ) {
-            while ( *src ) {
-                *dst = flip_bytes(*src);
-                ++src;
-                ++dst;
-            }
-            *dst = '\0';
-        } else {
-            while ( *src ) {
-                *dst = *src;
-                ++src;
-                ++dst;
-            }
-            *dst = '\0';
-        }
-    }
-    
     struct Font::FTLibrary {
         static FTLibrary& Instance() {
             static Font::FTLibrary* lib = 0;
@@ -277,7 +220,7 @@ namespace ukn {
         alignment(align) {
             uint32 len = (uint32)strlen(str);
             uint16* unicodestr = ukn_malloc_t(uint16, len+1);
-            UTF8_to_UNICODE(unicodestr, str, len);
+            utf8_to_unicode(unicodestr, str, len);
             string_to_render.set(unicodestr, len+1);
         }
     };
@@ -495,7 +438,7 @@ namespace ukn {
         float tmpw = 0.f;
         uint32 size = (uint32)strlen(str);
         uint16* ustr = ukn_malloc_t(uint16, size+1);
-        UTF8_to_UNICODE(ustr, str, size);
+        utf8_to_unicode(ustr, str, size);
         while(ustr && *ustr) {
             if(*ustr != L'\n') {
                 tmpw += mGlyphs[getGlyphByChar(*ustr)].imgw + kw;

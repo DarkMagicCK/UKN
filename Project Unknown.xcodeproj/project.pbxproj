@@ -80,6 +80,8 @@
 		88AAC17E1486F7FC007A80A4 /* FileUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */; };
 		88AAD17914CA2382007D3732 /* TMXTiledMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAD17814CA2382007D3732 /* TMXTiledMap.cpp */; };
 		88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */; };
+		88D86C2E14CD15FB00235AC5 /* Convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D86C2D14CD15FB00235AC5 /* Convert.cpp */; };
+		88D86C3014CD1D9900235AC5 /* StreamWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D86C2F14CD1D9900235AC5 /* StreamWrapper.cpp */; };
 		88E3C3DE147F2CD400E8754D /* GLGraphicDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */; };
 		88E3C3E1147F2D6200E8754D /* GLGraphicFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3E0147F2D6200E8754D /* GLGraphicFactory.cpp */; };
 		88E3C433147F2F1600E8754D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88E3C432147F2F1400E8754D /* Cocoa.framework */; };
@@ -396,6 +398,10 @@
 		88C3091514936622001262DF /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Component.h; sourceTree = "<group>"; };
 		88C309161493662A001262DF /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		88CC31191477915700558EA1 /* Project Unknown */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Project Unknown"; sourceTree = BUILT_PRODUCTS_DIR; };
+		88D86C2A14CD0A8D00235AC5 /* Convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Convert.h; sourceTree = "<group>"; };
+		88D86C2C14CD0A9600235AC5 /* StreamWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamWrapper.h; sourceTree = "<group>"; };
+		88D86C2D14CD15FB00235AC5 /* Convert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Convert.cpp; sourceTree = "<group>"; };
+		88D86C2F14CD1D9900235AC5 /* StreamWrapper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StreamWrapper.cpp; sourceTree = "<group>"; };
 		88E3C3DC147F2BBD00E8754D /* GLGraphicDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGraphicDevice.h; sourceTree = "<group>"; };
 		88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLGraphicDevice.cpp; sourceTree = "<group>"; };
 		88E3C3DF147F2D5B00E8754D /* GLGraphicFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGraphicFactory.h; sourceTree = "<group>"; };
@@ -718,6 +724,8 @@
 				88093C3214BC167900C6152F /* Base64.h */,
 				88093C3614BC182E00C6152F /* ZipUtil.h */,
 				88AAD17714CA2376007D3732 /* TMXTiledMap.h */,
+				88D86C2A14CD0A8D00235AC5 /* Convert.h */,
+				88D86C2C14CD0A9600235AC5 /* StreamWrapper.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -797,6 +805,8 @@
 				8850F0D614B9DA31001A250C /* Port.cpp */,
 				88093C3414BC16C100C6152F /* Base64.cpp */,
 				88093C3714BC183400C6152F /* ZipUtil.cpp */,
+				88D86C2D14CD15FB00235AC5 /* Convert.cpp */,
+				88D86C2F14CD1D9900235AC5 /* StreamWrapper.cpp */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1100,6 +1110,8 @@
 				88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */,
 				88AAD17914CA2382007D3732 /* TMXTiledMap.cpp in Sources */,
 				8802987614CA982F009D7670 /* RenderHelper.cpp in Sources */,
+				88D86C2E14CD15FB00235AC5 /* Convert.cpp in Sources */,
+				88D86C3014CD1D9900235AC5 /* StreamWrapper.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -41,11 +41,6 @@ namespace ukn {
         virtual bool hasAttribute(const ukn_string& attr) const;
         virtual std::vector<ukn_string> getAttributes() const;
         
-        virtual ukn_string  getString(const ukn_string& attr) const;
-        virtual bool        getBool(const ukn_string& attr) const;
-        virtual int32       getInt(const ukn_string& attr) const;
-        virtual float       getFloat(const ukn_string& attr) const;
-        
         virtual ukn_string  getString(const ukn_string& attr, const ukn_string& opt) const;
         virtual bool        getBool(const ukn_string& attr, bool opt) const;
         virtual int32       getInt(const ukn_string& attr, int32 opt) const;

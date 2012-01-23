@@ -19,25 +19,11 @@
 #include <map>
 #include <vector>
 
+#include "UKN/TypeInfo.h"
+
 namespace ukn {
     
     // requires rtti
-    
-    class TypeInfo {
-    public:
-        explicit TypeInfo(const std::type_info& info) : _typeInfo(info) {};
-        
-        bool operator < (const TypeInfo& rhs) const {
-            return _typeInfo.before(rhs._typeInfo) != 0;
-        }
-        
-        std::string name() {
-            return _typeInfo.name();
-        }
-        
-    private:
-        const std::type_info& _typeInfo;
-    };
     
     namespace detail {
         

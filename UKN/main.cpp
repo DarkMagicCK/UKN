@@ -73,7 +73,7 @@ public:
 			skAnim.setPosition(ukn::Vector2(300, 200));
 		}
         
-        ukn::ConfigParserPtr cfg3 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"perspective_walls.tmx");
+        ukn::ConfigParserPtr cfg3 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"desert.tmx");
 
         if(cfg3) {
             mMap = new ukn::tmx::Map();
@@ -94,14 +94,14 @@ public:
     void onRender() {
         ukn::Context::Instance().getGraphicFactory().getGraphicDevice().clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Lightskyblue, 0, 0);
         
-        if(mMap) 
-            mMap->render();
-
         mSpriteBatch->begin(ukn::SBS_BackToFront);
         {
             UKN_PROFILE("sk_anim");
             skAnim.update();
-            skAnim.render(*mSpriteBatch.get());
+          //  skAnim.render(*mSpriteBatch.get());
+            
+            if(mMap) 
+                mMap->render();
 
             ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
             

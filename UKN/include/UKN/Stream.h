@@ -39,31 +39,6 @@ namespace ukn {
         virtual void close() = 0;
         
         virtual StreamType getStreamType() const = 0;
-        
-        template<typename T>
-        IStream& operator<<(const T& val) {
-            write((uint8*)&val, sizeof(T));
-            return *this;
-        }
-        
-        template<typename T>
-        IStream& operator>>(T& val) {
-            read((uint8*)&val, sizeof(T));
-            return *this;
-        }
-        
-        IStream& operator<<(const char* val) {
-            write((const uint8*)val, strlen(val));
-            return *this;
-        }
-        
-        template<typename T>
-        IStream& operator<<(const Array<T>& array) {
-            for(size_t i=0; i<array.size(); ++i) {
-                *this<<array[i];
-            }
-            return *this;
-        }
     };
 
     class UKN_API MemoryStream: public IStream {

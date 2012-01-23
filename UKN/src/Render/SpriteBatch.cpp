@@ -331,12 +331,6 @@ namespace ukn {
                                            layerDepth));
             
         mRenderQueue.insert(obj);
-        
-        for(int i=0; i<6; ++i) {
-            updateBoundingBox(obj.vertices[i].x,
-                              obj.vertices[i].y, 
-                              obj.vertices[i].z);
-        }
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color) {
@@ -354,12 +348,7 @@ namespace ukn {
                           
         mRenderQueue.insert(obj);
         
-        for(int i=0; i<6; ++i) {
-            updateBoundingBox(obj.vertices[i].x,
-                              obj.vertices[i].y, 
-                              obj.vertices[i].z);
-        }
-        
+        for(int i=0; i<6; ++i);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {
@@ -376,12 +365,6 @@ namespace ukn {
                                            layerDepth));
         
         mRenderQueue.insert(obj);
-        
-        for(int i=0; i<6; ++i) {
-            updateBoundingBox(obj.vertices[i].x,
-                              obj.vertices[i].y, 
-                              obj.vertices[i].z);
-        }
     }
         
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Vector2& center, float rot, const Vector2& scale, const Color& color) {
@@ -397,12 +380,6 @@ namespace ukn {
         obj.buildVertices(descriptor);
         
         mRenderQueue.insert(obj);
-        
-        for(int i=0; i<6; ++i) {
-            updateBoundingBox(obj.vertices[i].x,
-                              obj.vertices[i].y, 
-                              obj.vertices[i].z);
-        }
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& srcRect, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {        
@@ -423,12 +400,6 @@ namespace ukn {
         obj.buildVertices(descriptor);
         
         mRenderQueue.insert(obj);
-        
-        for(int i=0; i<6; ++i) {
-            updateBoundingBox(obj.vertices[i].x,
-                              obj.vertices[i].y, 
-                              obj.vertices[i].z);
-        }
     }
     
     void SpriteBatch::begin(SpriteBatchSortMode mode) {

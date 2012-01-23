@@ -98,6 +98,10 @@ namespace ukn {
     
     UKN_API ukn_string get_file_path(const ukn_string& str);
     UKN_API ukn_wstring get_file_path(const ukn_wstring& str);
+    
+    UKN_API uint16 *utf8_to_unicode(uint16 *unicode, const char *utf8, size_t len);
+    UKN_API int unicode_strlen(const uint16 *text);
+    UKN_API void unicode_strcpy(uint16 *dst, const uint16 *src, size_t swap);
 
     template<typename T>
     ukn_string any_to_string(const T& val) {

@@ -8,6 +8,7 @@
 
 #include "UKN/StringUtil.h"
 #include "UKN/MemoryUtil.h"
+#include "UKN/MathUtil.h"
 
 namespace ukn {
     
@@ -421,5 +422,59 @@ namespace ukn {
         return ukn_wstring();
     }
     
+    uint16 *utf8_to_unicode(uint16 *unicode, const char *utf8, size_t len) {
+        int i, j;
+        uint16 ch;
+        
+        for ( i=0, j=0; i < len; ++i, ++j ) {
+            ch = ((const unsigned char *)utf8)[i];
+            if ( ch >= 0xF0 ) {
+                ch  =  (uint16)(utf8[i]&0x07) << 18;
+                ch |=  (uint16)(utf8[++i]&0x3F) << 12;
+                ch |=  (uint16)(utf8[++i]&0x3F) << 6;
+                ch |=  (uint16)(utf8[++i]&0x3F);
+            } else
+                if ( ch >= 0xE0 ) {
+                    ch  =  (uint16)(utf8[i]&0x0F) << 12;
+                    ch |=  (uint16)(utf8[++i]&0x3F) << 6;
+                    ch |=  (uint16)(utf8[++i]&0x3F);
+                } else
+                    if ( ch >= 0xC0 ) {
+                        ch  =  (uint16)(utf8[i]&0x1F) << 6;
+                        ch |=  (uint16)(utf8[++i]&0x3F);
+                    }
+            unicode[j] = ch;
+        }
+        unicode[j] = 0;
+        
+        return unicode;
+    }
+    
+    int unicode_strlen(const uint16 *text) {
+        int size = 0;
+        while ( *text++ ) {
+            ++size;
+        }
+        return size;
+    }
+    
+    void unicode_strcpy(uint16 *dst, const uint16 *src, size_t swap) {
+        if ( swap ) {
+            while ( *src ) {
+                *dst = flip_bytes(*src);
+                ++src;
+                ++dst;
+            }
+            *dst = '\0';
+        } else {
+            while ( *src ) {
+                *dst = *src;
+                ++src;
+                ++dst;
+            }
+            *dst = '\0';
+        }
+    }
+
     
 } // namespace ukn

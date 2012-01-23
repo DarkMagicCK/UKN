@@ -153,6 +153,8 @@ namespace ukn {
     class SequencialAnimation;
     typedef SharedPtr<SequencialAnimation> SequencialAnimationPtr;
     
+    class RenderTarget2D;
+    typedef SharedPtr<RenderTarget2D> RenderTargetPtr;
     
 } // namespace ukn
 

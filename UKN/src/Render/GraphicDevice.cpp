@@ -10,6 +10,8 @@
 #include "UKN/FrameBuffer.h"
 #include "UKN/Window.h"
 #include "UKN/Texture.h"
+#include "UKN/RenderTarget.h"
+#include "UKN/RenderView.h"
 
 namespace ukn {
     
@@ -159,6 +161,25 @@ namespace ukn {
         }
     }
     
+    void GraphicDevice::setRenderTarget(const RenderTargetPtr& target) {
+        if(target) {
+            if(mCurrFrameBuffer) {
+                mCurrFrameBuffer->attach(ATT_Color0, target->getTargetView());
+                if(target->getDepthStencilView()) {
+                    mCurrFrameBuffer->attach(ATT_DepthStencil, target->getDepthStencilView());
+                }
+                
+                mCurrTarget = target;
+            }
+        } else {
+            if(mCurrTarget) {
+                mCurrFrameBuffer->detach(ATT_Color0);
+                if(mCurrTarget->getDepthStencilView())
+                    mCurrFrameBuffer->detach(ATT_DepthStencil);
+            }
+            mCurrTarget = RenderTargetPtr();
+        }
+    }
     
     void GraphicDevice::clear(uint32 flags, const class Color& clr, float depth, int32 stencil) {
         if(mCurrFrameBuffer) {

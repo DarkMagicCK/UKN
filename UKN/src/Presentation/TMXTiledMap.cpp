@@ -411,19 +411,27 @@ namespace ukn {
             }
         }
         
+        static bool cached = false;
+        
         void Map::isometricRender() {
             
         }
         
         void Map::render() {
-            mMapRenderer->begin();
-                              
-            if(mOrientation == MO_Orthogonal)
-                orthogonalRender();
-            else
-                isometricRender();
-                       
-            mMapRenderer->end();
+            if(!cached) {
+                mMapRenderer->begin();
+                
+                if(mOrientation == MO_Orthogonal)
+                    orthogonalRender();
+                else
+                    isometricRender();
+                
+                mMapRenderer->end();
+            //    cached = true;
+                
+            } else {
+                mMapRenderer->render();
+            }
         }
         
     } // namespace tmx

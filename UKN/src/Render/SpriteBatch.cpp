@@ -425,6 +425,7 @@ namespace ukn {
             case SBS_None:
                 break;
         }
+        
         render();
 
         mBegan = false;

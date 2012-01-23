@@ -94,6 +94,9 @@ namespace ukn {
         
         void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
         
+    public:
+        void setRenderTarget(const RenderTargetPtr& target);
+        
     protected:
         FrameBufferPtr mCurrFrameBuffer;
         FrameBufferPtr mScreenFrameBuffer;
@@ -101,6 +104,8 @@ namespace ukn {
         Color mClearColor;
         float mClearDepth;
         int mClearStencil;
+        
+        RenderTargetPtr mCurrTarget;
     };
     
 } // namespace ukn

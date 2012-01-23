@@ -147,6 +147,8 @@ namespace ukn {
             
             /* tileid reference of the object, optional */
             int32 gid;
+            
+            TexturePtr image;
 
             PropertyContainer properties;
         };

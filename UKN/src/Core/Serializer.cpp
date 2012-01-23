@@ -11,13 +11,6 @@
 
 namespace ukn {
     
-    BinarySerializer::BinarySerializer(const StreamPtr& stream):
-    mSerializeStream(stream) {
-        if(!mSerializeStream) {
-            mSerializeStream = new MemoryStream();
-        }
-    }
-    
     // bool
     template<>
     void SerializeHelper::FromString<bool>(const ukn_string& str, bool* val) {

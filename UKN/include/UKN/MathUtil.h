@@ -10,6 +10,8 @@
 #define Project_Unknown_Math_h
 
 #include "UKN/Platform.h"
+#include "UKN/Basic.h"
+
 #include <cmath>
 
 namespace ukn {
@@ -1512,6 +1514,14 @@ namespace ukn {
                                         grad(_ukn_perlin_noise_perm[BB+1], x-1, y-1, z-1))));    
     }
     
+    template<> struct POD<Vector2> { enum { Value = true }; };
+    template<> struct POD<Vector3> { enum { Value = true }; };
+    template<> struct POD<AABB2> { enum { Value = true }; };
+    template<> struct POD<AABB3> { enum { Value = true }; };
+    template<> struct POD<Matrix4> { enum { Value = true }; };
+    template<> struct POD<Plane> { enum { Value = true }; };
+    template<> struct POD<Sphere> { enum { Value = true }; };
+    template<> struct POD<Quaternion> { enum { Value = true }; };
     
 } // namespace ukn
 
@@ -1573,6 +1583,8 @@ namespace ukn {
         
         return mat;
     }
+    
+    
     
 } // namespace ukn
 

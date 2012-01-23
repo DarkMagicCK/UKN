@@ -12,6 +12,7 @@
 #include "UKN/Platform.h"
 #include "UKN/Ptr.h"
 #include "UKN/Preprocessor.h"
+#include "UKN/Basic.h"
 #include "UKN/Interfaces.h"
 
 #include <algorithm>
@@ -19,8 +20,6 @@
 
 namespace ukn {
 
-    // array for POD
-    // *** does NOT call constructors
     template<typename T>
     class Array: public IEnumerable<T> {
     public:
@@ -232,8 +231,12 @@ namespace ukn {
         this->mSize = src.mSize;
         if(this->mCapacity > 0) {
             this->mElements = new T[mCapacity];
-            for(size_t i=0; i<this->mSize; ++i) {
-                this->mElements[i] = src.mElements[i];
+            if(POD<T>::Value) {
+                memcpy(this->mElements, src.mElements, this->mSize * sizeof(T));
+            } else {
+                for(size_t i=0; i<this->mSize; ++i) {
+                    this->mElements[i] = src.mElements[i];
+                }
             }
             this->mHolder = this->mElements;
         }
@@ -327,8 +330,13 @@ namespace ukn {
         T* newArray = new T[newCapacity];
         if(this->mElements) {
             size_t capa = this->mSize < newCapacity ? this->mSize : newCapacity;
-            for(size_t i=0; i<capa; ++i)
-                newArray[i] = this->mElements[i];
+            
+            if(POD<T>::Value) {
+                memcpy(newArray, this->mElements, capa * sizeof(T));
+            } else {
+                for(size_t i=0; i<capa; ++i)
+                    newArray[i] = this->mElements[i];
+            }
         }
         this->mElements = newArray;
         this->mHolder.reset(newArray);
@@ -359,8 +367,12 @@ namespace ukn {
         if(newSize >= this->mCapacity) {
             this->growTo(newSize);
         }
-        for(size_t i=0; i<size; ++i)
-            this->mElements[i+this->mSize] = arr[i];
+        if(POD<T>::Value) {
+            memcpy(&this->mElements[this->mSize], arr, size * sizeof(T));
+        } else {
+            for(size_t i=0; i<size; ++i)
+                this->mElements[i+this->mSize] = arr[i];
+        }
         this->mSize = newSize;
     }
 
@@ -382,12 +394,18 @@ namespace ukn {
         if(from > to) {
             // backward move
             size_t i;
-            for(i=0; i<num; ++i) {
-                this->mElements[to + i] = this->mElements[from + i];
-            }
-
-            for(i=(from+i)-1; i<this->mSize; ++i) {
-                this->destroy(&(this->mElements[i]));
+            
+            if(!POD<T>::Value) {
+                for(i=0; i<num; ++i) {
+                    this->mElements[to + i] = this->mElements[from + i];
+                }
+                
+                for(i=(from+i)-1; i<this->mSize; ++i) {
+                    this->destroy(&(this->mElements[i]));
+                }
+            } else {
+                // if is POD, just copy [from] to [to]
+                memcpy(&this->mElements[to], &this->mElements[from], num * sizeof(T));
             }
         } else {
             long i=0;

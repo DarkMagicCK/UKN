@@ -24,7 +24,7 @@ namespace ukn {
     }
     
     bool ConfigParserXmlImpl::open(ResourcePtr resource) {
-        StreamPtr dataStream = stream_to_memory_stream(resource->getResourceStream());
+        StreamPtr dataStream = resource->getResourceStream()->readIntoMemory();
         if(dataStream) {
             if(!mDocument) {
                 mDocument = new pugi::xml_document;

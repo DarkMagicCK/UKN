@@ -72,7 +72,7 @@ namespace ukn {
             }
             
             if(resource && resource->getResourceStream()) {
-                font_data = stream_to_memory_stream(resource->getResourceStream());
+                font_data = resource->getResourceStream()->readIntoMemory();
                 if(FT_New_Memory_Face(Font::FTLibrary::Instance().library, 
                                       static_cast<MemoryStream*>(font_data.get())->data(), 
                                       font_data->size(),

@@ -18,42 +18,103 @@ namespace ukn {
     /**
      * Binary writer wrapper which writes binar data into the stream
      **/
-    class BinaryStreamWriter: public IStream {
+    class BinaryStreamWriter: public Object {
     public:
         BinaryStreamWriter(const StreamPtr& stream);
         virtual ~BinaryStreamWriter();
+            
+        // flush or close be called to flush the underlying buffer to the stream
+        void flush();
+        void close();
         
-        // IStream
-        bool	canRead() const;
-        bool	canWrite() const;
-        bool 	canSeek() const;
-    	
-        bool    seek(size_t pos);
-        size_t  read(uint8* buffer, size_t length);
-        size_t  write(const uint8* buffer, size_t length);
+    public:
+        // 1 bytes
+        void write(uint8 val);
+        void write(char val);
         
-        size_t  pos() const;
-        size_t  size() const;
-        bool    isValid() const;
+        // 2 bytes
+        void write(int16 val);
+        void write(uint16 val);
+        
+        // 4 bytes
+        void write(int32 val);
+        void write(uint32 val);
+        
+        // 8 bytes
+        void write(int64 val);
+        void write(uint64 val);
+        
+        // 4 bytes
+        void write(float val);
+        // 8 bytes
+        void write(double val);
+        
+        // byte array
+        void write(const uint8* bytes, size_t len);
+        
+        // byte array with specified range
+        void write(const uint8* bytes, size_t start, size_t end);
+        
+        // encoded string
+        void write(const String& str);
+        
+        template<typename T>
+        void writePOD(const T& data);
+                
+    private:
+        Array<uint8> mBuffer;
+        
+        StreamPtr mStream;
+    };
+    
+    template<typename T>
+    void BinaryStreamWriter::writePOD(const T& data) {
+        // ukn_assert(POD<T>::Value);
+        write(&data, sizeof(T));
+    }
+    
+    class BinaryStreamReader: public Object {
+    public:
+        BinaryStreamReader(const StreamPtr& stream);
+        virtual ~BinaryStreamReader();
         
         void close();
         
-        StreamType getStreamType() const;
-        
     public:
-        void writeByte(uint8 val);
-        void writeChar(char val);
+        // peek next char, does not advance stream
+        char peekChar();
         
-        void writeInt16(int16 val);
-        void writeInt32(int32 val);
-        void writeInt64(int64 val);
-        void writeUInt16(uint16 val);
-        void writeUInt32(uint32 val);
-        void writeUInt64(uint64 val);
+        size_t read(uint8* buffer, size_t size_to_read);
+        
+        uint8   readByte();
+        uint16  readUInt16();
+        uint32  readUInt32();
+        uint64  readUInt64();
+        
+        int8    readChar();
+        int16   readInt16();
+        int32   readInt32();
+        int64   readInt64();
+        
+        float   readFloat();
+        double  readDouble();
+        
+        // read a string with specified encoding
+        String  readString(size_t char_count, StringFormat encoding_format);
+        
+        template<typename T>
+        T readPOD();
         
     private:
         StreamPtr mStream;
     };
+    
+    template<typename T>
+    T  BinaryStreamReader::readPOD() {
+        T buffer;
+        read(&buffer, sizeof(T));
+        return buffer;
+    }
     
 } // namespace ukn
 

@@ -9,15 +9,76 @@
 #include "UKN/Stream.h"
 #include "UKN/MemoryUtil.h"
 #include "UKN/StringUtil.h"
+#include "UKN/Logger.h"
 
 namespace ukn {
+    
+    uint8 Stream::readByte() {
+        if(!canRead()) {
+            UKN_THROW_EXCEPTION("ukn::Stream: cannot read byte because the stream cannot read");
+        }
+        uint8 buffer;
+        this->read(&buffer, 1);
+        return buffer;
+    }
+    
+    void Stream::writeByte(uint8 byte) {
+        if(!canRead()) {
+            UKN_THROW_EXCEPTION("ukn::Stream: cannot write byte because the stream cannot write");
+        }
+        this->write(&byte, 1);
+    }
+    
+    bool Stream::saveToFile(const String& file) {
+        FileStream output;
+        if(output.open(file, true)) {
+            if(this->getStreamType() == ST_Memory) {
+                output.write(static_cast<MemoryStream*>(this)->data(), this->size());
+            } else if(this->getStreamType() == ST_File) {
+                uint8* buffer = ukn_malloc_t(uint8, this->size());
+                if(buffer) {
+                    size_t readSize = this->read(buffer, this->size());
+                    output.write(buffer, readSize);
+                    
+                    ukn_free(buffer);
+                }
+            }
+            output.close();
+            return true;
+        }
+        return false;
+    }
+    
+    StreamPtr Stream::readIntoMemory() {
+        if(isValid()) {
+            uint8* dataBuffer = (uint8*)ukn_malloc(size());
+            ukn_assert(dataBuffer != 0);
+            
+            this->seek(0);
+            size_t readSize = this->read(dataBuffer, size());
+            if(readSize != size()) {
+                // log error
+                log_error("ukn::Stream::readIntoMemory: error happened when trying to read");
+            }
+            
+            MemoryStream* memBuffer = new MemoryStream();
+            // give memory management to MemoryStream
+            memBuffer->set(dataBuffer, readSize);
+            
+            this->seek(0);
+            
+            return StreamPtr(memBuffer);
+        } else 
+            // return null memorystream
+            return MakeSharedPtr<MemoryStream>();
+    }
  
     MemoryStream::MemoryStream():  
     mCurrPos(0) {
     }
     
     MemoryStream::MemoryStream(const MemoryStream& rhs):
-    mCurrPos(rhs.mCurrPos),
+    mCurrPos(0),
     mData(rhs.mData) {
 
     }
@@ -51,6 +112,15 @@ namespace ukn {
     }
     
     void MemoryStream::close() {
+        this->mData.clear();
+    }
+    
+    void MemoryStream::flush() {
+        
+    }
+    
+    StreamType MemoryStream::getStreamType() const {
+        return ST_Memory;
     }
     
     uint8 MemoryStream::operator[](size_t index) {
@@ -166,28 +236,11 @@ namespace ukn {
         return !mData.empty();
     }
     
-    StreamPtr FileStreamBasic::readIntoMemory() {
-        if(isValid()) {
-            uint8* dataBuffer = (uint8*)ukn_malloc(size());
-            ukn_assert(dataBuffer != 0);
-            
-            this->seek(0);
-            size_t readSize = this->read(dataBuffer, size());
-            if(readSize != size()) {
-                // log error
-            }
-            
-            MemoryStream* memBuffer = new MemoryStream();
-            // give memory management to MemoryStream
-            // faster
-           memBuffer->set(dataBuffer, readSize);
-            
-            return StreamPtr(memBuffer);
-        } else 
-            // return null memorystream
-            return MakeSharedPtr<MemoryStream>();
+    StreamPtr MemoryStream::readIntoMemory() {
+        return new MemoryStream(*this);
     }
     
+    /*
 #ifdef UKN_OS_WINDOWS
     
     FileStreamWin32::FileStreamWin32() {
@@ -233,6 +286,10 @@ namespace ukn {
             CloseHandle(file);
             file = NULL;
         }
+    }
+    
+    void FileStreamWin32::flush() {
+        
     }
     
     void FileStreamWin32::truncate() {
@@ -281,29 +338,29 @@ namespace ukn {
     }
     
 #else 
-    
-    FileStreamPosix::FileStreamPosix() {
+    */
+    FileStream::FileStream() {
         nocache = false;
         file = NULL;
     }
     
-    FileStreamPosix::~FileStreamPosix() {
+    FileStream::~FileStream() {
         close();
     }
     
-    bool FileStreamPosix::canRead() const {
+    bool FileStream::canRead() const {
     	return true;
     }
     
-	bool FileStreamPosix::canWrite() const {
+	bool FileStream::canWrite() const {
 		return canwrite;
 	}
 	
-    bool FileStreamPosix::canSeek() const {
+    bool FileStream::canSeek() const {
     	return true;
     }
     
-    bool FileStreamPosix::open(const String& filename, bool canwrite, bool append, bool nocache) {
+    bool FileStream::open(const String& filename, bool canwrite, bool append, bool nocache) {
         if(file != NULL)
             return false;
         
@@ -319,18 +376,23 @@ namespace ukn {
         return true;
     }
     
-    void FileStreamPosix::close() {
+    void FileStream::close() {
         if(file != NULL) {
             fclose(file);
             file = NULL;
         }
     }
     
-    void FileStreamPosix::truncate() {
+    void FileStream::truncate() {
         
     }
     
-    size_t FileStreamPosix::size() const {
+    void FileStream::flush() {
+        if(file != 0)
+            fflush(file);
+    }
+    
+    size_t FileStream::size() const {
         size_t pos = ftell(file);
         fseek(file, 0, SEEK_END);
         size_t size = ftell(file);
@@ -338,27 +400,38 @@ namespace ukn {
         return size;
     }
     
-    size_t FileStreamPosix::pos() const {
-        return ftell(file);
+    size_t FileStream::pos() const {
+        if(file != 0)
+            return ftell(file);
+        return 0;
     }
     
-    bool FileStreamPosix::isValid() const {
+    bool FileStream::isValid() const {
         return file != 0;
     }
     
-    bool FileStreamPosix::seek(size_t pos) {
-        return fseek(file, pos, SEEK_SET) == 0 ? true : false;
+    bool FileStream::seek(size_t pos) {
+        if(file != 0)
+            return fseek(file, pos, SEEK_SET) == 0 ? true : false;
+        return false;
     }
     
-    bool FileStreamPosix::seek(size_t pos, SeekType type) {
-        return fseek(file, pos, type) == 0 ? true : false;
+    bool FileStream::seek(size_t pos, SeekType type) {
+        if(file != 0)
+            return fseek(file, pos, type) == 0 ? true : false;
+        return false;
     }
     
-    size_t FileStreamPosix::read(uint8* data, size_t len) {
-        return fread(data, 1, len, file);
+    size_t FileStream::read(uint8* data, size_t len) {
+        if(file != 0)
+            return fread(data, 1, len, file);
+        return 0;
     }
     
-    size_t FileStreamPosix::write(const uint8* data, size_t len) {
+    size_t FileStream::write(const uint8* data, size_t len) {
+        if(file == 0)
+            return 0;
+        
         if(!nocache) 
             return fwrite(data, 1, len, file);
         else {
@@ -368,54 +441,105 @@ namespace ukn {
         }
     }
     
-    
-#endif // OS_WIN32
-    
-    StreamPtr stream_to_memory_stream(const StreamPtr& stream) {
-        if(stream->getStreamType() == ST_File) {
-            return static_cast<FileStream*>(stream.get())->readIntoMemory();
-        }
-        return stream;
+    StreamType FileStream::getStreamType() const {
+        return ST_File;
     }
     
-    bool write_stream_to_file(const StreamPtr& stream, const String& file) {
-        FileStream output;
-        if(output.open(file, true)) {
-            if(stream->getStreamType() == ST_Memory) {
-                output.write(static_cast<MemoryStream*>(stream.get())->data(), stream->size());
-            } else if(stream->getStreamType() == ST_File) {
-                uint8* buffer = ukn_malloc_t(uint8, stream->size());
-                if(buffer) {
-                    size_t readSize = stream->read(buffer, stream->size());
-                    output.write(buffer, readSize);
-                    
-                    ukn_free(buffer);
-                }
+    StreamPtr FileStream::readIntoMemory() {
+        if(isValid()) {
+            uint8* dataBuffer = (uint8*)ukn_malloc(size());
+            ukn_assert(dataBuffer != 0);
+            
+            this->seek(0);
+            size_t readSize = this->read(dataBuffer, size());
+            if(readSize != size()) {
+                // log error
             }
-            output.close();
-            return true;
-        }
-        return false;
+            
+            MemoryStream* memBuffer = new MemoryStream();
+            // give memory management to MemoryStream
+            // faster
+            memBuffer->set(dataBuffer, readSize);
+            
+            this->seek(0);
+            
+            return StreamPtr(memBuffer);
+        } else 
+            // return null memorystream
+            return MakeSharedPtr<MemoryStream>();
     }
     
-    bool write_stream_to_file(IStream& stream, const String& file) {
-        FileStream output;
-        if(output.open(file, true)) {
-            if(stream.getStreamType() == ST_Memory) {
-                output.write(static_cast<MemoryStream*>(&stream)->data(), stream.size());
-            } else if(stream.getStreamType() == ST_File) {
-                uint8* buffer = ukn_malloc_t(uint8, stream.size());
-                if(buffer) {
-                    size_t readSize = stream.read(buffer, stream.size());
-                    output.write(buffer, readSize);
-                    
-                    ukn_free(buffer);
-                }
-            }
-            output.close();
-            return true;
-        }
-        return false;
+    BufferedStream::BufferedStream(const StreamPtr& stream):
+    mStream(stream) {
+        
+    }
+    
+    BufferedStream::BufferedStream(const StreamPtr& stream, size_t buffer_size):
+    mStream(stream),
+    mBuffer(buffer_size, 0) {
+        
+    }
+    
+    BufferedStream::~BufferedStream() {
+        
+    }
+    
+    bool BufferedStream::canRead() const {
+        return mStream->canRead();
+    }
+    
+    bool BufferedStream::canWrite() const {
+        return mStream->canWrite();
+    }
+    
+    bool BufferedStream::canSeek() const {
+        return mStream->canSeek();
+    }
+    
+    bool BufferedStream::seek(size_t pos) {
+        return mStream->seek(pos);
+    }
+    
+    size_t BufferedStream::read(uint8* buffer, size_t length) {
+        return mStream->read(buffer, length);
+    }
+    
+    size_t BufferedStream::write(const uint8* buffer, size_t length) {
+        mBuffer.append(buffer, length);
+        return length;
+    }
+    
+    size_t BufferedStream::pos() const {
+        return mStream->pos();
+    }
+    
+    size_t BufferedStream::size() const {
+        return mStream->size();
+    }
+    
+    bool BufferedStream::isValid() const {
+        return mStream->isValid();
+    }
+    
+    void BufferedStream::close() {
+        mStream->close();
+    }
+    
+    void BufferedStream::flush() {
+        if(mStream->isValid()) {
+            mStream->write(mBuffer.begin(), mBuffer.size());
+            mBuffer.clear();
+            mStream->flush();
+        } else 
+            UKN_THROW_EXCEPTION("ukn::BufferedStream::flush: attempted to write a invalid stream, maybe the stream had been closed?");
+    }
+    
+    StreamType BufferedStream::getStreamType() const {
+        return mStream->getStreamType();
+    }
+    
+    StreamPtr BufferedStream::readIntoMemory() {
+        return mStream->readIntoMemory();
     }
     
 } // namespace ukn
@@ -885,6 +1009,10 @@ namespace ukn {
     
     bool NetStream::seek(size_t pos) {
         return false;
+    }
+    
+    void NetStream::flush() {
+        std::iostream::flush();
     }
     
     size_t NetStream::read(uint8* buffer, size_t length) {

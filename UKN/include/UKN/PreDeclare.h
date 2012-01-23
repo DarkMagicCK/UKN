@@ -75,8 +75,8 @@ namespace ukn {
     class Texture;
     typedef SharedPtr<Texture> TexturePtr;
     
-    class IStream;
-    typedef SharedPtr<IStream> StreamPtr;
+    class Stream;
+    typedef SharedPtr<Stream> StreamPtr;
     
     class Camera;
     typedef SharedPtr<Camera> CameraPtr;

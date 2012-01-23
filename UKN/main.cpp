@@ -103,7 +103,7 @@ public:
             if(mMap) 
                 mMap->render();
 
-            ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
+            ukn::ProfileData data = ukn::Profiler::Instance().get("MainFrame");
             
 
             printf("%s\n", data.toFormattedString().c_str());

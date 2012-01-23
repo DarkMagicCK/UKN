@@ -238,11 +238,12 @@ namespace ukn {
         AppInstance& app = Context::Instance().getApp();
         
         while(true) {
+            UKN_PROFILE("MainFrame");
+
             if(fb.isActive()) {
                 counter.waitToNextFrame();
                 
                 {
-                    UKN_PROFILE("MainFrame");
                     
                     glViewport(fb.getViewport().left,
                                fb.getViewport().top,

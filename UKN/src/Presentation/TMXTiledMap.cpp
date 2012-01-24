@@ -84,26 +84,16 @@ namespace ukn {
             return mTileHeight;
         }
         
-        void Map::setMapPosition(const Vector2& pos) {
-            mMapPosition.x = (int32)(pos.x / mTileWidth);
-            mMapPosition.y = (int32)(pos.y / mTileHeight);
-            mPosition = pos;
-        }
-        
-        Vector2 Map::getMapPosition() const {
-            return mMapPosition;
-        }
-        
-        void Map::setMapViewSize(const Vector2& size) {
-            mMapViewSize = size;
-        }
-        
-        Vector2 Map::getMapViewSize() const {
-            return mMapViewSize;
-        }
-        
         bool Map::serialize(const ConfigParserPtr& config) {
             return false;
+        }
+        
+        void Map::setMapViewRect(const Rectangle& vr) {
+            mViewRect = vr;
+        }
+        
+        const Rectangle& Map::getMapViewRect() const {
+            return mViewRect;
         }
         
         void Map::parseProperties(PropertyContainer& cont, const ConfigParserPtr& config) {
@@ -138,12 +128,12 @@ namespace ukn {
                     
                     tile.tile_id = i;
                     
-                    int32 x = tileset.spacing + (i % wcount) * (tileset.tile_width + tileset.spacing);
-                    int32 y = tileset.spacing + (i / wcount) * (tileset.tile_height + tileset.spacing);
+                    int32 x = (i % wcount) * (tileset.tile_width + tileset.spacing);
+                    int32 y = (i / wcount) * (tileset.tile_height + tileset.spacing);
                     tile.tile_texture_rect = Rectangle(x + tileset.margin,
                                                        y + tileset.margin,
-                                                       x + tileset.tile_width - tileset.margin,
-                                                       y + tileset.tile_height - tileset.margin);
+                                                       x + tileset.tile_width + tileset.margin,
+                                                       y + tileset.tile_height + tileset.margin);
                     
                     tile.tileset_id = tileset_id;
                 }
@@ -432,8 +422,9 @@ namespace ukn {
                         
                     } while(config->toNextChild());
                     
-                    mMapViewSize.x = mMapWidth;
-                    mMapViewSize.y = mMapHeight;
+                    mViewRect.set(Vector2(0, 0), 
+                                  Vector2(mMapWidth * mTileWidth,
+                                          mMapHeight * mTileHeight));
                     
                     // <map>
                     config->toParent();
@@ -480,15 +471,24 @@ namespace ukn {
                 if(layer.visible) {
                     mMapRenderer->startBatch();
                     
-                    for(int32 j = mMapPosition.y; j <= mMapPosition.y + mMapViewSize.y + 1; ++j) {
-                        for(int32 i = mMapPosition.x; i <= mMapPosition.x + mMapViewSize.x + 1; ++i) {
+                    int32 startx = mViewRect.left() / mTileWidth;
+                    int32 starty = mViewRect.top() / mTileHeight;
+                    
+                    int32 endx = mViewRect.right() / mTileWidth;
+                    int32 endy = mViewRect.bottom() / mTileHeight + 1;
+                    
+                    if(endx >= layer.width) endx = layer.width - 1;
+                    if(endy >= layer.height) endy = layer.height - 1;
+                    
+                    float x = startx * mTileWidth;
+                    float y = starty * mTileHeight;
+
+                    for(int32 j = starty; j <= endy; ++j) {
+                        for(int32 i = startx; i <= endx; ++i) {
                             Tile& tile = layer.tiles[i + j * layer.width];
+                            TileSet& ts = mTileSets[tile.tileset_id];
+
                             if(tile.tile_id != -1) {
-                                TileSet& ts = mTileSets[tile.tileset_id];
-                                
-                                float x = i * (mTileWidth - ts.margin * 2) + ts.tile_offset_x + layer.x - mPosition.x;
-                                float y = j * (mTileHeight - ts.margin * 2) + ts.tile_offset_y + layer.y - mPosition.y + mTileHeight;
-                                
                                 mMapRenderer->draw(ts.image,
                                                    Vector2(x,
                                                            y),
@@ -498,9 +498,14 @@ namespace ukn {
                                                    0.f,
                                                    Vector2(1.f, 1.f),
                                                    color::White * layer.opacity);
+                                
                             }
-                            
+                            x += mTileWidth;
+
                         }
+                        
+                        x = startx * mTileWidth;
+                        y += mTileHeight;
                     }
                     
                     mMapRenderer->endBatch();
@@ -514,42 +519,69 @@ namespace ukn {
                 if(layer.visible) {
                     mMapRenderer->startBatch();
                     
-                    float x = mMapPosition.x * (mTileWidth) + layer.x - mPosition.x;
-                    float y = mMapPosition.y * (mTileHeight) + layer.y - mPosition.y + mTileHeight;
+                    Rectangle vr = mViewRect;
+                    vr.set(mViewRect.x() - mTileWidth * mMapWidth,
+                           mViewRect.y(),
+                           mViewRect.right(),
+                           mViewRect.bottom() + mTileHeight * mMapHeight);
+            
+                    int32 rowx = std::floor(vr.left() / mTileWidth);
+                    int32 rowy = std::floor(vr.top() / mTileHeight);
                     
-                    bool shifted = false;
+                    float startx = rowx * mTileWidth - mTileWidth / 2;
+                    float starty = rowy * mTileHeight + mTileHeight;
                     
-                    for(int32 j = mMapPosition.y; j <= mMapPosition.y + mMapViewSize.y + 1; ++j) {
-                        for(int32 i = mMapPosition.x; i <= mMapPosition.x + mMapViewSize.x + 1; ++i) {
-                            Tile& tile = layer.tiles[i + j * layer.width];
-                            if(tile.tile_id != -1) {
-                                TileSet& ts = mTileSets[tile.tileset_id];
-                                
-                                
-                                x += mTileWidth;
-                                
-                                mMapRenderer->draw(ts.image,
-                                                   Vector2(x,
-                                                           y),
-                                                   tile.tile_texture_rect,
-                                                   Vector2(0,
-                                                           ts.tile_height),
-                                                   0.f,
-                                                   Vector2(1.f, 1.f),
-                                                   color::White * layer.opacity);
+                    bool isUpperHalf = starty - vr.y() > mTileHeight / 2;
+                    bool isLeftHalf = vr.x() - startx < mTileWidth / 2;
+                    
+                    if(isUpperHalf) {
+                        if(isLeftHalf) {
+                            rowx--;
+                            startx -= mTileWidth / 2;
+                        } else {
+                            rowy--;
+                            startx = mTileWidth / 2;
+                        }
+                        starty -= mTileHeight / 2;
+                    }
+                    
+                    bool shifted = isUpperHalf ^ isLeftHalf;
+                    
+                    for(float y = starty; y - mTileHeight < vr.bottom(); y += mTileHeight / 2) {
+                        int32 colx = rowx;
+                        int32 coly = rowy;
+                        
+                        for(float x = startx; x < vr.right(); x += mTileWidth) {
+                            if(colx >= 0 && colx < layer.width && coly >= 0 && coly < layer.height) {
+                                Tile& tile = layer.tiles[colx + coly * layer.width];
+
+                                if(tile.tile_id != -1) {
+                                    TileSet& ts = mTileSets[tile.tileset_id];
+                                    
+                                    mMapRenderer->draw(ts.image,
+                                                       Vector2(x,
+                                                               y - ts.image->getHeight()),
+                                                       tile.tile_texture_rect,
+                                                       Vector2(ts.tile_width / 2,
+                                                               ts.tile_height),
+                                                       0.f,
+                                                       Vector2(1.f, 1.f),
+                                                       color::White * layer.opacity);
+                                }
                             }
+                            
+                            colx++;
+                            coly--;
                         }
                         
-                        if(shifted) {
-                            x = mMapPosition.x * (mTileWidth) + layer.x - mPosition.x;
-                            y += mTileHeight / 2;
-                            
-                            shifted = false;
-                        } else {
-                            x = mMapPosition.x * (mTileWidth) + layer.x - mPosition.x - mTileWidth/2;
-                            y += mTileHeight / 2;
-                            
+                        if(!shifted) {
+                            rowx++;
+                            startx += mTileWidth/2;
                             shifted = true;
+                        } else {
+                            rowy++;
+                            startx -= mTileWidth/2;
+                            shifted = false;
                         }
                     }
                     

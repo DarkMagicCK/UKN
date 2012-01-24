@@ -103,54 +103,54 @@ namespace ukn {
     };
     
     enum RenderStateParam {
-        TextureWrapClamp = 0,       // D3DTADDRESS_CLAMP, GL_CLAMP
-        TextureWrapRepeat,          // D3DTADDRESS_REPEAT, GL_REPEAT
-        TextureWrapClampToBorder,  // D3DTADDRESS_BORDER, GL_CLAMP_TO_BORDER
-        TextureWrapMirror,          // D3DTADDRESS_MIRROR, GL_MIRRORED_REPEAT
+        RSP_TextureWrapClamp = 0,       // D3DTADDRESS_CLAMP, GL_CLAMP
+        RSP_TextureWrapRepeat,          // D3DTADDRESS_REPEAT, GL_REPEAT
+        RSP_TextureWrapClampToBorder,  // D3DTADDRESS_BORDER, GL_CLAMP_TO_BORDER
+        RSP_TextureWrapMirror,          // D3DTADDRESS_MIRROR, GL_MIRRORED_REPEAT
         
-        FilterNearest,              // GL_NEAREST, (D3DTEXF_POINT, NONE)
-        FilterLinear,               // GL_LINEAR, (D3DTEXF_LINEAR, NONE)
-        FilterNearestMipmapNearest, // GL_NEAREST_MIPMAP_NEAREST, (D3DTXEFT_POINT, POINT)
-        FilterNearestMipmapLinear,  // GL_NEAREST_MIPMAP_LINEAR, (D3DTXEFT_POINT, LINEAR)
-        FilterLinearMipmapNearest,  // GL_LINEAR_MIPMAP_NEAREST, (D3DTXEFT_LINEAR, POINT)
+        RSP_FilterNearest,              // GL_NEAREST, (D3DTEXF_POINT, NONE)
+        RSP_FilterLinear,               // GL_LINEAR, (D3DTEXF_LINEAR, NONE)
+        RSP_FilterNearestMipmapNearest, // GL_NEAREST_MIPMAP_NEAREST, (D3DTXEFT_POINT, POINT)
+        RSP_FilterNearestMipmapLinear,  // GL_NEAREST_MIPMAP_LINEAR, (D3DTXEFT_POINT, LINEAR)
+        RSP_FilterLinearMipmapNearest,  // GL_LINEAR_MIPMAP_NEAREST, (D3DTXEFT_LINEAR, POINT)
         
-        StencilOpZero,          // GL_ZERO, D3DSTENCILOP_ZERO
-        StencilOpKeep,          
-        StencilOpReplace,
-        StencilOpIncr,
-        StencilOpDecr,
-        StencilOpInvert,
-        StencilOpIncrWrap,
-        StencilOpDecrWrap,
+        RSP_StencilOpZero,          // GL_ZERO, D3DSTENCILOP_ZERO
+        RSP_StencilOpKeep,          
+        RSP_StencilOpReplace,
+        RSP_StencilOpIncr,
+        RSP_StencilOpDecr,
+        RSP_StencilOpInvert,
+        RSP_StencilOpIncrWrap,
+        RSP_StencilOpDecrWrap,
         
-        BlendOpAdd,             // GL_FUNC_ADD, D3DBLENDOP_ADD
-        BlendOpSubstract,
+        RSP_BlendOpAdd,             // GL_FUNC_ADD, D3DBLENDOP_ADD
+        RSP_BlendOpSubstract,
         
-        BlendFuncZero,              // GL_ZERO, D3DBLEND_ZERO
-        BlendFuncOne,
-        BlendFuncSrcColor,
-        BlendFuncOneMinusSrcColor,
-        BlendFuncDstColor,
-        BlendFuncOneMinusDstColor,
-        BlendFuncSrcAlpha,
-        BlendFuncOneMinusSrcAlpha,
-        BlendFuncDstAlpha,
-        BlendFuncOneMinusDstAlpha,
+        RSP_BlendFuncZero,              // GL_ZERO, D3DBLEND_ZERO
+        RSP_BlendFuncOne,
+        RSP_BlendFuncSrcColor,
+        RSP_BlendFuncOneMinusSrcColor,
+        RSP_BlendFuncDstColor,
+        RSP_BlendFuncOneMinusDstColor,
+        RSP_BlendFuncSrcAlpha,
+        RSP_BlendFuncOneMinusSrcAlpha,
+        RSP_BlendFuncDstAlpha,
+        RSP_BlendFuncOneMinusDstAlpha,
         
-        ColorOpAdd,  // GL_ADD
-        ColorOpModulate, // GL_MODULATE
+        RSP_ColorOpAdd,  // GL_ADD
+        RSP_ColorOpModulate, // GL_MODULATE
         
-        CompNever,      // GL_NEVER, D3DCMP_NEVER
-        CompAlways,
-        CompLess,
-        CompLEqual,
-        CompEqual,
-        CompGreater,
-        CompGEqual,
-        CompNotEqual,
+        RSP_CompNever,      // GL_NEVER, D3DCMP_NEVER
+        RSP_CompAlways,
+        RSP_CompLess,
+        RSP_CompLEqual,
+        RSP_CompEqual,
+        RSP_CompGreater,
+        RSP_CompGEqual,
+        RSP_CompNotEqual,
         
-        Enable,
-        Disable, 
+        RSP_Enable,
+        RSP_Disable, 
     };
     
 } // namespace ukn  

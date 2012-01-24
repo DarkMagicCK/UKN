@@ -421,19 +421,19 @@ namespace ukn {
 
         switch(blend) {
             case SBB_Alpha:
-                gd.setRenderState(RS_Blend, Enable);
-                gd.setRenderState(RS_SrcAlpha, BlendFuncOneMinusSrcAlpha);
-                gd.setRenderState(RS_ColorOp, ColorOpModulate);
+                gd.setRenderState(RS_Blend, RSP_Enable);
+                gd.setRenderState(RS_SrcAlpha, RSP_BlendFuncOneMinusSrcAlpha);
+                gd.setRenderState(RS_ColorOp, RSP_ColorOpModulate);
                 break;
                 
             case SBB_Addictive:
-                gd.setRenderState(RS_Blend, Enable);
-                gd.setRenderState(RS_SrcAlpha, BlendFuncOneMinusSrcAlpha);
-                gd.setRenderState(RS_ColorOp, ColorOpAdd);
+                gd.setRenderState(RS_Blend, RSP_Enable);
+                gd.setRenderState(RS_SrcAlpha, RSP_BlendFuncOneMinusSrcAlpha);
+                gd.setRenderState(RS_ColorOp, RSP_ColorOpAdd);
                 break;
                 
             case SBB_None:
-                gd.setRenderState(RS_Blend, Disable);
+                gd.setRenderState(RS_Blend, RSP_Disable);
                 break;
         }
     }

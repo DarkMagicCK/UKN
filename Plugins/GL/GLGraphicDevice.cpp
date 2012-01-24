@@ -314,7 +314,7 @@ namespace ukn {
                 glDepthFunc(render_state_param_to_gl_state_param(func));
                 break;
             case RS_DepthMask:
-                glDepthMask((func == Enable) ? GL_TRUE : GL_FALSE);
+                glDepthMask((func == RSP_Enable) ? GL_TRUE : GL_FALSE);
                 break;
                 
             case RS_SrcBlend:
@@ -326,14 +326,14 @@ namespace ukn {
                 break;
                 
             case RS_Blend:
-                if(func == Enable)
+                if(func == RSP_Enable)
                     glEnable(GL_BLEND);
                 else
                     glDisable(GL_BLEND);
                 break;
                 
             case RS_DepthTest:
-                if(func == Enable)
+                if(func == RSP_Enable)
                     glEnable(GL_DEPTH_TEST);
                 else
                     glDisable(GL_DEPTH_TEST);

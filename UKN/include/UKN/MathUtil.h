@@ -515,8 +515,8 @@ namespace ukn {
         void set(const Vector2& upper, const Vector2& lower) {
             this->x1 = upper.x;
             this->y1 = upper.y;
-            this->x2 = upper.x;
-            this->y2 = upper.y;
+            this->x2 = lower.x;
+            this->y2 = lower.y;
         }
         
         void set(real _x1, real _y1, real _x2, real _y2, bool asWH=false) {

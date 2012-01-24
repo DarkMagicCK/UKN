@@ -67,93 +67,93 @@ namespace ukn {
     
     inline GLenum render_state_param_to_gl_state_param(RenderStateParam param) {
         switch(param) {
-            case TextureWrapClamp:
+            case RSP_TextureWrapClamp:
                 return GL_CLAMP;
-            case TextureWrapRepeat:
+            case RSP_TextureWrapRepeat:
                 return GL_REPEAT;
-            case TextureWrapClampToBorder:
+            case RSP_TextureWrapClampToBorder:
                 return GL_CLAMP_TO_BORDER;
-            case TextureWrapMirror:
+            case RSP_TextureWrapMirror:
                 return GL_MIRRORED_REPEAT;
                 
-            case FilterNearest:
+            case RSP_FilterNearest:
                 return GL_NEAREST;
-            case FilterLinear:
+            case RSP_FilterLinear:
                 return GL_LINEAR;
-            case FilterNearestMipmapNearest:
+            case RSP_FilterNearestMipmapNearest:
                 return GL_NEAREST_MIPMAP_NEAREST;
-            case FilterNearestMipmapLinear:
+            case RSP_FilterNearestMipmapLinear:
                 return GL_NEAREST_MIPMAP_LINEAR;
-            case FilterLinearMipmapNearest:
+            case RSP_FilterLinearMipmapNearest:
                 return GL_LINEAR_MIPMAP_NEAREST;
                 
-            case StencilOpZero:
+            case RSP_StencilOpZero:
                 return GL_ZERO;
-            case StencilOpKeep:
+            case RSP_StencilOpKeep:
                 return GL_KEEP;
-            case StencilOpReplace:
+            case RSP_StencilOpReplace:
                 return GL_REPLACE;
-            case StencilOpIncr:
+            case RSP_StencilOpIncr:
                 return GL_INCR;
-            case StencilOpDecr:
+            case RSP_StencilOpDecr:
                 return GL_DECR;
-            case StencilOpInvert:
+            case RSP_StencilOpInvert:
                 return GL_INVERT;
-            case StencilOpIncrWrap:
+            case RSP_StencilOpIncrWrap:
                 return GL_INCR_WRAP;
-            case StencilOpDecrWrap:
+            case RSP_StencilOpDecrWrap:
                 return GL_DECR_WRAP;
                 
-            case BlendOpAdd:
+            case RSP_BlendOpAdd:
                 return GL_ADD;
-            case BlendOpSubstract:
+            case RSP_BlendOpSubstract:
                 return GL_SUBTRACT;
                 
-            case BlendFuncZero:
+            case RSP_BlendFuncZero:
                 return GL_ZERO;
-            case BlendFuncOne:
+            case RSP_BlendFuncOne:
                 return GL_ONE;
-            case BlendFuncSrcColor:
+            case RSP_BlendFuncSrcColor:
                 return GL_SRC_COLOR;
-            case BlendFuncOneMinusSrcColor:
+            case RSP_BlendFuncOneMinusSrcColor:
                 return GL_ONE_MINUS_SRC_COLOR;
-            case BlendFuncDstColor:
+            case RSP_BlendFuncDstColor:
                 return GL_DST_COLOR;
-            case BlendFuncOneMinusDstColor:
+            case RSP_BlendFuncOneMinusDstColor:
                 return GL_ONE_MINUS_DST_COLOR;
-            case BlendFuncSrcAlpha:
+            case RSP_BlendFuncSrcAlpha:
                 return GL_SRC_ALPHA;
-            case BlendFuncOneMinusSrcAlpha:
+            case RSP_BlendFuncOneMinusSrcAlpha:
                 return GL_ONE_MINUS_SRC_ALPHA;
-            case BlendFuncDstAlpha:
+            case RSP_BlendFuncDstAlpha:
                 return GL_DST_ALPHA;
-            case BlendFuncOneMinusDstAlpha:
+            case RSP_BlendFuncOneMinusDstAlpha:
                 return GL_ONE_MINUS_DST_ALPHA;
                 
-            case ColorOpAdd:
+            case RSP_ColorOpAdd:
                 return GL_ADD;
-            case ColorOpModulate:
+            case RSP_ColorOpModulate:
                 return GL_MODULATE;
                 
-            case CompNever:
+            case RSP_CompNever:
                 return GL_NEVER;
-            case CompAlways:
+            case RSP_CompAlways:
                 return GL_NEVER;
-            case CompLess:
+            case RSP_CompLess:
                 return GL_LESS;
-            case CompLEqual:
+            case RSP_CompLEqual:
                 return GL_LEQUAL;
-            case CompEqual:
+            case RSP_CompEqual:
                 return GL_EQUAL;
-            case CompGreater:
+            case RSP_CompGreater:
                 return GL_GREATER;
-            case CompGEqual:
+            case RSP_CompGEqual:
                 return GL_GEQUAL;
-            case CompNotEqual:
+            case RSP_CompNotEqual:
                 return GL_NOTEQUAL;
                 
-            case Enable:
-            case Disable: 
+            case RSP_Enable:
+            case RSP_Disable: 
                 return param;
         }
     }

@@ -87,9 +87,6 @@ namespace ukn {
         typedef std::vector<String> FileList;
 
     public:
-        ResourceLoader();
-        ~ResourceLoader();
-        
         static ResourceLoader& Instance();
         
         void    addPath(const String& path);
@@ -105,11 +102,14 @@ namespace ukn {
         
         void enumResourceNamesInPath(const String& path, FileList& names);
         
+    protected:
+        ResourceLoader();
+        ~ResourceLoader();
+        
     private:
         ResourcePtr onResourceLoad(const String& name, bool isFullPath);
         
         ResourceFactories mResourceFactories;
-      
         ResourcePaths mResourcePaths;
     };
     

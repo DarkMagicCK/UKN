@@ -207,12 +207,8 @@ namespace ukn {
             Tile& getTileAt(uint32 layer_index, const Vector2& pos);
 
             // in pixel
-            void            setMapPosition(const Vector2& pos);
-            Vector2         getMapPosition() const;
-            
-            // in tiles
-            void            setMapViewSize(const Vector2& size);
-            Vector2         getMapViewSize() const;
+            void                setMapViewRect(const Rectangle& vr);
+            const Rectangle&    getMapViewRect() const;
             
             // IConfigSerializable
             virtual bool serialize(const ConfigParserPtr& config) override;
@@ -253,9 +249,7 @@ namespace ukn {
             int32 mTileHeight;
             MapOrientation mOrientation;
             
-            Vector2 mPosition;
-            Vector2 mMapPosition;
-            Vector2 mMapViewSize;
+            Rectangle mViewRect;
         };
         
     } // namespace tmx

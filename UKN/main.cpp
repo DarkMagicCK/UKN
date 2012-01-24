@@ -78,9 +78,8 @@ public:
         if(cfg3) {
             mMap = new ukn::tmx::Map();
             mMap->deserialize(cfg3);
-        
-            mMap->setMapViewSize(ukn::Vector2(this->getMainWindow().getWidth() / mMap->getTileWidth() + 1,
-                                              this->getMainWindow().getHeight() / mMap->getTileHeight()+ 1));
+            
+         //  mMap->setMapViewRect(ukn::Rectangle(0, 0, 1280, 300));
         } else 
             mMap = 0;
     }

@@ -20,6 +20,7 @@
 #include "GLFrameBuffer.h"
 #include "GLGraphicBuffer.h"
 #include "GLSpriteBatch.h"
+#include "GLRenderView.h"
 
 namespace ukn {
     
@@ -111,7 +112,7 @@ namespace ukn {
     }
     
     RenderViewPtr GLGraphicFactory::create2DRenderView(TexturePtr texture) const {
-        return RenderView::NullObject();
+        return new GLTexture2DRenderView(*texture.get(), 0, 0);
     }
     
     RenderViewPtr GLGraphicFactory::create2DDepthStencilView(TexturePtr texture) const {

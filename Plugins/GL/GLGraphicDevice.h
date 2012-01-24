@@ -40,6 +40,8 @@ namespace ukn {
         
         void fillGraphicCaps(GraphicDeviceCaps& caps);
         
+        void setRenderState(RenderStateType type, RenderStateParam func);
+        
         void bindGLFrameBuffer(GLuint fbo);
         GLuint getBindedGLFrameBuffer() const;
         

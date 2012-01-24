@@ -11,6 +11,7 @@
 
 #include "UKN/Platform.h"
 #include "UKN/Util.h"
+#include "UKN/Serializer.h"
 
 namespace ukn {
     
@@ -32,6 +33,11 @@ namespace ukn {
         
         static Array<uint16> ToUnicode(const ukn_string& str);
     };
+    
+    template<typename T>
+    ukn_string Convert::ToString(T t) {
+        return any_to_string(t);
+    }
     
 } // namespace ukn
 

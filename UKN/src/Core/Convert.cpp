@@ -12,11 +12,6 @@
 
 namespace ukn {
     
-    template<typename T>
-    ukn_string Convert::ToString(T t) {
-        return SerializeHelper::ToString(&t);
-    }
-    
     int16 Convert::ToInt16(const ukn_string& str) {
         int16 result;
         SerializeHelper::FromString(str, &result);

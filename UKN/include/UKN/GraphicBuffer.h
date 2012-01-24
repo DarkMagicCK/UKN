@@ -42,7 +42,7 @@ namespace ukn {
         virtual void*   map() = 0;
         virtual void    unmap() = 0;
         
-        virtual void  activate() = 0;
+        virtual void    activate() = 0;
         
 		virtual uint32  count() const = 0;
         

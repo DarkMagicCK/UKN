@@ -37,19 +37,10 @@ namespace ukn {
         
         Array<Vertex2D> buffer;
         TexturePtr prevTexture = it->texture;
-
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);    
-        glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-        glDisable(GL_DEPTH_TEST);
-        glDepthMask(GL_FALSE);
         
         while(it != mRenderQueue.end()) { 
             if(it->texture != prevTexture) {
                 gd.bindTexture(prevTexture);
-                
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);	
                 
                 glInterleavedArrays(GL_T2F_C4UB_V3F, 
                                     0, 
@@ -78,8 +69,6 @@ namespace ukn {
                          0, 
                          (GLsizei)buffer.size());
         }
-        
-        glDisable(GL_BLEND);
     }
     
 } // namespace ukn

@@ -98,8 +98,25 @@ namespace ukn {
                 mIsDepthBuffered = true;
                 
                 // to do element formats
-                mDepthBits = 32;
-                mStencilBits = 0;
+                switch(view->format()) {
+                    case EF_D16:
+                        mDepthBits = 16;
+                        mStencilBits = 0;
+                        break;
+                        
+                    case EF_D24S8:
+                        mDepthBits = 24;
+                        mStencilBits = 8;
+                        break;
+                        
+                    case EF_D32:
+                        mDepthBits = 32;
+                        mStencilBits = 0;
+                        break;
+                        
+                    default:
+                        break;
+                }
                 break;
                 
             default:
@@ -116,9 +133,9 @@ namespace ukn {
                         min_clr_index = i;
                 }
                 if(min_clr_index == clrid) {
-                    mWidth = view->getWidth();
-                    mHeight = view->getHeight();
-                    mColorDepth = view->getBpp();
+                    mWidth = view->width();
+                    mHeight = view->height();
+                    mColorDepth = view->bpp();
     
                     mViewPort.left = 0;
                     mViewPort.top = 0;

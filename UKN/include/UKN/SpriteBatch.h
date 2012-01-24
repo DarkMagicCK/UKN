@@ -26,6 +26,12 @@ namespace ukn {
         SBS_FrontToBack
     };
     
+    enum SpriteBatchBlendMode {
+        SBB_Alpha,
+        SBB_Addictive,
+        SBB_None,
+    };
+    
     struct SpriteDescriptor {
         Vector2     position;
         Vector2     scale;
@@ -75,6 +81,7 @@ namespace ukn {
         // must be called before any draw call
         void begin(SpriteBatchSortMode mode = SBS_Deffered);
         void begin(SpriteBatchSortMode mode, const Matrix4& transformMat);
+        void begin(SpriteBatchBlendMode blend, SpriteBatchSortMode mode, const Matrix4& transformMat);
         
         // must be called after draw to render the SpriteBatch
         void end();
@@ -127,7 +134,7 @@ namespace ukn {
             float       layer_depth;
             Vertex2D    vertices[6];
         };
-        typedef Array<TextureObject> RenderQueue;
+        typedef std::vector<TextureObject> RenderQueue;
         RenderQueue mRenderQueue;
         
         RenderBufferPtr mRenderBuffer;

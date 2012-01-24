@@ -276,7 +276,7 @@ namespace ukn {
 
     template<typename T>
     void Array<T>::destroy(T* ele) {
-        ele->~T();
+    //    ele->~T();
     }
 
     template<typename T>
@@ -551,7 +551,7 @@ namespace ukn {
         ukn_assert(begin >= this->mElements && end >= this->mElements);
         ukn_assert(!this->mMapped);
         
-        this->erase(uint32(begin - this->mElements));
+        this->erase(size_t(begin - this->mElements), size_t(end - this->mElements));
     }
 
     template<typename T>

@@ -15,6 +15,7 @@
 #include "UKN/GraphicBuffer.h"
 #include "UKN/FrameBuffer.h"
 #include "UKN/Singleton.h"
+#include "UKN/Profiler.h"
 
 namespace ukn {
     
@@ -219,7 +220,7 @@ namespace ukn {
         if(!mBatchRendering)
             mRenderQueue.clear();
         else  
-            mRenderQueue.erase(mCurrentBatchIndex, mRenderQueue.size());
+            mRenderQueue.erase(mRenderQueue.begin()+mCurrentBatchIndex, mRenderQueue.end());
     }
     
     Matrix4& SpriteBatch::getTransformMatrix() {
@@ -259,16 +260,16 @@ namespace ukn {
         mCurrentBatchIndex = mRenderQueue.size();
     }
     
-    void SpriteBatch::endBatch() {
-        if(mCurrentBatchIndex > mRenderQueue.size()) {
+    void SpriteBatch::endBatch() {        
+        if(mCurrentBatchIndex < mRenderQueue.size()) {
             // alloc vertex buffer
             mVertexBuffer->resize((uint32)(mRenderQueue.size() - mCurrentBatchIndex) * 6);
             Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
-            for(size_t i=mCurrentBatchIndex; i<mRenderQueue.size(); ++i) {
+            for(size_t i = mCurrentBatchIndex; i < mRenderQueue.size(); ++i) {
                 memcpy(vertices + i*6, &mRenderQueue[i].vertices[0], sizeof(Vertex2D)*6);
             }
             mVertexBuffer->unmap();
-
+            
             onRenderBegin();
             GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
@@ -330,7 +331,7 @@ namespace ukn {
                                            color,
                                            layerDepth));
             
-        mRenderQueue.insert(obj);
+        mRenderQueue.push_back(obj);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color) {
@@ -346,7 +347,7 @@ namespace ukn {
         descriptor.color = color;
         obj.buildVertices(descriptor);
                           
-        mRenderQueue.insert(obj);
+        mRenderQueue.push_back(obj);
         
         for(int i=0; i<6; ++i);
     }
@@ -364,7 +365,7 @@ namespace ukn {
                                            color,
                                            layerDepth));
         
-        mRenderQueue.insert(obj);
+        mRenderQueue.push_back(obj);
     }
         
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Vector2& center, float rot, const Vector2& scale, const Color& color) {
@@ -379,7 +380,7 @@ namespace ukn {
         TextureObject obj(texture);
         obj.buildVertices(descriptor);
         
-        mRenderQueue.insert(obj);
+        mRenderQueue.push_back(obj);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& srcRect, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {        
@@ -399,18 +400,42 @@ namespace ukn {
         descriptor.source_rect = srcRect;
         obj.buildVertices(descriptor);
         
-        mRenderQueue.insert(obj);
+        mRenderQueue.push_back(obj);
     }
     
     void SpriteBatch::begin(SpriteBatchSortMode mode) {
-        mBegan = true;
-        mCurrMode = mode;
+        this->begin(SBB_Alpha, mode, Matrix4());
+        
     }
     
     void SpriteBatch::begin(SpriteBatchSortMode mode, const Matrix4& transformMat) {
+        this->begin(SBB_Alpha, mode, transformMat);
+    }
+    
+    void SpriteBatch::begin(SpriteBatchBlendMode blend, SpriteBatchSortMode mode, const Matrix4& transformMat) {
         mBegan = true;
         mCurrMode = mode;
         mTransformMatrix = transformMat;
+        
+        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+
+        switch(blend) {
+            case SBB_Alpha:
+                gd.setRenderState(RS_Blend, Enable);
+                gd.setRenderState(RS_SrcAlpha, BlendFuncOneMinusSrcAlpha);
+                gd.setRenderState(RS_ColorOp, ColorOpModulate);
+                break;
+                
+            case SBB_Addictive:
+                gd.setRenderState(RS_Blend, Enable);
+                gd.setRenderState(RS_SrcAlpha, BlendFuncOneMinusSrcAlpha);
+                gd.setRenderState(RS_ColorOp, ColorOpAdd);
+                break;
+                
+            case SBB_None:
+                gd.setRenderState(RS_Blend, Disable);
+                break;
+        }
     }
     
     void SpriteBatch::end() {
@@ -425,6 +450,7 @@ namespace ukn {
             case SBS_None:
                 break;
         }
+        
         render();
 
         mBegan = false;

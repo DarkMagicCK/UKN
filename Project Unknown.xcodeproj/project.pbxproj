@@ -80,6 +80,7 @@
 		88AAC17E1486F7FC007A80A4 /* FileUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */; };
 		88AAD17914CA2382007D3732 /* TMXTiledMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAD17814CA2382007D3732 /* TMXTiledMap.cpp */; };
 		88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */; };
+		88B2236914CDE18D00C871C8 /* RenderTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B2236814CDE18D00C871C8 /* RenderTarget.cpp */; };
 		88D86C2E14CD15FB00235AC5 /* Convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D86C2D14CD15FB00235AC5 /* Convert.cpp */; };
 		88D86C3014CD1D9900235AC5 /* StreamWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D86C2F14CD1D9900235AC5 /* StreamWrapper.cpp */; };
 		88E3C3DE147F2CD400E8754D /* GLGraphicDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */; };
@@ -392,6 +393,8 @@
 		88AAD17814CA2382007D3732 /* TMXTiledMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMXTiledMap.cpp; sourceTree = "<group>"; };
 		88B0FD4814C5F38800346AC5 /* SequencialAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencialAnimation.h; sourceTree = "<group>"; };
 		88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequencialAnimation.cpp; sourceTree = "<group>"; };
+		88B2236514CDE10A00C871C8 /* RenderTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTarget.h; sourceTree = "<group>"; };
+		88B2236814CDE18D00C871C8 /* RenderTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTarget.cpp; sourceTree = "<group>"; };
 		88C3091114936612001262DF /* Transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transform.h; sourceTree = "<group>"; };
 		88C3091314936617001262DF /* Sensor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sensor.h; sourceTree = "<group>"; };
 		88C309141493661C001262DF /* Trigger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Trigger.h; sourceTree = "<group>"; };
@@ -726,6 +729,7 @@
 				88AAD17714CA2376007D3732 /* TMXTiledMap.h */,
 				88D86C2A14CD0A8D00235AC5 /* Convert.h */,
 				88D86C2C14CD0A9600235AC5 /* StreamWrapper.h */,
+				88B2236514CDE10A00C871C8 /* RenderTarget.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -828,6 +832,7 @@
 				88029B091491DB8B00AB1490 /* Font.cpp */,
 				88278EDF149C947B00C7ED8A /* Scene.cpp */,
 				8802987514CA982F009D7670 /* RenderHelper.cpp */,
+				88B2236814CDE18D00C871C8 /* RenderTarget.cpp */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -1112,6 +1117,7 @@
 				8802987614CA982F009D7670 /* RenderHelper.cpp in Sources */,
 				88D86C2E14CD15FB00235AC5 /* Convert.cpp in Sources */,
 				88D86C3014CD1D9900235AC5 /* StreamWrapper.cpp in Sources */,
+				88B2236914CDE18D00C871C8 /* RenderTarget.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

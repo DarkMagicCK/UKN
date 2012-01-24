@@ -81,6 +81,8 @@ namespace ukn {
         virtual void onRenderBuffer(const RenderBufferPtr& buffer) = 0;
         virtual void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) = 0;
         
+        virtual void setRenderState(RenderStateType type, RenderStateParam func) = 0;
+        
     public:
         WindowPtr createRenderWindow(const ukn_string& name, const RenderSettings& settings);
         
@@ -94,6 +96,9 @@ namespace ukn {
         
         void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
         
+    public:
+        void setRenderTarget(const RenderTargetPtr& target);
+        
     protected:
         FrameBufferPtr mCurrFrameBuffer;
         FrameBufferPtr mScreenFrameBuffer;
@@ -101,6 +106,8 @@ namespace ukn {
         Color mClearColor;
         float mClearDepth;
         int mClearStencil;
+        
+        RenderTargetPtr mCurrTarget;
     };
     
 } // namespace ukn

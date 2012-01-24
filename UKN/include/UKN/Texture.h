@@ -47,7 +47,7 @@ namespace ukn {
         virtual ~Texture();
         
         ElementFormat getFormat() const;
-        TextureType getType() const;
+        TextureType   getType() const;
         
         virtual uint32 getWidth(uint32 level = 0) const = 0;
         virtual uint32 getHeight(uint32 level = 0) const = 0;

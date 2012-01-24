@@ -27,7 +27,8 @@ namespace ukn {
     
     ukn_string ProfileData::toFormattedString() const {
         ukn_string buffer("Profile "+name+": ");
-        buffer += format_string("average time %u, max time %u, min time %u, recorded frames %u, average time ratio %.3f, average time ratio in frame %.3f",
+        buffer += format_string("last time %u, average time %u, max time %u, min time %u, recorded frames %u, average time ratio %.3f, average time ratio in frame %.3f",
+                                time,
                                 average_time,
                                 max_time,
                                 min_time,

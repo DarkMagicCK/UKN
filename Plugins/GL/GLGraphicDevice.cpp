@@ -238,13 +238,13 @@ namespace ukn {
         AppInstance& app = Context::Instance().getApp();
         
         while(true) {
-            UKN_PROFILE("MainFrame");
 
             if(fb.isActive()) {
                 counter.waitToNextFrame();
                 
-                {
-                    
+                {            
+                    UKN_PROFILE("MainFrame");
+
                     glViewport(fb.getViewport().left,
                                fb.getViewport().top,
                                fb.getViewport().width,
@@ -286,6 +286,59 @@ namespace ukn {
     
     void GLGraphicDevice::getProjectionMatrix(Matrix4& mat) {
         glGetFloatv(GL_PROJECTION_MATRIX, &mat.x[0]);
+    }
+    
+    void GLGraphicDevice::setRenderState(RenderStateType type, RenderStateParam func) {
+        switch(type) {
+            case RS_TextureWrap0:
+            case RS_TextureWrap1:
+            case RS_ColorOp:
+                glTexEnvf(GL_TEXTURE_2D, 
+                          render_state_to_gl_state(type), 
+                          render_state_param_to_gl_state_param(func));
+                break;
+                
+                
+            case RS_MinFilter:
+            case RS_MagFilter:
+                glTexParameteri(GL_TEXTURE_2D, 
+                                render_state_to_gl_state(type), 
+                                render_state_param_to_gl_state_param(func));
+                break;
+                
+            case RS_StencilOp:
+            case RS_StencilFunc:
+                break;
+                
+            case RS_DepthOp:
+                glDepthFunc(render_state_param_to_gl_state_param(func));
+                break;
+            case RS_DepthMask:
+                glDepthMask((func == Enable) ? GL_TRUE : GL_FALSE);
+                break;
+                
+            case RS_SrcBlend:
+            case RS_DstBlend:
+            case RS_SrcAlpha:
+            case RS_DstAlpha:
+                glBlendFunc(render_state_to_gl_state(type), 
+                            render_state_param_to_gl_state_param(func));
+                break;
+                
+            case RS_Blend:
+                if(func == Enable)
+                    glEnable(GL_BLEND);
+                else
+                    glDisable(GL_BLEND);
+                break;
+                
+            case RS_DepthTest:
+                if(func == Enable)
+                    glEnable(GL_DEPTH_TEST);
+                else
+                    glDisable(GL_DEPTH_TEST);
+                break;
+        }
     }
     
 } // namespace ukn

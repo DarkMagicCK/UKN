@@ -52,6 +52,11 @@ namespace ukn {
         uint32 fsaa_samples;
     };
 
+    enum BlendMode {
+        BM_Alpha, 
+        BM_Addictive,
+        BM_None,
+    };
     
     enum RenderMode {
         // single points
@@ -93,13 +98,14 @@ namespace ukn {
         RS_SrcAlpha,
         RS_DstAlpha,
         
-        RS_BlendMode,
+        RS_Blend,
+        RS_DepthTest,
     };
     
     enum RenderStateParam {
         TextureWrapClamp = 0,       // D3DTADDRESS_CLAMP, GL_CLAMP
         TextureWrapRepeat,          // D3DTADDRESS_REPEAT, GL_REPEAT
-        TextureWrapClampToBoarder,  // D3DTADDRESS_BOARDER, GL_CLAMP_TO_BOARDER
+        TextureWrapClampToBorder,  // D3DTADDRESS_BORDER, GL_CLAMP_TO_BORDER
         TextureWrapMirror,          // D3DTADDRESS_MIRROR, GL_MIRRORED_REPEAT
         
         FilterNearest,              // GL_NEAREST, (D3DTEXF_POINT, NONE)
@@ -119,7 +125,6 @@ namespace ukn {
         
         BlendOpAdd,             // GL_FUNC_ADD, D3DBLENDOP_ADD
         BlendOpSubstract,
-        BlendOpReverseSubstract,
         
         BlendFuncZero,              // GL_ZERO, D3DBLEND_ZERO
         BlendFuncOne,
@@ -131,6 +136,9 @@ namespace ukn {
         BlendFuncOneMinusSrcAlpha,
         BlendFuncDstAlpha,
         BlendFuncOneMinusDstAlpha,
+        
+        ColorOpAdd,  // GL_ADD
+        ColorOpModulate, // GL_MODULATE
         
         CompNever,      // GL_NEVER, D3DCMP_NEVER
         CompAlways,

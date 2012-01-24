@@ -25,17 +25,21 @@ namespace ukn {
             
         }
         
-        uint32 getWidth() const {
+        uint32 width() const {
             return mWidth;
         }
         
-        uint32 getHeight() const {
+        uint32 height() const {
             return mHeight;
         }
         
-        uint32 getBpp() const {
+        uint32 bpp() const {
             // todo elements formats;
             return 32;
+        }
+        
+        ElementFormat format() const {
+            return mElementFormat;
         }
         
         virtual void clearColor(const Color& clr) = 0;

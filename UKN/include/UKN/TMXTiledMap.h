@@ -103,7 +103,17 @@ namespace ukn {
         
         class Map;
         
+        enum LayerType {
+            LT_Layer,
+            LT_ObjectGroup,
+        };
+        
         struct Layer {
+            /* type of the layer
+                layer or objectgroup
+             */
+            LayerType type;
+            
             /* name of the layer */
             ukn_string name;
             
@@ -121,21 +131,18 @@ namespace ukn {
             
             const Map* parent;
             
+            /* properties */
+            PropertyContainer property;
+            
             /* local tiles */
             std::vector<Tile> tiles;
             
             Tile& getTileAt(const Vector2& pos);
         };  
         
-        enum ObjectType {
-            OT_Image,
-            OT_Polygon,
-            OT_Polyline,
-        };
-        
         struct Object {
             ukn_string name;
-            ObjectType type;
+            ukn_string type;
 
             /* coordinate of the object in pixels */
             int32 x;
@@ -147,8 +154,12 @@ namespace ukn {
             
             /* tileid reference of the object, optional */
             int32 gid;
+            
+            Tile tile;
+            TexturePtr image;
 
-            PropertyContainer properties;
+            /* properties */
+            PropertyContainer property;
         };
         
         /* Obj group is a kind of layer */
@@ -157,6 +168,9 @@ namespace ukn {
             Color color;
             
             std::vector<Object> objects;
+            
+            /* properties */
+            PropertyContainer property;
         };
         
         enum MapOrientation {
@@ -174,8 +188,8 @@ namespace ukn {
             Map(const String& map_file);
             virtual ~Map();
             
-            const TileSetList&  getTileSets() const;
-            const LayerList&    getLayers() const;
+            const TileSetList&      getTileSets() const;
+            const LayerList&        getLayers() const;
             
             SpriteBatchPtr  getMapRenderer() const;
             void            setMapRenderer(SpriteBatchPtr renderer);
@@ -187,8 +201,8 @@ namespace ukn {
             uint32          getMapHeight() const;
             
             // ion pixel
-            int32          getTileWidth() const;
-            int32          getTileHeight() const;
+            int32           getTileWidth() const;
+            int32           getTileHeight() const;
                         
             Tile& getTileAt(uint32 layer_index, const Vector2& pos);
 
@@ -218,6 +232,13 @@ namespace ukn {
         private:
             void orthogonalRender();
             void isometricRender();
+            
+            Tile* getTileWithGid(int32 gid);
+            void deserialize_tile_set(TileSet& ts, uint32 ts_id, const ConfigParserPtr& config);
+            void parseProperties(PropertyContainer& cont, const ConfigParserPtr& config);
+            void parseTileset(const ConfigParserPtr& config);
+            void parseLayer(const ConfigParserPtr& config);
+            void parseObjectGroup(const ConfigParserPtr& config);
             
             TileSetList mTileSets;
             LayerList mLayers;

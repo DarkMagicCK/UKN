@@ -52,6 +52,10 @@ namespace ukn {
                     glBindTexture(GL_TEXTURE_2D, (GLuint)mTextureId);
                     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &w);
                     glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &h);
+                    
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    
                     glBindTexture(GL_TEXTURE_2D, 0);
 
                     mWidth = w;

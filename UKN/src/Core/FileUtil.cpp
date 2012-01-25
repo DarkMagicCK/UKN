@@ -33,7 +33,7 @@
 
 namespace ukn {
     
-    UKN_API bool file_exists(const String& filepath) {
+    bool File::FileExists(const String& filepath) {
 #ifdef UKN_OS_WINDOWS
         return PathFileExistsW(filepath.c_str())?true:false;
         
@@ -43,21 +43,21 @@ namespace ukn {
         
         struct stat sb;
         
-        if (stat(wstring_to_string(filepath).c_str(), &sb) == 0 && S_ISREG(sb.st_mode)) {
+        if (stat(String::WStringToString(filepath).c_str(), &sb) == 0 && S_ISREG(sb.st_mode)) {
             return true;
         }
 #endif
         return false;
     }
     
-    UKN_API bool path_exists(const String& path) {
+    bool File::PathExists(const String& path) {
 #ifdef UKN_OS_WINDOWS
         return PathFileExistsW(path.c_str())?true:false;
 
 #else
         struct stat sb;
         
-        if (stat(wstring_to_string(path).c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)) {
+        if (stat(String::WStringToString(path).c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)) {
             return true;
         }
 #endif
@@ -65,7 +65,7 @@ namespace ukn {
         return false;
     }
     
-    UKN_API String get_application_path() {
+    String Path::GetApplicationPath() {
 #ifdef UKN_OS_WINDOWS
         wchar_t buffer[MAX_PATH];
         GetCurrentDirectoryW(MAX_PATH, buffer);
@@ -79,16 +79,16 @@ namespace ukn {
         return L"./";
     }
     
-    UKN_API String check_and_get_font_path(const String& name) {
+    String Path::CheckAndGetFontPath(const String& name) {
         
-        if(file_exists(L"./"+name))
+        if(File::FileExists(L"./"+name))
             return L"./"+name;
         
         // resource path
         {
             String fullpath(Path::GetResource() + name);
             
-            if(file_exists(fullpath)) {
+            if(File::FileExists(fullpath)) {
                 return fullpath;
             }
         }
@@ -97,7 +97,7 @@ namespace ukn {
         {
             String fullpath(Path::GetFont() + name);
         
-            if(file_exists(fullpath)) {
+            if(File::FileExists(fullpath)) {
                 return fullpath;
             }
         }
@@ -107,7 +107,7 @@ namespace ukn {
 #if defined(UKN_OS_FAMILY_APPLE)
             String fullpath(ukn_apple_documents_path());
             
-            if(file_exists(fullpath)) {
+            if(File::FileExists(fullpath)) {
                 return fullpath;
             }
 #endif
@@ -138,7 +138,7 @@ namespace ukn {
         }
         
 #elif defined(UKN_OS_FAMILY_UNIX)
-        return string_to_wstring_fast(getenv(env.c_str()));
+        return String::StringToWStringFast(getenv(env.c_str()));
 #endif
         
         return String();
@@ -164,7 +164,7 @@ namespace ukn {
         size_t n = path.size();
         if(n > 0 && path[n-1] != '/')
             path.append("/");
-        return string_to_wstring_fast(path);
+        return String::StringToWStringFast(path);
 #endif      
     }
     
@@ -194,7 +194,7 @@ namespace ukn {
         size_t n = path.size();
         if(n > 0 && path[n-1] != '/')
             path.append("/");
-        return string_to_wstring_fast(path);
+        return String::StringToWStringFast(path);
 #endif           
     }
     
@@ -212,7 +212,7 @@ namespace ukn {
             else 
                 path = "/tmp/";
         }
-        return string_to_wstring_fast(path);
+        return String::StringToWStringFast(path);
 #endif       
         return String();
     }
@@ -239,7 +239,7 @@ namespace ukn {
             else 
                 path = "/tmp/";
         }
-        return string_to_wstring_fast(path);
+        return String::StringToWStringFast(path);
         
 #endif    
         return String();
@@ -262,7 +262,7 @@ namespace ukn {
         return L"./";
         
 #elif defined(UKN_OS_FAMILY_APPLE)
-        return get_application_path() + L"/Contents/Resources/";
+        return GetApplicationPath() + L"/Contents/Resources/";
         
 #elif defined(UKN_OS_FAMILY_UNIX)
         return L"./";
@@ -503,8 +503,8 @@ namespace ukn {
         mFile = mPath + mImpl->get();
     }
     
-    DirectoryIterator::DirectoryIterator(const String& path):
-    mPath(wstring_to_string(path+L"/")) {
+    DirectoryIterator::DirectoryIterator(const ukn_wstring& path):
+    mPath(String::WStringToString(path+L"/")) {
         mIsEnd = false;
         mImpl = new DirectoryIteratorImpl(mPath.c_str());
         

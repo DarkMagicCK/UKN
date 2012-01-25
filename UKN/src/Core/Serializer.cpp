@@ -50,7 +50,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<int32>(int32* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -72,7 +72,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<int16>(int16* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -94,7 +94,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<uint16>(uint16* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -116,7 +116,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<uint32>(uint32* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -138,7 +138,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<float>(float* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -160,7 +160,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<double>(double* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -182,7 +182,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<char>(char* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -204,7 +204,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<uint8>(uint8* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -226,7 +226,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<long>(long* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -248,7 +248,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<unsigned long>(unsigned long* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -270,7 +270,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<int64>(int64* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -292,7 +292,7 @@ namespace ukn {
     
     template<>
     ukn_string SerializeHelper::ToString<uint64>(uint64* val) {
-        return any_to_string(*val);
+        return String::AnyToString(*val);
     }
     
     template<>
@@ -309,12 +309,12 @@ namespace ukn {
     template<>
     void SerializeHelper::FromString<String>(const ukn_string& str, String* val) {
         ukn_assert(val);
-        *val = string_to_wstring(str);
+        *val = String::StringToWString(str);
     }
     
     template<>
     ukn_string SerializeHelper::ToString<String>(String* val) {
-        return wstring_to_string(*val);
+        return String::WStringToString(*val);
     }
     
     template<>

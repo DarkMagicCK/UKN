@@ -71,7 +71,7 @@ namespace ukn {
         try {
             mWindow = MakeSharedPtr<GLWindow>(name, settings);
         } catch(Exception& e) {
-			message_box(format_string("GLGraphic Device: Error creating opengl window, error %s", e.what()), "Fatal Error", MBO_OK | MBO_IconError);
+            MessageBox::Show(format_string("GLGraphic Device: Error creating opengl window, error %s", e.what()), "Fatal Error", MBO_OK | MBO_IconError);
 			Context::Instance().getApp().terminate();
             return WindowPtr();
         }

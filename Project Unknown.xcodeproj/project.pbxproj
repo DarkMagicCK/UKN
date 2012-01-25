@@ -404,6 +404,7 @@
 		88D1301014CF9677001BB071 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
 		88D1301314CFB2D4001BB071 /* OperationForEach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationForEach.h; sourceTree = "<group>"; };
 		88D1301414CFB2EA001BB071 /* Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Operations.h; sourceTree = "<group>"; };
+		88D1301514CFE501001BB071 /* Encode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Encode.h; sourceTree = "<group>"; };
 		88D86C2A14CD0A8D00235AC5 /* Convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Convert.h; sourceTree = "<group>"; };
 		88D86C2C14CD0A9600235AC5 /* StreamWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamWrapper.h; sourceTree = "<group>"; };
 		88D86C2D14CD15FB00235AC5 /* Convert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Convert.cpp; sourceTree = "<group>"; };
@@ -691,6 +692,7 @@
 				88AAC13814868751007A80A4 /* StackTrace.h */,
 				88AAC13914868751007A80A4 /* Stream.h */,
 				88AAC13A14868751007A80A4 /* StringUtil.h */,
+				88D1301514CFE501001BB071 /* Encode.h */,
 				88AAC13B14868751007A80A4 /* Texture.h */,
 				88AAC13C14868751007A80A4 /* TimeUtil.h */,
 				88AAC13D14868751007A80A4 /* Type.h */,

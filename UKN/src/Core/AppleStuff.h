@@ -31,7 +31,7 @@ namespace ukn {
     MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, int option);
     MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option);
     
-    void ukn_apple_enum_desktop_modes(Array<DesktopMode>& arr);
+    void ukn_apple_enum_desktop_modes(Array<SystemInformation::DesktopMode>& arr);
     
 #ifdef UKN_OS_OSX
     int ukn_get_os_osx_version();

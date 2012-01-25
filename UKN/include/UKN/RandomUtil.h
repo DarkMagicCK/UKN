@@ -13,14 +13,17 @@
 
 namespace ukn {
     
-    void set_random_seed(uint32 seed);
-    uint32 get_random_seed();
-    
-    // 0 - 1
-    float normlized_random();
-    
-    float random_float(float min, float max);
-    int32 random_int(int32 min, int32 max);
+    class Random {
+    public:
+        static void SetRandomSeed(uint32 seed);
+        static uint32 GetRandomSeed();
+        
+        // 0 - 1
+        static float NormalizedRandomFloat();
+        
+        static float RandomFloat(float min, float max);
+        static int32 RandomInt(int32 min, int32 max);
+    };
     
     /**
      * Global RandomGenerator

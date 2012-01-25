@@ -482,7 +482,7 @@ namespace ukn {
                             texture_path = config->getString("texture");
                         }
                         if (!texture_path.empty()) {
-                            TexturePtr texture = AssetManager::Instance().load<Texture>(get_file_path(config->getName()) + string_to_wstring(texture_path));
+                            TexturePtr texture = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + String::StringToWString(texture_path));
                             if(texture) {
                                 if(config->getString("mode", "texture") == "texture") {
                                     bone->mTexture = new SequencialAnimation(texture,

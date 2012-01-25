@@ -94,9 +94,9 @@ namespace ukn {
         return format_string("Windows %d.%d Build %d %s", osvi.dwMajorVersion, osvi.dwMinorVersion, osvi.dwBuildNumber, osvi.szCSDVersion);
     }
     
-    inline void ukn_win_enum_desktop_modes(Array<DesktopMode>& arr) {
+    inline void ukn_win_enum_desktop_modes(Array<SystemInformation::DesktopMode>& arr) {
         
-        DesktopMode currMode;
+        SystemInformation::DesktopMode currMode;
         currMode.width = (uint32)GetSystemMetrics(SM_CXSCREEN);
 		currMode.height = (uint32)GetSystemMetrics(SM_CYSCREEN);
         
@@ -125,7 +125,7 @@ namespace ukn {
     
 #endif
     
-    UKN_API MessageBoxButton message_box(const ukn_string& mssg, const ukn_string& title, int option) {
+    MessageBoxButton MessageBox::Show(const ukn_string& mssg, const ukn_string& title, int option) {
 #ifdef UKN_OS_WINDOWS
         return ukn_win_message_box(mssg, title, option);
         
@@ -137,7 +137,7 @@ namespace ukn {
         return MBB_OK;
     }
     
-    UKN_API MessageBoxButton message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
+    MessageBoxButton MessageBox::Show(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
 #ifdef UKN_OS_WINDOWS
         return ukn_win_message_box(mssg, title, option);
         
@@ -149,7 +149,7 @@ namespace ukn {
         return MBB_OK;
     }
     
-    UKN_API uint64 get_system_processor_speed() {
+    uint64 SystemInformation::GetProcessorSpeed() {
 #ifdef UKN_OS_WINDOWS
         return ukn_win_get_processor_speed();
         
@@ -162,7 +162,7 @@ namespace ukn {
         return 0;
     }
     
-    UKN_API uint64 get_system_memory_size() {
+    uint64 SystemInformation::GetMemorySize() {
 #ifdef UKN_OS_WINDOWS
         return ukn_win_get_memory_size();
         
@@ -175,7 +175,7 @@ namespace ukn {
         return 0;
     }
     
-    UKN_API ukn_string get_os_version() {
+    ukn_string SystemInformation::GetOSVersion() {
 #ifdef UKN_OS_WINDOWS
         return ukn_win_get_os_version();
         
@@ -188,8 +188,8 @@ namespace ukn {
         return ukn_string("Unknown OS");
     }
     
-    Array<DesktopMode> enum_desktop_mode() {
-        Array<DesktopMode> arr;
+    Array<SystemInformation::DesktopMode> SystemInformation::EnumDesktopMode() {
+        Array<SystemInformation::DesktopMode> arr;
 #if defined(UKN_OS_FAMILY_APPLE)
         ukn_apple_enum_desktop_modes(arr);
 

@@ -36,7 +36,7 @@ namespace ukn {
     
     template<typename T>
     ukn_string Convert::ToString(T t) {
-        return any_to_string(t);
+        return String::AnyToString(t);
     }
     
 } // namespace ukn

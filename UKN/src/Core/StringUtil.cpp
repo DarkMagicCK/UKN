@@ -61,7 +61,7 @@ namespace ukn {
         this->clear();
         switch(format) {
             case SF_ANSI:
-                this->assign(string_to_wstring(str));
+                this->assign(String::StringToWString(str));
                 break;
                 
             case SF_UTF8: {
@@ -109,7 +109,7 @@ namespace ukn {
     }
     
     const char* String::ansi_str() {
-        return wstring_to_string(*this).c_str();
+        return String::WStringToString(*this).c_str();
     }
     
     const char* String::utf8_str() {
@@ -141,7 +141,7 @@ namespace ukn {
     }
     
     std::ostream& operator<<(std::ostream& os, const String& val) {
-        os << wstring_to_string(val);
+        os << String::WStringToString(val);
         return os;
     }
     
@@ -340,7 +340,7 @@ namespace ukn {
         return result;
     }
     
-    UKN_API ukn_string wstring_to_string(const ukn_wstring& str) {
+    ukn_string String::WStringToString(const ukn_wstring& str) {
 #if defined(UKN_OS_WINDOWS)
         return ukn_win_wstring_to_string(str);
 #elif defined(UKN_OS_IOS)
@@ -350,7 +350,7 @@ namespace ukn {
 #endif
     }
     
-    UKN_API ukn_wstring string_to_wstring(const ukn_string& str) {
+    ukn_wstring String::StringToWString(const ukn_string& str) {
 #if defined(UKN_OS_WINDOWS)
         return ukn_win_string_to_wstring(str);
 #elif defined(UKN_OS_IOS)
@@ -360,19 +360,19 @@ namespace ukn {
 #endif  
     }
     
-    UKN_API ukn_string wstring_to_string_fast(const ukn_wstring& str) {
+    ukn_string String::WStringToStringFast(const ukn_wstring& str) {
         ukn_string buffer(str.length(), ' ');
 		std::copy(str.begin(), str.end(), buffer.begin());
 		return buffer;
     }
     
-    UKN_API ukn_wstring string_to_wstring_fast(const ukn_string& str) {
+    ukn_wstring String::StringToWStringFast(const ukn_string& str) {
         ukn_wstring buffer(str.length(), L' ');
 		std::copy(str.begin(), str.end(), buffer.begin());
 		return buffer; 
     }
     
-    UKN_API ukn_string get_file_name(const ukn_string& str) {
+    ukn_string String::GetFileName(const ukn_string& str) {
         ukn_string::const_iterator it = str.end();
         it--;
         
@@ -382,7 +382,7 @@ namespace ukn {
         return ukn_string(it, str.end());
     }
     
-    UKN_API ukn_wstring get_file_name(const ukn_wstring& str) {
+    ukn_wstring String::GetFileName(const ukn_wstring& str) {
         ukn_wstring::const_iterator it = str.end();
         it--;
         
@@ -392,7 +392,7 @@ namespace ukn {
         return ukn_wstring(it, str.end());
     }
     
-    UKN_API ukn_string get_file_path(const ukn_string& str) {
+    ukn_string String::GetFilePath(const ukn_string& str) {
         if(str.empty())
             return str;
         
@@ -407,7 +407,7 @@ namespace ukn {
         return ukn_string();
     }
 
-    UKN_API ukn_wstring get_file_path(const ukn_wstring& str) {
+    ukn_wstring String::GetFilePath(const ukn_wstring& str) {
         if(str.empty())
             return str;
         

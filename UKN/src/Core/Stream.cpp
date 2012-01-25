@@ -366,10 +366,10 @@ namespace ukn {
         
         this->nocache = nocache;
         this->canwrite = canwrite;
-        file = fopen(wstring_to_string(filename).c_str(), canwrite ? (append ? "a+b" : "r+b") : "rb");
+        file = fopen(String::WStringToString(filename).c_str(), canwrite ? (append ? "a+b" : "r+b") : "rb");
         if(file == NULL) {
             if(canwrite)
-                file = fopen(wstring_to_string(filename).c_str(), "w+b");
+                file = fopen(String::WStringToString(filename).c_str(), "w+b");
             if(file == NULL)
                 return false;
         }

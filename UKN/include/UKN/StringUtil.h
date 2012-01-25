@@ -40,6 +40,26 @@ namespace ukn {
         
         friend std::ostream& operator<<(std::ostream& os, const String& val);
         
+        static ukn_string WStringToString(const ukn_wstring& str);
+        static ukn_wstring StringToWString(const ukn_string& str);
+        
+        // by direct data copy
+        static ukn_string WStringToStringFast(const ukn_wstring& str);
+        static ukn_wstring StringToWStringFast(const ukn_string& str);
+        
+        static ukn_string GetFileName(const ukn_string& str);
+        static ukn_wstring GetFileName(const ukn_wstring& str);
+        
+        static ukn_string GetFilePath(const ukn_string& str);
+        static ukn_wstring GetFilePath(const ukn_wstring& str);
+        
+        template<typename T>
+        static ukn_string AnyToString(const T& val) {
+            std::ostringstream sstr;
+            sstr << val;
+            return sstr.str();
+        }
+        
     protected:
         StringFormat mFormat;
         
@@ -86,29 +106,10 @@ namespace ukn {
         TokenContainer mTokens;
     };
     
-    UKN_API ukn_string wstring_to_string(const ukn_wstring& str);
-    UKN_API ukn_wstring string_to_wstring(const ukn_string& str);
-    
-    // by direct data copy
-    UKN_API ukn_string wstring_to_string_fast(const ukn_wstring& str);
-    UKN_API ukn_wstring string_to_wstring_fast(const ukn_string& str);
-    
-    UKN_API ukn_string get_file_name(const ukn_string& str);
-    UKN_API ukn_wstring get_file_name(const ukn_wstring& str);
-    
-    UKN_API ukn_string get_file_path(const ukn_string& str);
-    UKN_API ukn_wstring get_file_path(const ukn_wstring& str);
-    
     UKN_API uint16 *utf8_to_unicode(uint16 *unicode, const char *utf8, size_t len);
     UKN_API int unicode_strlen(const uint16 *text);
     UKN_API void unicode_strcpy(uint16 *dst, const uint16 *src, size_t swap);
 
-    template<typename T>
-    ukn_string any_to_string(const T& val) {
-        std::ostringstream sstr;
-        sstr << val;
-        return sstr.str();
-    }
     
 } // namespace ukn
 

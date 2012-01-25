@@ -58,7 +58,7 @@ namespace ukn {
 	}
     
     bool ukn_apple_file_exists(const ukn_wstring& file) {        
-		NSString* nsPath = [[NSString alloc] initWithUTF8String:wstring_to_string(file).c_str()];
+		NSString* nsPath = [[NSString alloc] initWithUTF8String:String::WStringToString(file).c_str()];
 		bool result = [[NSFileManager defaultManager] fileExistsAtPath:nsPath];
         [nsPath release];
         
@@ -66,13 +66,13 @@ namespace ukn {
     }
     
     ukn_wstring ukn_apple_application_path() {
-        return string_to_wstring_fast([[[NSBundle mainBundle] bundlePath] UTF8String]) + L"/";
+        return String::StringToWStringFast([[[NSBundle mainBundle] bundlePath] UTF8String]) + L"/";
     }
     
     ukn_wstring ukn_apple_documents_path() {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 		NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-		ukn_wstring docPath = string_to_wstring_fast([basePath UTF8String]) + L"/";
+		ukn_wstring docPath = String::StringToWStringFast([basePath UTF8String]) + L"/";
         return docPath;
     }
     
@@ -155,8 +155,8 @@ namespace ukn {
     }
     
     MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
-        return ukn_apple_message_box(wstring_to_string(mssg),
-                                     wstring_to_string(title),
+        return ukn_apple_message_box(String::WStringToString(mssg),
+                                     String::WStringToString(title),
                                      option);
     }
     
@@ -165,18 +165,18 @@ namespace ukn {
         return MAC_OS_X_VERSION_MAX_ALLOWED;
     }
     
-    static DesktopMode vidmodeFromCGDisplayMode(NSDictionary* mode) {
-        DesktopMode result;
+    static SystemInformation::DesktopMode vidmodeFromCGDisplayMode(NSDictionary* mode) {
+        SystemInformation::DesktopMode result;
         result.width    = [[mode objectForKey:(id)kCGDisplayWidth] unsignedIntValue];;
         result.height   = [[mode objectForKey:(id)kCGDisplayHeight] unsignedIntValue];;
         result.bpp      = [[mode objectForKey:(id)kCGDisplayBitsPerPixel] unsignedIntValue];;
         return result;
     }
     
-    void ukn_apple_enum_desktop_modes(Array<DesktopMode>& arr) {
+    void ukn_apple_enum_desktop_modes(Array<SystemInformation::DesktopMode>& arr) {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
         CGDisplayModeRef cgmode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
-        DesktopMode mode;
+        SystemInformation::DesktopMode mode;
         mode.width  = (uint32)CGDisplayModeGetWidth(cgmode);
         mode.height = (uint32)CGDisplayModeGetHeight(cgmode);
         
@@ -204,7 +204,7 @@ namespace ukn {
         for (CFIndex index = 0; index < count; index++) {
             CGDisplayModeRef cgmode = (CGDisplayModeRef)CFArrayGetValueAtIndex(modes, index);
             
-            DesktopMode mode;
+            SystemInformation::DesktopMode mode;
             mode.width  = (uint32)CGDisplayModeGetWidth(cgmode);
             mode.height = (uint32)CGDisplayModeGetHeight(cgmode);
             
@@ -339,8 +339,8 @@ namespace ukn {
     }
     
     MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option) {
-        return ukn_apple_message_box(wstring_to_string(mssg),
-                                     wstring_to_string(title),
+        return ukn_apple_message_box(String::WStringToString(mssg),
+                                     String::WStringToString(title),
                                      option);
     }
     

@@ -80,7 +80,7 @@ namespace ukn {
                         mGrids[0].grid_width = config->getInt("width");
                         mGrids[0].grid_height = config->getInt("height");
                         mGrids[0].count = config->getInt("count");
-                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(get_file_path(config->getName()) + string_to_wstring(config->getString("texture")));
+                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(String::GetFilePath(config->getName()) + String::StringToWString(config->getString("texture")));
                         
                         mFrameRate = config->getInt("frame_rate", DefaultFrameRate);
                         break;
@@ -121,7 +121,7 @@ namespace ukn {
                                 ukn_string texture_path = config->getString("texture");
                                 if(!texture_path.empty()) {
                                     GridInfo info;
-                                    info.texture = AssetManager::Instance().load<ukn::Texture>(get_file_path(config->getName()) + string_to_wstring(texture_path));
+                                    info.texture = AssetManager::Instance().load<ukn::Texture>(String::GetFilePath(config->getName()) + String::StringToWString(texture_path));
                                     info.texture_pos_x = 0;
                                     info.texture_pos_y = 0;
                                     if(info.texture) {

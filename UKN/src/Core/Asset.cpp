@@ -110,8 +110,8 @@ namespace ukn {
             while(it != mAssetMap.end()) {
                 
                 config->beginNode("resource");
-                config->setString("name", wstring_to_string(it->first));
-                config->setString("path", wstring_to_string(it->second.fullPath));
+                config->setString("name", String::WStringToString(it->first));
+                config->setString("path", String::WStringToString(it->second.fullPath));
                 config->setString("type", AssetTypeToString(it->second.type));
                 config->endNode();
  
@@ -135,8 +135,8 @@ namespace ukn {
                     
                     info.type = StringToAssetType(config->getString("type"));
                     if(info.type != AT_Unknown) {
-                        info.name = string_to_wstring(config->getString("name"));
-                        info.fullPath = string_to_wstring(config->getString("path"));
+                        info.name = String::StringToWString(config->getString("name"));
+                        info.fullPath = String::StringToWString(config->getString("path"));
                         
                         if(!info.name.empty() && 
                            !info.fullPath.empty()) {

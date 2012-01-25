@@ -26,11 +26,11 @@ namespace ukn {
     class DiskResourceFactory: public ResourceFactory {
     public:
         bool resourceExists(const String& path) {
-            return file_exists(path);
+            return File::FileExists(path);
         }
         
         bool pathExists(const String& path) {
-            return path_exists(path);
+            return File::PathExists(path);
         }
         
         ResourcePtr onResourceLoad(const String& path) {
@@ -45,7 +45,7 @@ namespace ukn {
         void enumResourceNamesInPath(const String& path, ResourceFactory::ResourceNames& names) {
             DirectoryIterator it(path);
             while(!it.isEnd()) {
-                names.push_back(string_to_wstring(it.file()));
+                names.push_back(String::StringToWString(it.file()));
                 ++it;
             }
         }

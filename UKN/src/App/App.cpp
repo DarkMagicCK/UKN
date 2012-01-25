@@ -80,10 +80,10 @@ namespace ukn {
                                UKN_VERSION_MAJOR,
                                UKN_VERSION_MINOR,
                                UKN_VERSION_REV));
-        log_info(get_os_version());
+        log_info(SystemInformation::GetOSVersion());
         log_info(format_string("CPU Speed: %d mhz", 
-                               get_system_processor_speed()));
-        log_info(format_string("Memory Size: %d kb", get_system_memory_size() / 1024));
+                               SystemInformation::GetProcessorSpeed()));
+        log_info(format_string("Memory Size: %d kb", SystemInformation::GetMemorySize() / 1024));
         
         CpuInfo cpuinfo;
         log_info(format_string("CPU: %s, %s, Cores: %d Threads: %d", 

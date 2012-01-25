@@ -161,7 +161,7 @@ namespace ukn {
                 config->toParent();
             }
             if(config->toNode("image")) {
-                ts.image = AssetManager::Instance().load<Texture>(get_file_path(config->getName()) + string_to_wstring(config->getString("source")));
+                ts.image = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + String::StringToWString(config->getString("source")));
                 config->toParent();
             }
             parseProperties(ts.property, config);
@@ -339,7 +339,7 @@ namespace ukn {
                                      config);
             } else {
                 // external tile set file
-                ConfigParserPtr extern_config = AssetManager::Instance().load<ConfigParser>(get_file_path(config->getName()) + string_to_wstring(source));
+                ConfigParserPtr extern_config = AssetManager::Instance().load<ConfigParser>(String::GetFilePath(config->getName()) + String::StringToWString(source));
                 if(extern_config->toNode("tileset")) {
                     deserialize_tile_set(ts, 
                                          (uint32)mTileSets.size() - 1, 
@@ -384,7 +384,7 @@ namespace ukn {
                         if(obj.gid != -1) {
                             obj.tile = *getTileWithGid(obj.gid);
                         } else {
-                            obj.image = AssetManager::Instance().load<Texture>(get_file_path(config->getName()) + string_to_wstring(config->getString("image")));
+                            obj.image = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + String::StringToWString(config->getString("image")));
                         }
                         
                         parseProperties(obj.property, config);

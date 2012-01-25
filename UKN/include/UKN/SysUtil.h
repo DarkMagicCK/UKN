@@ -27,27 +27,33 @@ namespace ukn {
         MBB_Cancel      = 2,
     };
     
-    UKN_API MessageBoxButton message_box(const ukn_string& mssg, const ukn_string& title, int option);
-    UKN_API MessageBoxButton message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option);
-
-    // in mhz
-    UKN_API uint64 get_system_processor_speed();
-    // in bytes
-    UKN_API uint64 get_system_memory_size();
-    // formatted string
-    UKN_API ukn_string get_os_version();
-    
-    struct DesktopMode {
-        uint32 width;
-        uint32 height;
-        
-        uint32 bpp;
+    class UKN_API MessageBox {
+    public:
+        static MessageBoxButton Show(const ukn_string& mssg, const ukn_string& title, int option);
+        static MessageBoxButton Show(const ukn_wstring& mssg, const ukn_wstring& title, int option);
     };
     
-    // array size at least 1
-    // and the first one is current desktop resolution
-    UKN_API Array<DesktopMode> enum_desktop_mode();
-   
+    class UKN_API SystemInformation {
+    public:
+        // in mhz
+        static uint64 GetProcessorSpeed();
+        // in bytes
+        static uint64 GetMemorySize();
+        // formatted string
+        static ukn_string GetOSVersion();
+        
+        struct DesktopMode {
+            uint32 width;
+            uint32 height;
+            
+            uint32 bpp;
+        };
+        
+        // array size at least 1
+        // and the first one is current desktop resolution
+        static Array<SystemInformation::DesktopMode> EnumDesktopMode();
+    };
+       
     /**
      * Retrives cpuinfo from current platform
      **/

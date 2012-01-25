@@ -16,14 +16,12 @@
 
 namespace ukn {
     
-    UKN_API bool file_exists(const String& filepath);
-    UKN_API bool path_exists(const String& path);
-        
-    UKN_API String get_application_path();
-    
-    // check and get path of a font
-    // priority follows current path, resource path, system font folder, asset resource name
-    UKN_API String check_and_get_font_path(const String& name);
+    class File {
+    public:
+        static bool FileExists(const String& filepath);
+        static bool PathExists(const String& path);
+    };
+
     
     class UKN_API Path {
     public:
@@ -35,6 +33,11 @@ namespace ukn {
         static String GetFont();
         static String GetWrittable();
         static String GetResource();
+        static String GetApplicationPath();
+        
+        // check and get path of a font
+        // priority follows current path, resource path, system font folder, asset resource name
+        static String CheckAndGetFontPath(const String& name);
         
         static void ListRoots(std::vector<ukn_string>& arr);
         
@@ -46,7 +49,7 @@ namespace ukn {
         DirectoryIterator();
         DirectoryIterator(const DirectoryIterator& iterator);
         explicit DirectoryIterator(const ukn_string& path);
-        explicit DirectoryIterator(const String& path);
+        explicit DirectoryIterator(const ukn_wstring& path);
         ~DirectoryIterator();
         
         const ukn_string& file() const;

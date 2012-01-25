@@ -84,7 +84,7 @@ namespace ukn {
                 return true;
             } else {
                 if(FT_New_Face(Font::FTLibrary::Instance().library,
-                               wstring_to_string(resource->getName()).c_str(),
+                               String::WStringToString(resource->getName()).c_str(),
                                0,
                                &face)) {
                     return false;
@@ -263,7 +263,7 @@ namespace ukn {
             ukn_string font_name = config->getString("name");
             
             if(!font_name.empty()) {
-                String fullFontPath = check_and_get_font_path(string_to_wstring(font_name));
+                String fullFontPath = Path::CheckAndGetFontPath(String::StringToWString(font_name));
                 
                 if(fullFontPath.empty()) {
                     log_error("ukn::Font::deserialize: error finding font name " + font_name);
@@ -293,7 +293,7 @@ namespace ukn {
             mStrokeWidth = config->getInt("stroke_width", 0);
             
             mFontSize = config->getInt("size", 14);
-            mFontName = string_to_wstring(font_name);
+            mFontName = String::StringToWString(font_name);
             
             config->toParent();
             
@@ -305,7 +305,7 @@ namespace ukn {
     bool Font::serialize(const ConfigParserPtr& cfg) {
         if(cfg && !mGlyphs.empty()) {
             cfg->beginNode("font");
-            cfg->setString("name", wstring_to_string(mFontName));
+            cfg->setString("name", String::WStringToString(mFontName));
             cfg->setBool("shadow", mEnableShadow);
             cfg->setBool("stroke", mEnableStroke);
             cfg->setInt("shadow_offset_x", mShadowXOffset);

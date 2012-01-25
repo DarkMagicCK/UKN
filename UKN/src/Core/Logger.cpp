@@ -82,7 +82,7 @@ namespace ukn {
         mLogQueue.push_back(realLog);
         
         if(mOutputStream) {
-            ukn_string log = wstring_to_string(realLog);
+            ukn_string log = String::WStringToString(realLog);
 #ifdef UKN_OS_WINDOWS
             log += "\r\n";
             mOutputStream->write(log.c_str(), log.size());
@@ -130,19 +130,19 @@ namespace ukn {
     }
 
 	 void log_error(const ukn_string& log) {
-        Logger::Instance().log(string_to_wstring(log), LL_Error);
+        Logger::Instance().log(String::StringToWString(log), LL_Error);
     }
     
     void log_notice(const ukn_string& log) {
-        Logger::Instance().log(string_to_wstring(log), LL_Notice);
+        Logger::Instance().log(String::StringToWString(log), LL_Notice);
     }
     
     void log_warning(const ukn_string& log) {
-        Logger::Instance().log(string_to_wstring(log), LL_Warning);
+        Logger::Instance().log(String::StringToWString(log), LL_Warning);
     }
     
     void log_info(const ukn_string& log) {
-        Logger::Instance().log(string_to_wstring(log), LL_Info);
+        Logger::Instance().log(String::StringToWString(log), LL_Info);
     }
     
 } // namespace ukn

@@ -207,7 +207,7 @@ namespace ukn {
         // if wnd pos is (0, 0), then put it in the center of current screen
         int32 wndPosX = settings.left, wndPosY = settings.top;
         if(wndPosX == 0 && wndPosY == 0) {
-            Array<DesktopMode> desktop_modes = enum_desktop_mode();
+            Array<SystemInformation::DesktopMode> desktop_modes = SystemInformation::EnumDesktopMode();
             
             wndPosX = (desktop_modes[0].width - settings.width) / 2;
             wndPosY = (desktop_modes[0].height - settings.height) / 2;

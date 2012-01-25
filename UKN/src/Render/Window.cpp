@@ -19,5 +19,21 @@ namespace ukn {
         
     }
     
+    int32 Window::left() const {
+        return mLeft;
+    }
+    
+    int32 Window::top() const {
+        return mTop;
+    }
+    
+    uint32 Window::width() const {
+        return mWidth;
+    }
+    
+    uint32 Window::height() const {
+        return mHeight;
+    }
+    
     
 } // namespace ukn

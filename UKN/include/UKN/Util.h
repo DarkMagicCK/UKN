@@ -296,7 +296,6 @@ namespace ukn {
 
     template<typename T>
     void Array<T>::realloc(size_t capacity, size_t grow) {
-        this->destroyAll();
         this->mGrow = grow;
         this->mCapacity = capacity;
         this->mMapped= false;
@@ -325,8 +324,6 @@ namespace ukn {
 
     template<typename T>
     void Array<T>::growTo(size_t newCapacity) {
-        ukn_assert(!this->mMapped);
-
         T* newArray = new T[newCapacity];
         if(this->mElements) {
             size_t capa = this->mSize < newCapacity ? this->mSize : newCapacity;
@@ -361,8 +358,6 @@ namespace ukn {
 
     template<typename T>
     void Array<T>::append(const T* arr, size_t size) {
-        ukn_assert(size > 0);
-
         size_t newSize = this->mSize + size;
         if(newSize >= this->mCapacity) {
             this->growTo(newSize);
@@ -378,10 +373,6 @@ namespace ukn {
 
     template<typename T>
     void Array<T>::move(size_t from, size_t to) {
-        ukn_assert(this->mElements);
-        ukn_assert(from < this->mSize);
-        ukn_assert(!this->mMapped);
-
         if(from == to)
             return;
 
@@ -399,10 +390,6 @@ namespace ukn {
                 for(i=0; i<num; ++i) {
                     this->mElements[to + i] = this->mElements[from + i];
                 }
-                
-                for(i=(from+i)-1; i<this->mSize; ++i) {
-                    this->destroy(&(this->mElements[i]));
-                }
             } else {
                 // if is POD, just copy [from] to [to]
                 memcpy(&this->mElements[to], &this->mElements[from], num * sizeof(T));
@@ -411,10 +398,6 @@ namespace ukn {
             long i=0;
             for(i=num-1; i>=0; --i) {
                 this->mElements[to + i] = this->mElements[from + i];
-            }
-
-            for(i=int(from); i<int(to); ++i) {
-                this->destroy(&(this->mElements[i]));
             }
         }
 
@@ -426,7 +409,7 @@ namespace ukn {
         if(this->mSize >= this->mCapacity) {
             this->grow();
         }
-        ukn_assert(this->mElements);
+
         this->mElements[this->mSize++] = elemt;
     }
 
@@ -437,11 +420,8 @@ namespace ukn {
 
     template<typename T>
     void Array<T>::pop_back() {
-        ukn_assert(this->mElements);
-        ukn_assert(this->mSize > 0);
-
-        this->destroy(this->mElements[this->mSize-1]);
-        this->mSize--;
+        if(this->mSize > 0)
+            this->mSize--;
     }
 
     template<typename T>
@@ -481,16 +461,16 @@ namespace ukn {
 
     template<typename T>
     T& Array<T>::operator[](size_t index) {
-        ukn_assert(index < this->mCapacity);
-        ukn_assert(this->mElements);
+        if(!(index < this->mCapacity && this->mElements))
+            UKN_THROW_EXCEPTION("ukn::Array<T>::operator[]: invalid index");
 
         return this->mElements[index];
     }
     
     template<typename T>
     const T& Array<T>::operator[](size_t index) const {
-        ukn_assert(index < this->mCapacity);
-        ukn_assert(this->mElements);
+        if(!(index < this->mCapacity && this->mElements))
+            UKN_THROW_EXCEPTION("ukn::Array<T>::operator[]: invalid index");
         
         return this->mElements[index];
     }
@@ -514,16 +494,16 @@ namespace ukn {
 
     template<typename T>
     T& Array<T>::front() const {
-        ukn_assert(this->mElements);
-        ukn_assert(this->mSize > 0);
+        if(!this->mElements)
+            UKN_THROW_EXCEPTION("ukn::Array<T>::front: array empty");
 
         return this->mElements[0];
     }
 
     template<typename T>
     T& Array<T>::back() const {
-        ukn_assert(this->mElements);
-        ukn_assert(this->mSize > 0);
+        if(!this->mElements)
+            UKN_THROW_EXCEPTION("ukn::Array<T>::back: array empty");
 
         return this->mElements[this->mSize - 1];
     }
@@ -535,33 +515,21 @@ namespace ukn {
 
     template<typename T>
     typename Array<T>::iterator Array<T>::erase(typename Array<T>::iterator iter) {
-        ukn_assert(this->mElements);
-        ukn_assert(iter < (this->mElements + this->mSize));
-        ukn_assert(iter >= this->mElements);
-        ukn_assert(!this->mMapped);
-
         this->erase(uint32(iter - this->mElements));
         return iter;
     }
     
     template<typename T>
     void Array<T>::erase(typename Array<T>::iterator begin, typename Array<T>::iterator end) {
-        ukn_assert(this->mElements);
-        ukn_assert(begin < (this->mElements + this->mSize) && end < (this->mElements + this->mSize));
-        ukn_assert(begin >= this->mElements && end >= this->mElements);
-        ukn_assert(!this->mMapped);
-        
         this->erase(size_t(begin - this->mElements), size_t(end - this->mElements));
     }
 
     template<typename T>
     void Array<T>::erase(size_t index) {
-        ukn_assert(this->mElements);
-        ukn_assert(index < this->mSize);
-        ukn_assert(!this->mMapped);
-
+        if(index >= this->mSize)
+            UKN_THROW_EXCEPTION("ukn::Array<T>::erase: invalid index");
+        
         if(index == this->mSize-1) {
-            this->destroy(&(this->mElements[index]));
             this->mSize--;
         } else {
             this->move(index+1, index);
@@ -570,17 +538,16 @@ namespace ukn {
     
     template<typename T>
     void Array<T>::erase(size_t begin, size_t end) {
-        ukn_assert(this->mElements);
-        ukn_assert(begin < this->mSize && end < this->mSize && begin < end);
-        ukn_assert(!this->mMapped);
+        if(end >= this->mSize || begin >= this->mSize)
+            UKN_THROW_EXCEPTION("ukn::Array<T>::erase: invalid index");
         
         this->move(end, begin);
     }
 
     template<typename T>
     void Array<T>::insert(size_t index, const T& elemt) {
-        ukn_assert(index <= this->mSize);
-        ukn_assert(!this->mMapped);
+        if(index >= this->mSize)
+            UKN_THROW_EXCEPTION("ukn::Array<T>::insert: invalid index");
 
         if(index == this->mSize)
             this->append(elemt);
@@ -597,9 +564,8 @@ namespace ukn {
 
     template<typename T>
     void Array<T>::pop_front() {
-        ukn_assert(this->mElements);
-        ukn_assert(this->mSize >= 1);
-        ukn_assert(!this->mMapped);
+        if(!this->mElements)
+            UKN_THROW_EXCEPTION("ukn::Array<T>::back: array empty");
 
         if(this->mSize == 1)
             this->clear();
@@ -618,6 +584,7 @@ namespace ukn {
     template<typename T>
     void Array<T>::reset() {
         this->mSize = 0;
+        this->mHolder.reset();
     }
 
     template<typename T>

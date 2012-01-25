@@ -47,14 +47,14 @@
 #include <vector>
 #include <map>
 
-int x =0 , y=0;
-
 class MyApp: public ukn::AppInstance {
 public:
     MyApp(const ukn::ukn_string& name):
     ukn::AppInstance(name) {
         
     }
+    
+    ukn::Rectangle viewRect;
     
     void onInit() {
         mSpriteBatch = ukn::Context::Instance().getGraphicFactory().createSpriteBatch();
@@ -74,6 +74,11 @@ public:
 		}
         
         ukn::ConfigParserPtr cfg3 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"isometric_grass_and_water.tmx");
+        
+        viewRect = ukn::Rectangle(0,
+                                  0,
+                                  getMainWindow().width(),
+                                  getMainWindow().height());
 
         if(cfg3) {
             mMap = new ukn::tmx::Map();
@@ -85,9 +90,26 @@ public:
     }
     
     void onUpdate() {
-        x++;
-        y++;
-     //   mMap->setMapPosition(ukn::Vector2(x, 0));
+        if(getMainWindow().isKeyDown(ukn::input::Key::Left)) 
+            viewRect.x1 -= 1.f;
+        if(getMainWindow().isKeyDown(ukn::input::Key::Right)) 
+            viewRect.x1 += 1.f;
+        if(getMainWindow().isKeyDown(ukn::input::Key::Up)) 
+            viewRect.y1 -= 1.f;
+        if(getMainWindow().isKeyDown(ukn::input::Key::Down)) 
+            viewRect.y1 += 1.f;
+        if(getMainWindow().isKeyDown(ukn::input::Key::W)) 
+            viewRect.y2 -= 1.f;
+        if(getMainWindow().isKeyDown(ukn::input::Key::S)) 
+            viewRect.y2 += 1.f;
+        if(getMainWindow().isKeyDown(ukn::input::Key::A)) 
+            viewRect.x2 -= 1.f;
+        if(getMainWindow().isKeyDown(ukn::input::Key::D)) 
+            viewRect.x2 += 1.f;
+        
+        
+        mMap->setMapViewRect(viewRect);
+       // mMap->setPosition(ukn::Vector2(viewRect.x1, viewRect.y1));
     }
     
     void onRender() {
@@ -105,14 +127,18 @@ public:
             ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
             
 
-            printf("%s\n", data.toFormattedString().c_str());
+//            printf("%s\n", data.toFormattedString().c_str());
         }       
         mSpriteBatch->end();
         
         
         if(mFont) {
             mFont->draw("HAPPY NEW YEAR", 0, 0, ukn::FA_Left, ukn::color::Black);
-
+            mFont->draw(ukn::format_string("(%f, %f, %f, %f)",
+                                           viewRect.x1,
+                                           viewRect.y1,
+                                           viewRect.x2,
+                                           viewRect.y2).c_str(), 0, 20, ukn::FA_Left, ukn::color::White);
             mFont->render();
         }
     }

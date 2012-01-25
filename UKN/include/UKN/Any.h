@@ -17,12 +17,6 @@
 
 namespace ukn {
     
-    /**
-     * A class that holds a general type
-     * Code from Boost Library and Poco Library, Original Copyright by Kevlin Henney and Applied Infomatics
-     * Modified for Hoshizora by Griffin Bu
-     **/
-    
     class Any {
     public:
         Any():

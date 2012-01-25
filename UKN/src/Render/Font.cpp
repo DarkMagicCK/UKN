@@ -115,8 +115,10 @@ namespace ukn {
         bool cached;
         
         void resetFontSize(uint32 newsize) {
-            size = newsize;
-            cached = false;
+            if(size != newsize) {
+                size = newsize; 
+                cached = false;
+            }
         }
         
         void cache(uint32 index, Font& font) {
@@ -124,7 +126,7 @@ namespace ukn {
                 return;
             
             FT_Set_Pixel_Sizes(*face, 0, size);
-            if(!FT_Load_Glyph(*face, index, FT_LOAD_DEFAULT)) {
+            if(!FT_Load_Glyph(*face, index, FT_LOAD_NO_BITMAP)) {
                 FT_GlyphSlot glyph = (*face)->glyph;
                 FT_Bitmap bits;
                 if(glyph->format == ft_glyph_format_outline) {
@@ -142,6 +144,9 @@ namespace ukn {
                         imgw = next_pow_of_2(texw);
                         imgh = next_pow_of_2(texh);
                         imgw > imgh ? imgh = imgw : imgw = imgh;
+                        
+                        if(imgw == 0 || imgh == 0)
+                            return;
                         
                         uint32* texd = (uint32*)ukn_malloc(imgw * imgh * 4);
                         memset(texd, 0, imgw * imgh * 4);
@@ -219,9 +224,8 @@ namespace ukn {
         line_width(0),
         alignment(align) {
             uint32 len = (uint32)strlen(str);
-            uint16* unicodestr = ukn_malloc_t(uint16, len+1);
-            utf8_to_unicode(unicodestr, str, len);
-            string_to_render.set(unicodestr, len+1);
+            string_to_render.resize(len + 1);
+            utf8_to_unicode(&string_to_render[0], str, len);
         }
     };
     
@@ -360,22 +364,28 @@ namespace ukn {
             if(*it != L'\n') {
                 if(*it == L' ') {
                     x += mFontSize;
+                    
+                    uint32 gidx = getGlyphByChar(*it);
                 } else {
                     uint32 gidx = getGlyphByChar(*it);
                     
                     if(gidx > 0 && gidx < mGlyphs.size()) {
                         FTGlyph& glyph = mGlyphs[gidx-1];
                         
-                        mSpriteBatch->draw(glyph.texture, Vector2(x+glyph.left, y+glyph.size-glyph.top), data.char_rot, data.clr);
+                        mSpriteBatch->draw(glyph.texture, 
+                                           Vector2(x+glyph.left, 
+                                                   y+glyph.size-glyph.top), 
+                                           data.char_rot, 
+                                           data.clr);
                         
-                        x += mGlyphs[gidx-1].texw + mGlyphs[gidx-1].left + data.kerning_width;
+                        x += glyph.texw + glyph.left + data.kerning_width;
                     }
                     
                     if(data.line_width != 0.f && (x - data.x) > data.line_width) {
                         y += mFontSize + data.kerning_height;
                         x = data.x;
                     }
-                }
+               }
             } else {
                 y += mFontSize + data.kerning_height;
                 x = data.x;
@@ -392,18 +402,14 @@ namespace ukn {
             return;
     
         onRenderBegin();
-        
-        mSpriteBatch->begin();
-        
-        Array<StringData>::const_iterator it = mRenderQueue.begin();
+                
+        std::vector<StringData>::const_iterator it = mRenderQueue.begin();
         while(it != mRenderQueue.end()) {
             doRender(*it);
             
             ++it;
         }
-        
-        mSpriteBatch->end();
-        
+                
         onRenderEnd();
     }
     
@@ -412,9 +418,10 @@ namespace ukn {
         if(idx == 0)
             return idx;
         
-		if((idx && !mGlyphs[idx-1].cached) || mGlyphs[idx-1].size != mFontSize) {
-			mGlyphs[idx-1].resetFontSize(mFontSize);
-			mGlyphs[idx-1].cache(idx, *this);
+        FTGlyph& glyph = mGlyphs[idx-1];
+		if((idx && !glyph.cached) || glyph.size != mFontSize) {
+			glyph.resetFontSize(mFontSize);
+			glyph.cache(idx, *this);
 		}
         return idx;
     }
@@ -425,7 +432,6 @@ namespace ukn {
         data.clr = clr;
         
         mRenderQueue.push_back(data);
-       
     }
     
     const String& Font::getName() const {
@@ -457,15 +463,17 @@ namespace ukn {
     }
     
     void Font::onRenderBegin() {
-        if(mSpriteBatch)
-            mSpriteBatch->onRenderBegin();
+        if(mSpriteBatch) {
+            mSpriteBatch->begin();
+        }
     }
     
     void Font::onRenderEnd() {
         mRenderQueue.clear();
         
-        if(mSpriteBatch)
-            mSpriteBatch->onRenderEnd();
+        if(mSpriteBatch) {
+            mSpriteBatch->end();
+        }
     }
     
     Box Font::getBound() const {

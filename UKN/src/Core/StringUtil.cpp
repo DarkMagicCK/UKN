@@ -428,6 +428,7 @@ namespace ukn {
         
         for ( i=0, j=0; i < len; ++i, ++j ) {
             ch = ((const unsigned char *)utf8)[i];
+
             if ( ch >= 0xF0 ) {
                 ch  =  (uint16)(utf8[i]&0x07) << 18;
                 ch |=  (uint16)(utf8[++i]&0x3F) << 12;

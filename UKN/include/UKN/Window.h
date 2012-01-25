@@ -13,6 +13,7 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
 #include "UKN/Event.h"
+#include "UKN/Input.h"
 
 #ifdef UKN_OS_WINDOWS
 #include <Windows.h>
@@ -56,25 +57,30 @@ namespace ukn {
         virtual HWND getHWnd() const = 0;
 #endif
         
-        int32 getLeft() const {
-            return mLeft;
-        }
-        
-        int32 getTop() const {
-            return mTop;
-        }
-        
-        uint32 getWidth() const {
-            return mWidth;
-        }
-        
-        uint32 getHeight() const {
-            return mHeight;
-        }
-        
         // poll windows events
         // PeekMessage on Windows etc
         virtual bool pullEvents() = 0;
+        
+        // input 
+    public:
+        
+        virtual int2 getMousePos() = 0;
+        virtual int  getMouseWheel() = 0;
+        
+        virtual bool isKeyDown(input::Key::KeyCode key) = 0;
+        virtual bool isMouseButtonDown(input::Mouse::MouseButton btn) = 0;
+        
+        virtual void setMousePos(int32 x, int32 y) = 0;
+        
+    protected:
+        ukn_string mName;
+        
+    public:
+        int32  left() const;
+        int32  top() const;
+        uint32 width() const;
+        uint32 height() const;
+        
         
     protected:
         int32 mLeft;
@@ -82,6 +88,7 @@ namespace ukn {
         uint32 mWidth;
         uint32 mHeight;
         
+    // events
     public:
         typedef Event<NullEventArgs>            WindowCreateEvent;
         typedef Event<WindowBoolEventArgs>      ActiveEvent;
@@ -96,21 +103,28 @@ namespace ukn {
         typedef Event<NullEventArgs>            FrameStartEvent;
         typedef Event<NullEventArgs>            InitializeEvent;
         
+        typedef Event<input::MouseEventArgs>    MouseEvent;
+        typedef Event<input::KeyEventArgs>      KeyEvent;
+        typedef Event<input::JoyStickEventArgs> JoyStickEvent;
+        
         typedef Event<NullEventArgs>            GlobalUpdateEvent;
         
     private:
-        WindowCreateEvent mWindowCreateEvent;
-        ActiveEvent     mActiveEvent;
-        RenderEvent     mRenderEvent;
-        UpdateEvent     mUpdateEvent;
-        ResizeEvent     mResizeEvent;
-        SetCursorEvent  mSetCursorEvent;
-        SetIconEvent    mSetIconEvent;
-        CloseEvent      mCloseEvent;
-        IconifyEvent    mIconifyEvent;
-        FrameStartEvent mFrameStart;
-        FrameEndEvent   mFrameEnd;
-        InitializeEvent mInitEvent;
+        WindowCreateEvent   mWindowCreateEvent;
+        ActiveEvent         mActiveEvent;
+        RenderEvent         mRenderEvent;
+        UpdateEvent         mUpdateEvent;
+        ResizeEvent         mResizeEvent;
+        SetCursorEvent      mSetCursorEvent;
+        SetIconEvent        mSetIconEvent;
+        CloseEvent          mCloseEvent;
+        IconifyEvent        mIconifyEvent;
+        FrameStartEvent     mFrameStart;
+        FrameEndEvent       mFrameEnd;
+        InitializeEvent     mInitEvent;
+        MouseEvent          mMouseEvent;
+        KeyEvent            mKeyEvent;
+        JoyStickEvent       mJoyStickEvent;
         
     public:
         ActiveEvent& onActive() {
@@ -161,13 +175,23 @@ namespace ukn {
             return mWindowCreateEvent;
         }
         
+        MouseEvent& onMouseEvent() {
+            return mMouseEvent;
+        }
+        
+        KeyEvent& onKeyEvent() {
+            return mKeyEvent;
+        }
+        
+        JoyStickEvent& onJoyStickEvent() {
+            return mJoyStickEvent;
+        }
+        
         static GlobalUpdateEvent& OnGlobalUpdate() {
 			static GlobalUpdateEvent globalUpdate;
             return globalUpdate;
         }
-    
-    protected:
-        ukn_string mName;
+        
     };
     
 } // namespace ukn

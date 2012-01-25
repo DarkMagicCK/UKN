@@ -192,10 +192,6 @@ namespace ukn {
                                                  formattedString.size());
         }
     }
- 
-    GraphicFactoryPtr Context::getGraphicFactoryPtr() const {
-        return mGraphicFactory;
-    }
     
     GraphicFactory& Context::getGraphicFactory() const {
         return *mGraphicFactory;

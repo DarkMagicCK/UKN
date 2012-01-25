@@ -102,7 +102,7 @@ namespace ukn {
         SpriteBatchPtr mSpriteBatch;
         
         struct StringData;
-        Array<StringData> mRenderQueue;
+        std::vector<StringData> mRenderQueue;
         
         void doRender(const StringData& data);
         

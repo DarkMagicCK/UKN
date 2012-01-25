@@ -81,6 +81,7 @@
 		88AAD17914CA2382007D3732 /* TMXTiledMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAD17814CA2382007D3732 /* TMXTiledMap.cpp */; };
 		88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */; };
 		88B2236914CDE18D00C871C8 /* RenderTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B2236814CDE18D00C871C8 /* RenderTarget.cpp */; };
+		88D1301114CF9677001BB071 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D1301014CF9677001BB071 /* Input.cpp */; };
 		88D86C2E14CD15FB00235AC5 /* Convert.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D86C2D14CD15FB00235AC5 /* Convert.cpp */; };
 		88D86C3014CD1D9900235AC5 /* StreamWrapper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D86C2F14CD1D9900235AC5 /* StreamWrapper.cpp */; };
 		88E3C3DE147F2CD400E8754D /* GLGraphicDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */; };
@@ -282,7 +283,6 @@
 		886DBA3D14C43DCB00652729 /* Error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Error.h; sourceTree = "<group>"; };
 		886DBA3E14C43DCB00652729 /* Interfaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interfaces.h; sourceTree = "<group>"; };
 		886DBA3F14C43DCB00652729 /* Lazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lazy.h; sourceTree = "<group>"; };
-		886DBA4014C43DCB00652729 /* OperationForEach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationForEach.h; sourceTree = "<group>"; };
 		886DBA4114C43DCB00652729 /* UnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitTest.h; sourceTree = "<group>"; };
 		88871FD4148CB1800026B2B8 /* glfw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glfw3.h; sourceTree = "<group>"; };
 		88871FD5148CB1800026B2B8 /* libglfw.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw.a; sourceTree = "<group>"; };
@@ -334,7 +334,6 @@
 		88AAC12314868751007A80A4 /* GraphicFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicFactory.h; sourceTree = "<group>"; };
 		88AAC12414868751007A80A4 /* GraphicSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicSettings.h; sourceTree = "<group>"; };
 		88AAC12514868751007A80A4 /* Input.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Input.h; sourceTree = "<group>"; };
-		88AAC12614868751007A80A4 /* Key.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Key.h; sourceTree = "<group>"; };
 		88AAC12814868751007A80A4 /* Logger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Logger.h; sourceTree = "<group>"; };
 		88AAC12914868751007A80A4 /* MathUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MathUtil.h; sourceTree = "<group>"; };
 		88AAC12A14868751007A80A4 /* MemoryUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MemoryUtil.h; sourceTree = "<group>"; };
@@ -401,6 +400,10 @@
 		88C3091514936622001262DF /* Component.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Component.h; sourceTree = "<group>"; };
 		88C309161493662A001262DF /* Entity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Entity.h; sourceTree = "<group>"; };
 		88CC31191477915700558EA1 /* Project Unknown */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Project Unknown"; sourceTree = BUILT_PRODUCTS_DIR; };
+		88D1300E14CF812C001BB071 /* GLFWInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFWInput.h; sourceTree = "<group>"; };
+		88D1301014CF9677001BB071 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
+		88D1301314CFB2D4001BB071 /* OperationForEach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OperationForEach.h; sourceTree = "<group>"; };
+		88D1301414CFB2EA001BB071 /* Operations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Operations.h; sourceTree = "<group>"; };
 		88D86C2A14CD0A8D00235AC5 /* Convert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Convert.h; sourceTree = "<group>"; };
 		88D86C2C14CD0A9600235AC5 /* StreamWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamWrapper.h; sourceTree = "<group>"; };
 		88D86C2D14CD15FB00235AC5 /* Convert.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Convert.cpp; sourceTree = "<group>"; };
@@ -655,7 +658,6 @@
 				886DBA3D14C43DCB00652729 /* Error.h */,
 				886DBA3E14C43DCB00652729 /* Interfaces.h */,
 				886DBA3F14C43DCB00652729 /* Lazy.h */,
-				886DBA4014C43DCB00652729 /* OperationForEach.h */,
 				886DBA4114C43DCB00652729 /* UnitTest.h */,
 				88AAC11C14868751007A80A4 /* Font.h */,
 				88AAC11D14868751007A80A4 /* FrameBuffer.h */,
@@ -667,7 +669,6 @@
 				88AAC12314868751007A80A4 /* GraphicFactory.h */,
 				88AAC12414868751007A80A4 /* GraphicSettings.h */,
 				88AAC12514868751007A80A4 /* Input.h */,
-				88AAC12614868751007A80A4 /* Key.h */,
 				88AAC12814868751007A80A4 /* Logger.h */,
 				88AAC12914868751007A80A4 /* MathUtil.h */,
 				884CE3FC14901F0900F58E2E /* RandomUtil.h */,
@@ -730,6 +731,7 @@
 				88D86C2A14CD0A8D00235AC5 /* Convert.h */,
 				88D86C2C14CD0A9600235AC5 /* StreamWrapper.h */,
 				88B2236514CDE10A00C871C8 /* RenderTarget.h */,
+				88D1301414CFB2EA001BB071 /* Operations.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -737,6 +739,7 @@
 		88AAC10114868751007A80A4 /* detail */ = {
 			isa = PBXGroup;
 			children = (
+				88D1301214CFB2D4001BB071 /* operations */,
 				88AAC10214868751007A80A4 /* function */,
 				88AAC11714868751007A80A4 /* TypeTraits.h */,
 			);
@@ -811,6 +814,7 @@
 				88093C3714BC183400C6152F /* ZipUtil.cpp */,
 				88D86C2D14CD15FB00235AC5 /* Convert.cpp */,
 				88D86C2F14CD1D9900235AC5 /* StreamWrapper.cpp */,
+				88D1301014CF9677001BB071 /* Input.cpp */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -929,6 +933,14 @@
 			path = "Project Unknown";
 			sourceTree = "<group>";
 		};
+		88D1301214CFB2D4001BB071 /* operations */ = {
+			isa = PBXGroup;
+			children = (
+				88D1301314CFB2D4001BB071 /* OperationForEach.h */,
+			);
+			path = operations;
+			sourceTree = "<group>";
+		};
 		88E3C3C7147F2BAC00E8754D /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
@@ -959,6 +971,7 @@
 				884CE3FA148F843800F58E2E /* GLGraphicBuffer.cpp */,
 				884CE3FF14908FDC00F58E2E /* GLSpriteBatch.h */,
 				884CE4001490905600F58E2E /* GLSpriteBatch.cpp */,
+				88D1300E14CF812C001BB071 /* GLFWInput.h */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -1118,6 +1131,7 @@
 				88D86C2E14CD15FB00235AC5 /* Convert.cpp in Sources */,
 				88D86C3014CD1D9900235AC5 /* StreamWrapper.cpp in Sources */,
 				88B2236914CDE18D00C871C8 /* RenderTarget.cpp in Sources */,
+				88D1301114CF9677001BB071 /* Input.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

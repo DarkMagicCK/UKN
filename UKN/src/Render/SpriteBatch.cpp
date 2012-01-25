@@ -87,7 +87,7 @@ namespace ukn {
             float ty1 = -descriptor.center.y * descriptor.scale.y;
             float tx2, ty2;
             
-            if(descriptor.source_rect.isEmpty()) {
+            if(descriptor.source_rect.isEmpty() && texture) {
                 tx2 = (texture->getWidth() - descriptor.center.x) * descriptor.scale.x;
                 ty2 = (texture->getHeight() - descriptor.center.y) * descriptor.scale.y;
             } else {

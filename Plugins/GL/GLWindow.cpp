@@ -13,13 +13,37 @@
 #include "UKN/SysUtil.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/GraphicDevice.h"
+#include "UKN/Input.h"
 
 #include "GLPreq.h"
+#include "GLConvert.h"
+
+#include "GLFWInput.h"
 
 namespace ukn {
     
     static void ErrorFunc(int e, const char* w) {
 	}
+    
+    static int g_key_flag;
+    
+    static void update_key_flag(GLFWwindow window) {
+        g_key_flag = 0;
+        if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))
+            g_key_flag |= input::Key::FlagShift;
+        if(glfwGetKey(window, GLFW_KEY_LEFT_ALT) || glfwGetKey(window, GLFW_KEY_RIGHT_ALT))
+            g_key_flag |= input::Key::FlagAlt;
+        if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(window, GLFW_KEY_RIGHT_ALT))
+            g_key_flag |= input::Key::FlagCtrl;
+        if(glfwGetKey(window, GLFW_KEY_CAPS_LOCK))
+            g_key_flag |= input::Key::FlagCapslock;
+        if(glfwGetKey(window, GLFW_KEY_SCROLL_LOCK))
+            g_key_flag |= input::Key::FlagScrolllock;
+        if(glfwGetKey(window, GLFW_KEY_NUM_LOCK))
+            g_key_flag |= input::Key::FlagNumlock;
+        if(glfwGetKey(window, GLFW_KEY_REPEAT))
+            g_key_flag |= input::Key::FlagRepeat;
+    }
     
     static void WindowSizeFunc(GLFWwindow window, int w, int h) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
@@ -36,7 +60,7 @@ namespace ukn {
     }
     
     static void WindowRefreshFunc(GLFWwindow window) {
-        GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
+    //    GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
     }
     
@@ -54,29 +78,52 @@ namespace ukn {
         glwnd->onIconify().raise(glwnd, args);
     }
     
-    static void MouseButtonFunc(GLFWwindow window, int a, int b) {
+    static void MouseButtonFunc(GLFWwindow window, int btn, int state) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
+        input::MouseEventArgs args;
+        args.button = glfw_to_ukn_mouse(btn);
+        args.state  = glfw_to_ukn_mouse_state(state);
+        args.flag   = g_key_flag;
+        
+        // retrieve mouse pos
+        glfwGetMousePos(window, &args.x, &args.y);
+        
+        glwnd->onMouseEvent().raise(glwnd, args);
     }
     
     static void MousePosFunc(GLFWwindow window, int x, int y) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
-
+                
+        input::MouseEventArgs args;
+        args.button = input::Mouse::Null;
+        args.state  = input::Mouse::Move;
+        args.flag   = g_key_flag;
+        args.x      = x;
+        args.y      = y;
+        
+        glwnd->onMouseEvent().raise(glwnd, args);
     }
     
     static void ScrollFunc(GLFWwindow window, int a, int b) {
-        GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
+    //    GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
   //      glwnd->onScroll().getSignal()(*glwnd, a, b);
     }
     
-    static void KeyFunc(GLFWwindow window, int a, int b) {
+    static void KeyFunc(GLFWwindow window, int key, int state) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
+        input::KeyEventArgs args;
+        args.key    = glfw_to_ukn_key(key);
+        args.state  = glfw_to_ukn_key_state(state);
+        args.flag   = g_key_flag;
+        
+        glwnd->onKeyEvent().raise(glwnd, args);
     }
     
     static void CharFunc(GLFWwindow window, int c) {
-        GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
+   //     GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
     }
     
@@ -226,12 +273,35 @@ namespace ukn {
     }
     
     void GLWindow::onWindowResize(void* wnd, WindowResizeEventArgs& args) {
-        updateWindowProperties(getLeft(), getTop(), args.width, args.height);
+        updateWindowProperties(left(), top(), args.width, args.height);
 
     }
     
     void GLWindow::onWindowMove(Window& wnd, uint32 x, uint32 y) {
-        updateWindowProperties(x, y, getWidth(), getHeight());
+        updateWindowProperties(x, y, width(), height());
+    }
+    
+    int2 GLWindow::getMousePos() {
+        int2 pos;
+        glfwGetMousePos(mGlfwWindow, &pos[0], &pos[1]);
+        
+        return pos;
+    }
+    
+    int32 GLWindow::getMouseWheel() {
+        return 0;
+    }
+    
+    bool GLWindow::isKeyDown(input::Key::KeyCode key) {
+        return glfwGetKey(mGlfwWindow, ukn_key_to_glfw(key)) == GLFW_PRESS;
+    }
+    
+    bool GLWindow::isMouseButtonDown(input::Mouse::MouseButton btn) {
+        return glfwGetKey(mGlfwWindow, ukn_mouse_to_glfw(btn)) == GLFW_PRESS;
+    }
+    
+    void GLWindow::setMousePos(int32 x, int32 y) {
+        glfwSetMousePos(mGlfwWindow, x, y);
     }
     
     bool GLWindow::pullEvents() { 
@@ -254,7 +324,9 @@ namespace ukn {
 		}
 #endif
         
+        update_key_flag(mGlfwWindow);
         glfwPollEvents();
+        
         return false;
     }
 

@@ -26,6 +26,14 @@ namespace ukn {
         HWND getHWnd() const { return 0; }
 #endif
         bool pullEvents() { return true; }
+        
+        int2  getMousePos() { return int2(0, 0); }
+        int32 getMouseWheel() { return 0; }
+        
+        bool isKeyDown(input::Key::KeyCode key) { return false; }
+        bool isMouseButtonDown(input::Mouse::MouseButton btn) { return false; }
+        
+        void setMousePos(int32 x, int32 y) { }
     };
     
     class NullGraphicDevice: public GraphicDevice {

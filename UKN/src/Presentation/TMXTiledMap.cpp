@@ -11,7 +11,7 @@
 #include "UKN/Asset.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/GraphicDevice.h"
-#include "UKN/OperationForEach.h"
+#include "UKN/Operations.h"
 #include "UKN/Texture.h"
 #include "UKN/Color.h"
 #include "UKN/ConfigParser.h"
@@ -82,6 +82,14 @@ namespace ukn {
         
         int32 Map::getTileHeight() const {
             return mTileHeight;
+        }
+        
+        void Map::setPosition(const Vector2& pos) {
+            mPosition = pos;
+        }
+        
+        const Vector2& Map::getPosition() const {
+            return mPosition;
         }
         
         bool Map::serialize(const ConfigParserPtr& config) {
@@ -471,45 +479,80 @@ namespace ukn {
                 if(layer.visible) {
                     mMapRenderer->startBatch();
                     
-                    int32 startx = mViewRect.left() / mTileWidth;
-                    int32 starty = mViewRect.top() / mTileHeight;
+                    int32 startx = 0;
+                    int32 starty = 0;
                     
-                    int32 endx = mViewRect.right() / mTileWidth;
-                    int32 endy = mViewRect.bottom() / mTileHeight + 1;
+                    int32 endx = layer.width;
+                    int32 endy = layer.height;
                     
-                    if(endx >= layer.width) endx = layer.width - 1;
-                    if(endy >= layer.height) endy = layer.height - 1;
+                    startx = UKN_MAX(mViewRect.left() / mTileWidth, 0);
+                    starty = UKN_MAX(mViewRect.top() / mTileHeight, 0);
                     
-                    float x = startx * mTileWidth;
-                    float y = starty * mTileHeight;
-
-                    for(int32 j = starty; j <= endy; ++j) {
-                        for(int32 i = startx; i <= endx; ++i) {
-                            Tile& tile = layer.tiles[i + j * layer.width];
+                    endx = UKN_MIN(mViewRect.right() / mTileWidth + 1, endx);
+                    endy = UKN_MIN(mViewRect.bottom() / mTileHeight + 1, endy);
+                    
+                    for(int32 y = starty; y < endy; ++y) {
+                        for(int32 x = startx; x < endx; ++x) {
+                            Tile& tile = layer.tiles[x + y * layer.width];
                             TileSet& ts = mTileSets[tile.tileset_id];
 
                             if(tile.tile_id != -1) {
+                                float dx = ts.tile_offset_x + x * mTileWidth;
+                                float dy = ts.tile_offset_y + (y + 1) * mTileHeight - ts.tile_height;
+                                
+                                if(tile.flipped_diagonally) {
+                                    dy += ts.tile_height - ts.tile_width;
+                                }
+                                if(tile.flipped_horizontally) {
+                                    dx += tile.flipped_diagonally ? ts.tile_height : ts.tile_width;
+                                }
+                                if(tile.flipped_vertically) {
+                                    dy += tile.flipped_diagonally ? ts.tile_width : ts.tile_height;
+                                }
+                                
                                 mMapRenderer->draw(ts.image,
-                                                   Vector2(x,
-                                                           y),
+                                                   Vector2(dx, dy),
                                                    tile.tile_texture_rect,
                                                    Vector2(0,
-                                                           ts.tile_height),
+                                                           0),
                                                    0.f,
                                                    Vector2(1.f, 1.f),
                                                    color::White * layer.opacity);
                                 
                             }
-                            x += mTileWidth;
 
                         }
-                        
-                        x = startx * mTileWidth;
-                        y += mTileHeight;
                     }
                     
                     mMapRenderer->endBatch();
                 }
+            }
+        }
+        
+        float2 Map::pixelToTileCoords(float x, float y) const {
+            if(mOrientation == MO_Isometric) {
+                float ratio = mTileWidth / mTileHeight;
+                
+                x -= mMapHeight * mTileWidth / 2;
+                float mx = y + (x / ratio);
+                float my = y - (x / ratio);
+                
+                return float2(mx / mTileHeight,
+                              my / mTileHeight);
+            } else {
+                return float2(x / mTileWidth,
+                              y / mTileHeight);
+            }
+        }
+        
+        float2 Map::tileToPixelCoords(float x, float y) const {
+            if(mOrientation == MO_Isometric) {
+                int origx = mMapHeight * mTileWidth / 2;
+                return float2((x - y) * mTileWidth / 2 + origx,
+                              (x + y) * mTileHeight / 2);
+            } else {
+                return float2(x * mTileWidth,
+                              y * mTileHeight);
             }
         }
                 
@@ -520,16 +563,20 @@ namespace ukn {
                     mMapRenderer->startBatch();
                     
                     Rectangle vr = mViewRect;
-                    vr.set(mViewRect.x() - mTileWidth * mMapWidth,
+                    vr.set(mViewRect.x(),
                            mViewRect.y(),
                            mViewRect.right(),
-                           mViewRect.bottom() + mTileHeight * mMapHeight);
+                           mViewRect.bottom());
             
-                    int32 rowx = std::floor(vr.left() / mTileWidth);
-                    int32 rowy = std::floor(vr.top() / mTileHeight);
+                    float2 tilePos = pixelToTileCoords(vr.x(), vr.y());
                     
-                    float startx = rowx * mTileWidth - mTileWidth / 2;
-                    float starty = rowy * mTileHeight + mTileHeight;
+                    int32 rowx = (int32)std::floor(tilePos[0]);
+                    int32 rowy = (int32)std::floor(tilePos[1]);
+                    
+                    float2 startPos = tileToPixelCoords(rowx, rowy);
+                    
+                    float startx = startPos[0] - mTileWidth / 2;
+                    float starty = startPos[1] + mTileHeight;
                     
                     bool isUpperHalf = starty - vr.y() > mTileHeight / 2;
                     bool isLeftHalf = vr.x() - startx < mTileWidth / 2;
@@ -540,11 +587,11 @@ namespace ukn {
                             startx -= mTileWidth / 2;
                         } else {
                             rowy--;
-                            startx = mTileWidth / 2;
+                            startx += mTileWidth / 2;
                         }
                         starty -= mTileHeight / 2;
                     }
-                    
+                                        
                     bool shifted = isUpperHalf ^ isLeftHalf;
                     
                     for(float y = starty; y - mTileHeight < vr.bottom(); y += mTileHeight / 2) {
@@ -558,12 +605,24 @@ namespace ukn {
                                 if(tile.tile_id != -1) {
                                     TileSet& ts = mTileSets[tile.tileset_id];
                                     
+                                    float dx = ts.tile_offset_x + x;
+                                    float dy = ts.tile_offset_y + y - ts.tile_height;
+                                    
+                                    if(tile.flipped_diagonally) {
+                                        dy += ts.tile_height - ts.tile_width;
+                                    }
+                                    if(tile.flipped_horizontally) {
+                                        dx += tile.flipped_diagonally ? ts.tile_height : ts.tile_width;
+                                    }
+                                    if(tile.flipped_vertically) {
+                                        dy += tile.flipped_diagonally ? ts.tile_width : ts.tile_height;
+                                    }
+                                    
                                     mMapRenderer->draw(ts.image,
-                                                       Vector2(x,
-                                                               y - ts.image->getHeight()),
+                                                       Vector2(dx,
+                                                               dy),
                                                        tile.tile_texture_rect,
-                                                       Vector2(ts.tile_width / 2,
-                                                               ts.tile_height),
+                                                       Vector2(0, 0),
                                                        0.f,
                                                        Vector2(1.f, 1.f),
                                                        color::White * layer.opacity);
@@ -591,7 +650,7 @@ namespace ukn {
         }
         
         void Map::render() {
-            mMapRenderer->begin();
+            mMapRenderer->begin(SBS_Deffered, Matrix4::TransMat(mPosition.x, mPosition.y, 0.f));
             
             if(mOrientation == MO_Orthogonal)
                 orthogonalRender();

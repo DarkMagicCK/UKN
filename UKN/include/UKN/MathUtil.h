@@ -51,6 +51,9 @@ namespace ukn {
 #define UKN_TINY 0.00000001f
 #endif
     
+#define UKN_MIN(a, b) a < b ? a : b
+#define UKN_MAX(a, b) a > b ? a : b
+    
     inline bool float_equal(real f1, real f2) {
         return fabs(f1 - f2) < UKN_TINY;
     }

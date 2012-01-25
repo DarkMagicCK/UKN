@@ -39,7 +39,6 @@ namespace ukn {
         void loadCfgFile(const String& name);
         void saveCfgFile(const String& name);
         
-        GraphicFactoryPtr getGraphicFactoryPtr() const;
         GraphicFactory&   getGraphicFactory() const;
         
         void setScene(const SceneManagerPtr& ptr);

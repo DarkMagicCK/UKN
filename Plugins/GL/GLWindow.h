@@ -30,6 +30,14 @@ namespace ukn {
 #endif
         
         bool pullEvents();
+        
+        int2  getMousePos();
+        int32 getMouseWheel();
+        
+        bool isKeyDown(input::Key::KeyCode key);
+        bool isMouseButtonDown(input::Mouse::MouseButton btn);
+        
+        void setMousePos(int32 x, int32 y);
 
         void onWindowResize(void* wnd, WindowResizeEventArgs&);
         void onWindowMove(Window& wnd, uint32 x, uint32 y);

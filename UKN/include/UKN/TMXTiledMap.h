@@ -210,6 +210,9 @@ namespace ukn {
             void                setMapViewRect(const Rectangle& vr);
             const Rectangle&    getMapViewRect() const;
             
+            void                setPosition(const Vector2& pos);
+            const Vector2&      getPosition() const;
+            
             // IConfigSerializable
             virtual bool serialize(const ConfigParserPtr& config) override;
             virtual bool deserialize(const ConfigParserPtr& config) override;
@@ -229,6 +232,9 @@ namespace ukn {
             void orthogonalRender();
             void isometricRender();
             
+            float2 pixelToTileCoords(float x, float y) const;
+            float2 tileToPixelCoords(float x, float y) const;
+            
             Tile* getTileWithGid(int32 gid);
             void deserialize_tile_set(TileSet& ts, uint32 ts_id, const ConfigParserPtr& config);
             void parseProperties(PropertyContainer& cont, const ConfigParserPtr& config);
@@ -243,12 +249,13 @@ namespace ukn {
             
             String mName;
             
-            uint32 mMapWidth;
-            uint32 mMapHeight;
-            int32 mTileWidth;
-            int32 mTileHeight;
+            uint32  mMapWidth;
+            uint32  mMapHeight;
+            int32   mTileWidth;
+            int32   mTileHeight;
             MapOrientation mOrientation;
             
+            Vector2   mPosition;
             Rectangle mViewRect;
         };
         

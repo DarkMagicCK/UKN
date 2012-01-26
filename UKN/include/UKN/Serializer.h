@@ -62,8 +62,8 @@ namespace ukn {
         
     class IBinarySerializable: public virtual Interface {
     public:
-        virtual bool serialize(const SharedPtr<BinaryStreamWriter>& serializer) = 0;
-        virtual bool deserialize(const SharedPtr<BinaryStreamReader>& serializer) = 0;
+        virtual bool serialize(const SharedPtr<StreamWriter>& serializer) = 0;
+        virtual bool deserialize(const SharedPtr<StreamWriter>& serializer) = 0;
     };
     
     class IConfigSerializable: public virtual Interface {

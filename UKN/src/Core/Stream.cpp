@@ -407,7 +407,7 @@ namespace ukn {
     }
     
     bool FileStream::isValid() const {
-        return file != 0;
+        return file != 0 && pos() != size();
     }
     
     bool FileStream::seek(size_t pos) {

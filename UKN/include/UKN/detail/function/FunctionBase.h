@@ -31,17 +31,17 @@ namespace ukn {
         
         template<typename F>
         class get_function_tag {
-            typedef typename if_c<(is_pointer<F>::value),
-                                    function_ptr_tag,
-                                    function_obj_tag>::type ptr_or_obj_tag;
+            typedef typename traits::if_c<(traits::is_pointer<F>::value),
+                                            function_ptr_tag,
+                                            function_obj_tag>::type ptr_or_obj_tag;
             
-            typedef typename if_c<(is_member_pointer<F>::value),
-                                    member_ptr_tag,
-                                    ptr_or_obj_tag>::type ptr_or_obj_or_mem_tag;
+            typedef typename traits::if_c<(traits::is_member_pointer<F>::value),
+                                            member_ptr_tag,
+                                            ptr_or_obj_tag>::type ptr_or_obj_or_mem_tag;
             
-            typedef typename if_c<(is_reference_wrapper<F>::value),
-                                    function_obj_ref_tag,
-                                    ptr_or_obj_or_mem_tag>::type or_ref_tag;
+            typedef typename traits::if_c<(traits::is_reference_wrapper<F>::value),
+                                            function_obj_ref_tag,
+                                            ptr_or_obj_or_mem_tag>::type or_ref_tag;
             
         public:
             typedef or_ref_tag type;

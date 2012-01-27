@@ -24,7 +24,7 @@
 #include "UKN/Logger.h"
 #include "UKN/Common.h"
 #include "UKN/Texture.h"
-#include "UKN/Class.h"
+#include "UKN/Reflection.h"
 #include "UKN/Event.h"
 #include "UKN/RandomUtil.h"
 #include "UKN/SpriteBatch.h"
@@ -37,16 +37,39 @@
 #include "UKN/Profiler.h"
 #include "UKN/Thread.h"
 #include "UKN/Animation.h"
-#include "UKN/Class.h"
 #include "UKN/Skeletal.h"
 #include "UKN/Base64.h"
 #include "UKN/RandomUtil.h"
 #include "UKN/TMXTiledMap.h"
 #include "UKN/ZipUtil.h"
 #include "UKN/StreamWrapper.h"
+#include "UKN/Operations.h"
 
 #include <vector>
 #include <map>
+
+class Vector {
+public:
+    int x;
+    int y;
+    
+    UKN_RF_BEGIN_TYPE_FIELDS(Vector)
+        UKN_RF_TYPE_FIELD(x),
+        UKN_RF_TYPE_FIELD(y)
+    UKN_RF_END_TYPE_FIELDS();
+};
+
+namespace ukn {
+    
+    namespace reflection {
+        
+        template<> struct TypeNameRetriever<Vector> {
+            static const char* Name() {
+                return "vector";
+            }
+        };
+    }
+}
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -134,12 +157,7 @@ public:
         
         
         if(mFont) {
-            mFont->draw("HAPPY NEW YEAR", 0, 0, ukn::FA_Left, ukn::color::Black);
-            mFont->draw(ukn::format_string("(%f, %f, %f, %f)",
-                                           viewRect.x1,
-                                           viewRect.y1,
-                                           viewRect.x2,
-                                           viewRect.y2).c_str(), 0, 20, ukn::FA_Left, ukn::color::White);
+            mFont->draw("咿呀咿呀哟哦哦哦", 0, 0, ukn::FA_Left, ukn::color::Black);
             mFont->render();
         }
     }
@@ -175,8 +193,37 @@ int CALLBACK WinMain(
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
-    
-    ukn::TextStreamWriter* writer = new ukn::TextStreamWriter(new ukn::FileStream("test.txt"));
+        
+    ukn::reflection::TypeDB& db = ukn::reflection::TypeDB::Instance();
+    UKN_ENUMERABLE_FOREACH(ukn::reflection::Type, t, db) {
+        printf("%s\n", t.name.text);
+    }
+    db.createType<Vector>();
+    Vector::TypeFields::Set();
+    ukn::reflection::Type* type = db.getType("vector");
+    if(type != 0) {
+        ukn::reflection::Field* x = type->getField("x");
+        ukn::reflection::Field* y = type->getField("y");
+        
+        ukn_assert(x != 0 && y != 0);
+        
+        printf("field name = %s, type = %s, desc = %s, group = %s\n", 
+               x->name.text,
+               x->type_name.text,
+               x->description.text,
+               x->group.text);
+        printf("field name = %s, type = %s, desc = %s, group = %s\n", 
+               y->name.text,
+               y->type_name.text,
+               y->description.text,
+               y->group.text);
+        
+        Vector my_vec;
+        my_vec.x = 10;
+        my_vec.y = 20;
+        int* xv = x->getCheckedPtr<int>(&my_vec);
+        ukn_assert(*xv == 10);
+    }
     
     MyApp instance("Test App");
 

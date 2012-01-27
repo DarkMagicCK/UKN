@@ -94,7 +94,7 @@
 		88EA1C4A14A38C090079CCC4 /* Module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C4914A38C090079CCC4 /* Module.cpp */; };
 		88EA1C6414A4AA780079CCC4 /* AutoUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */; };
 		88F7219B14A6EB2400568FBE /* Skeletal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88F7219A14A6EB2400568FBE /* Skeletal.cpp */; };
-		88F7219D14A75C6600568FBE /* Class.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88F7219C14A75C6600568FBE /* Class.cpp */; };
+		88F7219D14A75C6600568FBE /* Reflection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88F7219C14A75C6600568FBE /* Reflection.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -302,7 +302,7 @@
 		88871FEA148CBC390026B2B8 /* Hashing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hashing.cpp; sourceTree = "<group>"; };
 		88871FED148CBCA30026B2B8 /* md5lib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = md5lib.cpp; sourceTree = "<group>"; };
 		88871FEE148CBCA30026B2B8 /* md5lib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5lib.h; sourceTree = "<group>"; };
-		88871FF0148CC6130026B2B8 /* Class.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Class.h; sourceTree = "<group>"; };
+		88871FF0148CC6130026B2B8 /* Reflection.h */ = {isa = PBXFileReference; fileEncoding = 4; path = Reflection.h; sourceTree = "<group>"; };
 		88AAC0F714868751007A80A4 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
 		88AAC0F814868751007A80A4 /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
 		88AAC0F914868751007A80A4 /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
@@ -428,7 +428,7 @@
 		88EA1C6A14A606DD0079CCC4 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio.h; sourceTree = "<group>"; };
 		88F7219814A6E9EF00568FBE /* Skeletal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeletal.h; sourceTree = "<group>"; };
 		88F7219A14A6EB2400568FBE /* Skeletal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skeletal.cpp; sourceTree = "<group>"; };
-		88F7219C14A75C6600568FBE /* Class.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Class.cpp; sourceTree = "<group>"; };
+		88F7219C14A75C6600568FBE /* Reflection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Reflection.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -650,7 +650,7 @@
 				88AAC11914868751007A80A4 /* Event.h */,
 				88871FE7148CB2E60026B2B8 /* Asset.h */,
 				88871FE8148CB9DB0026B2B8 /* TypeInfo.h */,
-				88871FF0148CC6130026B2B8 /* Class.h */,
+				88871FF0148CC6130026B2B8 /* Reflection.h */,
 				882D3CB81498A74500963AAD /* Serializer.h */,
 				88871FE9148CBB670026B2B8 /* Hashing.h */,
 				88AAC11A14868751007A80A4 /* Exception.h */,
@@ -810,7 +810,7 @@
 				882D3CB91498BA1D00963AAD /* Serializer.cpp */,
 				88EA1C4914A38C090079CCC4 /* Module.cpp */,
 				88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */,
-				88F7219C14A75C6600568FBE /* Class.cpp */,
+				88F7219C14A75C6600568FBE /* Reflection.cpp */,
 				8850F0D614B9DA31001A250C /* Port.cpp */,
 				88093C3414BC16C100C6152F /* Base64.cpp */,
 				88093C3714BC183400C6152F /* ZipUtil.cpp */,
@@ -1105,7 +1105,7 @@
 				88EA1C4A14A38C090079CCC4 /* Module.cpp in Sources */,
 				88EA1C6414A4AA780079CCC4 /* AutoUpdate.cpp in Sources */,
 				88F7219B14A6EB2400568FBE /* Skeletal.cpp in Sources */,
-				88F7219D14A75C6600568FBE /* Class.cpp in Sources */,
+				88F7219D14A75C6600568FBE /* Reflection.cpp in Sources */,
 				8850F0D714B9DA33001A250C /* Port.cpp in Sources */,
 				88093C2B14BB218600C6152F /* Component.cpp in Sources */,
 				88093C2D14BB218B00C6152F /* Entity.cpp in Sources */,

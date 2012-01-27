@@ -163,7 +163,7 @@ namespace ukn {
     }
 	
 	size_t MemoryStream::write(const uint8* data, size_t length) {
-		 mData.append(data, length);
+        mData.append(data, length);
 		return length;
 	}
 	
@@ -238,6 +238,10 @@ namespace ukn {
     
     StreamPtr MemoryStream::readIntoMemory() {
         return new MemoryStream(*this);
+    }
+    
+    bool MemoryStream::eos() const {
+        return this->mCurrPos == mData.size();
     }
     
     /*
@@ -360,6 +364,12 @@ namespace ukn {
     	return true;
     }
     
+    bool FileStream::eos() const {
+        if(file)
+            return feof(file);
+        return true;
+    }
+    
     bool FileStream::open(const String& filename, bool canwrite, bool append, bool nocache) {
         if(file != NULL)
             return false;
@@ -433,9 +443,9 @@ namespace ukn {
             return 0;
         
         if(!nocache) 
-            return fwrite(data, 1, len, file);
+            return fwrite(data, len, 1, file);
         else {
-            size_t size = fwrite(data, 1, len, file);
+            size_t size = fwrite(data, len, 1, file);
             fflush(file);
             return size;
         }
@@ -482,6 +492,10 @@ namespace ukn {
     
     BufferedStream::~BufferedStream() {
         
+    }
+    
+    bool BufferedStream::eos() const {
+        return mStream->eos();
     }
     
     bool BufferedStream::canRead() const {

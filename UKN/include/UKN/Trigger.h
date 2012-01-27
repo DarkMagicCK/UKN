@@ -14,6 +14,8 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/Event.h"
 
+#include <list>
+
 namespace ukn {
     
     class Condition;

@@ -25,7 +25,7 @@ namespace ukn {
 
 	class Exception: public std::exception {
 	public:
-		Exception(const ukn_string& mssg, const ukn_string& function, const ukn_string& file, int line):
+		Exception(const char* mssg, const char* function, const char* file, int line):
         mMssg(mssg),
         mFunction(function),
         mFile(file),
@@ -33,10 +33,10 @@ namespace ukn {
 
         }
 
-        Exception(const ukn_string& mssg):
+        Exception(const char* mssg):
         mMssg(mssg),
-        mFunction("?"),
-        mFile("?"),
+        mFunction(0),
+        mFile(0),
         mLine(-1) {
 
         }
@@ -47,8 +47,8 @@ namespace ukn {
 		virtual const char* what() const throw() {
             std::ostringstream mssg;
             mssg << "ukn::Exception: class=" << name() << "\nMessage=" << mMssg;
-            if(mFunction[0] != '?') mssg << "\nFunction=" << mFunction;
-            if(mFile[0] != '?') mssg << "\nFile=" << mFile;
+            if(mFunction != 0) mssg << "\nFunction=" << mFunction;
+            if(mFile != 0) mssg << "\nFile=" << mFile;
             if(mLine != -1) mssg << "\nLine=" << mLine;
 
             return mssg.str().c_str();
@@ -64,13 +64,13 @@ namespace ukn {
             return typeid(*this).name();
         }
 
-		const ukn_string& mssg() const {
+		const char* mssg() const {
             return mMssg;
         }
-		const ukn_string& function() const {
+		const char* function() const {
             return mFunction;
         }
-		const ukn_string& file() const {
+		const char* file() const {
             return mFile;
         }
 
@@ -87,7 +87,9 @@ namespace ukn {
         }
 
 	private:
-		ukn_string mMssg, mFunction, mFile;
+		const char* mMssg;
+        const char* mFunction;
+        const char* mFile;
         int32 mLine;
 	};
 

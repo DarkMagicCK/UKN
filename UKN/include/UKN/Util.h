@@ -231,7 +231,7 @@ namespace ukn {
         this->mSize = src.mSize;
         if(this->mCapacity > 0) {
             this->mElements = new T[mCapacity];
-            if(POD<T>::Value) {
+            if(traits::is_pod<T>::value) {
                 memcpy(this->mElements, src.mElements, this->mSize * sizeof(T));
             } else {
                 for(size_t i=0; i<this->mSize; ++i) {
@@ -328,7 +328,7 @@ namespace ukn {
         if(this->mElements) {
             size_t capa = this->mSize < newCapacity ? this->mSize : newCapacity;
             
-            if(POD<T>::Value) {
+            if(traits::is_pod<T>::value) {
                 memcpy(newArray, this->mElements, capa * sizeof(T));
             } else {
                 for(size_t i=0; i<capa; ++i)
@@ -362,7 +362,7 @@ namespace ukn {
         if(newSize >= this->mCapacity) {
             this->growTo(newSize);
         }
-        if(POD<T>::Value) {
+        if(traits::is_pod<T>::value) {
             memcpy(&this->mElements[this->mSize], arr, size * sizeof(T));
         } else {
             for(size_t i=0; i<size; ++i)
@@ -386,7 +386,7 @@ namespace ukn {
             // backward move
             size_t i;
             
-            if(!POD<T>::Value) {
+            if(!traits::is_pod<T>::value) {
                 for(i=0; i<num; ++i) {
                     this->mElements[to + i] = this->mElements[from + i];
                 }

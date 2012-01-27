@@ -14,13 +14,15 @@
 
 namespace ukn {
     
-    uint64 crc32(const char *buf, size_t size);
-    uint64 crc32(const wchar_t *buf, size_t size);
-    uint64 crc32(const ukn_string& str);
-    uint64 crc32(const ukn_wstring& str);
-    
-    ukn_string stream_get_md5(const StreamPtr stream);
-    ukn_string resource_get_md5(const ResourcePtr resource);
+    class Hash {
+    public:
+        static uint64 Crc32(const char *buf, size_t size);
+        static uint64 Crc32(const wchar_t *buf, size_t size);
+        static uint64 Crc32(const ukn_string& str);
+        static uint64 Crc32(const ukn_wstring& str);
+        
+        static ukn_string GetMD5(const StreamPtr stream);
+    };
     
 } // namespace ukn
 

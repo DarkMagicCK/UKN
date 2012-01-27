@@ -47,7 +47,7 @@ namespace ukn {
 		return mMainWindow;
 	}
     
-    void AppInstance::create(const String& cfgname) {
+    void AppInstance::create(const ukn_wstring& cfgname) {
         mInited = true;
         
         Context::Instance().loadCfgFile(cfgname);

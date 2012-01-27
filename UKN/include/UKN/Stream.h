@@ -38,6 +38,7 @@ namespace ukn {
         
         virtual void    close() = 0;
         virtual void    flush() = 0;
+        virtual bool    eos() const = 0;
         
         virtual StreamType getStreamType() const = 0;
         
@@ -70,6 +71,7 @@ namespace ukn {
         size_t  write(const uint8* data, size_t length) override;
 
         bool    seek(size_t pos) override;
+        bool    eos() const override;
 		
 		size_t  size() const override;
 		size_t  capacity() const;
@@ -154,6 +156,7 @@ namespace ukn {
         void truncate();
         size_t size() const override;
         size_t pos() const override;
+        bool eos() const override;
         
         bool isValid() const override;
         bool seek(size_t pos) override;
@@ -184,6 +187,7 @@ namespace ukn {
         size_t  read(uint8* buffer, size_t length) override;
         size_t  write(const uint8* buffer, size_t length) override;
         
+        bool    eos() const override;
         size_t  pos() const override;
         size_t  size() const override;
         bool    isValid() const override;

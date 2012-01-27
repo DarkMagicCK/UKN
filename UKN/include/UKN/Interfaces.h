@@ -27,6 +27,12 @@ namespace ukn {
     public:
         virtual const String& getName() const = 0;
     };
+    
+    template<typename T>
+    class ISerializable: public virtual Interface {
+        
+    };
+    
 } // namespace ukn
 
 #endif

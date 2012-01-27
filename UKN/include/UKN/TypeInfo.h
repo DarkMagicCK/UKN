@@ -11,23 +11,31 @@
 
 #include "UKN/Platform.h"
 
+#include <map>
+
 namespace ukn {
     
-    class UKN_API TypeInfo {
-	public:
-		explicit TypeInfo(const std::type_info& info) : _typeInfo(info) { };
+    namespace reflection {
+           
+        class UKN_API RttiTypeInfo {
+        public:
+            explicit RttiTypeInfo(const std::type_info& info) : _typeInfo(info) { };
+            
+            bool operator < (const RttiTypeInfo& rhs) const {
+                return _typeInfo.before(rhs._typeInfo) != 0;
+            }
+            
+            const char* name() const {
+                return _typeInfo.name();
+            }
+            
+        private:
+            const std::type_info& _typeInfo;
+        };
         
-		bool operator < (const TypeInfo& rhs) const {
-			return _typeInfo.before(rhs._typeInfo) != 0;
-		}
         
-        ukn_string name() {
-            return _typeInfo.name();
-        }
-        
-	private:
-		const std::type_info& _typeInfo;
-	};
+    }
+    
     
 } // namespace ukn
 

@@ -89,7 +89,7 @@ namespace ukn {
 		0xb40bbe37, 0xc30c8ea1, 0x5a05df1b, 0x2d02ef8d,
 	};
 	
-    uint64 crc32(const char *buf, size_t size) {
+    uint64 Hash::Crc32(const char *buf, size_t size) {
 		uint64 crc = (uint64)~0;		
 		for(size_t i=0; i<size; ++i) {
 			_CRC32_(crc, buf[i]);
@@ -97,7 +97,7 @@ namespace ukn {
 		return ~crc;
 	}
 	
-    uint64 crc32(const wchar_t *buf, size_t size) {
+    uint64 Hash::Crc32(const wchar_t *buf, size_t size) {
 		uint64 crc = (uint64)~0;		
 		for(size_t i=0; i<size; ++i) {
 			_CRC32_(crc, buf[i]);
@@ -105,7 +105,7 @@ namespace ukn {
 		return ~crc;
 	}
 	
-    uint64 crc32(const ukn_string& str) {
+    uint64 Hash::Crc32(const ukn_string& str) {
 		uint64 crc = (uint64)~0;
 		for(size_t i=0; i<str.size(); ++i) {
 			_CRC32_(crc, str[i]);
@@ -113,7 +113,7 @@ namespace ukn {
 		return ~crc;
 	}
 	
-    uint64 crc32(const ukn_wstring& str) {
+    uint64 Hash::Crc32(const ukn_wstring& str) {
 		uint64 crc = (uint64)~0;
 		for(size_t i=0; i<str.size(); ++i) {
 			_CRC32_(crc, str[i]);
@@ -121,16 +121,12 @@ namespace ukn {
 		return ~crc;
 	}
     
-    ukn_string stream_get_md5(const StreamPtr stream) {
+    ukn_string Hash::GetMD5(const StreamPtr stream) {
         StreamPtr memData = stream->readIntoMemory();
         
         MD5 md5((const char*)(static_cast<MemoryStream*>(memData.get())->data()), (uint32)memData->size());
         return md5.hex_digest();
     }
    
-    
-    ukn_string resource_get_md5(const ResourcePtr resource) {
-        return stream_get_md5(resource->getResourceStream());
-    }
     
 } // namespace ukn

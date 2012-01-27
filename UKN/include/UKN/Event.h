@@ -10,7 +10,6 @@
 #define Project_Unknown_Event_h
 
 #include "UKN/Platform.h"
-#include "UKN/Class.h"
 #include "UKN/Any.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/Signal.h"

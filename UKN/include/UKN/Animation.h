@@ -16,7 +16,6 @@
 #include "UKN/Event.h"
 #include "UKN/AutoUpdate.h"
 #include "UKN/Serializer.h"
-#include "UKN/Class.h"
 
 #include <vector>
 

@@ -43,6 +43,7 @@
 #include "UKN/RandomUtil.h"
 #include "UKN/TMXTiledMap.h"
 #include "UKN/ZipUtil.h"
+#include "UKN/StreamWrapper.h"
 
 #include <vector>
 #include <map>
@@ -174,6 +175,8 @@ int CALLBACK WinMain(
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
+    
+    ukn::TextStreamWriter* writer = new ukn::TextStreamWriter(new ukn::FileStream("test.txt"));
     
     MyApp instance("Test App");
 

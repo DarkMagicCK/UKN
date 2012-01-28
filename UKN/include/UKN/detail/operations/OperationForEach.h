@@ -1,13 +1,16 @@
 #include "UKN/Basic.h"
 #include "UKN/Ptr.h"
 
+#include "UKN/detail/TypeTraits.h"
+
 namespace ukn {
 	
 	template<typename T>
 	class ForEachIterator: public Object {
 	public:
-		virtual bool available(T& var) const = 0;
-		virtual void next() const = 0;
+		virtual bool      available() const = 0;
+		virtual void      next() const = 0;
+        virtual const T&  current() const = 0;
 		
 		operator bool() const {
 			return true;
@@ -29,18 +32,17 @@ namespace ukn {
 		
 		}
 		
-		bool available(T& var) const {
-			if(iterator->available()) {
-				var = iterator->current();
-				return true;
-			} else {
-				return false;
-			}
+		bool available() const {
+			return iterator->available();
 		}
 		
 		void next() const {
 			iterator->next();
 		}
+        
+        const T& current() const {
+            return iterator->current();
+        }
 	};
 	
 	template<typename T>
@@ -53,12 +55,16 @@ namespace ukn {
 			for(TYPE VARIABLE = VALUE; __scope_variable_flag__; __scope_variable_flag__=false)
 			
 	#define UKN_ENUMERABLE_FOREACH(TYPE, VARIABLE, COLLECTION) \
-		UKN_SCOPE_VARIABLE(const ukn::ForEachIterator<TYPE>&, __foreach_iterator__, CreateForEachIterator(COLLECTION))\
-		for(TYPE VARIABLE; __foreach_iterator__.available(VARIABLE); __foreach_iterator__.next())
+		UKN_SCOPE_VARIABLE(const ukn::ForEachIterator<ukn::traits::strip_modifier<TYPE>::type >&, __foreach_iterator__, ukn::CreateForEachIterator<ukn::traits::strip_modifier<TYPE>::type >(COLLECTION))\
+		for(bool more=true; __foreach_iterator__.available(); __foreach_iterator__.next()) \
+            if((more = false)) {} else \
+            for(TYPE VARIABLE=__foreach_iterator__.current(); !more; more=true)
 		
 	#define UKN_ENUMERABLE_FOREACH_INDEXED(TYPE, VARIABLE, INDEXER, COLLECTION)\
 		UKN_SCOPE_VARIABLE(const ukn::ForEachIterator<TYPE>&, __foreach_iterator__, CreateForEachIterator(COLLECTION))\
 		UKN_SCOPE_VARIABLE(intPtr, indexer, 0) \
-		for(TYPE VARIABLE; __foreach_iterator__.available(VARIABLE); __foreach_iterator__.next(), INDEXER++)
+        for(bool more=true; __foreach_iterator__.available(); __foreach_iterator__.next(), INDEXER++) \
+            if((more = false)) {} else \
+            for(const VARIABLE=__foreach_iterator__.current(); !more; more=true)
     
 } // namespace ukn

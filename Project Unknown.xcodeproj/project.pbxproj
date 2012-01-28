@@ -56,6 +56,11 @@
 		88871FE6148CB1800026B2B8 /* stb_image_aug.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FDD148CB1800026B2B8 /* stb_image_aug.c */; };
 		88871FEB148CBC390026B2B8 /* Hashing.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88871FEA148CBC390026B2B8 /* Hashing.cpp */; };
 		88871FEF148CBCA30026B2B8 /* md5lib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88871FED148CBCA30026B2B8 /* md5lib.cpp */; };
+		88A98F1914D33BDD002A79CD /* TMXTiledMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88A98F1814D33BDD002A79CD /* TMXTiledMap.cpp */; };
+		88A98F2A14D34982002A79CD /* Field.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88A98F2714D34982002A79CD /* Field.cpp */; };
+		88A98F2B14D34982002A79CD /* Type.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88A98F2814D34982002A79CD /* Type.cpp */; };
+		88A98F2C14D34982002A79CD /* TypeDatabase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88A98F2914D34982002A79CD /* TypeDatabase.cpp */; };
+		88A98F3114D35F09002A79CD /* TypeRegistration.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88A98F3014D35F09002A79CD /* TypeRegistration.cpp */; };
 		88AAC15B14868751007A80A4 /* App.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14614868751007A80A4 /* App.cpp */; };
 		88AAC15D14868751007A80A4 /* ConfigParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14914868751007A80A4 /* ConfigParser.cpp */; };
 		88AAC15E14868751007A80A4 /* Context.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC14A14868751007A80A4 /* Context.cpp */; };
@@ -78,7 +83,6 @@
 		88AAC17814868AF5007A80A4 /* ConfigParserXml.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17714868AF5007A80A4 /* ConfigParserXml.cpp */; };
 		88AAC17B1486EBDA007A80A4 /* AppleStuff.mm in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17A1486EBD9007A80A4 /* AppleStuff.mm */; };
 		88AAC17E1486F7FC007A80A4 /* FileUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */; };
-		88AAD17914CA2382007D3732 /* TMXTiledMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAD17814CA2382007D3732 /* TMXTiledMap.cpp */; };
 		88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */; };
 		88B2236914CDE18D00C871C8 /* RenderTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B2236814CDE18D00C871C8 /* RenderTarget.cpp */; };
 		88D1301114CF9677001BB071 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D1301014CF9677001BB071 /* Input.cpp */; };
@@ -94,7 +98,6 @@
 		88EA1C4A14A38C090079CCC4 /* Module.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C4914A38C090079CCC4 /* Module.cpp */; };
 		88EA1C6414A4AA780079CCC4 /* AutoUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */; };
 		88F7219B14A6EB2400568FBE /* Skeletal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88F7219A14A6EB2400568FBE /* Skeletal.cpp */; };
-		88F7219D14A75C6600568FBE /* Reflection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88F7219C14A75C6600568FBE /* Reflection.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -183,6 +186,8 @@
 		8832D1501489A47800D08C15 /* GLRenderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderView.h; sourceTree = "<group>"; };
 		8832D1521489A47E00D08C15 /* GLRenderView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderView.cpp; sourceTree = "<group>"; };
 		8832D1541489B53100D08C15 /* GLPreq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLPreq.h; sourceTree = "<group>"; };
+		884B705314D36AE500F4B514 /* Reflection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reflection.h; sourceTree = "<group>"; };
+		884B705414D39AD300F4B514 /* ArrayContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArrayContainer.h; sourceTree = "<group>"; };
 		884CE3F2148F32F000F58E2E /* SpriteBatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpriteBatch.h; sourceTree = "<group>"; };
 		884CE3F6148F74D600F58E2E /* SpriteBatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpriteBatch.cpp; sourceTree = "<group>"; };
 		884CE3F8148F82E600F58E2E /* GLRenderBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderBuffer.h; sourceTree = "<group>"; };
@@ -302,7 +307,18 @@
 		88871FEA148CBC390026B2B8 /* Hashing.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Hashing.cpp; sourceTree = "<group>"; };
 		88871FED148CBCA30026B2B8 /* md5lib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = md5lib.cpp; sourceTree = "<group>"; };
 		88871FEE148CBCA30026B2B8 /* md5lib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = md5lib.h; sourceTree = "<group>"; };
-		88871FF0148CC6130026B2B8 /* Reflection.h */ = {isa = PBXFileReference; fileEncoding = 4; path = Reflection.h; sourceTree = "<group>"; };
+		88A98F1814D33BDD002A79CD /* TMXTiledMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMXTiledMap.cpp; sourceTree = "<group>"; };
+		88A98F1B14D33BEC002A79CD /* TypeDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeDatabase.h; sourceTree = "<group>"; };
+		88A98F1D14D33BEC002A79CD /* TMXTiledMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMXTiledMap.h; sourceTree = "<group>"; };
+		88A98F1E14D33F7E002A79CD /* TypeName.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeName.h; sourceTree = "<group>"; };
+		88A98F1F14D340F4002A79CD /* Type.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Type.h; sourceTree = "<group>"; };
+		88A98F2014D34101002A79CD /* Field.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Field.h; sourceTree = "<group>"; };
+		88A98F2114D3446B002A79CD /* TypeInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeInfo.h; sourceTree = "<group>"; };
+		88A98F2714D34982002A79CD /* Field.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Field.cpp; sourceTree = "<group>"; };
+		88A98F2814D34982002A79CD /* Type.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Type.cpp; sourceTree = "<group>"; };
+		88A98F2914D34982002A79CD /* TypeDatabase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TypeDatabase.cpp; sourceTree = "<group>"; };
+		88A98F2D14D35707002A79CD /* Container.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Container.h; sourceTree = "<group>"; };
+		88A98F3014D35F09002A79CD /* TypeRegistration.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TypeRegistration.cpp; sourceTree = "<group>"; };
 		88AAC0F714868751007A80A4 /* Action.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Action.h; sourceTree = "<group>"; };
 		88AAC0F814868751007A80A4 /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
 		88AAC0F914868751007A80A4 /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
@@ -388,8 +404,6 @@
 		88AAC17A1486EBD9007A80A4 /* AppleStuff.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AppleStuff.mm; sourceTree = "<group>"; };
 		88AAC17C1486F787007A80A4 /* FileUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileUtil.h; sourceTree = "<group>"; };
 		88AAC17D1486F7FC007A80A4 /* FileUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FileUtil.cpp; sourceTree = "<group>"; };
-		88AAD17714CA2376007D3732 /* TMXTiledMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMXTiledMap.h; sourceTree = "<group>"; };
-		88AAD17814CA2382007D3732 /* TMXTiledMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMXTiledMap.cpp; sourceTree = "<group>"; };
 		88B0FD4814C5F38800346AC5 /* SequencialAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencialAnimation.h; sourceTree = "<group>"; };
 		88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequencialAnimation.cpp; sourceTree = "<group>"; };
 		88B2236514CDE10A00C871C8 /* RenderTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTarget.h; sourceTree = "<group>"; };
@@ -428,7 +442,6 @@
 		88EA1C6A14A606DD0079CCC4 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio.h; sourceTree = "<group>"; };
 		88F7219814A6E9EF00568FBE /* Skeletal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeletal.h; sourceTree = "<group>"; };
 		88F7219A14A6EB2400568FBE /* Skeletal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skeletal.cpp; sourceTree = "<group>"; };
-		88F7219C14A75C6600568FBE /* Reflection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Reflection.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -624,6 +637,47 @@
 			path = md5lib;
 			sourceTree = "<group>";
 		};
+		88A98F1714D33BDD002A79CD /* TMX */ = {
+			isa = PBXGroup;
+			children = (
+				88A98F1814D33BDD002A79CD /* TMXTiledMap.cpp */,
+			);
+			path = TMX;
+			sourceTree = "<group>";
+		};
+		88A98F1A14D33BEC002A79CD /* reflection */ = {
+			isa = PBXGroup;
+			children = (
+				88A98F1B14D33BEC002A79CD /* TypeDatabase.h */,
+				88A98F1E14D33F7E002A79CD /* TypeName.h */,
+				88A98F2114D3446B002A79CD /* TypeInfo.h */,
+				88A98F1F14D340F4002A79CD /* Type.h */,
+				88A98F2014D34101002A79CD /* Field.h */,
+				88A98F2D14D35707002A79CD /* Container.h */,
+				884B705414D39AD300F4B514 /* ArrayContainer.h */,
+			);
+			path = reflection;
+			sourceTree = "<group>";
+		};
+		88A98F1C14D33BEC002A79CD /* tmx */ = {
+			isa = PBXGroup;
+			children = (
+				88A98F1D14D33BEC002A79CD /* TMXTiledMap.h */,
+			);
+			path = tmx;
+			sourceTree = "<group>";
+		};
+		88A98F2614D34982002A79CD /* Reflection */ = {
+			isa = PBXGroup;
+			children = (
+				88A98F2714D34982002A79CD /* Field.cpp */,
+				88A98F2814D34982002A79CD /* Type.cpp */,
+				88A98F2914D34982002A79CD /* TypeDatabase.cpp */,
+				88A98F3014D35F09002A79CD /* TypeRegistration.cpp */,
+			);
+			path = Reflection;
+			sourceTree = "<group>";
+		};
 		88AAC0F514868751007A80A4 /* include */ = {
 			isa = PBXGroup;
 			children = (
@@ -636,6 +690,8 @@
 		88AAC0F614868751007A80A4 /* UKN */ = {
 			isa = PBXGroup;
 			children = (
+				88A98F1C14D33BEC002A79CD /* tmx */,
+				88A98F1A14D33BEC002A79CD /* reflection */,
 				88AAC0F714868751007A80A4 /* Action.h */,
 				88AAC0F814868751007A80A4 /* Any.h */,
 				88AAC0F914868751007A80A4 /* App.h */,
@@ -650,7 +706,6 @@
 				88AAC11914868751007A80A4 /* Event.h */,
 				88871FE7148CB2E60026B2B8 /* Asset.h */,
 				88871FE8148CB9DB0026B2B8 /* TypeInfo.h */,
-				88871FF0148CC6130026B2B8 /* Reflection.h */,
 				882D3CB81498A74500963AAD /* Serializer.h */,
 				88871FE9148CBB670026B2B8 /* Hashing.h */,
 				88AAC11A14868751007A80A4 /* Exception.h */,
@@ -729,11 +784,11 @@
 				8850F0D414B9D095001A250C /* Port.h */,
 				88093C3214BC167900C6152F /* Base64.h */,
 				88093C3614BC182E00C6152F /* ZipUtil.h */,
-				88AAD17714CA2376007D3732 /* TMXTiledMap.h */,
 				88D86C2A14CD0A8D00235AC5 /* Convert.h */,
 				88D86C2C14CD0A9600235AC5 /* StreamWrapper.h */,
 				88B2236514CDE10A00C871C8 /* RenderTarget.h */,
 				88D1301414CFB2EA001BB071 /* Operations.h */,
+				884B705314D36AE500F4B514 /* Reflection.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -765,7 +820,9 @@
 		88AAC14414868751007A80A4 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				88A98F1714D33BDD002A79CD /* TMX */,
 				88AAC14514868751007A80A4 /* App */,
+				88A98F2614D34982002A79CD /* Reflection */,
 				88AAC14814868751007A80A4 /* Core */,
 				88EA1C4514A34FB40079CCC4 /* Presentation */,
 				88AAC15114868751007A80A4 /* Render */,
@@ -810,7 +867,6 @@
 				882D3CB91498BA1D00963AAD /* Serializer.cpp */,
 				88EA1C4914A38C090079CCC4 /* Module.cpp */,
 				88EA1C6314A4AA780079CCC4 /* AutoUpdate.cpp */,
-				88F7219C14A75C6600568FBE /* Reflection.cpp */,
 				8850F0D614B9DA31001A250C /* Port.cpp */,
 				88093C3414BC16C100C6152F /* Base64.cpp */,
 				88093C3714BC183400C6152F /* ZipUtil.cpp */,
@@ -994,7 +1050,6 @@
 				88EA1C4614A34FB90079CCC4 /* Animation.cpp */,
 				88F7219A14A6EB2400568FBE /* Skeletal.cpp */,
 				88B0FD4A14C609F600346AC5 /* SequencialAnimation.cpp */,
-				88AAD17814CA2382007D3732 /* TMXTiledMap.cpp */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -1105,7 +1160,6 @@
 				88EA1C4A14A38C090079CCC4 /* Module.cpp in Sources */,
 				88EA1C6414A4AA780079CCC4 /* AutoUpdate.cpp in Sources */,
 				88F7219B14A6EB2400568FBE /* Skeletal.cpp in Sources */,
-				88F7219D14A75C6600568FBE /* Reflection.cpp in Sources */,
 				8850F0D714B9DA33001A250C /* Port.cpp in Sources */,
 				88093C2B14BB218600C6152F /* Component.cpp in Sources */,
 				88093C2D14BB218B00C6152F /* Entity.cpp in Sources */,
@@ -1128,12 +1182,16 @@
 				88093C9F14BC258000C6152F /* zip.c in Sources */,
 				88093CA014BC258000C6152F /* zutil.c in Sources */,
 				88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */,
-				88AAD17914CA2382007D3732 /* TMXTiledMap.cpp in Sources */,
 				8802987614CA982F009D7670 /* RenderHelper.cpp in Sources */,
 				88D86C2E14CD15FB00235AC5 /* Convert.cpp in Sources */,
 				88D86C3014CD1D9900235AC5 /* StreamWrapper.cpp in Sources */,
 				88B2236914CDE18D00C871C8 /* RenderTarget.cpp in Sources */,
 				88D1301114CF9677001BB071 /* Input.cpp in Sources */,
+				88A98F1914D33BDD002A79CD /* TMXTiledMap.cpp in Sources */,
+				88A98F2A14D34982002A79CD /* Field.cpp in Sources */,
+				88A98F2B14D34982002A79CD /* Type.cpp in Sources */,
+				88A98F2C14D34982002A79CD /* TypeDatabase.cpp in Sources */,
+				88A98F3114D35F09002A79CD /* TypeRegistration.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

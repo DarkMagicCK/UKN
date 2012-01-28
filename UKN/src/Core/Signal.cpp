@@ -21,15 +21,17 @@ namespace ukn {
         }
     }
 
-    bool Connection::isValid() {
+    bool Connection::isValid() const {
         if(con.get())
             return con->isValid();
         return false;
     }
 
     void Connection::disconnect() {
-        if(con.get())
+        if(con.get()) {
+            isControlling = false;
             con->disconnect();
+        }
     }
 
     bool Connection::operator ==(const Connection &rhs) {
@@ -69,7 +71,7 @@ namespace ukn {
         }
         
         void SignalImpl::disconnect(void* con, void* data) {
-            if(!__in_distribute) {
+            if(!in_distribute) {
                 std::auto_ptr<IteratorType> slot(reinterpret_cast<IteratorType*>(data));
                 mConnections.erase(*slot);
                 

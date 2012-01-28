@@ -25,8 +25,8 @@ namespace ukn {
         AppInstance(const ukn_string& name);
         ~AppInstance();
         
-        Window&     getMainWindow() const;
-		WindowPtr   getMainWindowPtr() const;
+        Window&     getWindow() const;
+		WindowPtr   getWindowPtr() const;
         
         void create(const ukn_wstring& cfgname=L"config.xml");
         void create(const ContextCfg& cfg);

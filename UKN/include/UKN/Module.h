@@ -29,16 +29,22 @@ namespace ukn {
         virtual void shutdown() = 0;
     };
         
-    class ModuleManager: public AutoUpdate  {
-    public:
-        static void AddModule(Module* module);
-        static void DelModule(Module* module);
+    class ModuleManager: Uncopyable {
+    protected:
+        ModuleManager();
+        ~ModuleManager();
         
-        static void OnUpdate(void*, NullEventArgs&);
+    public:
+        static ModuleManager& Instance();
+        
+        void addModule(Module* module);
+        void delModule(Module* module);
+        
+        void onUpdate(void*, NullEventArgs&);
         
     private:
         typedef std::vector<Module*> ModuleList;
-        static ModuleList mModules;
+        ModuleList mModules;
     };
     
 } // namespace ukn

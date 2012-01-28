@@ -531,7 +531,7 @@ namespace ukn {
             typename T9,
             typename T10,
             typename obj>
-    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10), obj> MemFun(R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)) {
+    inline Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10), obj> MakeMemFun(R (obj::*mem_fun)(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10)) {
         return Memfun<R(T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10), obj>(mem_fun);
     }
 } // namespace ukn

@@ -12,7 +12,8 @@
 #include "UKN/Platform.h"
 #include "UKN/Basic.h"
 
-#include "detail/TypeTraits.h"
+#include "UKN/detail/TypeTraits.h"
+#include "UKN/reflection/TypeName.h"
 
 #include <cmath>
 
@@ -285,7 +286,7 @@ namespace ukn {
             return *this;
         }
         
-        Vector2 normal(const Vector2& rhs){
+        Vector2 normal(const Vector2& rhs) const {
             Vector2 normal;
             
             normal.x = this->y - rhs.y;
@@ -1520,14 +1521,25 @@ namespace ukn {
     }
     
     namespace traits {
-        template<> struct is_pod<Vector2>   { enum { Value = true }; };
-        template<> struct is_pod<Vector3>   { enum { Value = true }; };
-        template<> struct is_pod<AABB2>     { enum { Value = true }; };
-        template<> struct is_pod<AABB3>     { enum { Value = true }; };
-        template<> struct is_pod<Matrix4>   { enum { Value = true }; };
-        template<> struct is_pod<Plane>     { enum { Value = true }; };
-        template<> struct is_pod<Sphere>    { enum { Value = true }; };
-        template<> struct is_pod<Quaternion>{ enum { Value = true }; };
+        template<> struct is_pod<Vector2>   { enum { value = true }; };
+        template<> struct is_pod<Vector3>   { enum { value = true }; };
+        template<> struct is_pod<AABB2>     { enum { value = true }; };
+        template<> struct is_pod<AABB3>     { enum { value = true }; };
+        template<> struct is_pod<Matrix4>   { enum { value = true }; };
+        template<> struct is_pod<Plane>     { enum { value = true }; };
+        template<> struct is_pod<Sphere>    { enum { value = true }; };
+        template<> struct is_pod<Quaternion>{ enum { value = true }; };
+    }
+    
+    namespace reflection {
+        template<> struct TypeNameRetriever<Vector2>    { static const char* Name() { return "vector2"; } };
+        template<> struct TypeNameRetriever<Vector3>    { static const char* Name() { return "vector3"; } };
+        template<> struct TypeNameRetriever<AABB2>      { static const char* Name() { return "rectangle"; } };
+        template<> struct TypeNameRetriever<AABB3>      { static const char* Name() { return "box"; } };
+        template<> struct TypeNameRetriever<Matrix4>    { static const char* Name() { return "matrix4"; } };
+        template<> struct TypeNameRetriever<Plane>      { static const char* Name() { return "plane"; } };
+        template<> struct TypeNameRetriever<Sphere>     { static const char* Name() { return "sphere"; } };
+        template<> struct TypeNameRetriever<Quaternion> { static const char* Name() { return "quaternion"; } };
     }
     
 } // namespace ukn

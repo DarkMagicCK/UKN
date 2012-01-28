@@ -24,7 +24,6 @@
 #include "UKN/Logger.h"
 #include "UKN/Common.h"
 #include "UKN/Texture.h"
-#include "UKN/Reflection.h"
 #include "UKN/Event.h"
 #include "UKN/RandomUtil.h"
 #include "UKN/SpriteBatch.h"
@@ -40,36 +39,17 @@
 #include "UKN/Skeletal.h"
 #include "UKN/Base64.h"
 #include "UKN/RandomUtil.h"
-#include "UKN/TMXTiledMap.h"
 #include "UKN/ZipUtil.h"
 #include "UKN/StreamWrapper.h"
 #include "UKN/Operations.h"
 
+#include "UKN/tmx/TMXTiledMap.h"
+
+#include "UKN/reflection/TypeDatabase.h"
+
+
 #include <vector>
 #include <map>
-
-class Vector {
-public:
-    int x;
-    int y;
-    
-    UKN_RF_BEGIN_TYPE_FIELDS(Vector)
-        UKN_RF_TYPE_FIELD(x),
-        UKN_RF_TYPE_FIELD(y)
-    UKN_RF_END_TYPE_FIELDS();
-};
-
-namespace ukn {
-    
-    namespace reflection {
-        
-        template<> struct TypeNameRetriever<Vector> {
-            static const char* Name() {
-                return "vector";
-            }
-        };
-    }
-}
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -101,8 +81,8 @@ public:
         
         viewRect = ukn::Rectangle(0,
                                   0,
-                                  getMainWindow().width(),
-                                  getMainWindow().height());
+                                  getWindow().width(),
+                                  getWindow().height());
 
         if(cfg3) {
             mMap = new ukn::tmx::Map();
@@ -114,21 +94,21 @@ public:
     }
     
     void onUpdate() {
-        if(getMainWindow().isKeyDown(ukn::input::Key::Left)) 
+        if(getWindow().isKeyDown(ukn::input::Key::Left)) 
             viewRect.x1 -= 1.f;
-        if(getMainWindow().isKeyDown(ukn::input::Key::Right)) 
+        if(getWindow().isKeyDown(ukn::input::Key::Right)) 
             viewRect.x1 += 1.f;
-        if(getMainWindow().isKeyDown(ukn::input::Key::Up)) 
+        if(getWindow().isKeyDown(ukn::input::Key::Up)) 
             viewRect.y1 -= 1.f;
-        if(getMainWindow().isKeyDown(ukn::input::Key::Down)) 
+        if(getWindow().isKeyDown(ukn::input::Key::Down)) 
             viewRect.y1 += 1.f;
-        if(getMainWindow().isKeyDown(ukn::input::Key::W)) 
+        if(getWindow().isKeyDown(ukn::input::Key::W)) 
             viewRect.y2 -= 1.f;
-        if(getMainWindow().isKeyDown(ukn::input::Key::S)) 
+        if(getWindow().isKeyDown(ukn::input::Key::S)) 
             viewRect.y2 += 1.f;
-        if(getMainWindow().isKeyDown(ukn::input::Key::A)) 
+        if(getWindow().isKeyDown(ukn::input::Key::A)) 
             viewRect.x2 -= 1.f;
-        if(getMainWindow().isKeyDown(ukn::input::Key::D)) 
+        if(getWindow().isKeyDown(ukn::input::Key::D)) 
             viewRect.x2 += 1.f;
         
         
@@ -175,6 +155,27 @@ private:
     int x, y;
 };
 
+class myClass {
+public:
+    int test[5];
+    
+    myClass() {
+        for(int i=0; i<5; ++i)
+            test[i] = i;
+    }
+};
+
+namespace ukn {
+    
+    namespace reflection {
+        
+        template<>
+        struct TypeNameRetriever<myClass> { static const char* Name() { return "myClass"; } };
+        
+    }
+    
+}
+
 #ifndef UKN_OS_WINDOWS
 int main (int argc, const char * argv[])
 {
@@ -195,33 +196,28 @@ int CALLBACK WinMain(
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
         
     ukn::reflection::TypeDB& db = ukn::reflection::TypeDB::Instance();
-    UKN_ENUMERABLE_FOREACH(ukn::reflection::Type, t, db) {
+    UKN_ENUMERABLE_FOREACH(const ukn::reflection::Type&, t, db) {
         printf("%s\n", t.name.text);
     }
-    db.createType<Vector>();
-    Vector::TypeFields::Set();
-    ukn::reflection::Type* type = db.getType("vector");
+ 
+    ukn::reflection::Type* type = db.getType("vector2");
     if(type != 0) {
-        ukn::reflection::Field* x = type->getField("x");
-        ukn::reflection::Field* y = type->getField("y");
+        const ukn::reflection::Field* x = type->getField("x");
+        const ukn::reflection::Field* y = type->getField("y");
         
         ukn_assert(x != 0 && y != 0);
         
-        printf("field name = %s, type = %s, desc = %s, group = %s\n", 
+        printf("field name = %s, type = %s\n", 
                x->name.text,
-               x->type_name.text,
-               x->description.text,
-               x->group.text);
-        printf("field name = %s, type = %s, desc = %s, group = %s\n", 
+               x->type->name.text);
+        printf("field name = %s, type = %s\n", 
                y->name.text,
-               y->type_name.text,
-               y->description.text,
-               y->group.text);
-        
-        Vector my_vec;
+               x->type->name.text);
+
+        ukn::Vector2 my_vec;
         my_vec.x = 10;
         my_vec.y = 20;
-        int* xv = x->getCheckedPtr<int>(&my_vec);
+        float* xv = ukn::reflection::FieldCast<float>(x, &my_vec);
         ukn_assert(*xv == 10);
     }
     

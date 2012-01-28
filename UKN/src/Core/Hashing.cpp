@@ -121,6 +121,32 @@ namespace ukn {
 		return ~crc;
 	}
     
+    uint32 Hash::Adler32(const char* buf) {
+        static const uint32 MOD_ADLER = 65521;
+        uint32 a = 1, b = 0;
+        
+        /* Loop over each byte of data, in order */
+        for (size_t index = 0; buf[index]; ++index) {
+            a = (a + buf[index]) % MOD_ADLER;
+            b = (b + a) % MOD_ADLER;
+        }
+        
+        return (b << 16) | a;
+    }
+    
+    uint32 Hash::Adler32(const char* buf, size_t size) {
+        static const uint32 MOD_ADLER = 65521;
+        uint32 a = 1, b = 0;
+        
+        /* Loop over each byte of data, in order */
+        for (size_t index = 0; index < size; ++index) {
+            a = (a + buf[index]) % MOD_ADLER;
+            b = (b + a) % MOD_ADLER;
+        }
+        
+        return (b << 16) | a;
+    }
+    
     ukn_string Hash::GetMD5(const StreamPtr stream) {
         StreamPtr memData = stream->readIntoMemory();
         

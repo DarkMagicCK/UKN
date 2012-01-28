@@ -6,7 +6,7 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "UKN/Reflection.h"
+#include "UKN/reflection/TypeDatabase.h"
 #include "UKN/Color.h"
 #include "UKN/MathUtil.h"
 
@@ -73,19 +73,39 @@ namespace ukn {
             createType<double>();
             createType<ukn_string>();
             createType<ukn_wstring>();
+            
+            OnTypeDBInitialize().raise(this, _NullEventArgs);
+        }
+        
+        namespace {
+            SingletonHolder<TypeDB, void> instance;
         }
         
         TypeDB& TypeDB::Instance() {
-            static TypeDB instance;
-            return instance;
+            return *instance.get();
+        }
+        
+        TypeDB::TypeDBInitialize& TypeDB::OnTypeDBInitialize() {
+            static TypeDBInitialize mInitializeEvent;
+            ;
+            return mInitializeEvent;
         }
         
         TypeDB::~TypeDB() {
             
         }
         
-        Type* TypeDB::getType(Name name) const {
-            TypeMap::const_iterator itType = mTypes.find(name);
+        Type* TypeDB::getType(const Name& name) const {
+            TypeMap::const_iterator itType = mTypes.find(name.hash);
+            if(itType == mTypes.end()) {
+                return 0;
+            } else {
+                return itType->second;
+            }
+        }
+        
+        Type* TypeDB::getType(const TypeInfo& info) const {
+            TypeMap::const_iterator itType = mTypes.find(info.name.hash);
             if(itType == mTypes.end()) {
                 return 0;
             } else {

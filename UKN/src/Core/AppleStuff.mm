@@ -282,12 +282,12 @@ namespace ukn {
         return g_use_retina;
     }
     
-    uint32 ukn_apple_get_processor_speed() {
+    uint64 ukn_apple_get_processor_speed() {
         return 0;
     }
     
-    void ukn_apple_enum_desktop_modes(Array<DesktopMode>& arr) {
-        DesktopMode mode;
+    void ukn_apple_enum_desktop_modes(Array<SystemInformation::DesktopMode>& arr) {
+        SystemInformation::DesktopMode mode;
         mode.width = ukn_ios_get_screen_width();
         mode.height = ukn_ios_get_screen_height();
         mode.bpp = 32;
@@ -296,12 +296,14 @@ namespace ukn {
     }
     
     uint64 ukn_apple_get_memory_size() {
+#ifndef UKN_OS_IOS
         int mib[2] = { CTL_HW, HW_MEMSIZE };
         u_int namelen = sizeof(mib) / sizeof(mib[0]);
         uint64_t size = 0;
         size_t len = sizeof(size);
         
         sysctl(mib, namelen, &size, &len, NULL, 0);
+#endif
         return 0;
     }
     
@@ -317,8 +319,8 @@ namespace ukn {
     MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option) {
         NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
         
-        NSString* nsMessage = [[NSString alloc] initWithUTF8String:sMessage.c_str()];
-		NSString* nsTitle = [[NSString alloc] initWithUTF8String:sTitle.c_str()];
+        NSString* nsMessage = [[NSString alloc] initWithUTF8String:mssg.c_str()];
+		NSString* nsTitle = [[NSString alloc] initWithUTF8String:mssg.c_str()];
 		
 		UIAlertView* alert = [[UIAlertView alloc]
 							  initWithTitle:nsTitle
@@ -335,7 +337,7 @@ namespace ukn {
         
         [pool drain];
     
-		return 1;
+		return MBB_OK;
     }
     
     MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option) {

@@ -12,7 +12,8 @@
 #include "UKN/Platform.h"
 #include "UKN/Basic.h"
 
-#include "detail/TypeTraits.h"
+#include "UKN/detail/TypeTraits.h"
+#include "UKN/reflection/TypeName.h"
 
 #include <cmath>
 
@@ -177,6 +178,98 @@ namespace ukn {
         return v;
     }
     
+    // represents a value range
+    template<typename T>
+    struct Range {
+        Range() {
+            
+        }
+        
+        Range(const Range& rhs):
+        mBegin(rhs.mBegin),
+        mEnd(rhs.mEnd) {
+            
+        }
+        
+        Range(T begin, T end):
+        mBegin(begin),
+        mEnd(end) {
+            
+        }
+        
+        void set(T begin, T end) {
+            mBegin = begin;
+            mEnd = end;
+        }
+        
+        T& begin() { return mBegin; }
+        T& end() { return mEnd; }
+        
+        const T& begin() const { return mBegin; }
+        const T& end()   const { return mEnd; }
+        
+        void begin(T begin) { mBegin = begin; }
+        void end(T end)     { mEnd = end; }
+        
+        Range operator + (const Range& rhs) const {
+            return Range(this->mBegin + rhs.mBegin,
+                         this->mEnd + rhs.mEnd);
+        }
+        
+        Range& operator += (const Range& rhs) {
+            this->mBegin += rhs.mBegin;
+            this->mEnd += rhs.mEnd;
+            return *this;
+        }
+        
+        Range operator - (const Range& rhs) const {
+            return Range(this->mBegin - rhs.mBegin,
+                         this->mEnd - rhs.mEnd);
+        }
+        
+        Range& operator -= (const Range& rhs) {
+            this->mBegin -= rhs.mBegin;
+            this->mEnd -= rhs.mEnd;
+            return *this;
+        }
+        
+        Range operator + (T value) const {
+            return Range(this->mBegin + value,
+                         this->mEnd + value);
+        }
+        
+        Range& operator += (T value) {
+            this->mBegin += value;
+            this->mEnd += value;
+            return *this;
+        }
+        
+        Range& operator -= (T value) {
+            this->mBegin -= value;
+            this->mEnd -= value;
+            return *this;
+        }
+        
+        Range operator * (float value) const {
+            return Range(this->mBegin * value,
+                         this->mEnd * value);
+        }
+        
+        Range operator - (T value) const {
+            return Range(this->mBegin - value,
+                         this->mEnd - value);
+        }
+        
+        bool operator == (const Range& rhs) const {
+            return this->mBegin == rhs.mBegin &&
+                    this->mEnd == rhs.mEnd;
+        }
+        
+    private:
+        T mBegin;
+        T mEnd;
+    };
+    
 #define ukn_min(a, b) a < b ? a : b
 #define ukn_max(a, b) a > b ? a : b
 #define ukn_abs(x) x < 0 ? -x : x
@@ -285,7 +378,7 @@ namespace ukn {
             return *this;
         }
         
-        Vector2 normal(const Vector2& rhs){
+        Vector2 normal(const Vector2& rhs) const {
             Vector2 normal;
             
             normal.x = this->y - rhs.y;
@@ -1520,14 +1613,25 @@ namespace ukn {
     }
     
     namespace traits {
-        template<> struct is_pod<Vector2>   { enum { Value = true }; };
-        template<> struct is_pod<Vector3>   { enum { Value = true }; };
-        template<> struct is_pod<AABB2>     { enum { Value = true }; };
-        template<> struct is_pod<AABB3>     { enum { Value = true }; };
-        template<> struct is_pod<Matrix4>   { enum { Value = true }; };
-        template<> struct is_pod<Plane>     { enum { Value = true }; };
-        template<> struct is_pod<Sphere>    { enum { Value = true }; };
-        template<> struct is_pod<Quaternion>{ enum { Value = true }; };
+        template<> struct is_pod<Vector2>   { enum { value = true }; };
+        template<> struct is_pod<Vector3>   { enum { value = true }; };
+        template<> struct is_pod<AABB2>     { enum { value = true }; };
+        template<> struct is_pod<AABB3>     { enum { value = true }; };
+        template<> struct is_pod<Matrix4>   { enum { value = true }; };
+        template<> struct is_pod<Plane>     { enum { value = true }; };
+        template<> struct is_pod<Sphere>    { enum { value = true }; };
+        template<> struct is_pod<Quaternion>{ enum { value = true }; };
+    }
+    
+    namespace reflection {
+        template<> struct TypeNameRetriever<Vector2>    { static const char* Name() { return "vector2"; } };
+        template<> struct TypeNameRetriever<Vector3>    { static const char* Name() { return "vector3"; } };
+        template<> struct TypeNameRetriever<AABB2>      { static const char* Name() { return "rectangle"; } };
+        template<> struct TypeNameRetriever<AABB3>      { static const char* Name() { return "box"; } };
+        template<> struct TypeNameRetriever<Matrix4>    { static const char* Name() { return "matrix4"; } };
+        template<> struct TypeNameRetriever<Plane>      { static const char* Name() { return "plane"; } };
+        template<> struct TypeNameRetriever<Sphere>     { static const char* Name() { return "sphere"; } };
+        template<> struct TypeNameRetriever<Quaternion> { static const char* Name() { return "quaternion"; } };
     }
     
 } // namespace ukn

@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 heizi. All rights reserved.
 //
 
-#include "UKN/TMXTiledMap.h"
+#include "UKN/tmx/TMXTiledMap.h"
 #include "UKN/SpriteBatch.h"
 #include "UKN/Asset.h"
 #include "UKN/GraphicFactory.h"
@@ -474,7 +474,7 @@ namespace ukn {
         }
         
         void Map::orthogonalRender() {
-            UKN_ENUMERABLE_FOREACH(SharedPtr<Layer>, layer_ptr, mLayers) {
+            UKN_ENUMERABLE_FOREACH(const SharedPtr<Layer>&, layer_ptr, mLayers) {
                 Layer& layer = *layer_ptr;
                 if(layer.visible) {
                     mMapRenderer->startBatch();
@@ -557,7 +557,7 @@ namespace ukn {
         }
                 
         void Map::isometricRender() {
-            UKN_ENUMERABLE_FOREACH(SharedPtr<Layer>, layer_ptr, mLayers) {
+            UKN_ENUMERABLE_FOREACH(const SharedPtr<Layer>&, layer_ptr, mLayers) {
                 Layer& layer = *layer_ptr;
                 if(layer.visible) {
                     mMapRenderer->startBatch();

@@ -12,9 +12,9 @@ namespace ukn {
 	
 	namespace unittest {
 	
-		#define TEST_CHECK_ERROR(cond, description) do { if(!(cond)) throw Error(description); } while(0);
-		#define TEST_ASSERT(cond) do { ukn_test_check_error(cond, L""); } while(0);
-		#define TEST_ERROR(cond) do { try { cond; throw UnitTestError(); } catch (const Error&) {} catch(const UnitTestError&) { ukn_test_check_error(false, L""); } } while(0) 
+		#define UKN_TEST_CHECK_ERROR(cond, description) do { if(!(cond)) throw Error(description); } while(0);
+		#define UKN_TEST_ASSERT(cond) do { ukn_test_check_error(cond, L""); } while(0);
+		#define UKN_TEST_ERROR(cond) do { try { cond; throw UnitTestError(); } catch (const Error&) {} catch(const UnitTestError&) { ukn_test_check_error(false, L""); } } while(0) 
 	
 		#define UKN_TEST_CASE(name) \
 			extern void ukn_testcase_##name();				\

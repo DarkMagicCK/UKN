@@ -21,6 +21,9 @@ namespace ukn {
         static uint64 Crc32(const ukn_string& str);
         static uint64 Crc32(const ukn_wstring& str);
         
+        static uint32 Adler32(const char* buf);
+        static uint32 Adler32(const char* buf, size_t size);
+        
         static ukn_string GetMD5(const StreamPtr stream);
     };
     

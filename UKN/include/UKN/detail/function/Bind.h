@@ -32,6 +32,10 @@ namespace ukn {
                 return mObj && mMemfun;
             }
             
+            bool operator == (const MemfunContainer<obj, sig>& rhs) const {
+                return this->mObj == rhs.mObj && this->mMemfun == rhs.mMemfun;
+            }
+            
         protected:
             ObjType* mObj;
             MemfunType mMemfun;

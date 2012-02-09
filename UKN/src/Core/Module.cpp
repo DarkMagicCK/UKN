@@ -12,13 +12,25 @@
 
 namespace ukn {
     
-    ModuleManager::ModuleList ModuleManager::mModules;
-    
-    void ModuleManager::AddModule(Module* module) {
-        mModules.push_back(module);
+    ModuleManager::ModuleManager() {
+        
     }
     
-    void ModuleManager::DelModule(Module* module) {
+    ModuleManager::~ModuleManager() {
+        ModuleList::const_iterator it = mModules.begin();
+        while(it != mModules.end()) {
+            (*it)->shutdown();
+            ++it;
+        }
+    }
+    
+    void ModuleManager::addModule(Module* module) {
+        mModules.push_back(module);
+        
+        module->init();
+    }
+    
+    void ModuleManager::delModule(Module* module) {
         ModuleList::iterator it = mModules.begin();
         for(; it != mModules.end(); ++it) {
             if(*it == module) {
@@ -30,7 +42,7 @@ namespace ukn {
         }
     }
     
-    void ModuleManager::OnUpdate(void*, NullEventArgs&) {
+    void ModuleManager::onUpdate(void*, NullEventArgs&) {
         ModuleList::const_iterator it = mModules.begin();
         while(it != mModules.end()) {
             (*it)->update();
@@ -38,7 +50,12 @@ namespace ukn {
         }
     }
     
-    UKN_STATIC_RUN_CODE(Window::OnGlobalUpdate() += &ModuleManager::OnUpdate);
+    ModuleManager& ModuleManager::Instance() {
+        static ModuleManager instance;
+        return instance;
+    }
+    
+    UKN_STATIC_RUN_CODE(Window::OnGlobalUpdate() += Bind(&ModuleManager::Instance(), &ModuleManager::onUpdate));
     
 
      

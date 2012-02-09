@@ -158,6 +158,27 @@ namespace ukn {
             operator bool() const {
                 return mInvoker != NULL;
             }
+            
+            template<typename F>
+            bool operator== (F f) {
+                typedef typename get_function_tag<F>::type tag;
+                return this->equalTo(tag());
+            }
+            
+            template<typename F>
+            bool equalTo(F f, function_ptr_tag tag) {
+                return this->mPtr.func_ptr == f;
+            }
+            
+            template<typename F>
+            bool equalTo(F f, member_ptr_tag tag) {
+                return this->equalTo(MemFun(f), function_obj_tag());
+            }
+            
+            template<typename F>
+            bool equalTo(F f, function_obj_tag tag) {
+                return *(F*)this->mPtr.obj_ptr == f;
+            }
 
             typedef R (*invoker_type)(any_ptr UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS);
             typedef void (*releaser_type)(any_ptr);
@@ -178,7 +199,6 @@ namespace ukn {
             void assign_to(Functor f, function_obj_tag tag) {
                 typedef typename UKN_GET_OBJ_INVOKER<Functor, R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>::type invoker_type;
                 typedef typename UKN_GET_FUNCTOR_RELEASE<Functor, R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>::type releaser_type;
-
 
                 mInvoker = &invoker_type::invoke;
                 mReleaser = &releaser_type::release;
@@ -261,6 +281,27 @@ namespace ukn {
             operator bool() const {
                 return mInvoker != NULL;
             }
+            
+            template<typename F>
+            bool operator== (F f) {
+                typedef typename get_function_tag<F>::type tag;
+                return this->equalTo(f, tag());
+            }
+            
+            template<typename F>
+            bool equalTo(F f, function_ptr_tag tag) {
+                return this->mPtr.func_ptr == f;
+            }
+            
+            template<typename F>
+            bool equalTo(F f, member_ptr_tag tag) {
+                return this->equalTo(MakeMemFun(f), function_obj_tag());
+            }
+            
+            template<typename F>
+            bool equalTo(F f, function_obj_tag tag) {
+                return *(F*)this->mPtr.obj_ptr == f;
+            }
 
             typedef void (*invoker_type)(any_ptr UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS);
             typedef void (*releaser_type)(any_ptr);
@@ -292,7 +333,7 @@ namespace ukn {
 
             template<typename Functor>
             void assign_to(Functor f, member_ptr_tag tag) {
-                this->assign_to(MemFun(f));
+                this->assign_to(MakeMemFun(f));
             }
 
             template<typename Functor>

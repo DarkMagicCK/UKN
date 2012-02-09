@@ -39,11 +39,11 @@ namespace ukn {
         terminate();
     }
     
-    Window& AppInstance::getMainWindow() const {
+    Window& AppInstance::getWindow() const {
         return *mMainWindow;
     }
 
-	WindowPtr AppInstance::getMainWindowPtr() const {
+	WindowPtr AppInstance::getWindowPtr() const {
 		return mMainWindow;
 	}
     
@@ -108,9 +108,6 @@ namespace ukn {
         
         Logger::Instance().setFeature(LF_PrependRunningTime, true);
         
-        // on init
-        mMainWindow->onInit().raise(mMainWindow, _NullEventArgs);
-        onInit();
     }
     
     void AppInstance::terminate() {
@@ -153,6 +150,10 @@ namespace ukn {
             log_error("ukn::AppInstance::run: cannot without a window");
             return ;
         }
+        
+        // on init
+        mMainWindow->onInit().raise(mMainWindow, _NullEventArgs);
+        onInit();
         
         Context::Instance().getGraphicFactory().getGraphicDevice().beginRendering();
     }

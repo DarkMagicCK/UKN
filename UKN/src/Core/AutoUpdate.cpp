@@ -15,7 +15,7 @@ namespace ukn {
     public:
         AutoUpdateModule() {
             // register module
-            ModuleManager::AddModule(this);
+            ModuleManager::Instance().addModule(this);
         }
         
         const String& getName() const {

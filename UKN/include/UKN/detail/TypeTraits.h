@@ -53,6 +53,26 @@ namespace ukn {
         };
         
         template<typename T>
+        struct strip_modifier {
+            typedef T type;
+        };
+        
+        template<typename T>
+        struct strip_modifier<T*> {
+            typedef T type;
+        };
+        
+        template<typename T>
+        struct strip_modifier<T&> {
+            typedef T type;
+        };
+        
+        template<typename T>
+        struct strip_modifier<const T&> {
+            typedef T type;
+        };
+        
+        template<typename T>
         struct is_member_pointer {
             static const bool value = false;
         };
@@ -108,10 +128,10 @@ namespace ukn {
         template<typename T> struct is_pod<T*>  { enum { value = true }; };
         template<typename T> struct is_pod<T&>  { enum { value = true }; };
         
-        template<typename T, intPtr size> struct is_pod<T[size]>    { enum { value = is_pod<T>::Value }; };
+        template<typename T, intPtr size> struct is_pod<T[size]>    { enum { value = is_pod<T>::value }; };
         template<typename T, typename C> struct is_pod<T C::*>      { enum { value = true }; };
-        template<typename T> struct is_pod<const T>                 { enum { value = is_pod<T>::Value }; };
-        template<typename T> struct is_pod<volatile T>              { enum { value = is_pod<T>::Value }; };
+        template<typename T> struct is_pod<const T>                 { enum { value = is_pod<T>::value }; };
+        template<typename T> struct is_pod<volatile T>              { enum { value = is_pod<T>::value }; };
     } // namespace traits
     
 } // namespace ukn

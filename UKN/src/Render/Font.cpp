@@ -365,7 +365,6 @@ namespace ukn {
                 if(*it == L' ') {
                     x += mFontSize;
                     
-                    uint32 gidx = getGlyphByChar(*it);
                 } else {
                     uint32 gidx = getGlyphByChar(*it);
                     

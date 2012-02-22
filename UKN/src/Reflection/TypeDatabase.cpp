@@ -74,21 +74,14 @@ namespace ukn {
             createType<ukn_string>();
             createType<ukn_wstring>();
             
-            OnTypeDBInitialize().raise(this, _NullEventArgs);
         }
         
         namespace {
             SingletonHolder<TypeDB, void> instance;
         }
         
-        TypeDB& TypeDB::Instance() {
+        TypeDB& TypeDB::Default() {
             return *instance.get();
-        }
-        
-        TypeDB::TypeDBInitialize& TypeDB::OnTypeDBInitialize() {
-            static TypeDBInitialize mInitializeEvent;
-            ;
-            return mInitializeEvent;
         }
         
         TypeDB::~TypeDB() {

@@ -178,6 +178,73 @@ namespace ukn {
         return v;
     }
     
+    // represents a value range
+    template<typename T>
+    struct Range {
+        Range() {
+            
+        }
+        
+        Range(const Range& rhs):
+        mBegin(rhs.mBegin),
+        mEnd(rhs.mEnd) {
+            
+        }
+        
+        Range(T begin, T end):
+        mBegin(begin),
+        mEnd(end) {
+            
+        }
+        
+        T begin() const { return mBegin; }
+        T end()   const { return mEnd; }
+        
+        void begin(T begin) { mBegin = begin; }
+        void end(T end)     { mEnd = end; }
+        
+        Range& operator + (const Range& rhs) const {
+            return Range(this->mBegin + rhs.mBegin,
+                         this->mEnd + rhs.mEnd);
+        }
+        
+        Range& operator += (const Range& rhs) {
+            this->mBegin += rhs.mBegin;
+            this->mEnd += rhs.mEnd;
+            return *this;
+        }
+        
+        Range& operator - (const Range& rhs) const {
+            return Range(this->mBegin - rhs.mBegin,
+                         this->mEnd - rhs.mEnd);
+        }
+        
+        Range& operator -= (const Range& rhs) {
+            this->mBegin -= rhs.mBegin;
+            this->mEnd -= rhs.mEnd;
+            return *this;
+        }
+        
+        Range operator + (T value) const {
+            return Range(this->mBegin + value,
+                         this->mEnd + value);
+        }
+        
+        Range operator - (T value) const {
+            return Range(this->mBegin - value,
+                         this->mEnd - value);
+        }
+        
+        bool operator == (const Range& rhs) const {
+            return this->mBegin == rhs.mBegin &&
+                    this->mEnd == rhs.mEnd;
+        }
+        
+    private:
+        T mBegin;
+        T mEnd;
+    };
+    
 #define ukn_min(a, b) a < b ? a : b
 #define ukn_max(a, b) a > b ? a : b
 #define ukn_abs(x) x < 0 ? -x : x

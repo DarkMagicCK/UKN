@@ -35,6 +35,26 @@ namespace ukn {
         mOwner = owner;
     }
     
+    bool Component::serialize(const ConfigParserPtr& config) {
+        return false;
+    }
+    
+    bool Component::deserialize(const ConfigParserPtr& config) {
+        return false;
+    }
+    
+    void Component::onComponentAdded(Component* compo) {
+        
+    }
+    
+    void Component::onComponentRemoved(Component* compo) {
+        
+    }
+    
+    void Component::onReceiveMessage(MessageEventArgs& args) {
+        
+    }
+    
     ComponentHolder::ComponentHolder() {
         
     }
@@ -85,6 +105,14 @@ namespace ukn {
     }
     
     void ComponentHolder::onComponentRemoved(Component* compo) {
+        //
+    }
+    
+    void ComponentHolder::notify(Component* c, MessageEventArgs& args){
+        this->onNotified(c, args);
+    }
+    
+    void ComponentHolder::onNotified(Component* c, MessageEventArgs& args) {
         //
     }
     

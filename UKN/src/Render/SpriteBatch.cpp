@@ -436,6 +436,8 @@ namespace ukn {
                 gd.setRenderState(RS_Blend, RSP_Disable);
                 break;
         }
+        gd.setRenderState(RS_DepthTest, RSP_Disable);
+        gd.setRenderState(RS_DepthMask, RSP_Disable);
     }
     
     void SpriteBatch::end() {

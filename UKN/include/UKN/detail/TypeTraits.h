@@ -53,23 +53,34 @@ namespace ukn {
         };
         
         template<typename T>
-        struct strip_modifier {
+        struct strip_qualifier {
             typedef T type;
         };
         
         template<typename T>
-        struct strip_modifier<T*> {
+        struct strip_qualifier<T*> {
             typedef T type;
         };
         
         template<typename T>
-        struct strip_modifier<T&> {
+        struct strip_qualifier<T&> {
             typedef T type;
         };
         
         template<typename T>
-        struct strip_modifier<const T&> {
+        struct strip_qualifier<const T&> {
             typedef T type;
+        };
+        
+        // helper template to seperate array type and size
+        template<typename T>
+        struct strip_array;
+        
+        template<typename T, size_t LENGTH>
+        struct strip_array<T[LENGTH]> {
+            typedef T type;
+            
+            enum { Length = LENGTH };
         };
         
         template<typename T>

@@ -37,13 +37,13 @@ namespace ukn {
             }
         }
         
-        static void OnTypeDBInitialize(void* sender, NullEventArgs&) {
-            TypeDB& db = *(TypeDB*)sender;
+        static void OnTypeDBInitialize() {
+            TypeDB& db = TypeDB::Default();
             
             OnMathTypeRegistration(db);
         }
         
-        UKN_STATIC_RUN_CODE(TypeDB::OnTypeDBInitialize() += OnTypeDBInitialize);
+        UKN_STATIC_RUN_CODE(OnTypeDBInitialize());
         
         
     } // namespace ukn

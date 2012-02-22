@@ -25,6 +25,7 @@ namespace ukn {
         AS_Playing,
         AS_Paused,
         AS_Stopped,
+        AS_Completed,
     };
     
     class Animation {

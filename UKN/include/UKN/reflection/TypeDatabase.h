@@ -29,17 +29,13 @@ namespace ukn {
     namespace reflection {
         
         class TypeDB: public virtual IEnumerable<Type>, Uncopyable {
-        private:
+        public:
+            static TypeDB& Default();
+
             TypeDB();
             ~TypeDB();
             
             friend class ClassInstantiator<TypeDB>;
-            
-        public:
-            static TypeDB& Instance();
-            
-            typedef Event<NullEventArgs> TypeDBInitialize;
-            static TypeDBInitialize& OnTypeDBInitialize();
             
             template<typename T>
             Type& createType();
@@ -98,7 +94,16 @@ namespace ukn {
         
         template<typename T>
         inline T* FieldCast(const Field* field, void* object) {
-            Type* type = TypeDB::Instance().getType<T>();
+            Type* type = TypeDB::Default().getType<T>();
+            if(type == field->type) {
+                return reinterpret_cast<T*>((char*)object+field->offset);
+            }
+            return 0;
+        }
+        
+        template<typename T>
+        inline T* FieldCast(const Field* field, void* object, const TypeDB& db) {
+            Type* type = db.getType<T>();
             if(type == field->type) {
                 return reinterpret_cast<T*>((char*)object+field->offset);
             }

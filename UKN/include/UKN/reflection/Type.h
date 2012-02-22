@@ -51,7 +51,7 @@ namespace ukn {
             Type& defBase(Type* type);
             Type* getBase() const;
             
-        private:
+        protected:
             friend class TypeDB;
             Type& defFields(const FieldInfo* fields, size_t size, TypeDB& db);
             

@@ -42,14 +42,20 @@
 #include "UKN/ZipUtil.h"
 #include "UKN/StreamWrapper.h"
 #include "UKN/Operations.h"
+#include "UKN/Input.h"
 
 #include "UKN/tmx/TMXTiledMap.h"
 
 #include "UKN/reflection/TypeDatabase.h"
 
+#include "../DF/Game/Player.h"
+#include "../DF/Scene.h"
 
 #include <vector>
 #include <map>
+
+df::Player* player;
+df::Scene* scene;
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -60,6 +66,11 @@ public:
     
     ukn::Rectangle viewRect;
     
+    void onMouseEvent(void* sender, ukn::input::MouseEventArgs& e) {
+        if(e.state == ukn::input::Mouse::Press)
+            player->moveTo(ukn::Vector2(e.x, e.y));
+    }
+    
     void onInit() {
         mSpriteBatch = ukn::Context::Instance().getGraphicFactory().createSpriteBatch();
         
@@ -69,13 +80,13 @@ public:
         mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
         
-        ukn::ConfigParserPtr cfg2 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"text/girl.uknanm");
+        ukn::ConfigParserPtr cfg2 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"player.xml");
 		if(cfg2) {
-			skAnim.deserialize(cfg2);
-        
-			skAnim.play("NewAnim");
-			skAnim.setPosition(ukn::Vector2(300, 200));
+            player = new df::Player();
+            player->deserialize(cfg2);
 		}
+        scene = new df::Scene();
+        scene->addSceneObject(player);
         
         ukn::ConfigParserPtr cfg3 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"isometric_grass_and_water.tmx");
         
@@ -91,6 +102,8 @@ public:
          //  mMap->setMapViewRect(ukn::Rectangle(0, 0, 1280, 300));
         } else 
             mMap = 0;
+        
+        getWindow().onMouseEvent() += ukn::Bind(this, &MyApp::onMouseEvent);
     }
     
     void onUpdate() {
@@ -111,6 +124,7 @@ public:
         if(getWindow().isKeyDown(ukn::input::Key::D)) 
             viewRect.x2 += 1.f;
         
+        scene->onUpdate();
         
         mMap->setMapViewRect(viewRect);
        // mMap->setPosition(ukn::Vector2(viewRect.x1, viewRect.y1));
@@ -119,11 +133,10 @@ public:
     void onRender() {
         ukn::Context::Instance().getGraphicFactory().getGraphicDevice().clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Lightskyblue, 0, 0);
         
+        
+        
         mSpriteBatch->begin(ukn::SBS_BackToFront);
         {
-            UKN_PROFILE("sk_anim");
-            skAnim.update();
-            skAnim.render(*mSpriteBatch.get());
             
             if(mMap) 
                 mMap->render();
@@ -134,12 +147,8 @@ public:
 //            printf("%s\n", data.toFormattedString().c_str());
         }       
         mSpriteBatch->end();
-        
-        
-        if(mFont) {
-            mFont->draw("咿呀咿呀哟哦哦哦", 0, 0, ukn::FA_Left, ukn::color::Black);
-            mFont->render();
-        }
+        scene->onRender();
+
     }
     
 private:
@@ -147,34 +156,13 @@ private:
 
     ukn::tmx::Map* mMap;
     
-    ukn::SkeletalAnimation skAnim;
+    
     ukn::FontPtr mFont;
     
     ukn::TexturePtr mTexture;
     ukn::StoryBoard mAnimation;
     int x, y;
 };
-
-class myClass {
-public:
-    int test[5];
-    
-    myClass() {
-        for(int i=0; i<5; ++i)
-            test[i] = i;
-    }
-};
-
-namespace ukn {
-    
-    namespace reflection {
-        
-        template<>
-        struct TypeNameRetriever<myClass> { static const char* Name() { return "myClass"; } };
-        
-    }
-    
-}
 
 #ifndef UKN_OS_WINDOWS
 int main (int argc, const char * argv[])
@@ -194,33 +182,6 @@ int CALLBACK WinMain(
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
-        
-    ukn::reflection::TypeDB& db = ukn::reflection::TypeDB::Instance();
-    UKN_ENUMERABLE_FOREACH(const ukn::reflection::Type&, t, db) {
-        printf("%s\n", t.name.text);
-    }
- 
-    ukn::reflection::Type* type = db.getType("vector2");
-    if(type != 0) {
-        const ukn::reflection::Field* x = type->getField("x");
-        const ukn::reflection::Field* y = type->getField("y");
-        
-        ukn_assert(x != 0 && y != 0);
-        
-        printf("field name = %s, type = %s\n", 
-               x->name.text,
-               x->type->name.text);
-        printf("field name = %s, type = %s\n", 
-               y->name.text,
-               x->type->name.text);
-
-        ukn::Vector2 my_vec;
-        my_vec.x = 10;
-        my_vec.y = 20;
-        float* xv = ukn::reflection::FieldCast<float>(x, &my_vec);
-        ukn_assert(*xv == 10);
-    }
-    
     MyApp instance("Test App");
 
     // create app context

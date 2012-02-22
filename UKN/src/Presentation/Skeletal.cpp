@@ -188,6 +188,7 @@ namespace ukn {
     mInheritOpacity(true),
     mUserData(0)
 	{
+        mCurrentAnimation = mAnimations.begin();
     }
     
     Bone::~Bone() {

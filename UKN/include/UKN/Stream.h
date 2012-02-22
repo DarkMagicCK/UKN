@@ -24,6 +24,8 @@ namespace ukn {
     
     class UKN_API Stream {
     public:
+        virtual ~Stream() { }
+        
     	virtual bool	canRead() const = 0;
     	virtual bool	canWrite() const = 0;
     	virtual bool 	canSeek() const = 0;

@@ -79,7 +79,7 @@ namespace ukn {
             return *this;
         }
         SelfType& del(state_type state) {
-            typename StateMap::iterator itState = this->mStateMap.find(mCurrState);
+            typename StateMap::iterator itState = this->mStateMap.find(state);
             if(itState != this->mStateMap.end()) {
                 this->mStateMap.erase(itState);
             }
@@ -87,7 +87,7 @@ namespace ukn {
         }
         
         void setState(state_type state) {
-            typename StateMap::iterator itState = this->mStateMap.find(mCurrState);
+            typename StateMap::iterator itState = this->mStateMap.find(state);
             if(itState == this->mStateMap.end()) {
                 return;
             }
@@ -104,7 +104,7 @@ namespace ukn {
         }
         
         SelfType& defTrans(state_type state, event_type event, state_type stateto) {
-            typename StateMap::iterator itState = this->mStateMap.find(mCurrState);
+            typename StateMap::iterator itState = this->mStateMap.find(state);
             if(itState == this->mStateMap.end()) {
                 // should we allow this?
                 state_trans trans;
@@ -117,7 +117,7 @@ namespace ukn {
         }
         
         SelfType& delTrans(state_type state, event_type event) {
-            typename StateMap::iterator itState = this->mStateMap.find(mCurrState);
+            typename StateMap::iterator itState = this->mStateMap.find(state);
             if(itState != this->mStateMap.end()) {
                 typename StateEventMap::iterator itEvent = itState->second.mTransitions.find(event);
                 if(itEvent != itState->second.mTransitions.end()) {

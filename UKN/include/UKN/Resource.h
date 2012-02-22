@@ -72,6 +72,7 @@ namespace ukn {
     
     class UKN_API ResourceFactory {
     public:
+        virtual ~ResourceFactory() { }
         virtual bool resourceExists(const String& resource) = 0;
         virtual bool pathExists(const String& path) = 0;
         virtual ResourcePtr onResourceLoad(const String& path) = 0;

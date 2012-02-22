@@ -197,10 +197,6 @@ namespace ukn {
             
         }
         
-<<<<<<< HEAD
-        T begin() const { return mBegin; }
-        T end()   const { return mEnd; }
-=======
         void set(T begin, T end) {
             mBegin = begin;
             mEnd = end;
@@ -208,19 +204,11 @@ namespace ukn {
         
         T& begin() { return mBegin; }
         T& end() { return mEnd; }
-        
+    
         const T& begin() const { return mBegin; }
         const T& end()   const { return mEnd; }
->>>>>>> 50e8d1be6a13865596914dce85e676107d4ec9a2
         
-        void begin(T begin) { mBegin = begin; }
-        void end(T end)     { mEnd = end; }
-        
-<<<<<<< HEAD
-        Range& operator + (const Range& rhs) const {
-=======
         Range operator + (const Range& rhs) const {
->>>>>>> 50e8d1be6a13865596914dce85e676107d4ec9a2
             return Range(this->mBegin + rhs.mBegin,
                          this->mEnd + rhs.mEnd);
         }
@@ -230,12 +218,8 @@ namespace ukn {
             this->mEnd += rhs.mEnd;
             return *this;
         }
-        
-<<<<<<< HEAD
-        Range& operator - (const Range& rhs) const {
-=======
+       
         Range operator - (const Range& rhs) const {
->>>>>>> 50e8d1be6a13865596914dce85e676107d4ec9a2
             return Range(this->mBegin - rhs.mBegin,
                          this->mEnd - rhs.mEnd);
         }
@@ -250,9 +234,7 @@ namespace ukn {
             return Range(this->mBegin + value,
                          this->mEnd + value);
         }
-        
-<<<<<<< HEAD
-=======
+       
         Range& operator += (T value) {
             this->mBegin += value;
             this->mEnd += value;
@@ -270,7 +252,6 @@ namespace ukn {
                          this->mEnd * value);
         }
         
->>>>>>> 50e8d1be6a13865596914dce85e676107d4ec9a2
         Range operator - (T value) const {
             return Range(this->mBegin - value,
                          this->mEnd - value);

@@ -48,14 +48,10 @@
 
 #include "UKN/reflection/TypeDatabase.h"
 
-#include "../DF/Game/Player.h"
-#include "../DF/Scene.h"
 
 #include <vector>
 #include <map>
 
-df::Player* player;
-df::Scene* scene;
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -67,8 +63,8 @@ public:
     ukn::Rectangle viewRect;
     
     void onMouseEvent(void* sender, ukn::input::MouseEventArgs& e) {
-        if(e.state == ukn::input::Mouse::Press)
-            player->moveTo(ukn::Vector2(e.x, e.y));
+   //     if(e.state == ukn::input::Mouse::Press)
+    //        player->moveTo(ukn::Vector2(e.x, e.y));
     }
     
     void onInit() {
@@ -79,14 +75,14 @@ public:
         
         mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
         mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
-        
+ /*       
         ukn::ConfigParserPtr cfg2 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"player.xml");
 		if(cfg2) {
             player = new df::Player();
             player->deserialize(cfg2);
 		}
         scene = new df::Scene();
-        scene->addSceneObject(player);
+        scene->addSceneObject(player);*/
         
         ukn::ConfigParserPtr cfg3 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"isometric_grass_and_water.tmx");
         
@@ -124,7 +120,7 @@ public:
         if(getWindow().isKeyDown(ukn::input::Key::D)) 
             viewRect.x2 += 1.f;
         
-        scene->onUpdate();
+    //    scene->onUpdate();
         
         mMap->setMapViewRect(viewRect);
        // mMap->setPosition(ukn::Vector2(viewRect.x1, viewRect.y1));
@@ -147,7 +143,7 @@ public:
 //            printf("%s\n", data.toFormattedString().c_str());
         }       
         mSpriteBatch->end();
-        scene->onRender();
+  //      scene->onRender();
 
     }
     

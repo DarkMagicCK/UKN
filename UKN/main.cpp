@@ -122,7 +122,7 @@ public:
         
     //    scene->onUpdate();
         
-        mMap->setMapViewRect(viewRect);
+      //  mMap->setMapViewRect(viewRect);
        // mMap->setPosition(ukn::Vector2(viewRect.x1, viewRect.y1));
     }
     
@@ -160,6 +160,18 @@ private:
     int x, y;
 };
 
+#include "UKN/Thread.h"
+
+void threadFunc(void* args) {
+    int i = 0;
+    int data[1000];
+    while(i < 10000000) {
+        i++;
+  //      printf("sds");
+    }
+}
+ukn::thread::Thread* threads;
+
 #ifndef UKN_OS_WINDOWS
 int main (int argc, const char * argv[])
 {
@@ -173,6 +185,15 @@ int CALLBACK WinMain(
   __in  int nCmdShow
 ) {
 #endif
+    threads = new ukn::thread::Thread[1000];
+    for(int i=0; i<1000; ++i) {
+        threads[i].start(ukn::thread::ThreadTask(threadFunc));
+    }
+    
+    sleep(1);
+    delete []threads;
+    
+    
     // register plugins by hand for testing purpose
     ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);

@@ -386,8 +386,8 @@ namespace ukn {
                 
                 try {
                     pthread->mTask();
-                } catch(...) {
-                    std::terminate();
+                } catch(std::exception& e) {
+                    log_error(e.what());
                 }
                 
                 MutexGuard<Mutex> guard(pthread->mDataMutex);
@@ -402,14 +402,15 @@ namespace ukn {
             }
             
             Thread::~Thread() {
-                
+              
             }
             
             bool Thread::start(const ThreadTask& task) {
-                if(mIsActive || mTask.isValid()) 
+                if(mIsActive) 
                     return 0;
                 
                 mIsActive = true;
+                mTask = task;
                 
 #ifdef UKN_OS_WINDOWS
                 mHandle = (HANDLE)_beginthreadex(0, 0, Thread::WrapperFunc, (void*)this, 0, &mWin32ThreadId);

@@ -133,10 +133,9 @@ public:
         
         mSpriteBatch->begin(ukn::SBS_BackToFront);
         {
-            
-            if(mMap) 
+            if(mMap) {
                 mMap->render();
-
+            }
             ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
             
 

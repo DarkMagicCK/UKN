@@ -19,7 +19,7 @@
 #include <sys/stat.h>
 #else
 #include <sys/stat.h>
-#endif // UKN_OS_FAMILTY_APPLe
+#endif // UKN_OS_FAMILTY_APPLE
 
 #ifdef UKN_OS_FAMILY_UNIX   
 #include <pwd.h>
@@ -375,6 +375,9 @@ namespace ukn {
         
         const ukn_string& get() const;
         const ukn_string& next() {
+            if(!mDir)
+                return mCurrent;
+            
             do {
                 struct dirent* entry = readdir(mDir);
                 if(entry)

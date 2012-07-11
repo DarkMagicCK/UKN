@@ -96,6 +96,24 @@ namespace ukn {
                 ((it->second)->*Memfun)(arg1, arg2, arg3, arg4);
             }
         }
+
+         
+        template<typename ARG1, typename ARG2, typename ARG3, typename ARG4, typename ARG5>
+        void publishListenerEvent(void (ListenerType::*Memfun)(ARG1, ARG2, ARG3, ARG4, ARG5), ARG1 arg1, ARG2 arg2, ARG3 arg3, ARG4 arg4, ARG5 arg5) {
+            typename ListenerList::iterator it = mListenerList.begin();
+            for(; it != mListenerList.end(); ++it) {
+                ((it->first)->*Memfun)(arg1, arg2, arg3, arg4, arg5);
+            }
+        }
+        
+        template<typename ARG1, typename ARG2, typename ARG3, typename ARG4, typename ARG5, typename ARG6>
+        void publishListenerEvent(void (ListenerType::*Memfun)(ARG1, ARG2, ARG3, ARG4, ARG5, ARG6), ARG1 arg1, ARG2 arg2, ARG3 arg3, ARG4 arg4, ARG5 arg5, ARG6 arg6) {
+            typename ListenerList::iterator it = mListenerList.begin();
+            for(; it != mListenerList.end(); ++it) {
+                ((it->first)->*Memfun)(arg1, arg2, arg3, arg4, arg5, arg6);
+            }
+        }
+
         
     protected:
         ListenerMap mListenerMap;

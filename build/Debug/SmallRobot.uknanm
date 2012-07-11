@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<skeletal global_scale="1" frame_rate="30">
+  <Bone name="Root" texture_center_x="0" texture_center_y="0" x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="stand" repeat_count="1" default="False">
+        <KeyFrame x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="walk" repeat_count="1" default="True">
+        <KeyFrame x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="400" />
+        <KeyFrame x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="350" y="280" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="NewAnim" repeat_count="1" default="False" />
+    </Animations>
+  </Bone>
+  <Bone name="body" parent="Root" editor_texture_path="Body.png" texture_path="Body.png" texture="Body.png" texture_center_x="21" texture_center_y="34" x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="stand" repeat_count="1" default="False">
+        <KeyFrame x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="walk" repeat_count="1" default="True">
+        <KeyFrame x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" duration="400" />
+        <KeyFrame x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="2" y="25" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="NewAnim" repeat_count="1" default="False" />
+    </Animations>
+  </Bone>
+  <Bone name="arm" parent="body" editor_texture_path="Upper Arm.png" texture_path="Upper Arm.png" texture="Upper Arm.png" texture_center_x="22" texture_center_y="11" x="9" y="9" scale_x="1" scale_y="1" rotation="75.99993" layer_depth="0.2" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="stand" repeat_count="1" default="False">
+        <KeyFrame x="23" y="-6" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="23" y="-6" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="23" y="-6" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="23" y="-6" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="walk" repeat_count="1" default="True">
+        <KeyFrame x="9" y="9" scale_x="1" scale_y="1" rotation="75.99993" layer_depth="0.2" opacity="1" visible="True" duration="400" />
+        <KeyFrame x="-6.2" y="9" scale_x="1" scale_y="1" rotation="113.9997" layer_depth="0.2" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="-10" y="9" scale_x="1" scale_y="1" rotation="123.4997" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="15" y="5" scale_x="1" scale_y="1" rotation="38.50002" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="9" y="9" scale_x="1" scale_y="1" rotation="75.99993" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="NewAnim" repeat_count="1" default="False" />
+    </Animations>
+  </Bone>
+  <Bone name="arm2" parent="body" editor_texture_path="Upper Arm.png" texture_path="Upper Arm.png" texture="Upper Arm.png" texture_center_x="8" texture_center_y="11" x="2" y="0" scale_x="1" scale_y="1" rotation="55.66782" layer_depth="0" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="stand" repeat_count="1" default="False">
+        <KeyFrame x="10" y="0" scale_x="1" scale_y="1" rotation="-1.332221" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="10" y="0" scale_x="1" scale_y="1" rotation="-45.60951" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="10" y="0" scale_x="1" scale_y="1" rotation="42.09896" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="10" y="0" scale_x="1" scale_y="1" rotation="-1.332221" layer_depth="0" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="walk" repeat_count="1" default="True">
+        <KeyFrame x="2" y="0" scale_x="1" scale_y="1" rotation="55.66782" layer_depth="0" opacity="1" visible="True" duration="400" />
+        <KeyFrame x="2" y="0" scale_x="1" scale_y="1" rotation="32.86779" layer_depth="0" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="2" y="0" scale_x="1" scale_y="1" rotation="27.16778" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="2" y="0" scale_x="1" scale_y="1" rotation="126.6674" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="2" y="0" scale_x="1" scale_y="1" rotation="55.66782" layer_depth="0" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="NewAnim" repeat_count="1" default="False" />
+    </Animations>
+  </Bone>
+  <Bone name="head" parent="Root" editor_texture_path="Head.png" texture_path="Head.png" texture="Head.png" texture_center_x="34" texture_center_y="43" x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="stand" repeat_count="1" default="False">
+        <KeyFrame x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="walk" repeat_count="1" default="True">
+        <KeyFrame x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" duration="400" />
+        <KeyFrame x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="4" y="-39" scale_x="1" scale_y="1" rotation="-0.9999999" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="NewAnim" repeat_count="1" default="False" />
+    </Animations>
+  </Bone>
+  <Bone name="leg" parent="Root" editor_texture_path="Upper Leg.png" texture_path="Upper Leg.png" texture="Upper Leg.png" texture_center_x="16" texture_center_y="7" x="1" y="60" scale_x="1" scale_y="1" rotation="-268.5856" layer_depth="0.2" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="stand" repeat_count="1" default="False">
+        <KeyFrame x="1" y="60" scale_x="1" scale_y="1" rotation="-268.5856" layer_depth="0.3" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="1" y="60" scale_x="1" scale_y="1" rotation="-268.5856" layer_depth="0.3" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="1" y="60" scale_x="1" scale_y="1" rotation="-268.5856" layer_depth="0.3" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="1" y="60" scale_x="1" scale_y="1" rotation="-268.5856" layer_depth="0.3" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="walk" repeat_count="1" default="True">
+        <KeyFrame x="1" y="60" scale_x="1" scale_y="1" rotation="-268.5856" layer_depth="0.2" opacity="1" visible="True" duration="400" />
+        <KeyFrame x="13.8" y="56.8" scale_x="1" scale_y="1" rotation="-294.5854" layer_depth="0.2" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="17" y="56" scale_x="1" scale_y="1" rotation="-301.0854" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="-10" y="58" scale_x="1" scale_y="1" rotation="-234.5858" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="1" y="60" scale_x="1" scale_y="1" rotation="-268.5856" layer_depth="0.2" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="NewAnim" repeat_count="1" default="False" />
+    </Animations>
+  </Bone>
+  <Bone name="NewBone" parent="leg" editor_texture_path="Foot.png" texture_path="Foot.png" texture="Foot.png" texture_center_x="22" texture_center_y="6" x="7" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0.3" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="stand" repeat_count="1" default="False">
+        <KeyFrame x="7" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="7" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="7" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="7" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="walk" repeat_count="1" default="False">
+        <KeyFrame x="7" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0.3" opacity="1" visible="True" duration="400" />
+        <KeyFrame x="7" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0.3" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="7" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0.3" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="-3" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0.3" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="7" y="10" scale_x="1" scale_y="1" rotation="-89.99998" layer_depth="0.3" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="NewAnim" repeat_count="1" default="False" />
+    </Animations>
+  </Bone>
+  <Bone name="leg2" parent="Root" editor_texture_path="Upper Leg.png" texture_path="Upper Leg.png" texture="Upper Leg.png" texture_center_x="16" texture_center_y="7" x="2" y="57" scale_x="1" scale_y="1" rotation="91.49987" layer_depth="0.1" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="stand" repeat_count="1" default="False">
+        <KeyFrame x="0" y="50" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="0" y="50" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="0" y="50" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="0" y="50" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="walk" repeat_count="1" default="True">
+        <KeyFrame x="2" y="57" scale_x="1" scale_y="1" rotation="91.49987" layer_depth="0.1" opacity="1" visible="True" duration="400" />
+        <KeyFrame x="-6.8" y="59.4" scale_x="1" scale_y="1" rotation="115.0997" layer_depth="0.1" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="-9" y="60" scale_x="1" scale_y="1" rotation="120.9997" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="18" y="60" scale_x="1" scale_y="1" rotation="52.00004" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="2" y="57" scale_x="1" scale_y="1" rotation="91.49987" layer_depth="0.1" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="NewAnim" repeat_count="1" default="False" />
+    </Animations>
+  </Bone>
+  <Bone name="NewBone1" parent="leg2" editor_texture_path="Foot.png" texture_path="Foot.png" texture="Foot.png" texture_center_x="22" texture_center_y="6" x="7" y="13" scale_x="1" scale_y="1" rotation="-90.49982" layer_depth="0" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="stand" repeat_count="1" default="False">
+        <KeyFrame x="0" y="50" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="0" y="50" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="0" y="50" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="0" y="50" scale_x="1" scale_y="1" rotation="0" layer_depth="0" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="walk" repeat_count="1" default="True">
+        <KeyFrame x="7" y="13" scale_x="1" scale_y="1" rotation="-90.49982" layer_depth="0" opacity="1" visible="True" duration="400" />
+        <KeyFrame x="-9" y="3.8" scale_x="1" scale_y="1" rotation="-81.28832" layer_depth="0" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="-3" y="9" scale_x="1" scale_y="1" rotation="-90.49982" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="7" y="7" scale_x="1" scale_y="1" rotation="-90.49982" layer_depth="0" opacity="1" visible="True" duration="300" />
+        <KeyFrame x="7" y="13" scale_x="1" scale_y="1" rotation="-90.49982" layer_depth="0" opacity="1" visible="True" duration="300" />
+      </Animation>
+      <Animation name="NewAnim" repeat_count="1" default="False" />
+    </Animations>
+  </Bone>
+</skeletal>

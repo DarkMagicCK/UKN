@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<skeletal global_scale="1.22" frame_rate="25">
+  <Bone name="Root" texture_center_x="0" texture_center_y="0" x="430" y="340" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="430" y="340" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="430" y="340" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="430" y="340" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="100" />
+        <KeyFrame x="430" y="340" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="100" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="d" parent="Root" editor_texture_path="胸腔.png" texture_path="胸腔.png" texture="胸腔.png" texture_center_x="22" texture_center_y="21" x="0" y="-64" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="0" y="-64" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="4" y="-64" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="7" y="-64" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="7" y="-64" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="后手" parent="d" texture_center_x="0" texture_center_y="0" x="-38" y="3" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-38" y="3" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-38" y="3" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-38" y="3" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-38" y="3" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="前大臂" parent="d" editor_texture_path="前大臂.png" texture_path="前大臂.png" texture="前大臂.png" texture_center_x="12" texture_center_y="23" x="23" y="8" scale_x="1" scale_y="1" rotation="5" layer_depth="0.3400002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="23" y="8" scale_x="1" scale_y="1" rotation="5" layer_depth="0.3400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="20" y="8" scale_x="1" scale_y="1" rotation="14" layer_depth="0.3400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="16" y="9" scale_x="1" scale_y="1" rotation="31" layer_depth="0.03000025" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="21" y="9" scale_x="1" scale_y="1" rotation="9" layer_depth="0.03000025" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="手里衬" parent="前大臂" editor_texture_path="手里衬.png" texture_path="手里衬.png" texture="手里衬.png" texture_center_x="8" texture_center_y="9" x="4" y="12" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2800002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="4" y="12" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2800002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2" y="12" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2800002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-2" y="12" scale_x="1" scale_y="1" rotation="2" layer_depth="0.01000019" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2" y="12" scale_x="1" scale_y="1" rotation="2" layer_depth="0.01000019" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="脖子" parent="d" editor_texture_path="脖子.png" texture_path="脖子.png" texture="脖子.png" texture_center_x="6" texture_center_y="8" x="3" y="-19" scale_x="1" scale_y="1" rotation="0.2222295" layer_depth="0.4" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="3" y="-19" scale_x="1" scale_y="1" rotation="0.2222295" layer_depth="0.4" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="3" y="-19" scale_x="1" scale_y="1" rotation="0.2222295" layer_depth="0.4" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="3" y="-19" scale_x="1" scale_y="1" rotation="0.2222295" layer_depth="0.4" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="3" y="-19" scale_x="1" scale_y="1" rotation="0.2222295" layer_depth="0.4" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="脸" parent="脖子" editor_texture_path="脸.png" texture_path="脸.png" texture="脸.png" texture_center_x="20" texture_center_y="23" x="-4" y="-24" scale_x="1" scale_y="1" rotation="0" layer_depth="0.3" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-4" y="-24" scale_x="1" scale_y="1" rotation="0" layer_depth="0.3" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-4" y="-24" scale_x="1" scale_y="1" rotation="0" layer_depth="0.3" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-4" y="-24" scale_x="1" scale_y="1" rotation="0" layer_depth="0.3" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-4" y="-24" scale_x="1" scale_y="1" rotation="0" layer_depth="0.3" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="前发" parent="脸" editor_texture_path="前发.png" texture_path="前发.png" texture="前发.png" texture_center_x="33" texture_center_y="39" x="3" y="-2" scale_x="1" scale_y="1" rotation="-2.999696" layer_depth="0.1" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="3" y="-2" scale_x="1" scale_y="1" rotation="-2.999696" layer_depth="0.1" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2" y="-2" scale_x="0.95" scale_y="1" rotation="-2.999696" layer_depth="0.1" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="1" y="-2" scale_x="0.9" scale_y="1" rotation="-2.999696" layer_depth="0.1" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2" y="-2" scale_x="0.95" scale_y="1" rotation="-2.999696" layer_depth="0.1" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="后发" parent="脸" editor_texture_path="后发.png" texture_path="后发.png" texture="后发.png" texture_center_x="31" texture_center_y="55" x="7" y="42" scale_x="1" scale_y="1" rotation="-2.141291" layer_depth="1" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="7" y="42" scale_x="1" scale_y="1" rotation="-2.141291" layer_depth="1" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="5" y="42" scale_x="0.95" scale_y="1" rotation="-2.141291" layer_depth="1" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="5" y="42" scale_x="0.9" scale_y="1" rotation="-2.141291" layer_depth="1" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="5" y="42" scale_x="0.95" scale_y="1" rotation="-2.141291" layer_depth="1" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="眼睛" parent="脸" editor_texture_path="眼睛.png" texture_path="眼睛.png" texture="眼睛.png" texture_center_x="16" texture_center_y="6" x="-2.229576" y="2.02024" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2500001" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-2.229576" y="2.02024" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2500001" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-4.229576" y="2.02024" scale_x="0.95" scale_y="1" rotation="0" layer_depth="0.2500001" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-4.229576" y="2.02024" scale_x="0.9" scale_y="1" rotation="0" layer_depth="0.2500001" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-4.229576" y="2.02024" scale_x="0.95" scale_y="1" rotation="0" layer_depth="0.2500001" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="xiong" parent="d" editor_texture_path="胸部.png" texture_path="胸部.png" texture="胸部.png" texture_center_x="19" texture_center_y="12" x="-9" y="2" scale_x="1" scale_y="1" rotation="0" layer_depth="0.3200002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-9" y="2" scale_x="1" scale_y="1" rotation="0" layer_depth="0.3200002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-11" y="2" scale_x="0.95" scale_y="1" rotation="0" layer_depth="0.3200002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-13" y="2" scale_x="0.95" scale_y="1" rotation="0" layer_depth="0.3200002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-12" y="2" scale_x="0.98" scale_y="1" rotation="0" layer_depth="0.3200002" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="上衣" parent="xiong" editor_texture_path="胸衣.png" texture_path="胸衣.png" texture="胸衣.png" texture_center_x="21" texture_center_y="12" x="0" y="6" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="0" y="6" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="0" y="6" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="0" y="6" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="0" y="6" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="a" parent="d" editor_texture_path="前腰.png" texture_path="前腰.png" texture="前腰.png" texture_center_x="16" texture_center_y="12" x="-5" y="24" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5999999" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-5" y="24" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5999999" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-8" y="24" scale_x="0.95" scale_y="1" rotation="0" layer_depth="0.5999999" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-8" y="24" scale_x="0.95" scale_y="1" rotation="0" layer_depth="0.5999999" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-8" y="24" scale_x="0.95" scale_y="1" rotation="0" layer_depth="0.5999999" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="腰衣" parent="a" editor_texture_path="腰衣.png" texture_path="腰衣.png" texture="腰衣.png" texture_center_x="17" texture_center_y="8" x="-2" y="-2" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-2" y="-2" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-2" y="-2" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-2" y="-2" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-2" y="-2" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="胯" parent="d" editor_texture_path="前胯.png" texture_path="前胯.png" texture="前胯.png" texture_center_x="21" texture_center_y="14" x="4" y="40" scale_x="1" scale_y="1" rotation="10" layer_depth="0.5" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="4" y="40" scale_x="1" scale_y="1" rotation="10" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="0" y="40" scale_x="0.9" scale_y="1" rotation="10" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-2" y="40" scale_x="0.85" scale_y="1" rotation="10" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2" y="40" scale_x="0.9" scale_y="1" rotation="10" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="下衣" parent="胯" editor_texture_path="下衣.png" texture_path="下衣.png" texture="下衣.png" texture_center_x="16" texture_center_y="11" x="-8" y="-5" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-8" y="-5" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-8" y="-5" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-8" y="-5" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-8" y="-5" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="胯甲" parent="胯" editor_texture_path="胯甲.png" texture_path="胯甲.png" texture="胯甲.png" texture_center_x="18" texture_center_y="19" x="14" y="1" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="14" y="1" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="12" y="1" scale_x="1.2" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="11" y="1" scale_x="1.3" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="14" y="1" scale_x="1.2" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="腰带" parent="胯" editor_texture_path="腰带.png" texture_path="腰带.png" texture="腰带.png" texture_center_x="18" texture_center_y="9" x="-8" y="2" scale_x="1" scale_y="1" rotation="-6" layer_depth="0.0900002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-8" y="2" scale_x="1" scale_y="1" rotation="-6" layer_depth="0.0900002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-8" y="2" scale_x="1" scale_y="1" rotation="-6" layer_depth="0.0900002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-8" y="2" scale_x="1" scale_y="1" rotation="-6" layer_depth="0.0900002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-8" y="2" scale_x="1" scale_y="1" rotation="-6" layer_depth="0.0900002" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="下摆" parent="胯" editor_texture_path="下摆.png" texture_path="下摆.png" texture="下摆.png" texture_center_x="11" texture_center_y="37" x="-8" y="42" scale_x="1" scale_y="1" rotation="-11" layer_depth="0.1400002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-8" y="42" scale_x="1" scale_y="1" rotation="-11" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-7" y="42" scale_x="1" scale_y="1" rotation="-11" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-7" y="42" scale_x="0.95" scale_y="1" rotation="-11" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-7" y="42" scale_x="0.95" scale_y="1" rotation="-11" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="前大腿" parent="d" editor_texture_path="前大腿.png" texture_path="前大腿.png" texture="前大腿.png" texture_center_x="14" texture_center_y="35" x="13.2213" y="72.0005" scale_x="1" scale_y="1" rotation="0" layer_depth="0.48" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="13.2213" y="72.0005" scale_x="1" scale_y="1" rotation="0" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="13.2213" y="72.0005" scale_x="1" scale_y="1" rotation="2" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="13.2213" y="72.0005" scale_x="1" scale_y="1" rotation="7" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="15.2213" y="72.0005" scale_x="1" scale_y="1" rotation="5" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="后大腿" parent="d" editor_texture_path="后大腿.png" texture_path="后大腿.png" texture="后大腿.png" texture_center_x="17" texture_center_y="34" x="-13.77872" y="69.0005" scale_x="1" scale_y="1" rotation="0" layer_depth="0.7399998" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-13.77872" y="69.0005" scale_x="1" scale_y="1" rotation="0" layer_depth="0.7399998" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-13.77872" y="69.0005" scale_x="1" scale_y="1" rotation="6" layer_depth="0.7399998" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-13.77872" y="69.0005" scale_x="1" scale_y="1" rotation="6" layer_depth="0.7399998" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-13.77872" y="69.0005" scale_x="1" scale_y="1" rotation="3" layer_depth="0.7399998" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="dd" parent="d" editor_texture_path="前小腿.png" texture_path="前小腿.png" texture="前小腿.png" texture_center_x="9" texture_center_y="28" x="18.5004" y="126.944" scale_x="1" scale_y="1" rotation="4" layer_depth="0.48" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="18.5004" y="126.944" scale_x="1" scale_y="1" rotation="4" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="15.5004" y="126.944" scale_x="1" scale_y="1" rotation="6" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="12.5004" y="126.944" scale_x="1" scale_y="1" rotation="8" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="12.5004" y="126.944" scale_x="1" scale_y="1" rotation="2" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="前膝" parent="dd" editor_texture_path="前膝甲.png" texture_path="前膝甲.png" texture="前膝甲.png" texture_center_x="17" texture_center_y="14" x="-3.49963" y="-25.056" scale_x="1" scale_y="1" rotation="4" layer_depth="0.09000018" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-3.49963" y="-25.056" scale_x="1" scale_y="1" rotation="4" layer_depth="0.09000018" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-3.49963" y="-25.056" scale_x="1" scale_y="1" rotation="6" layer_depth="0.09000018" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-3.49963" y="-25.056" scale_x="1" scale_y="1" rotation="6" layer_depth="0.09000018" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-0.49963" y="-25.056" scale_x="1" scale_y="1" rotation="6" layer_depth="0.09000018" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="前小腿甲" parent="dd" editor_texture_path="前小腿甲.png" texture_path="前小腿甲.png" texture="前小腿甲.png" texture_center_x="13" texture_center_y="24" x="2.500366" y="8.944" scale_x="1" scale_y="1" rotation="2" layer_depth="0.3800001" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="2.500366" y="8.944" scale_x="1" scale_y="1" rotation="2" layer_depth="0.3800001" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2.500366" y="8.944" scale_x="1" scale_y="1" rotation="2" layer_depth="0.3800001" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2.500366" y="8.944" scale_x="1" scale_y="1" rotation="2" layer_depth="0.3800001" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="6.500366" y="8.944" scale_x="1" scale_y="1" rotation="2" layer_depth="0.3800001" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="w" parent="dd" editor_texture_path="前足甲.png" texture_path="前足甲.png" texture="前足甲.png" texture_center_x="13" texture_center_y="17" x="0.50037" y="32.944" scale_x="1" scale_y="1" rotation="10" layer_depth="0.3800001" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="0.50037" y="32.944" scale_x="1" scale_y="1" rotation="10" layer_depth="0.3800001" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="0.50037" y="31.944" scale_x="1" scale_y="1" rotation="11" layer_depth="0.3800001" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="0.50037" y="31.944" scale_x="1" scale_y="1" rotation="11" layer_depth="0.3800001" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="4.50037" y="30.944" scale_x="1" scale_y="1" rotation="11" layer_depth="0.3800001" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="后足" parent="d" editor_texture_path="后足.png" texture_path="后足.png" texture="后足.png" texture_center_x="11" texture_center_y="13" x="-41.8073" y="152.4649" scale_x="1" scale_y="1" rotation="0" layer_depth="2.149998" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-41.8073" y="152.4649" scale_x="1" scale_y="1" rotation="0" layer_depth="2.149998" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-46.8073" y="152.4649" scale_x="1" scale_y="1" rotation="0" layer_depth="2.149998" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-50.8073" y="152.4649" scale_x="1" scale_y="1" rotation="0" layer_depth="2.149998" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-46.8073" y="152.4649" scale_x="1" scale_y="1" rotation="0" layer_depth="2.149998" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="add" parent="d" editor_texture_path="后小腿.png" texture_path="后小腿.png" texture="后小腿.png" texture_center_x="12" texture_center_y="23" x="-30.8073" y="120.4649" scale_x="1" scale_y="1" rotation="0" layer_depth="1.639999" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-30.8073" y="120.4649" scale_x="1" scale_y="1" rotation="0" layer_depth="1.639999" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-34.8073" y="120.4649" scale_x="1" scale_y="1" rotation="2" layer_depth="1.639999" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-36.8073" y="120.4649" scale_x="1" scale_y="1" rotation="5" layer_depth="1.639999" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-32.8073" y="120.4649" scale_x="1" scale_y="1" rotation="2" layer_depth="1.639999" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="后膝" parent="add" editor_texture_path="后膝甲.png" texture_path="后膝甲.png" texture="后膝甲.png" texture_center_x="17" texture_center_y="13" x="5.500366" y="-25.056" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="5.500366" y="-25.056" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="9.500366" y="-25.056" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="9.500366" y="-25.056" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="5.500366" y="-25.056" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="后小腿甲" parent="add" editor_texture_path="后小腿甲.png" texture_path="后小腿甲.png" texture="后小腿甲.png" texture_center_x="14" texture_center_y="22" x="-1.499634" y="0.9440002" scale_x="1" scale_y="1" rotation="1" layer_depth="0.5" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-1.499634" y="0.9440002" scale_x="1" scale_y="1" rotation="1" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-1.499634" y="0.9440002" scale_x="1" scale_y="1" rotation="1" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-2.499634" y="0.9440002" scale_x="1" scale_y="1" rotation="1" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-2.499634" y="0.9440002" scale_x="1" scale_y="1" rotation="-1" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="后足甲" parent="add" editor_texture_path="后足甲.png" texture_path="后足甲.png" texture="后足甲.png" texture_center_x="11" texture_center_y="14" x="-12.49963" y="29.944" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-12.49963" y="29.944" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-12.49963" y="29.944" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-14.49963" y="29.944" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-14.49963" y="29.944" scale_x="1" scale_y="1" rotation="0" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="前足" parent="d" editor_texture_path="前足.png" texture_path="前足.png" texture="前足.png" texture_center_x="10" texture_center_y="13" x="17.3178" y="162.1599" scale_x="1" scale_y="1" rotation="7" layer_depth="0.48" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="17.3178" y="162.1599" scale_x="1" scale_y="1" rotation="7" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="15.3178" y="162.1599" scale_x="1" scale_y="1" rotation="25" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="12.3178" y="162.1599" scale_x="1" scale_y="1" rotation="25" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="16.3178" y="162.1599" scale_x="1" scale_y="1" rotation="25" layer_depth="0.48" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="前小臂" parent="d" editor_texture_path="前小臂.png" texture_path="前小臂.png" texture="前小臂.png" texture_center_x="15" texture_center_y="13" x="39.44349" y="36.60593" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2200002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="39.44349" y="36.60593" scale_x="1" scale_y="1" rotation="0" layer_depth="0.2200002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="28.44349" y="39.60593" scale_x="1" scale_y="1" rotation="26" layer_depth="0.2200002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="16.44349" y="42.60593" scale_x="1" scale_y="1" rotation="37" layer_depth="0.03000018" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="27.44349" y="42.60593" scale_x="1" scale_y="1" rotation="40" layer_depth="0.03000018" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="手甲" parent="前小臂" editor_texture_path="前手甲.png" texture_path="前手甲.png" texture="前手甲.png" texture_center_x="26" texture_center_y="23" x="2" y="1" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="2" y="1" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2" y="1" scale_x="1" scale_y="1" rotation="0" layer_depth="0.1400002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2" y="1" scale_x="1" scale_y="1" rotation="0" layer_depth="2.086163E-07" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="2" y="1" scale_x="1" scale_y="1" rotation="0" layer_depth="2.086163E-07" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="wadws" parent="d" editor_texture_path="手.png" texture_path="手.png" texture="手.png" texture_center_x="12" texture_center_y="12" x="60.18311" y="56.05379" scale_x="1" scale_y="1" rotation="-1.879424" layer_depth="0.2200002" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="60.18311" y="56.05379" scale_x="1" scale_y="1" rotation="-1.879424" layer_depth="0.2200002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="44.18311" y="65.05379" scale_x="1" scale_y="1" rotation="-1.879424" layer_depth="0.2200002" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="26.18311" y="71.05379" scale_x="1" scale_y="1" rotation="26.12057" layer_depth="0.09000017" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="33.18311" y="71.05379" scale_x="1" scale_y="1" rotation="55.12057" layer_depth="0.09000017" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+  <Bone name="下身" parent="Root" texture_center_x="0" texture_center_y="0" x="-162" y="5" scale_x="1" scale_y="1" rotation="-3" layer_depth="0.5" opacity="1" visible="True" length="50" inherit_visibility="True" inherit_opacity="True" inherit_position="True" inherit_rotation="True" inherit_scale="True">
+    <Animations>
+      <Animation name="NewAnim" repeat_count="1" default="False">
+        <KeyFrame x="-162" y="5" scale_x="1" scale_y="1" rotation="-3" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-162" y="5" scale_x="1" scale_y="1" rotation="-3" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-162" y="5" scale_x="1" scale_y="1" rotation="-3" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+        <KeyFrame x="-162" y="5" scale_x="1" scale_y="1" rotation="-3" layer_depth="0.5" opacity="1" visible="True" duration="1000" />
+      </Animation>
+    </Animations>
+  </Bone>
+</skeletal>

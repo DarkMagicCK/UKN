@@ -1,6 +1,0 @@
-<?xml version="1.0"?>
-<cfg>
-	<graphics width="1280" height="800" top="0" left="0" show_mouse="true" full_screen="false" resizable="true" sample_count="1" sample_quality="0" fsaa_samples="0" color_fmt="EF_ARGB8" depth_stencil_fmt="EF_D16" />
-	<plugins graphic_factory="gl_factory"/>
-</cfg>
-

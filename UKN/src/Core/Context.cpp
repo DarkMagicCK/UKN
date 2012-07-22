@@ -150,7 +150,7 @@ namespace ukn {
                 cfg.graphic_factory_name = configParser->getString("graphic_factory", "");
             }
         } else {
-            log_warning(L"ukn::Context::loadCfgFile: unable to open config file "+configParser->getName());
+            log_warning(L"ukn::Context::loadCfgFile: unable to open config file " + name);
         }
         
         setCfg(cfg);

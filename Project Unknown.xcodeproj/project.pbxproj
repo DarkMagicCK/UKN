@@ -31,6 +31,7 @@
 		88093C9F14BC258000C6152F /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 88093C8C14BC258000C6152F /* zip.c */; };
 		88093CA014BC258000C6152F /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 88093C8F14BC258000C6152F /* zutil.c */; };
 		881B520415BBC63C009B9482 /* LocalizedStringTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */; };
+		881B522015BBCD8C009B9482 /* LocalizedStringTableLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */; };
 		88221BCD1497225400325DC9 /* Profiler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88221BCC1497225400325DC9 /* Profiler.cpp */; };
 		88260E631488450200142365 /* Logger.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E621488450100142365 /* Logger.cpp */; };
 		88260E651488541E00142365 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E641488541E00142365 /* Window.cpp */; };
@@ -164,6 +165,8 @@
 		88093C9014BC258000C6152F /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
 		881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalizedStringTable.cpp; sourceTree = "<group>"; };
 		881B520B15BBC882009B9482 /* LocalizedStringTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedStringTable.h; sourceTree = "<group>"; };
+		881B521C15BBCD67009B9482 /* LocalizedStringTableLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedStringTableLoader.h; sourceTree = "<group>"; };
+		881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalizedStringTableLoader.cpp; sourceTree = "<group>"; };
 		88221BCA1497217C00325DC9 /* Profiler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Profiler.h; sourceTree = "<group>"; };
 		88221BCC1497225400325DC9 /* Profiler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Profiler.cpp; sourceTree = "<group>"; };
 		88260E621488450100142365 /* Logger.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Logger.cpp; sourceTree = "<group>"; };
@@ -713,6 +716,7 @@
 				88AAC11A14868751007A80A4 /* Exception.h */,
 				88AAC11B14868751007A80A4 /* Factory.h */,
 				881B520B15BBC882009B9482 /* LocalizedStringTable.h */,
+				881B521C15BBCD67009B9482 /* LocalizedStringTableLoader.h */,
 				886DBA3C14C43DCB00652729 /* Basic.h */,
 				886DBA3D14C43DCB00652729 /* Error.h */,
 				886DBA3E14C43DCB00652729 /* Interfaces.h */,
@@ -877,6 +881,7 @@
 				88D86C2D14CD15FB00235AC5 /* Convert.cpp */,
 				88D86C2F14CD1D9900235AC5 /* StreamWrapper.cpp */,
 				88D1301014CF9677001BB071 /* Input.cpp */,
+				881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1196,6 +1201,7 @@
 				88A98F2C14D34982002A79CD /* TypeDatabase.cpp in Sources */,
 				88A98F3114D35F09002A79CD /* TypeRegistration.cpp in Sources */,
 				881B520415BBC63C009B9482 /* LocalizedStringTable.cpp in Sources */,
+				881B522015BBCD8C009B9482 /* LocalizedStringTableLoader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

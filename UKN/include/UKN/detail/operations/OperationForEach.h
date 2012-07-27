@@ -58,7 +58,7 @@ namespace ukn {
 		UKN_SCOPE_VARIABLE(const ukn::ForEachIterator<ukn::traits::strip_qualifier<TYPE>::type >&, __foreach_iterator__, ukn::CreateForEachIterator<ukn::traits::strip_qualifier<TYPE>::type >(COLLECTION))\
 		for(bool more=true; __foreach_iterator__.available(); __foreach_iterator__.next()) \
             if((more = false)) {} else \
-            for(TYPE VARIABLE=__foreach_iterator__.current(); !more; more=true)
+            for(TYPE VARIABLE=__foreach_iterator__.current(); !more; more=true) \
 		
 	#define UKN_ENUMERABLE_FOREACH_INDEXED(TYPE, VARIABLE, INDEXER, COLLECTION)\
 		UKN_SCOPE_VARIABLE(const ukn::ForEachIterator<ukn::traits::strip_qualifier<TYPE>::type >&, __foreach_iterator__, CreateForEachIterator<ukn::traits::strip_qualifier<TYPE>::type >(COLLECTION))\

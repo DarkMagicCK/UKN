@@ -218,7 +218,6 @@ namespace ukn {
                     ukn_string::iterator begin = str_data.begin();
                     while(*begin == '\n' || *begin == ' ')
                         begin++;
-                    ukn_string::iterator end = str_data.end();
                     str_data.erase(str_data.begin(), begin);
                     
                     // base64 decode

@@ -42,7 +42,7 @@ namespace ukn {
     class GraphicDevice {
     public:
         GraphicDevice();
-        ~GraphicDevice();
+        virtual ~GraphicDevice();
         
         static GraphicDevicePtr NullObject();
         

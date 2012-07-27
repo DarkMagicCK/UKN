@@ -35,7 +35,7 @@ namespace ukn {
         friend class detail::SignalImpl;
         
         Connection();
-        ~Connection();
+        virtual ~Connection();
         
         bool isValid() const;
         void disconnect() ;
@@ -97,6 +97,7 @@ namespace ukn {
             ConnectionBase() {
                 __in_delete_list = false;
             }
+            virtual ~ConnectionBase() { }
             
             virtual bool isValid() = 0;
             virtual void disconnect() = 0;

@@ -207,6 +207,9 @@ namespace ukn {
                 mCurrentStatus = AS_Stopped;
                 mCompleteEvent.raise(this, _NullEventArgs);
                 break;
+                
+            default:
+                break;
         }
     }
     

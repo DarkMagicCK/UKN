@@ -29,38 +29,28 @@
 namespace ukn {
     
     ukn_wstring ukn_apple_string_to_wstring(const ukn_string& str) {   
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
 		NSString* nsstr = [[NSString alloc] initWithUTF8String: str.c_str()];
         NSStringEncoding pEncode    =   CFStringConvertEncodingToNSStringEncoding ( kCFStringEncodingUTF32LE );   
 		NSData* pSData              =   [ nsstr dataUsingEncoding : pEncode ];    
 		
-        std::wstring result = std::wstring ( (wchar_t*) [ pSData bytes ], [ pSData length] / sizeof ( wchar_t ) ); 
-        [nsstr release];
-        
-        [pool drain];
+        std::wstring result = std::wstring ( (wchar_t*) [ pSData bytes ], [ pSData length] / sizeof ( wchar_t ) );         
         return result;
 	}
 	
+    
 	ukn_string ukn_apple_wstring_to_string(const ukn_wstring& str) { 
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-
         NSString* pString = [ [ NSString alloc ]    
 							 initWithBytes : (char*)str.data()   
 							 length : str.size() * sizeof(wchar_t)   
                              encoding : CFStringConvertEncodingToNSStringEncoding ( kCFStringEncodingUTF32LE ) ];   
         
         std::string result = [pString UTF8String];
-        [pString release];
-        
-        [pool drain];
 		return result;
 	}
     
     bool ukn_apple_file_exists(const ukn_wstring& file) {        
 		NSString* nsPath = [[NSString alloc] initWithUTF8String:String::WStringToString(file).c_str()];
 		bool result = [[NSFileManager defaultManager] fileExistsAtPath:nsPath];
-        [nsPath release];
         
         return result;
     }
@@ -190,6 +180,8 @@ namespace ukn {
         
         arr.push_back(mode);
         
+        CFRelease(pixEnc);
+        
         CGDisplayModeRelease(cgmode);
         
 #else
@@ -215,7 +207,8 @@ namespace ukn {
                 mode.bpp = 16;
             else if(CFStringCompare(pixEnc, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
                 mode.bpp = 8;
-            
+            CFRelease(pixEnc);
+
             arr.push_back(mode);
         }
         CFRelease(modes);
@@ -316,11 +309,10 @@ namespace ukn {
                              [model UTF8String]);
     }
     
-    MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, MessageBoxOption option) {
-        NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+    MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, int option) {
         
         NSString* nsMessage = [[NSString alloc] initWithUTF8String:mssg.c_str()];
-		NSString* nsTitle = [[NSString alloc] initWithUTF8String:mssg.c_str()];
+		NSString* nsTitle = [[NSString alloc] initWithUTF8String:title.c_str()];
 		
 		UIAlertView* alert = [[UIAlertView alloc]
 							  initWithTitle:nsTitle
@@ -330,17 +322,10 @@ namespace ukn {
 							  otherButtonTitles:nil];
 		[alert show];
         
-        // release
-        [alert release];
-        [nsMessage release];
-        [nsTitle release];
-        
-        [pool drain];
-    
 		return MBB_OK;
     }
     
-    MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, MessageBoxOption option) {
+    MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
         return ukn_apple_message_box(String::WStringToString(mssg),
                                      String::WStringToString(title),
                                      option);

@@ -21,7 +21,6 @@ namespace ukn {
             
             parser->toFirstChild();
             
-            bool stringIdLoaded = false;
             do {
                 std::string lanName = parser->getCurrentNodeName();
                 if(!lanName.empty()) {
@@ -35,18 +34,12 @@ namespace ukn {
                             
                             std::string value = parser->getString("value");
                             
-                            stringTable.addString(lanName, stringId, value);
-                            
-                            if(!stringIdLoaded)
-                            /* add string id */
-                                stringTable.mIdVector.push_back(stringId);
+                            stringTable.addString(lanName, stringId, value); 
                         }
                         
                     } while(parser->toNextChild());
                     
                     parser->toParent();
-                    
-                    stringIdLoaded = true;
                 }
                 
             } while(parser->toNextChild());

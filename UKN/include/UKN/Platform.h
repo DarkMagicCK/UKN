@@ -71,11 +71,12 @@
 // apple os ( osx / ios )
 #if defined(__APPLE__) || defined(__APPLE_CC__)
 
+#include "TargetConditionals.h"
 #include <Availability.h>
 
-    #if !defined(__IPHONE_OS_VERSION_MIN_REQUIRED)
+    #if defined(TARGET_OS_MAC)
         #define UKN_OS_OSX
-    #else
+    #elif defined(TARGET_OS_IOS)
         #define UKN_OS_IOS
     #endif
 

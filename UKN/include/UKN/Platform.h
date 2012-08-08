@@ -74,10 +74,10 @@
 #include "TargetConditionals.h"
 #include <Availability.h>
 
-    #if defined(TARGET_OS_MAC)
-        #define UKN_OS_OSX
-    #elif defined(TARGET_OS_IOS)
+    #if defined(TARGET_OS_IPHONE)
         #define UKN_OS_IOS
+    #elif defined(TARGET_OS_MAC)
+        #define UKN_OS_OSX
     #endif
 
     #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7

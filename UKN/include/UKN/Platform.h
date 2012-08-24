@@ -76,7 +76,8 @@
 
     #if defined(TARGET_OS_IPHONE)
         #define UKN_OS_IOS
-    #elif defined(TARGET_OS_MAC)
+    #endif
+    #if defined(TARGET_OS_MAC)
         #define UKN_OS_OSX
     #endif
 

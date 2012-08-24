@@ -18,7 +18,8 @@ namespace ukn {
                                    const void* initData,
                                    const VertexFormat& format):
     GraphicBuffer(access, usage),
-    mFormat(format) {
+    mFormat(format),
+    mMaped(false) {
 
         glGenBuffers(1, &mId);
         glBindBuffer(GL_ARRAY_BUFFER, mId);
@@ -45,6 +46,9 @@ namespace ukn {
     }
 
     void* GLVertexBuffer::map() {
+        if(mMaped)
+            unmap();
+        
         GLenum gl_acess;
 
         switch (access()) {
@@ -63,6 +67,8 @@ namespace ukn {
 
         glBindBuffer(GL_ARRAY_BUFFER, mId);
         void* p = glMapBuffer(GL_ARRAY_BUFFER, gl_acess);
+        if(p)
+            mMaped = true;
         return p;
     }
 
@@ -70,6 +76,8 @@ namespace ukn {
         glBindBuffer(GL_ARRAY_BUFFER, mId);
         glUnmapBuffer(GL_ARRAY_BUFFER);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        
+        mMaped = false;
     }
 
     void GLVertexBuffer::activate() {
@@ -103,7 +111,8 @@ namespace ukn {
                                  GraphicBuffer::Usage usage,
                                  uint32 desired_count,
                                  const void* initData):
-    GraphicBuffer(access, usage)  {
+    GraphicBuffer(access, usage),
+    mMaped(false) {
         glGenBuffers(1, &mId);
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
@@ -133,6 +142,9 @@ namespace ukn {
     }
 
     void* GLIndexBuffer::map() {
+        if(mMaped)
+            unmap();
+        
         GLenum gl_acess;
 
         switch (access()) {
@@ -150,7 +162,10 @@ namespace ukn {
         }
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
-        return glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, gl_acess);
+        void* p = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, gl_acess);
+        if(p)
+            mMaped = true;
+        return p;
     }
 
     void GLIndexBuffer::resize(uint32 desired_count) {
@@ -168,6 +183,7 @@ namespace ukn {
     void GLIndexBuffer::unmap() {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
         glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
     void GLIndexBuffer::activate() {

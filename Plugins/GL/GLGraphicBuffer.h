@@ -40,6 +40,7 @@ namespace ukn {
     private:
         GLuint mId;
 
+        bool mMaped;
         uint32 mCount;
         VertexFormat mFormat;
     };
@@ -63,7 +64,8 @@ namespace ukn {
 
     private:
         GLuint mId;
-
+        
+        bool mMaped;
         uint32 mCount;
     };
 

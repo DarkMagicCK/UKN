@@ -78,6 +78,9 @@ namespace ukn {
                     mCompleteEvent.raise(this, args);
                 }
                 break;
+                
+            default:
+                break;
         }
     }
     

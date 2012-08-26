@@ -48,10 +48,102 @@
 
 #include "UKN/reflection/TypeDatabase.h"
 
-
 #include <vector>
 #include <map>
 
+template<typename F>
+class Graph {
+public:
+    Graph(F func):
+    mFunc(func) {
+        
+    }
+    
+    Graph(float a, float b, unsigned int numPoints, F func):
+    mA(a),
+    mB(b),
+    mNumPoints(numPoints),
+    mFunc(func) {
+        build(a, b, numPoints, 0.f, 0.f, 1.0);
+    }
+    
+    void build(float a, float b, unsigned int numPoints, float xOffset, float yOffset, float scale) {
+        ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
+        mRenderBuffer = gf.createRenderBuffer();
+        ukn_assert(mRenderBuffer);
+        
+        mVertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::ReadWrite,
+                                              ukn::GraphicBuffer::Static,
+                                              numPoints,
+                                              0,
+                                              ukn::Vertex2D::Format());
+        ukn_assert(mVertexBuffer);
+        
+        mRenderBuffer->bindVertexStream(mVertexBuffer,
+                                        ukn::Vertex2D::Format());
+        mRenderBuffer->setRenderMode(ukn::RM_Point);
+        
+        ukn::Window& wnd = ukn::Context::Instance().getApp().getWindow();
+        ukn::Vertex2D* vertices = (ukn::Vertex2D*)mVertexBuffer->map();
+        
+        for(unsigned int i = 0; i < numPoints; ++i) {
+            float x = a + (b - a) * (float)i / numPoints;
+            vertices[i].x = x;
+            vertices[i].y = -mFunc(x);
+            vertices[i].z = 0;
+            vertices[i].color = 0xFF0000FF;
+        }
+        
+        float rScale = (wnd.width() / (b - a)) * scale;
+        for(unsigned int i = 0; i < numPoints; ++i) {
+            vertices[i].x = vertices[i].x * rScale + wnd.width() / 2 + xOffset;
+            vertices[i].y = vertices[i].y * rScale + wnd.height() / 2 + yOffset;
+        }
+        
+        mVertexBuffer->unmap();
+        
+        mA = a;
+        mB = b;
+        mNumPoints = numPoints;
+        mScale = scale;
+        mXOffset = xOffset;
+        mYOffset = yOffset;
+    }
+    
+    void setColor(const ukn::Color& clr) {
+        ukn::Vertex2D* vertices = (ukn::Vertex2D*)mVertexBuffer->map();
+        for(unsigned int i = 0; i < mNumPoints; ++i) {
+            vertices[i].color = clr.toHWColor();
+        }
+        mVertexBuffer->unmap();
+    }
+    
+    void render() {
+        ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
+        gd.onRenderBuffer(mRenderBuffer);
+    }
+    
+    float a() const { return mA; }
+    float b() const { return mB; }
+    float scale() const { return mScale; }
+    unsigned int numPoints() const { return mNumPoints; }
+    
+private:
+    F mFunc;
+    float mA;
+    float mB;
+    float mXOffset;
+    float mYOffset;
+    float mScale;
+    unsigned int mNumPoints;
+    
+    ukn::RenderBufferPtr mRenderBuffer;
+    ukn::GraphicBufferPtr mVertexBuffer;
+};
+
+static float testGraphFunc(float x) {
+    return pow(2.71828182846f, -x*x / 10) * cos(x * x);
+}
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -60,103 +152,49 @@ public:
         
     }
     
-    ukn::Rectangle viewRect;
-    
     void onMouseEvent(void* sender, ukn::input::MouseEventArgs& e) {
-   //     if(e.state == ukn::input::Mouse::Press)
-    //        player->moveTo(ukn::Vector2(e.x, e.y));
+   
     }
     
+    void onKeyEvent(void* sender, ukn::input::KeyEventArgs& e) {
+        if(e.state == ukn::input::Key::Press) {
+            switch(e.key) {
+                case ukn::input::Key::Equals:
+                    testGraph->build(-5, 5, 5000, 0, 0, testGraph->scale() * 1.57);
+                    break;
+                
+                case ukn::input::Key::Minus:
+                    testGraph->build(-5, 5, 5000, 0, 0, testGraph->scale() * 0.717);
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+    }
+        
     void onInit() {
-        mSpriteBatch = ukn::Context::Instance().getGraphicFactory().createSpriteBatch();
-        
-        ukn::ConfigParserPtr cfg = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"asset.xml");
-        ukn::AssetManager::Instance().deserialize(cfg);
-        
-        mFont = ukn::AssetManager::Instance().load<ukn::Font>(L"liheipro");
-        mTexture = ukn::AssetManager::Instance().load<ukn::Texture>(L"索拉");
- /*       
-        ukn::ConfigParserPtr cfg2 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"player.xml");
-		if(cfg2) {
-            player = new df::Player();
-            player->deserialize(cfg2);
-		}
-        scene = new df::Scene();
-        scene->addSceneObject(player);*/
-        
-        ukn::ConfigParserPtr cfg3 = ukn::AssetManager::Instance().load<ukn::ConfigParser>(L"isometric_grass_and_water.tmx");
-        
-        viewRect = ukn::Rectangle(0,
-                                  0,
-                                  getWindow().width(),
-                                  getWindow().height());
-
-        if(cfg3) {
-            mMap = new ukn::tmx::Map();
-            mMap->deserialize(cfg3);
-            
-         //  mMap->setMapViewRect(ukn::Rectangle(0, 0, 1280, 300));
-        } else 
-            mMap = 0;
-        
         getWindow().onMouseEvent() += ukn::Bind(this, &MyApp::onMouseEvent);
+        getWindow().onKeyEvent() += ukn::Bind(this, &MyApp::onKeyEvent);
+        
+        testGraph = new Graph<float (*)(float)>(-5, 5, 5000, testGraphFunc);
     }
     
     void onUpdate() {
-        if(getWindow().isKeyDown(ukn::input::Key::Left)) 
-            viewRect.x1 -= 1.f;
-        if(getWindow().isKeyDown(ukn::input::Key::Right)) 
-            viewRect.x1 += 1.f;
-        if(getWindow().isKeyDown(ukn::input::Key::Up)) 
-            viewRect.y1 -= 1.f;
-        if(getWindow().isKeyDown(ukn::input::Key::Down)) 
-            viewRect.y1 += 1.f;
-        if(getWindow().isKeyDown(ukn::input::Key::W)) 
-            viewRect.y2 -= 1.f;
-        if(getWindow().isKeyDown(ukn::input::Key::S)) 
-            viewRect.y2 += 1.f;
-        if(getWindow().isKeyDown(ukn::input::Key::A)) 
-            viewRect.x2 -= 1.f;
-        if(getWindow().isKeyDown(ukn::input::Key::D)) 
-            viewRect.x2 += 1.f;
-        
-    //    scene->onUpdate();
-        
-      //  mMap->setMapViewRect(viewRect);
-       // mMap->setPosition(ukn::Vector2(viewRect.x1, viewRect.y1));
+       
     }
     
     void onRender() {
-        ukn::Context::Instance().getGraphicFactory().getGraphicDevice().clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Lightskyblue, 0, 0);
+        ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
         
+        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
         
+        testGraph->render();
         
-        mSpriteBatch->begin(ukn::SBS_BackToFront);
-        {
-            if(mMap) {
-                mMap->render();
-            }
-            ukn::ProfileData data = ukn::Profiler::Instance().get("sk_anim");
-            
-
-//            printf("%s\n", data.toFormattedString().c_str());
-        }       
-        mSpriteBatch->end();
-  //      scene->onRender();
-
     }
     
 private:
-    ukn::SharedPtr<ukn::SpriteBatch> mSpriteBatch;
-
-    ukn::tmx::Map* mMap;
-    
-    
-    ukn::FontPtr mFont;
-    
-    ukn::TexturePtr mTexture;
-    ukn::StoryBoard mAnimation;
-    int x, y;
+    Graph<float (*)(float)>* testGraph;
 };
 
 #include "UKN/Thread.h"
@@ -175,17 +213,15 @@ int CALLBACK WinMain(
 ) {
 #endif
     
-    
     // register plugins by hand for testing purpose
     ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
-    MyApp instance("Test App");
+    MyApp instance("Graph It!");
 
     // create app context
     instance.create(L"config.xml");
-    
     
     ukn::FrameCounter::Instance().setDesiredFps(60);
     

@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8802987614CA982F009D7670 /* RenderHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8802987514CA982F009D7670 /* RenderHelper.cpp */; };
+		8802987614CA982F009D7670 /* GraphicContext.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8802987514CA982F009D7670 /* GraphicContext.cpp */; };
 		88029B0A1491DB8B00AB1490 /* Font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88029B091491DB8B00AB1490 /* Font.cpp */; };
 		88029B0D1491DF9F00AB1490 /* Asset.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88029B0C1491DF9F00AB1490 /* Asset.cpp */; };
 		88093C2B14BB218600C6152F /* Component.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88093C2A14BB218600C6152F /* Component.cpp */; };
@@ -115,8 +115,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8802987314CA89AC009D7670 /* RenderHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderHelper.h; sourceTree = "<group>"; };
-		8802987514CA982F009D7670 /* RenderHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderHelper.cpp; sourceTree = "<group>"; };
+		8802987314CA89AC009D7670 /* GraphicContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphicContext.h; sourceTree = "<group>"; };
+		8802987514CA982F009D7670 /* GraphicContext.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicContext.cpp; sourceTree = "<group>"; };
 		88029B091491DB8B00AB1490 /* Font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Font.cpp; sourceTree = "<group>"; };
 		88029B0C1491DF9F00AB1490 /* Asset.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Asset.cpp; sourceTree = "<group>"; };
 		88038F40149776BE00C8ACE0 /* Mesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mesh.h; sourceTree = "<group>"; };
@@ -744,7 +744,7 @@
 				88AAC12F14868751007A80A4 /* RenderBuffer.h */,
 				88AAC13014868751007A80A4 /* RenderEffect.h */,
 				88AAC13114868751007A80A4 /* RenderView.h */,
-				8802987314CA89AC009D7670 /* RenderHelper.h */,
+				8802987314CA89AC009D7670 /* GraphicContext.h */,
 				88AAC13214868751007A80A4 /* Resource.h */,
 				88AAC13314868751007A80A4 /* Scene.h */,
 				88AAC13514868751007A80A4 /* Shader.h */,
@@ -902,7 +902,7 @@
 				884CE3F6148F74D600F58E2E /* SpriteBatch.cpp */,
 				88029B091491DB8B00AB1490 /* Font.cpp */,
 				88278EDF149C947B00C7ED8A /* Scene.cpp */,
-				8802987514CA982F009D7670 /* RenderHelper.cpp */,
+				8802987514CA982F009D7670 /* GraphicContext.cpp */,
 				88B2236814CDE18D00C871C8 /* RenderTarget.cpp */,
 			);
 			path = Render;
@@ -1190,7 +1190,7 @@
 				88093C9F14BC258000C6152F /* zip.c in Sources */,
 				88093CA014BC258000C6152F /* zutil.c in Sources */,
 				88B0FD4B14C609F600346AC5 /* SequencialAnimation.cpp in Sources */,
-				8802987614CA982F009D7670 /* RenderHelper.cpp in Sources */,
+				8802987614CA982F009D7670 /* GraphicContext.cpp in Sources */,
 				88D86C2E14CD15FB00235AC5 /* Convert.cpp in Sources */,
 				88D86C3014CD1D9900235AC5 /* StreamWrapper.cpp in Sources */,
 				88B2236914CDE18D00C871C8 /* RenderTarget.cpp in Sources */,

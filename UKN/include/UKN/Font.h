@@ -43,6 +43,7 @@ namespace ukn {
         FSP_Shadow_XOffset,
         FSP_Shadow_YOffset,
         FSP_Stroke_Width,
+        FSP_Size,
     };
     
     class UKN_API Font: Uncopyable, public virtual IRenderable, public virtual IConfigSerializable {
@@ -62,7 +63,7 @@ namespace ukn {
         void setStyle(FontStyle style, bool flag);
         void setStyleProperty(FontStyleProperty sp, int32 prop);
         
-        void draw(const char* str, float x, float y, FontAlignment alignment, const Color& clr = color::White);
+        void draw(const wchar_t* str, float x, float y, FontAlignment alignment, const Color& clr = color::White);
         
         // inherited from Renderable
         void render();
@@ -70,7 +71,7 @@ namespace ukn {
         void onRenderBegin();
         void onRenderEnd();
         
-        float2 getStringDimensions(const char* str, float kw=0, float kh=0);
+        float2 getStringDimensions(const wchar_t* str, float kw=0, float kh=0);
         
         const String& getName() const;
         

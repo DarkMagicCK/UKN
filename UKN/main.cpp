@@ -86,12 +86,18 @@ public:
         ukn::Window& wnd = ukn::Context::Instance().getApp().getWindow();
         ukn::Vertex2D* vertices = (ukn::Vertex2D*)mVertexBuffer->map();
         
+        float maxy = -100000.f, miny = 1000000.f;
         for(unsigned int i = 0; i < numPoints; ++i) {
             float x = a + (b - a) * (float)i / numPoints;
             vertices[i].x = x;
             vertices[i].y = -mFunc(x);
             vertices[i].z = 0;
-            vertices[i].color = 0xFF0000FF;
+            vertices[i].color = ukn::color::Red;
+            
+            if(maxy < vertices[i].y)
+                maxy = vertices[i].y;
+            if(miny > vertices[i].y)
+                miny = vertices[i].y;
         }
         
         float rScale = (wnd.width() / (b - a)) * scale;
@@ -105,9 +111,11 @@ public:
         mA = a;
         mB = b;
         mNumPoints = numPoints;
-        mScale = scale;
+        mScale = rScale;
         mXOffset = xOffset;
         mYOffset = yOffset;
+        mMaxY = -miny;
+        mMinY = -maxy;
     }
     
     void setColor(const ukn::Color& clr) {
@@ -126,6 +134,8 @@ public:
     float a() const { return mA; }
     float b() const { return mB; }
     float scale() const { return mScale; }
+    float maxY() const { return mMaxY; }
+    float minY() const { return mMinY; }
     unsigned int numPoints() const { return mNumPoints; }
     
 private:
@@ -135,6 +145,8 @@ private:
     float mXOffset;
     float mYOffset;
     float mScale;
+    float mMaxY;
+    float mMinY;
     unsigned int mNumPoints;
     
     ukn::RenderBufferPtr mRenderBuffer;
@@ -166,18 +178,44 @@ public:
                 case ukn::input::Key::Minus:
                     testGraph->build(-5, 5, 5000, 0, 0, testGraph->scale() * 0.717);
                     break;
+                    
+                case ukn::input::Key::Left:
+                    testGraph->build(testGraph->a() - 0.5,
+                                     testGraph->b(),
+                                     5000,
+                                     0,
+                                     0,
+                                     testGraph->scale());
+                    break;
+                    
+                case ukn::input::Key::Right:
+                    testGraph->build(testGraph->a() + 0.5f,
+                                     testGraph->b() + 0.5f,
+                                     5000,
+                                     0,
+                                     0,
+                                     testGraph->scale());
+                    break;
                 
                 default:
                     break;
             }
         }
     }
+    
+    void onResize(void * sender, ukn::WindowResizeEventArgs& args) {
+        testGraph->build(-5, 5, 5000, 0, 0, 1);
+    }
         
     void onInit() {
         getWindow().onMouseEvent() += ukn::Bind(this, &MyApp::onMouseEvent);
         getWindow().onKeyEvent() += ukn::Bind(this, &MyApp::onKeyEvent);
+        getWindow().onResize() += ukn::Bind(this, &MyApp::onResize);
         
         testGraph = new Graph<float (*)(float)>(-5, 5, 5000, testGraphFunc);
+        
+        mFont = ukn::AssetManager::Instance().load<ukn::Font>("Menlo.ttc");
+        mFont->setStyleProperty(ukn::FSP_Size, 20);
     }
     
     void onUpdate() {
@@ -191,10 +229,23 @@ public:
         
         testGraph->render();
         
+        mFont->draw((L"MaxY: " + ukn::String::AnyToWString(testGraph->maxY())).c_str(),
+                    0,
+                    getWindow().height() / 2 - testGraph->maxY() * testGraph->scale(),
+                    ukn::FA_Left,
+                    ukn::color::Skyblue);
+        mFont->draw((L"MinY: " + ukn::String::AnyToWString(testGraph->minY())).c_str(),
+                    0,
+                    getWindow().height() / 2 - testGraph->minY() * testGraph->scale(),
+                    ukn::FA_Left, ukn::color::Red);
+        mFont->render();
     }
     
 private:
     Graph<float (*)(float)>* testGraph;
+    
+    
+    ukn::FontPtr mFont;
 };
 
 #include "UKN/Thread.h"
@@ -221,7 +272,10 @@ int CALLBACK WinMain(
     MyApp instance("Graph It!");
 
     // create app context
-    instance.create(L"config.xml");
+    ukn::ContextCfg cfg;
+    cfg.render_cfg.width = 1024;
+    cfg.render_cfg.height = 450;
+    instance.create(cfg);
     
     ukn::FrameCounter::Instance().setDesiredFps(60);
     

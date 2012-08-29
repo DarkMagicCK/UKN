@@ -29,7 +29,7 @@ namespace ukn {
     }
     
     Box GraphicContext::getBound() const {
-        
+        return Box();
     }
     
     RenderBufferPtr GraphicContext::getRenderBuffer() const {

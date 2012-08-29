@@ -126,7 +126,7 @@ namespace ukn {
                 return;
             
             FT_Set_Pixel_Sizes(*face, 0, size);
-            if(!FT_Load_Glyph(*face, index, FT_LOAD_NO_BITMAP)) {
+            if(!FT_Load_Glyph(*face, index, FT_LOAD_DEFAULT)) {
                 FT_GlyphSlot glyph = (*face)->glyph;
                 FT_Bitmap bits;
                 if(glyph->format == ft_glyph_format_outline) {
@@ -194,7 +194,7 @@ namespace ukn {
     };
     
     struct Font::StringData {
-        Array<uint16> string_to_render;
+        std::wstring string_to_render;
         float x;
         float y;
         float char_rot;
@@ -215,7 +215,7 @@ namespace ukn {
         
         }
         
-        StringData(const char* str, float _x, float _y, FontAlignment align):
+        StringData(const wchar_t* str, float _x, float _y, FontAlignment align):
         x(_x),
         y(_y),
         char_rot(0),
@@ -223,9 +223,7 @@ namespace ukn {
         kerning_height(0),
         line_width(0),
         alignment(align) {
-            uint32 len = (uint32)strlen(str);
-            string_to_render.resize(len + 1);
-            utf8_to_unicode(&string_to_render[0], str, len);
+            string_to_render = str;
         }
     };
     
@@ -246,13 +244,41 @@ namespace ukn {
         
     }
     
-    bool Font::loadFromResource(const ResourcePtr& resource) {        
+    bool Font::loadFromResource(const ResourcePtr& resource) {
+        if(resource->getName().find(L".ttf") != String::npos ||
+           resource->getName().find(L".otf") != String::npos ||
+           resource->getName().find(L".ttc") != String::npos) {
+            bool result = mFace->load(resource);
+            if(result) {
+                mGlyphs.resize(mFace->face->num_glyphs);
+                
+                for(int i = 0; i < mFace->face->num_glyphs; ++i) {
+                    mGlyphs[i].size = mFontSize;
+                    mGlyphs[i].face = &mFace->face;
+                }
+                
+                mEnableShadow = false;
+                mEnableStroke = false;
+                
+                mShadowXOffset = 0;
+                mShadowYOffset = 0;
+                
+                mStrokeWidth = 0;
+                
+                mFontSize = 14;
+                mFontName = resource->getName();
+            }
+            return result;
+        }
+        
         ConfigParserPtr config = ConfigParser::MakeParser(resource);
         
-        if(config)  
+        if(config)
             return deserialize(config);
-        else
+        else {
             log_error(L"ukn::Font::loadFromResource: invalid resource ptr, with resource name" + resource->getName());
+            
+                    }
         return false;
     }
     
@@ -348,6 +374,7 @@ namespace ukn {
             case FSP_Stroke_Width: mStrokeWidth = prop; break;
             case FSP_Shadow_XOffset: mShadowXOffset = prop; break;
             case FSP_Shadow_YOffset: mShadowYOffset = prop; break;
+            case FSP_Size: mFontSize = prop; break;
         }
     }
     
@@ -359,7 +386,7 @@ namespace ukn {
         float x = data.x;
         float y = data.y;
         
-        Array<uint16>::const_iterator it = data.string_to_render.begin();
+        std::wstring::const_iterator it = data.string_to_render.begin();
         while(it != data.string_to_render.end() && *it != 0) {
             if(*it != L'\n') {
                 if(*it == L' ') {
@@ -425,7 +452,7 @@ namespace ukn {
         return idx;
     }
     
-    void Font::draw(const char* str, float x, float y, FontAlignment alignment, const Color& clr) {
+    void Font::draw(const wchar_t* str, float x, float y, FontAlignment alignment, const Color& clr) {
         // in windows, gbk -> utf8
         Font::StringData data(str, x, y, alignment);
         data.clr = clr;
@@ -437,13 +464,12 @@ namespace ukn {
         return mFontName;
     }
     
-    float2 Font::getStringDimensions(const char* str, float kw, float kh) {
+    float2 Font::getStringDimensions(const wchar_t* str, float kw, float kh) {
         float2 dim(0.f, 0.f);
         
         float tmpw = 0.f;
-        uint32 size = (uint32)strlen(str);
-        uint16* ustr = ukn_malloc_t(uint16, size+1);
-        utf8_to_unicode(ustr, str, size);
+        uint32 size = (uint32)wcslen(str);
+        const wchar_t* ustr = str;
         while(ustr && *ustr) {
             if(*ustr != L'\n') {
                 tmpw += mGlyphs[getGlyphByChar(*ustr)].imgw + kw;
@@ -457,7 +483,6 @@ namespace ukn {
             
             ustr++;
         }
-        ukn_free(ustr);
         return dim;
     }
     

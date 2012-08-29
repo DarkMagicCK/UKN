@@ -30,6 +30,9 @@ namespace ukn {
         
         void render();
         
+        void moveTo(float x, float y);
+        void lineTo(float x, float y);
+        
     private:
         GraphicBufferPtr mVertexBuffer;
         RenderBufferPtr mRenderBuffer;

@@ -60,6 +60,13 @@ namespace ukn {
             return sstr.str();
         }
         
+        template<typename T>
+        static ukn_wstring AnyToWString(const T& val) {
+            std::wostringstream sstr;
+            sstr << val;
+            return sstr.str();
+        }
+        
     protected:
         StringFormat mFormat;
         

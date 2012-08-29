@@ -343,7 +343,7 @@ namespace ukn {
     ukn_string String::WStringToString(const ukn_wstring& str) {
 #if defined(UKN_OS_WINDOWS)
         return ukn_win_wstring_to_string(str);
-#elif defined(UKN_OS_IOS)
+#elif defined(UKN_OS_IOS) || defined(UKN_OS_OSX)
         return ukn_apple_wstring_to_string(str);
 #else
         return ukn_normal_wstring_to_string(str);
@@ -353,7 +353,7 @@ namespace ukn {
     ukn_wstring String::StringToWString(const ukn_string& str) {
 #if defined(UKN_OS_WINDOWS)
         return ukn_win_string_to_wstring(str);
-#elif defined(UKN_OS_IOS)
+#elif defined(UKN_OS_IOS) || defined(UKN_OS_OSX)
         return ukn_apple_string_to_wstring(str);
 #else
         return ukn_normal_string_to_wstring(str);

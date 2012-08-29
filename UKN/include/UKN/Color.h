@@ -152,17 +152,17 @@ namespace ukn {
         }
         
         uint32 toHWColor() const { 
-            return ((unsigned int)(this->a*255.0f)<<24) + 
-                    ((unsigned int)(this->r*255.0f)<<16) +
-                    ((unsigned int)(this->g*255.0f)<<8) + 
-                    (unsigned int)(this->b*255.0f);
+            return ((unsigned int)(this->a*255.0f)) +
+                    ((unsigned int)(this->r*255.0f)<<24) +
+                    ((unsigned int)(this->g*255.0f)<<16) +
+                    ((unsigned int)(this->b*255.0f) << 8);
         }
         
         static uint32 ToHWColor(float oR, float og, float ob, float oa)  { 
-            return ((unsigned int)(oa*255.0f)<<24) + 
-                    ((unsigned int)(oR*255.0f)<<16) +
-                    ((unsigned int)(og*255.0f)<<8) + 
-                    (unsigned int)(ob*255.0f);
+            return ((unsigned int)(oa*255.0f)) +
+                    ((unsigned int)(oR*255.0f)<<24) +
+                    ((unsigned int)(og*255.0f)<<16) +
+                    ((unsigned int)(ob*255.0f)<<8);
         }
         
         static Color FromHWColor(uint32 col) {

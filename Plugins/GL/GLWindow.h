@@ -42,6 +42,8 @@ namespace ukn {
         void onWindowResize(void* wnd, WindowResizeEventArgs&);
         void onWindowMove(Window& wnd, uint32 x, uint32 y);
         
+        void setName(const ukn_string& name);
+        
         GLFrameBufferPtr getFrameBuffer() const;
         
     private:

@@ -81,7 +81,7 @@ public:
         
         mRenderBuffer->bindVertexStream(mVertexBuffer,
                                         ukn::Vertex2D::Format());
-        mRenderBuffer->setRenderMode(ukn::RM_Point);
+        mRenderBuffer->setRenderMode(ukn::RM_LineLoop);
         
         ukn::Window& wnd = ukn::Context::Instance().getApp().getWindow();
         ukn::Vertex2D* vertices = (ukn::Vertex2D*)mVertexBuffer->map();
@@ -103,7 +103,7 @@ public:
         float rScale = (wnd.width() / (b - a)) * scale;
         for(unsigned int i = 0; i < numPoints; ++i) {
             vertices[i].x = vertices[i].x * rScale + wnd.width() / 2 + xOffset;
-            vertices[i].y = vertices[i].y * rScale + wnd.height() / 2 + yOffset;
+            vertices[i].y = vertices[i].y * rScale * 2 + wnd.height() / 2 + yOffset;
         }
         
         mVertexBuffer->unmap();
@@ -154,7 +154,7 @@ private:
 };
 
 static float testGraphFunc(float x) {
-    return pow(2.71828182846f, -x*x / 10) * cos(x * x);
+    return pow(2.71828182846, -(x*x / 10)) * cos(x * x);
 }
 
 class MyApp: public ukn::AppInstance {
@@ -212,9 +212,9 @@ public:
         getWindow().onKeyEvent() += ukn::Bind(this, &MyApp::onKeyEvent);
         getWindow().onResize() += ukn::Bind(this, &MyApp::onResize);
         
-        testGraph = new Graph<float (*)(float)>(-5, 5, 5000, testGraphFunc);
+        testGraph = new Graph<float (*)(float)>(-5, 5, 1000, testGraphFunc);
         
-        mFont = ukn::AssetManager::Instance().load<ukn::Font>("Menlo.ttc");
+        mFont = ukn::AssetManager::Instance().load<ukn::Font>("Thonburi.ttf");
         mFont->setStyleProperty(ukn::FSP_Size, 20);
     }
     
@@ -225,30 +225,41 @@ public:
     void onRender() {
         ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
         
-        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
+        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Skyblue, 0, 0);
         
         testGraph->render();
         
         mFont->draw((L"MaxY: " + ukn::String::AnyToWString(testGraph->maxY())).c_str(),
                     0,
-                    getWindow().height() / 2 - testGraph->maxY() * testGraph->scale(),
+                    getWindow().height() / 2 - testGraph->maxY() * testGraph->scale() * 2,
                     ukn::FA_Left,
-                    ukn::color::Skyblue);
+                    ukn::color::Red);
         mFont->draw((L"MinY: " + ukn::String::AnyToWString(testGraph->minY())).c_str(),
                     0,
-                    getWindow().height() / 2 - testGraph->minY() * testGraph->scale(),
+                    getWindow().height() / 2 - testGraph->minY() * testGraph->scale() * 2,
+                    ukn::FA_Left, ukn::color::Red);
+        mFont->draw(L"-5",
+                    0,
+                    getWindow().height() / 2 + 10,
+                    ukn::FA_Left, ukn::color::Red);
+        mFont->draw(L"5",
+                    getWindow().width() - 20,
+                    getWindow().height() / 2 + 10,
+                    ukn::FA_Left, ukn::color::Red);
+        mFont->draw(L"0",
+                    getWindow().width() / 2,
+                    getWindow().height() / 2 + 10,
                     ukn::FA_Left, ukn::color::Red);
         mFont->render();
     }
     
 private:
     Graph<float (*)(float)>* testGraph;
-    
-    
     ukn::FontPtr mFont;
 };
 
 #include "UKN/Thread.h"
+#include "SqaureGame.h"
 
 #ifndef UKN_OS_WINDOWS
 int main (int argc, const char * argv[])
@@ -269,12 +280,12 @@ int CALLBACK WinMain(
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
-    MyApp instance("Graph It!");
+    SquareGame instance("SquareGame!");
 
     // create app context
     ukn::ContextCfg cfg;
     cfg.render_cfg.width = 1024;
-    cfg.render_cfg.height = 450;
+    cfg.render_cfg.height = 600;
     instance.create(cfg);
     
     ukn::FrameCounter::Instance().setDesiredFps(60);

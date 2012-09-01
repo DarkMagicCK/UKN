@@ -30,6 +30,8 @@ namespace ukn {
         int2  getMousePos() { return int2(0, 0); }
         int32 getMouseWheel() { return 0; }
         
+        void setName(const ukn_string& name) { }
+        
         bool isKeyDown(input::Key::KeyCode key) { return false; }
         bool isMouseButtonDown(input::Mouse::MouseButton btn) { return false; }
         

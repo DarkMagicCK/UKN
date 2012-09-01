@@ -72,8 +72,12 @@ namespace ukn {
         
         virtual void setMousePos(int32 x, int32 y) = 0;
         
+        void setWindowTitle(const ukn_string& title);
+        const ukn_string& getWindowTitle() const;
+        
     protected:
         ukn_string mName;
+        virtual void setName(const ukn_string& name) = 0;
         
     public:
         int32  left() const;

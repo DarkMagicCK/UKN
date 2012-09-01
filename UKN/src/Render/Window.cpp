@@ -19,6 +19,15 @@ namespace ukn {
         
     }
     
+    void Window::setWindowTitle(const ukn_string& title) {
+        mName = title;
+        this->setName(title);
+    }
+    
+    const ukn_string& Window::getWindowTitle() const {
+        return mName;
+    }
+    
     int32 Window::left() const {
         return mLeft;
     }

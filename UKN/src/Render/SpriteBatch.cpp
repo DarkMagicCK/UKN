@@ -303,11 +303,11 @@ namespace ukn {
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Color& color) {
-        draw(texture, pos, 0.f);
+        draw(texture, pos, 0.f, color);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color) {
-        draw(texture, dstRect, 0.f);
+        draw(texture, dstRect, 0.f, color);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color) {
@@ -315,7 +315,7 @@ namespace ukn {
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, const Color& color) {
-        draw(texture, pos, center, rot, scale, 0.f);
+        draw(texture, pos, center, rot, scale, 0.f, color);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, float layerDepth, const Color& color) {
@@ -460,7 +460,7 @@ namespace ukn {
     }
     
     SpriteBatch& SpriteBatch::DefaultObject() {
-        static SpriteBatch* instance = Context::Instance().getGraphicFactory().createSpriteBatch();
+        static SpriteBatchPtr instance = Context::Instance().getGraphicFactory().createSpriteBatch();
         return *instance;
     }
     

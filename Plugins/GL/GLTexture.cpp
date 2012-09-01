@@ -86,7 +86,7 @@ namespace ukn {
             uint8* texData;
             if(initialData == 0) {
                 texData = ukn_malloc_t(uint8, w*h*sizeof(uint32));
-                memset(texData, 0, w*h*sizeof(uint32));
+                memset(texData, 0xFF, w*h*sizeof(uint32));
             } else {
                 texData = const_cast<uint8*>(initialData);
             }

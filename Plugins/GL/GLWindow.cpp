@@ -249,6 +249,10 @@ namespace ukn {
         return mFrameBuffer;
     }
     
+    void GLWindow::setName(const ukn_string& name) {
+        glfwSetWindowTitle(mGlfwWindow, name.c_str());
+    }
+    
     void GLWindow::updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h) {
         mFrameBuffer->mLeft = 0;
         mFrameBuffer->mTop = 0;

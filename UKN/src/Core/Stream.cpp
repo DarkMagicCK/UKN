@@ -619,7 +619,7 @@ typedef socklen_t SocketLengthType;
 const SocketType NotASocket = SocketType(-1);
 
 static void CloseSocket(SocketType socket) {
-    close(socket);
+    //::close(socket);
 }
 
 #endif

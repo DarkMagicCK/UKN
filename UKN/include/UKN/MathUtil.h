@@ -581,7 +581,7 @@ namespace ukn {
         
         AABB2(real _x1, real _y1, real _x2, real _y2, bool asWH=false):
         x1(_x1), y1(_y1),
-        x2(_x2), y2(_y2) {
+        x2(asWH ? _x1 + _x2: _x2), y2(asWH ? _y1 + _y2 : _y2) {
             
         }
         
@@ -612,6 +612,13 @@ namespace ukn {
             this->y1 = upper.y;
             this->x2 = lower.x;
             this->y2 = lower.y;
+        }
+        
+        void setXY(real _x1, real _y1) {
+            this->x2 = _x1 + this->width();
+            this->y2 = _y1 + this->height();
+            this->x1 = _x1;
+            this->y1 = _y1;
         }
         
         void set(real _x1, real _y1, real _x2, real _y2, bool asWH=false) {

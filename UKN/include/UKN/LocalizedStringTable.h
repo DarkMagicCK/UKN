@@ -14,19 +14,21 @@
 #include <string>
 #include <exception>
 
+#include "UKN/Platform.h"
+
 namespace ukn {
 
     class StringMap {
     public:
-        typedef std::map<std::string, std::string> StringMapCont;
+        typedef std::map<ukn_string, ukn_string> StringMapCont;
         
-        std::string stringAtIndex(size_t index) const;
-        std::string stringAtId(const std::string& sid) const;
+        ukn_string stringAtIndex(size_t index) const;
+        ukn_string stringAtId(const ukn_string& sid) const;
 
-        void setStringAtId(const std::string& sid, const std::string& string);
-        void addString(const std::string& sid, const std::string& string);
-        void removeStringAtId(const std::string& sid);
-        void setStringIdAtId(const std::string& sid, const std::string& after);
+        void setStringAtId(const ukn_string& sid, const ukn_string& string);
+        void addString(const ukn_string& sid, const ukn_string& string);
+        void removeStringAtId(const ukn_string& sid);
+        void setStringIdAtId(const ukn_string& sid, const ukn_string& after);
         
         size_t size() const;
 
@@ -46,39 +48,39 @@ namespace ukn {
     
     class LocalizedStringTable {
     public:
-        typedef std::map<std::string /* lan */, StringMap /* StringMap */> LanguageMap;
+        typedef std::map<ukn_string /* lan */, StringMap /* StringMap */> LanguageMap;
         
-        const StringMap& languageStringMapAtId(const std::string& lanName) const;
-        StringMap& languageStringMapAtId(const std::string& lanName);
+        const StringMap& languageStringMapAtId(const ukn_string& lanName) const;
+        StringMap& languageStringMapAtId(const ukn_string& lanName);
         
-        void addLanguage(const std::string& lanName);
+        void addLanguage(const ukn_string& lanName);
 
-        void removeLanguage(const std::string& lanName);
-        void setCurrentLanguage(const std::string& language);
+        void removeLanguage(const ukn_string& lanName);
+        void setCurrentLanguage(const ukn_string& language);
         
-        const std::string& getCurrentLanguage() const;
+        const ukn_string& getCurrentLanguage() const;
         
-        std::string stringById(const std::string& sid) const;
+        ukn_string stringById(const ukn_string& sid) const;
         
-        void setStringById(const std::string& sid, const std::string& string);
-        void addString(const std::string& sid, const std::string& string);
-        void addString(const std::string& lan, const std::string& sid, const std::string& string);
+        void setStringById(const ukn_string& sid, const ukn_string& string);
+        void addString(const ukn_string& sid, const ukn_string& string);
+        void addString(const ukn_string& lan, const ukn_string& sid, const ukn_string& string);
 
-        void removeStringById(const std::string& sid);
+        void removeStringById(const ukn_string& sid);
         
-        std::string getString(const std::string& lan, const std::string& sid);
-        void setString(const std::string& lan, const std::string& sid, const std::string& string);
-        void setStringIdAtId(const std::string& before, const std::string& after);
+        ukn_string getString(const ukn_string& lan, const ukn_string& sid);
+        void setString(const ukn_string& lan, const ukn_string& sid, const ukn_string& string);
+        void setStringIdAtId(const ukn_string& before, const ukn_string& after);
         
-        std::string getIdByIndex(size_t index) const;
+        ukn_string getIdByIndex(size_t index) const;
         
         size_t sizeOfLanguages() const;
         size_t sizeOfStrings() const;
         
         void clear();
     
-        bool checkLanguage(const std::string& lanName) const;
-        bool checkStringId(const std::string& stringId) const;
+        bool checkLanguage(const ukn_string& lanName) const;
+        bool checkStringId(const ukn_string& stringId) const;
         
         typedef LanguageMap::iterator iterator;
         typedef LanguageMap::const_iterator const_iterator;
@@ -91,14 +93,14 @@ namespace ukn {
         
     private:
         friend class LocalizedStringTableLoader;
-        void updateStringId(const std::string& before, const std::string& after);
+        void updateStringId(const ukn_string& before, const ukn_string& after);
         
         LanguageMap mLocalizedString;
         
-        typedef std::vector<std::string> IdVector;
+        typedef std::vector<ukn_string> IdVector;
         IdVector mIdVector;
         
-        std::string mCurrentLanguage;
+        ukn_string mCurrentLanguage;
     };
 
 } // namespace ukn

@@ -62,7 +62,7 @@ namespace ukn {
     private:
         struct myWritter: public pugi::xml_writer {
             void write(const void* data, size_t size);
-            ukn_string str;
+            std::string str;
             
             myWritter(const char* indent);
             

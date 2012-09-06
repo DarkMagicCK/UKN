@@ -105,12 +105,12 @@ namespace ukn {
         }
         
         void Map::parseProperties(PropertyContainer& cont, const ConfigParserPtr& config) {
-            if(config->toNode("properties")) {
+            if(config->toNode(L"properties")) {
                 if(config->toFirstChild()) {
                     do {
-                        if(config->hasAttribute("name")) 
-                            cont.properties.push_back(Property(config->getString("name"),
-                                                               config->getString("value")));
+                        if(config->hasAttribute(L"name"))
+                            cont.properties.push_back(Property(config->getString(L"name"),
+                                          config->getString(L"value")));
                         
                     } while(config->toNextChild());
                     
@@ -149,19 +149,19 @@ namespace ukn {
         }
         
         void Map::deserialize_tile_set(TileSet& ts, uint32 ts_id, const ConfigParserPtr& config) {
-            ts.name = config->getString("name");
-            ts.tile_width = config->getInt("tilewidth");
-            ts.tile_height = config->getInt("tileheight");
-            ts.margin = config->getInt("margin");
-            ts.spacing = config->getInt("spacing");
+            ts.name =config->getString(L"name");
+            ts.tile_width = config->getInt(L"tilewidth");
+            ts.tile_height = config->getInt(L"tileheight");
+            ts.margin = config->getInt(L"margin");
+            ts.spacing = config->getInt(L"spacing");
             
-            if(config->toNode("tileoffset")) {
-                ts.tile_offset_x = config->getInt("x");
-                ts.tile_offset_y = config->getInt("y");
+            if(config->toNode(L"tileoffset")) {
+                ts.tile_offset_x = config->getInt(L"x");
+                ts.tile_offset_y = config->getInt(L"y");
                 config->toParent();
             }
-            if(config->toNode("image")) {
-                ts.image = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + String::StringToWString(config->getString("source")));
+            if(config->toNode(L"image")) {
+                ts.image = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + config->getString(L"source"));
                 config->toParent();
             }
             parseProperties(ts.property, config);
@@ -171,8 +171,8 @@ namespace ukn {
             // parser tile properties
             if(config->toFirstChild()) {
                 do {
-                    if(config->getCurrentNodeName() == "tile") {
-                        int32 tileid = config->getInt("id");
+                    if(config->getCurrentNodeName() == L"tile") {
+                        int32 tileid = config->getInt(L"id");
                         ukn_assert(tileid < ts.tiles.size());
                         
                         Tile* tile = ts.tileAt(tileid);
@@ -199,19 +199,19 @@ namespace ukn {
             mLayers.push_back(new Layer());
             
             Layer& layer = *mLayers.back();
-            layer.name = config->getString("name");
-            layer.width = config->getInt("width");
-            layer.height = config->getInt("height");
-            layer.x = config->getInt("x");
-            layer.y = config->getInt("y");
-            layer.visible = config->getBool("visible", true);
-            layer.opacity = config->getFloat("opacity", 1.0f);
+            layer.name = config->getString(L"name");
+            layer.width = config->getInt(L"width");
+            layer.height = config->getInt(L"height");
+            layer.x = config->getInt(L"x");
+            layer.y = config->getInt(L"y");
+            layer.visible = config->getBool(L"visible", true);
+            layer.opacity = config->getFloat(L"opacity", 1.0f);
             
-            if(config->toNode("data")) {
-                ukn_string encoding = config->getString("encoding");
-                ukn_string compression = config->getString("compression");
+            if(config->toNode(L"data")) {
+                ukn_string encoding = config->getString(L"encoding");
+                ukn_string compression = config->getString(L"compression");
                 
-                if(encoding == "base64") {
+                if(encoding == L"base64") {
                     ukn_string str_data = config->getString(ukn_string());
                     ukn_assert(!str_data.empty());
                     
@@ -222,7 +222,7 @@ namespace ukn {
                     
                     // base64 decode
                     Array<uint8> data(base64_decode(/* node value */
-                                                    str_data
+                                                    String::WStringToStringFast(str_data)
                                                     ));
                     ukn_assert(data.size() != 0);
                     
@@ -285,12 +285,13 @@ namespace ukn {
                         }
                     }
                     
-                } else if(encoding == "csv") {
-                    StringTokenlizer tiles(config->getString(ukn_string()), ",");
+                } else if(encoding == L"csv") {
+                    StringTokenlizer tiles(config->getString(ukn_string()),
+                                           L",");
                     ukn_assert(tiles.size() == layer.width * layer.height);
                     for(int32 j = 0; j < layer.height; ++j) {
                         for(int32 i = 0; i < layer.width; ++i) {
-                            Tile* g_tile = getTileWithGid(Convert::ToInt32(tiles[j * layer.width + i]));
+                            Tile* g_tile = getTileWithGid(Convert::ToInt32(String::WStringToStringFast(tiles[j * layer.width + i])));
                             if(g_tile) {
                                 Tile& tile = layer.tiles[i + j * layer.width];
                                 
@@ -302,7 +303,7 @@ namespace ukn {
                                                                     (i % layer.width) * tileset.tile_width + tileset.tile_width,
                                                                     (i / layer.width) * tileset.tile_height + tileset.tile_height);
                             } else
-                                log_error("ukn::tmx::Map::parseLayer: invalid tile with gid " + tiles[j * layer.width + i]);
+                                log_error(L"ukn::tmx::Map::parseLayer: invalid tile with gid " + tiles[j * layer.width + i]);
                         }
                     }
                 }
@@ -325,12 +326,12 @@ namespace ukn {
         }
         
         void Map::parseTileset(const ConfigParserPtr& config) {
-            ukn_string source = config->getString("source");
+            ukn_string source = config->getString(L"source");
             
             mTileSets.push_back(TileSet());
             
             TileSet& ts = mTileSets.back();
-            ts.first_grid = config->getInt("firstgid");
+            ts.first_grid = config->getInt(L"firstgid");
             
             if(source.empty()) {
                 deserialize_tile_set(ts, 
@@ -338,8 +339,8 @@ namespace ukn {
                                      config);
             } else {
                 // external tile set file
-                ConfigParserPtr extern_config = AssetManager::Instance().load<ConfigParser>(String::GetFilePath(config->getName()) + String::StringToWString(source));
-                if(extern_config->toNode("tileset")) {
+                ConfigParserPtr extern_config = AssetManager::Instance().load<ConfigParser>(String::GetFilePath(config->getName()) + source);
+                if(extern_config->toNode(L"tileset")) {
                     deserialize_tile_set(ts, 
                                          (uint32)mTileSets.size() - 1, 
                                          extern_config);
@@ -355,43 +356,43 @@ namespace ukn {
             ObjectGroup& obj_group = *static_cast<ObjectGroup*>(mLayers.back().get());
             
             // layer properties
-            obj_group.name = config->getString("name");
-            obj_group.width = config->getInt("width");
-            obj_group.height = config->getInt("height");
-            obj_group.x = config->getInt("x");
-            obj_group.y = config->getInt("y");
-            obj_group.visible = config->getBool("visible", true);
-            obj_group.opacity = config->getFloat("opacity", 1.0f);
+            obj_group.name = config->getString(L"name");
+            obj_group.width = config->getInt(L"width");
+            obj_group.height = config->getInt(L"height");
+            obj_group.x = config->getInt(L"x");
+            obj_group.y = config->getInt(L"y");
+            obj_group.visible = config->getBool(L"visible", true);
+            obj_group.opacity = config->getFloat(L"opacity", 1.0f);
             
             parseProperties(obj_group.property, config);
             
             if(config->toFirstChild()) {
                 do {
                     ukn_string node_type = config->getCurrentNodeName();
-                    if(node_type == "object") {
+                    if(node_type == L"object") {
                         Object obj;
                         
-                        obj.name = config->getString("name");
-                        obj.type = config->getString("type");
+                        obj.name = config->getString(L"name");
+                        obj.type = config->getString(L"type");
                         
-                        obj.x = config->getInt("x");
-                        obj.y = config->getInt("y");
-                        obj.width = config->getInt("width");
-                        obj.height = config->getInt("height");
+                        obj.x = config->getInt(L"x");
+                        obj.y = config->getInt(L"y");
+                        obj.width = config->getInt(L"width");
+                        obj.height = config->getInt(L"height");
                         
-                        obj.gid = config->getInt("gid", -1);
+                        obj.gid = config->getInt(L"gid", -1);
                         if(obj.gid != -1) {
                             obj.tile = *getTileWithGid(obj.gid);
                         } else {
-                            obj.image = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + String::StringToWString(config->getString("image")));
+                            obj.image = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + config->getString(L"image"));
                         }
                         
                         parseProperties(obj.property, config);
                         
-                        if(config->toNode("polygon")) {
+                        if(config->toNode(L"polygon")) {
                             ukn_logged_assert(false, "ukn::tmx::Map: polygon object not supported");
                             config->toParent();
-                        } else if(config->toNode("polyline")) {
+                        } else if(config->toNode(L"polyline")) {
                             ukn_logged_assert(false, "ukn::tmx::Map: polyline object not supported");
                             config->toParent();
                         }
@@ -402,28 +403,28 @@ namespace ukn {
         }
         
         bool Map::deserialize(const ConfigParserPtr& config) {
-            if(config->toNode("map")) {
-                ukn_string orientation = config->getString("orientation", "orthogonall");
-                if(orientation == "orthogonal")
+            if(config->toNode(L"map")) {
+                ukn_string orientation = config->getString(L"orientation", L"orthogonall");
+                if(orientation == L"orthogonal")
                     mOrientation = MO_Orthogonal;
                 else
                     mOrientation = MO_Isometric;
                 
-                mMapWidth = config->getInt("width");
-                mMapHeight = config->getInt("height");
-                mTileWidth = config->getInt("tilewidth");
-                mTileHeight = config->getInt("tileheight");
+                mMapWidth = config->getInt(L"width");
+                mMapHeight = config->getInt(L"height");
+                mTileWidth = config->getInt(L"tilewidth");
+                mTileHeight = config->getInt(L"tileheight");
                 
                 if(config->toFirstChild()) {
                     do {
                         ukn_string node_type = config->getCurrentNodeName();
-                        if(node_type == "tileset") {                            
+                        if(node_type == L"tileset") {
                             parseTileset(config);
     
-                        } else if(node_type == "layer") {
+                        } else if(node_type == L"layer") {
                             parseLayer(config);
     
-                        } else if(node_type == "objectgroup") {
+                        } else if(node_type == L"objectgroup") {
                             parseObjectGroup(config);
                         }
                         

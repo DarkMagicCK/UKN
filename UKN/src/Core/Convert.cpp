@@ -12,55 +12,55 @@
 
 namespace ukn {
     
-    int16 Convert::ToInt16(const ukn_string& str) {
+    int16 Convert::ToInt16(const std::string& str) {
         int16 result;
         SerializeHelper::FromString(str, &result);
         return result;
     }
     
-    int32 Convert::ToInt32(const ukn_string& str) {
+    int32 Convert::ToInt32(const std::string& str) {
         int32 result;
         SerializeHelper::FromString(str, &result);
         return result;
     }
     
-    int64 Convert::ToInt64(const ukn_string& str) {
+    int64 Convert::ToInt64(const std::string& str) {
         int64 result;
         SerializeHelper::FromString(str, &result);
         return result;
     }
     
-    uint16 Convert::ToUInt16(const ukn_string& str) {
+    uint16 Convert::ToUInt16(const std::string& str) {
         uint16 result;
         SerializeHelper::FromString(str, &result);
         return result;
     }
     
-    uint32 Convert::ToUInt32(const ukn_string& str) {
+    uint32 Convert::ToUInt32(const std::string& str) {
         uint32 result;
         SerializeHelper::FromString(str, &result);
         return result;
     }
     
-    uint64 Convert::ToUInt64(const ukn_string& str) {
+    uint64 Convert::ToUInt64(const std::string& str) {
         uint64 result;
         SerializeHelper::FromString(str, &result);
         return result;
     }
     
-    uint8 Convert::ToByte(const ukn_string& str) {
+    uint8 Convert::ToByte(const std::string& str) {
         uint8 result;
         SerializeHelper::FromString(str, &result);
         return result;
     }
     
-    Array<uint16> Convert::ToUnicode(const ukn_string& str) {
+    Array<uint16> Convert::ToUnicode(const std::string& str) {
         uint16* buffer = ukn_malloc_t(uint16, str.size()+1);
         utf8_to_unicode(buffer, str.c_str(), str.size());
         return Array<uint16>(buffer, str.size()+1);
     }
     
-    double Convert::ToDouble(const ukn_string& str) {
+    double Convert::ToDouble(const std::string& str) {
         double result;
         SerializeHelper::FromString(str, &result);
         return result;

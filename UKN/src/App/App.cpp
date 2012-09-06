@@ -12,6 +12,7 @@
 #include "UKN/Context.h"
 #include "UKN/GraphicDevice.h"
 #include "UKN/GraphicFactory.h"
+#include "UKN/SpriteBatch.h"
 
 #include "UKN/TimeUtil.h"
 
@@ -131,6 +132,9 @@ namespace ukn {
         mMainWindow->onRender().raise(mMainWindow, _NullEventArgs);
         
         onRender();
+        
+        // render default SpriteBatch
+        SpriteBatch::DefaultObject().render();
     }
     
     void AppInstance::setCamera(CameraPtr camera) {

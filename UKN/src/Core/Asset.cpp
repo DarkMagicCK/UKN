@@ -81,38 +81,38 @@ namespace ukn {
     
     ukn_string AssetManager::AssetTypeToString(AssetType type) {
         switch(type) {
-            case AT_Font:       return "font"; break;
-            case AT_Texture2D:  return "texture2d"; break;
-            case AT_Config:     return "config"; break;
-            case AT_Raw:        return "raw"; break;
+            case AT_Font:       return L"font"; break;
+            case AT_Texture2D:  return L"texture2d"; break;
+            case AT_Config:     return L"config"; break;
+            case AT_Raw:        return L"raw"; break;
             default:
                 return ukn_string();
         }
     }
     
     AssetType AssetManager::StringToAssetType(const ukn_string& name) {
-        if(name == "font")
+        if(name == L"font")
             return AT_Font;
-        if(name == "texture2d")
+        if(name == L"texture2d")
             return AT_Texture2D;
-        if(name == "config")
+        if(name == L"config")
             return AT_Config;
-        if(name == "raw")
+        if(name == L"raw")
             return AT_Raw;
         return AT_Unknown;
     }
     
     bool AssetManager::serialize(const ConfigParserPtr& config) {        
         if(config) {
-            config->beginNode("assets");
+            config->beginNode(L"assets");
             
             AssetNameMap::const_iterator it = mAssetMap.begin();
             while(it != mAssetMap.end()) {
                 
-                config->beginNode("resource");
-                config->setString("name", String::WStringToString(it->first));
-                config->setString("path", String::WStringToString(it->second.fullPath));
-                config->setString("type", AssetTypeToString(it->second.type));
+                config->beginNode(L"resource");
+                config->setString(L"name", it->first);
+                config->setString(L"path", it->second.fullPath);
+                config->setString(L"type", AssetTypeToString(it->second.type));
                 config->endNode();
  
                 ++it;
@@ -128,15 +128,15 @@ namespace ukn {
     }
     
     bool AssetManager::deserialize(const ConfigParserPtr& config) {
-        if(config && config->toNode("assets")) {
+        if(config && config->toNode(L"assets")) {
             if(config->toFirstChild()) {
                 do {
                     AssetInfo info;
                     
-                    info.type = StringToAssetType(config->getString("type"));
+                    info.type = StringToAssetType(config->getString(L"type"));
                     if(info.type != AT_Unknown) {
-                        info.name = String::StringToWString(config->getString("name"));
-                        info.fullPath = String::StringToWString(config->getString("path"));
+                        info.name = config->getString(L"name");
+                        info.fullPath = config->getString(L"path");
                         
                         if(!info.name.empty() && 
                            !info.fullPath.empty()) {

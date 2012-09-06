@@ -55,50 +55,50 @@ namespace ukn {
         return false;
     }
     
-    inline SequencialAnimationMode name_to_mode(const char* name) {
-        if(strcmpnocase(name, "grid") == 0)
+    inline SequencialAnimationMode name_to_mode(const ukn_string& name) {
+        if(name == L"grid")
             return SA_Grid;
-        if(strcmpnocase(name, "grid_custom") == 0)
+        if(name == L"grid_custom")
             return SA_GridCustom;
-        if(strcmpnocase(name, "seperate_files") == 0)
+        if(name == L"seperate_files")
             return SA_SeperateFiles;
         return SA_Unknown;
     }
     
     bool SequencialAnimation::deserialize(const ConfigParserPtr& config) {
-        if(config->toNode("SpriteSheet")) {
-            ukn_string name = config->getString("name");
+        if(config->toNode(L"SpriteSheet")) {
+            ukn_string name = config->getString(L"name");
             if(!name.empty()) {
                 mName = name;
                 
-                mGrids[0].mode = name_to_mode(config->getString("mode").c_str());
+                mGrids[0].mode = name_to_mode(config->getString(L"mode").c_str());
                 if(mGrids[0].mode == SA_Unknown)
                     return false;
                 
                 switch(mGrids[0].mode) {
                     case SA_Grid:
-                        mGrids[0].grid_width = config->getInt("width");
-                        mGrids[0].grid_height = config->getInt("height");
-                        mGrids[0].count = config->getInt("count");
-                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(String::GetFilePath(config->getName()) + String::StringToWString(config->getString("texture")));
+                        mGrids[0].grid_width = config->getInt(L"width");
+                        mGrids[0].grid_height = config->getInt(L"height");
+                        mGrids[0].count = config->getInt(L"count");
+                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(String::GetFilePath(config->getName()) + (config->getString(L"texture")));
                         
-                        mFrameRate = config->getInt("frame_rate", DefaultFrameRate);
+                        mFrameRate = config->getInt(L"frame_rate", DefaultFrameRate);
                         break;
                         
                     case SA_GridCustom:
-                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(config->getString("texture"));
-                        mFrameRate = config->getInt("frame_rate", DefaultFrameRate);
+                        mGrids[0].texture = AssetManager::Instance().load<ukn::Texture>(config->getString(L"texture"));
+                        mFrameRate = config->getInt(L"frame_rate", DefaultFrameRate);
                         
                         if(config->toFirstChild()) {
                             do {
-                                int childcount = config->getInt("count", 0);
+                                int childcount = config->getInt(L"count", 0);
                                 if(childcount != 0) {
                                     for(int i = 0; i < childcount; ++i) {
                                         GridInfo info;
-                                        info.grid_width = config->getInt("width");
-                                        info.grid_height = config->getInt("height");
-                                        info.texture_pos_x = config->getInt("x") + info.grid_width * i;
-                                        info.texture_pos_y = config->getInt("y");
+                                        info.grid_width = config->getInt(L"width");
+                                        info.grid_height = config->getInt(L"height");
+                                        info.texture_pos_x = config->getInt(L"x") + info.grid_width * i;
+                                        info.texture_pos_y = config->getInt(L"y");
                                         
                                         info.texture = mGrids[0].texture;
                                         
@@ -118,10 +118,10 @@ namespace ukn {
                     case SA_SeperateFiles:
                         if(config->toFirstChild()) {
                             do {
-                                ukn_string texture_path = config->getString("texture");
+                                ukn_string texture_path = config->getString(L"texture");
                                 if(!texture_path.empty()) {
                                     GridInfo info;
-                                    info.texture = AssetManager::Instance().load<ukn::Texture>(String::GetFilePath(config->getName()) + String::StringToWString(texture_path));
+                                    info.texture = AssetManager::Instance().load<ukn::Texture>(String::GetFilePath(config->getName()) + texture_path);
                                     info.texture_pos_x = 0;
                                     info.texture_pos_y = 0;
                                     if(info.texture) {

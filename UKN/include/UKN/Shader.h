@@ -14,7 +14,7 @@
 namespace ukn {
     
     struct ShaderDesc {
-        ukn_string func_name;
+        ukn_string func;
         ukn_string profile;
     };
     
@@ -25,7 +25,7 @@ namespace ukn {
             ST_VertexShader,
             
             // geometry shaders to do
-        }
+        };
         
         virtual void bind() = 0;
         virtual void unbind() = 0;

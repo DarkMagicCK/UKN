@@ -448,7 +448,7 @@ namespace ukn {
     SkeletalAnimation::SkeletalAnimation() {
         // create root bone for all child bones
         // use for positioning
-        mRoot = new Bone("Root");
+        mRoot = new Bone(L"Root");
     }
     
     SkeletalAnimation::~SkeletalAnimation() {
@@ -461,31 +461,31 @@ namespace ukn {
     }
     
     bool SkeletalAnimation::deserialize(const ConfigParserPtr& config) {
-        if(config->toNode("skeletal")) {
+        if(config->toNode(L"skeletal")) {
             if(config->toFirstChild()) {
                 do {
-                    ukn_string bone_name = config->getString("name");
+                    ukn_string bone_name = config->getString(L"name");
                     if(!bone_name.empty()) {
                         BonePtr bone;
 
-                        if(bone_name != "Root") {
+                        if(bone_name != L"Root") {
                             bone = new Bone(bone_name);
                         } else {
                             bone = mRoot;
                         }
                         
                         ukn_string texture_path;
-                        if(config->hasAttribute("texture_path")) {
-                            texture_path = config->getString("texture_path");
-                        } else if(config->hasAttribute("editor_texture_path")) {
-                            texture_path = config->getString("editor_texture_path");
-                        } else if(config->hasAttribute("texture")) {
-                            texture_path = config->getString("texture");
+                        if(config->hasAttribute(L"texture_path")) {
+                            texture_path = config->getString(L"texture_path");
+                        } else if(config->hasAttribute(L"editor_texture_path")) {
+                            texture_path = config->getString(L"editor_texture_path");
+                        } else if(config->hasAttribute(L"texture")) {
+                            texture_path = config->getString(L"texture");
                         }
                         if (!texture_path.empty()) {
-                            TexturePtr texture = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + String::StringToWString(texture_path));
+                            TexturePtr texture = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + texture_path);
                             if(texture) {
-                                if(config->getString("mode", "texture") == "texture") {
+                                if(config->getString(L"mode", L"texture") == L"texture") {
                                     bone->mTexture = new SequencialAnimation(texture,
                                                                             texture->getWidth(),
                                                                             texture->getHeight(),
@@ -493,67 +493,67 @@ namespace ukn {
                                                                             0);
                                 } else {
                                     bone->mTexture = new SequencialAnimation(texture,
-                                                                             config->getInt("grid_width"),
-                                                                             config->getInt("grid_height"),
-                                                                             config->getInt("count"),
-                                                                             config->getInt("frame_rate", SequencialAnimation::DefaultFrameRate));
+                                                                             config->getInt(L"grid_width"),
+                                                                             config->getInt(L"grid_height"),
+                                                                             config->getInt(L"count"),
+                                                                             config->getInt(L"frame_rate", SequencialAnimation::DefaultFrameRate));
                                 }
                             }
                         }
                            
                         // parse basic properties
-                        bone->setPosition(Vector2(config->getFloat("x"),
-                                                  config->getFloat("y")));
-                        bone->setScale(Vector2(config->getFloat("scale_x", 1.f),
-                                               config->getFloat("scale_y", 1.f)));
-                        bone->setTextureCenter(Vector2(config->getFloat("texture_center_x"),
-                                                       config->getFloat("texture_center_y")));
+                        bone->setPosition(Vector2(config->getFloat(L"x"),
+                                                  config->getFloat(L"y")));
+                        bone->setScale(Vector2(config->getFloat(L"scale_x", 1.f),
+                                               config->getFloat(L"scale_y", 1.f)));
+                        bone->setTextureCenter(Vector2(config->getFloat(L"texture_center_x"),
+                                                       config->getFloat(L"texture_center_y")));
                                        
-                        if(config->hasAttribute("length"))
-                            bone->setLength(config->getFloat("length"));
+                        if(config->hasAttribute(L"length"))
+                            bone->setLength(config->getFloat(L"length"));
                         else
                             bone->setLength(50.f);
                         
-                        bone->setRotation(config->getFloat("rotation"));
-                        bone->setVisible(config->getBool("visible", true));
-                        bone->setOpacity(config->getFloat("opacity", 1.f));
-                        bone->setLayerDepth(config->getFloat("layer_depth", 0.f));
+                        bone->setRotation(config->getFloat(L"rotation"));
+                        bone->setVisible(config->getBool(L"visible", true));
+                        bone->setOpacity(config->getFloat(L"opacity", 1.f));
+                        bone->setLayerDepth(config->getFloat(L"layer_depth", 0.f));
                    
-                        bone->mInheritVisibility = config->getBool("inherit_visibility");
-                        bone->mInheritRotation = config->getBool("inherit_rotation");
-                        bone->mInheritPosition = config->getBool("inherit_position");
-                        bone->mInheritScale = config->getBool("inherit_scale");
-                        bone->mInheritOpacity = config->getBool("inherit_opacity");
+                        bone->mInheritVisibility = config->getBool(L"inherit_visibility");
+                        bone->mInheritRotation = config->getBool(L"inherit_rotation");
+                        bone->mInheritPosition = config->getBool(L"inherit_position");
+                        bone->mInheritScale = config->getBool(L"inherit_scale");
+                        bone->mInheritOpacity = config->getBool(L"inherit_opacity");
                                                 
                         // parse animation
                         // bone->mAnimation.deserialize(config);
-                        if(config->toNode("Animations")) {
+                        if(config->toNode(L"Animations")) {
                             if(config->toFirstChild()) {
                                 do {
-                                    ukn_string anim_name = config->getString("name");
+                                    ukn_string anim_name = config->getString(L"name");
                                     if(!anim_name.empty()) {
                                         BoneAnimation anim;
                                         anim.name = anim_name;
-                                        anim.repeat_count = config->getInt("repeat_count");
-                                        anim.is_default = config->getBool("default");
+                                        anim.repeat_count = config->getInt(L"repeat_count");
+                                        anim.is_default = config->getBool(L"default");
                                         if(anim.is_default)
                                             mDefaultAnimation = anim.name;
                                         
                                         if(config->toFirstChild()) {
                                             do {
-                                                uint32 duration = config->getInt("duration");
+                                                uint32 duration = config->getInt(L"duration");
                                                 if(duration != 0) {
                                                     BoneKeyFrameData data;
                                                     data.duration = duration;
-                                                    data.layer_depth = config->getFloat("layer_depth", 0.f);
-                                                    data.visible = config->getBool("visible", true);
-                                                    data.opacity = config->getFloat("opacity", 1.f);
-                                                    data.rotation = config->getFloat("rotation");
+                                                    data.layer_depth = config->getFloat(L"layer_depth", 0.f);
+                                                    data.visible = config->getBool(L"visible", true);
+                                                    data.opacity = config->getFloat(L"opacity", 1.f);
+                                                    data.rotation = config->getFloat(L"rotation");
                                                     
-                                                    data.position = Vector2(config->getFloat("x"),
-                                                                            config->getFloat("y"));
-                                                    data.scale = Vector2(config->getFloat("scale_x", 1.f),
-                                                                        config->getFloat("scale_y", 1.f));
+                                                    data.position = Vector2(config->getFloat(L"x"),
+                                                                            config->getFloat(L"y"));
+                                                    data.scale = Vector2(config->getFloat(L"scale_x", 1.f),
+                                                                        config->getFloat(L"scale_y", 1.f));
                                                     
                                                     anim.key_frames.push_back(data);
                                                 }
@@ -565,10 +565,12 @@ namespace ukn {
                                         }
                                         
                                         if(bone == mRoot) {
-                                            std::pair<Bone::AnimationMap::iterator, bool> it = bone->getAnimation().insert(std::make_pair(anim_name, anim));
+                                            std::pair<Bone::AnimationMap::iterator, bool> it = bone->getAnimation().insert(std::make_pair(anim_name,
+                                                                                                                                          anim));
                                             it.first->second.complete_event += Bind(this, &SkeletalAnimation::onAnimationComplete);
                                         } else {
-                                            bone->getAnimation().insert(std::make_pair(anim_name, anim));
+                                            bone->getAnimation().insert(std::make_pair(anim_name,
+                                                                                       anim));
                                         }
                                     }
                                     
@@ -583,9 +585,9 @@ namespace ukn {
                         }
                         
                         // add bone
-                        if(bone_name != "Root") {
-                            ukn_string parent = config->getString("parent");
-                            addBone(bone, parent);
+                        if(bone_name != L"Root") {
+                            addBone(bone,
+                                    config->getString(L"parent"));
                         }
                     }
                     
@@ -631,12 +633,12 @@ namespace ukn {
     }
     
     void SkeletalAnimation::addBone(const BonePtr& bone, const ukn_string& parent_name) {
-        BonePtr parent = getBone(parent_name.empty() ? "Root" : parent_name);
+        BonePtr parent = getBone(parent_name.empty() ? L"Root" : parent_name);
         if(parent) {
             parent->getChildren().push_back(bone);
             bone->mParent = parent;
         } else 
-            log_error(ukn_string("ukn::SkeletalAnimation:addBone: no parent bone with name ")+parent_name+" found");
+            log_error(ukn_string(L"ukn::SkeletalAnimation:addBone: no parent bone with name ")+parent_name+L" found");
     }
     
     inline void render_bone(SpriteBatch& spriteBatch, Bone& bone) {

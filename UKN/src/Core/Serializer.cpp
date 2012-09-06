@@ -13,7 +13,7 @@ namespace ukn {
     
     // bool
     template<>
-    void SerializeHelper::FromString<bool>(const ukn_string& str, bool* val) {
+    void SerializeHelper::FromString<bool>(const std::string& str, bool* val) {
         ukn_assert(val);
         if((str.size() == 1 && str[0] == '1') ||
            strcmpnocase(str.c_str(), "true") ||
@@ -24,7 +24,7 @@ namespace ukn {
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<bool>(bool* val) {
+    std::string SerializeHelper::ToString<bool>(bool* val) {
         if(*val)
             return "true";
         else
@@ -43,13 +43,13 @@ namespace ukn {
     
     // int32
     template<>
-    void SerializeHelper::FromString<int32>(const ukn_string& str, int32* val) {
+    void SerializeHelper::FromString<int32>(const std::string& str, int32* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%d", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<int32>(int32* val) {
+    std::string SerializeHelper::ToString<int32>(int32* val) {
         return String::AnyToString(*val);
     }
     
@@ -65,13 +65,13 @@ namespace ukn {
     
     // int16
     template<>
-    void SerializeHelper::FromString<int16>(const ukn_string& str, int16* val) {
+    void SerializeHelper::FromString<int16>(const std::string& str, int16* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%hd", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<int16>(int16* val) {
+    std::string SerializeHelper::ToString<int16>(int16* val) {
         return String::AnyToString(*val);
     }
     
@@ -87,13 +87,13 @@ namespace ukn {
     
     // uint16
     template<>
-    void SerializeHelper::FromString<uint16>(const ukn_string& str, uint16* val) {
+    void SerializeHelper::FromString<uint16>(const std::string& str, uint16* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%hu", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<uint16>(uint16* val) {
+    std::string SerializeHelper::ToString<uint16>(uint16* val) {
         return String::AnyToString(*val);
     }
     
@@ -109,13 +109,13 @@ namespace ukn {
     
     // uint32
     template<>
-    void SerializeHelper::FromString<uint32>(const ukn_string& str, uint32* val) {
+    void SerializeHelper::FromString<uint32>(const std::string& str, uint32* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%u", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<uint32>(uint32* val) {
+    std::string SerializeHelper::ToString<uint32>(uint32* val) {
         return String::AnyToString(*val);
     }
     
@@ -131,13 +131,13 @@ namespace ukn {
     
     // float
     template<>
-    void SerializeHelper::FromString<float>(const ukn_string& str, float* val) {
+    void SerializeHelper::FromString<float>(const std::string& str, float* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%f", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<float>(float* val) {
+    std::string SerializeHelper::ToString<float>(float* val) {
         return String::AnyToString(*val);
     }
     
@@ -153,13 +153,13 @@ namespace ukn {
     
     // double
     template<>
-    void SerializeHelper::FromString<double>(const ukn_string& str, double* val) {
+    void SerializeHelper::FromString<double>(const std::string& str, double* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%lf", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<double>(double* val) {
+    std::string SerializeHelper::ToString<double>(double* val) {
         return String::AnyToString(*val);
     }
     
@@ -175,13 +175,13 @@ namespace ukn {
     
     // char
     template<>
-    void SerializeHelper::FromString<char>(const ukn_string& str, char* val) {
+    void SerializeHelper::FromString<char>(const std::string& str, char* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%c", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<char>(char* val) {
+    std::string SerializeHelper::ToString<char>(char* val) {
         return String::AnyToString(*val);
     }
     
@@ -197,13 +197,13 @@ namespace ukn {
     
     // byte
     template<>
-    void SerializeHelper::FromString<uint8>(const ukn_string& str, uint8* val) {
+    void SerializeHelper::FromString<uint8>(const std::string& str, uint8* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%c", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<uint8>(uint8* val) {
+    std::string SerializeHelper::ToString<uint8>(uint8* val) {
         return String::AnyToString(*val);
     }
     
@@ -219,13 +219,13 @@ namespace ukn {
     
     // long
     template<>
-    void SerializeHelper::FromString<long>(const ukn_string& str, long* val) {
+    void SerializeHelper::FromString<long>(const std::string& str, long* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%ld", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<long>(long* val) {
+    std::string SerializeHelper::ToString<long>(long* val) {
         return String::AnyToString(*val);
     }
     
@@ -241,13 +241,13 @@ namespace ukn {
     
     // unsigned long
     template<>
-    void SerializeHelper::FromString<unsigned long>(const ukn_string& str, unsigned long* val) {
+    void SerializeHelper::FromString<unsigned long>(const std::string& str, unsigned long* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%lu", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<unsigned long>(unsigned long* val) {
+    std::string SerializeHelper::ToString<unsigned long>(unsigned long* val) {
         return String::AnyToString(*val);
     }
     
@@ -263,13 +263,13 @@ namespace ukn {
     
     // int64
     template<>
-    void SerializeHelper::FromString<int64>(const ukn_string& str, int64* val) {
+    void SerializeHelper::FromString<int64>(const std::string& str, int64* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%lld", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<int64>(int64* val) {
+    std::string SerializeHelper::ToString<int64>(int64* val) {
         return String::AnyToString(*val);
     }
     
@@ -285,13 +285,13 @@ namespace ukn {
     
     // uint64
     template<>
-    void SerializeHelper::FromString<uint64>(const ukn_string& str, uint64* val) {
+    void SerializeHelper::FromString<uint64>(const std::string& str, uint64* val) {
         ukn_assert(val);
         sscanf(str.c_str(), "%llu", val);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<uint64>(uint64* val) {
+    std::string SerializeHelper::ToString<uint64>(uint64* val) {
         return String::AnyToString(*val);
     }
     
@@ -307,13 +307,13 @@ namespace ukn {
     
     // string
     template<>
-    void SerializeHelper::FromString<String>(const ukn_string& str, String* val) {
+    void SerializeHelper::FromString<String>(const std::string& str, String* val) {
         ukn_assert(val);
         *val = String::StringToWString(str);
     }
     
     template<>
-    ukn_string SerializeHelper::ToString<String>(String* val) {
+    std::string SerializeHelper::ToString<String>(String* val) {
         return String::WStringToString(*val);
     }
     

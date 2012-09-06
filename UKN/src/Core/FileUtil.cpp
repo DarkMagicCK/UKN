@@ -33,7 +33,7 @@
 
 namespace ukn {
     
-    bool File::FileExists(const String& filepath) {
+    bool File::FileExists(const ukn_string& filepath) {
 #ifdef UKN_OS_WINDOWS
         return PathFileExistsW(filepath.c_str())?true:false;
         
@@ -43,14 +43,14 @@ namespace ukn {
         
         struct stat sb;
         
-        if (stat(String::WStringToString(filepath).c_str(), &sb) == 0 && S_ISREG(sb.st_mode)) {
+        if (stat(ukn_string::WStringToString(filepath).c_str(), &sb) == 0 && S_ISREG(sb.st_mode)) {
             return true;
         }
 #endif
         return false;
     }
     
-    bool File::PathExists(const String& path) {
+    bool File::PathExists(const ukn_string& path) {
 #ifdef UKN_OS_WINDOWS
         return PathFileExistsW(path.c_str())?true:false;
 
@@ -65,12 +65,12 @@ namespace ukn {
         return false;
     }
     
-    String Path::GetApplicationPath() {
+    ukn_string Path::GetApplicationPath() {
 #ifdef UKN_OS_WINDOWS
         wchar_t buffer[MAX_PATH];
         GetCurrentDirectoryW(MAX_PATH, buffer);
         
-        return String(buffer)+L"/";
+        return ukn_string(buffer)+L"/";
         
 #elif defined(UKN_OS_FAMILY_APPLE)
         return ukn_apple_application_path() + L"/";
@@ -79,14 +79,14 @@ namespace ukn {
         return L"./";
     }
     
-    String Path::CheckAndGetFontPath(const String& name) {
+    ukn_string Path::CheckAndGetFontPath(const ukn_string& name) {
         
         if(File::FileExists(L"./"+name))
             return L"./"+name;
         
         // resource path
         {
-            String fullpath(Path::GetResource() + name);
+            ukn_string fullpath(Path::GetResource() + name);
             
             if(File::FileExists(fullpath)) {
                 return fullpath;
@@ -95,7 +95,7 @@ namespace ukn {
         
         // system font path
         {
-            String fullpath(Path::GetFont() + name);
+            ukn_string fullpath(Path::GetFont() + name);
         
             if(File::FileExists(fullpath)) {
                 return fullpath;
@@ -105,7 +105,7 @@ namespace ukn {
         // document path for ios and osx
         {
 #if defined(UKN_OS_FAMILY_APPLE)
-            String fullpath(ukn_apple_documents_path());
+            ukn_string fullpath(ukn_apple_documents_path());
             
             if(File::FileExists(fullpath)) {
                 return fullpath;
@@ -123,28 +123,28 @@ namespace ukn {
             }
         }
         
-        return String();
+        return ukn_string();
     }
     
-    String Path::GetEnv(const ukn_string& env) {
+    ukn_string Path::GetEnv(const ukn_string& env) {
 #if defined(UKN_OS_WINDOWS)
-        DWORD len = GetEnvironmentVariableA(env.c_str(), 0, 0);
+        DWORD len = GetEnvironmentVariableW(env.c_str(), 0, 0);
         if (len != 0) {
             char* buffer = new char[len];
-            GetEnvironmentVariableA(env.c_str(), buffer, len);
+            GetEnvironmentVariableW(env.c_str(), buffer, len);
             ukn_string result(buffer);
             delete [] buffer;
             return result;
         }
         
 #elif defined(UKN_OS_FAMILY_UNIX)
-        return String::StringToWStringFast(getenv(env.c_str()));
+        return String::StringToWStringFast(getenv(String::WStringToString(env).c_str()));
 #endif
         
-        return String();
+        return ukn_string();
     }
     
-    String Path::GetCurrent() {
+    ukn_string Path::GetCurrent() {
 #if defined(UKN_OS_WINDOWS)
         wchar_t buffer[_MAX_PATH];
         DWORD n = GetCurrentDirectoryW(sizeof(buffer), buffer);
@@ -156,7 +156,7 @@ namespace ukn {
         }
         
 #elif defined(UKN_OS_FAMILY_UNIX)
-        ukn_string path;
+        std::string path;
         char cwd[PATH_MAX];
         if(getcwd(cwd, sizeof(cwd)))
             path = cwd;
@@ -168,9 +168,9 @@ namespace ukn {
 #endif      
     }
     
-    String Path::GetHome() {
+    ukn_string Path::GetHome() {
 #if defined(UKN_OS_WINDOWS)
-        String result = Path::GetEnv("HOMEDRIVE");
+        ukn_string result = Path::GetEnv("HOMEDRIVE");
         result.append(Path::GetEnv("HOMEPATH"));
        
         size_t n = result.size();
@@ -179,7 +179,7 @@ namespace ukn {
         return result;
         
 #elif defined(UKN_OS_FAMILY_UNIX)
-        ukn_string path;
+        std::string path;
         struct passwd* pwd = getpwuid(getuid());
         if(pwd)
             path = pwd->pw_dir;
@@ -188,7 +188,7 @@ namespace ukn {
             if(pwd) 
                 path = pwd->pw_dir;
             else 
-                return Path::GetEnv("HOME") + L"/";
+                return Path::GetEnv(L"HOME") + L"/";
         }
         
         size_t n = path.size();
@@ -198,11 +198,11 @@ namespace ukn {
 #endif           
     }
     
-    String Path::GetRoot() {
+    ukn_string Path::GetRoot() {
 #if defined(UKN_OS_WINDOWS)
         
 #elif defined(UKN_OS_FAMILY_UNIX)
-        ukn_string path;
+        std::string path;
         char* tmp = getenv("TMPDIR");
         if(tmp) {
             path = tmp;
@@ -214,10 +214,10 @@ namespace ukn {
         }
         return String::StringToWStringFast(path);
 #endif       
-        return String();
+        return ukn_string();
     }
     
-    String Path::GetTemp() {
+    ukn_string Path::GetTemp() {
 #if defined(UKN_OS_WINDOWS)
         wchar_t buffer[_MAX_PATH];
         DWORD n = GetTempPathW(sizeof(buffer), buffer);
@@ -242,10 +242,10 @@ namespace ukn {
         return String::StringToWStringFast(path);
         
 #endif    
-        return String();
+        return ukn_string();
     }
     
-    String Path::GetWrittable() {
+    ukn_string Path::GetWrittable() {
 #if defined(UKN_OS_WINDOWS)
         return L"./";
         
@@ -257,7 +257,7 @@ namespace ukn {
 #endif
     }
     
-    String Path::GetResource() {
+    ukn_string Path::GetResource() {
 #if defined(UKN_OS_WINDOWS)
         return L"./";
         
@@ -269,7 +269,7 @@ namespace ukn {
 #endif  
     }
     
-    String Path::GetFont() {
+    ukn_string Path::GetFont() {
 #if defined(UKN_OS_WINDOWS)
         wchar_t buffer[_MAX_PATH];
         GetWindowsDirectoryW(buffer, _MAX_PATH-1);
@@ -290,12 +290,12 @@ namespace ukn {
         arr.clear();
         
 #if defined(UKN_OS_WINDOWS)
-        char buffer[128];
-        DWORD n = GetLogicalDriveStringsA(sizeof(buffer)-1, buffer);
-        char* it = buffer;
-        char* end = buffer + (n > sizeof(buffer) ? sizeof(buffer): n);
+        wchar_t buffer[128];
+        DWORD n = GetLogicalDriveStringsW(sizeof(buffer)-1, buffer);
+        wchar_t* it = buffer;
+        wchar_t* end = buffer + (n > sizeof(buffer) ? sizeof(buffer): n);
         while(it < end) {
-            std::string dev;
+            std::wstring dev;
             while(it < end && *it)
                 dev += *it++;
             arr.push_back(dev);
@@ -303,11 +303,11 @@ namespace ukn {
         }
         
 #elif defined(UKN_OS_FAMILY_UNIX)
-        arr.push_back("/");
+        arr.push_back(L"/");
 #endif    
     }
     
-    String Path::ExpandPath(const String& path) {
+    ukn_string Path::ExpandPath(const ukn_string& path) {
 #if defined(UKN_OS_WINDOWS)
         wchar_t buffer[_MAX_PATH];
         DWORD n = ExpandEnvironmentStringsW(path.c_str(), buffer, sizeof(buffer));
@@ -317,9 +317,9 @@ namespace ukn {
             return path;
         
 #elif defined(UKN_OS_FAMILY_UNIX)
-        String result;
-        String::const_iterator it  = path.begin();
-        String::const_iterator end = path.end();
+        ukn_string result;
+        ukn_string::const_iterator it  = path.begin();
+        ukn_string::const_iterator end = path.end();
         if (it != end && *it == L'~') {
             ++it;
             if (it != end && *it == L'/') {
@@ -329,7 +329,7 @@ namespace ukn {
         }
         while (it != end) {
             if (*it == L'$') {
-                std::string var;
+                std::wstring var;
                 ++it;
                 if (it != end && *it == L'{') {
                     ++it;
@@ -359,7 +359,7 @@ namespace ukn {
     class DirectoryIterator::DirectoryIteratorImpl {
     public:
         DirectoryIteratorImpl(const ukn_string& path) {
-            mDir = opendir((path+"/").c_str());
+            mDir = opendir(String::WStringToString((path+L"/")).c_str());
             
             if(mDir)
                 next();
@@ -381,11 +381,11 @@ namespace ukn {
             do {
                 struct dirent* entry = readdir(mDir);
                 if(entry)
-                    mCurrent = entry->d_name;
+                    mCurrent = String::StringToWString(entry->d_name);
                 else
                     mCurrent.clear();
             }
-            while(mCurrent == "." || mCurrent == ".." || (mCurrent.size() > 0 && mCurrent[0] == '.'));
+            while(mCurrent == L"." || mCurrent == L".." || (mCurrent.size() > 0 && mCurrent[0] == '.'));
             
             return mCurrent;
         }
@@ -420,7 +420,7 @@ namespace ukn {
     class DirectoryIterator::DirectoryIteratorImpl {
     public:
         DirectoryIteratorImpl(const ukn_string& path) {
-            std::string findPath = path + "/*";
+            std::ukn_string findPath = path + "/*";
             
             mFH = FindFirstFileA(findPath.c_str(), &mFD);
             if(mFH == INVALID_HANDLE_VALUE) {
@@ -463,7 +463,7 @@ namespace ukn {
         int mRC;
     };
     
-    const std::string& DirectoryIterator::DirectoryIteratorImpl::get() const {
+    const std::ukn_string& DirectoryIterator::DirectoryIteratorImpl::get() const {
         return mCurrent;
     }
     
@@ -499,17 +499,9 @@ namespace ukn {
     }
     
     DirectoryIterator::DirectoryIterator(const ukn_string& path):
-    mPath(path+"/"),
+    mPath(path+L"/"),
     mImpl(new DirectoryIteratorImpl(path)) {
         mIsEnd = false;
-        
-        mFile = mPath + mImpl->get();
-    }
-    
-    DirectoryIterator::DirectoryIterator(const ukn_wstring& path):
-    mPath(String::WStringToString(path+L"/")) {
-        mIsEnd = false;
-        mImpl = new DirectoryIteratorImpl(mPath.c_str());
         
         mFile = mPath + mImpl->get();
     }
@@ -538,7 +530,7 @@ namespace ukn {
     
     DirectoryIterator& DirectoryIterator ::operator++() {
         if(mImpl) {
-            std::string n = mImpl->next();
+            ukn_string n = mImpl->next();
             if(n.empty())
                 mIsEnd = true;
             else {

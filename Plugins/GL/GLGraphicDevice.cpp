@@ -41,10 +41,10 @@ namespace ukn {
     }
     
     ukn_string GLGraphicDevice::description() const {
-        static ukn_string des = format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s",
-                                              (char*)glGetString(GL_VERSION),
-                                              (char*)glGetString(GL_VENDOR),
-                                             (char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+        static ukn_string des = String::StringToWString(format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s",
+                                                                      (char*)glGetString(GL_VERSION),
+                                                                      (char*)glGetString(GL_VENDOR),
+                                                                      (char*)glGetString(GL_SHADING_LANGUAGE_VERSION)));
 /* #ifdef UKN_DEBUG
         
 #if UKN_OPENGL_VERSION >= 30 && defined(UKN_REQUEST_OPENGL_3_2_PROFILE)
@@ -71,7 +71,10 @@ namespace ukn {
         try {
             mWindow = MakeSharedPtr<GLWindow>(name, settings);
         } catch(Exception& e) {
-            MessageBox::Show(format_string("GLGraphic Device: Error creating opengl window, error %s", e.what()), "Fatal Error", MBO_OK | MBO_IconError);
+            MessageBox::Show(String::StringToWString(format_string("GLGraphic Device: Error creating opengl window, error %s",
+                                           e.what())),
+                             L"Fatal Error",
+                             MBO_OK | MBO_IconError);
 			Context::Instance().getApp().terminate();
             return WindowPtr();
         }
@@ -126,7 +129,8 @@ namespace ukn {
         }
         
         const VertexFormat& format = buffer->getVertexFormat();
-        if(format == Vertex2D::Format()) {
+        if(format == Vertex2D::Format() &&
+           !buffer->isUseIndexStream()) {
             // acceleration for 2d vertices
             Array<Vertex2D> vtxArr((Vertex2D*)vertexBuffer->map(), vertexBuffer->count());
             vertexBuffer->unmap();
@@ -205,11 +209,11 @@ namespace ukn {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         
-        glDisableClientState(GL_VERTEX_ARRAY);
+       /* glDisableClientState(GL_VERTEX_ARRAY);
         glDisableClientState(GL_NORMAL_ARRAY);
         glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         glDisableClientState(GL_COLOR_ARRAY);
-        glDisableClientState(GL_SECONDARY_COLOR_ARRAY);
+        glDisableClientState(GL_SECONDARY_COLOR_ARRAY);*/
     }
     
     void GLGraphicDevice::bindGLFrameBuffer(GLuint fbo) {
@@ -243,7 +247,7 @@ namespace ukn {
                 counter.waitToNextFrame();
                 
                 {            
-                    UKN_PROFILE("MainFrame");
+                    UKN_PROFILE(L"__MainFrame");
 
                     glViewport(fb.getViewport().left,
                                fb.getViewport().top,

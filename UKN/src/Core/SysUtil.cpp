@@ -43,12 +43,7 @@ namespace ukn {
     
 #ifdef UKN_OS_WINDOWS
     
-    inline MessageBoxButton ukn_win_message_box(const ukn_string& mssg, const ukn_string& title, int option) {
-        HWND hWnd = (Context::Instance().isAppAvailable() && Context::Instance().getApp().getMainWindowPtr().isValid()) ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
-        return (MessageBoxButton)MessageBoxA(hWnd, mssg.c_str(), title.c_str(), option);
-    }
-    
-    inline MessageBoxButton ukn_win_message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
+    inline MessageBoxButton ukn_win_message_box(const std::wstring& mssg, const std::wstring& title, int option) {
         HWND hWnd = (Context::Instance().isAppAvailable() && Context::Instance().getApp().getMainWindowPtr().isValid()) ? Context::Instance().getApp().getMainWindow().getHWnd() : 0;
         return (MessageBoxButton)MessageBoxW(hWnd, mssg.c_str(), title.c_str(), option);
     }
@@ -125,19 +120,7 @@ namespace ukn {
     
 #endif
     
-    MessageBoxButton MessageBox::Show(const ukn_string& mssg, const ukn_string& title, int option) {
-#ifdef UKN_OS_WINDOWS
-        return ukn_win_message_box(mssg, title, option);
-        
-#elif defined(UKN_OS_FAMILY_APPLE)
-        return ukn_apple_message_box(mssg, title, option);
-        
-#elif defined(UKN_OS_LINUX)
-#endif
-        return MBB_OK;
-    }
-    
-    MessageBoxButton MessageBox::Show(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
+    MessageBoxButton MessageBox::Show(const std::wstring& mssg, const std::wstring& title, int option) {
 #ifdef UKN_OS_WINDOWS
         return ukn_win_message_box(mssg, title, option);
         
@@ -185,7 +168,7 @@ namespace ukn {
 #elif defined(UKN_OS_LINUX)
         
 #endif  
-        return ukn_string("Unknown OS");
+        return ukn_string(L"Unknown OS");
     }
     
     Array<SystemInformation::DesktopMode> SystemInformation::EnumDesktopMode() {

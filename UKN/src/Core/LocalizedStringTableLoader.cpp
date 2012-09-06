@@ -14,25 +14,25 @@
 
 namespace ukn {
     
-    bool LocalizedStringTableLoader::Load(const char* file, LocalizedStringTable& stringTable) {
+    bool LocalizedStringTableLoader::Load(const ukn_string& file, LocalizedStringTable& stringTable) {
         ukn::ConfigParserPtr parser = ukn::ConfigParser::MakeParser(ukn::ResourceLoader::Instance().loadResource(file));
         if(parser &&
-           parser->toNode("strings")) {
+           parser->toNode(L"strings")) {
             
             parser->toFirstChild();
             
             do {
-                std::string lanName = parser->getCurrentNodeName();
+                ukn_string lanName = parser->getCurrentNodeName();
                 if(!lanName.empty()) {
                     stringTable.addLanguage(lanName);
                     
                     parser->toFirstChild();
                     
                     do {
-                        std::string stringId = parser->getCurrentNodeName();
+                        ukn_string stringId = parser->getCurrentNodeName();
                         if(!stringId.empty()) {
                             
-                            std::string value = parser->getString("value");
+                            ukn_string value = parser->getString(L"value");
                             
                             stringTable.addString(lanName, stringId, value); 
                         }
@@ -50,11 +50,11 @@ namespace ukn {
         return false;
     }
     
-    bool LocalizedStringTableLoader::Save(const char* file, const LocalizedStringTable& stringTable) {
+    bool LocalizedStringTableLoader::Save(const ukn_string& file, const LocalizedStringTable& stringTable) {
         ukn::ConfigParserPtr parser = ukn::ConfigParser::MakeEmptyParser(ukn::CPT_XML);
         
         if(parser) {
-            parser->beginNode("strings");
+            parser->beginNode(L"strings");
             
             for(LocalizedStringTable::LanguageMap::const_iterator it = stringTable.begin(),
                 end = stringTable.end();
@@ -69,7 +69,7 @@ namespace ukn {
                     it != end;
                     ++it) {
                     parser->beginNode(it->first);
-                    parser->setString("value", it->second);
+                    parser->setString(L"value", it->second);
                     parser->endNode(); // String->first;
                 }
                 
@@ -78,9 +78,10 @@ namespace ukn {
             
             parser->endNode();
             
-            std::string content = parser->writeToString();
+            ukn_string content = parser->writeToString();
             
-            FILE* pfile = fopen(file, "w+");
+            FILE* pfile = fopen(String::WStringToString(file).c_str(),
+                                "w+");
             if(!pfile)
                 return false;
             

@@ -51,6 +51,8 @@
 		884CE4011490905900F58E2E /* GLSpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE4001490905600F58E2E /* GLSpriteBatch.cpp */; };
 		8850F0D714B9DA33001A250C /* Port.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8850F0D614B9DA31001A250C /* Port.cpp */; };
 		8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885449981491E253006B8B60 /* libfreetype.a */; };
+		8884B3C415F7CCEA0086533E /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C215F7CCE90086533E /* Shader.cpp */; };
+		8884B3C715F7CCFC0086533E /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C515F7CCFB0086533E /* GLShader.cpp */; };
 		88871FE2148CB1800026B2B8 /* libglfw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88871FD5148CB1800026B2B8 /* libglfw.a */; };
 		88871FE3148CB1800026B2B8 /* image_DXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FD7148CB1800026B2B8 /* image_DXT.c */; };
 		88871FE4148CB1800026B2B8 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FD9148CB1800026B2B8 /* image_helper.c */; };
@@ -297,6 +299,9 @@
 		886DBA3E14C43DCB00652729 /* Interfaces.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Interfaces.h; sourceTree = "<group>"; };
 		886DBA3F14C43DCB00652729 /* Lazy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Lazy.h; sourceTree = "<group>"; };
 		886DBA4114C43DCB00652729 /* UnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitTest.h; sourceTree = "<group>"; };
+		8884B3C215F7CCE90086533E /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
+		8884B3C515F7CCFB0086533E /* GLShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShader.cpp; sourceTree = "<group>"; };
+		8884B3C615F7CCFB0086533E /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
 		88871FD4148CB1800026B2B8 /* glfw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glfw3.h; sourceTree = "<group>"; };
 		88871FD5148CB1800026B2B8 /* libglfw.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw.a; sourceTree = "<group>"; };
 		88871FD7148CB1800026B2B8 /* image_DXT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = image_DXT.c; sourceTree = "<group>"; };
@@ -735,6 +740,7 @@
 				88AAC12214868751007A80A4 /* GraphicDevice.h */,
 				88AAC12314868751007A80A4 /* GraphicFactory.h */,
 				88AAC12414868751007A80A4 /* GraphicSettings.h */,
+				8802987314CA89AC009D7670 /* GraphicContext.h */,
 				88AAC12514868751007A80A4 /* Input.h */,
 				88AAC12814868751007A80A4 /* Logger.h */,
 				88AAC12914868751007A80A4 /* MathUtil.h */,
@@ -748,7 +754,6 @@
 				88AAC12F14868751007A80A4 /* RenderBuffer.h */,
 				88AAC13014868751007A80A4 /* RenderEffect.h */,
 				88AAC13114868751007A80A4 /* RenderView.h */,
-				8802987314CA89AC009D7670 /* GraphicContext.h */,
 				88AAC13214868751007A80A4 /* Resource.h */,
 				88AAC13314868751007A80A4 /* Scene.h */,
 				88AAC13514868751007A80A4 /* Shader.h */,
@@ -908,6 +913,7 @@
 				88278EDF149C947B00C7ED8A /* Scene.cpp */,
 				8802987514CA982F009D7670 /* GraphicContext.cpp */,
 				88B2236814CDE18D00C871C8 /* RenderTarget.cpp */,
+				8884B3C215F7CCE90086533E /* Shader.cpp */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -1044,6 +1050,8 @@
 				884CE3FF14908FDC00F58E2E /* GLSpriteBatch.h */,
 				884CE4001490905600F58E2E /* GLSpriteBatch.cpp */,
 				88D1300E14CF812C001BB071 /* GLFWInput.h */,
+				8884B3C515F7CCFB0086533E /* GLShader.cpp */,
+				8884B3C615F7CCFB0086533E /* GLShader.h */,
 			);
 			path = GL;
 			sourceTree = "<group>";
@@ -1208,6 +1216,8 @@
 				88A98F3114D35F09002A79CD /* TypeRegistration.cpp in Sources */,
 				881B520415BBC63C009B9482 /* LocalizedStringTable.cpp in Sources */,
 				881B522015BBCD8C009B9482 /* LocalizedStringTableLoader.cpp in Sources */,
+				8884B3C415F7CCEA0086533E /* Shader.cpp in Sources */,
+				8884B3C715F7CCFC0086533E /* GLShader.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

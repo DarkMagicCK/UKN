@@ -92,10 +92,10 @@ public:
     
     void onUpdate() {
         mTimeLeft -= ukn::FrameCounter::Instance().getPrevDelta();
-        getWindow().setWindowTitle(ukn::format_string("Square Game [Score = %d, TimeLeft = %.2f]", mScore, mTimeLeft));
+        getWindow().setWindowTitle(ukn::String::StringToWString(ukn::format_string("Square Game [Score = %d, TimeLeft = %.2f]", mScore, mTimeLeft)));
         
         if(mTimeLeft < 0.f) {
-            ukn::MessageBox::Show("Timeout!", "Game", ukn::MBO_OK);
+            ukn::MessageBox::Show(L"Timeout!", L"Game", ukn::MBO_OK);
             mTimeLeft = 5.f;
             mScore = 0.f;
         }

@@ -8,6 +8,7 @@
 
 #include "UKN/Profiler.h"
 #include "UKN/Common.h"
+#include "UKN/StringUtil.h"
 
 namespace ukn {
     
@@ -26,15 +27,15 @@ namespace ukn {
     } // namespace detail
     
     ukn_string ProfileData::toFormattedString() const {
-        ukn_string buffer("Profile "+name+": ");
-        buffer += format_string("last time %u, average time %u, max time %u, min time %u, recorded frames %u, average time ratio %.3f, average time ratio in frame %.3f",
-                                time,
-                                average_time,
-                                max_time,
-                                min_time,
-                                recorded_frames,
-                                time_ratio,
-                                time_ratio_frame);
+        ukn_string buffer(L"Profile "+name+L": ");
+        buffer += String::StringToWStringFast(format_string("last time %u, average time %u, max time %u, min time %u, recorded frames %u, average time ratio %.3f, average time ratio in frame %.3f",
+                                                            time,
+                                                            average_time,
+                                                            max_time,
+                                                            min_time,
+                                                            recorded_frames,
+                                                            time_ratio,
+                                                            time_ratio_frame));
         return buffer;
     }
     

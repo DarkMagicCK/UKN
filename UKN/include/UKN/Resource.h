@@ -30,7 +30,7 @@ namespace ukn {
     
     class UKN_API Resource: public IResource {
     public:
-        Resource(const String& name, StreamPtr resourceStream):
+        Resource(const ukn_string& name, StreamPtr resourceStream):
         mName(name),
         mResourceStream(resourceStream) {
             
@@ -38,7 +38,7 @@ namespace ukn {
         
         virtual ~Resource() { }
         
-        const String& getName() const {
+        const ukn_string& getName() const {
             return this->mName;
         }
         
@@ -57,12 +57,12 @@ namespace ukn {
     private:
         friend class ResourceLoader;
         
-        void setName(const String& name) {
+        void setName(const ukn_string& name) {
             this->mName = name;
         }
         
     private:
-        String mName;
+        ukn_string mName;
         
         // unique id for the resource
         uint32 mUniqueId;
@@ -73,42 +73,42 @@ namespace ukn {
     class UKN_API ResourceFactory {
     public:
         virtual ~ResourceFactory() { }
-        virtual bool resourceExists(const String& resource) = 0;
-        virtual bool pathExists(const String& path) = 0;
-        virtual ResourcePtr onResourceLoad(const String& path) = 0;
+        virtual bool resourceExists(const ukn_string& resource) = 0;
+        virtual bool pathExists(const ukn_string& path) = 0;
+        virtual ResourcePtr onResourceLoad(const ukn_string& path) = 0;
         
-        typedef std::vector<String> ResourceNames;
-        virtual void enumResourceNamesInPath(const String& path, ResourceNames& names) = 0;
+        typedef std::vector<ukn_string> ResourceNames;
+        virtual void enumResourceNamesInPath(const ukn_string& path, ResourceNames& names) = 0;
     };
     
     class UKN_API ResourceLoader {
     public:
-        typedef std::vector<String> ResourcePaths;
+        typedef std::vector<ukn_string> ResourcePaths;
         typedef std::vector<ResourceFactoryPtr> ResourceFactories;
-        typedef std::vector<String> FileList;
+        typedef std::vector<ukn_string> FileList;
 
     public:
         static ResourceLoader& Instance();
         
-        void    addPath(const String& path);
-        void    removePath(const String& path);
+        void    addPath(const ukn_string& path);
+        void    removePath(const ukn_string& path);
         const   ResourcePaths& getResourcePaths() const;
         
         void    registerResourceFactory(ResourceFactoryPtr rfac);
         const   ResourceFactories& getResourceFactories() const;
         
-        ResourcePtr loadResource(const String& name_or_path, bool isFullPath=false /* search resource paths? */);
-        ResourcePtr createMemoryResource(const uint8* data, size_t size, const String& name=L"memory_buffer");
-        ResourcePtr createFileResource(const String& name);
+        ResourcePtr loadResource(const ukn_string& name_or_path, bool isFullPath=false /* search resource paths? */);
+        ResourcePtr createMemoryResource(const uint8* data, size_t size, const ukn_string& name=L"memory_buffer");
+        ResourcePtr createFileResource(const ukn_string& name);
         
-        void enumResourceNamesInPath(const String& path, FileList& names);
+        void enumResourceNamesInPath(const ukn_string& path, FileList& names);
         
     protected:
         ResourceLoader();
         ~ResourceLoader();
         
     private:
-        ResourcePtr onResourceLoad(const String& name, bool isFullPath);
+        ResourcePtr onResourceLoad(const ukn_string& name, bool isFullPath);
         
         ResourceFactories mResourceFactories;
         ResourcePaths mResourcePaths;
@@ -119,7 +119,7 @@ namespace ukn {
         T obj;
         uint64 last_time;
         uint64 owner_num;
-        String name;
+        ukn_string name;
         
         friend bool operator < (const ResourcePoolObject<T>& l, const ResourcePoolObject<T>& r) {
             return l.live_time < r.live_time;
@@ -129,7 +129,7 @@ namespace ukn {
     template<typename T, int MAX_SIZE>
     class ResourcePool: public AutoUpdate {
     public:
-        typedef Function<bool(const String& name, T& obj)> new_obj;
+        typedef Function<bool(const ukn_string& name, T& obj)> new_obj;
         typedef Function<bool(T&)> dispose_obj;
         
         enum {
@@ -153,7 +153,7 @@ namespace ukn {
             }
         }
         
-        T& get(const String& name) {
+        T& get(const ukn_string& name) {
             iterator it;
             if((it = mResources.find(name)) != mResources.end()) {
                 it->seoncd.owner_num++;
@@ -188,7 +188,7 @@ namespace ukn {
             }
         }
         
-        bool release_by_name(const String& name) {
+        bool release_by_name(const ukn_string& name) {
             iterator it = mResources.find(name);
             if(it != mResources.end()) {
                 release_obj(it);
@@ -207,7 +207,7 @@ namespace ukn {
             }
         }
         
-        typedef typename ukn_hash_map<String, ResourcePoolObject<T> > ResourceMap;
+        typedef typename ukn_hash_map<ukn_string, ResourcePoolObject<T> > ResourceMap;
         typedef typename ResourceMap::iterator iterator;
         
         void relaes_obj(iterator it) {
@@ -229,7 +229,7 @@ namespace ukn {
         new_obj mNew;
         dispose_obj mDispose;
         
-        std::set<String> mGarbageSet;
+        std::set<ukn_string> mGarbageSet;
     };
         
 } // namespace ukn

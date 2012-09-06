@@ -104,23 +104,7 @@ namespace ukn {
 		}
 		return ~crc;
 	}
-	
-    uint64 Hash::Crc32(const ukn_string& str) {
-		uint64 crc = (uint64)~0;
-		for(size_t i=0; i<str.size(); ++i) {
-			_CRC32_(crc, str[i]);
-		}
-		return ~crc;
-	}
-	
-    uint64 Hash::Crc32(const ukn_wstring& str) {
-		uint64 crc = (uint64)~0;
-		for(size_t i=0; i<str.size(); ++i) {
-			_CRC32_(crc, str[i]);
-		}
-		return ~crc;
-	}
-    
+	   
     uint32 Hash::Adler32(const char* buf) {
         static const uint32 MOD_ADLER = 65521;
         uint32 a = 1, b = 0;
@@ -147,7 +131,7 @@ namespace ukn {
         return (b << 16) | a;
     }
     
-    ukn_string Hash::GetMD5(const StreamPtr stream) {
+    std::string Hash::GetMD5(const StreamPtr stream) {
         StreamPtr memData = stream->readIntoMemory();
         
         MD5 md5((const char*)(static_cast<MemoryStream*>(memData.get())->data()), (uint32)memData->size());

@@ -245,9 +245,7 @@ namespace ukn {
     }
     
     bool Font::loadFromResource(const ResourcePtr& resource) {
-        if(resource->getName().find(L".ttf") != String::npos ||
-           resource->getName().find(L".otf") != String::npos ||
-           resource->getName().find(L".ttc") != String::npos) {
+        if(resource->getName().find(L".xml") == String::npos) {
             bool result = mFace->load(resource);
             if(result) {
                 mGlyphs.resize(mFace->face->num_glyphs);
@@ -285,14 +283,14 @@ namespace ukn {
     bool Font::deserialize(const ConfigParserPtr& config) {
         mGlyphs.clear();
 
-        if(config && config->toNode("font")) {            
-            ukn_string font_name = config->getString("name");
+        if(config && config->toNode(L"font")) {            
+            ukn_string font_name = config->getString(L"name");
             
             if(!font_name.empty()) {
-                String fullFontPath = Path::CheckAndGetFontPath(String::StringToWString(font_name));
+                ukn_string fullFontPath = Path::CheckAndGetFontPath(font_name);
                 
                 if(fullFontPath.empty()) {
-                    log_error("ukn::Font::deserialize: error finding font name " + font_name);
+                    log_error(L"ukn::Font::deserialize: error finding font name " + font_name);
                     return false;
                 }
                 ResourcePtr fontResource = ResourceLoader::Instance().loadResource(fullFontPath);
@@ -310,16 +308,16 @@ namespace ukn {
                 }
             }
             
-            mEnableShadow = config->getBool("shadow", false);
-            mEnableStroke = config->getBool("stroke", false);
+            mEnableShadow = config->getBool(L"shadow", false);
+            mEnableStroke = config->getBool(L"stroke", false);
             
-            mShadowXOffset = config->getInt("shadow_offset_x", 0);
-            mShadowYOffset = config->getInt("shadow_offset_y", 0);
+            mShadowXOffset = config->getInt(L"shadow_offset_x", 0);
+            mShadowYOffset = config->getInt(L"shadow_offset_y", 0);
             
-            mStrokeWidth = config->getInt("stroke_width", 0);
+            mStrokeWidth = config->getInt(L"stroke_width", 0);
             
-            mFontSize = config->getInt("size", 14);
-            mFontName = String::StringToWString(font_name);
+            mFontSize = config->getInt(L"size", 14);
+            mFontName = font_name;
             
             config->toParent();
             
@@ -330,14 +328,14 @@ namespace ukn {
     
     bool Font::serialize(const ConfigParserPtr& cfg) {
         if(cfg && !mGlyphs.empty()) {
-            cfg->beginNode("font");
-            cfg->setString("name", String::WStringToString(mFontName));
-            cfg->setBool("shadow", mEnableShadow);
-            cfg->setBool("stroke", mEnableStroke);
-            cfg->setInt("shadow_offset_x", mShadowXOffset);
-            cfg->setInt("shadow_offset_y", mShadowYOffset);
-            cfg->setInt("stroke_width", mStrokeWidth);
-            cfg->setInt("size", mFontSize);
+            cfg->beginNode(L"font");
+            cfg->setString(L"name", mFontName);
+            cfg->setBool(L"shadow", mEnableShadow);
+            cfg->setBool(L"stroke", mEnableStroke);
+            cfg->setInt(L"shadow_offset_x", mShadowXOffset);
+            cfg->setInt(L"shadow_offset_y", mShadowYOffset);
+            cfg->setInt(L"stroke_width", mStrokeWidth);
+            cfg->setInt(L"size", mFontSize);
             cfg->endNode();
             
             return true;

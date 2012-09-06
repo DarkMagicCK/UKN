@@ -261,10 +261,6 @@ namespace ukn {
         parse(str, ukn_string());
     }
     
-    void StringTokenlizer::operator=(const char* str) {
-        parse(str, ukn_string());
-    }
-    
     size_t StringTokenlizer::size() const {
         return mTokens.size();
     }
@@ -283,7 +279,7 @@ namespace ukn {
 namespace ukn {
     
 #ifdef UKN_OS_WINDOWS
-	static ukn_string ukn_win_wstring_to_string(const String& pwszSrc) {
+	static std::string ukn_win_wstring_to_string(const std::wstring& pwszSrc) {
 		int nLen = WideCharToMultiByte(CP_ACP, 0, pwszSrc.c_str(), -1, NULL, 0, NULL, NULL);
 		if (nLen<= 0) return std::string("");
 		char* pszDst = new char[nLen];
@@ -295,7 +291,7 @@ namespace ukn {
 		return strTemp;
 	}
     
-	static ukn_wstring ukn_win_string_to_wstring(const ukn_string& pszSrc) {
+	static std::wstring ukn_win_string_to_wstring(const std::string& pszSrc) {
 		if(pszSrc.size() == 0)
 			return L"\0";
 		int nSize = MultiByteToWideChar(CP_ACP, 0, pszSrc.c_str(), pszSrc.size(), 0, 0);
@@ -313,7 +309,7 @@ namespace ukn {
 	}
 #endif
     
-    static ukn_string ukn_normal_wstring_to_string(const String& ws) {
+    static std::string ukn_normal_wstring_to_string(const std::wstring& ws) {
         std::string curLocale = setlocale(LC_ALL, NULL);        // curLocale = "C";
         setlocale(LC_ALL, "chs");
         const wchar_t* _Source = ws.c_str();
@@ -327,7 +323,7 @@ namespace ukn {
         return result;
     }
     
-    static ukn_wstring ukn_normal_string_to_wstring(const ukn_string& s) {
+    static std::wstring ukn_normal_string_to_wstring(const std::string& s) {
         setlocale(LC_ALL, "chs"); 
         const char* _Source = s.c_str();
         size_t _Dsize = s.size() + 1;
@@ -340,7 +336,7 @@ namespace ukn {
         return result;
     }
     
-    ukn_string String::WStringToString(const ukn_wstring& str) {
+    std::string String::WStringToString(const std::wstring& str) {
 #if defined(UKN_OS_WINDOWS)
         return ukn_win_wstring_to_string(str);
 #elif defined(UKN_OS_IOS) || defined(UKN_OS_OSX)
@@ -350,7 +346,7 @@ namespace ukn {
 #endif
     }
     
-    ukn_wstring String::StringToWString(const ukn_string& str) {
+    std::wstring String::StringToWString(const std::string& str) {
 #if defined(UKN_OS_WINDOWS)
         return ukn_win_string_to_wstring(str);
 #elif defined(UKN_OS_IOS) || defined(UKN_OS_OSX)
@@ -360,13 +356,13 @@ namespace ukn {
 #endif  
     }
     
-    ukn_string String::WStringToStringFast(const ukn_wstring& str) {
-        ukn_string buffer(str.length(), ' ');
+    std::string String::WStringToStringFast(const std::wstring& str) {
+        std::string buffer(str.length(), ' ');
 		std::copy(str.begin(), str.end(), buffer.begin());
 		return buffer;
     }
     
-    ukn_wstring String::StringToWStringFast(const ukn_string& str) {
+    std::wstring String::StringToWStringFast(const std::string& str) {
         ukn_wstring buffer(str.length(), L' ');
 		std::copy(str.begin(), str.end(), buffer.begin());
 		return buffer; 
@@ -382,16 +378,6 @@ namespace ukn {
         return ukn_string(it, str.end());
     }
     
-    ukn_wstring String::GetFileName(const ukn_wstring& str) {
-        ukn_wstring::const_iterator it = str.end();
-        it--;
-        
-        while(it != str.begin() && *it != L'/' && *it != L'\\') {
-            --it;
-        }
-        return ukn_wstring(it, str.end());
-    }
-    
     ukn_string String::GetFilePath(const ukn_string& str) {
         if(str.empty())
             return str;
@@ -405,21 +391,6 @@ namespace ukn {
         if(it != str.begin())
             return ukn_string(str.begin(), it+1);
         return ukn_string();
-    }
-
-    ukn_wstring String::GetFilePath(const ukn_wstring& str) {
-        if(str.empty())
-            return str;
-        
-        ukn_wstring::const_iterator it = str.end();
-        it--;
-        
-        while(it != str.begin() && *it != L'/' && *it != L'\\') {
-            --it;
-        }
-        if(it != str.begin())
-            return ukn_wstring(str.begin(), it+1);
-        return ukn_wstring();
     }
     
     uint16 *utf8_to_unicode(uint16 *unicode, const char *utf8, size_t len) {

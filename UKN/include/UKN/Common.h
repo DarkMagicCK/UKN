@@ -47,22 +47,22 @@ namespace ukn {
 		}
 	};
 
-    static ukn_string format_string(const char* format, ...) {
+    static std::string format_string(const char* format, ...) {
         va_list	arg;
 		char message[1024] = {0};
 		va_start(arg, format);
 		vsprintf(message, format, arg);
 		va_end(arg);
-		return ukn_string(message);
+		return std::string(message);
     }
 
     inline ukn_string get_lib_name(const ukn_string& lib) {
 #if defined(UKN_OS_OSX)
-        return lib + ".dylib";
+        return lib + L".dylib";
 #elif defined(UKN_OS_WINDOWS)
-        return lib + ".dll";
+        return lib + L".dll";
 #elif defined(UKN_OS_LINUX)
-        return lib + ".so";
+        return lib + L".so";
 #endif
     }
 

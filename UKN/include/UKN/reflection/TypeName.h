@@ -62,11 +62,11 @@ namespace ukn {
             static const char* Name() { return "double"; }
         };
         
-        template<> struct TypeNameRetriever<ukn_string>{ 
+        template<> struct TypeNameRetriever<std::string>{
             static const char* Name() { return "string"; }
         };
         
-        template<> struct TypeNameRetriever<ukn_wstring>{ 
+        template<> struct TypeNameRetriever<std::wstring>{
             static const char* Name() { return "wstring"; }
         };
         
@@ -110,11 +110,11 @@ namespace ukn {
             static const char* Name() { return "double"; }
         };
         
-        template<size_t LENGTH> struct TypeNameRetriever<ukn_string[LENGTH]>{ 
+        template<size_t LENGTH> struct TypeNameRetriever<std::string[LENGTH]>{
             static const char* Name() { return "string"; }
         };
         
-        template<size_t LENGTH> struct TypeNameRetriever<ukn_wstring[LENGTH]>{ 
+        template<size_t LENGTH> struct TypeNameRetriever<std::wstring[LENGTH]>{
             static const char* Name() { return "wstring"; }
         };
         

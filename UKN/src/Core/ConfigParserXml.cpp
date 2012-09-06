@@ -61,7 +61,8 @@ namespace ukn {
         
         pugi::xml_node nextNode = node[0] == '/' ? mCurrNode.root() : mCurrNode;
         
-        StringTokenlizer tokens(node, "/");
+        StringTokenlizer tokens(node,
+                                L"/");
         if(tokens.size() == 0)
             return false;
         
@@ -72,7 +73,7 @@ namespace ukn {
                 continue;
             }
             
-            nextNode = nextNode.child((*it).c_str());
+            nextNode = nextNode.child(String::WStringToString((*it)).c_str());
             if(!nextNode)
                 return false;
             ++it;
@@ -82,13 +83,13 @@ namespace ukn {
     
     ukn_string ConfigParserXmlImpl::getCurrentNodeName() const {
         if(mDocument)
-            return mCurrNode.name();
+            return String::StringToWString(mCurrNode.name());
         return ukn_string();
     }
     
     ukn_string ConfigParserXmlImpl::getCurrentNodePath() const {
         if(mDocument)
-            return mCurrNode.path();
+            return String::StringToWString(mCurrNode.path());
         return ukn_string();
     }
     
@@ -101,7 +102,8 @@ namespace ukn {
             return true;
         }
         
-        StringTokenlizer tokens(node, "/");
+        StringTokenlizer tokens(node,
+                                L"/");
         if(tokens.size() == 0)
             return false;
         
@@ -113,7 +115,7 @@ namespace ukn {
                 continue;
             }
             
-            nextNode = nextNode.child((*it).c_str());
+            nextNode = nextNode.child(String::WStringToString((*it)).c_str());
             if(!nextNode)
                 return false;
             ++it;
@@ -131,7 +133,7 @@ namespace ukn {
         if(name.empty()) {
             node = mCurrNode.first_child();
         } else {
-            node = mCurrNode.child(name.c_str());
+            node = mCurrNode.child(String::WStringToString(name).c_str());
         }
         if(node) {
             mCurrNode = node;
@@ -148,7 +150,7 @@ namespace ukn {
         if(name.empty()) {
             node = mCurrNode.next_sibling();
         } else {
-            node = mCurrNode.next_sibling(name.c_str());
+            node = mCurrNode.next_sibling(String::WStringToString(name).c_str());
         }
         if(node) {
             mCurrNode = node;
@@ -173,7 +175,7 @@ namespace ukn {
         if(!mDocument)
             return false;
         
-        pugi::xml_attribute attr = mCurrNode.attribute(name.c_str());
+        pugi::xml_attribute attr = mCurrNode.attribute(String::WStringToString(name).c_str());
         if(attr) {
             return true;
         }
@@ -189,7 +191,7 @@ namespace ukn {
         
         std::vector<ukn_string> attributes;
         for(; it != end; ++it) {
-            attributes.push_back(ukn_string(it->name()));
+            attributes.push_back(String::StringToWString(it->name()));
         }
         return attributes;
     }
@@ -199,14 +201,14 @@ namespace ukn {
             return opt;
         
         if(attr.empty()) {
-            ukn_string child_value = mCurrNode.child_value();
+            ukn_string child_value = String::StringToWString(mCurrNode.child_value());
             return child_value;
         }
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
         if(attribute) {
-            return attribute.value();
+            return String::StringToWString(attribute.value());
         } else {
-            ukn_string c = mCurrNode.child_value(attr.c_str());
+            ukn_string c = String::StringToWString(mCurrNode.child_value(String::WStringToString(attr).c_str()));
             if(!c.empty())
                 return c;
         }
@@ -220,7 +222,7 @@ namespace ukn {
         if(attr.empty()) {
             return opt;
         }
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
         if(attribute) {
             return attribute.as_bool();
         }
@@ -233,7 +235,7 @@ namespace ukn {
         
         if(attr.empty())
             return opt;
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
         if(attribute) {
             return attribute.as_int();
         }
@@ -246,7 +248,7 @@ namespace ukn {
         
         if(attr.empty())
             return opt;
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
         if(attribute) {
             return attribute.as_float();
         }
@@ -254,8 +256,7 @@ namespace ukn {
     }
     
     void ConfigParserXmlImpl::myWritter::write(const void* data, size_t size) {
-        str += ukn_string((const char*)data, size);
-        str += indent;
+        str += std::string((const char*)data, size);
     }
     
     void ConfigParserXmlImpl::myStreamWritter::write(const void* data, size_t size) {
@@ -269,16 +270,15 @@ namespace ukn {
         
         myWritter writter(indent);
         mDocument->save(writter, PUGIXML_TEXT("\t"), pugi::format_indent, pugi::encoding_wchar);
-        return writter.str;
+        return String::StringToWString(writter.str);
     }
     
     ConfigParserXmlImpl::myStreamWritter::myStreamWritter(const char* indent) {
         stream = MakeSharedPtr<MemoryStream>();
-        this->indent = indent;
     }
     
     ConfigParserXmlImpl::myWritter::myWritter(const char* indent) {
-        this->indent = indent;
+
     }
     
     StreamPtr ConfigParserXmlImpl::writeToStream(const char* indent) const {
@@ -294,7 +294,7 @@ namespace ukn {
         if(!mDocument)
             return false;
         
-        pugi::xml_node node = mCurrNode.append_child(name.c_str());
+        pugi::xml_node node = mCurrNode.append_child(String::WStringToString(name).c_str());
         if(node) {
             mCurrNode = node;
             return true;
@@ -310,18 +310,18 @@ namespace ukn {
         if(!mDocument)
             return;
         
-        mCurrNode.set_value(val.c_str());
+        mCurrNode.set_value(String::WStringToString(val).c_str());
     }
     
     void ConfigParserXmlImpl::setString(const ukn_string& attr, const ukn_string& val) {
         if(!mDocument)
             return;
         
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
         if(attribute)
             attribute.set_value(val.c_str());
         else {
-            attribute = mCurrNode.append_attribute(attr.c_str());
+            attribute = mCurrNode.append_attribute(String::WStringToString(attr).c_str());
             attribute.set_value(val.c_str());
         }
     }
@@ -330,11 +330,11 @@ namespace ukn {
         if(!mDocument)
             return;
         
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
         if(attribute)
             attribute.set_value(val);
         else {
-            attribute = mCurrNode.append_attribute(attr.c_str());
+            attribute = mCurrNode.append_attribute(String::WStringToString(attr).c_str());
             attribute.set_value(val);
         }
     }
@@ -343,11 +343,11 @@ namespace ukn {
         if(!mDocument)
             return;
         
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
         if(attribute)
             attribute.set_value(val);
         else {
-            attribute = mCurrNode.append_attribute(attr.c_str());
+            attribute = mCurrNode.append_attribute(String::WStringToString(attr).c_str());
             attribute.set_value(val);
         }
     }
@@ -356,11 +356,11 @@ namespace ukn {
         if(!mDocument)
             return;
         
-        pugi::xml_attribute attribute = mCurrNode.attribute(attr.c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
         if(attribute)
             attribute.set_value(val);
         else {
-            attribute = mCurrNode.append_attribute(attr.c_str());
+            attribute = mCurrNode.append_attribute(String::WStringToString(attr).c_str());
             attribute.set_value(val);
         }
     }

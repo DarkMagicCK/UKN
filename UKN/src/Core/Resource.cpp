@@ -25,15 +25,15 @@ namespace ukn {
     
     class DiskResourceFactory: public ResourceFactory {
     public:
-        bool resourceExists(const String& path) {
+        bool resourceExists(const ukn_string& path) {
             return File::FileExists(path);
         }
         
-        bool pathExists(const String& path) {
+        bool pathExists(const ukn_string& path) {
             return File::PathExists(path);
         }
         
-        ResourcePtr onResourceLoad(const String& path) {
+        ResourcePtr onResourceLoad(const ukn_string& path) {
             FileStream* pfs = new FileStream;
             if(pfs->open(path)) {
                 ResourcePtr ptr = MakeSharedPtr<Resource>(path, StreamPtr(pfs));
@@ -42,10 +42,10 @@ namespace ukn {
             return MakeSharedPtr<Resource>(path, StreamPtr());
         }
         
-        void enumResourceNamesInPath(const String& path, ResourceFactory::ResourceNames& names) {
+        void enumResourceNamesInPath(const ukn_string& path, ResourceFactory::ResourceNames& names) {
             DirectoryIterator it(path);
             while(!it.isEnd()) {
-                names.push_back(String::StringToWString(it.file()));
+                names.push_back(it.file());
                 ++it;
             }
         }
@@ -64,11 +64,11 @@ namespace ukn {
         return static_instance;
     }
     
-    void ResourceLoader::addPath(const String& path) {
+    void ResourceLoader::addPath(const ukn_string& path) {
         mResourcePaths.push_back(path);
     }
     
-    void ResourceLoader::removePath(const String& path) {
+    void ResourceLoader::removePath(const ukn_string& path) {
         ResourcePaths::iterator it = mResourcePaths.begin();
         while(it != mResourcePaths.end()) {
             if(*it == path) {
@@ -90,14 +90,14 @@ namespace ukn {
         return mResourceFactories;
     }
     
-    inline ResourcePtr ResourceLoader::onResourceLoad(const String& name, bool isFullPath) {
+    inline ResourcePtr ResourceLoader::onResourceLoad(const ukn_string& name, bool isFullPath) {
         ResourceFactories::iterator itFac = mResourceFactories.begin();
         while(itFac != mResourceFactories.end()) {
             ResourcePaths::iterator itPath = mResourcePaths.begin();
             
 			 if(!isFullPath && mResourcePaths.size() != 0) {
                 while(itPath != mResourcePaths.end()) {
-                    String fullPath = *itPath + L"/" + name;
+                    ukn_string fullPath = *itPath + L"/" + name;
                     
                     if((*itFac)->resourceExists(fullPath)) {
                         ResourcePtr ptr = (*itFac)->onResourceLoad(fullPath);
@@ -119,22 +119,22 @@ namespace ukn {
         return MakeSharedPtr<Resource>(name, StreamPtr());
     }
     
-    ResourcePtr ResourceLoader::loadResource(const String& name_or_path, bool isFullPath) {
+    ResourcePtr ResourceLoader::loadResource(const ukn_string& name_or_path, bool isFullPath) {
         return onResourceLoad(name_or_path, isFullPath);
     }
     
-    ResourcePtr ResourceLoader::createMemoryResource(const uint8* data, size_t size, const String& name) {
+    ResourcePtr ResourceLoader::createMemoryResource(const uint8* data, size_t size, const ukn_string& name) {
         return MakeSharedPtr<Resource>(name, MakeSharedPtr<MemoryStream>(data, size));
     }
     
-    ResourcePtr ResourceLoader::createFileResource(const String& name) {
+    ResourcePtr ResourceLoader::createFileResource(const ukn_string& name) {
         FileStream* file_stream = new FileStream();
         if(file_stream->open(name, true, false, false))
             return MakeSharedPtr<Resource>(name, StreamPtr(file_stream));
         return ResourcePtr();
     }
     
-    void ResourceLoader::enumResourceNamesInPath(const String& path, FileList& names) {
+    void ResourceLoader::enumResourceNamesInPath(const ukn_string& path, FileList& names) {
         ResourceFactories::iterator itFac = mResourceFactories.begin();
         while(itFac != mResourceFactories.end()) {
             if((*itFac)->pathExists(path)) {

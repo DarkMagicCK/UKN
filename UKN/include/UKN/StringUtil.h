@@ -40,28 +40,25 @@ namespace ukn {
         
         friend std::ostream& operator<<(std::ostream& os, const String& val);
         
-        static ukn_string WStringToString(const ukn_wstring& str);
-        static ukn_wstring StringToWString(const ukn_string& str);
+        static std::string WStringToString(const std::wstring& str);
+        static std::wstring StringToWString(const std::string& str);
         
         // by direct data copy
-        static ukn_string WStringToStringFast(const ukn_wstring& str);
-        static ukn_wstring StringToWStringFast(const ukn_string& str);
+        static std::string WStringToStringFast(const std::wstring& str);
+        static std::wstring StringToWStringFast(const std::string& str);
         
         static ukn_string GetFileName(const ukn_string& str);
-        static ukn_wstring GetFileName(const ukn_wstring& str);
-        
         static ukn_string GetFilePath(const ukn_string& str);
-        static ukn_wstring GetFilePath(const ukn_wstring& str);
         
         template<typename T>
-        static ukn_string AnyToString(const T& val) {
+        static std::string AnyToString(const T& val) {
             std::ostringstream sstr;
             sstr << val;
             return sstr.str();
         }
         
         template<typename T>
-        static ukn_wstring AnyToWString(const T& val) {
+        static std::wstring AnyToWString(const T& val) {
             std::wostringstream sstr;
             sstr << val;
             return sstr.str();
@@ -100,7 +97,6 @@ namespace ukn {
         size_t size() const;
         
         void operator=(const ukn_string& str);
-        void operator=(const char* str);
         
         const TokenContainer& getTokens() const;
         

@@ -16,8 +16,8 @@ namespace ukn {
     
     // ios and osx wrapper functions
      
-    ukn_wstring ukn_apple_string_to_wstring(const ukn_string& str);
-    ukn_string ukn_apple_wstring_to_string(const ukn_wstring& str);
+    std::wstring ukn_apple_string_to_wstring(const std::string& str);
+    std::string ukn_apple_wstring_to_string(const std::wstring& str);
     
     bool ukn_apple_file_exists(const ukn_wstring& file);
     ukn_wstring ukn_apple_application_path();

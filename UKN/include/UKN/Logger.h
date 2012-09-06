@@ -69,15 +69,40 @@ namespace ukn {
         bool mOutputToConsole;
     };
     
-    void log_error(const ukn_wstring& log);
-    void log_notice(const ukn_wstring& log);
-    void log_warning(const ukn_wstring& log);
-    void log_info(const ukn_wstring& log);
+    
+    inline void log_error(const std::wstring& log) {
+        Logger::Instance().log(log, LL_Error);
+    }
+    
+    inline void log_notice(const std::wstring& log) {
+        Logger::Instance().log(log, LL_Notice);
+    }
+    
+    inline void log_warning(const std::wstring& log) {
+        Logger::Instance().log(log, LL_Warning);
+    }
+    
+    inline void log_info(const std::wstring& log) {
+        Logger::Instance().log(log, LL_Info);
+    }
+    
+    inline void log_error(const std::string& log) {
+        Logger::Instance().log(String::StringToWString(log), LL_Error);
+    }
+    
+    inline void log_notice(const std::string& log) {
+        Logger::Instance().log(String::StringToWString(log), LL_Notice);
+    }
+    
+    inline void log_warning(const std::string& log) {
+        Logger::Instance().log(String::StringToWString(log), LL_Warning);
+    }
+    
+    inline void log_info(const std::string& log) {
+        Logger::Instance().log(String::StringToWString(log), LL_Info);
+    }
+    
 
-	void log_error(const ukn_string& log);
-    void log_notice(const ukn_string& log);
-    void log_warning(const ukn_string& log);
-    void log_info(const ukn_string& log);
 
 #define ukn_logged_assert(cond, log) \
     if(!(cond)) { \

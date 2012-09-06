@@ -190,7 +190,7 @@ namespace ukn {
         if((mGlfwWindow = glfwOpenWindow(settings.width,
                                          settings.height,
                                          settings.full_screen ? GLFW_FULLSCREEN : GLFW_WINDOWED, 
-                                         name.c_str(), 
+                                         String::WStringToString(name).c_str(),
                                          0)) == 0) {
             // no window = app exit
             // so exception is acceptable here
@@ -250,7 +250,8 @@ namespace ukn {
     }
     
     void GLWindow::setName(const ukn_string& name) {
-        glfwSetWindowTitle(mGlfwWindow, name.c_str());
+        glfwSetWindowTitle(mGlfwWindow,
+                           String::WStringToString(name).c_str());
     }
     
     void GLWindow::updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h) {
@@ -346,7 +347,7 @@ namespace ukn {
     }
     
     ukn_string GLWindow::description() const {
-        static ukn_string des("OpenGL Window based on GLFW");
+        static ukn_string des(L"OpenGL Window based on GLFW");
         return des;
     }
      

@@ -29,7 +29,7 @@
 
 namespace ukn {
     
-    ukn_wstring ukn_apple_string_to_wstring(const ukn_string& str) {   
+    std::wstring ukn_apple_string_to_wstring(const std::string& str) {
 		NSString* nsstr = [[NSString alloc] initWithUTF8String: str.c_str()];
         NSStringEncoding pEncode    =   CFStringConvertEncodingToNSStringEncoding ( kCFStringEncodingUTF32LE );   
 		NSData* pSData              =   [ nsstr dataUsingEncoding : pEncode ];    
@@ -39,7 +39,7 @@ namespace ukn {
 	}
 	
     
-	ukn_string ukn_apple_wstring_to_string(const ukn_wstring& str) { 
+	std::string ukn_apple_wstring_to_string(const std::wstring& str) {
         NSString* pString = [ [ NSString alloc ]    
 							 initWithBytes : (char*)str.data()   
 							 length : str.size() * sizeof(wchar_t)   
@@ -94,9 +94,9 @@ namespace ukn {
         SInt32 versionMinor = 0;
         Gestalt( gestaltSystemVersionMajor, &versionMajor );
         Gestalt( gestaltSystemVersionMinor, &versionMinor );
-        return format_string("Mac OS X Version %d.%d", 
-                             versionMajor, 
-                             versionMinor);
+        return String::StringToWString(format_string("Mac OS X Version %d.%d",
+                                                     versionMajor,
+                                                     versionMinor));
     }
     
     inline int32 mb_option_to_kCFNotificationLevel(int32 option) {
@@ -112,9 +112,9 @@ namespace ukn {
 		return kCFUserNotificationPlainAlertLevel;
 	}
     
-    MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, int option) {
-        CFStringRef header_ref   = CFStringCreateWithCString(NULL, title.c_str(), (uint32)title.size());
-		CFStringRef message_ref  = CFStringCreateWithCString(NULL, mssg.c_str(), (uint32)mssg.size());
+    MessageBoxButton ukn_apple_message_box(const std::wstring& mssg, const std::wstring& title, int option) {
+        CFStringRef header_ref   = CFStringCreateWithCString(NULL, String::WStringToString(mssg).c_str(), (uint32)title.size());
+		CFStringRef message_ref  = CFStringCreateWithCString(NULL, String::WStringToString(title).c_str(), (uint32)mssg.size());
 		
 		CFOptionFlags result;
 		int32 level = mb_option_to_kCFNotificationLevel(option);
@@ -144,13 +144,6 @@ namespace ukn {
                 return MBB_Cancel;
 		}
     }
-    
-    MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option) {
-        return ukn_apple_message_box(String::WStringToString(mssg),
-                                     String::WStringToString(title),
-                                     option);
-    }
-    
     
     int ukn_get_os_osx_version() {
         return MAC_OS_X_VERSION_MAX_ALLOWED;

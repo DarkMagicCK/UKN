@@ -75,7 +75,7 @@ namespace ukn {
         this->writeLineSeparator();
     }
     
-    void StreamWriter::writeLine(const ukn_string& str) {
+    void StreamWriter::writeLine(const std::string& str) {
         this->write(str);
         this->writeLineSeparator();
     }
@@ -151,7 +151,7 @@ namespace ukn {
         mBuffer.append(bytes + start, end - start);
     }
     
-    void BinaryStreamWriter::write(const ukn_string& str) {
+    void BinaryStreamWriter::write(const std::string& str) {
         mBuffer.append((uint8*)str.c_str(), str.length()+1);
     }
     
@@ -235,15 +235,15 @@ namespace ukn {
     
     void TextStreamWriter::write(const uint8* bytes, size_t len) {
         if(mStream && mStream->isValid())
-            this->write(ukn_string((const char*)bytes, len));
+            this->write(std::string((const char*)bytes, len));
     }
     
     void TextStreamWriter::write(const uint8* bytes, size_t start, size_t end) {
         if(mStream && mStream->isValid())
-            this->write(ukn_string((const char*)bytes, start, end));
+            this->write(std::string((const char*)bytes, start, end));
     }
     
-    void TextStreamWriter::write(const ukn_string& str) {
+    void TextStreamWriter::write(const std::string& str) {
         if(mStream && mStream->isValid()) 
             mStream->write((const uint8*)str.c_str(), str.length());
     }
@@ -375,9 +375,9 @@ namespace ukn {
         UKN_THROW_EXCEPTION("ukn::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
-    ukn_string BinaryStreamReader::readString() {
+    std::string BinaryStreamReader::readString() {
         if(mStream && mStream->isValid()) { 
-            ukn_string buffer;
+            std::string buffer;
             uint8 c;
             mStream->read(&c, 1);
             while(c != 0 && !mStream->eos()) {
@@ -389,14 +389,14 @@ namespace ukn {
         UKN_THROW_EXCEPTION("ukn::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
-    ukn_string BinaryStreamReader::readString(size_t char_count, StringFormat encoding_format) {
+    std::string BinaryStreamReader::readString(size_t char_count, StringFormat encoding_format) {
         if(mStream && mStream->isValid()) { 
             uint8* char_data = ukn_malloc_t(uint8, char_count);
             size_t read_count = mStream->read(char_data, char_count);
             if(read_count != char_count) {
             // exception
             }
-            ukn_string str((const char*)char_data, encoding_format);
+            std::string str((const char*)char_data, encoding_format);
             ukn_free(char_data);
             return str;
         }
@@ -481,8 +481,8 @@ namespace ukn {
                c == '\r';
     }
     
-    ukn_string TextStreamReader::readString() {
-        ukn_string result;
+    std::string TextStreamReader::readString() {
+        std::string result;
         
         uint8 buffer = ' ';
         while(is_space((char)buffer))  
@@ -496,12 +496,12 @@ namespace ukn {
         return result;
     }
     
-    ukn_string TextStreamReader::readLine() {
+    std::string TextStreamReader::readLine() {
         return readTill('\n');
     }
     
-    ukn_string TextStreamReader::readTill(char end) {
-        ukn_string result;
+    std::string TextStreamReader::readTill(char end) {
+        std::string result;
         
         uint8 buffer;
         mStream->read(&buffer, 1);
@@ -513,8 +513,8 @@ namespace ukn {
         return result;
     }
     
-    ukn_string TextStreamReader::readNumber() {
-        ukn_string result;
+    std::string TextStreamReader::readNumber() {
+        std::string result;
         
         uint8 buffer = ' ';
         while(is_space((char)buffer))  

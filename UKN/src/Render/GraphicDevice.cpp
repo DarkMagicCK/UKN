@@ -18,9 +18,9 @@ namespace ukn {
     class NullWindow: public Window {
     public:
         NullWindow():
-        Window("Null") { }
+        Window(L"Null") { }
         
-        ukn_string description() const { return ukn_string("Null Window"); }
+        ukn_string description() const { return ukn_string(L"Null Window"); }
         
 #if defined(UKN_OS_WINDOWS)
         HWND getHWnd() const { return 0; }
@@ -48,7 +48,7 @@ namespace ukn {
         void onRenderBuffer(const RenderBufferPtr& buffer) { }
         
         ukn_string description() const {
-            return ukn_string("Null GraphicDevice");
+            return ukn_string(L"Null GraphicDevice");
         }
         
         void beginRendering() { }

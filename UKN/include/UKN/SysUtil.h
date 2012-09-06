@@ -29,8 +29,7 @@ namespace ukn {
     
     class UKN_API MessageBox {
     public:
-        static MessageBoxButton Show(const ukn_string& mssg, const ukn_string& title, int option);
-        static MessageBoxButton Show(const ukn_wstring& mssg, const ukn_wstring& title, int option);
+        static MessageBoxButton Show(const std::wstring& mssg, const std::wstring& title, int option);
     };
     
     class UKN_API SystemInformation {

@@ -12,13 +12,13 @@
 
 namespace ukn {
     
-    static ukn_string base64_Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    static std::string base64_Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     
     static inline bool is_base64(unsigned char c) {
         return (isalnum(c) || (c == '+') || (c == '/'));
     }
     
-    Array<uint8> base64_decode(const ukn_string& input) {
+    Array<uint8> base64_decode(const std::string& input) {
         int in_len = (int)input.size();
         int i = 0;
         int j = 0;
@@ -59,8 +59,8 @@ namespace ukn {
         return ret;
     }
     
-    ukn_string base64_encode(const uint8* bytes_to_encode, uint32 in_len) {
-        ukn_string ret;
+    std::string base64_encode(const uint8* bytes_to_encode, uint32 in_len) {
+        std::string ret;
         int i = 0;
         int j = 0;
         unsigned char char_array_3[3];

@@ -1599,7 +1599,7 @@ namespace ukn {
         ukn_string toString() const {
             ukn_assert(isValid());
 
-            std::string str("1234");
+            std::wstring str(L"1234");
             str[0] = static_cast<char>((this->mFourCC & 0xFF000000) >> 24);
             str[1] = static_cast<char>((this->mFourCC & 0x00FF0000) >> 16);
             str[2] = static_cast<char>((this->mFourCC & 0x0000FF00) >> 8);

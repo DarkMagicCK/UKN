@@ -216,7 +216,7 @@ namespace ukn {
 #define _HAVE_int64 1
 #endif
     
-    typedef std::string ukn_string;
+    typedef std::wstring ukn_string;
     typedef std::wstring ukn_wstring;
     
 #define UKN_SINGLE_PRECISION

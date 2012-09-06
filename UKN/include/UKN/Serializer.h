@@ -53,10 +53,10 @@ namespace ukn {
     
     class SerializeHelper {
     public:
-        template<class T> static void               FromString(const ukn_string& str, T* val);
+        template<class T> static void               FromString(const std::string& str, T* val);
         template<class T> static T                  DefaultValue();
         
-        template<class T> static ukn_string         ToString(T* val);
+        template<class T> static std::string         ToString(T* val);
         template<class T> static SerializableTypeId GetTypeId();
     };
         

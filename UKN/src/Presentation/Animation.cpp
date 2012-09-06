@@ -206,51 +206,51 @@ namespace ukn {
     }
     
     inline void create_linear_animation(const ukn_string& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
-        if(type == "int") {
+        if(type == L"int") {
             LinearAnimation<int>* anim = new LinearAnimation<int>;
-            anim->setFrom(parser->getInt("from", 0));
-            anim->setTo(parser->getInt("to", 0));
-            anim->setDuration(parser->getInt("duration", 0));
-            storyboard->children().push_back(StoryBoard::AnimationInfo(parser->getInt("time", 0), 
+            anim->setFrom(parser->getInt(L"from", 0));
+            anim->setTo(parser->getInt(L"to", 0));
+            anim->setDuration(parser->getInt(L"duration", 0));
+            storyboard->children().push_back(StoryBoard::AnimationInfo(parser->getInt(L"time", 0), 
                                                                        anim,
                                                                        prop));
             return;
         }
         
-        if(type == "float") {
+        if(type == L"float") {
             LinearAnimation<float>* anim = new LinearAnimation<float>;
-            anim->setFrom(parser->getFloat("from", 0));
-            anim->setTo(parser->getFloat("to", 0));
-            anim->setDuration(parser->getInt("duration", 0));
-            storyboard->children().push_back(StoryBoard::AnimationInfo(parser->getInt("time", 0), 
+            anim->setFrom(parser->getFloat(L"from", 0));
+            anim->setTo(parser->getFloat(L"to", 0));
+            anim->setDuration(parser->getInt(L"duration", 0));
+            storyboard->children().push_back(StoryBoard::AnimationInfo(parser->getInt(L"time", 0), 
                                                                        anim,
                                                                        prop));
             return;
         }
         
-        if(type == "uint") {
+        if(type == L"uint") {
             LinearAnimation<uint32>* anim = new LinearAnimation<uint32>;
-            anim->setFrom(parser->getInt("from", 0));
-            anim->setTo(parser->getInt("to", 0));
-            anim->setDuration(parser->getInt("duration", 0));
-            storyboard->children().push_back(StoryBoard::AnimationInfo(parser->getInt("time", 0), 
+            anim->setFrom(parser->getInt(L"from", 0));
+            anim->setTo(parser->getInt(L"to", 0));
+            anim->setDuration(parser->getInt(L"duration", 0));
+            storyboard->children().push_back(StoryBoard::AnimationInfo(parser->getInt(L"time", 0), 
                                                                        anim,
                                                                        prop));
             return;
         }
         
-        if(type == "double") {
+        if(type == L"double") {
             LinearAnimation<double>* anim = new LinearAnimation<double>;
-            anim->setFrom(parser->getFloat("from", 0));
-            anim->setTo(parser->getFloat("to", 0));
-            anim->setDuration(parser->getInt("duration", 0));
-            storyboard->children().push_back(StoryBoard::AnimationInfo(parser->getInt("time", 0), 
+            anim->setFrom(parser->getFloat(L"from", 0));
+            anim->setTo(parser->getFloat(L"to", 0));
+            anim->setDuration(parser->getInt(L"duration", 0));
+            storyboard->children().push_back(StoryBoard::AnimationInfo(parser->getInt(L"time", 0), 
                                                                        anim,
                                                                        prop));
             return;
         }
         
-        if(type == "color") {
+        if(type == L"color") {
             // to do
             return;
         }
@@ -258,11 +258,11 @@ namespace ukn {
     
     inline void create_key_frame_animation(const ukn_string& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
         
-        if(type == "int") {
+        if(type == L"int") {
             KeyFrameAnimation<int>* anim = new KeyFrameAnimation<int>;
             
-            int32 time = parser->getInt("time", 0);
-            int32 duration = parser->getInt("duration", 0);
+            int32 time = parser->getInt(L"time", 0);
+            int32 duration = parser->getInt(L"duration", 0);
             
             if(duration == 0)
                 return;
@@ -270,11 +270,11 @@ namespace ukn {
             
             if(parser->toFirstChild()) {
                 do {
-                    if(parser->hasAttribute("val")) {
+                    if(parser->hasAttribute(L"val")) {
                         
-                        int32 val = parser->getInt("val", 0);
-                        int32 dur = parser->getInt("duration", 0);
-                        int32 type = parser->getInt("type", 0);
+                        int32 val = parser->getInt(L"val", 0);
+                        int32 dur = parser->getInt(L"duration", 0);
+                        int32 type = parser->getInt(L"type", 0);
                     
                         anim->getKeyFrames().push_back(KeyFrameAnimation<int>::KeyFrame(val, 
                                                                                       dur, 
@@ -290,11 +290,11 @@ namespace ukn {
             return;
         } 
         
-        if(type == "float") {
+        if(type == L"float") {
             KeyFrameAnimation<float>* anim = new KeyFrameAnimation<float>;
             
-            int32 time = parser->getInt("time", 0);
-            int32 duration = parser->getInt("duration", 0);
+            int32 time = parser->getInt(L"time", 0);
+            int32 duration = parser->getInt(L"duration", 0);
             
             if(duration == 0)
                 return;
@@ -302,11 +302,11 @@ namespace ukn {
             
             if(parser->toFirstChild()) {
                 do {
-                    if(parser->hasAttribute("val")) {
+                    if(parser->hasAttribute(L"val")) {
                         
-                        float val = parser->getFloat("val", 0);
-                        int32 dur = parser->getInt("duration", 0);
-                        int32 type = parser->getInt("type", 0);
+                        float val = parser->getFloat(L"val", 0);
+                        int32 dur = parser->getInt(L"duration", 0);
+                        int32 type = parser->getInt(L"type", 0);
                         
                         anim->getKeyFrames().push_back(KeyFrameAnimation<float>::KeyFrame(val, 
                                                                                         dur, 
@@ -322,11 +322,11 @@ namespace ukn {
             return;
         } 
         
-        if(type == "double") {
+        if(type == L"double") {
             KeyFrameAnimation<double>* anim = new KeyFrameAnimation<double>;
             
-            int32 time = parser->getInt("time", 0);
-            int32 duration = parser->getInt("duration", 0);
+            int32 time = parser->getInt(L"time", 0);
+            int32 duration = parser->getInt(L"duration", 0);
             
             if(duration == 0)
                 return;
@@ -334,10 +334,10 @@ namespace ukn {
             
             if(parser->toFirstChild()) {
                 do {
-                    if(parser->hasAttribute("val")) {
-                        int32 val = parser->getInt("val", 0);
-                        int32 dur = parser->getInt("duration", 0);
-                        int32 type = parser->getInt("type", 0);
+                    if(parser->hasAttribute(L"val")) {
+                        int32 val = parser->getInt(L"val", 0);
+                        int32 dur = parser->getInt(L"duration", 0);
+                        int32 type = parser->getInt(L"type", 0);
                         
                         anim->getKeyFrames().push_back(KeyFrameAnimation<double>::KeyFrame(val, 
                                                                                          dur, 
@@ -353,11 +353,11 @@ namespace ukn {
             return;
         } 
         
-        if(type == "uint") {
+        if(type == L"uint") {
             KeyFrameAnimation<uint32>* anim = new KeyFrameAnimation<uint32>;
             
-            int32 time = parser->getInt("time", 0);
-            int32 duration = parser->getInt("duration", 0);
+            int32 time = parser->getInt(L"time", 0);
+            int32 duration = parser->getInt(L"duration", 0);
             
             if(duration == 0)
                 return;
@@ -365,11 +365,11 @@ namespace ukn {
             
             if(parser->toFirstChild()) {
                 do {
-                    if(parser->hasAttribute("val")) {
+                    if(parser->hasAttribute(L"val")) {
                         
-                        int32 val = parser->getInt("val", 0);
-                        int32 dur = parser->getInt("duration", 0);
-                        int32 type = parser->getInt("type", 0);
+                        int32 val = parser->getInt(L"val", 0);
+                        int32 dur = parser->getInt(L"duration", 0);
+                        int32 type = parser->getInt(L"type", 0);
                     
                         anim->getKeyFrames().push_back(KeyFrameAnimation<uint32>::KeyFrame(val, 
                                                                                        dur, 
@@ -387,19 +387,19 @@ namespace ukn {
         } 
         
         
-        if(type == "color") {
+        if(type == L"color") {
             // to do
         } 
     }
     
     bool AnimationPlayer::deserialize(const ConfigParserPtr& parser) {
-        if(parser->toNode("animations")) {
+        if(parser->toNode(L"animations")) {
             if(parser->toFirstChild()) {
                 do {
                     StoryBoardPtr storyboard = new StoryBoard;
-                    ukn_string name = parser->getString("name");
+                    ukn_string name = parser->getString(L"name");
                     if(!name.empty()) {
-                        bool isdefault = parser->getBool("default", false);
+                        bool isdefault = parser->getBool(L"default", false);
                         if(isdefault)
                             setDefault(name);
                         
@@ -408,23 +408,28 @@ namespace ukn {
                                 ukn_string type = parser->getCurrentNodeName();
                                 
                                 // linear animation
-                                if(type == "linear") {
-                                    ukn_string prop_name = parser->getString("prop");
-                                    ukn_string prop_type = parser->getString("prop_type");
+                                if(type == L"linear") {
+                                    ukn_string prop_name = parser->getString(L"prop");
+                                    ukn_string prop_type = parser->getString(L"prop_type");
                                     
                                     void* prop = getProperty(prop_name);
                                     if(prop) {
-                                        create_linear_animation(prop_type, prop, parser, storyboard);
+                                        create_linear_animation(prop_type,
+                                                                prop,
+                                                                parser,
+                                                                storyboard);
                                     }
                                     
                                 // keyframe animation
-                                } else if(type == "keyframe") {
-                                    ukn_string prop_name = parser->getString("prop");
-                                    ukn_string prop_type = parser->getString("prop_type");
-                                    
+                                } else if(type == L"keyframe") {
+                                    ukn_string prop_name = parser->getString(L"prop");
+                                    ukn_string prop_type = parser->getString(L"prop_type");
                                     void* prop = getProperty(prop_name);
                                     if(prop) {
-                                        create_key_frame_animation(prop_type, prop, parser, storyboard);
+                                        create_key_frame_animation(prop_type,
+                                                                   prop,
+                                                                   parser,
+                                                                   storyboard);
                                       
                                         // back to parent node
                                         parser->toParent();

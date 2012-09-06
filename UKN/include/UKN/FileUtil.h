@@ -18,30 +18,30 @@ namespace ukn {
     
     class File {
     public:
-        static bool FileExists(const String& filepath);
-        static bool PathExists(const String& path);
+        static bool FileExists(const ukn_string& filepath);
+        static bool PathExists(const ukn_string& path);
     };
 
     
     class UKN_API Path {
     public:
-        static String GetEnv(const ukn_string& env);
-        static String GetCurrent();
-        static String GetHome();
-        static String GetRoot();
-        static String GetTemp();
-        static String GetFont();
-        static String GetWrittable();
-        static String GetResource();
-        static String GetApplicationPath();
+        static ukn_string GetEnv(const ukn_string& env);
+        static ukn_string GetCurrent();
+        static ukn_string GetHome();
+        static ukn_string GetRoot();
+        static ukn_string GetTemp();
+        static ukn_string GetFont();
+        static ukn_string GetWrittable();
+        static ukn_string GetResource();
+        static ukn_string GetApplicationPath();
         
         // check and get path of a font
         // priority follows current path, resource path, system font folder, asset resource name
-        static String CheckAndGetFontPath(const String& name);
+        static ukn_string CheckAndGetFontPath(const ukn_string& name);
         
         static void ListRoots(std::vector<ukn_string>& arr);
         
-        static String ExpandPath(const String& path);
+        static ukn_string ExpandPath(const ukn_string& path);
     };
             
     class UKN_API DirectoryIterator {
@@ -49,7 +49,6 @@ namespace ukn {
         DirectoryIterator();
         DirectoryIterator(const DirectoryIterator& iterator);
         explicit DirectoryIterator(const ukn_string& path);
-        explicit DirectoryIterator(const ukn_wstring& path);
         ~DirectoryIterator();
         
         const ukn_string& file() const;

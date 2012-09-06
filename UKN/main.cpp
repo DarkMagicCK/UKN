@@ -280,7 +280,7 @@ int CALLBACK WinMain(
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
-    SquareGame instance("SquareGame!");
+    SquareGame instance(L"SquareGame!");
 
     // create app context
     ukn::ContextCfg cfg;

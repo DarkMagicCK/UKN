@@ -82,7 +82,7 @@ namespace ukn {
             throw *this;
         }
 
-        ukn_string getFormattedCallStack() const {
+        std::string getFormattedCallStack() const {
             return ukn_get_formatted_stack_trace_string();
         }
 

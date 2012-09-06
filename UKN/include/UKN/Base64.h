@@ -14,8 +14,8 @@
 
 namespace ukn {
     
-    Array<uint8> base64_decode(const ukn_string& input);
-    ukn_string base64_encode(const uint8* bytes_to_encode, uint32 in_len);
+    Array<uint8> base64_decode(const std::string& input);
+    std::string base64_encode(const uint8* bytes_to_encode, uint32 in_len);
     
 } // namespace ukn
 

@@ -41,7 +41,7 @@ namespace ukn {
         
         virtual void write(const uint8* bytes, size_t len) = 0;
         virtual void write(const uint8* bytes, size_t start, size_t end) = 0;
-        virtual void write(const ukn_string& str) = 0;
+        virtual void write(const std::string& str) = 0;
         
         virtual void writeLineSeparator() = 0;
         
@@ -62,7 +62,7 @@ namespace ukn {
         
         virtual void writeLine(const uint8* bytes, size_t len);
         virtual void writeLine(const uint8* bytes, size_t start, size_t end);
-        virtual void writeLine(const ukn_string& str);
+        virtual void writeLine(const std::string& str);
         
     private:
     };
@@ -108,7 +108,7 @@ namespace ukn {
         virtual void write(const uint8* bytes, size_t start, size_t end);
         
         // encoded string
-        virtual void write(const ukn_string& str);
+        virtual void write(const std::string& str);
         
         virtual void writeLineSeparator();
         
@@ -155,7 +155,7 @@ namespace ukn {
         
         virtual void write(const uint8* bytes, size_t start, size_t end);
         
-        virtual void write(const ukn_string& str);
+        virtual void write(const std::string& str);
         
         virtual void writeLineSeparator();
         
@@ -187,7 +187,7 @@ namespace ukn {
         virtual float   readFloat() = 0;
         virtual double  readDouble() = 0;
         
-        virtual ukn_string  readString() = 0;
+        virtual std::string  readString() = 0;
     };
     
     class BinaryStreamReader: public StreamReader {
@@ -216,10 +216,10 @@ namespace ukn {
         virtual float   readFloat();
         virtual double  readDouble();
         
-        virtual ukn_string  readString();
+        virtual std::string  readString();
         
         // read a string with specified encoding
-        ukn_string  readString(size_t char_count, StringFormat encoding_format);
+        std::string  readString(size_t char_count, StringFormat encoding_format);
         
         template<typename T>
         T readPOD();
@@ -260,11 +260,11 @@ namespace ukn {
         virtual float   readFloat();
         virtual double  readDouble();
         
-        virtual ukn_string  readString();
+        virtual std::string  readString();
     
-        ukn_string readLine();
-        ukn_string readNumber();
-        ukn_string readTill(char end);
+        std::string readLine();
+        std::string readNumber();
+        std::string readTill(char end);
         
     private:
         StreamPtr mStream;

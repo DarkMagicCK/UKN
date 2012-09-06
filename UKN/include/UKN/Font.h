@@ -65,23 +65,25 @@ namespace ukn {
         
         void draw(const wchar_t* str, float x, float y, FontAlignment alignment, const Color& clr = color::White);
         
-        // inherited from Renderable
-        void render();
-        
-        void onRenderBegin();
-        void onRenderEnd();
-        
         float2 getStringDimensions(const wchar_t* str, float kw=0, float kh=0);
-        
-        const String& getName() const;
-        
-        Box getBound() const;
-        RenderBufferPtr getRenderBuffer() const;
-        
         bool isValid() const;
         
-        bool deserialize(const ConfigParserPtr& cfg);
-        bool serialize(const ConfigParserPtr& cfg);
+    public:
+        // IRenderable
+        virtual void render();
+        
+        virtual void onRenderBegin();
+        virtual void onRenderEnd();
+        
+        virtual const String& getName() const;
+        
+        virtual Box getBound() const;
+        virtual RenderBufferPtr getRenderBuffer() const;
+        
+    public:
+        // IConfigSerializable
+        virtual bool deserialize(const ConfigParserPtr& cfg);
+        virtual bool serialize(const ConfigParserPtr& cfg);
         
     private:
         friend class AssetManager;

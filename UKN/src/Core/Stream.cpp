@@ -991,7 +991,8 @@ namespace ukn {
     }
     
     void NetStream::open(const ukn_string& filename, uint16 portNum) {
-        if(!connection->open(filename, portNum))
+        if(!connection->open(String::WStringToString(filename).c_str(),
+                             portNum))
             setstate(ios_base::failbit);
     }
     

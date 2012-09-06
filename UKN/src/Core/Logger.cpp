@@ -82,7 +82,7 @@ namespace ukn {
         mLogQueue.push_back(realLog);
         
         if(mOutputStream) {
-            ukn_string log = String::WStringToString(realLog);
+            std::string log = String::WStringToString(realLog);
 #ifdef UKN_OS_WINDOWS
             log += "\r\n";
             mOutputStream->write(log.c_str(), log.size());
@@ -112,37 +112,5 @@ namespace ukn {
     const std::deque<ukn_wstring>& Logger::getLogQueue() const {
         return mLogQueue;
     }
-    
-    void log_error(const ukn_wstring& log) {
-        Logger::Instance().log(log, LL_Error);
-    }
-    
-    void log_notice(const ukn_wstring& log) {
-        Logger::Instance().log(log, LL_Notice);
-    }
-    
-    void log_warning(const ukn_wstring& log) {
-        Logger::Instance().log(log, LL_Warning);
-    }
-    
-    void log_info(const ukn_wstring& log) {
-        Logger::Instance().log(log, LL_Info);
-    }
-
-	 void log_error(const ukn_string& log) {
-        Logger::Instance().log(String::StringToWString(log), LL_Error);
-    }
-    
-    void log_notice(const ukn_string& log) {
-        Logger::Instance().log(String::StringToWString(log), LL_Notice);
-    }
-    
-    void log_warning(const ukn_string& log) {
-        Logger::Instance().log(String::StringToWString(log), LL_Warning);
-    }
-    
-    void log_info(const ukn_string& log) {
-        Logger::Instance().log(String::StringToWString(log), LL_Info);
-    }
-    
+   
 } // namespace ukn

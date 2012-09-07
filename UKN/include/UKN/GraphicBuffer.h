@@ -51,9 +51,15 @@ namespace ukn {
         Usage   usage() const;
         Access  access() const;
         
+        // set use count, default = count
+        uint32 useCount() const;
+        void   useCount(uint32 useCount);
+        
     private:
         Access mAccessHint;
         Usage mUsage;
+        
+        uint32 mUseCount;
     };
     
 } // namespace ukn

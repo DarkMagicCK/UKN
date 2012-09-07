@@ -14,7 +14,7 @@ namespace ukn {
     
     namespace detail {
         
-        Profile::Profile(const ukn_string& n):
+        Profile::Profile(const UknString& n):
         ts(Timestamp()), 
         name(n) {
             
@@ -26,8 +26,8 @@ namespace ukn {
         
     } // namespace detail
     
-    ukn_string ProfileData::toFormattedString() const {
-        ukn_string buffer(L"Profile "+name+L": ");
+    UknString ProfileData::toFormattedString() const {
+        UknString buffer(L"Profile "+name+L": ");
         buffer += String::StringToWStringFast(format_string("last time %u, average time %u, max time %u, min time %u, recorded frames %u, average time ratio %.3f, average time ratio in frame %.3f",
                                                             time,
                                                             average_time,
@@ -44,7 +44,7 @@ namespace ukn {
         return instance;
     }
     
-    ProfileData Profiler::get(const ukn_string& name) const {
+    ProfileData Profiler::get(const UknString& name) const {
         ProfileDataMap::const_iterator it = mProfiles.find(name);
         if(it != mProfiles.end()) {
             return it->second;
@@ -52,7 +52,7 @@ namespace ukn {
         return ProfileData();
     }
     
-    void Profiler::record(const ukn_string& name, uint64 time) {
+    void Profiler::record(const UknString& name, uint64 time) {
         ProfileDataMap::iterator it = mProfiles.find(name);
         if(it != mProfiles.end()) {
             it->second.recorded_frames++;

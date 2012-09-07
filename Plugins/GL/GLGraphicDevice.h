@@ -19,9 +19,9 @@ namespace ukn {
         GLGraphicDevice();
         virtual ~GLGraphicDevice();
         
-        ukn_string description() const;
+        UknString description() const;
         
-        WindowPtr doCreateRenderWindow(const ukn_string& name, const RenderSettings& settings);
+        WindowPtr doCreateRenderWindow(const UknString& name, const RenderSettings& settings);
         
         void beginFrame();
         void endFrame();

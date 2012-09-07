@@ -33,22 +33,22 @@ namespace ukn {
     public:
         static PortManager& Instance();
         
-        PortManagerResult add(const ukn_string& name,
+        PortManagerResult add(const UknString& name,
                               void* obj,
                               ClassId cid);
         
         PortManagerResult remove(void* obj);
         
-        void* attach(const ukn_string& name,
+        void* attach(const UknString& name,
                      ClassId cid);
         PortManagerResult detach(void* obj);
     
     private:
-        PortManagerResult remove(const ukn_string& name);
+        PortManagerResult remove(const UknString& name);
 
         struct PortInfo;
 
-        typedef ukn_hash_map<ukn_string, PortInfo> PortMap;
+        typedef ukn_hash_map<UknString, PortInfo> PortMap;
         PortMap mPorts;
         
     };
@@ -79,7 +79,7 @@ namespace ukn {
             return new Port<T>();
         }
         
-        static PortManagerResult Register(const ukn_string& name,
+        static PortManagerResult Register(const UknString& name,
                                           Port* port) {
             ClassId cid = GetClassId<Port<T> >();
             return PortManager::Instance().add(name,
@@ -91,7 +91,7 @@ namespace ukn {
             return PortManager::Instance().remove((void*)port);
         }
         
-        static Port<T>* Attach(const ukn_string& name) {
+        static Port<T>* Attach(const UknString& name) {
             ClassId cid = GetClassId<Port<T> >();
             Port<T>* obj = static_cast<Port<T>*>(PortManager::Instance().attach(name, cid));
             if(obj)
@@ -108,7 +108,7 @@ namespace ukn {
         
         // register port to PortManager
         // name cannot duplicate
-        PortManagerResult registerSelf(const ukn_string& name) {
+        PortManagerResult registerSelf(const UknString& name) {
             return Register(name, this);
         }
         

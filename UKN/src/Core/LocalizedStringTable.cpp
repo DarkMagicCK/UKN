@@ -11,7 +11,7 @@
 
 namespace ukn {
     
-    ukn_string StringMap::stringAtIndex(size_t index) const {
+    UknString StringMap::stringAtIndex(size_t index) const {
         if(index < mStringMap.size()) {
             StringMap::StringMapCont::const_iterator it = mStringMap.begin();
             std::advance(it, index);
@@ -20,23 +20,23 @@ namespace ukn {
         return L"";
     }
     
-    ukn_string StringMap::stringAtId(const ukn_string& sid) const {
+    UknString StringMap::stringAtId(const UknString& sid) const {
         StringMapCont::const_iterator it = mStringMap.find(sid);
         return it != mStringMap.end() ? it->second : L"";
     }
     
-    void StringMap::setStringAtId(const ukn_string& sid, const ukn_string& string) {
+    void StringMap::setStringAtId(const UknString& sid, const UknString& string) {
         StringMapCont::iterator it = mStringMap.find(sid);
         if(it != mStringMap.end()) {
             it->second = string;
         }
     }
     
-    void StringMap::addString(const ukn_string& sid, const ukn_string& string) {
+    void StringMap::addString(const UknString& sid, const UknString& string) {
         mStringMap.insert(std::make_pair(sid, string));
     }
     
-    void StringMap::removeStringAtId(const ukn_string& sid) {
+    void StringMap::removeStringAtId(const UknString& sid) {
         StringMapCont::iterator it = mStringMap.find(sid);
         if(it != mStringMap.end()) {
             mStringMap.erase(it);
@@ -47,16 +47,16 @@ namespace ukn {
         return mStringMap.size();
     }
     
-    void StringMap::setStringIdAtId(const ukn_string& sid, const ukn_string& after) {
+    void StringMap::setStringIdAtId(const UknString& sid, const UknString& after) {
         StringMapCont::iterator it = mStringMap.find(sid);
         if(it != mStringMap.end()) {
-            ukn_string value = it->second;
+            UknString value = it->second;
             mStringMap.erase(it);
             mStringMap.insert(std::make_pair(after, value));
         }
     }
     
-    const StringMap& LocalizedStringTable::languageStringMapAtId(const ukn_string& lanName) const {
+    const StringMap& LocalizedStringTable::languageStringMapAtId(const UknString& lanName) const {
         LanguageMap::const_iterator it = mLocalizedString.find(lanName);
         if(it != mLocalizedString.end()) {
             return it->second;
@@ -65,7 +65,7 @@ namespace ukn {
         }
     }
     
-    StringMap& LocalizedStringTable::languageStringMapAtId(const ukn_string& lanName) {
+    StringMap& LocalizedStringTable::languageStringMapAtId(const UknString& lanName) {
         LanguageMap::iterator it = mLocalizedString.find(lanName);
         if(it != mLocalizedString.end()) {
             return it->second;
@@ -74,26 +74,26 @@ namespace ukn {
         }
     }
     
-    void LocalizedStringTable::addLanguage(const ukn_string& lanName) {
+    void LocalizedStringTable::addLanguage(const UknString& lanName) {
         mLocalizedString.insert(std::make_pair(lanName, StringMap()));
     }
     
-    void LocalizedStringTable::removeLanguage(const ukn_string& lanName) {
+    void LocalizedStringTable::removeLanguage(const UknString& lanName) {
         LocalizedStringTable::iterator it = mLocalizedString.find(lanName);
         if(it != mLocalizedString.end()) {
             mLocalizedString.erase(it);
         }
     }
     
-    void LocalizedStringTable::setCurrentLanguage(const ukn_string& language) {
+    void LocalizedStringTable::setCurrentLanguage(const UknString& language) {
         mCurrentLanguage = language;
     }
     
-    const ukn_string& LocalizedStringTable::getCurrentLanguage() const {
+    const UknString& LocalizedStringTable::getCurrentLanguage() const {
         return mCurrentLanguage;
     }
     
-    ukn_string LocalizedStringTable::stringById(const ukn_string& sid) const {
+    UknString LocalizedStringTable::stringById(const UknString& sid) const {
         if(mCurrentLanguage.empty())
             return L"";
         
@@ -101,7 +101,7 @@ namespace ukn {
         return map.stringAtId(sid);
     }
     
-    void LocalizedStringTable::setStringById(const ukn_string& sid, const ukn_string& string) {
+    void LocalizedStringTable::setStringById(const UknString& sid, const UknString& string) {
         if(mCurrentLanguage.empty())
             return;
         
@@ -109,7 +109,7 @@ namespace ukn {
         map.setStringAtId(sid, string);
     }
     
-    void LocalizedStringTable::addString(const ukn_string& sid, const ukn_string& string) {
+    void LocalizedStringTable::addString(const UknString& sid, const UknString& string) {
         for(LanguageMap::iterator it = mLocalizedString.begin(),
             end = mLocalizedString.end();
             it != end;
@@ -119,7 +119,7 @@ namespace ukn {
         mIdVector.push_back(sid);
     }
     
-    void LocalizedStringTable::removeStringById(const ukn_string& sid) {
+    void LocalizedStringTable::removeStringById(const UknString& sid) {
         for(LanguageMap::iterator it = mLocalizedString.begin(),
             end = mLocalizedString.end();
             it != end;
@@ -139,12 +139,12 @@ namespace ukn {
         
     }
     
-    ukn_string LocalizedStringTable::getString(const ukn_string& lan, const ukn_string& sid) {
+    UknString LocalizedStringTable::getString(const UknString& lan, const UknString& sid) {
         StringMap& map = languageStringMapAtId(lan);
         return map.stringAtId(sid);
     }
     
-    void LocalizedStringTable::setString(const ukn_string& lan, const ukn_string& sid, const ukn_string& string) {
+    void LocalizedStringTable::setString(const UknString& lan, const UknString& sid, const UknString& string) {
         StringMap& map = languageStringMapAtId(lan);
         map.setStringAtId(sid, string);
     }
@@ -159,7 +159,7 @@ namespace ukn {
         return mLocalizedString.begin()->second.size();
     }
     
-    void LocalizedStringTable::setStringIdAtId(const ukn_string& before, const ukn_string& after) {
+    void LocalizedStringTable::setStringIdAtId(const UknString& before, const UknString& after) {
         for(LanguageMap::iterator it = mLocalizedString.begin(),
             end = mLocalizedString.end();
             it != end;
@@ -169,7 +169,7 @@ namespace ukn {
         updateStringId(before, after);
     }
     
-    ukn_string LocalizedStringTable::getIdByIndex(size_t index) const {
+    UknString LocalizedStringTable::getIdByIndex(size_t index) const {
         return mIdVector[index];
     }
 
@@ -177,16 +177,16 @@ namespace ukn {
         mLocalizedString.clear();
     }
     
-    bool LocalizedStringTable::checkLanguage(const ukn_string& lanName) const {
+    bool LocalizedStringTable::checkLanguage(const UknString& lanName) const {
         return mLocalizedString.find(lanName) == mLocalizedString.end();
     }
-    bool LocalizedStringTable::checkStringId(const ukn_string& stringId) const {
+    bool LocalizedStringTable::checkStringId(const UknString& stringId) const {
         return std::find(mIdVector.begin(),
                          mIdVector.end(),
                          stringId) == mIdVector.end();
     }
     
-    void LocalizedStringTable::updateStringId(const ukn_string& before, const ukn_string& after) {
+    void LocalizedStringTable::updateStringId(const UknString& before, const UknString& after) {
         for(IdVector::iterator it = mIdVector.begin(),
             end = mIdVector.end();
             it != end;
@@ -198,7 +198,7 @@ namespace ukn {
         }
     }
     
-    void LocalizedStringTable::addString(const ukn_string& lan, const ukn_string& sid, const ukn_string& string) {
+    void LocalizedStringTable::addString(const UknString& lan, const UknString& sid, const UknString& string) {
         StringMap& map = languageStringMapAtId(lan);
         map.addString(sid, string);
         

@@ -57,7 +57,7 @@ namespace ukn {
         MatrixStack mViewMatrixStack;
         MatrixStack mProjMatrixStack;
         
-        virtual WindowPtr doCreateRenderWindow(const ukn_string& name, const RenderSettings& settings) = 0;
+        virtual WindowPtr doCreateRenderWindow(const UknString& name, const RenderSettings& settings) = 0;
 
     public:
         virtual void beginFrame() = 0;
@@ -66,7 +66,7 @@ namespace ukn {
         virtual void beginRendering() = 0;
         
     public:
-        virtual ukn_string description() const = 0;
+        virtual UknString description() const = 0;
                
         virtual void setViewMatrix(const Matrix4& mat) = 0;
         virtual void setProjectionMatrix(const Matrix4& mat) = 0;
@@ -84,7 +84,7 @@ namespace ukn {
         virtual void setRenderState(RenderStateType type, RenderStateParam func) = 0;
         
     public:
-        WindowPtr createRenderWindow(const ukn_string& name, const RenderSettings& settings);
+        WindowPtr createRenderWindow(const UknString& name, const RenderSettings& settings);
         
         void bindFrameBuffer(const FrameBufferPtr& ptr);
         const FrameBufferPtr& getCurrFrameBuffer() const;

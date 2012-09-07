@@ -20,7 +20,7 @@ namespace ukn {
         NullWindow():
         Window(L"Null") { }
         
-        ukn_string description() const { return ukn_string(L"Null Window"); }
+        UknString description() const { return UknString(L"Null Window"); }
         
 #if defined(UKN_OS_WINDOWS)
         HWND getHWnd() const { return 0; }
@@ -30,7 +30,7 @@ namespace ukn {
         int2  getMousePos() { return int2(0, 0); }
         int32 getMouseWheel() { return 0; }
         
-        void setName(const ukn_string& name) { }
+        void setName(const UknString& name) { }
         
         bool isKeyDown(input::Key::KeyCode key) { return false; }
         bool isMouseButtonDown(input::Mouse::MouseButton btn) { return false; }
@@ -40,15 +40,15 @@ namespace ukn {
     
     class NullGraphicDevice: public GraphicDevice {
     public:
-        WindowPtr doCreateRenderWindow(const ukn_string& name, const RenderSettings& settings) {
+        WindowPtr doCreateRenderWindow(const UknString& name, const RenderSettings& settings) {
             static WindowPtr static_ptr = MakeSharedPtr<NullWindow>();
             return static_ptr;
         }
         
         void onRenderBuffer(const RenderBufferPtr& buffer) { }
         
-        ukn_string description() const {
-            return ukn_string(L"Null GraphicDevice");
+        UknString description() const {
+            return UknString(L"Null GraphicDevice");
         }
         
         void beginRendering() { }
@@ -151,7 +151,7 @@ namespace ukn {
         return mScreenFrameBuffer;
     }
     
-    WindowPtr GraphicDevice::createRenderWindow(const ukn_string& name, const RenderSettings& settings) {
+    WindowPtr GraphicDevice::createRenderWindow(const UknString& name, const RenderSettings& settings) {
         return doCreateRenderWindow(name, settings);
     }
     

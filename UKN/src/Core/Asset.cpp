@@ -79,18 +79,18 @@ namespace ukn {
         mAssetMap.insert(std::make_pair(name, AssetInfo(type, name, path)));
     }
     
-    ukn_string AssetManager::AssetTypeToString(AssetType type) {
+    UknString AssetManager::AssetTypeToString(AssetType type) {
         switch(type) {
             case AT_Font:       return L"font"; break;
             case AT_Texture2D:  return L"texture2d"; break;
             case AT_Config:     return L"config"; break;
             case AT_Raw:        return L"raw"; break;
             default:
-                return ukn_string();
+                return UknString();
         }
     }
     
-    AssetType AssetManager::StringToAssetType(const ukn_string& name) {
+    AssetType AssetManager::StringToAssetType(const UknString& name) {
         if(name == L"font")
             return AT_Font;
         if(name == L"texture2d")

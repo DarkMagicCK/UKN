@@ -55,7 +55,7 @@ namespace ukn {
         }
     }
     
-    bool ConfigParserXmlImpl::hasNode(const ukn_string& node) const {
+    bool ConfigParserXmlImpl::hasNode(const UknString& node) const {
         if(!mDocument)
             return false;
         
@@ -81,19 +81,19 @@ namespace ukn {
         return true;
     }
     
-    ukn_string ConfigParserXmlImpl::getCurrentNodeName() const {
+    UknString ConfigParserXmlImpl::getCurrentNodeName() const {
         if(mDocument)
             return String::StringToWString(mCurrNode.name());
-        return ukn_string();
+        return UknString();
     }
     
-    ukn_string ConfigParserXmlImpl::getCurrentNodePath() const {
+    UknString ConfigParserXmlImpl::getCurrentNodePath() const {
         if(mDocument)
             return String::StringToWString(mCurrNode.path());
-        return ukn_string();
+        return UknString();
     }
     
-    bool ConfigParserXmlImpl::toNode(const ukn_string& node) {
+    bool ConfigParserXmlImpl::toNode(const UknString& node) {
         if(!mDocument)
             return false;
         
@@ -125,7 +125,7 @@ namespace ukn {
         return true;
     }
     
-    bool ConfigParserXmlImpl::toFirstChild(const ukn_string& name) {
+    bool ConfigParserXmlImpl::toFirstChild(const UknString& name) {
         if(!mDocument)
             return false;
         
@@ -142,7 +142,7 @@ namespace ukn {
         return false;
     }
     
-    bool ConfigParserXmlImpl::toNextChild(const ukn_string& name) {
+    bool ConfigParserXmlImpl::toNextChild(const UknString& name) {
         if(!mDocument)
             return false;
         
@@ -171,7 +171,7 @@ namespace ukn {
         return false;
     }
     
-    bool ConfigParserXmlImpl::hasAttribute(const ukn_string& name) const {
+    bool ConfigParserXmlImpl::hasAttribute(const UknString& name) const {
         if(!mDocument)
             return false;
         
@@ -182,40 +182,40 @@ namespace ukn {
         return false;
     }
     
-    std::vector<ukn_string> ConfigParserXmlImpl::getAttributes() const {
+    std::vector<UknString> ConfigParserXmlImpl::getAttributes() const {
         if(!mDocument)
-            return std::vector<ukn_string>();
+            return std::vector<UknString>();
         
         pugi::xml_attribute_iterator it = mCurrNode.attributes_begin();
         pugi::xml_attribute_iterator end = mCurrNode.attributes_end();
         
-        std::vector<ukn_string> attributes;
+        std::vector<UknString> attributes;
         for(; it != end; ++it) {
             attributes.push_back(String::StringToWString(it->name()));
         }
         return attributes;
     }
     
-    ukn_string ConfigParserXmlImpl::getString(const ukn_string& attr, const ukn_string& opt) const {
+    UknString ConfigParserXmlImpl::getString(const UknString& attr, const UknString& opt) const {
         if(!mDocument)
             return opt;
         
         if(attr.empty()) {
-            ukn_string child_value = String::StringToWString(mCurrNode.child_value());
+            UknString child_value = String::StringToWString(mCurrNode.child_value());
             return child_value;
         }
         pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
         if(attribute) {
             return String::StringToWString(attribute.value());
         } else {
-            ukn_string c = String::StringToWString(mCurrNode.child_value(String::WStringToString(attr).c_str()));
+            UknString c = String::StringToWString(mCurrNode.child_value(String::WStringToString(attr).c_str()));
             if(!c.empty())
                 return c;
         }
         return opt;
     }
     
-    bool ConfigParserXmlImpl::getBool(const ukn_string& attr, bool opt) const {
+    bool ConfigParserXmlImpl::getBool(const UknString& attr, bool opt) const {
         if(!mDocument)
             return opt;
         
@@ -229,7 +229,7 @@ namespace ukn {
         return opt;
     }
     
-    int32 ConfigParserXmlImpl::getInt(const ukn_string& attr, int32 opt) const {
+    int32 ConfigParserXmlImpl::getInt(const UknString& attr, int32 opt) const {
         if(!mDocument)
             return opt;
         
@@ -242,7 +242,7 @@ namespace ukn {
         return opt;
     }
     
-    float ConfigParserXmlImpl::getFloat(const ukn_string& attr, float opt) const {
+    float ConfigParserXmlImpl::getFloat(const UknString& attr, float opt) const {
         if(!mDocument)
             return opt;
         
@@ -264,9 +264,9 @@ namespace ukn {
         stream->write((const uint8*)indent.data(), indent.size());
     }
     
-    ukn_string ConfigParserXmlImpl::writeToString(const char* indent) const {
+    UknString ConfigParserXmlImpl::writeToString(const char* indent) const {
         if(!mDocument)
-            return ukn_string();
+            return UknString();
         
         myWritter writter(indent);
         mDocument->save(writter, PUGIXML_TEXT("\t"), pugi::format_indent, pugi::encoding_wchar);
@@ -290,7 +290,7 @@ namespace ukn {
         return writter.stream;
     }
     
-    bool ConfigParserXmlImpl::beginNode(const ukn_string& name) {
+    bool ConfigParserXmlImpl::beginNode(const UknString& name) {
         if(!mDocument)
             return false;
         
@@ -306,14 +306,14 @@ namespace ukn {
         toParent();
     }
     
-    void ConfigParserXmlImpl::setValue(const ukn_string& val) {
+    void ConfigParserXmlImpl::setValue(const UknString& val) {
         if(!mDocument)
             return;
         
         mCurrNode.set_value(String::WStringToString(val).c_str());
     }
     
-    void ConfigParserXmlImpl::setString(const ukn_string& attr, const ukn_string& val) {
+    void ConfigParserXmlImpl::setString(const UknString& attr, const UknString& val) {
         if(!mDocument)
             return;
         
@@ -326,7 +326,7 @@ namespace ukn {
         }
     }
     
-    void ConfigParserXmlImpl::setBool(const ukn_string& attr, bool val) {
+    void ConfigParserXmlImpl::setBool(const UknString& attr, bool val) {
         if(!mDocument)
             return;
         
@@ -339,7 +339,7 @@ namespace ukn {
         }
     }
     
-    void ConfigParserXmlImpl::setInt(const ukn_string& attr, int32 val) {
+    void ConfigParserXmlImpl::setInt(const UknString& attr, int32 val) {
         if(!mDocument)
             return;
         
@@ -352,7 +352,7 @@ namespace ukn {
         }
     }
     
-    void ConfigParserXmlImpl::setFloat(const ukn_string& attr, float val) {
+    void ConfigParserXmlImpl::setFloat(const UknString& attr, float val) {
         if(!mDocument)
             return;
         

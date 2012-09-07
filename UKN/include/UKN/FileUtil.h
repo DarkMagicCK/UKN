@@ -18,41 +18,41 @@ namespace ukn {
     
     class File {
     public:
-        static bool FileExists(const ukn_string& filepath);
-        static bool PathExists(const ukn_string& path);
+        static bool FileExists(const UknString& filepath);
+        static bool PathExists(const UknString& path);
     };
 
     
     class UKN_API Path {
     public:
-        static ukn_string GetEnv(const ukn_string& env);
-        static ukn_string GetCurrent();
-        static ukn_string GetHome();
-        static ukn_string GetRoot();
-        static ukn_string GetTemp();
-        static ukn_string GetFont();
-        static ukn_string GetWrittable();
-        static ukn_string GetResource();
-        static ukn_string GetApplicationPath();
+        static UknString GetEnv(const UknString& env);
+        static UknString GetCurrent();
+        static UknString GetHome();
+        static UknString GetRoot();
+        static UknString GetTemp();
+        static UknString GetFont();
+        static UknString GetWrittable();
+        static UknString GetResource();
+        static UknString GetApplicationPath();
         
         // check and get path of a font
         // priority follows current path, resource path, system font folder, asset resource name
-        static ukn_string CheckAndGetFontPath(const ukn_string& name);
+        static UknString CheckAndGetFontPath(const UknString& name);
         
-        static void ListRoots(std::vector<ukn_string>& arr);
+        static void ListRoots(std::vector<UknString>& arr);
         
-        static ukn_string ExpandPath(const ukn_string& path);
+        static UknString ExpandPath(const UknString& path);
     };
             
     class UKN_API DirectoryIterator {
     public:
         DirectoryIterator();
         DirectoryIterator(const DirectoryIterator& iterator);
-        explicit DirectoryIterator(const ukn_string& path);
+        explicit DirectoryIterator(const UknString& path);
         ~DirectoryIterator();
         
-        const ukn_string& file() const;
-        const ukn_string& path() const;
+        const UknString& file() const;
+        const UknString& path() const;
         
         bool isEnd() const;
         
@@ -64,8 +64,8 @@ namespace ukn {
         bool operator != (const DirectoryIterator& iterator) const;
         
     private:
-        ukn_string mPath;
-        ukn_string mFile;
+        UknString mPath;
+        UknString mFile;
         bool mIsEnd;
         
         class DirectoryIteratorImpl;
@@ -73,7 +73,7 @@ namespace ukn {
         DirectoryIteratorImpl* mImpl;        
     };
     
-    inline const ukn_string& DirectoryIterator::path() const {
+    inline const UknString& DirectoryIterator::path() const {
         return mPath;
     }
     
@@ -81,7 +81,7 @@ namespace ukn {
         return mIsEnd;
     }
     
-    inline const ukn_string& DirectoryIterator::file() const {
+    inline const UknString& DirectoryIterator::file() const {
         return mFile;
     }
     

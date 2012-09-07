@@ -38,7 +38,7 @@ namespace ukn {
     template<typename Base>
     class Factory {
     public:
-        typedef std::map<ukn_string, ClassInstantiator<Base>* > instantiator_map;
+        typedef std::map<UknString, ClassInstantiator<Base>* > instantiator_map;
         typedef typename instantiator_map::iterator iterator;
         typedef typename instantiator_map::const_iterator const_iterator;
         
@@ -51,7 +51,7 @@ namespace ukn {
         }
         
         template<typename C>
-        void registerClass(const ukn_string& name, const ClassInstantiator<Base>* instantiator) {
+        void registerClass(const UknString& name, const ClassInstantiator<Base>* instantiator) {
             if(mInstantiators.find(name) == mInstantiators.end())
                 mInstantiators.insert(std::make_pair(name, instantiator));
             else
@@ -59,14 +59,14 @@ namespace ukn {
         }
         
         template<typename C>
-        void registerClassCtor(const ukn_string& name) {
+        void registerClassCtor(const UknString& name) {
             if(mInstantiators.find(name) == mInstantiators.end())
                 mInstantiators.insert(std::make_pair(name, new DefaultClassInstantiator<Base, C>()));
             else
                 log_error(format_string("ukn::Factory::registerClass: class with name %s alreay registered", name.c_str()));
         }
         
-        Base* createClass(const ukn_string& name) {
+        Base* createClass(const UknString& name) {
             iterator it;
             if((it = mInstantiators.find(name)) != mInstantiators.end()) {
                 return it->second->instantiate();

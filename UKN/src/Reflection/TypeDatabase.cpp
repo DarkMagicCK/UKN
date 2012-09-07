@@ -71,7 +71,7 @@ namespace ukn {
             createType<uint8>();
             createType<float>();
             createType<double>();
-            createType<ukn_string>();
+            createType<UknString>();
             createType<ukn_wstring>();
             
         }

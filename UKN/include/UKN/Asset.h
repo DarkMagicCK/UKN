@@ -97,8 +97,8 @@ namespace ukn {
         bool serialize(const ConfigParserPtr& config);
         bool deserialize(const ConfigParserPtr& config);
         
-        static ukn_string AssetTypeToString(AssetType type);
-        static AssetType  StringToAssetType(const ukn_string& name);
+        static UknString AssetTypeToString(AssetType type);
+        static AssetType  StringToAssetType(const UknString& name);
         
     protected:
         AssetManager();

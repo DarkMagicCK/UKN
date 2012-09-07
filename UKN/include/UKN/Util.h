@@ -1577,7 +1577,7 @@ namespace ukn {
     public:
         FourCC();
         FourCC(uint32 f);
-        FourCC(const ukn_string& s);
+        FourCC(const UknString& s);
 
         bool operator==(const FourCC& rhs) const;
         bool operator!=(const FourCC& rhs) const;
@@ -1590,13 +1590,13 @@ namespace ukn {
         void fromUInt(uint32 f);
         uint32 asUInt() const;
 
-        void fromString(const ukn_string& s) {
+        void fromString(const UknString& s) {
             ukn_assert(!s.empty() &&
                        s.size() >= 4);
 
             this->mFourCC = uint32(s[0] | s[1]<<8 | s[2]<<16 | s[3]<<24);
         }
-        ukn_string toString() const {
+        UknString toString() const {
             ukn_assert(isValid());
 
             std::wstring str(L"1234");
@@ -1607,8 +1607,8 @@ namespace ukn {
             return str;
         }
 
-        static ukn_string ToString(const FourCC& f);
-        static FourCC FromString(const ukn_string& s);
+        static UknString ToString(const FourCC& f);
+        static FourCC FromString(const UknString& s);
 
     private:
         uint32 mFourCC;
@@ -1624,7 +1624,7 @@ namespace ukn {
 
     }
 
-    inline FourCC::FourCC(const ukn_string& f) {
+    inline FourCC::FourCC(const UknString& f) {
         this->fromString(f);
     }
 
@@ -1664,13 +1664,13 @@ namespace ukn {
         return this->mFourCC;
     }
 
-    inline FourCC FourCC::FromString(const ukn_string& s) {
+    inline FourCC FourCC::FromString(const UknString& s) {
         FourCC cc;
         cc.fromString(s);
         return cc;
     }
 
-    inline ukn_string FourCC::ToString(const FourCC& rhs) {
+    inline UknString FourCC::ToString(const FourCC& rhs) {
         return rhs.toString();
     }
 

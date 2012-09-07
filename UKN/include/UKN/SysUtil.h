@@ -39,7 +39,7 @@ namespace ukn {
         // in bytes
         static uint64 GetMemorySize();
         // formatted string
-        static ukn_string GetOSVersion();
+        static UknString GetOSVersion();
         
         struct DesktopMode {
             uint32 width;

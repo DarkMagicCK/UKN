@@ -51,8 +51,8 @@ namespace ukn {
     }
     
     template<>
-    inline const ukn_string& simple_fsm_get_null_state() {
-        static ukn_string null("null");
+    inline const UknString& simple_fsm_get_null_state() {
+        static UknString null("null");
         return null;
     }
     
@@ -289,7 +289,7 @@ namespace ukn {
     
     class FSMManager {
     public:
-        typedef ukn_string EventType;
+        typedef UknString EventType;
         
         FSMManager(): 
         mGlobalState(0),
@@ -306,14 +306,14 @@ namespace ukn {
             }
         }
         
-        FSMManager& defState(FSMState* state, const ukn_string& name)  {
+        FSMManager& defState(FSMState* state, const UknString& name)  {
             this->mStates.insert(std::make_pair(name, state));
             state->onInitiate();
             state->mManager = this;
             return *this;
         }
         
-        void delState(const ukn_string& name) {
+        void delState(const UknString& name) {
             FSMStateMap::iterator itState = this->mStates.find(name);
             if(itState != this->mStates.end()) {
                 itState->second->destroy();
@@ -322,7 +322,7 @@ namespace ukn {
             }
         }
         
-        bool defTrans(const ukn_string& state1, const EventType& event, const ukn_string& state2) {
+        bool defTrans(const UknString& state1, const EventType& event, const UknString& state2) {
             FSMStateMap::iterator itState1 = this->mStates.find(state1);
             FSMStateMap::iterator itState2 = this->mStates.find(state2);
             if(itState1 != this->mStates.end() &&
@@ -333,7 +333,7 @@ namespace ukn {
             return false;
         }
             
-        void delTrans(const ukn_string& state, const EventType& event) {
+        void delTrans(const UknString& state, const EventType& event) {
             FSMStateMap::iterator itState = this->mStates.find(state);
             if(itState != this->mStates.end()) {
                 StateTransitionMap::iterator itTrans = this->mTransitions.find(itState->second);
@@ -356,7 +356,7 @@ namespace ukn {
             }
         }
         
-        void switchToState(const ukn_string& name) {
+        void switchToState(const UknString& name) {
             FSMStateMap::iterator itState = this->mStates.find(name);
             if(itState != this->mStates.end()) {
                 switchToState(itState->second);
@@ -394,7 +394,7 @@ namespace ukn {
             return false;
         }
                 
-        FSMState* operator[](const ukn_string& name) const {
+        FSMState* operator[](const UknString& name) const {
             FSMStateMap::const_iterator itState = this->mStates.find(name);
             if(itState != this->mStates.end()) {
                 return itState->second;
@@ -415,7 +415,7 @@ namespace ukn {
                 this->mCurrentState->onEnter();
         }
         
-        typedef std::map<ukn_string, FSMState*> FSMStateMap;
+        typedef std::map<UknString, FSMState*> FSMStateMap;
         FSMStateMap mStates;
         
         typedef std::map<EventType, FSMState*> StateEventMap;

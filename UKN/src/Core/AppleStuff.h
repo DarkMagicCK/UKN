@@ -26,9 +26,9 @@ namespace ukn {
     
     uint64 ukn_apple_get_processor_speed();
     uint64 ukn_apple_get_memory_size();
-    ukn_string ukn_apple_get_os_version();
+    UknString ukn_apple_get_os_version();
     
-    MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, int option);
+    MessageBoxButton ukn_apple_message_box(const UknString& mssg, const UknString& title, int option);
     MessageBoxButton ukn_apple_message_box(const ukn_wstring& mssg, const ukn_wstring& title, int option);
     
     void ukn_apple_enum_desktop_modes(Array<SystemInformation::DesktopMode>& arr);

@@ -78,7 +78,7 @@ namespace ukn {
         return status.ullTotalPhys;
     }
     
-    inline ukn_string ukn_win_get_os_version() {
+    inline UknString ukn_win_get_os_version() {
         OSVERSIONINFO osvi;
         
         ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
@@ -158,7 +158,7 @@ namespace ukn {
         return 0;
     }
     
-    ukn_string SystemInformation::GetOSVersion() {
+    UknString SystemInformation::GetOSVersion() {
 #ifdef UKN_OS_WINDOWS
         return ukn_win_get_os_version();
         
@@ -168,7 +168,7 @@ namespace ukn {
 #elif defined(UKN_OS_LINUX)
         
 #endif  
-        return ukn_string(L"Unknown OS");
+        return UknString(L"Unknown OS");
     }
     
     Array<SystemInformation::DesktopMode> SystemInformation::EnumDesktopMode() {

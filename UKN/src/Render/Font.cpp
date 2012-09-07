@@ -284,10 +284,10 @@ namespace ukn {
         mGlyphs.clear();
 
         if(config && config->toNode(L"font")) {            
-            ukn_string font_name = config->getString(L"name");
+            UknString font_name = config->getString(L"name");
             
             if(!font_name.empty()) {
-                ukn_string fullFontPath = Path::CheckAndGetFontPath(font_name);
+                UknString fullFontPath = Path::CheckAndGetFontPath(font_name);
                 
                 if(fullFontPath.empty()) {
                     log_error(L"ukn::Font::deserialize: error finding font name " + font_name);

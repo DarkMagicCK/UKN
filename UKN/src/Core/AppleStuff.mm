@@ -89,7 +89,7 @@ namespace ukn {
         return size;
     }
     
-    ukn_string ukn_apple_get_os_version() {
+    UknString ukn_apple_get_os_version() {
         SInt32 versionMajor = 0;
         SInt32 versionMinor = 0;
         Gestalt( gestaltSystemVersionMajor, &versionMajor );
@@ -294,7 +294,7 @@ namespace ukn {
         return 0;
     }
     
-    ukn_string ukn_apple_get_os_version() {
+    UknString ukn_apple_get_os_version() {
         NSString*  systemVersion=[[UIDevice currentDevice] systemVersion];
         NSString*  model=[[UIDevice currentDevice] model];
         
@@ -303,7 +303,7 @@ namespace ukn {
                              [model UTF8String]);
     }
     
-    MessageBoxButton ukn_apple_message_box(const ukn_string& mssg, const ukn_string& title, int option) {
+    MessageBoxButton ukn_apple_message_box(const UknString& mssg, const UknString& title, int option) {
         
         NSString* nsMessage = [[NSString alloc] initWithUTF8String:mssg.c_str()];
 		NSString* nsTitle = [[NSString alloc] initWithUTF8String:title.c_str()];

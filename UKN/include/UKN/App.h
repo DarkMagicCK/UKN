@@ -22,7 +22,7 @@ namespace ukn {
     
     class AppInstance: public Uncopyable {
     public:
-        AppInstance(const ukn_string& name);
+        AppInstance(const UknString& name);
         ~AppInstance();
         
         Window&     getWindow() const;
@@ -49,7 +49,7 @@ namespace ukn {
         void doCreate();
         void onWindowClose(void* wnd, NullEventArgs&);
         
-        ukn_string mName;
+        UknString mName;
         bool mInited;    
 
         WindowPtr mMainWindow;

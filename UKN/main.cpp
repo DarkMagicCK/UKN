@@ -159,7 +159,7 @@ static float testGraphFunc(float x) {
 
 class MyApp: public ukn::AppInstance {
 public:
-    MyApp(const ukn::ukn_string& name):
+    MyApp(const ukn::UknString& name):
     ukn::AppInstance(name) {
         
     }

@@ -27,11 +27,11 @@ namespace ukn {
          **/
         
         struct Property {
-            ukn_string name;
-            ukn_string value;
+            UknString name;
+            UknString value;
             
             Property() { }
-            Property(const ukn_string& name, const ukn_string& value):
+            Property(const UknString& name, const UknString& value):
             name(name),
             value(value) { 
             }
@@ -70,7 +70,7 @@ namespace ukn {
         
         struct TileSet {
             /* name of the tileset */
-            ukn_string name;
+            UknString name;
             /* first tileset grid id */
             int32 first_grid;
             
@@ -115,7 +115,7 @@ namespace ukn {
             LayerType type;
             
             /* name of the layer */
-            ukn_string name;
+            UknString name;
             
             /* dimensions of the layer, in tile */
             uint32 width;
@@ -141,8 +141,8 @@ namespace ukn {
         };  
         
         struct Object {
-            ukn_string name;
-            ukn_string type;
+            UknString name;
+            UknString type;
 
             /* coordinate of the object in pixels */
             int32 x;

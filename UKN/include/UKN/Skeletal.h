@@ -73,7 +73,7 @@ namespace ukn {
         
         KeyFrameList key_frames;
         
-        ukn_string  name;
+        UknString  name;
         int         repeat_count;
         bool        is_default;
         
@@ -117,10 +117,10 @@ namespace ukn {
     class Bone {
     public:
         typedef std::list<BonePtr> ChildrenList;
-        typedef std::map<ukn_string, BoneAnimation> AnimationMap;
+        typedef std::map<UknString, BoneAnimation> AnimationMap;
 
     public:
-        Bone(const ukn_string& name);
+        Bone(const UknString& name);
         ~Bone();
         
         ChildrenList& getChildren();
@@ -151,11 +151,11 @@ namespace ukn {
         void* getUserData() const;
         
         size_t     getSize() const;
-        ukn_string getName() const;
+        UknString getName() const;
         
-        BonePtr findChild(const ukn_string& name) const;
+        BonePtr findChild(const UknString& name) const;
         
-        void playAnimation(const ukn_string& name);
+        void playAnimation(const UknString& name);
         void stopAnimation();
         void pauseAnimation();
         
@@ -178,7 +178,7 @@ namespace ukn {
     private:
         friend class SkeletalAnimation;
         
-        ukn_string   mName;
+        UknString   mName;
         
         Bone*        mParent;
         ChildrenList mChildren;
@@ -219,14 +219,14 @@ namespace ukn {
         bool serialize(const ConfigParserPtr& config);
         bool deserialize(const ConfigParserPtr& config);
         
-        void play(const ukn_string& name);
+        void play(const UknString& name);
         void pause();
         void stop();
         
         BonePtr getRoot() const;
-        BonePtr getBone(const ukn_string& name) const;
+        BonePtr getBone(const UknString& name) const;
         
-        void addBone(const BonePtr& bone, const ukn_string& parent);
+        void addBone(const BonePtr& bone, const UknString& parent);
         
         size_t getSize() const;
         
@@ -239,7 +239,7 @@ namespace ukn {
         
         // root bone
         BonePtr mRoot;
-        ukn_string mDefaultAnimation;
+        UknString mDefaultAnimation;
     };
     
 } // namespace ukn

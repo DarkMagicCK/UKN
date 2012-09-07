@@ -149,36 +149,36 @@ namespace ukn {
         
     }
     
-    StringTokenlizer::StringTokenlizer(const ukn_string& str) {
-        parse(str, ukn_string());
+    StringTokenlizer::StringTokenlizer(const UknString& str) {
+        parse(str, UknString());
     }
     
-    StringTokenlizer::StringTokenlizer(const ukn_string& str, const ukn_string& deli) {
+    StringTokenlizer::StringTokenlizer(const UknString& str, const UknString& deli) {
         parse(str, deli);
     }
     
-    ukn_string StringTokenlizer::first() {
+    UknString StringTokenlizer::first() {
         if(mTokens.size() != 0)
             return mTokens.front();
-        return ukn_string();
+        return UknString();
     }
     
-    ukn_string StringTokenlizer::last() {
+    UknString StringTokenlizer::last() {
         if(mTokens.size() != 0)
             return mTokens.back();
-        return ukn_string();
+        return UknString();
     }
     
-    ukn_string StringTokenlizer::front() {
+    UknString StringTokenlizer::front() {
         if(mTokens.size() != 0)
             return mTokens.front();
-        return ukn_string();
+        return UknString();
     }
     
-    ukn_string StringTokenlizer::back() {
+    UknString StringTokenlizer::back() {
         if(mTokens.size() != 0)
             return mTokens.back();
-        return ukn_string();
+        return UknString();
         
     }
     
@@ -202,23 +202,23 @@ namespace ukn {
         return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));
     }
     
-    void StringTokenlizer::parse(const ukn_string& str) {
-        parse(str, ukn_string());
+    void StringTokenlizer::parse(const UknString& str) {
+        parse(str, UknString());
     }
     
-    ukn_string StringTokenlizer::operator[](size_t index) {
+    UknString StringTokenlizer::operator[](size_t index) {
         ukn_assert(index < mTokens.size());
         
         return mTokens[index];
     }
     
-    void StringTokenlizer::parse(const ukn_string& str, const ukn_string& deli) {
+    void StringTokenlizer::parse(const UknString& str, const UknString& deli) {
         size_t start = 0, end = 0;
         if(deli.size() != 0) {
             while(end < str.size()) {
-                while((deli.find(str[end]) == ukn_string::npos) && end < str.size()) { ++end; }
+                while((deli.find(str[end]) == UknString::npos) && end < str.size()) { ++end; }
                 if(end == str.size()) {
-                    while(deli.find(str[end]) != ukn_string::npos)
+                    while(deli.find(str[end]) != UknString::npos)
                         --end;
                     mTokens.push_back( str.substr(start, end-start) );
                     break;
@@ -227,7 +227,7 @@ namespace ukn {
                     mTokens.push_back( str.substr(start, end-start) );
                 
                 ++end; 
-                while((deli.find(str[end]) != ukn_string::npos || isSpace(str[end])) && end < str.size()) ++end;
+                while((deli.find(str[end]) != UknString::npos || isSpace(str[end])) && end < str.size()) ++end;
                 
                 start = end;
             }
@@ -257,8 +257,8 @@ namespace ukn {
         }
     }
     
-    void StringTokenlizer::operator=(const ukn_string& str) {
-        parse(str, ukn_string());
+    void StringTokenlizer::operator=(const UknString& str) {
+        parse(str, UknString());
     }
     
     size_t StringTokenlizer::size() const {
@@ -368,29 +368,29 @@ namespace ukn {
 		return buffer; 
     }
     
-    ukn_string String::GetFileName(const ukn_string& str) {
-        ukn_string::const_iterator it = str.end();
+    UknString String::GetFileName(const UknString& str) {
+        UknString::const_iterator it = str.end();
         it--;
         
         while(it != str.begin() && *it != '/' && *it != '\\') {
             --it;
         }
-        return ukn_string(it, str.end());
+        return UknString(it, str.end());
     }
     
-    ukn_string String::GetFilePath(const ukn_string& str) {
+    UknString String::GetFilePath(const UknString& str) {
         if(str.empty())
             return str;
         
-        ukn_string::const_iterator it = str.end();
+        UknString::const_iterator it = str.end();
         it--;
         
         while(it != str.begin() && *it != '/' && *it != '\\') {
             --it;
         }
         if(it != str.begin())
-            return ukn_string(str.begin(), it+1);
-        return ukn_string();
+            return UknString(str.begin(), it+1);
+        return UknString();
     }
     
     uint16 *utf8_to_unicode(uint16 *unicode, const char *utf8, size_t len) {

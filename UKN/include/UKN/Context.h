@@ -24,7 +24,7 @@ namespace ukn {
      **/
     
     struct ContextCfg {
-        ukn_string graphic_factory_name;
+        UknString graphic_factory_name;
         
         RenderSettings render_cfg;
     };
@@ -46,7 +46,7 @@ namespace ukn {
         
         void registerGraphicFactory(GraphicFactoryPtr factory);
         
-        void loadGraphicFactory(const ukn_string& name);
+        void loadGraphicFactory(const UknString& name);
         
         void setApp(AppInstance* app);
         bool isAppAvailable() const;

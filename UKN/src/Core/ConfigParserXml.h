@@ -24,38 +24,38 @@ namespace ukn {
         virtual bool create();
         
         virtual StreamPtr  writeToStream(const char* indent="\n") const;
-        virtual ukn_string writeToString(const char* indent="\n") const;
+        virtual UknString writeToString(const char* indent="\n") const;
         
         virtual void close();
         
-        virtual bool        hasNode(const ukn_string& node) const;
-        virtual ukn_string  getCurrentNodeName() const;
-        virtual ukn_string  getCurrentNodePath() const;
+        virtual bool        hasNode(const UknString& node) const;
+        virtual UknString  getCurrentNodeName() const;
+        virtual UknString  getCurrentNodePath() const;
         
-        virtual bool toNode(const ukn_string& node);
+        virtual bool toNode(const UknString& node);
         
-        virtual bool toFirstChild(const ukn_string& name=ukn_string());
-        virtual bool toNextChild(const ukn_string& name=ukn_string());
+        virtual bool toFirstChild(const UknString& name=UknString());
+        virtual bool toNextChild(const UknString& name=UknString());
         virtual bool toParent();
         
-        virtual bool hasAttribute(const ukn_string& attr) const;
-        virtual std::vector<ukn_string> getAttributes() const;
+        virtual bool hasAttribute(const UknString& attr) const;
+        virtual std::vector<UknString> getAttributes() const;
         
-        virtual ukn_string  getString(const ukn_string& attr, const ukn_string& opt) const;
-        virtual bool        getBool(const ukn_string& attr, bool opt) const;
-        virtual int32       getInt(const ukn_string& attr, int32 opt) const;
-        virtual float       getFloat(const ukn_string& attr, float opt) const;
+        virtual UknString  getString(const UknString& attr, const UknString& opt) const;
+        virtual bool        getBool(const UknString& attr, bool opt) const;
+        virtual int32       getInt(const UknString& attr, int32 opt) const;
+        virtual float       getFloat(const UknString& attr, float opt) const;
         
-        ukn_string  getFormattedString() const;
+        UknString  getFormattedString() const;
         
-        virtual bool beginNode(const ukn_string& name);
+        virtual bool beginNode(const UknString& name);
         virtual void endNode();
         
-        virtual void setValue(const ukn_string& val);
-        virtual void setString(const ukn_string& attr, const ukn_string& val);
-        virtual void setBool(const ukn_string& attr, bool val);
-        virtual void setInt(const ukn_string& attr, int32 val);
-        virtual void setFloat(const ukn_string& attr, float val);
+        virtual void setValue(const UknString& val);
+        virtual void setString(const UknString& attr, const UknString& val);
+        virtual void setBool(const UknString& attr, bool val);
+        virtual void setInt(const UknString& attr, int32 val);
+        virtual void setFloat(const UknString& attr, float val);
         
         const String& getName() const;
         
@@ -66,7 +66,7 @@ namespace ukn {
             
             myWritter(const char* indent);
             
-            ukn_string indent;
+            UknString indent;
         };
         
         struct myStreamWritter: public pugi::xml_writer {
@@ -74,7 +74,7 @@ namespace ukn {
             
             void write(const void* data, size_t size);            
             StreamPtr stream;
-            ukn_string indent;
+            UknString indent;
         };
         
         String mName;

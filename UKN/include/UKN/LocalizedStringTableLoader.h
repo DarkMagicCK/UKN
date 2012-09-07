@@ -16,8 +16,8 @@ namespace ukn {
     class LocalizedStringTable;
     
     struct LocalizedStringTableLoader {
-        static bool Load(const ukn_string& file, LocalizedStringTable& stringTable);
-        static bool Save(const ukn_string& file, const LocalizedStringTable& stringTable);
+        static bool Load(const UknString& file, LocalizedStringTable& stringTable);
+        static bool Save(const UknString& file, const LocalizedStringTable& stringTable);
     };
     
 }

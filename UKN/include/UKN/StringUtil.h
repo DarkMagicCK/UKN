@@ -47,8 +47,8 @@ namespace ukn {
         static std::string WStringToStringFast(const std::wstring& str);
         static std::wstring StringToWStringFast(const std::string& str);
         
-        static ukn_string GetFileName(const ukn_string& str);
-        static ukn_string GetFilePath(const ukn_string& str);
+        static UknString GetFileName(const UknString& str);
+        static UknString GetFilePath(const UknString& str);
         
         template<typename T>
         static std::string AnyToString(const T& val) {
@@ -74,33 +74,33 @@ namespace ukn {
     
     class UKN_API StringTokenlizer {
     public:
-        typedef std::vector<ukn_string> TokenContainer;
+        typedef std::vector<UknString> TokenContainer;
         typedef TokenContainer::iterator Iterator;
         typedef Iterator iterator;
         
         StringTokenlizer();
-        StringTokenlizer(const ukn_string& str);
-        StringTokenlizer(const ukn_string& str, const ukn_string& deli);
+        StringTokenlizer(const UknString& str);
+        StringTokenlizer(const UknString& str, const UknString& deli);
         
-        void parse(const ukn_string& str);
-        void parse(const ukn_string& str, const ukn_string& deli);
+        void parse(const UknString& str);
+        void parse(const UknString& str, const UknString& deli);
         
-        ukn_string first();
-        ukn_string last();
+        UknString first();
+        UknString last();
         
-        ukn_string front();
-        ukn_string back();
+        UknString front();
+        UknString back();
         
         iterator begin();
         iterator end();
         
         size_t size() const;
         
-        void operator=(const ukn_string& str);
+        void operator=(const UknString& str);
         
         const TokenContainer& getTokens() const;
         
-        ukn_string operator[](size_t index);
+        UknString operator[](size_t index);
         
     protected:
         bool isSpace(char c);

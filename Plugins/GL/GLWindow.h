@@ -20,10 +20,10 @@ namespace ukn {
     
     class GLWindow: public Window  {
     public:
-        GLWindow(const ukn_string& name, const RenderSettings& settings);
+        GLWindow(const UknString& name, const RenderSettings& settings);
         ~GLWindow();
         
-        ukn_string description() const;
+        UknString description() const;
         
 #ifdef UKN_OS_WINDOWS
 		HWND getHWnd() const;
@@ -42,7 +42,7 @@ namespace ukn {
         void onWindowResize(void* wnd, WindowResizeEventArgs&);
         void onWindowMove(Window& wnd, uint32 x, uint32 y);
         
-        void setName(const ukn_string& name);
+        void setName(const UknString& name);
         
         GLFrameBufferPtr getFrameBuffer() const;
         

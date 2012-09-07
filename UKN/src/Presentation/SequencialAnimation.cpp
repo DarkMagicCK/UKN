@@ -55,7 +55,7 @@ namespace ukn {
         return false;
     }
     
-    inline SequencialAnimationMode name_to_mode(const ukn_string& name) {
+    inline SequencialAnimationMode name_to_mode(const UknString& name) {
         if(name == L"grid")
             return SA_Grid;
         if(name == L"grid_custom")
@@ -67,7 +67,7 @@ namespace ukn {
     
     bool SequencialAnimation::deserialize(const ConfigParserPtr& config) {
         if(config->toNode(L"SpriteSheet")) {
-            ukn_string name = config->getString(L"name");
+            UknString name = config->getString(L"name");
             if(!name.empty()) {
                 mName = name;
                 
@@ -118,7 +118,7 @@ namespace ukn {
                     case SA_SeperateFiles:
                         if(config->toFirstChild()) {
                             do {
-                                ukn_string texture_path = config->getString(L"texture");
+                                UknString texture_path = config->getString(L"texture");
                                 if(!texture_path.empty()) {
                                     GridInfo info;
                                     info.texture = AssetManager::Instance().load<ukn::Texture>(String::GetFilePath(config->getName()) + texture_path);

@@ -69,7 +69,7 @@ namespace ukn {
             it->second->onReceiveMessage(args);
     }
     
-    void ComponentHolder::sendMessage(const ukn_string& to, MessageEventArgs& args) {
+    void ComponentHolder::sendMessage(const UknString& to, MessageEventArgs& args) {
         ComponentMap::iterator it = mComponents.begin();
         for(; it != mComponents.end(); ++it)
             if(it->second->getName() == to)
@@ -80,7 +80,7 @@ namespace ukn {
         mComponents.insert(std::make_pair(comp->getName(), comp));
     }
     
-    ComponentPtr ComponentHolder::removeComponent(const ukn_string& name) {
+    ComponentPtr ComponentHolder::removeComponent(const UknString& name) {
         ComponentMap::iterator it = mComponents.find(name);
         if(it != mComponents.end()) {
             ComponentPtr comp = it->second;
@@ -90,12 +90,12 @@ namespace ukn {
         return ComponentPtr();
     }
     
-    bool ComponentHolder::hasComponent(const ukn_string& name) {
+    bool ComponentHolder::hasComponent(const UknString& name) {
         ComponentMap::iterator it = mComponents.find(name);
         return it != mComponents.end();
     }
     
-    Component* ComponentHolder::getComponent(const ukn_string& name) {
+    Component* ComponentHolder::getComponent(const UknString& name) {
         ComponentMap::iterator it = mComponents.find(name);
         return it != mComponents.end() ? it->second.get() : 0;
     }

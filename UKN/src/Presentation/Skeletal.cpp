@@ -18,7 +18,7 @@
 namespace ukn {
     
     BoneAnimation::BoneAnimation():
-    name(ukn_string()),
+    name(UknString()),
     repeat_count(1),
     is_default(false),
     mCurrentTime(0),
@@ -171,7 +171,7 @@ namespace ukn {
         }
     }
     
-    Bone::Bone(const ukn_string& name):
+    Bone::Bone(const UknString& name):
     mName(name),
     mParent(0),
     mLength(0),
@@ -382,7 +382,7 @@ namespace ukn {
         }
     }
     
-    BonePtr Bone::findChild(const ukn_string& name) const {
+    BonePtr Bone::findChild(const UknString& name) const {
         ChildrenList::const_iterator it = mChildren.begin();
         while(it != mChildren.end()) {
             if((*it)->getName() == name) {
@@ -396,7 +396,7 @@ namespace ukn {
         return BonePtr();
     }
         
-    ukn_string Bone::getName() const {
+    UknString Bone::getName() const {
         return mName;
     }
     
@@ -412,7 +412,7 @@ namespace ukn {
         return size;
     }
     
-    void Bone::playAnimation(const ukn_string& name) {
+    void Bone::playAnimation(const UknString& name) {
         mCurrentAnimation = mAnimations.find(name);
         if(mCurrentAnimation != mAnimations.end())
             mCurrentAnimation->second.play();
@@ -464,7 +464,7 @@ namespace ukn {
         if(config->toNode(L"skeletal")) {
             if(config->toFirstChild()) {
                 do {
-                    ukn_string bone_name = config->getString(L"name");
+                    UknString bone_name = config->getString(L"name");
                     if(!bone_name.empty()) {
                         BonePtr bone;
 
@@ -474,7 +474,7 @@ namespace ukn {
                             bone = mRoot;
                         }
                         
-                        ukn_string texture_path;
+                        UknString texture_path;
                         if(config->hasAttribute(L"texture_path")) {
                             texture_path = config->getString(L"texture_path");
                         } else if(config->hasAttribute(L"editor_texture_path")) {
@@ -530,7 +530,7 @@ namespace ukn {
                         if(config->toNode(L"Animations")) {
                             if(config->toFirstChild()) {
                                 do {
-                                    ukn_string anim_name = config->getString(L"name");
+                                    UknString anim_name = config->getString(L"name");
                                     if(!anim_name.empty()) {
                                         BoneAnimation anim;
                                         anim.name = anim_name;
@@ -601,7 +601,7 @@ namespace ukn {
         return true;
     }
     
-    void SkeletalAnimation::play(const ukn_string& name) {
+    void SkeletalAnimation::play(const UknString& name) {
         mRoot->playAnimation(name);
     }
     
@@ -625,20 +625,20 @@ namespace ukn {
         return mRoot;
     }
     
-    BonePtr SkeletalAnimation::getBone(const ukn_string& name) const {
+    BonePtr SkeletalAnimation::getBone(const UknString& name) const {
         if(mRoot->getName() == name)
             return mRoot;
         
         return mRoot->findChild(name);
     }
     
-    void SkeletalAnimation::addBone(const BonePtr& bone, const ukn_string& parent_name) {
+    void SkeletalAnimation::addBone(const BonePtr& bone, const UknString& parent_name) {
         BonePtr parent = getBone(parent_name.empty() ? L"Root" : parent_name);
         if(parent) {
             parent->getChildren().push_back(bone);
             bone->mParent = parent;
         } else 
-            log_error(ukn_string(L"ukn::SkeletalAnimation:addBone: no parent bone with name ")+parent_name+L" found");
+            log_error(UknString(L"ukn::SkeletalAnimation:addBone: no parent bone with name ")+parent_name+L" found");
     }
     
     inline void render_bone(SpriteBatch& spriteBatch, Bone& bone) {

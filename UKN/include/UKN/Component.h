@@ -24,18 +24,18 @@ namespace ukn {
      **/
     
 #define UKN_DEF_COMPONENT_NAME(compo) \
-    static ukn_string GetName() { \
-        static ukn_string compo_name(#compo); \
+    static UknString GetName() { \
+        static UknString compo_name(#compo); \
         return compo_name; \
     } \
-    virtual const ukn_string& getName() const { \
-        static ukn_string compo_name(#compo); \
+    virtual const UknString& getName() const { \
+        static UknString compo_name(#compo); \
         return compo_name; \
     }
     
     class IComponent: public virtual Interface {
     public:        
-        virtual const ukn_string& getName() const = 0;
+        virtual const UknString& getName() const = 0;
 
         virtual void onComponentAdded(Component* compo) = 0;
         virtual void onComponentRemoved(Component* compo) = 0;
@@ -78,13 +78,13 @@ namespace ukn {
         
         void notify(Component* c, MessageEventArgs& args);
         void sendMessage(MessageEventArgs& args);
-        void sendMessage(const ukn_string& to, MessageEventArgs& args);
+        void sendMessage(const UknString& to, MessageEventArgs& args);
         
         void            addComponent(ComponentPtr comp);
-        ComponentPtr    removeComponent(const ukn_string& name);
+        ComponentPtr    removeComponent(const UknString& name);
         
-        bool        hasComponent(const ukn_string& name);
-        Component*  getComponent(const ukn_string& name);
+        bool        hasComponent(const UknString& name);
+        Component*  getComponent(const UknString& name);
         
         virtual void onComponentAdded(Component* compo);
         virtual void onComponentRemoved(Component* compo);
@@ -94,7 +94,7 @@ namespace ukn {
         virtual void onNotified(Component* c, MessageEventArgs& args);
         
     private:
-        typedef std::multimap<ukn_string, ComponentPtr> ComponentMap;
+        typedef std::multimap<UknString, ComponentPtr> ComponentMap;
         ComponentMap mComponents;
     };
     

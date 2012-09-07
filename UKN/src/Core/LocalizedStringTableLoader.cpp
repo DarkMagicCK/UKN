@@ -14,7 +14,7 @@
 
 namespace ukn {
     
-    bool LocalizedStringTableLoader::Load(const ukn_string& file, LocalizedStringTable& stringTable) {
+    bool LocalizedStringTableLoader::Load(const UknString& file, LocalizedStringTable& stringTable) {
         ukn::ConfigParserPtr parser = ukn::ConfigParser::MakeParser(ukn::ResourceLoader::Instance().loadResource(file));
         if(parser &&
            parser->toNode(L"strings")) {
@@ -22,17 +22,17 @@ namespace ukn {
             parser->toFirstChild();
             
             do {
-                ukn_string lanName = parser->getCurrentNodeName();
+                UknString lanName = parser->getCurrentNodeName();
                 if(!lanName.empty()) {
                     stringTable.addLanguage(lanName);
                     
                     parser->toFirstChild();
                     
                     do {
-                        ukn_string stringId = parser->getCurrentNodeName();
+                        UknString stringId = parser->getCurrentNodeName();
                         if(!stringId.empty()) {
                             
-                            ukn_string value = parser->getString(L"value");
+                            UknString value = parser->getString(L"value");
                             
                             stringTable.addString(lanName, stringId, value); 
                         }
@@ -50,7 +50,7 @@ namespace ukn {
         return false;
     }
     
-    bool LocalizedStringTableLoader::Save(const ukn_string& file, const LocalizedStringTable& stringTable) {
+    bool LocalizedStringTableLoader::Save(const UknString& file, const LocalizedStringTable& stringTable) {
         ukn::ConfigParserPtr parser = ukn::ConfigParser::MakeEmptyParser(ukn::CPT_XML);
         
         if(parser) {
@@ -78,7 +78,7 @@ namespace ukn {
             
             parser->endNode();
             
-            ukn_string content = parser->writeToString();
+            UknString content = parser->writeToString();
             
             FILE* pfile = fopen(String::WStringToString(file).c_str(),
                                 "w+");

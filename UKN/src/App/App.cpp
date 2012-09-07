@@ -26,7 +26,7 @@
 
 namespace ukn {
     
-    AppInstance::AppInstance(const ukn_string& name):
+    AppInstance::AppInstance(const UknString& name):
     mName(name),
     mInited(false) {
         Context::Instance().setApp(this);

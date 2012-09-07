@@ -25,7 +25,7 @@ namespace ukn {
 	
     class IResource: public virtual Interface {
     public:
-        virtual const ukn_string& getName() const = 0;
+        virtual const UknString& getName() const = 0;
     };
     
     template<typename T>

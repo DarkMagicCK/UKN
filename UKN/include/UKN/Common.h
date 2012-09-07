@@ -56,7 +56,7 @@ namespace ukn {
 		return std::string(message);
     }
 
-    inline ukn_string get_lib_name(const ukn_string& lib) {
+    inline UknString get_lib_name(const UknString& lib) {
 #if defined(UKN_OS_OSX)
         return lib + L".dylib";
 #elif defined(UKN_OS_WINDOWS)

@@ -953,7 +953,7 @@ namespace ukn {
      */
     
     /* Client constructor */
-    NetStream::NetStream(const ukn_string& hostName, uint16 portNum):
+    NetStream::NetStream(const UknString& hostName, uint16 portNum):
     iostream(NULL), 
     connection(new SocketStreambuf()) {
         init(connection);
@@ -990,7 +990,7 @@ namespace ukn {
         delete connection;
     }
     
-    void NetStream::open(const ukn_string& filename, uint16 portNum) {
+    void NetStream::open(const UknString& filename, uint16 portNum) {
         if(!connection->open(String::WStringToString(filename).c_str(),
                              portNum))
             setstate(ios_base::failbit);

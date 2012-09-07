@@ -260,39 +260,39 @@ namespace ukn {
         virtual bool serialize(const ConfigParserPtr& parser);
         virtual bool deserialize(const ConfigParserPtr& parser);
         
-        bool isStoryBoardExist(const ukn_string& name) const;
+        bool isStoryBoardExist(const UknString& name) const;
         
-        StoryBoardPtr getStoryBoard(const ukn_string& name) const;
+        StoryBoardPtr getStoryBoard(const UknString& name) const;
         
-        void play(const ukn_string& name);
+        void play(const UknString& name);
         void pause();
         void stop();
         
         // property references
         // required for deserialization
-        void  addProperty(const ukn_string& name, void* prop);
-        void  delProperty(const ukn_string& name);
-        void* getProperty(const ukn_string& name) const;
+        void  addProperty(const UknString& name, void* prop);
+        void  delProperty(const UknString& name);
+        void* getProperty(const UknString& name) const;
         
         size_t size() const;
         
         Event<StoryBoardCompletedEventArgs>& onComplete();
         
-        void       setDefault(const ukn_string& name);
-        ukn_string getDefault() const;
-        ukn_string getCurrent() const;
+        void       setDefault(const UknString& name);
+        UknString getDefault() const;
+        UknString getCurrent() const;
                 
     private:
-        typedef std::map<ukn_string, StoryBoardPtr> StoryBoardMap;
+        typedef std::map<UknString, StoryBoardPtr> StoryBoardMap;
         StoryBoardMap mStoryBoards;
         
         Event<StoryBoardCompletedEventArgs> mCompleteEvent;
         
-        typedef std::map<ukn_string, void*> PropertyMap;
+        typedef std::map<UknString, void*> PropertyMap;
         PropertyMap mProperties;
         
-        ukn_string mDefault;
-        ukn_string mCurrent;
+        UknString mDefault;
+        UknString mCurrent;
         
         void onAnimationFinished(void* sender, StoryBoardCompletedEventArgs& args);
     };

@@ -14,8 +14,8 @@
 namespace ukn {
     
     struct ShaderDesc {
-        ukn_string func;
-        ukn_string profile;
+        UknString func;
+        UknString profile;
     };
     
     class Shader {

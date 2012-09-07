@@ -24,11 +24,11 @@ namespace ukn {
     namespace detail {
         
         struct Profile {
-            Profile(const ukn_string& name);
+            Profile(const UknString& name);
             ~Profile();
             
             Timestamp ts;
-            ukn_string name;
+            UknString name;
         };
     }
     
@@ -44,9 +44,9 @@ namespace ukn {
         float time_ratio;
         float time_ratio_frame;
         
-        ukn_string name;
+        UknString name;
         
-        ukn_string toFormattedString() const;
+        UknString toFormattedString() const;
         
         ProfileData():
         time(0),
@@ -56,7 +56,7 @@ namespace ukn {
         recorded_frames(1),
         time_ratio(0),
         time_ratio_frame(0),
-        name(ukn_string()) {
+        name(UknString()) {
             
         }
     };
@@ -69,16 +69,16 @@ namespace ukn {
     public:
         static Profiler& Instance();
         
-        ProfileData get(const ukn_string& name) const;
+        ProfileData get(const UknString& name) const;
         
     private:
         friend struct detail::Profile;
         friend class FrameCounter;
         
-        void record(const ukn_string& name, uint64 time);
+        void record(const UknString& name, uint64 time);
         void updateTimeRatio(uint64 frametime, uint64 frameDelta);
         
-        typedef ukn_hash_map<ukn_string, ProfileData> ProfileDataMap;
+        typedef ukn_hash_map<UknString, ProfileData> ProfileDataMap;
         ProfileDataMap mProfiles;
     };
     

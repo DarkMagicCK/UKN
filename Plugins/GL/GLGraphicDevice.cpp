@@ -40,8 +40,8 @@ namespace ukn {
         
     }
     
-    ukn_string GLGraphicDevice::description() const {
-        static ukn_string des = String::StringToWString(format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s",
+    UknString GLGraphicDevice::description() const {
+        static UknString des = String::StringToWString(format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s",
                                                                       (char*)glGetString(GL_VERSION),
                                                                       (char*)glGetString(GL_VENDOR),
                                                                       (char*)glGetString(GL_SHADING_LANGUAGE_VERSION)));
@@ -67,7 +67,7 @@ namespace ukn {
         return des;
     }
     
-    WindowPtr GLGraphicDevice::doCreateRenderWindow(const ukn_string& name, const RenderSettings& settings) {
+    WindowPtr GLGraphicDevice::doCreateRenderWindow(const UknString& name, const RenderSettings& settings) {
         try {
             mWindow = MakeSharedPtr<GLWindow>(name, settings);
         } catch(Exception& e) {
@@ -138,7 +138,7 @@ namespace ukn {
             glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vtxArr.begin());
             glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
                          0,
-                         vertexBuffer->count());
+                         vertexBuffer->useCount());
             return;
         }
 
@@ -203,7 +203,7 @@ namespace ukn {
         } else {
             glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
                          0,
-                         vertexBuffer->count());
+                         vertexBuffer->useCount());
         }
         
         glBindBuffer(GL_ARRAY_BUFFER, 0);

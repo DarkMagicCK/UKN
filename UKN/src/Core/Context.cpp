@@ -69,7 +69,7 @@ namespace ukn {
         return mCfg;
     }
     
-    inline int fmt_string_to_element_format(const ukn_string& str) {
+    inline int fmt_string_to_element_format(const UknString& str) {
         if(str == L"EF_ARGB8")
             return EF_ARGB8;
         else if(str == L"EF_D16")
@@ -81,7 +81,7 @@ namespace ukn {
         return -1;
     }
     
-    inline ukn_string element_format_to_string(ElementFormat fmt) {
+    inline UknString element_format_to_string(ElementFormat fmt) {
         switch(fmt) {
             case EF_ARGB8:
                 return L"EF_ARGB8";
@@ -126,7 +126,7 @@ namespace ukn {
                 cfg.render_cfg.sample_quality   = configParser->getInt(L"sample_quality", cfg.render_cfg.sample_quality);
                 cfg.render_cfg.fsaa_samples     = configParser->getInt(L"fsaa_samples", cfg.render_cfg.fsaa_samples);
                 
-                ukn_string fmt_string;
+                UknString fmt_string;
                 int fmt_id;
                 
                 fmt_string = configParser->getString(L"color_fmt", L"EF_ARGB8");
@@ -185,7 +185,7 @@ namespace ukn {
                 configParser->setString(L"graphic_factory", mCfg.graphic_factory_name);
         }
         
-        ukn_string formattedString = configParser->writeToString();
+        UknString formattedString = configParser->writeToString();
         ResourcePtr resource = ResourceLoader::Instance().createFileResource(name);
         if(resource) {
             resource->getResourceStream()->write((const uint8*)formattedString.data(), 
@@ -201,7 +201,7 @@ namespace ukn {
         mGraphicFactory = factory;
     }
     
-    void Context::loadGraphicFactory(const ukn_string& name) {
+    void Context::loadGraphicFactory(const UknString& name) {
         mGraphicFactoryLoader.close();
         
         if(mGraphicFactoryLoader.open(String::WStringToString(name).c_str())) {

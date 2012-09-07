@@ -127,7 +127,7 @@ namespace ukn {
 
     }
     
-    GLWindow::GLWindow(const ukn_string& name, const RenderSettings& settings):
+    GLWindow::GLWindow(const UknString& name, const RenderSettings& settings):
     mFrameBuffer(new GLFrameBuffer(false)),
     Window(name) {
         glfwInit();
@@ -249,7 +249,7 @@ namespace ukn {
         return mFrameBuffer;
     }
     
-    void GLWindow::setName(const ukn_string& name) {
+    void GLWindow::setName(const UknString& name) {
         glfwSetWindowTitle(mGlfwWindow,
                            String::WStringToString(name).c_str());
     }
@@ -346,8 +346,8 @@ namespace ukn {
         glfwTerminate();
     }
     
-    ukn_string GLWindow::description() const {
-        static ukn_string des(L"OpenGL Window based on GLFW");
+    UknString GLWindow::description() const {
+        static UknString des(L"OpenGL Window based on GLFW");
         return des;
     }
      

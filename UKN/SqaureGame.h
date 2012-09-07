@@ -45,7 +45,7 @@
 
 class SquareGame: public ukn::AppInstance {
 public:
-    SquareGame(const ukn::ukn_string& name):
+    SquareGame(const ukn::UknString& name):
     ukn::AppInstance(name) {
         
     }

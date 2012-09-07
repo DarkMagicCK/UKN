@@ -13,7 +13,7 @@ namespace ukn {
     struct PortManager::PortInfo {
         ClassId PortClassId;
         void* PortObj;
-        ukn_string PortName;
+        UknString PortName;
     };
     
     PortManager& PortManager::Instance() {
@@ -21,7 +21,7 @@ namespace ukn {
         return instance;
     }
     
-    PortManagerResult PortManager::add(const ukn_string& name, void* obj, ClassId cid) {
+    PortManagerResult PortManager::add(const UknString& name, void* obj, ClassId cid) {
         PortMap::iterator it = mPorts.find(name);
         if(it != mPorts.end())
             return PMR_Duplicate;
@@ -47,7 +47,7 @@ namespace ukn {
         return PMR_NotFound;
     }
     
-    void* PortManager::attach(const ukn_string& name, ClassId cid) {
+    void* PortManager::attach(const UknString& name, ClassId cid) {
         PortMap::iterator it = mPorts.find(name);
         if(it != mPorts.end())
             return it->second.PortObj;
@@ -59,7 +59,7 @@ namespace ukn {
         return PMR_Success;
     }
     
-    PortManagerResult PortManager::remove(const ukn_string& name) {
+    PortManagerResult PortManager::remove(const UknString& name) {
         PortMap::iterator it = mPorts.find(name);
         if(it != mPorts.end()) {
             mPorts.erase(it);

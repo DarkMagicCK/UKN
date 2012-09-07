@@ -45,7 +45,8 @@ namespace ukn {
     
     GraphicBuffer::GraphicBuffer(Access a, Usage u):
     mAccessHint(a),
-    mUsage(u) {
+    mUsage(u),
+    mUseCount(0) {
         
     }
     
@@ -61,5 +62,15 @@ namespace ukn {
         return mUsage;
     }
     
+    void GraphicBuffer::useCount(uint32 useCount) {
+        mUseCount = useCount;
+    }
+    
+    uint32 GraphicBuffer::useCount() const {
+        if(mUseCount == 0) {
+            return this->count();
+        }
+        return mUseCount;
+    }
     
 } // namespace ukn

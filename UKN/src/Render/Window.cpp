@@ -10,7 +10,7 @@
 
 namespace ukn {
 
-    Window::Window(const ukn_string& name):
+    Window::Window(const UknString& name):
     mName(name) {
         
     }
@@ -19,12 +19,12 @@ namespace ukn {
         
     }
     
-    void Window::setWindowTitle(const ukn_string& title) {
+    void Window::setWindowTitle(const UknString& title) {
         mName = title;
         this->setName(title);
     }
     
-    const ukn_string& Window::getWindowTitle() const {
+    const UknString& Window::getWindowTitle() const {
         return mName;
     }
     

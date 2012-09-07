@@ -208,14 +208,14 @@ namespace ukn {
             layer.opacity = config->getFloat(L"opacity", 1.0f);
             
             if(config->toNode(L"data")) {
-                ukn_string encoding = config->getString(L"encoding");
-                ukn_string compression = config->getString(L"compression");
+                UknString encoding = config->getString(L"encoding");
+                UknString compression = config->getString(L"compression");
                 
                 if(encoding == L"base64") {
-                    ukn_string str_data = config->getString(ukn_string());
+                    UknString str_data = config->getString(UknString());
                     ukn_assert(!str_data.empty());
                     
-                    ukn_string::iterator begin = str_data.begin();
+                    UknString::iterator begin = str_data.begin();
                     while(*begin == '\n' || *begin == ' ')
                         begin++;
                     str_data.erase(str_data.begin(), begin);
@@ -286,7 +286,7 @@ namespace ukn {
                     }
                     
                 } else if(encoding == L"csv") {
-                    StringTokenlizer tiles(config->getString(ukn_string()),
+                    StringTokenlizer tiles(config->getString(UknString()),
                                            L",");
                     ukn_assert(tiles.size() == layer.width * layer.height);
                     for(int32 j = 0; j < layer.height; ++j) {
@@ -326,7 +326,7 @@ namespace ukn {
         }
         
         void Map::parseTileset(const ConfigParserPtr& config) {
-            ukn_string source = config->getString(L"source");
+            UknString source = config->getString(L"source");
             
             mTileSets.push_back(TileSet());
             
@@ -368,7 +368,7 @@ namespace ukn {
             
             if(config->toFirstChild()) {
                 do {
-                    ukn_string node_type = config->getCurrentNodeName();
+                    UknString node_type = config->getCurrentNodeName();
                     if(node_type == L"object") {
                         Object obj;
                         
@@ -404,7 +404,7 @@ namespace ukn {
         
         bool Map::deserialize(const ConfigParserPtr& config) {
             if(config->toNode(L"map")) {
-                ukn_string orientation = config->getString(L"orientation", L"orthogonall");
+                UknString orientation = config->getString(L"orientation", L"orthogonall");
                 if(orientation == L"orthogonal")
                     mOrientation = MO_Orthogonal;
                 else
@@ -417,7 +417,7 @@ namespace ukn {
                 
                 if(config->toFirstChild()) {
                     do {
-                        ukn_string node_type = config->getCurrentNodeName();
+                        UknString node_type = config->getCurrentNodeName();
                         if(node_type == L"tileset") {
                             parseTileset(config);
     

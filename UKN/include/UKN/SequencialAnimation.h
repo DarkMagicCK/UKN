@@ -91,7 +91,7 @@ namespace ukn {
     private:
         GridList mGrids;
         uint32   mTotalCount;
-        ukn_string mName;
+        UknString mName;
         CompleteEvent mCompleteEvent;
         
         AnimationStatus mCurrentStatus;

@@ -48,10 +48,10 @@ namespace ukn {
     
     class UKN_API Window {
     public:
-        explicit Window(const ukn_string& name);
+        explicit Window(const UknString& name);
         virtual ~Window();
     
-        virtual ukn_string description() const = 0;
+        virtual UknString description() const = 0;
         
 #if defined(UKN_OS_WINDOWS)
         virtual HWND getHWnd() const = 0;
@@ -72,12 +72,12 @@ namespace ukn {
         
         virtual void setMousePos(int32 x, int32 y) = 0;
         
-        void setWindowTitle(const ukn_string& title);
-        const ukn_string& getWindowTitle() const;
+        void setWindowTitle(const UknString& title);
+        const UknString& getWindowTitle() const;
         
     protected:
-        ukn_string mName;
-        virtual void setName(const ukn_string& name) = 0;
+        UknString mName;
+        virtual void setName(const UknString& name) = 0;
         
     public:
         int32  left() const;

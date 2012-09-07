@@ -38,85 +38,85 @@ namespace ukn {
         virtual const String& getName() const = 0;
         
         virtual StreamPtr  writeToStream(const char* indent="\n") const = 0;
-        virtual ukn_string writeToString(const char* indent="\n") const = 0;
+        virtual UknString writeToString(const char* indent="\n") const = 0;
         
         virtual void close() = 0;
         
-        virtual bool hasNode(const ukn_string& node) const = 0;
-        virtual ukn_string getCurrentNodeName() const = 0;
-        virtual ukn_string getCurrentNodePath() const = 0;
+        virtual bool hasNode(const UknString& node) const = 0;
+        virtual UknString getCurrentNodeName() const = 0;
+        virtual UknString getCurrentNodePath() const = 0;
         
         /**
          * set current node to a node, / for root, otherwise use relative path
          * /config/window/ etc
          **/
-        virtual bool toNode(const ukn_string& node) = 0;
+        virtual bool toNode(const UknString& node) = 0;
         
         /**
          * set current node to first node child
          **/
-        virtual bool toFirstChild(const ukn_string& name=ukn_string()) = 0;
+        virtual bool toFirstChild(const UknString& name=UknString()) = 0;
         /**
          * set current node to next slibling child
          **/
-        virtual bool toNextChild(const ukn_string& name=ukn_string()) = 0;
+        virtual bool toNextChild(const UknString& name=UknString()) = 0;
         /**
          * set current node to node parent
          **/
         virtual bool toParent() = 0;
         
         
-        virtual bool hasAttribute(const ukn_string& attr) const = 0;
+        virtual bool hasAttribute(const UknString& attr) const = 0;
         /**
          * get all attributes of current node
          **/
-        virtual std::vector<ukn_string> getAttributes() const = 0;
+        virtual std::vector<UknString> getAttributes() const = 0;
         
         /**
          * get node attribute as optinal string
          */
-        virtual ukn_string getString(const ukn_string& attr, const ukn_string& opt = ukn_string()) const = 0;
+        virtual UknString getString(const UknString& attr, const UknString& opt = UknString()) const = 0;
         /**
          * get node attribute as optinal bool
          */
-        virtual bool getBool(const ukn_string& attr, bool opt = false) const = 0;
+        virtual bool getBool(const UknString& attr, bool opt = false) const = 0;
         /**
          * get node attribute as optinal bool
          */
-        virtual int32 getInt(const ukn_string& attr, int32 opt = 0) const = 0;
+        virtual int32 getInt(const UknString& attr, int32 opt = 0) const = 0;
         /**
          * get node attribute as optinal bool
          */
-        virtual float getFloat(const ukn_string& attr, float opt = 0.f) const = 0;
+        virtual float getFloat(const UknString& attr, float opt = 0.f) const = 0;
         
         
         /**
          * Begin a new node under current node
          **/
-        virtual bool beginNode(const ukn_string& nodeName) = 0;
+        virtual bool beginNode(const UknString& nodeName) = 0;
         
         virtual void endNode() = 0;
         
         /**
          * set the value of current node
          **/
-        virtual void setValue(const ukn_string& val) = 0;
+        virtual void setValue(const UknString& val) = 0;
         /**
          * set a string attribute under current node
          **/
-        virtual void setString(const ukn_string& attr, const ukn_string& val) = 0;
+        virtual void setString(const UknString& attr, const UknString& val) = 0;
         /**
          * set a bool attribute under current node
          **/
-        virtual void setBool(const ukn_string& attr, bool val) = 0;
+        virtual void setBool(const UknString& attr, bool val) = 0;
         /**
          * set a int attribute under current node
          **/
-        virtual void setInt(const ukn_string& attr, int32 val) = 0;
+        virtual void setInt(const UknString& attr, int32 val) = 0;
         /**
          * set a float attribute under current node
          **/
-        virtual void setFloat(const ukn_string& attr, float val) = 0;
+        virtual void setFloat(const UknString& attr, float val) = 0;
         
         UKN_API static ConfigParserPtr MakeEmptyParser(ConfigParserType type);
         UKN_API static ConfigParserPtr MakeParser(ResourcePtr resource);

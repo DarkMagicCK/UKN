@@ -25,15 +25,15 @@ namespace ukn {
     
     class DiskResourceFactory: public ResourceFactory {
     public:
-        bool resourceExists(const ukn_string& path) {
+        bool resourceExists(const UknString& path) {
             return File::FileExists(path);
         }
         
-        bool pathExists(const ukn_string& path) {
+        bool pathExists(const UknString& path) {
             return File::PathExists(path);
         }
         
-        ResourcePtr onResourceLoad(const ukn_string& path) {
+        ResourcePtr onResourceLoad(const UknString& path) {
             FileStream* pfs = new FileStream;
             if(pfs->open(path)) {
                 ResourcePtr ptr = MakeSharedPtr<Resource>(path, StreamPtr(pfs));
@@ -42,7 +42,7 @@ namespace ukn {
             return MakeSharedPtr<Resource>(path, StreamPtr());
         }
         
-        void enumResourceNamesInPath(const ukn_string& path, ResourceFactory::ResourceNames& names) {
+        void enumResourceNamesInPath(const UknString& path, ResourceFactory::ResourceNames& names) {
             DirectoryIterator it(path);
             while(!it.isEnd()) {
                 names.push_back(it.file());
@@ -64,11 +64,11 @@ namespace ukn {
         return static_instance;
     }
     
-    void ResourceLoader::addPath(const ukn_string& path) {
+    void ResourceLoader::addPath(const UknString& path) {
         mResourcePaths.push_back(path);
     }
     
-    void ResourceLoader::removePath(const ukn_string& path) {
+    void ResourceLoader::removePath(const UknString& path) {
         ResourcePaths::iterator it = mResourcePaths.begin();
         while(it != mResourcePaths.end()) {
             if(*it == path) {
@@ -90,14 +90,14 @@ namespace ukn {
         return mResourceFactories;
     }
     
-    inline ResourcePtr ResourceLoader::onResourceLoad(const ukn_string& name, bool isFullPath) {
+    inline ResourcePtr ResourceLoader::onResourceLoad(const UknString& name, bool isFullPath) {
         ResourceFactories::iterator itFac = mResourceFactories.begin();
         while(itFac != mResourceFactories.end()) {
             ResourcePaths::iterator itPath = mResourcePaths.begin();
             
 			 if(!isFullPath && mResourcePaths.size() != 0) {
                 while(itPath != mResourcePaths.end()) {
-                    ukn_string fullPath = *itPath + L"/" + name;
+                    UknString fullPath = *itPath + L"/" + name;
                     
                     if((*itFac)->resourceExists(fullPath)) {
                         ResourcePtr ptr = (*itFac)->onResourceLoad(fullPath);
@@ -119,22 +119,22 @@ namespace ukn {
         return MakeSharedPtr<Resource>(name, StreamPtr());
     }
     
-    ResourcePtr ResourceLoader::loadResource(const ukn_string& name_or_path, bool isFullPath) {
+    ResourcePtr ResourceLoader::loadResource(const UknString& name_or_path, bool isFullPath) {
         return onResourceLoad(name_or_path, isFullPath);
     }
     
-    ResourcePtr ResourceLoader::createMemoryResource(const uint8* data, size_t size, const ukn_string& name) {
+    ResourcePtr ResourceLoader::createMemoryResource(const uint8* data, size_t size, const UknString& name) {
         return MakeSharedPtr<Resource>(name, MakeSharedPtr<MemoryStream>(data, size));
     }
     
-    ResourcePtr ResourceLoader::createFileResource(const ukn_string& name) {
+    ResourcePtr ResourceLoader::createFileResource(const UknString& name) {
         FileStream* file_stream = new FileStream();
         if(file_stream->open(name, true, false, false))
             return MakeSharedPtr<Resource>(name, StreamPtr(file_stream));
         return ResourcePtr();
     }
     
-    void ResourceLoader::enumResourceNamesInPath(const ukn_string& path, FileList& names) {
+    void ResourceLoader::enumResourceNamesInPath(const UknString& path, FileList& names) {
         ResourceFactories::iterator itFac = mResourceFactories.begin();
         while(itFac != mResourceFactories.end()) {
             if((*itFac)->pathExists(path)) {

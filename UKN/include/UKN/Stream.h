@@ -214,7 +214,7 @@ namespace ukn {
     class NetStream: public Stream, public std::iostream {
     public:
         NetStream();
-        explicit NetStream(const ukn_string& hostName, uint16 portNum);
+        explicit NetStream(const UknString& hostName, uint16 portNum);
         explicit NetStream(uint16 port);
 
         ~NetStream();
@@ -228,7 +228,7 @@ namespace ukn {
         void open(uint16 port);
         
         // connect to a server
-        void open(const ukn_string& server, uint16 port);
+        void open(const UknString& server, uint16 port);
         
         bool is_open() const;
         

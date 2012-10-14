@@ -153,6 +153,251 @@ private:
     ukn::GraphicBufferPtr mVertexBuffer;
 };
 
+
+struct Vector2 {
+    Vector2(): x(0.0), y(0.0) { }
+    Vector2(double x, double y): x(x), y(y) { }
+    
+    Vector2& operator+=(const Vector2& rhs) { x += rhs.x; y += rhs.y; return *this; }
+    Vector2 operator+(const Vector2& rhs) const { return Vector2(x + rhs.x, y + rhs.y); }
+    Vector2& operator-=(const Vector2& rhs) { x -= rhs.x; y -= rhs.y; return *this; }
+    Vector2 operator-(const Vector2& rhs) const { return Vector2(x - rhs.x, y - rhs.y); }
+    
+    double x, y;
+};
+
+struct Expression;
+
+struct Term {
+    Term():coefficient(0.0), power(0.0), containsVariable(false) { }
+    Term(double co, double power, bool var):
+    coefficient(co),
+    power(power),
+    containsVariable(var) { }
+    
+    double coefficient;
+    double power;
+    bool containsVariable;
+};
+
+struct Expression {
+    Expression() {
+    }
+    Expression(const Term& term) {
+        mTerms.push_back(term);
+    }
+    Expression(const std::initializer_list<Term>& terms) {
+        mTerms = std::vector<Term>(terms.begin(), terms.end());
+    }
+    Expression(const std::vector<Term>& terms):
+    mTerms(terms) { }
+    
+    Expression& operator=(const Expression& rhs) { mTerms = rhs.mTerms; return *this; }
+    
+    Expression operator+(const Expression& rhs) const;
+    Expression operator-(const Expression& rhs) const;
+    Expression operator/(const Expression& rhs) const;
+    Expression operator*(const Expression& rhs) const;
+    
+    Expression operator+(const Term& rhs) const;
+    Expression operator-(const Term& rhs) const;
+    Expression operator/(const Term& rhs) const;
+    Expression operator*(const Term& rhs) const;
+    
+    Expression& operator+=(const Term& rhs);
+    Expression& operator-=(const Term& rhs);
+    Expression& operator/=(const Term& rhs);
+    Expression& operator*=(const Term& rhs);
+    
+    friend std::ostream& operator<<(std::ostream& os, const Expression& exp) {
+        for(std::vector<Term>::const_iterator it = exp.terms().begin(), end = exp.terms().end();
+            it != end;
+            ++it) {
+            if(it->containsVariable == 0) {
+                os << it->coefficient;
+            } else {
+                os << it->coefficient << "*x^" << it->power;
+            }
+            if(it != exp.mTerms.end() - 1)
+                os << " + ";
+        }
+        return os;
+    }
+    
+    const std::vector<Term>& terms() const { return mTerms; }
+    std::vector<Term>& terms() { return mTerms; }
+    
+private:
+    std::vector<Term> mTerms;
+};
+
+Expression& Expression::operator+=(const Term& rhs) {
+    for(std::vector<Term>::iterator it = mTerms.begin(), end = mTerms.end();
+        it != end;
+        ++it) {
+        Term& term = *it;
+        if(!term.containsVariable && !rhs.containsVariable) {
+            term.coefficient += rhs.coefficient;
+            return *this;
+        } else if(term.containsVariable && rhs.containsVariable) {
+            if(term.power == rhs.power) {
+                term.coefficient += rhs.coefficient;
+                return *this;
+            }
+        }
+    }
+    mTerms.push_back(rhs);
+    return *this;
+}
+
+Expression& Expression::operator-=(const Term& rhs) {
+    return Expression::operator+=(Term(-rhs.coefficient, rhs.power, rhs.containsVariable));
+}
+
+Expression& Expression::operator/=(const Term& rhs) {
+    return Expression::operator*=(Term(1/rhs.coefficient, -1/rhs.power, rhs.containsVariable));
+}
+
+Expression& Expression::operator*=(const Term& rhs) {
+    std::for_each(mTerms.begin(),
+                  mTerms.end(),
+                  [=](Term& term) {
+                      if(!rhs.containsVariable) {
+                          term.coefficient *= rhs.coefficient;
+                      } else if(rhs.containsVariable && term.containsVariable) {
+                          term.power += rhs.power;
+                          term.coefficient *= rhs.coefficient;
+                      } else if(rhs.containsVariable && !term.containsVariable) {
+                          term.coefficient *= rhs.coefficient;
+                          term.power = rhs.power;
+                          term.containsVariable = true;
+                      }
+                  });
+    return *this;
+}
+
+Expression Expression::operator+(const Term& rhs) const {
+    Expression exp = *this;
+    exp += rhs;
+    return exp;
+}
+
+Expression Expression::operator-(const Term& rhs) const {
+    return Expression::operator+(Term(-rhs.coefficient, rhs.power, rhs.containsVariable));
+}
+
+Expression Expression::operator/(const Term& rhs) const {
+    return Expression::operator*(Term(1/rhs.coefficient, -1/rhs.power, rhs.containsVariable));
+}
+
+Expression Expression::operator*(const Term& rhs) const {
+    Expression exp = *this;
+    exp *= rhs;
+    return exp;
+}
+
+Expression Expression::operator+(const Expression& rhs) const {
+    Expression exp = *this;
+    for(std::vector<Term>::const_iterator it = rhs.terms().begin(), end = rhs.terms().end();
+        it != end;
+        ++it) {
+        exp += *it;
+    }
+    return exp;
+}
+
+Expression Expression::operator-(const Expression& rhs) const {
+    Expression exp = *this;
+    for(std::vector<Term>::const_iterator it = rhs.terms().begin(), end = rhs.terms().end();
+        it != end;
+        ++it) {
+        exp -= *it;
+    }
+    return exp;
+}
+
+Expression Expression::operator*(const Expression& rhs) const {
+    if(this->mTerms.size() == 0) {
+        return rhs;
+    } else if(rhs.terms().size() == 0) {
+        return *this;
+    }
+    Expression exp = *this;
+    Expression result;
+    for(std::vector<Term>::const_iterator it = rhs.terms().begin(), end = rhs.terms().end();
+        it != end;
+        ++it) {
+        result = result + exp * *it;
+        std::cout << "result: " << result << std::endl;
+        
+    }
+    return result;
+}
+
+Expression Expression::operator/(const Expression& rhs) const {
+    if(this->mTerms.size() == 0) {
+        return rhs;
+    } else if(rhs.terms().size() == 0) {
+        return *this;
+    }
+    Expression exp = *this;
+    Expression result;
+    for(std::vector<Term>::const_iterator it = rhs.terms().begin(), end = rhs.terms().end();
+        it != end;
+        ++it) {
+        result = result + exp / *it;
+    }
+    return result;
+}
+
+struct LagrangePolynomial {
+    LagrangePolynomial();
+    
+    LagrangePolynomial(const std::initializer_list<Vector2>& points) {
+        mPoints = std::vector<Vector2>(points.begin(), points.end());
+        doCalculateExpression();
+    }
+    
+    LagrangePolynomial(const std::vector<Vector2>& points):
+    mPoints(points) {
+        doCalculateExpression();
+    }
+    
+    LagrangePolynomial(const LagrangePolynomial& rhs):
+    mPoints(rhs.mPoints) {
+        doCalculateExpression();
+    }
+    
+    void setPoints(const std::vector<Vector2>& points) {
+        mPoints = points;
+    }
+    
+private:
+    void doCalculateExpression() {
+        Expression result;
+        for(size_t i = 0; i < mPoints.size(); ++i) {
+            Expression jterm;
+            for(size_t j = 0; j < mPoints.size(); ++j) {
+                if(j != i) {
+                    Expression dominator = Expression({Term(1, 1, true), Term(-mPoints[j].x, 0, false) });
+                    
+                    Expression xterm = dominator / Term(mPoints[i].x - mPoints[j].x, 0, false);
+                    jterm = xterm * jterm;
+                }
+            }
+            jterm = jterm * Term(mPoints[i].y, 0, false);
+            result = result + jterm;
+        }
+        mExpression = result;
+        
+        std::cout << mExpression << std::endl;
+    }
+    
+    Expression mExpression;
+    
+    std::vector<Vector2> mPoints;
+};
+
 static float testGraphFunc(float x) {
     return pow(2.71828182846, -(x*x / 10)) * cos(x * x);
 }

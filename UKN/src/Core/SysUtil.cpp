@@ -32,6 +32,7 @@
 #endif
 #endif
 
+#include <unistd.h>
 #include <algorithm>
 
 #include "UKN/StringUtil.h"

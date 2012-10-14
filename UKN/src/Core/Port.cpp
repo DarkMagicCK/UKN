@@ -10,12 +10,6 @@
 
 namespace ukn {
     
-    struct PortManager::PortInfo {
-        ClassId PortClassId;
-        void* PortObj;
-        UknString PortName;
-    };
-    
     PortManager& PortManager::Instance() {
         static PortManager instance;
         return instance;

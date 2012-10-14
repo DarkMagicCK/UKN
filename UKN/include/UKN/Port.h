@@ -46,7 +46,11 @@ namespace ukn {
     private:
         PortManagerResult remove(const UknString& name);
 
-        struct PortInfo;
+        struct PortInfo {
+            ClassId PortClassId;
+            void* PortObj;
+            UknString PortName;
+        };
 
         typedef ukn_hash_map<UknString, PortInfo> PortMap;
         PortMap mPorts;

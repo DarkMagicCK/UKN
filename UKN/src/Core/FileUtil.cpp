@@ -17,6 +17,7 @@
 #elif defined(UKN_OS_FAMILY_APPLE)
 #include "AppleStuff.h"
 #include <sys/stat.h>
+#include <unistd.h>
 #else
 #include <sys/stat.h>
 #endif // UKN_OS_FAMILTY_APPLE

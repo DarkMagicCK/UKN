@@ -139,6 +139,7 @@ namespace ukn {
             glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
                          0,
                          vertexBuffer->useCount());
+            
             return;
         }
 

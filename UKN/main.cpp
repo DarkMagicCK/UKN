@@ -59,12 +59,12 @@ public:
         
     }
     
-    Graph(float a, float b, unsigned int numPoints, F func):
+    Graph(float a, float b, unsigned int numPoints, F func, float scale = 1.0):
     mA(a),
     mB(b),
     mNumPoints(numPoints),
     mFunc(func) {
-        build(a, b, numPoints, 0.f, 0.f, 1.0);
+        build(a, b, numPoints, 0.f, 0.f, scale);
     }
     
     void build(float a, float b, unsigned int numPoints, float xOffset, float yOffset, float scale) {
@@ -81,7 +81,7 @@ public:
         
         mRenderBuffer->bindVertexStream(mVertexBuffer,
                                         ukn::Vertex2D::Format());
-        mRenderBuffer->setRenderMode(ukn::RM_LineLoop);
+        mRenderBuffer->setRenderMode(ukn::RM_Point);
         
         ukn::Window& wnd = ukn::Context::Instance().getApp().getWindow();
         ukn::Vertex2D* vertices = (ukn::Vertex2D*)mVertexBuffer->map();
@@ -100,10 +100,18 @@ public:
                 miny = vertices[i].y;
         }
         
-        float rScale = (wnd.width() / (b - a)) * scale;
+        float rScale;
+        if(scale == 1.0) {
+            float s1 = (float)wnd.height() / 2 / (maxy > 0.0 ? maxy: -maxy);
+            float s2 = (float)wnd.height() / 2 / (miny > 0.0 ? miny: -miny);
+            rScale = s1 < s2 ? s1 : s2;
+        } else {
+            rScale = scale;
+        }
+        
         for(unsigned int i = 0; i < numPoints; ++i) {
             vertices[i].x = vertices[i].x * rScale + wnd.width() / 2 + xOffset;
-            vertices[i].y = vertices[i].y * rScale * 2 + wnd.height() / 2 + yOffset;
+            vertices[i].y = vertices[i].y * rScale + wnd.height() / 2 + yOffset;
         }
         
         mVertexBuffer->unmap();
@@ -208,6 +216,21 @@ struct Expression {
     Expression& operator-=(const Term& rhs);
     Expression& operator/=(const Term& rhs);
     Expression& operator*=(const Term& rhs);
+    
+    double operator()(double x) {
+        double result = 0.0;
+        for(std::vector<Term>::const_iterator it = mTerms.begin(), end = mTerms.end();
+            it != end;
+            ++it) {
+            const Term& term = *it;
+            if(term.containsVariable) {
+                result += term.coefficient * pow(x, term.power);
+            } else {
+                result += term.coefficient;
+            }
+        }
+        return result;
+    }
     
     friend std::ostream& operator<<(std::ostream& os, const Expression& exp) {
         for(std::vector<Term>::const_iterator it = exp.terms().begin(), end = exp.terms().end();
@@ -327,9 +350,7 @@ Expression Expression::operator*(const Expression& rhs) const {
     for(std::vector<Term>::const_iterator it = rhs.terms().begin(), end = rhs.terms().end();
         it != end;
         ++it) {
-        result = result + exp * *it;
-        std::cout << "result: " << result << std::endl;
-        
+        result = result + exp * *it;        
     }
     return result;
 }
@@ -372,6 +393,10 @@ struct LagrangePolynomial {
         mPoints = points;
     }
     
+    double operator()(double x) {
+        return mExpression(x);
+    }
+    
 private:
     void doCalculateExpression() {
         Expression result;
@@ -389,8 +414,6 @@ private:
             result = result + jterm;
         }
         mExpression = result;
-        
-        std::cout << mExpression << std::endl;
     }
     
     Expression mExpression;
@@ -398,9 +421,144 @@ private:
     std::vector<Vector2> mPoints;
 };
 
-static float testGraphFunc(float x) {
-    return pow(2.71828182846, -(x*x / 10)) * cos(x * x);
-}
+struct Spline {
+    typedef std::vector<double> DoubleVector;
+    
+    Spline() {
+    }
+    
+    Spline(const std::initializer_list<Vector2>& points):
+    mPoints(points.begin(), points.end()) {
+        setup();
+    }
+    
+    Spline(const std::vector<Vector2>& points):
+    mPoints(points) {
+        setup();
+    }
+    
+    double operator()(double v) const {
+        size_t D;
+        if(v <= mPoints[1].x) {
+            D = 0;
+        } else if(v >= mPoints[mPoints.size()-2].x) {
+            D = mPoints.size() - 2;
+        } else {
+            for(size_t j = 1; j < mPoints.size()-2; ++j) {
+                if(v <= mPoints[j+1].x) {
+                    D = j;
+                    break;
+                }
+            }
+        }
+        
+        double h = mPoints[D+1].x - mPoints[D].x;
+        double s;
+        if(D == 0) {
+            
+            double b = mPoints[0].y / h;
+            double c = mPoints[1].y / h - m_A[0] * h / 6;
+            s = m_A[0] * pow((v - mPoints[0].x), 3) / (6 * h) +
+                b * (mPoints[1].x - v) +
+                c * (v - mPoints[0].x);
+            
+        } else if(D == mPoints.size()-2) {
+            
+            double b = mPoints[mPoints.size()-2].y / h - m_A[mPoints.size()-3] * h / 6;
+            double c = mPoints.back().y / h;
+            s = m_A[mPoints.size()-3] * pow((mPoints.back().x - v), 3) / (6 * h) +
+                b * (mPoints.back().x - v) +
+                c * (v - mPoints[mPoints.size()-2].x);
+            
+        } else {
+            
+            double b = mPoints[D].y / h - m_A[D-1] * h / 6;
+            double c = mPoints[D+1].y / h - m_A[D] * h / 6;
+            s = m_A[D-1] * pow(mPoints[D+1].x - v, 3) / (6 * h) +
+                m_A[D] * pow(v - mPoints[D].x, 3) / (6 * h) +
+                b * (mPoints[D+1].x - v) +
+                c * (v - mPoints[D].x);
+            
+        }
+        return s;
+    }
+    
+private:
+    void setup() {
+        DoubleVector T, H, R, D, U, L;
+        
+        T.resize(mPoints.size() - 1);
+        H.resize(mPoints.size() - 1);
+        R.resize(mPoints.size() - 2);
+        D.resize(mPoints.size() - 2);
+        U.resize(mPoints.size() - 2);
+        L.resize(mPoints.size() - 2);
+        
+        for(size_t i = 0; i < mPoints.size() - 1; ++i) {
+            H[i] = mPoints[i+1].x - mPoints[i].x;
+            T[i] = (mPoints[i+1].y - mPoints[i].y) / H[i];
+        }
+        
+        for(size_t i = 0; i < mPoints.size() - 2; ++i) {
+            R[i] = T[i+1] - T[i];
+            D[i] = (H[i] + H[i+1]) / 3;
+        }
+        
+        for(size_t i = 0; i < mPoints.size() - 3; ++i) {
+            U[i] = H[i+1] / 6;
+            L[i+1] = U[i];
+        }
+        
+        U[mPoints.size() - 3] = 0;
+        L[0] = 0;
+        
+        auto BB_DD = this->LU_Factor_TriDiag(U, D, L);
+        m_A = this->TriDiag_Solve(U, std::get<1>(BB_DD), std::get<0>(BB_DD), R);
+    }
+    
+    std::tuple<DoubleVector, DoubleVector> LU_Factor_TriDiag(const DoubleVector& U, const DoubleVector& D, const DoubleVector& L) {
+        DoubleVector BB;
+        DoubleVector DD;
+        
+        BB.resize(D.size());
+        DD.resize(D.size());
+        
+        BB[0] = 0;
+        DD[0] = D[0];
+        
+        for(size_t i = 1; i < D.size(); ++i) {
+            BB[i] = L[i] / DD[i-1];
+            DD[i] = D[i] - BB[i] * U[i-1];
+        }
+        
+        return std::make_tuple(BB, DD);
+    }
+    
+    // solve uses R, BB(L), DD(D), U
+    DoubleVector TriDiag_Solve(const DoubleVector& U, const DoubleVector& D, const DoubleVector& L, const DoubleVector& R) {
+        DoubleVector Z;
+        DoubleVector X;
+        
+        Z.resize(D.size());
+        X.resize(D.size());
+        
+        Z[0] = R[0];
+        
+        for(size_t i = 1; i < D.size(); ++i) {
+            Z[i] = R[i] - L[i] * Z[i-1];
+        }
+        
+        X[D.size()-1] = Z[D.size()-1] / D[D.size()-1];
+        for(int i = (int)D.size()-2; i >= 0; --i) {
+            X[i] = (Z[i] - U[i] * X[i+1]) / D[i];
+        }
+        
+        return X;
+    }
+    
+    std::vector<Vector2> mPoints;
+    DoubleVector m_A;
+};
 
 class MyApp: public ukn::AppInstance {
 public:
@@ -449,7 +607,7 @@ public:
     }
     
     void onResize(void * sender, ukn::WindowResizeEventArgs& args) {
-        testGraph->build(-5, 5, 5000, 0, 0, 1);
+        testGraph->build(-1, 1, 5000, 0, 0, 1);
     }
         
     void onInit() {
@@ -457,7 +615,33 @@ public:
         getWindow().onKeyEvent() += ukn::Bind(this, &MyApp::onKeyEvent);
         getWindow().onResize() += ukn::Bind(this, &MyApp::onResize);
         
-        testGraph = new Graph<float (*)(float)>(-5, 5, 1000, testGraphFunc);
+        testGraph = new Graph<LagrangePolynomial>(-1.0,
+                                                  1.0,
+                                                  5000,
+                                                  LagrangePolynomial({
+                                                      Vector2(-1.0, -1.0),
+                                                      Vector2(-0.96, -0.151),
+                                                      Vector2(-0.86, 0.894),
+                                                      Vector2(-0.79, 0.986),
+                                                      Vector2(0.22, 0.895),
+                                                      Vector2(0.5, 0.5),
+                                                      Vector2(0.93, -0.306)
+                                                  }),
+                                                  260);
+        testGraph2 = new Graph<Spline>(-1.0,
+                                       1.0,
+                                       5000,
+                                       Spline({
+                                            Vector2(-1.0, -1.0),
+                                            Vector2(-0.96, -0.151),
+                                            Vector2(-0.86, 0.894),
+                                            Vector2(-0.79, 0.986),
+                                            Vector2(0.22, 0.895),
+                                            Vector2(0.5, 0.5),
+                                            Vector2(0.93, -0.306)
+                                       }),
+                                       260);
+       testGraph->setColor(ukn::color::White);
         
         mFont = ukn::AssetManager::Instance().load<ukn::Font>("Thonburi.ttf");
         mFont->setStyleProperty(ukn::FSP_Size, 20);
@@ -470,24 +654,16 @@ public:
     void onRender() {
         ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
         
-        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Skyblue, 0, 0);
+        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
         
-        testGraph->render();
-        
-        mFont->draw((L"MaxY: " + ukn::String::AnyToWString(testGraph->maxY())).c_str(),
-                    0,
-                    getWindow().height() / 2 - testGraph->maxY() * testGraph->scale() * 2,
-                    ukn::FA_Left,
-                    ukn::color::Red);
-        mFont->draw((L"MinY: " + ukn::String::AnyToWString(testGraph->minY())).c_str(),
-                    0,
-                    getWindow().height() / 2 - testGraph->minY() * testGraph->scale() * 2,
-                    ukn::FA_Left, ukn::color::Red);
-        mFont->draw(L"-5",
+     //   testGraph->render();
+        testGraph2->render();
+      
+        mFont->draw(L"-1",
                     0,
                     getWindow().height() / 2 + 10,
                     ukn::FA_Left, ukn::color::Red);
-        mFont->draw(L"5",
+        mFont->draw(L"1",
                     getWindow().width() - 20,
                     getWindow().height() / 2 + 10,
                     ukn::FA_Left, ukn::color::Red);
@@ -499,12 +675,10 @@ public:
     }
     
 private:
-    Graph<float (*)(float)>* testGraph;
+    Graph<LagrangePolynomial>* testGraph;
+    Graph<Spline>* testGraph2;
     ukn::FontPtr mFont;
 };
-
-#include "UKN/Thread.h"
-#include "SqaureGame.h"
 
 #ifndef UKN_OS_WINDOWS
 int main (int argc, const char * argv[])
@@ -525,11 +699,11 @@ int CALLBACK WinMain(
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
-    SquareGame instance(L"SquareGame!");
+    MyApp instance(L"Lagrange & Spline");
 
     // create app context
     ukn::ContextCfg cfg;
-    cfg.render_cfg.width = 1024;
+    cfg.render_cfg.width = 600;
     cfg.render_cfg.height = 600;
     instance.create(cfg);
     

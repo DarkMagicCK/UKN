@@ -11,11 +11,12 @@
 #include "GLGraphicDevice.h"
 #include "GLFrameBuffer.h"
 
-#include "UKN/Common.h"
+#include "mist/Common.h"
+#include "mist/Stream.h"
+
 #include "UKN/Context.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/GraphicDevice.h"
-#include "UKN/Stream.h"
 
 namespace ukn {
 
@@ -142,8 +143,8 @@ namespace ukn {
         } else {
             glBindTexture(GL_TEXTURE_2D, mTex);
 
-            Array<Color> mem_clr(mWidth * mHeight, 0, clr);
-            glTexSubImage2D(GL_TEXTURE_2D, mLevel, 0, 0, mWidth, mHeight, GL_RGBA, GL_FLOAT, mem_clr.begin());
+            std::vector<Color> mem_clr(mWidth * mHeight, clr);
+            glTexSubImage2D(GL_TEXTURE_2D, mLevel, 0, 0, mWidth, mHeight, GL_RGBA, GL_FLOAT, mem_clr.data());
         }
     }
 

@@ -9,7 +9,7 @@
 // use gl3.2 profile means there's no fixed pipeline functions unless use compability context
 // #define UKN_REQUEST_OPENGL_3_2_PROFILE
 
-#ifdef UKN_OS_WINDOWS
+#ifdef MIST_OS_WINDOWS
 // glew for higher opengl profile extensions
 
 // static link
@@ -37,7 +37,7 @@
 	#define UKN_OPENGL_VERSION 21
 #endif
 
-#elif defined(UKN_OS_OSX)
+#elif defined(MIST_OS_OSX)
 	#include <OpenGL/OpenGL.h>
 	#include <OpenGL/glext.h>
 
@@ -54,7 +54,7 @@
 		#define UKN_OPENGL_VERSION 21
 	#endif
 
-#elif defined(UKN_OS_LINUX) // linux still need workaround
+#elif defined(MIST_OS_LINUX) // linux still need workaround
 	#include <glew/glew.h>
 	#include <GL/gl.h>
 	#include <GL/glu.h>

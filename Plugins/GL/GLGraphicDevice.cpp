@@ -11,23 +11,25 @@
 #include "GLWindow.h"
 #include "GLConvert.h"
 
-#include "UKN/Common.h"
+#include "mist/Common.h"
+#include "mist/Logger.h"
+#include "mist/TimeUtil.h"
+#include "mist/SysUtil.h"
+#include "mist/Stream.h"
+#include "mist/Profiler.h"
+
 #include "UKN/GraphicBuffer.h"
 #include "UKN/RenderBuffer.h"
-#include "UKN/Logger.h"
 #include "UKN/Texture.h"
 #include "UKN/FrameBuffer.h"
 #include "UKN/Window.h"
-#include "UKN/TimeUtil.h"
 #include "UKN/Context.h"
 #include "UKN/App.h"
-#include "UKN/SysUtil.h"
-#include "UKN/Stream.h"
-#include "UKN/Profiler.h"
 
 #include "GLFrameBuffer.h"
 #include "GLRenderView.h"
 #include "GLTexture.h"
+#include "GLPreq.h"
 
 namespace ukn {
     
@@ -120,7 +122,7 @@ namespace ukn {
     void GLGraphicDevice::onRenderBuffer(const RenderBufferPtr& buffer) {
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
         
-        ukn_assert(buffer.isValid());
+        mist_assert(buffer.isValid());
         
         GraphicBufferPtr vertexBuffer = buffer->getVertexStream();
         if(!vertexBuffer.isValid()) {
@@ -132,10 +134,13 @@ namespace ukn {
         if(format == Vertex2D::Format() &&
            !buffer->isUseIndexStream()) {
             // acceleration for 2d vertices
-            Array<Vertex2D> vtxArr((Vertex2D*)vertexBuffer->map(), vertexBuffer->count());
+            
+            Vertex2D* vptr = (Vertex2D*)vertexBuffer->map();
+            Array<Vertex2D> vtxArr;
+            vtxArr.assign(vptr, vptr + vertexBuffer->count());
             vertexBuffer->unmap();
             
-            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vtxArr.begin());
+            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vtxArr.data());
             glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
                          0,
                          vertexBuffer->useCount());
@@ -248,7 +253,7 @@ namespace ukn {
                 counter.waitToNextFrame();
                 
                 {            
-                    UKN_PROFILE(L"__MainFrame");
+                    UKN_PROFILE(L"__MainFrame__");
 
                     glViewport(fb.getViewport().left,
                                fb.getViewport().top,

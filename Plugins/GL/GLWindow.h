@@ -9,9 +9,10 @@
 #ifndef Project_Unknown_GLWindow_h
 #define Project_Unknown_GLWindow_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/Signal.h"
+
 #include "UKN/Window.h"
-#include "UKN/Signal.h"
 #include "UKN/FrameBuffer.h"
 
 #include "GLFrameBuffer.h"
@@ -25,7 +26,7 @@ namespace ukn {
         
         UknString description() const;
         
-#ifdef UKN_OS_WINDOWS
+#ifdef MIST_OS_WINDOWS
 		HWND getHWnd() const;
 #endif
         

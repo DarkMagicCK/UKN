@@ -10,9 +10,9 @@
 
 #include "soil/SOIL.h"
 
-#include "UKN/Resource.h"
-#include "UKN/Stream.h"
-#include "UKN/Logger.h"
+#include "mist/Resource.h"
+#include "mist/Stream.h"
+#include "mist/Logger.h"
 
 #include "GLPreq.h"
 

@@ -207,7 +207,7 @@ namespace ukn {
             case GLFW_RELEASE:
                 return input::Mouse::Release;
         }
-        ukn_assert(0);
+        mist_assert(0);
     }
     
     inline int ukn_mouse_state_to_glfw(input::Mouse::MouseState state) {
@@ -217,7 +217,7 @@ namespace ukn {
             case input::Mouse::Release:
                 return GLFW_RELEASE;
             default:
-                ukn_assert(0);
+                mist_assert(0);
         }
     }
     
@@ -228,7 +228,7 @@ namespace ukn {
             case GLFW_RELEASE:
                 return input::Key::Release;
         }
-        ukn_assert(0);
+        mist_assert(0);
     }
     
     inline int ukn_key_state_to_glfw(input::Key::KeyState state) {
@@ -247,7 +247,7 @@ namespace ukn {
             case GLFW_RELEASE:
                 return input::JoyStick::Release;
         }
-        ukn_assert(0);
+        mist_assert(0);
     }
     
     inline int ukn_joystick_state_to_glfw(input::JoyStick::JoyStickState state) {

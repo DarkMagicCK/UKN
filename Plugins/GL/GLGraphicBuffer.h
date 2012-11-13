@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_GLGraphicBuffer_h
 #define Project_Unknown_GLGraphicBuffer_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
 #include "UKN/GraphicBuffer.h"
 
 #include "GLPreq.h"

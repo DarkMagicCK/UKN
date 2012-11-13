@@ -9,8 +9,9 @@
 #include "GLWindow.h"
 #include "GLRenderView.h"
 
+#include "mist/SysUtil.h"
+
 #include "UKN/Context.h"
-#include "UKN/SysUtil.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/GraphicDevice.h"
 #include "UKN/Input.h"
@@ -194,13 +195,13 @@ namespace ukn {
                                          0)) == 0) {
             // no window = app exit
             // so exception is acceptable here
-            UKN_THROW_EXCEPTION("GLWindow::GLWindow: Error opening window");
+            MIST_THROW_EXCEPTION("GLWindow::GLWindow: Error opening window");
         } 
 
-#if defined(UKN_OS_WINDOWS)
+#if defined(MIST_OS_WINDOWS)
 		GLenum err = glewInit();
 		if (GLEW_OK != err) {
-			UKN_THROW_EXCEPTION(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err)));
+			MIST_THROW_EXCEPTION(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err)));
 		}
 #endif
     
@@ -310,7 +311,7 @@ namespace ukn {
     }
     
     bool GLWindow::pullEvents() { 
-#ifdef UKN_OS_WINDOWS
+#ifdef MIST_OS_WINDOWS
 		bool gotMsg;
 		MSG  msg;
         
@@ -335,7 +336,7 @@ namespace ukn {
         return false;
     }
 
-#ifdef UKN_OS_WINDOWS
+#ifdef MIST_OS_WINDOWS
 	HWND GLWindow::getHWnd() const {
 		return 0;
 	}

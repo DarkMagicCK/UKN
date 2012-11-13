@@ -11,9 +11,11 @@
 #include "UKN/GraphicDevice.h"
 #include "UKN/Context.h"
 #include "UKN/GraphicFactory.h"
-#include "UKN/MathUtil.h"
 #include "UKN/Texture.h"
 #include "UKN/FrameBuffer.h"
+
+#include "mist/MathUtil.h"
+
 
 #include "GLPreq.h"
 
@@ -44,7 +46,7 @@ namespace ukn {
                 
                 glInterleavedArrays(GL_T2F_C4UB_V3F, 
                                     0, 
-                                    buffer.begin());
+                                    &buffer.front());
                 
                 glDrawArrays(GL_TRIANGLES, 
                              0, 
@@ -53,7 +55,7 @@ namespace ukn {
                 prevTexture = it->texture;
                 buffer.clear();
             }
-            buffer.append(&it->vertices[0], 6);
+            buffer.insert(buffer.end(), &it->vertices[0], &it->vertices[0] + 6);
             
             ++it;
         }
@@ -63,7 +65,7 @@ namespace ukn {
             
             glInterleavedArrays(GL_T2F_C4UB_V3F, 
                                 0, 
-                                buffer.begin());
+                                &buffer.front());
             
             glDrawArrays(GL_TRIANGLES, 
                          0, 

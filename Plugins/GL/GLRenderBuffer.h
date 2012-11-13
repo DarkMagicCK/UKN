@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_GLRenderBuffer_h
 #define Project_Unknown_GLRenderBuffer_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
 #include "UKN/RenderBuffer.h"
 
 namespace ukn {

@@ -9,9 +9,8 @@
 #ifndef Project_Unknown_GLGraphicFactory_h
 #define Project_Unknown_GLGraphicFactory_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
 #include "UKN/PreDeclare.h"
-
 #include "UKN/GraphicFactory.h"
 
 #ifdef UKN_HAS_DECLSPEC

@@ -9,13 +9,14 @@
 #ifndef Project_Unknown_SpriteBatch_h
 #define Project_Unknown_SpriteBatch_h
 
-#include "UKN/Platform.h"
-#include "UKN/Uncopyable.h"
+#include "mist/Platform.h"
+#include "mist/Uncopyable.h"
+#include "mist/Color.h"
+#include "mist/StringUtil.h"
+
 #include "UKN/PreDeclare.h"
-#include "UKN/Color.h"
 #include "UKN/Vertex.h"
 #include "UKN/Renderable.h"
-#include "UKN/StringUtil.h"
 
 namespace ukn {
     
@@ -67,7 +68,7 @@ namespace ukn {
         
         static SpriteBatch& DefaultObject();
 
-        const String& getName() const;
+        const UknString& getName() const;
         
         Box getBound() const;
         RenderBufferPtr getRenderBuffer() const;

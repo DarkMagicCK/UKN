@@ -7,7 +7,8 @@
 //
 
 #include "ukn/LocalizedStringTable.h"
-#include "ukn/ConfigParser.h"
+
+#include "mist/ConfigParser.h"
 
 namespace ukn {
     

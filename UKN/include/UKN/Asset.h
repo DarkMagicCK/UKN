@@ -9,15 +9,18 @@
 #ifndef Project_Unknown_Asset_h
 #define Project_Unknown_Asset_h
 
-#include "UKN/Platform.h"
-#include "UKN/Uncopyable.h"
+#include "mist/Platform.h"
+#include "mist/Uncopyable.h"
+#include "mist/Serializer.h"
+#include "mist/Ptr.h"
+
 #include "UKN/PreDeclare.h"
-#include "UKN/Serializer.h"
-#include "UKN/Ptr.h"
 
 #include <map>
-#ifdef UKN_OS_WINDOWS
+#ifdef MIST_CPP11
 #include <unordered_map>
+#else
+
 #endif
 
 namespace ukn {
@@ -40,25 +43,25 @@ namespace ukn {
     template<>
     class AssetLoader<Font> {
     public:
-        static SharedPtr<Font> Load(const String& name, const String& path);
+        static SharedPtr<Font> Load(const UknString& name, const UknString& path);
     };
     
     template<>
     class AssetLoader<Texture> {
     public:
-        static SharedPtr<Texture> Load(const String& name, const String& path);
+        static SharedPtr<Texture> Load(const UknString& name, const UknString& path);
     };
     
     template<>
     class AssetLoader<ConfigParser> {
     public:
-        static SharedPtr<ConfigParser> Load(const String& name, const String& path);
+        static SharedPtr<ConfigParser> Load(const UknString& name, const UknString& path);
     };
     
     template<>
     class AssetLoader<Resource> {
     public:
-        static SharedPtr<Resource> Load(const String& name, const String& path);
+        static SharedPtr<Resource> Load(const UknString& name, const UknString& path);
     };
     
     class AssetManager: Uncopyable, public IConfigSerializable {
@@ -68,29 +71,29 @@ namespace ukn {
         struct AssetInfo {
             AssetInfo():
             type(AT_Unknown),
-            fullPath(String()) { 
+            fullPath(UknString()) { 
             
             }
             
-            AssetInfo(AssetType t, const String& n, const String& path):
+            AssetInfo(AssetType t, const UknString& n, const UknString& path):
             type(t),
             name(n),
             fullPath(path) { 
             
             }
             
-            AssetType   type;
-            String      name;
-            String      fullPath;
+            AssetType      type;
+            UknString      name;
+            UknString      fullPath;
         };
         
-        typedef ukn_hash_map<ukn_wstring, AssetInfo> AssetNameMap;
+        typedef std::unordered_map<UknString, AssetInfo> AssetNameMap;
         
     public:
         template<typename T>
-        SharedPtr<T> load(const String& name) const;
+        SharedPtr<T> load(const UknString& name) const;
         
-        void add(const String& name, const String& path, AssetType type);
+        void add(const UknString& name, const UknString& path, AssetType type);
         
         const AssetNameMap& getAssets() const;   
         
@@ -109,7 +112,7 @@ namespace ukn {
     };
     
     template<typename T>
-    SharedPtr<T> AssetManager::load(const String& name) const {
+    SharedPtr<T> AssetManager::load(const UknString& name) const {
         AssetNameMap::const_iterator it = mAssetMap.find(name);
         if(it != mAssetMap.end()) {
             return AssetLoader<T>::Load(name, it->second.fullPath);

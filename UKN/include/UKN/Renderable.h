@@ -9,16 +9,17 @@
 #ifndef Project_Unknown_Renderable_h
 #define Project_Unknown_Renderable_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/MathUtil.h"
+#include "mist/StringUtil.h"
+
 #include "UKN/PreDeclare.h"
-#include "UKN/MathUtil.h"
-#include "UKN/StringUtil.h"
 
 namespace ukn {
     
     class UKN_API IRenderable: public virtual Interface {
     public:
-        virtual const String& getName() const = 0;
+        virtual const UknString& getName() const = 0;
         
         virtual Box getBound() const = 0;
         virtual RenderBufferPtr getRenderBuffer() const = 0;

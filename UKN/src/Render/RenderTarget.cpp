@@ -13,7 +13,8 @@
 #include "UKN/Context.h"
 #include "UKN/Texture.h"
 #include "UKN/RenderBuffer.h"
-#include "UKN/Logger.h"
+
+#include "mist/Logger.h"
 
 namespace ukn {
     

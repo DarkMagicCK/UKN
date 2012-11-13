@@ -14,8 +14,9 @@
 #include "UKN/Texture.h"
 #include "UKN/GraphicBuffer.h"
 #include "UKN/FrameBuffer.h"
-#include "UKN/Singleton.h"
-#include "UKN/Profiler.h"
+
+#include "mist/Singleton.h"
+#include "mist/Profiler.h"
 
 namespace ukn {
     
@@ -136,7 +137,7 @@ namespace ukn {
         }
         
         for(int i=0; i<4; ++i) {
-            tmpVert[i].color = descriptor.color.toHWColor();
+            tmpVert[i].color = descriptor.color.toRGBA();
         }
         
         vertices[0] = tmpVert[0];
@@ -164,14 +165,14 @@ namespace ukn {
     
     SpriteBatch::SpriteBatch() {
         mRenderBuffer = Context::Instance().getGraphicFactory().createRenderBuffer();
-        ukn_assert(mRenderBuffer);
+        mist_assert(mRenderBuffer);
         
         mVertexBuffer = Context::Instance().getGraphicFactory().createVertexBuffer(GraphicBuffer::ReadWrite, 
                                                                                    GraphicBuffer::Static, 
                                                                                    6, 
                                                                                    0, 
                                                                                    Vertex2D::Format());
-        ukn_assert(mVertexBuffer);
+        mist_assert(mVertexBuffer);
         
         mRenderBuffer->bindVertexStream(mVertexBuffer, Vertex2D::Format());
         
@@ -184,8 +185,8 @@ namespace ukn {
         
     }
     
-    const String& SpriteBatch::getName() const {
-        static String name(L"SpriteBatch");
+    const UknString& SpriteBatch::getName() const {
+        static UknString name(L"SpriteBatch");
         return name;
     }
     
@@ -320,7 +321,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, float layerDepth, const Color& color) {
         if(!mBegan) {
-            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
         TextureObject obj(texture);
@@ -336,7 +337,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color) {
         if(!mBegan) {
-            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
         TextureObject obj(texture);
@@ -354,7 +355,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {
         if(!mBegan) {
-            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         TextureObject obj(texture);
         
@@ -374,7 +375,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const SpriteDescriptor& descriptor) {
         if(!mBegan) {
-            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
         TextureObject obj(texture);
@@ -385,7 +386,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& srcRect, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {        
         if(!mBegan) {
-            UKN_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
         TextureObject obj(texture);

@@ -9,11 +9,12 @@
 #ifndef Project_Unknown_RenderDevice_h
 #define Project_Unknown_RenderDevice_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/MathUtil.h"
+#include "mist/Color.h"
+
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
-#include "UKN/MathUtil.h"
-#include "UKN/Color.h"
 
 #include <stack>
 

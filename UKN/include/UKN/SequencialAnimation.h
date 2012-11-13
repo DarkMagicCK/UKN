@@ -9,13 +9,14 @@
 #ifndef Project_Unknown_SequencialAnimation_h
 #define Project_Unknown_SequencialAnimation_h
 
-#include "UKN/Platform.h"
-#include "UKN/Basic.h"
-#include "UKN/Serializer.h"
+#include "mist/Platform.h"
+#include "mist/Basic.h"
+#include "mist/Serializer.h"
+#include "mist/Util.h"
+#include "mist/Event.h"
+
 #include "UKN/PreDeclare.h"
-#include "UKN/Util.h"
 #include "UKN/Animation.h"
-#include "UKN/Event.h"
 
 namespace ukn {
     

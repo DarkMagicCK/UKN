@@ -23,8 +23,8 @@ namespace ukn {
         
     }
     
-    const String& GraphicContext::getName() const {
-        static String name ("GraphicContext");
+    const UknString& GraphicContext::getName() const {
+        static UknString name (L"GraphicContext");
         return name;
     }
     

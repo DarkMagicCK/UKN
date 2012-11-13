@@ -9,10 +9,11 @@
 #ifndef Project_Unknown_RenderHelper_h
 #define Project_Unknown_RenderHelper_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/Color.h"
+
 #include "UKN/PreDeclare.h"
 #include "UKN/Renderable.h"
-#include "UKN/Color.h"
 
 namespace ukn {
     
@@ -21,7 +22,7 @@ namespace ukn {
         GraphicContext();
         virtual ~GraphicContext();
         
-        virtual const String& getName() const;
+        virtual const UknString& getName() const;
         
         virtual Box getBound() const;
         virtual RenderBufferPtr getRenderBuffer() const;

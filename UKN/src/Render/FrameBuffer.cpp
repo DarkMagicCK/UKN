@@ -120,7 +120,7 @@ namespace ukn {
                 break;
                 
             default:
-                ukn_assert(attachment >= ATT_Color0);
+                mist_assert(attachment >= ATT_Color0);
                 
                 uint32 clrid = attachment - ATT_Color0;
                 if(mClearViews.size() < clrid + 1)

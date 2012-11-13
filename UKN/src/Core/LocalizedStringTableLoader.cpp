@@ -9,8 +9,8 @@
 #include "ukn/LocalizedStringTableLoader.h"
 #include "ukn/LocalizedStringTable.h"
 
-#include "ukn/ConfigParser.h"
-#include "ukn/Resource.h"
+#include "mist/ConfigParser.h"
+#include "mist/Resource.h"
 
 namespace ukn {
     

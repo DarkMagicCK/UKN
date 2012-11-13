@@ -9,15 +9,15 @@
 #ifndef Project_Unknown_AutoUpdate_h
 #define Project_Unknown_AutoUpdate_h
 
-#include "UKN/Platform.h"
-#include "UKN/Util.h"
+#include "mist/Platform.h"
+#include "mist/Util.h"
 
 namespace ukn {
     
     /**
      * Inheritate from this to make the class "auto update" in every frame by calling the onUpdate function
      **/
-    class AutoUpdate: public AutoListElement<AutoUpdate> {
+    class AutoUpdate: public mist::AutoListElement<AutoUpdate> {
     public:
         AutoUpdate();
         virtual ~AutoUpdate();

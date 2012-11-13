@@ -7,19 +7,22 @@
 //
 
 #include "UKN/AutoUpdate.h"
-#include "UKN/Module.h"
+#include "UKN/PreDeclare.h"
+#include "mist/Module.h"
 
 namespace ukn {
     
-    class AutoUpdateModule: public Module {
+    using namespace mist;
+    
+    class AutoUpdateModule: public mist::Module {
     public:
         AutoUpdateModule() {
             // register module
             ModuleManager::Instance().addModule(this);
         }
         
-        const String& getName() const {
-            static String name("AutoUpdate");
+        const UknString& getName() const {
+            static UknString name(L"AutoUpdate");
             return name;
         }
         

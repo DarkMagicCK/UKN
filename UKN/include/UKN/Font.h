@@ -9,12 +9,13 @@
 #ifndef Project_Unknown_Font_h
 #define Project_Unknown_Font_h
 
-#include "UKN/Platform.h"
-#include "UKN/Uncopyable.h"
+#include "mist/Platform.h"
+#include "mist/Uncopyable.h"
+#include "mist/Serializer.h"
+#include "mist/Color.h"
+
 #include "UKN/PreDeclare.h"
 #include "UKN/Renderable.h"
-#include "UKN/Serializer.h"
-#include "UKN/Color.h"
 
 #include <vector>
 
@@ -75,7 +76,7 @@ namespace ukn {
         virtual void onRenderBegin();
         virtual void onRenderEnd();
         
-        virtual const String& getName() const;
+        virtual const UknString& getName() const;
         
         virtual Box getBound() const;
         virtual RenderBufferPtr getRenderBuffer() const;
@@ -93,7 +94,7 @@ namespace ukn {
         void setFTStyle(uint32 style);
         
         uint32 mFontSize;
-        String mFontName;
+        UknString mFontName;
         
         bool mEnableStroke;
         bool mEnableShadow;

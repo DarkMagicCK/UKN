@@ -9,18 +9,20 @@
 #include "UKN/Asset.h"
 #include "UKN/Font.h"
 #include "UKN/Texture.h"
-#include "UKN/ConfigParser.h"
-#include "UKN/Resource.h"
-#include "UKN/Stream.h"
-#include "UKN/StringUtil.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/Context.h"
-#include "UKN/Logger.h"
+
+
+#include "mist/ConfigParser.h"
+#include "mist/Resource.h"
+#include "mist/Stream.h"
+#include "mist/StringUtil.h"
+#include "mist/Logger.h"
 
 namespace ukn {
 
     
-    SharedPtr<Font> AssetLoader<Font>::Load(const String& name, const String& path) {
+    SharedPtr<Font> AssetLoader<Font>::Load(const UknString& name, const UknString& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
         if(resource) {            
@@ -32,7 +34,7 @@ namespace ukn {
         return SharedPtr<Font>();
     }
     
-    SharedPtr<Texture> AssetLoader<Texture>::Load(const String& name, const String& path) {
+    SharedPtr<Texture> AssetLoader<Texture>::Load(const UknString& name, const UknString& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
         if(resource) {            
@@ -42,7 +44,7 @@ namespace ukn {
         return SharedPtr<Texture>();
     }
     
-    SharedPtr<ConfigParser> AssetLoader<ConfigParser>::Load(const String& name, const String& path) {
+    SharedPtr<ConfigParser> AssetLoader<ConfigParser>::Load(const UknString& name, const UknString& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
         if(resource) {            
@@ -52,7 +54,7 @@ namespace ukn {
         return SharedPtr<ConfigParser>();
     }
     
-    SharedPtr<Resource> AssetLoader<Resource>::Load(const String& name, const String& path) {
+    SharedPtr<Resource> AssetLoader<Resource>::Load(const UknString& name, const UknString& path) {
         ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
         
         return resource;
@@ -75,7 +77,7 @@ namespace ukn {
         return mAssetMap;
     }
     
-    void AssetManager::add(const String& name, const String& path, AssetType type) {
+    void AssetManager::add(const UknString& name, const UknString& path, AssetType type) {
         mAssetMap.insert(std::make_pair(name, AssetInfo(type, name, path)));
     }
     

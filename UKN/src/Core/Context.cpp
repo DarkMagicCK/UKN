@@ -6,16 +6,18 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
+
+#include "mist/ConfigParser.h"
+#include "mist/Resource.h"
+#include "mist/Stream.h"
+#include "mist/Logger.h"
+#include "mist/Common.h"
+
 #include "UKN/Context.h"
 #include "UKN/GraphicDevice.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/Window.h"
 #include "UKN/App.h"
-#include "UKN/ConfigParser.h"
-#include "UKN/Resource.h"
-#include "UKN/Stream.h"
-#include "UKN/Logger.h"
-#include "UKN/Common.h"
 #include "UKN/Scene.h"
 #include "UKN/Asset.h"
 
@@ -50,7 +52,7 @@ namespace ukn {
     }
     
     SceneManager& Context::getScene() {
-        ukn_assert(mScene);
+        mist_assert(mScene);
         return *mScene;
     }
     
@@ -95,7 +97,7 @@ namespace ukn {
         return L"unknown_fmt";
     }
     
-    void Context::loadCfgFile(const String& name) {
+    void Context::loadCfgFile(const UknString& name) {
         ContextCfg cfg;
         cfg.render_cfg.width = 800;
         cfg.render_cfg.height = 600;
@@ -161,7 +163,7 @@ namespace ukn {
 		}
     }
     
-    void Context::saveCfgFile(const String& name) {
+    void Context::saveCfgFile(const UknString& name) {
         ConfigParserPtr configParser = ConfigParser::MakeEmptyParser(CPT_XML);
         if(configParser) {
             configParser->beginNode(L"cfg");
@@ -210,7 +212,7 @@ namespace ukn {
             if(func) {
                 func(mGraphicFactory);
                 
-                ukn_assert(mGraphicFactory.isValid());
+                mist_assert(mGraphicFactory.isValid());
             }
         }
     }

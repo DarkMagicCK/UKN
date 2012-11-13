@@ -9,11 +9,12 @@
 #ifndef Project_Unknown_PluginContents_h
 #define Project_Unknown_PluginContents_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/DllLoader.h"
+#include "mist/StringUtil.h"
+
 #include "UKN/GraphicSettings.h"
 #include "UKN/PreDeclare.h"
-#include "UKN/DllLoader.h"
-#include "UKN/StringUtil.h"
 
 namespace ukn {
         
@@ -36,8 +37,8 @@ namespace ukn {
         void        setCfg(const ContextCfg& cfg);
         ContextCfg  getCfg() const;
         
-        void loadCfgFile(const String& name);
-        void saveCfgFile(const String& name);
+        void loadCfgFile(const UknString& name);
+        void saveCfgFile(const UknString& name);
         
         GraphicFactory&   getGraphicFactory() const;
         

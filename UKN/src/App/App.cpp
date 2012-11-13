@@ -6,6 +6,12 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
+#include "mist/TimeUtil.h"
+#include "mist/Logger.h"
+#include "mist/Common.h"
+#include "mist/SysUtil.h"
+#include "mist/Stream.h"
+
 #include "UKN/App.h"
 #include "UKN/Window.h"
 
@@ -14,13 +20,7 @@
 #include "UKN/GraphicFactory.h"
 #include "UKN/SpriteBatch.h"
 
-#include "UKN/TimeUtil.h"
-
-#include "UKN/Logger.h"
-#include "UKN/Common.h"
-#include "UKN/SysUtil.h"
 #include "UKN/Camera.h"
-#include "UKN/Stream.h"
 
 #include "UKN/UKN.h"
 
@@ -48,7 +48,7 @@ namespace ukn {
 		return mMainWindow;
 	}
     
-    void AppInstance::create(const ukn_wstring& cfgname) {
+    void AppInstance::create(const UknString& cfgname) {
         mInited = true;
         
         Context::Instance().loadCfgFile(cfgname);
@@ -63,7 +63,7 @@ namespace ukn {
     }
     
     void AppInstance::doCreate() {
-        ukn_assert(mInited);
+        mist_assert(mInited);
         
         GraphicDevice& graphic_device = Context::Instance().getGraphicFactory().getGraphicDevice();
         
@@ -112,7 +112,7 @@ namespace ukn {
     }
     
     void AppInstance::terminate() {
-#ifdef UKN_OS_WINDOWS
+#ifdef MIST_OS_WINDOWS
         ::PostQuitMessage(0);
 		exit(0);
 #else

@@ -9,10 +9,11 @@
 #ifndef Project_Unknown_RenderView_h
 #define Project_Unknown_RenderView_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/Color.h"
+
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
-#include "UKN/Color.h"
 
 namespace ukn {
     

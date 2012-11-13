@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_StringTableLoader_h
 #define Project_Unknown_StringTableLoader_h
 
-#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
 
 namespace ukn {
     

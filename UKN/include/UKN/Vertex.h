@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_Vertex_h
 #define Project_Unknown_Vertex_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
 
 namespace ukn {
     

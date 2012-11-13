@@ -6,21 +6,22 @@
 //  Copyright (c) 2012 heizi. All rights reserved.
 //
 
+#include "mist/Operations.h"
+#include "mist/Color.h"
+#include "mist/ConfigParser.h"
+#include "mist/Logger.h"
+#include "mist/Base64.h"
+#include "mist/ZipUtil.h"
+#include "mist/Convert.h"
+
 #include "UKN/tmx/TMXTiledMap.h"
 #include "UKN/SpriteBatch.h"
 #include "UKN/Asset.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/GraphicDevice.h"
-#include "UKN/Operations.h"
 #include "UKN/Texture.h"
-#include "UKN/Color.h"
-#include "UKN/ConfigParser.h"
-#include "UKN/Logger.h"
-#include "UKN/Base64.h"
-#include "UKN/ZipUtil.h"
 #include "UKN/Context.h"
 #include "UKN/RenderBuffer.h"
-#include "UKN/Convert.h"
 
 namespace ukn {
     
@@ -34,7 +35,7 @@ namespace ukn {
             mMapRenderer = Context::Instance().getGraphicFactory().createSpriteBatch();
         }
         
-        Map::Map(const String& map_file):
+        Map::Map(const UknString& map_file):
         mMapWidth(0),
         mMapHeight(0),
         mTileWidth(0),
@@ -173,7 +174,7 @@ namespace ukn {
                 do {
                     if(config->getCurrentNodeName() == L"tile") {
                         int32 tileid = config->getInt(L"id");
-                        ukn_assert(tileid < ts.tiles.size());
+                        mist_assert(tileid < ts.tiles.size());
                         
                         Tile* tile = ts.tileAt(tileid);
                         if(tile) {
@@ -194,7 +195,7 @@ namespace ukn {
             static const int FLIPPED_VERTICALLY_FLAG   = 0x40000000;
             static const int FLIPPED_DIAGONALLY_FLAG   = 0x20000000;
             
-            ukn_assert(!mTileSets.empty());
+            mist_assert(!mTileSets.empty());
             
             mLayers.push_back(new Layer());
             
@@ -213,7 +214,7 @@ namespace ukn {
                 
                 if(encoding == L"base64") {
                     UknString str_data = config->getString(UknString());
-                    ukn_assert(!str_data.empty());
+                    mist_assert(!str_data.empty());
                     
                     UknString::iterator begin = str_data.begin();
                     while(*begin == '\n' || *begin == ' ')
@@ -224,15 +225,15 @@ namespace ukn {
                     Array<uint8> data(base64_decode(/* node value */
                                                     String::WStringToStringFast(str_data)
                                                     ));
-                    ukn_assert(data.size() != 0);
+                    mist_assert(data.size() != 0);
                     
                     // zlib/gzip decompress
-                    Array<uint8> dp_data(zlib_decompress(data.begin(), (uint32)data.size()));
+                    std::vector<uint8> dp_data = zlib_decompress(&data.front(), (uint32)data.size());
                     
-                    ukn_assert(dp_data.size() == layer.width * layer.height * 4);
+                    mist_assert(dp_data.size() == layer.width * layer.height * 4);
                     
                     uint32 tile_index = 0;
-                    uint8* raw_data = (uint8*)dp_data.begin();
+                    uint8* raw_data = (uint8*)&dp_data.front();
                     
                     layer.tiles.resize(layer.width * layer.height);
                     
@@ -258,7 +259,7 @@ namespace ukn {
                                                 FLIPPED_VERTICALLY_FLAG |
                                                 FLIPPED_DIAGONALLY_FLAG);
                             
-                            ukn_assert(global_tile_id < mTileSets.back().first_grid + mTileSets.back().tiles.size());
+                            mist_assert(global_tile_id < mTileSets.back().first_grid + mTileSets.back().tiles.size());
                             
                             // Resolve the tile
                             if(global_tile_id == 0) {
@@ -280,7 +281,7 @@ namespace ukn {
                                                                         (i % layer.width) * tileset.tile_width + tileset.tile_width,
                                                                         (i / layer.width) * tileset.tile_height + tileset.tile_height);
                                 } else
-                                    log_error("ukn::tmx::Map::parseLayer: invalid tile with gid " + Convert::ToString(global_tile_id));
+                                    log_error(L"ukn::tmx::Map::parseLayer: invalid tile with gid " + Convert::ToString(global_tile_id));
                             }
                         }
                     }
@@ -288,10 +289,10 @@ namespace ukn {
                 } else if(encoding == L"csv") {
                     StringTokenlizer tiles(config->getString(UknString()),
                                            L",");
-                    ukn_assert(tiles.size() == layer.width * layer.height);
+                    mist_assert(tiles.size() == layer.width * layer.height);
                     for(int32 j = 0; j < layer.height; ++j) {
                         for(int32 i = 0; i < layer.width; ++i) {
-                            Tile* g_tile = getTileWithGid(Convert::ToInt32(String::WStringToStringFast(tiles[j * layer.width + i])));
+                            Tile* g_tile = getTileWithGid(Convert::ToInt32(tiles[j * layer.width + i]));
                             if(g_tile) {
                                 Tile& tile = layer.tiles[i + j * layer.width];
                                 
@@ -450,7 +451,7 @@ namespace ukn {
             return mLayers[layer_index]->getTileAt(pos);
         }
         
-        const String& Map::getName() const {
+        const UknString& Map::getName() const {
             return mName;
         }
         
@@ -474,8 +475,10 @@ namespace ukn {
         }
         
         void Map::orthogonalRender() {
-            UKN_ENUMERABLE_FOREACH(const SharedPtr<Layer>&, layer_ptr, mLayers) {
-                Layer& layer = *layer_ptr;
+            for(LayerList::iterator it = mLayers.begin(), end = mLayers.end();
+                it != end;
+                ++it) {
+                Layer& layer = **it;
                 if(layer.visible) {
                     mMapRenderer->startBatch();
                     
@@ -557,8 +560,10 @@ namespace ukn {
         }
                 
         void Map::isometricRender() {
-            UKN_ENUMERABLE_FOREACH(const SharedPtr<Layer>&, layer_ptr, mLayers) {
-                Layer& layer = *layer_ptr;
+            for(LayerList::iterator it = mLayers.begin(), end = mLayers.end();
+                it != end;
+                ++it) {
+                Layer& layer = **it;
                 if(layer.visible) {
                     mMapRenderer->startBatch();
                     

@@ -14,8 +14,6 @@
 #ifndef Project_Unknown_UKN_h
 #define Project_Unknown_UKN_h
 
-#include "UKN/Preprocessor.h"
-
 #define UKN_VERSION_MAJOR 0
 #define UKN_VERSION_MINOR 1
 #define UKN_VERSION_REV   10

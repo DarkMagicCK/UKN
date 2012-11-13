@@ -9,12 +9,13 @@
 #ifndef Project_Unknown_App_h
 #define Project_Unknown_App_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/Uncopyable.h"
+#include "mist/Signal.h"
+#include "mist/Event.h"
+
 #include "UKN/PreDeclare.h"
-#include "UKN/Uncopyable.h"
-#include "UKN/Signal.h"
 #include "UKN/GraphicSettings.h"
-#include "UKN/Event.h"
 
 namespace ukn {
     
@@ -28,7 +29,7 @@ namespace ukn {
         Window&     getWindow() const;
 		WindowPtr   getWindowPtr() const;
         
-        void create(const ukn_wstring& cfgname=L"config.xml");
+        void create(const UknString& cfgname=L"config.xml");
         void create(const ContextCfg& cfg);
         
         void run();

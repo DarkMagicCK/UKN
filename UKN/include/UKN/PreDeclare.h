@@ -9,34 +9,54 @@
 #ifndef Project_Unknown_PreDeclare_h
 #define Project_Unknown_PreDeclare_h
 
-#include "UKN/Platform.h"
-#include "UKN/Ptr.h"
+#include "mist/Platform.h"
+#include "mist/Resource.h"
+#include "mist/Entity.h"
+#include "mist/Task.h"
+#include "mist/FSM.h"
+#include "mist/Stream.h"
+#include "mist/Component.h"
+#include "mist/Ptr.h"
+#include "mist/MathUtil.h"
 
 #include <string>
 
 namespace ukn {
     
-    template<int size, typename T>
-    struct PointTemplate;
+    using namespace mist;
     
-    typedef PointTemplate<1, float> float1;
-    typedef PointTemplate<2, float> float2;
-    typedef PointTemplate<3, float> float3;
-    typedef PointTemplate<4, float> float4;
+#define UKN_API MIST_API 
     
-    typedef PointTemplate<1, int32> int1;
-    typedef PointTemplate<2, int32> int2;
-    typedef PointTemplate<3, int32> int3;
-    typedef PointTemplate<4, int32> int4;
+    typedef MistString UknString;
     
-    typedef PointTemplate<1, uint32> uint1;
-    typedef PointTemplate<2, uint32> uint2;
-    typedef PointTemplate<3, uint32> uint3;
-    typedef PointTemplate<4, uint32> uint4;
+    typedef mist::PointTemplate<1, float> float1;
+    typedef mist::PointTemplate<2, float> float2;
+    typedef mist::PointTemplate<3, float> float3;
+    typedef mist::PointTemplate<4, float> float4;
+    
+    typedef mist::PointTemplate<1, int32> int1;
+    typedef mist::PointTemplate<2, int32> int2;
+    typedef mist::PointTemplate<3, int32> int3;
+    typedef mist::PointTemplate<4, int32> int4;
+    
+    typedef mist::PointTemplate<1, uint32> uint1;
+    typedef mist::PointTemplate<2, uint32> uint2;
+    typedef mist::PointTemplate<3, uint32> uint3;
+    typedef mist::PointTemplate<4, uint32> uint4;
 
     struct VertexFormat;
     
     struct ContextCfg;
+    
+    typedef SharedPtr<mist::Resource> ResourcePtr;
+    typedef SharedPtr<mist::Stream> StreamPtr;
+    typedef SharedPtr<mist::Entity> EntityPtr;
+    typedef SharedPtr<mist::Component> ComponentPtr;
+    typedef SharedPtr<mist::Task> TaskPtr;
+    typedef SharedPtr<mist::FSMState> FSMStatePtr;
+    typedef SharedPtr<mist::ComponentHolder> ComponentHolderPtr;
+    typedef SharedPtr<mist::ConfigParser> ConfigParserPtr;
+    
     
     class GraphicDevice;
     typedef SharedPtr<GraphicDevice> GraphicDevicePtr;
@@ -69,32 +89,17 @@ namespace ukn {
     class Font;
     typedef SharedPtr<Font> FontPtr;
     
-    class Resource;
-    typedef SharedPtr<Resource> ResourcePtr;
-    
     class Texture;
-    typedef SharedPtr<Texture> TexturePtr;
-    
-    class Stream;
-    typedef SharedPtr<Stream> StreamPtr;
-    
+   
     class Camera;
     typedef SharedPtr<Camera> CameraPtr;
     
     class Window;
     typedef SharedPtr<Window> WindowPtr;
     
-    class ConfigParser;
-    typedef SharedPtr<ConfigParser> ConfigParserPtr;
     
     class AppInstance;
     typedef SharedPtr<AppInstance> AppPtr;
-    
-    class ResourceFactory;
-    typedef SharedPtr<ResourceFactory> ResourceFactoryPtr;
-    
-    class ResourceLoader;
-    typedef SharedPtr<ResourceLoader> ResourceLoaderPtr;
     
     class SpriteBatch;
     typedef SharedPtr<SpriteBatch> SpriteBatchPtr;
@@ -104,51 +109,15 @@ namespace ukn {
     
     class Scene;
     typedef SharedPtr<Scene> ScenePtr;
-    
-    class Entity;
-    typedef SharedPtr<Entity> EntityPtr;
-    
-    class Component;
-    typedef SharedPtr<Component> ComponentPtr;
-    
-    class Task;
-    typedef SharedPtr<Task> TaskPtr;
-    
-    class FSMState;
-    typedef SharedPtr<FSMState> FSMStatePtr;
-    
-    class Condition;
-    typedef SharedPtr<Condition> ConditionPtr;
-    
-    class Operator;
-    typedef SharedPtr<Operator> OperatorPtr;
-    
-    class Action;
-    typedef SharedPtr<Action> ActionPtr;
-    
-    class Trigger;
-    typedef SharedPtr<Trigger> TriggerPtr;
-    
+           
     class IRenderable;
     typedef SharedPtr<IRenderable> RenderablePtr;
-    
-    class SceneNode;
-    typedef SharedPtr<SceneNode> SceneNodePtr;
     
     class SceneObject;
     typedef SharedPtr<SceneObject> SceneObjectPtr;
     
     class SceneManager;
     typedef SharedPtr<SceneManager> SceneManagerPtr;
-    
-    class Entity;
-    typedef SharedPtr<Entity> EntityPtr;
-    
-    class Component;
-    typedef SharedPtr<Component> ComponentPtr;
-    
-    class ComponentHolder;
-    typedef SharedPtr<ComponentHolder> ComponentHolderPtr;
     
     class SequencialAnimation;
     typedef SharedPtr<SequencialAnimation> SequencialAnimationPtr;

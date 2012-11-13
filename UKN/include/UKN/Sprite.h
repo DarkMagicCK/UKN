@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_Sprite_h
 #define Project_Unknown_Sprite_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
 #include "UKN/Texture.h"
 
 namespace ukn {

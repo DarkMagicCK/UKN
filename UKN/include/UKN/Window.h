@@ -9,13 +9,14 @@
 #ifndef Project_Unknown_Window_h
 #define Project_Unknown_Window_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/Event.h"
+
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
-#include "UKN/Event.h"
 #include "UKN/Input.h"
 
-#ifdef UKN_OS_WINDOWS
+#ifdef MIST_OS_WINDOWS
 #include <Windows.h>
 #endif
 
@@ -53,7 +54,7 @@ namespace ukn {
     
         virtual UknString description() const = 0;
         
-#if defined(UKN_OS_WINDOWS)
+#if defined(MIST_OS_WINDOWS)
         virtual HWND getHWnd() const = 0;
 #endif
         

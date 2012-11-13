@@ -14,7 +14,7 @@
 #include <string>
 #include <exception>
 
-#include "UKN/Platform.h"
+#include "UKN/PreDeclare.h"
 
 namespace ukn {
 

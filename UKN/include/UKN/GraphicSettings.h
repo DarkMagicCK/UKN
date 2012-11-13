@@ -9,7 +9,11 @@
 #ifndef Project_Unknown_GraphicSettings_h
 #define Project_Unknown_GraphicSettings_h
 
+#include "mist/Platform.h"
+
 namespace ukn {
+    
+    using namespace mist;
     
     enum ElementFormat {
         EF_ARGB8,

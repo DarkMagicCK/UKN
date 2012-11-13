@@ -22,7 +22,7 @@ namespace ukn {
         
         UknString description() const { return UknString(L"Null Window"); }
         
-#if defined(UKN_OS_WINDOWS)
+#if defined(MIST_OS_WINDOWS)
         HWND getHWnd() const { return 0; }
 #endif
         bool pullEvents() { return true; }

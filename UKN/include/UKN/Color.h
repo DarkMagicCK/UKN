@@ -68,10 +68,10 @@ namespace ukn {
         }
         
         Color operator = (uint32 col) {
-            this->a = (col>>24)/255.0f; 
-            this->r = ((col>>16) & 0xFF)/255.0f; 
-            this->g = ((col>>8) & 0xFF)/255.0f; 
-            this->b = (col & 0xFF)/255.0f; 
+            this->r = (col>>24)/255.0f;
+            this->g = ((col>>16) & 0xFF)/255.0f;
+            this->b = ((col>>8) & 0xFF)/255.0f;
+            this->a = (col & 0xFF)/255.0f;
             return *this;
         }
         

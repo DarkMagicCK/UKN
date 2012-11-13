@@ -14,39 +14,20 @@
 #include "UKN/App.h"
 #include "UKN/Context.h"
 #include "UKN/Window.h"
-#include "UKN/TimeUtil.h"
-#include "UKN/Stream.h"
-#include "UKN/SysUtil.h"
-#include "UKN/Ptr.h"
 #include "UKN/Texture.h"
 #include "UKN/GraphicDevice.h"
 #include "UKN/FrameBuffer.h"
-#include "UKN/Logger.h"
-#include "UKN/Common.h"
 #include "UKN/Texture.h"
-#include "UKN/Event.h"
-#include "UKN/RandomUtil.h"
 #include "UKN/SpriteBatch.h"
 #include "UKN/RenderBuffer.h"
-#include "UKN/MathUtil.h"
 #include "UKN/Font.h"
 #include "UKN/Asset.h"
-#include "UKN/ConfigParser.h"
-#include "UKN/Resource.h"
-#include "UKN/Profiler.h"
-#include "UKN/Thread.h"
 #include "UKN/Animation.h"
 #include "UKN/Skeletal.h"
-#include "UKN/Base64.h"
-#include "UKN/RandomUtil.h"
-#include "UKN/ZipUtil.h"
-#include "UKN/StreamWrapper.h"
-#include "UKN/Operations.h"
 #include "UKN/Input.h"
 
 #include "UKN/tmx/TMXTiledMap.h"
 
-#include "UKN/reflection/TypeDatabase.h"
 
 #include <vector>
 #include <map>
@@ -59,25 +40,35 @@ public:
         
     }
     
-    Graph(float a, float b, unsigned int numPoints, F func, float scale = 1.0):
+    Graph(float a, float b, unsigned int numPoints, F func, float scale = 1.0, float xoff = 0.f, float yoff = 0.f):
     mA(a),
     mB(b),
     mNumPoints(numPoints),
     mFunc(func) {
-        build(a, b, numPoints, 0.f, 0.f, scale);
+        build(a, b, numPoints, xoff, yoff, scale);
     }
+    
+    Graph(float a, float b, unsigned int numPoints, F func, F func2, float scale = 1.0, float xoff = 0.f, float yoff = 0.f):
+    mA(a),
+    mB(b),
+    mNumPoints(numPoints),
+    mFunc(func),
+    mFunc2(func2) {
+        build(a, b, numPoints, xoff, yoff, scale);
+    }
+    
     
     void build(float a, float b, unsigned int numPoints, float xOffset, float yOffset, float scale) {
         ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
         mRenderBuffer = gf.createRenderBuffer();
-        ukn_assert(mRenderBuffer);
+        mist_assert(mRenderBuffer);
         
         mVertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::ReadWrite,
                                               ukn::GraphicBuffer::Static,
                                               numPoints,
                                               0,
                                               ukn::Vertex2D::Format());
-        ukn_assert(mVertexBuffer);
+        mist_assert(mVertexBuffer);
         
         mRenderBuffer->bindVertexStream(mVertexBuffer,
                                         ukn::Vertex2D::Format());
@@ -87,9 +78,10 @@ public:
         ukn::Vertex2D* vertices = (ukn::Vertex2D*)mVertexBuffer->map();
         
         float maxy = -100000.f, miny = 1000000.f;
+        float maxx = -100000.f, minx = 1000000.f;
         for(unsigned int i = 0; i < numPoints; ++i) {
             float x = a + (b - a) * (float)i / numPoints;
-            vertices[i].x = x;
+            vertices[i].x = mFunc2 ? mFunc2(x) : x;
             vertices[i].y = -mFunc(x);
             vertices[i].z = 0;
             vertices[i].color = ukn::color::Red;
@@ -98,13 +90,25 @@ public:
                 maxy = vertices[i].y;
             if(miny > vertices[i].y)
                 miny = vertices[i].y;
+            if(maxx < vertices[i].x)
+                maxx = vertices[i].x;
+            if(minx > vertices[i].x)
+                minx = vertices[i].x;
         }
         
+        float rScaleX;
+        float rScaleY;
         float rScale;
         if(scale == 1.0) {
-            float s1 = (float)wnd.height() / 2 / (maxy > 0.0 ? maxy: -maxy);
-            float s2 = (float)wnd.height() / 2 / (miny > 0.0 ? miny: -miny);
-            rScale = s1 < s2 ? s1 : s2;
+            float s1 = (float)wnd.height() / 2 / (maxy > 0.0 ? maxy: -maxy + 1.0);
+            float s2 = (float)wnd.height() / 2 / (miny > 0.0 ? miny: -miny + 1.0);
+            rScaleY = s1 < s2 ? s1 : s2;
+            
+            s1 = (float)wnd.width() / 2 / (maxx > 0.0 ? maxx: -maxx + 1.0);
+            s2 = (float)wnd.width() / 2 / (minx > 0.0 ? minx: -minx + 1.0);
+            rScaleX = s1 < s2 ? s1 : s2;
+            
+            rScale = rScaleX < rScaleY ? rScaleX : rScaleY;
         } else {
             rScale = scale;
         }
@@ -113,6 +117,7 @@ public:
             vertices[i].x = vertices[i].x * rScale + wnd.width() / 2 + xOffset;
             vertices[i].y = vertices[i].y * rScale + wnd.height() / 2 + yOffset;
         }
+        
         
         mVertexBuffer->unmap();
         
@@ -129,7 +134,7 @@ public:
     void setColor(const ukn::Color& clr) {
         ukn::Vertex2D* vertices = (ukn::Vertex2D*)mVertexBuffer->map();
         for(unsigned int i = 0; i < mNumPoints; ++i) {
-            vertices[i].color = clr.toHWColor();
+            vertices[i].color = 0x22FF0000;
         }
         mVertexBuffer->unmap();
     }
@@ -148,6 +153,7 @@ public:
     
 private:
     F mFunc;
+    F mFunc2;
     float mA;
     float mB;
     float mXOffset;
@@ -217,7 +223,7 @@ struct Expression {
     Expression& operator/=(const Term& rhs);
     Expression& operator*=(const Term& rhs);
     
-    double operator()(double x) {
+    double operator()(double x) const {
         double result = 0.0;
         for(std::vector<Term>::const_iterator it = mTerms.begin(), end = mTerms.end();
             it != end;
@@ -372,7 +378,7 @@ Expression Expression::operator/(const Expression& rhs) const {
 }
 
 struct LagrangePolynomial {
-    LagrangePolynomial();
+    LagrangePolynomial() {}
     
     LagrangePolynomial(const std::initializer_list<Vector2>& points) {
         mPoints = std::vector<Vector2>(points.begin(), points.end());
@@ -391,9 +397,14 @@ struct LagrangePolynomial {
     
     void setPoints(const std::vector<Vector2>& points) {
         mPoints = points;
+        doCalculateExpression();
     }
     
-    double operator()(double x) {
+    const Expression& getExpression() const  {
+        return mExpression;
+    }
+    
+    double operator()(double x) const {
         return mExpression(x);
     }
     
@@ -483,6 +494,15 @@ struct Spline {
         return s;
     }
     
+    void setPoints(const std::vector<Vector2>& vec) {
+        mPoints = vec;
+        setup();
+    }
+    
+    const DoubleVector& getA() const {
+        return m_A;
+    }
+    
 private:
     void setup() {
         DoubleVector T, H, R, D, U, L;
@@ -560,6 +580,176 @@ private:
     DoubleVector m_A;
 };
 
+#define PI 3.141592653589793238462643383279502884
+
+#include <cassert>
+#include <array>
+
+/* Simple template based matrixNM, M(Column) * N(Row) matrix */
+template<size_t N, size_t M, typename _DATA_TYPE = float>
+struct MatrixMN {
+public:
+    typedef _DATA_TYPE data_type;
+    typedef MatrixMN<M, N, _DATA_TYPE> self_type;
+    typedef typename std::array<_DATA_TYPE, N> row_type;
+    typedef typename std::array<_DATA_TYPE, M> column_type;
+    
+    /* enum hack to get dimension and length here */
+    enum { Column = M };
+    enum { Row = N };
+    enum { Length = M * N };
+    
+    /* union to simplify data storage and access, column->row */
+    union {
+        data_type c[N][M];
+        data_type d[Length];
+    };
+    
+public:
+    MatrixMN() {
+        memset(this->d, 0, sizeof(_DATA_TYPE) * Length);
+    }
+    /* std::initializer_list constructor, for faster construction */
+    MatrixMN(std::initializer_list<_DATA_TYPE> list) {
+        /* initializer list size must larger than N*M */
+        assert(list.size() >= Length);
+        memcpy(this->d, list.begin(), sizeof(_DATA_TYPE) * Length);
+    }
+    MatrixMN(const self_type& rhs) {
+        memcpy(this->d, rhs.d, sizeof(_DATA_TYPE) * Length);
+    }
+    // rvalue constructor
+    MatrixMN(const self_type&& rval) {
+        memcpy(this->d, rval.d, sizeof(_DATA_TYPE) * Length);
+    }
+    
+    self_type& operator=(const self_type& rhs) {
+        memcpy(this->d, rhs.d, sizeof(_DATA_TYPE) * Length);
+    }
+    self_type operator+(const self_type& rhs) const {
+        MatrixMN temp = *this;
+        for(size_t i = 0; i < Length; ++i) {
+            temp.d[i] += rhs.d[i];
+        }
+        return temp;
+    }
+    self_type operator-(const self_type& rhs) const {
+        MatrixMN temp = *this;
+        for(size_t i = 0; i < Length; ++i) {
+            temp.d[i] -= rhs.d[i];
+        }
+        return temp;
+    }
+    self_type& operator+=(const self_type& rhs) {
+        for(size_t i = 0; i < Length; ++i) {
+            this->d[i] += rhs.d[i];
+        }
+        return *this;
+    }
+    self_type& operator-=(const self_type& rhs) {
+        for(size_t i = 0; i < Length; ++i) {
+            this->d[i] += rhs.d[i];
+        }
+        return *this;
+    }
+    
+    bool operator==(const self_type& rhs) const {
+        for(size_t i = 0; i < Length; ++i) {
+            if(this->d[i] != rhs.d[i])
+                return false;
+        }
+        return true;
+    }
+    /* implicit convertion to std::array */
+    operator std::array<_DATA_TYPE, Length>() const {
+        std::array<_DATA_TYPE, Length> a;
+        for(size_t i = 0; i < Length; ++i) {
+            a[i] = this->d[i];
+        }
+        return a;
+    }
+    
+    /* for output */
+    friend std::ostream& operator<<(std::ostream& os, const MatrixMN& m) {
+        for(size_t i = 0; i < m.Row; ++i) {
+            for(size_t j = 0; j < m.Column; ++j) {
+                os << m.c[i][j] << " ";
+            }
+            os << std::endl;
+        }
+        return os;
+    }
+};
+
+template<typename T>
+T dabs(T v) {
+    return v < 0 ? -v : v;
+}
+
+template<int MIN_ITR, int MAX_ITR>
+double RombergIntegration(double a, double b, const std::function<double(double)>& f, double epsilon) {
+    double h = b - a;
+    
+    MatrixMN<2, MAX_ITR> r;
+    r.c[0][0] = h * (f(a) + f(b)) / 2.0;
+    
+    for(size_t i=1; i<MAX_ITR; ++i) {
+        double sum = 0.0;
+        for(size_t k=1; k<=pow(2, i-1); ++k) {
+            sum += f(a + (k-0.5) * h);
+        }
+        r.c[1][0] = 0.5 * (r.c[0][0] + h * sum);
+        for(size_t j=1; j<i; ++j) {
+            r.c[1][j] = (pow(4.0, j) * r.c[1][j-1] - r.c[0][j-1]) / (pow(4.0, j) - 1);
+        }
+        
+        if(dabs(r.c[1][i-1] - r.c[0][i-2]) < epsilon && i >= MIN_ITR) {
+            return r.c[1][i-1];
+        } else {
+            h = h / 2.0;
+            for(size_t j=0; j<i; ++j) {
+                r.c[0][j] = r.c[1][j];
+            }
+        }
+    }
+    
+    return r.c[1][MAX_ITR-1];
+}
+
+struct FresnelFunction {
+    double operator()(double x) {
+        return RombergIntegration<10, 100>(0.0, x, _f, _epsilon);
+    }
+    
+    std::function<double(double)> _f;
+    double _a;
+    double _epsilon;
+    
+    FresnelFunction(const std::function<double(double)>& f, double epsilon):
+    _f(f),
+    _epsilon(epsilon) {
+        
+    }
+    FresnelFunction() {
+        
+    }
+};
+
+struct SleepingCurve {
+    SleepingCurve(const std::vector<Vector2>& time):
+    m_time(time) {
+        
+    }
+    
+    double operator()(const double& x) const{
+        double dist = x - floor(x);
+        unsigned index = floor(x);
+        return m_time[index].x * 60 + m_time[index].y;
+    }
+    
+    std::vector<Vector2> m_time;
+};
+
 class MyApp: public ukn::AppInstance {
 public:
     MyApp(const ukn::UknString& name):
@@ -573,78 +763,218 @@ public:
     
     void onKeyEvent(void* sender, ukn::input::KeyEventArgs& e) {
         if(e.state == ukn::input::Key::Press) {
-            switch(e.key) {
-                case ukn::input::Key::Equals:
-                    testGraph->build(-5, 5, 5000, 0, 0, testGraph->scale() * 1.57);
-                    break;
-                
-                case ukn::input::Key::Minus:
-                    testGraph->build(-5, 5, 5000, 0, 0, testGraph->scale() * 0.717);
-                    break;
-                    
-                case ukn::input::Key::Left:
-                    testGraph->build(testGraph->a() - 0.5,
-                                     testGraph->b(),
-                                     5000,
-                                     0,
-                                     0,
-                                     testGraph->scale());
-                    break;
-                    
-                case ukn::input::Key::Right:
-                    testGraph->build(testGraph->a() + 0.5f,
-                                     testGraph->b() + 0.5f,
-                                     5000,
-                                     0,
-                                     0,
-                                     testGraph->scale());
-                    break;
-                
-                default:
-                    break;
+            if(e.key == ukn::input::Key::Num1) {
+                r1 = !r1;
+            }
+            if(e.key == ukn::input::Key::Num2) {
+                r2 = !r2;
+            }
+            if(e.key == ukn::input::Key::Num3) {
+                r3 = !r3;
+            }
+            if(e.key == ukn::input::Key::Num4) {
+                r4 = !r4;
             }
         }
     }
     
     void onResize(void * sender, ukn::WindowResizeEventArgs& args) {
-        testGraph->build(-1, 1, 5000, 0, 0, 1);
     }
         
     void onInit() {
         getWindow().onMouseEvent() += ukn::Bind(this, &MyApp::onMouseEvent);
         getWindow().onKeyEvent() += ukn::Bind(this, &MyApp::onKeyEvent);
         getWindow().onResize() += ukn::Bind(this, &MyApp::onResize);
+       
+        std::vector<Vector2> vec {
+            Vector2(33, 1),
+            Vector2(35, 2),
+            Vector2(34, 3),
+            Vector2(10, 4),
+            Vector2(12, 5),
+            Vector2(34, 6),
+            Vector2(74, 7),
+            Vector2(91, 8),
+            Vector2(88, 9),
+            Vector2(66, 10),
+            Vector2(44, 11),
+            Vector2(40, 12),
+            Vector2(36, 13),
+        };
+        std::vector<Vector2> vec2 {
+            Vector2(2, 1),
+            Vector2(18, 2),
+            Vector2(22, 3),
+            Vector2(24, 4),
+            Vector2(36, 5),
+            Vector2(42, 6),
+            Vector2(42, 7),
+            Vector2(36, 8),
+            Vector2(24, 9),
+            Vector2(24, 10),
+            Vector2(22, 11),
+            Vector2(18, 12),
+            Vector2(2, 13),
+        };
         
-        testGraph = new Graph<LagrangePolynomial>(-1.0,
-                                                  1.0,
-                                                  5000,
-                                                  LagrangePolynomial({
-                                                      Vector2(-1.0, -1.0),
-                                                      Vector2(-0.96, -0.151),
-                                                      Vector2(-0.86, 0.894),
-                                                      Vector2(-0.79, 0.986),
-                                                      Vector2(0.22, 0.895),
-                                                      Vector2(0.5, 0.5),
-                                                      Vector2(0.93, -0.306)
-                                                  }),
-                                                  260);
-        testGraph2 = new Graph<Spline>(-1.0,
-                                       1.0,
-                                       5000,
-                                       Spline({
-                                            Vector2(-1.0, -1.0),
-                                            Vector2(-0.96, -0.151),
-                                            Vector2(-0.86, 0.894),
-                                            Vector2(-0.79, 0.986),
-                                            Vector2(0.22, 0.895),
-                                            Vector2(0.5, 0.5),
-                                            Vector2(0.93, -0.306)
-                                       }),
-                                       260);
-       testGraph->setColor(ukn::color::White);
+        std::for_each(vec.begin(), vec.end(), [](Vector2& t) {
+            float tt = t.x;
+            t.x = t.y;
+            t.y = tt;
+        });
+        std::for_each(vec2.begin(), vec2.end(), [](Vector2& t) {
+            float tt = t.x;
+            t.x = t.y;
+            t.y = tt;
+        });
+        /*
+        std::vector<Vector2> vec2 {
+            Vector2(2, 1),
+            Vector2(18, 2),
+            Vector2(22, 3),
+            Vector2(24, 4),
+            Vector2(36, 5),
+            Vector2(42, 6),
+        };
+        */
+        float scale = 100;
         
-        mFont = ukn::AssetManager::Instance().load<ukn::Font>("Thonburi.ttf");
-        mFont->setStyleProperty(ukn::FSP_Size, 20);
+        s1 = Spline(vec);
+        s2 = Spline(vec2);
+        
+        std::vector<Vector2> points;
+        for(int i=1; i<=11; ++i) {
+            double x = -1 + (i-1.0) / 5.0;
+            points.push_back(Vector2(x, pow(1 + 25 * x * x, -1)));
+        }
+        
+        s1 = Spline(points);
+        
+        
+        points.clear();
+        for(int i=1; i<=11; ++i) {
+            double x = cos(PI * (23- 2*i) /22.0);
+            points.push_back(Vector2(x, pow(1 + 25 * x * x, -1)));
+        }
+        
+        s2 = Spline(points);
+        
+                
+     /*   lag2->setColor(ukn::color::White);
+        spline1->setColor(ukn::color::Pink);
+        spline2->setColor(ukn::color::Green);
+       */ 
+        runge = new Graph<std::function<float(float)> >(1,
+                                            13,
+                                            13000,
+                                            [&](float x) -> float {
+                                                return s2(x);
+                                            },
+                                            [&](float x) -> float {
+                                                return s1(x);
+                                            },
+                                                        1.f,
+                                                        -500.f,
+                                                        200.f);
+        runge->setColor(ukn::color::Pink);
+        
+        r1 = r2 = r3 = r4 = false;
+        
+        
+        sx = new Graph<std::function<double(double)>>(0.0,
+                                                      5.0,
+                                                      3000,
+                                                      FresnelFunction([](double x) ->double { return sin(x*x); },
+                                                                      1E-10));
+        cx = new Graph<std::function<double(double)>>(0.0,
+                                                      5.0,
+                                                      3000,
+                                                      FresnelFunction([](double x) ->double { return cos(x*x); },
+                                                                      1E-10));
+        printf("%f, %f, %f, %f", sx->maxY(), sx->minY(), cx->maxY(), cx->minY());
+        cx->setColor(ukn::color::Blue);
+        
+        SleepingCurve curve = SleepingCurve({
+            Vector2( 3, 0 ),
+            Vector2( 4, 0 ),
+            Vector2( -6, 0 ),
+            Vector2( 2, 0 ),
+            Vector2( 4, 30),
+            Vector2( 0, 0 ),
+            Vector2( 2, 30 ),
+            Vector2( 0, 44),
+            Vector2( 2, 50),
+            Vector2( 2, 30),
+            Vector2( 4, 0),
+            Vector2( 0, -30),
+            Vector2( -6, 0),
+            Vector2(4, 0),
+            Vector2(3, 30),
+            Vector2(3, 0),
+            Vector2(2, 30),
+            Vector2(3, 30),
+            Vector2( -6 , 0),
+            Vector2(6, 0),
+            Vector2(4, 0),
+            Vector2(0, -50),
+            Vector2(0, -45),
+            Vector2(0, 0),
+            Vector2(0, 0),
+            Vector2(-2, 0),
+            Vector2(0, 0),
+            Vector2(0, 0),
+            Vector2(0, -50),
+            Vector2(2, 22),
+            Vector2(3, 30)
+        });
+        std::cout<<std::endl;
+        for(int i=0; i<=31; ++i) {
+            std::cout<<"Vector2("<<i+1<<", "<<curve(i) / 60<<"),"<<std::endl;
+        }
+        
+        Spline s = Spline({
+            Vector2(1, 3),
+            Vector2(2, 4),
+            Vector2(3, -6),
+            Vector2(4, 2),
+            Vector2(5, 4.5),
+            Vector2(6, 0),
+            Vector2(7, 2.5),
+            Vector2(8, 0.733333),
+            Vector2(9, 2.83333),
+            Vector2(10, 2.5),
+            Vector2(11, 4),
+            Vector2(12, -0.5),
+            Vector2(13, -6),
+            Vector2(14, 4),
+            Vector2(15, 3.5),
+            Vector2(16, 3),
+            Vector2(17, 2.5),
+            Vector2(18, 3.5),
+            Vector2(19, -6),
+            Vector2(20, 6),
+            Vector2(21, 4),
+            Vector2(22, -0.833333),
+            Vector2(23, -0.75),
+            Vector2(24, 0),
+            Vector2(25, 0),
+            Vector2(26, -2),
+            Vector2(27, 0),
+            Vector2(28, 0),
+            Vector2(29, -0.833333),
+            Vector2(30, 2.36667),
+            Vector2(31, 3.5),
+            Vector2(32, 0),
+        });
+        
+        
+        sleeping = new Graph<std::function<double(double)>>(0.0,
+                                                            32,
+                                                            30000,
+                                                            [=](double x) ->double { return s(x); },
+                                                            1.f,
+                                                            -400.f);
+        sleeping->setColor(ukn::color::Blue);
     }
     
     void onUpdate() {
@@ -656,31 +986,40 @@ public:
         
         gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
         
-     //   testGraph->render();
-        testGraph2->render();
-      
-        mFont->draw(L"-1",
-                    0,
-                    getWindow().height() / 2 + 10,
-                    ukn::FA_Left, ukn::color::Red);
-        mFont->draw(L"1",
-                    getWindow().width() - 20,
-                    getWindow().height() / 2 + 10,
-                    ukn::FA_Left, ukn::color::Red);
-        mFont->draw(L"0",
-                    getWindow().width() / 2,
-                    getWindow().height() / 2 + 10,
-                    ukn::FA_Left, ukn::color::Red);
-        mFont->render();
+        if(r1) lag1->render();
+        if(r2) lag2->render();
+        if(r3) spline1->render();
+        if(r4) spline2->render();
+        
+     //   sx->render();
+    //    cx->render();
+        sleeping->render();
+        //runge->render();
     }
     
 private:
-    Graph<LagrangePolynomial>* testGraph;
-    Graph<Spline>* testGraph2;
+    Spline s1, s2;
+    
+    Graph<std::function<double(double)>>* sleeping;
+    
+    Graph<std::function<float(float)>>* lag1;
+    Graph<std::function<float(float)>>* spline1;
+    Graph<std::function<float(float)>>* lag2;
+    Graph<std::function<float(float)>>* spline2;
+    
+    Graph<std::function<double(double)>>* sx;
+    Graph<std::function<double(double)>>* cx;
+    
+    
+    Graph<std::function<float(float)>>* runge;
+    
     ukn::FontPtr mFont;
+    
+    bool r1, r2, r3, r4, r5;
 };
 
-#ifndef UKN_OS_WINDOWS
+
+#ifndef MIST_OS_WINDOWS
 int main (int argc, const char * argv[])
 {
 #else
@@ -703,8 +1042,8 @@ int CALLBACK WinMain(
 
     // create app context
     ukn::ContextCfg cfg;
-    cfg.render_cfg.width = 600;
-    cfg.render_cfg.height = 600;
+    cfg.render_cfg.width = 1200;
+    cfg.render_cfg.height = 800;
     instance.create(cfg);
     
     ukn::FrameCounter::Instance().setDesiredFps(60);

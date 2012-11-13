@@ -9,13 +9,14 @@
 #ifndef Project_Unknown_TMXTiledMap_h
 #define Project_Unknown_TMXTiledMap_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/MathUtil.h"
+#include "mist/Serializer.h"
+#include "mist/Util.h"
+#include "mist/Color.h"
+
 #include "UKN/PreDeclare.h"
-#include "UKN/MathUtil.h"
-#include "UKN/Serializer.h"
 #include "UKN/Renderable.h"
-#include "UKN/Util.h"
-#include "UKN/Color.h"
 
 namespace ukn {
     
@@ -185,7 +186,7 @@ namespace ukn {
             
         public:
             Map();
-            Map(const String& map_file);
+            Map(const UknString& map_file);
             virtual ~Map();
             
             const TileSetList&      getTileSets() const;
@@ -218,7 +219,7 @@ namespace ukn {
             virtual bool deserialize(const ConfigParserPtr& config) override;
             
             // IRenderable
-            virtual const String&   getName() override const;
+            virtual const UknString&   getName() override const;
             
             virtual Box             getBound() override const;
             virtual RenderBufferPtr getRenderBuffer() override const;
@@ -247,7 +248,7 @@ namespace ukn {
             
             SpriteBatchPtr mMapRenderer;
             
-            String mName;
+            UknString mName;
             
             uint32  mMapWidth;
             uint32  mMapHeight;

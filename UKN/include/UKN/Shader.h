@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_Shader_h
 #define Project_Unknown_Shader_h
 
-#include "UKN/Platform.h"
+#include "ukn/PreDeclare.h"
 
 namespace ukn {
     

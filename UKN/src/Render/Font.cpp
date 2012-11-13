@@ -6,25 +6,26 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
+#include "mist/ConfigParser.h"
+#include "mist/FileUtil.h"
+#include "mist/Logger.h"
+#include "mist/MathUtil.h"
+#include "mist/Stream.h"
+#include "mist/Resource.h"
+#include "mist/StringUtil.h"
+
 #include "UKN/Font.h"
 #include "UKN/RenderBuffer.h"
 #include "UKN/GraphicDevice.h"
 #include "UKN/GraphicFactory.h"
-#include "UKN/MathUtil.h"
-#include "UKN/Stream.h"
-#include "UKN/Resource.h"
-#include "UKN/StringUtil.h"
 #include "UKN/Context.h"
-#include "UKN/Logger.h"
 #include "UKN/SpriteBatch.h"
 #include "UKN/Texture.h"
-#include "UKN/ConfigParser.h"
-#include "UKN/FileUtil.h"
 
 #include <ft2build.h>
 #include <freetype/freetype.h>
 
-#ifdef UKN_OS_WINDOWS
+#ifdef MIST_OS_WINDOWS
 #pragma comment(lib, "freetype244ST.lib")
 #endif
 
@@ -245,7 +246,7 @@ namespace ukn {
     }
     
     bool Font::loadFromResource(const ResourcePtr& resource) {
-        if(resource->getName().find(L".xml") == String::npos) {
+        if(resource->getName().find(L".xml") == UknString::npos) {
             bool result = mFace->load(resource);
             if(result) {
                 mGlyphs.resize(mFace->face->num_glyphs);
@@ -458,7 +459,7 @@ namespace ukn {
         mRenderQueue.push_back(data);
     }
     
-    const String& Font::getName() const {
+    const UknString& Font::getName() const {
         return mFontName;
     }
     

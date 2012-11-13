@@ -9,10 +9,11 @@
 #ifndef Project_Unknown_Scene_h
 #define Project_Unknown_Scene_h
 
-#include "UKN/Platform.h"
+#include "mist/Platform.h"
+#include "mist/MathUtil.h"
+#include "mist/Uncopyable.h"
+
 #include "UKN/PreDeclare.h"
-#include "UKN/MathUtil.h"
-#include "UKN/Uncopyable.h"
 #include "UKN/Frustum.h"
 #include "UKN/Renderable.h"
 

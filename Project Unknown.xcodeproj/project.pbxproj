@@ -37,6 +37,7 @@
 		884CE3FB148F843A00F58E2E /* GLGraphicBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE3FA148F843800F58E2E /* GLGraphicBuffer.cpp */; };
 		884CE4011490905900F58E2E /* GLSpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE4001490905600F58E2E /* GLSpriteBatch.cpp */; };
 		8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885449981491E253006B8B60 /* libfreetype.a */; };
+		8855E32616561118002311E9 /* LeapMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8855E32416561118002311E9 /* LeapMotion.cpp */; };
 		8884B3C415F7CCEA0086533E /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C215F7CCE90086533E /* Shader.cpp */; };
 		8884B3C715F7CCFC0086533E /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C515F7CCFB0086533E /* GLShader.cpp */; };
 		88871FE2148CB1800026B2B8 /* libglfw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88871FD5148CB1800026B2B8 /* libglfw.a */; };
@@ -266,6 +267,8 @@
 		885449951491E253006B8B60 /* ttunpat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ttunpat.h; sourceTree = "<group>"; };
 		885449971491E253006B8B60 /* ft2build.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ft2build.h; sourceTree = "<group>"; };
 		885449981491E253006B8B60 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfreetype.a; sourceTree = "<group>"; };
+		8855E31E1656107B002311E9 /* LeapMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeapMotion.h; sourceTree = "<group>"; };
+		8855E32416561118002311E9 /* LeapMotion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LeapMotion.cpp; sourceTree = "<group>"; };
 		886DBA3C14C43DCB00652729 /* Basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Basic.h; sourceTree = "<group>"; };
 		8884B3C215F7CCE90086533E /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		8884B3C515F7CCFB0086533E /* GLShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShader.cpp; sourceTree = "<group>"; };
@@ -605,6 +608,14 @@
 			path = services;
 			sourceTree = "<group>";
 		};
+		8855E320165610EC002311E9 /* Experiment */ = {
+			isa = PBXGroup;
+			children = (
+				8855E32416561118002311E9 /* LeapMotion.cpp */,
+			);
+			path = Experiment;
+			sourceTree = "<group>";
+		};
 		88871FD2148CB1800026B2B8 /* glfw */ = {
 			isa = PBXGroup;
 			children = (
@@ -676,6 +687,7 @@
 				88AAC12414868751007A80A4 /* GraphicSettings.h */,
 				8802987314CA89AC009D7670 /* GraphicContext.h */,
 				88AAC12514868751007A80A4 /* Input.h */,
+				8855E31E1656107B002311E9 /* LeapMotion.h */,
 				88AAC12C14868751007A80A4 /* PreDeclare.h */,
 				88AAC12E14868751007A80A4 /* Renderable.h */,
 				88AAC12F14868751007A80A4 /* RenderBuffer.h */,
@@ -710,6 +722,7 @@
 		88AAC14414868751007A80A4 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				8855E320165610EC002311E9 /* Experiment */,
 				88A98F1714D33BDD002A79CD /* TMX */,
 				88AAC14514868751007A80A4 /* App */,
 				88AAC14814868751007A80A4 /* Core */,
@@ -1226,6 +1239,7 @@
 				88ECF0DB16521BF000EA6B47 /* Skeletal.cpp in Sources */,
 				88ECF0DE16521C3A00EA6B47 /* ZipUtil.cpp in Sources */,
 				88ECF0E016521F0500EA6B47 /* AutoUpdate.cpp in Sources */,
+				8855E32616561118002311E9 /* LeapMotion.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1302,6 +1316,7 @@
 					"\"$(SRCROOT)/External/glfw\"",
 					"\"$(SRCROOT)/External/freetype\"",
 					"\"$(SRCROOT)/../..\"",
+					"\"$(SRCROOT)/External/leapmotion\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";
@@ -1323,6 +1338,7 @@
 					"\"$(SRCROOT)/External/glfw\"",
 					"\"$(SRCROOT)/External/freetype\"",
 					"\"$(SRCROOT)/../..\"",
+					"\"$(SRCROOT)/External/leapmotion\"",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRINGS_FILE_OUTPUT_ENCODING = "UTF-16";

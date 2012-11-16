@@ -26,8 +26,8 @@ namespace ukn {
             return name;
         }
         
-        void init() {
-            
+        bool init() {
+            return true;
         }
         
         void update() {

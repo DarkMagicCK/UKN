@@ -20,7 +20,14 @@ namespace ukn {
     namespace input {
         
         struct LeapMotionListener {
-            virtual void onLeapMotionFrame(const Leap::Controller& c) = 0;
+            virtual void onLeapMotionFrame(const Leap::Controller& c) { };
+            virtual void onLeapMotionConnect() { }
+            virtual void onLeapMotionDisconnect() { }
+        };
+        
+        struct LeapMotionFrameWrapper {
+            LeapMotionFrameWrapper(const Leap::Frame& f);
+            
         };
         
         class LeapMotionModule:

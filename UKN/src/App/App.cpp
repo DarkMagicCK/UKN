@@ -11,6 +11,7 @@
 #include "mist/Common.h"
 #include "mist/SysUtil.h"
 #include "mist/Stream.h"
+#include "mist/Module.h"
 
 #include "UKN/App.h"
 #include "UKN/Window.h"
@@ -112,12 +113,18 @@ namespace ukn {
     }
     
     void AppInstance::terminate() {
+        mist::ModuleManager::Destroy();
+        
+        try {
 #ifdef MIST_OS_WINDOWS
         ::PostQuitMessage(0);
 		exit(0);
 #else
         exit(0);
 #endif
+        } catch(...) {
+            
+        }
     }
     
     void AppInstance::update() {

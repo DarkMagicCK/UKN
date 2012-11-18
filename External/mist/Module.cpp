@@ -70,9 +70,22 @@ namespace mist {
         }
     }
     
+    namespace {
+        static ModuleManager* _module_manager;
+    }
+    
     ModuleManager& ModuleManager::Instance() {
-        static ModuleManager instance;
-        return instance;
+        if(!_module_manager) {
+            _module_manager = new ModuleManager();
+        }
+        return *_module_manager;
+    }
+    
+    void ModuleManager::Destroy() {
+        if(_module_manager) {
+            delete _module_manager;
+            _module_manager = 0;
+        }
     }
     
     

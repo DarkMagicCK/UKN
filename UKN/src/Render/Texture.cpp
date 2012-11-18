@@ -50,9 +50,9 @@ namespace ukn {
     
     ElementFormat Texture::getFormat() const {
         // return mFormat;
-        // currently ARGB8(32bit) textures only
+        // currently RGBA8(32bit) textures only
         // todo with element formats
-        return EF_ARGB8;
+        return EF_RGBA8;
     }
     
 } // namespace ukn

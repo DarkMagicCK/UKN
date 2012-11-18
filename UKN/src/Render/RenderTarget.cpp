@@ -104,7 +104,7 @@ namespace ukn {
     ElementFormat RenderTarget2D::format() const {
         if(mTargetTexture)
             return mTargetTexture->getFormat();
-        return EF_ARGB8;
+        return EF_RGBA8;
     }
     
 } // namespace ukn

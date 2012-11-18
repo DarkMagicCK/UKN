@@ -69,6 +69,23 @@ namespace mist {
             this->a = _a;
         }
         
+        Color& A(float a) {
+            this->a = a;
+            return *this;
+        }
+        Color& R(float r) {
+            this->r = r;
+            return *this;
+        }
+        Color& G(float g) {
+            this->g = g;
+            return *this;
+        }
+        Color& B(float b) {
+            this->b = b;
+            return *this;
+        }
+        
         Color operator = (const Color& rhs) {
             this->r = rhs.r; 
             this->g = rhs.g; 
@@ -154,10 +171,10 @@ namespace mist {
                                  this->a+rhs.a);
         }
         
-        bool operator == (const Color& rhs)	{
+        bool operator == (const Color& rhs)	const {
             return (this->r==rhs.r && this->g==rhs.g && this->b==rhs.b && this->a==rhs.a);
         }
-        bool operator != (const Color& rhs)	{
+        bool operator != (const Color& rhs) const {
             return !(*this == rhs);
         }
         

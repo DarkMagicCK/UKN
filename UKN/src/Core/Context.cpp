@@ -72,8 +72,8 @@ namespace ukn {
     }
     
     inline int fmt_string_to_element_format(const UknString& str) {
-        if(str == L"EF_ARGB8")
-            return EF_ARGB8;
+        if(str == L"EF_RGBA8")
+            return EF_RGBA8;
         else if(str == L"EF_D16")
             return EF_D16;
         else if(str == L"EF_D24S8")
@@ -85,8 +85,8 @@ namespace ukn {
     
     inline UknString element_format_to_string(ElementFormat fmt) {
         switch(fmt) {
-            case EF_ARGB8:
-                return L"EF_ARGB8";
+            case EF_RGBA8:
+                return L"EF_RGBA8";
             case EF_D16:
                 return L"EF_D16";
             case EF_D32:
@@ -103,7 +103,7 @@ namespace ukn {
         cfg.render_cfg.height = 600;
         cfg.render_cfg.top = 0;
         cfg.render_cfg.left = 0;
-        cfg.render_cfg.color_fmt = EF_ARGB8;
+        cfg.render_cfg.color_fmt = EF_RGBA8;
         cfg.render_cfg.depth_stencil_fmt = EF_D16;
         cfg.render_cfg.resizable = false;
         cfg.render_cfg.full_screen = false;

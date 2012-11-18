@@ -16,7 +16,7 @@ namespace ukn {
     using namespace mist;
     
     enum ElementFormat {
-        EF_ARGB8,
+        EF_RGBA8,
         
         EF_D24S8,
         EF_D32,
@@ -32,7 +32,7 @@ namespace ukn {
         top(0),
         width(0),
         height(0),
-        color_fmt(EF_ARGB8),
+        color_fmt(EF_RGBA8),
         depth_stencil_fmt(EF_D16),
         sample_count(1),
         sample_quality(0) {
@@ -104,6 +104,8 @@ namespace ukn {
         
         RS_Blend,
         RS_DepthTest,
+        
+        RS_PointSize,       // glPointSize, D3DRS_POINTSIZE
     };
     
     enum RenderStateParam {

@@ -35,6 +35,7 @@ namespace mist {
         
     public:
         static ModuleManager& Instance();
+        static void Destroy();
         
         bool addModule(Module* module);
         bool delModule(Module* module);

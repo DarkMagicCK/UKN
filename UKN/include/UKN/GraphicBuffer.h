@@ -43,10 +43,12 @@ namespace ukn {
         virtual void    unmap() = 0;
         
         virtual void    activate() = 0;
+        virtual void    deactivate() = 0;
         
 		virtual uint32  count() const = 0;
         
         virtual void resize(uint32 desired_count) = 0;
+        virtual bool isInMemory() const = 0;
         
         Usage   usage() const;
         Access  access() const;
@@ -60,6 +62,33 @@ namespace ukn {
         Usage mUsage;
         
         uint32 mUseCount;
+    };
+    
+    template<typename T>
+    class UKN_API MemoryGraphicBuffer: public GraphicBuffer {
+    public:
+        MemoryGraphicBuffer():
+        GraphicBuffer(GraphicBuffer::ReadWrite, GraphicBuffer::Dynamic) { }
+        virtual ~MemoryGraphicBuffer() { }
+        
+        typedef Array<T> container_type;
+        
+        virtual void*   map() { return &mContainer[0]; }
+        virtual void    unmap() { }
+        
+        virtual void    activate() { }
+        virtual void    deactivate() { }
+        
+        virtual uint32  count() const { return (uint32)mContainer.size(); }
+        
+        virtual void resize(uint32 desired_count) { mContainer.resize(desired_count); }
+        virtual bool isInMemory() const { return true; }
+        
+    public:
+        MemoryGraphicBuffer& push(const T& t) { mContainer.push_back(t); return *this; }
+        
+    private:
+        container_type mContainer;
     };
     
 } // namespace ukn

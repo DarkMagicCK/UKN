@@ -29,12 +29,20 @@ namespace ukn {
             
         }
         
+        void deactivate() {
+            
+        }
+        
         uint32 count() const {
             return 0;
         }
         
         void resize(uint32 desired_count) {
             
+        }
+        
+        bool isInMemory() const {
+            return false;
         }
     };
         

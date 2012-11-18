@@ -32,12 +32,27 @@ namespace mist {
         
         static uint8    ToByte(const MistString& str);
         static double   ToDouble(const MistString& str);
+        
+        
+        template<typename T1, typename T2>
+        union _ReinterpretConvertUnion {
+            T1 t1;
+            T2 t2;
+        };
+        
+        template<typename T1, typename T2>
+        static T2 ReinterpretConvert(T1 t1) {
+            _ReinterpretConvertUnion<T1, T2> t;
+            t.t1 = t1;
+            return t.t2;
+        }
     };
     
     template<typename T>
     MistString Convert::ToString(T t) {
         return String::AnyToWString(t);
     }
+    
     
 } // namespace mist
 

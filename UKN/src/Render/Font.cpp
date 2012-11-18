@@ -173,7 +173,11 @@ namespace ukn {
                             texp += imgw;
                         }
                         
-                        texture = Context::Instance().getGraphicFactory().create2DTexture(imgw, imgh, 0, EF_ARGB8, (uint8*)texd);
+                        texture = Context::Instance().getGraphicFactory().create2DTexture(imgw,
+                                                                                          imgh,
+                                                                                          0,
+                                                                                          EF_RGBA8,
+                                                                                          (uint8*)texd);
                         ukn_free(texd);
                         cached = true;
                     }

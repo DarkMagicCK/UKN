@@ -1019,8 +1019,8 @@ private:
 };
 
 #include "ukn/asset.h"
-
 #include "ukn/LeapMotion.h"
+#include "mist/Convert.h"
 
 class TestApp: public ukn::AppInstance, public ukn::input::LeapMotionListener {
 public:
@@ -1040,9 +1040,10 @@ public:
                 vert.x = f.tip().position.x * 3 + getWindow().width() / 2;
                 vert.y = f.tip().position.y * 3;
                 vert.z = f.tip().position.z;
-                vert.color = ukn::ColorHSV(1.0 - 0.2*f.id(), 1.0 - 0.2*f.id(), 0.5, 1.0).toRGBA();
+                vert.color = ukn::ColorHSV(1.0 - 0.2*f.id(), 1.0 - 0.2*f.id(), 0.5, 0.3).toRGBA();
+               // vert.color = ukn::color::Skyblue.toRGBA();
                 
-                mVertices.push_back(vert);
+                mVertexBuffer->push(vert);
             }
         }
     }
@@ -1069,11 +1070,8 @@ public:
         mSquareTexture = gf.create2DTexture(getWindow().width(),
                                             getWindow().height(),
                                             0,
-                                            ukn::EF_ARGB8,
+                                            ukn::EF_RGBA8,
                                             0);
-        mScore = 0;
-        mTimeLeft = 5.f;
-        
         mFrameBuffer = gf.createFrameBuffer();
         mFrameBuffer->attach(ukn::ATT_Color0, gf.create2DRenderView(mSquareTexture));
         mFrameBuffer->attach(ukn::ATT_DepthStencil, gf.create2DDepthStencilView(gf.create2DTexture(getWindow().width(),
@@ -1086,11 +1084,7 @@ public:
         mRenderBuffer = gf.createRenderBuffer();
         mist_assert(mRenderBuffer);
         
-        mVertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::ReadWrite,
-                                              ukn::GraphicBuffer::Static,
-                                              100000,
-                                              0,
-                                              ukn::Vertex2D::Format());
+        mVertexBuffer = new ukn::MemoryGraphicBuffer<ukn::Vertex2D>();
         mist_assert(mVertexBuffer);
         
         mRenderBuffer->bindVertexStream(mVertexBuffer,
@@ -1104,17 +1098,19 @@ public:
     }
     
     void onUpdate() {
-        ukn::Vertex2D* vertices = (ukn::Vertex2D*)mVertexBuffer->map();
-        memcpy(vertices, &mVertices.front(), mVertices.size() * sizeof(ukn::Vertex2D));
-        mVertexBuffer->unmap();
-        
     }
     
     void onRender() {
         ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
+        
         gd.bindFrameBuffer(mFrameBuffer);
         gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
-
+        
+        gd.setRenderState(ukn::RS_PointSize, mist::Convert::ReinterpretConvert<float, ukn::uint32>(4.0));
+        gd.setRenderState(ukn::RS_Blend, ukn::RSP_Enable);
+        gd.setRenderState(ukn::RS_SrcAlpha, ukn::RSP_BlendFuncOneMinusSrcAlpha);
+        gd.setRenderState(ukn::RS_ColorOp, ukn::RSP_ColorOpModulate);
+        
         gd.onRenderBuffer(mRenderBuffer);
         
         gd.bindFrameBuffer(gd.getScreenFrameBuffer());
@@ -1133,16 +1129,9 @@ private:
     ukn::FrameBufferPtr mFrameBuffer;
     
     ukn::RenderBufferPtr mRenderBuffer;
-    ukn::GraphicBufferPtr mVertexBuffer;
+    ukn::SharedPtr<ukn::MemoryGraphicBuffer<ukn::Vertex2D> > mVertexBuffer;
     
     ukn::input::LeapMotionModule* mLeapModule;
-    
-    Graph<std::function<float(float)>>* spline1;
-    
-    std::vector<ukn::Vertex2D> mVertices;
-
-    int mScore;
-    float mTimeLeft;
 };
 
 

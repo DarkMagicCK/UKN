@@ -20,7 +20,9 @@ namespace ukn {
         }
         
         LeapMotionModule::~LeapMotionModule() {
-            
+            if(mLeapController) {
+                delete mLeapController;
+            }
         }
         
         const mist::MistString& LeapMotionModule::getName() const {

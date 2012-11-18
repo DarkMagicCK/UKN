@@ -25,7 +25,7 @@ namespace ukn {
         RenderTarget2D(uint32 width,
                        uint32 height,
                        int32 num_of_levels,
-                       ElementFormat color_format = EF_ARGB8);
+                       ElementFormat color_format = EF_RGBA8);
         
         RenderTarget2D(uint32 width,
                        uint32 height,

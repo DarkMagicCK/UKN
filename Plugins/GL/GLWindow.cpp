@@ -134,7 +134,7 @@ namespace ukn {
         glfwInit();
        
         switch(settings.color_fmt) {
-            case EF_ARGB8:
+            case EF_RGBA8:
                 glfwOpenWindowHint(GLFW_RED_BITS, 8);
                 glfwOpenWindowHint(GLFW_BLUE_BITS, 8);
                 glfwOpenWindowHint(GLFW_GREEN_BITS, 8);

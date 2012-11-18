@@ -59,7 +59,7 @@ namespace ukn {
         void getViewMatrix(Matrix4& mat) { }
         void getProjectionMatrix(Matrix4& mat) { }
         
-        void setRenderState(RenderStateType, RenderStateParam) { }
+        void setRenderState(RenderStateType, uint32) { }
         
         void fillGraphicCaps(GraphicDeviceCaps& caps) {
             caps.max_indices = 0;

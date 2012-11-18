@@ -17,6 +17,7 @@
 #include "mist/SysUtil.h"
 #include "mist/Stream.h"
 #include "mist/Profiler.h"
+#include "mist/Convert.h"
 
 #include "UKN/GraphicBuffer.h"
 #include "UKN/RenderBuffer.h"
@@ -120,7 +121,7 @@ namespace ukn {
     }
     
     void GLGraphicDevice::onRenderBuffer(const RenderBufferPtr& buffer) {
-#define BUFFER_OFFSET(i) ((char *)NULL + (i))
+#define BUFFER_OFFSET(buffer, i) (buffer->isInMemory() ? ((char*)buffer->map() + (i)) : ((char *)NULL + (i)))
         
         mist_assert(buffer.isValid());
         
@@ -130,22 +131,27 @@ namespace ukn {
             return;
         }
         
-        glPointSize(2.0);
-        
         const VertexFormat& format = buffer->getVertexFormat();
         if(format == Vertex2D::Format() &&
            !buffer->isUseIndexStream()) {
             // acceleration for 2d vertices
             
-            Vertex2D* vptr = (Vertex2D*)vertexBuffer->map();
-            Array<Vertex2D> vtxArr;
-            vtxArr.assign(vptr, vptr + vertexBuffer->count());
-            vertexBuffer->unmap();
-            
-            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vtxArr.data());
-            glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
-                         0,
-                         vertexBuffer->useCount());
+            if(vertexBuffer->isInMemory()) {
+                glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vertexBuffer->map());
+                glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
+                             0,
+                             vertexBuffer->useCount());
+            } else {
+                Vertex2D* vptr = (Vertex2D*)vertexBuffer->map();
+                Array<Vertex2D> vtxArr;
+                vtxArr.assign(vptr, vptr + vertexBuffer->count());
+                vertexBuffer->unmap();
+                
+                glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vtxArr.data());
+                glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
+                             0,
+                             vertexBuffer->useCount());
+            }
             
             return;
         }
@@ -157,14 +163,14 @@ namespace ukn {
             glVertexPointer(3,
                             GL_FLOAT,
                             format.totalSize(),
-                            BUFFER_OFFSET(format.offsetXYZ()));
+                            BUFFER_OFFSET(vertexBuffer, format.offsetXYZ()));
         }
         
         if(format.checkFormat(VF_Normal)) {
             glEnableClientState(GL_NORMAL_ARRAY);
             glNormalPointer(GL_FLOAT,
                             format.totalSize(),
-                            BUFFER_OFFSET(format.offsetNormal()));
+                            BUFFER_OFFSET(vertexBuffer, format.offsetNormal()));
         }
         
         if(format.checkFormat(VF_Color0)) {
@@ -172,7 +178,7 @@ namespace ukn {
             glColorPointer(4,
                            GL_UNSIGNED_BYTE,
                            format.totalSize(),
-                           BUFFER_OFFSET(format.offsetColor0()));
+                           BUFFER_OFFSET(vertexBuffer, format.offsetColor0()));
         }
         
         if(format.checkFormat(VF_Color1)) {
@@ -180,7 +186,7 @@ namespace ukn {
             glSecondaryColorPointer(4,
                                     GL_UNSIGNED_BYTE,
                                     format.totalSize(),
-                                    BUFFER_OFFSET(format.offsetColor1()));
+                                    BUFFER_OFFSET(vertexBuffer, format.offsetColor1()));
         }
         
         if(format.checkFormat(VF_UV)) {
@@ -188,7 +194,7 @@ namespace ukn {
             glTexCoordPointer(2,
                               GL_FLOAT,
                               format.totalSize(),
-                              BUFFER_OFFSET(format.offsetUV()));
+                              BUFFER_OFFSET(vertexBuffer, format.offsetUV()));
         } else {
             glDisable(GL_TEXTURE_2D);
         }
@@ -207,7 +213,7 @@ namespace ukn {
                                 0xffffffff,
                                 indexBuffer->count(),
                                 GL_UNSIGNED_INT,
-                                BUFFER_OFFSET(0));
+                                BUFFER_OFFSET(vertexBuffer, 0));
         } else {
             glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
                          0,
@@ -300,14 +306,14 @@ namespace ukn {
         glGetFloatv(GL_PROJECTION_MATRIX, &mat.x[0]);
     }
     
-    void GLGraphicDevice::setRenderState(RenderStateType type, RenderStateParam func) {
+    void GLGraphicDevice::setRenderState(RenderStateType type, uint32 func) {
         switch(type) {
             case RS_TextureWrap0:
             case RS_TextureWrap1:
             case RS_ColorOp:
                 glTexEnvf(GL_TEXTURE_2D, 
                           render_state_to_gl_state(type), 
-                          render_state_param_to_gl_state_param(func));
+                          render_state_param_to_gl_state_param((RenderStateParam)func));
                 break;
                 
                 
@@ -315,7 +321,7 @@ namespace ukn {
             case RS_MagFilter:
                 glTexParameteri(GL_TEXTURE_2D, 
                                 render_state_to_gl_state(type), 
-                                render_state_param_to_gl_state_param(func));
+                                render_state_param_to_gl_state_param((RenderStateParam)func));
                 break;
                 
             case RS_StencilOp:
@@ -323,7 +329,7 @@ namespace ukn {
                 break;
                 
             case RS_DepthOp:
-                glDepthFunc(render_state_param_to_gl_state_param(func));
+                glDepthFunc(render_state_param_to_gl_state_param((RenderStateParam)func));
                 break;
             case RS_DepthMask:
                 glDepthMask((func == RSP_Enable) ? GL_TRUE : GL_FALSE);
@@ -334,7 +340,7 @@ namespace ukn {
             case RS_SrcAlpha:
             case RS_DstAlpha:
                 glBlendFunc(render_state_to_gl_state(type), 
-                            render_state_param_to_gl_state_param(func));
+                            render_state_param_to_gl_state_param((RenderStateParam)func));
                 break;
                 
             case RS_Blend:
@@ -349,6 +355,10 @@ namespace ukn {
                     glEnable(GL_DEPTH_TEST);
                 else
                     glDisable(GL_DEPTH_TEST);
+                break;
+                
+            case RS_PointSize:
+                glPointSize(mist::Convert::ReinterpretConvert<uint32, float>(func));
                 break;
         }
     }

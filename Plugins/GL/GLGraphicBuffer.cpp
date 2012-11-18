@@ -83,7 +83,11 @@ namespace ukn {
     void GLVertexBuffer::activate() {
         glBindBuffer(GL_ARRAY_BUFFER, mId);
     }
-
+    
+    void GLVertexBuffer::deactivate() {
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+    
     void GLVertexBuffer::resize(uint32 desired_count) {
         glBindBuffer(GL_ARRAY_BUFFER, mId);
 
@@ -105,6 +109,10 @@ namespace ukn {
 
     uint32 GLVertexBuffer::count() const {
         return mCount;
+    }
+    
+    bool GLVertexBuffer::isInMemory() const {
+        return false;
     }
 
     GLIndexBuffer::GLIndexBuffer(GraphicBuffer::Access access,
@@ -179,7 +187,10 @@ namespace ukn {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-
+    bool GLIndexBuffer::isInMemory() const {
+        return false;
+    }
+    
     void GLIndexBuffer::unmap() {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
         glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
@@ -188,6 +199,10 @@ namespace ukn {
 
     void GLIndexBuffer::activate() {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
+    }
+    
+    void GLIndexBuffer::deactivate() {
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
 } // namespace ukn

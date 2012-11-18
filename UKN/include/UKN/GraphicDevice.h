@@ -82,7 +82,7 @@ namespace ukn {
         virtual void onRenderBuffer(const RenderBufferPtr& buffer) = 0;
         virtual void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) = 0;
         
-        virtual void setRenderState(RenderStateType type, RenderStateParam func) = 0;
+        virtual void setRenderState(RenderStateType type, uint32 func) = 0;
         
     public:
         WindowPtr createRenderWindow(const UknString& name, const RenderSettings& settings);

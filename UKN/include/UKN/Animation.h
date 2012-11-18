@@ -212,7 +212,7 @@ namespace ukn {
         void setDuration(uint32 ms);
         uint32 getDuration();
         
-        void update(uint64 pass_time);
+        void update(uint64 now_time);
         
         Event<StoryBoardCompletedEventArgs>& onComplete();
         

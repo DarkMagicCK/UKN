@@ -30,6 +30,8 @@ namespace ukn {
         virtual void unmap();
 
         virtual void activate();
+        virtual void deactivate();
+        virtual bool isInMemory() const;
 
         VertexFormat& format();
         const VertexFormat& format() const;
@@ -58,7 +60,9 @@ namespace ukn {
         virtual void unmap();
 
         virtual void activate();
-
+        virtual void deactivate();
+        virtual bool isInMemory() const;
+        
         uint32 count() const;
         void resize(uint32 desired_count);
 

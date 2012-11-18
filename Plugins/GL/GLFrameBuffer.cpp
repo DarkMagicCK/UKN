@@ -9,6 +9,10 @@
 #include "GLFrameBuffer.h"
 #include "GLPreq.h"
 
+#include "GLGraphicDevice.h"
+#include "GLGraphicFactory.h"
+#include "ukn/Context.h"
+
 namespace ukn {
     
     GLFrameBuffer::GLFrameBuffer(bool offscreen):
@@ -51,6 +55,19 @@ namespace ukn {
         }
         
         glClear(glflags);
+    }
+    
+    void GLFrameBuffer::onBind() {
+        GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
+        
+        gd.bindGLFrameBuffer(mFBO);
+
+    }
+    
+    void GLFrameBuffer::onUnbind() {
+        GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
+        
+        gd.bindGLFrameBuffer(0);
     }
     
     GLuint GLFrameBuffer::getGLFBO() const {

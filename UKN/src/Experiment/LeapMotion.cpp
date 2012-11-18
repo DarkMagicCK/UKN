@@ -14,52 +14,52 @@ namespace ukn {
     
     namespace input {
         
-        LeapMotionListener::LeapMotionListener():
+        LeapMotionModule::LeapMotionModule():
         mLeapController(0) {
             
         }
         
-        LeapMotionListener::~LeapMotionListener() {
+        LeapMotionModule::~LeapMotionModule() {
             
         }
         
-        const mist::MistString& LeapMotionListener::getName() const {
+        const mist::MistString& LeapMotionModule::getName() const {
             static mist::MistString name = L"LeapMotion";
             return name;
         }
         
-        bool LeapMotionListener::init() {
+        bool LeapMotionModule::init() {
             mLeapController = new Leap::Controller(this);
             return mLeapController != 0;
         }
         
-        void LeapMotionListener::update() {
+        void LeapMotionModule::update() {
             // pass
         }
         
-        void LeapMotionListener::shutdown() {
+        void LeapMotionModule::shutdown() {
             if(mLeapController) {
                 delete mLeapController;
             }
         }
         
-        void LeapMotionListener::onInit(const Leap::Controller& c) {
-            mist::log_info("LeapMotion initialized");
+        void LeapMotionModule::onInit(const Leap::Controller& c) {
+            mist::log_info(L"LeapMotion initialized");
         }
         
-        void LeapMotionListener::onConnect(const Leap::Controller& c) {
-            mist::log_info("LeapMotion connected");
+        void LeapMotionModule::onConnect(const Leap::Controller& c) {
+            mist::log_info(L"LeapMotion connected");
         }
         
-        void LeapMotionListener::onDisconnect(const Leap::Controller& c) {
-            mist::log_info("LeapMotion disconnected");
+        void LeapMotionModule::onDisconnect(const Leap::Controller& c) {
+            mist::log_info(L"LeapMotion disconnected");
         }
         
-        void LeapMotionListener::onFrame(const Leap::Controller& c) {
-            
+        void LeapMotionModule::onFrame(const Leap::Controller& c) {
+            this->publishListenerEvent<const Leap::Controller&>(&LeapMotionListener::onLeapMotionFrame, c);
         }
         
-        Leap::Controller* LeapMotionListener::getLeapController() const {
+        Leap::Controller* LeapMotionModule::getLeapController() const {
             return mLeapController;
         }
         

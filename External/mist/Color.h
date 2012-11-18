@@ -342,25 +342,25 @@ namespace mist {
         a(_a) {}
         
         ColorHSV(uint32 col) {
-            this->fromARGB(col);
+            this->fromRGBA(col);
         }
         
         bool operator ==(const ColorHSV& c) const;
         bool operator !=(const ColorHSV& c) const;
         
-        void fromARGB(uint32 col);
-        uint32 toARGB() const;
+        void fromRGBA(uint32 col);
+        uint32 toRGBA() const;
     };
     
-    inline void ColorHSV::fromARGB(uint32 col) {
+    inline void ColorHSV::fromRGBA(uint32 col) {
         float r, g, b;
         float minv, maxv, delta;
         float del_R, del_G, del_B;
         
-        this->a = (col>>24) / 255.0f;
-        r = ((col>>16) & 0xFF) / 255.0f;
-        g = ((col>>8)  & 0xFF) / 255.0f;
-        b = (col       & 0xFF) / 255.0f;
+        this->a = (col & 0xFF) / 255.0f;
+        r = ((col>>24) & 0xFF) / 255.0f;
+        g = ((col>>16) & 0xFF) / 255.0f;
+        b = ((col>>8)  & 0xFF) / 255.0f;
         
         minv = std::min(std::min(r, g), b);
         maxv = std::max(std::max(r, g), b);
@@ -387,7 +387,7 @@ namespace mist {
         }
     }
     
-    inline uint32 ColorHSV::toARGB() const {
+    inline uint32 ColorHSV::toRGBA() const {
         float r, g, b;
         float xh, i, p1, p2, p3;
         
@@ -412,7 +412,7 @@ namespace mist {
             else			 {r = v;  g = p1; b = p2;}
         }
         
-        return (uint32(a*255.0f)<<24) + (uint32(r*255.0f)<<16) + (uint32(g*255.0f)<<8) + uint32(b*255.0f);
+        return (uint32(a*255.0f)) + (uint32(r*255.0f)<<24) + (uint32(g*255.0f)<<16) + (uint32(b*255.0f)<<8);
     }
     
     

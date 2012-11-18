@@ -11,6 +11,7 @@
 
 #include "mist/Platform.h"
 #include "mist/Module.h"
+#include "mist/ListenerManager.h"
 
 #include "leapmotion/Leap.h"
 
@@ -18,10 +19,17 @@ namespace ukn {
     
     namespace input {
         
-        class LeapMotionListener: public Leap::Listener, public mist::Module {
+        struct LeapMotionListener {
+            virtual void onLeapMotionFrame(const Leap::Controller& c) = 0;
+        };
+        
+        class LeapMotionModule:
+            public Leap::Listener,
+            public mist::Module,
+            public mist::ListenerManager<LeapMotionListener> {
         public:
-            LeapMotionListener();
-            virtual ~LeapMotionListener();
+            LeapMotionModule();
+            virtual ~LeapMotionModule();
             
         public:
             // mist::Module

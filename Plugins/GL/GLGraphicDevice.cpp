@@ -130,6 +130,8 @@ namespace ukn {
             return;
         }
         
+        glPointSize(2.0);
+        
         const VertexFormat& format = buffer->getVertexFormat();
         if(format == Vertex2D::Format() &&
            !buffer->isUseIndexStream()) {

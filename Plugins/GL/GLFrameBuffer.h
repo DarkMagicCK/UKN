@@ -21,6 +21,8 @@ namespace ukn {
         
         bool requiresFlipping() const;
         
+        void onBind();
+        void onUnbind();
         void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
         
         GLuint getGLFBO() const;

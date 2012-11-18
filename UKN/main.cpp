@@ -1018,6 +1018,133 @@ private:
     bool r1, r2, r3, r4, r5;
 };
 
+#include "ukn/asset.h"
+
+#include "ukn/LeapMotion.h"
+
+class TestApp: public ukn::AppInstance, public ukn::input::LeapMotionListener {
+public:
+    TestApp(const ukn::UknString& name):
+    ukn::AppInstance(name) {
+        
+    }
+    virtual ~TestApp() {
+        
+    }
+    
+    void onLeapMotionFrame(const Leap::Controller& c) {
+        Leap::Frame frame = c.frame(0);
+        for(const Leap::Hand& h: frame.hands()) {
+            for(const Leap::Finger& f: h.fingers()) {
+                ukn::Vertex2D vert;
+                vert.x = f.tip().position.x * 3 + getWindow().width() / 2;
+                vert.y = f.tip().position.y * 3;
+                vert.z = f.tip().position.z;
+                vert.color = ukn::ColorHSV(1.0 - 0.2*f.id(), 1.0 - 0.2*f.id(), 0.5, 1.0).toRGBA();
+                
+                mVertices.push_back(vert);
+            }
+        }
+    }
+    
+    void onMouseEvent(void* sender, ukn::input::MouseEventArgs& e) {
+        
+    }
+    
+    void onKeyEvent(void* sender, ukn::input::KeyEventArgs& e) {
+        
+    }
+    
+    void onResize(void * sender, ukn::WindowResizeEventArgs& args) {
+        
+    }
+    
+    void onInit() {
+        getWindow().onMouseEvent() += mist::Bind(this, &TestApp::onMouseEvent);
+        getWindow().onKeyEvent() += mist::Bind(this, &TestApp::onKeyEvent);
+        getWindow().onResize() += mist::Bind(this, &TestApp::onResize);
+      
+        
+        ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
+        mSquareTexture = gf.create2DTexture(getWindow().width(),
+                                            getWindow().height(),
+                                            0,
+                                            ukn::EF_ARGB8,
+                                            0);
+        mScore = 0;
+        mTimeLeft = 5.f;
+        
+        mFrameBuffer = gf.createFrameBuffer();
+        mFrameBuffer->attach(ukn::ATT_Color0, gf.create2DRenderView(mSquareTexture));
+        mFrameBuffer->attach(ukn::ATT_DepthStencil, gf.create2DDepthStencilView(gf.create2DTexture(getWindow().width(),
+                                                                                                   getWindow().height(),
+                                                                                                   0,
+                                                                                                   ukn::EF_D16,
+                                                                                                   0)));
+    
+        
+        mRenderBuffer = gf.createRenderBuffer();
+        mist_assert(mRenderBuffer);
+        
+        mVertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::ReadWrite,
+                                              ukn::GraphicBuffer::Static,
+                                              100000,
+                                              0,
+                                              ukn::Vertex2D::Format());
+        mist_assert(mVertexBuffer);
+        
+        mRenderBuffer->bindVertexStream(mVertexBuffer,
+                                        ukn::Vertex2D::Format());
+        mRenderBuffer->setRenderMode(ukn::RM_Point);
+        
+        
+        mLeapModule = new ukn::input::LeapMotionModule();
+        mLeapModule->attachListener(this);
+        ukn::ModuleManager::Instance().addModule(mLeapModule);
+    }
+    
+    void onUpdate() {
+        ukn::Vertex2D* vertices = (ukn::Vertex2D*)mVertexBuffer->map();
+        memcpy(vertices, &mVertices.front(), mVertices.size() * sizeof(ukn::Vertex2D));
+        mVertexBuffer->unmap();
+        
+    }
+    
+    void onRender() {
+        ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
+        gd.bindFrameBuffer(mFrameBuffer);
+        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
+
+        gd.onRenderBuffer(mRenderBuffer);
+        
+        gd.bindFrameBuffer(gd.getScreenFrameBuffer());
+        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Skyblue, 0, 0);
+
+        ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
+        sb.begin();
+        sb.draw(mSquareTexture,
+                ukn::Vector2(0, 0));
+        sb.end();
+    }
+    
+private:
+    ukn::TexturePtr mSquareTexture;
+    ukn::FontPtr mFont;
+    ukn::FrameBufferPtr mFrameBuffer;
+    
+    ukn::RenderBufferPtr mRenderBuffer;
+    ukn::GraphicBufferPtr mVertexBuffer;
+    
+    ukn::input::LeapMotionModule* mLeapModule;
+    
+    Graph<std::function<float(float)>>* spline1;
+    
+    std::vector<ukn::Vertex2D> mVertices;
+
+    int mScore;
+    float mTimeLeft;
+};
+
 
 #ifndef MIST_OS_WINDOWS
 int main (int argc, const char * argv[])
@@ -1038,7 +1165,7 @@ int CALLBACK WinMain(
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
-    MyApp instance(L"Lagrange & Spline");
+    TestApp instance(L"LeapMotion Test");
 
     // create app context
     ukn::ContextCfg cfg;

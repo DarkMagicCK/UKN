@@ -59,41 +59,41 @@ namespace mist {
         }
         
         void publishListenerEvent(void (ListenerType::*Memfun)()) {
-            typename ListenerMap::iterator it = mListenerMap.begin();
-            for(; it != mListenerMap.end(); ++it) {
-                ((it->second)->*Memfun)();
+            typename ListenerList::iterator it = mListenerList.begin();
+            for(; it != mListenerList.end(); ++it) {
+                ((it->first)->*Memfun)();
             }
         }
         
         template<typename ARG1>
         void publishListenerEvent(void (ListenerType::*Memfun)(ARG1), ARG1 arg1) {
-            typename ListenerMap::iterator it = mListenerMap.begin();
-            for(; it != mListenerMap.end(); ++it) {
-                ((it->second)->*Memfun)(arg1);
+            typename ListenerList::iterator it = mListenerList.begin();
+            for(; it != mListenerList.end(); ++it) {
+                ((it->first)->*Memfun)(arg1);
             }
         }
         
         template<typename ARG1, typename ARG2>
         void publishListenerEvent(void (ListenerType::*Memfun)(ARG1, ARG2), ARG1 arg1, ARG2 arg2) {
-            typename ListenerMap::iterator it = mListenerMap.begin();
-            for(; it != mListenerMap.end(); ++it) {
-                ((it->second)->*Memfun)(arg1, arg2);
+            typename ListenerList::iterator it = mListenerList.begin();
+            for(; it != mListenerList.end(); ++it) {
+                ((it->first)->*Memfun)(arg1, arg2);
             }
         }
         
         template<typename ARG1, typename ARG2, typename ARG3>
         void publishListenerEvent(void (ListenerType::*Memfun)(ARG1, ARG2, ARG3), ARG1 arg1, ARG2 arg2, ARG3 arg3) {
-            typename ListenerMap::iterator it = mListenerMap.begin();
-            for(; it != mListenerMap.end(); ++it) {
-                ((it->second)->*Memfun)(arg1, arg2, arg3);
+            typename ListenerList::iterator it = mListenerList.begin();
+            for(; it != mListenerList.end(); ++it) {
+                ((it->first)->*Memfun)(arg1, arg2, arg3);
             }
         }
         
         template<typename ARG1, typename ARG2, typename ARG3, typename ARG4>
         void publishListenerEvent(void (ListenerType::*Memfun)(ARG1, ARG2, ARG3, ARG4), ARG1 arg1, ARG2 arg2, ARG3 arg3, ARG4 arg4) {
-            typename ListenerMap::iterator it = mListenerMap.begin();
-            for(; it != mListenerMap.end(); ++it) {
-                ((it->second)->*Memfun)(arg1, arg2, arg3, arg4);
+            typename ListenerList::iterator it = mListenerList.begin();
+            for(; it != mListenerList.end(); ++it) {
+                ((it->first)->*Memfun)(arg1, arg2, arg3, arg4);
             }
         }
 

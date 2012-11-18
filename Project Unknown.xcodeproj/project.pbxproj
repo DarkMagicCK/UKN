@@ -40,6 +40,8 @@
 		8855E32616561118002311E9 /* LeapMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8855E32416561118002311E9 /* LeapMotion.cpp */; };
 		8884B3C415F7CCEA0086533E /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C215F7CCE90086533E /* Shader.cpp */; };
 		8884B3C715F7CCFC0086533E /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C515F7CCFB0086533E /* GLShader.cpp */; };
+		8885838616587EF7000D9ADA /* libLeap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8885838516587EF7000D9ADA /* libLeap.dylib */; };
+		8885838916587F0E000D9ADA /* libLeap.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 8885838516587EF7000D9ADA /* libLeap.dylib */; };
 		88871FE2148CB1800026B2B8 /* libglfw.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88871FD5148CB1800026B2B8 /* libglfw.a */; };
 		88871FE3148CB1800026B2B8 /* image_DXT.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FD7148CB1800026B2B8 /* image_DXT.c */; };
 		88871FE4148CB1800026B2B8 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FD9148CB1800026B2B8 /* image_helper.c */; };
@@ -106,6 +108,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		8885838816587F00000D9ADA /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				8885838916587F0E000D9ADA /* libLeap.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		88CC31171477915700558EA1 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -273,6 +285,8 @@
 		8884B3C215F7CCE90086533E /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		8884B3C515F7CCFB0086533E /* GLShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShader.cpp; sourceTree = "<group>"; };
 		8884B3C615F7CCFB0086533E /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
+		8885838416587EF7000D9ADA /* Leap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Leap.h; sourceTree = "<group>"; };
+		8885838516587EF7000D9ADA /* libLeap.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libLeap.dylib; sourceTree = "<group>"; };
 		88871FD4148CB1800026B2B8 /* glfw3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glfw3.h; sourceTree = "<group>"; };
 		88871FD5148CB1800026B2B8 /* libglfw.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libglfw.a; sourceTree = "<group>"; };
 		88871FD7148CB1800026B2B8 /* image_DXT.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = image_DXT.c; sourceTree = "<group>"; };
@@ -478,6 +492,7 @@
 				88E3C433147F2F1600E8754D /* Cocoa.framework in Frameworks */,
 				88871FE2148CB1800026B2B8 /* libglfw.a in Frameworks */,
 				8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */,
+				8885838616587EF7000D9ADA /* libLeap.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -614,6 +629,15 @@
 				8855E32416561118002311E9 /* LeapMotion.cpp */,
 			);
 			path = Experiment;
+			sourceTree = "<group>";
+		};
+		8885838316587EF7000D9ADA /* leapmotion */ = {
+			isa = PBXGroup;
+			children = (
+				8885838416587EF7000D9ADA /* Leap.h */,
+				8885838516587EF7000D9ADA /* libLeap.dylib */,
+			);
+			path = leapmotion;
 			sourceTree = "<group>";
 		};
 		88871FD2148CB1800026B2B8 /* glfw */ = {
@@ -780,6 +804,7 @@
 		88AAC170148689ED007A80A4 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				8885838316587EF7000D9ADA /* leapmotion */,
 				88C308991492DFCB001262DF /* zlib */,
 				8854493E1491E253006B8B60 /* freetype */,
 				88871FD2148CB1800026B2B8 /* glfw */,
@@ -1108,6 +1133,7 @@
 				88CC31151477915700558EA1 /* Sources */,
 				88CC31161477915700558EA1 /* Frameworks */,
 				88CC31171477915700558EA1 /* CopyFiles */,
+				8885838816587F00000D9ADA /* CopyFiles */,
 			);
 			buildRules = (
 			);

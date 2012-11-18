@@ -16,6 +16,8 @@
 
 #include "pugixml.hpp"
 
+#define PUGIXML_NO_EXCEPTIONS
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>

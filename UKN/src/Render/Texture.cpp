@@ -28,6 +28,7 @@ namespace ukn {
         uintPtr getTextureId() const {
             return 0;
         }
+
     };
     
     TexturePtr Texture::NullObject() {

@@ -8,7 +8,7 @@
 
 #include "GLFrameBuffer.h"
 #include "GLPreq.h"
-
+#include "GLConvert.h"
 #include "GLGraphicDevice.h"
 #include "GLGraphicFactory.h"
 #include "ukn/Context.h"
@@ -33,6 +33,35 @@ namespace ukn {
     
     void GLFrameBuffer::swapBuffers() {
         glfwSwapBuffers();
+    }
+    
+    SharedPtr<uint8> GLFrameBuffer::readFrameBufferData(int32 x, int32 y, uint32 width, uint32 height, ElementFormat format) {
+        GLint prevBuffer;
+        glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevBuffer);
+        
+        glBindBuffer(GL_FRAMEBUFFER_EXT, mFBO);
+        
+        if(width == 0)
+            width = this->getViewport().width;
+        if(height == 0)
+            height = this->getViewport().height;
+        
+        uint8* texData = new uint8[width * height * GetElementSize(format)];
+        glReadPixels(x,
+                     y,
+                     width,
+                     height,
+                     element_format_to_gl_format(format),
+                     element_format_to_gl_element_type(format),
+                     texData);
+        
+        if(glGetError() != GL_NO_ERROR) {
+            log_error("GLGraphicDevice: error when read pixels");
+        }
+        
+        glBindBuffer(GL_FRAMEBUFFER_EXT, prevBuffer);
+        
+        return SharedPtr<uint8>(texData);
     }
     
     void GLFrameBuffer::clear(uint32 flags, const class Color& clr, float depth, int32 stencil) {

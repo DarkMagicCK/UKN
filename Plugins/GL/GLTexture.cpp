@@ -15,6 +15,7 @@
 #include "mist/Logger.h"
 
 #include "GLPreq.h"
+#include "GLConvert.h"
 
 namespace ukn {
 
@@ -73,6 +74,9 @@ namespace ukn {
     bool GLTexture2D::create(uint32 w, uint32 h, uint32 mipmaps, ElementFormat format, const uint8* initialData) {
         if(mTextureId != 0)
             glDeleteTextures(1, (GLuint*)&mTextureId);
+        
+        GLint prevTexture;
+        glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
 
         // to do with element formats
         GLuint texId;
@@ -92,15 +96,31 @@ namespace ukn {
             }
 
             if(mipmaps != 0)
-                gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA8, w, h, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+                gluBuild2DMipmaps(GL_TEXTURE_2D,
+                                  element_format_to_gl_format(format),
+                                  w,
+                                  h,
+                                  GL_RGBA,
+                                  GL_UNSIGNED_BYTE,
+                                  texData);
             else
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, texData);
+                glTexImage2D(GL_TEXTURE_2D,
+                             0,
+                             element_format_to_gl_format(format),
+                             w,
+                             h,
+                             0,
+                             GL_RGBA,
+                             GL_UNSIGNED_BYTE,
+                             texData);
             if(initialData == 0)
                 ukn_free(texData);
                 
             mTextureId = (uintPtr)texId;
             mWidth = mOrigWidth = w;
             mHeight = mOrigHeight = h;
+            
+            glBindTexture(GL_TEXTURE_2D, prevTexture);
 
             return true;
         }
@@ -113,6 +133,53 @@ namespace ukn {
 
     uint32 GLTexture2D::getHeight(uint32 level) const {
         return mOrigHeight;
+    }
+    
+    SharedPtr<uint8> GLTexture2D::readTextureData(uint8 level) {
+        GLint prevTexture;
+        glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
+        
+        uint8* texData = new uint8[mOrigWidth * mOrigHeight * GetElementSize(this->getFormat())];
+        
+        glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
+        glGetTexImage(GL_TEXTURE_2D,
+                      level,
+                      element_format_to_gl_format(this->getFormat()),
+                      element_format_to_gl_element_type(this->getFormat()),
+                      texData);
+        if(glGetError() != GL_NO_ERROR) {
+            log_error("GLGraphicDevice: error when locking texture");
+        }
+        
+        glBindTexture(GL_TEXTURE_2D, prevTexture);
+        return SharedPtr<uint8>(texData);
+    }
+    
+    void GLTexture2D::updateTextureData(void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level) {
+        if(width == 0)
+            width = mOrigWidth;
+        if(height == 0)
+            height = mOrigHeight;
+        
+        GLint prevTexture;
+        glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
+        
+        glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
+        glTexSubImage2D(GL_TEXTURE_2D,
+                        level,
+                        x,
+                        y,
+                        width,
+                        height,
+                        element_format_to_gl_format(this->getFormat()),
+                        element_format_to_gl_element_type(this->getFormat()),
+                        data);
+        
+        if(glGetError() != GL_NO_ERROR) {
+            log_error("GLGraphicDevice: error when updating texture");
+        }
+        
+        glBindTexture(GL_TEXTURE_2D, prevTexture);
     }
 
     uintPtr GLTexture2D::getTextureId() const {

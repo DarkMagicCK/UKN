@@ -1084,7 +1084,7 @@ public:
         mRenderBuffer = gf.createRenderBuffer();
         mist_assert(mRenderBuffer);
         
-        mVertexBuffer = new ukn::MemoryGraphicBuffer<ukn::Vertex2D>();
+        mVertexBuffer = gf.createMemoryVertexBuffer<ukn::Vertex2D>(0, 0);
         mist_assert(mVertexBuffer);
         
         mRenderBuffer->bindVertexStream(mVertexBuffer,
@@ -1116,6 +1116,7 @@ public:
         gd.bindFrameBuffer(gd.getScreenFrameBuffer());
         gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Skyblue, 0, 0);
 
+                
         ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
         sb.begin();
         sb.draw(mSquareTexture,

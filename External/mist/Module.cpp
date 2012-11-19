@@ -9,6 +9,7 @@
 #include "mist/Module.h"
 #include "mist/Preprocessor.h"
 #include "mist/DllLoader.h"
+#include "mist/StringUtil.h"
 
 namespace mist {
     
@@ -46,6 +47,16 @@ namespace mist {
     }
     
     bool ModuleManager::addModuleFromDll(const MistString& name) {
+        DllLoader loader;
+        if(loader.open(String::WStringToString(name).c_str())) {
+            typedef Module* (*ModuleCreateFunc)();
+            ModuleCreateFunc func = (ModuleCreateFunc)loader.getProc("CreateModule");
+            
+            Module* module = func();
+            if(module) {
+                this->addModule(module);
+            }
+        }
         return false;
     }
     

@@ -36,7 +36,11 @@ namespace ukn {
         void getViewMatrix(Matrix4& mat);
         void getProjectionMatrix(Matrix4& mat);
         
-        void bindTexture(TexturePtr texture);
+        void bindTexture(const TexturePtr& texture);
+        
+        SharedPtr<uint8> readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format);
+        SharedPtr<uint8> readTextureData(const TexturePtr& texture, uint8 level);
+        void  updateTextureData(const TexturePtr& texture, void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level);
         
         void fillGraphicCaps(GraphicDeviceCaps& caps);
         

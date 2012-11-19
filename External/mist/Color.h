@@ -95,10 +95,10 @@ namespace mist {
         }
         
         Color operator = (uint32 col) {
-            this->a = (col>>24)/255.0f; 
-            this->r = ((col>>16) & 0xFF)/255.0f; 
-            this->g = ((col>>8) & 0xFF)/255.0f; 
-            this->b = (col & 0xFF)/255.0f; 
+            this->b = ((col & 0xFF))/255.0f;
+            this->g = ((col>>8) & 0xFF)/255.0f;
+            this->r = ((col>>16) & 0xFF)/255.0f;
+            this->a = ((col>>24) & 0xFF)/255.0f;
             return *this;
         }
         
@@ -179,17 +179,17 @@ namespace mist {
         }
         
         uint32 toRGBA() const {
-            return ((unsigned int)(this->r*255.0f)<<24) +
-                    ((unsigned int)(this->g*255.0f)<<16) +
-                    ((unsigned int)(this->b*255.0f)<<8) +
-                    ((unsigned int)(this->a*255.0f));
+            return ((unsigned int)(this->a*255.0f)<<24) +
+                    ((unsigned int)(this->b*255.0f)<<16) +
+                    ((unsigned int)(this->g*255.0f)<<8) +
+                    ((unsigned int)(this->r*255.0f));
         }
         
         static uint32 FromRGBA(float oR, float og, float ob, float oa)  {
-            return ((unsigned int)(oR*255.0f)<<24) +
-                    ((unsigned int)(og*255.0f)<<16) +
-                    ((unsigned int)(ob*255.0f)<<8) +
-                    ((unsigned int)(oa*255.0f));
+            return ((unsigned int)(oa*255.0f)<<24) +
+                    ((unsigned int)(ob*255.0f)<<16) +
+                    ((unsigned int)(og*255.0f)<<8) +
+                    ((unsigned int)(oR*255.0f));
         }
         
         uint32 toARGB() const {

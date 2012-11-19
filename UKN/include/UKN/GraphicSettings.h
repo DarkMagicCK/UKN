@@ -16,11 +16,51 @@ namespace ukn {
     using namespace mist;
     
     enum ElementFormat {
-        EF_RGBA8,
+        EF_RGBA8,   // GL_RGBA8, D3DFMT_A8R8G8B8
+        EF_RGB565,   // GL_RGB565, D3DFMT_RGB6B5
+        EF_RGBA4444,  // GL_RGBA4,
+        EF_RGB5A1,  // GL_RGB5A1,
         
         EF_D24S8,
         EF_D32,
         EF_D16
+    };
+    
+    template<int T>
+    struct ElementSize;
+    
+    template<> struct ElementSize<EF_RGBA8> {
+        enum { Size = 4 };
+    };
+    template<> struct ElementSize<EF_RGB565> {
+        enum { Size = 2 };
+    };
+    template<> struct ElementSize<EF_RGBA4444> {
+        enum { Size = 2 };
+    };
+    template<> struct ElementSize<EF_RGB5A1> {
+        enum { Size = 2 };
+    };
+    template<> struct ElementSize<EF_D24S8> {
+        enum { Size = 4 };
+    };
+    template<> struct ElementSize<EF_D32> {
+        enum { Size = 4 };
+    };
+    template<> struct ElementSize<EF_D16> {
+        enum { Size = 2 };
+    };
+    
+    static uint8 GetElementSize(ElementFormat format) {
+        switch(format) {
+            case EF_RGBA8: return 4;
+            case EF_RGB565: return 2;
+            case EF_RGBA4444: return 2;
+            case EF_RGB5A1: return 2;
+            case EF_D24S8: return 4;
+            case EF_D32: return 4;
+            case EF_D16: return 2;
+        };
     };
         
     struct RenderSettings {
@@ -74,12 +114,6 @@ namespace ukn {
         RM_Triangle,           // GL_TRIANGLE, D3DPT_TRIANGLELIST
         RM_TriangleFan,        // GL_TRIANGLE_FAN, D3DPT_TRIANGLEFSN
         RM_TriangleStrip,      // GL_TRIANGLE_STRIP, D3DPT_TRIANGLESTRIP
-    };
-    
-    enum ColorFormat {
-        CF_RGBA8,      // GL_RGBA8, D3DFMT_A8R8G8B8
-        CF_RGB565,     // GL_RGB565, D3DFMT_RGB6B5
-        CF_RGB8,       // GL_RGB8, D3DFMT_X8R8G8B8
     };
     
     enum RenderStateType {

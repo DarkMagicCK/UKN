@@ -67,11 +67,17 @@ namespace ukn {
     template<typename T>
     class UKN_API MemoryGraphicBuffer: public GraphicBuffer {
     public:
-        MemoryGraphicBuffer():
-        GraphicBuffer(GraphicBuffer::ReadWrite, GraphicBuffer::Dynamic) { }
-        virtual ~MemoryGraphicBuffer() { }
-        
         typedef Array<T> container_type;
+        
+    public:
+        MemoryGraphicBuffer(uint32 count, const T* initialData):
+        GraphicBuffer(GraphicBuffer::ReadWrite, GraphicBuffer::Dynamic) {
+            if(count > 0)
+                mContainer.resize(count);
+            if(initialData)
+                mContainer.assign(initialData, initialData + count);
+        }
+        virtual ~MemoryGraphicBuffer() { }
         
         virtual void*   map() { return &mContainer[0]; }
         virtual void    unmap() { }

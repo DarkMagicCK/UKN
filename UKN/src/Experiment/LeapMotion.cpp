@@ -51,10 +51,14 @@ namespace ukn {
         
         void LeapMotionModule::onConnect(const Leap::Controller& c) {
             mist::log_info(L"LeapMotion connected");
+            
+            this->publishListenerEvent(&LeapMotionListener::onLeapMotionConnect);
         }
         
         void LeapMotionModule::onDisconnect(const Leap::Controller& c) {
             mist::log_info(L"LeapMotion disconnected");
+            
+            this->publishListenerEvent(&LeapMotionListener::onLeapMotionDisconnect);
         }
         
         void LeapMotionModule::onFrame(const Leap::Controller& c) {

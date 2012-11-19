@@ -75,14 +75,19 @@ namespace ukn {
         virtual void getViewMatrix(Matrix4& mat) = 0;
         virtual void getProjectionMatrix(Matrix4& mat) = 0;
         
-        virtual void bindTexture(TexturePtr texture) = 0;
-                
         virtual void fillGraphicCaps(GraphicDeviceCaps& caps) = 0;
     
         virtual void onRenderBuffer(const RenderBufferPtr& buffer) = 0;
         virtual void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) = 0;
         
         virtual void setRenderState(RenderStateType type, uint32 func) = 0;
+        
+    public:
+        virtual void bindTexture(const TexturePtr& texture) = 0;
+        
+        virtual SharedPtr<uint8> readFrameBufferData(const FrameBufferPtr& buffer, int32 x = 0, int32 y = 0, uint32 width = 0, uint32 height = 0, ElementFormat format = EF_RGBA8) = 0;
+        virtual SharedPtr<uint8> readTextureData(const TexturePtr& texture, uint8 level = 0) = 0;
+        virtual void  updateTextureData(const TexturePtr& texture, void* data, int32 x = 0, int32 y = 0, uint32 width = 0, uint32 height = 0, uint8 level = 0) = 0;
         
     public:
         WindowPtr createRenderWindow(const UknString& name, const RenderSettings& settings);

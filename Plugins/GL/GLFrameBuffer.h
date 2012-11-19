@@ -28,6 +28,8 @@ namespace ukn {
         GLuint getGLFBO() const;
         void swapBuffers();
         
+        SharedPtr<uint8> readFrameBufferData(int32 x, int32 y, uint32 width, uint32 height, ElementFormat format);
+        
     private:
         GLuint mFBO;
         

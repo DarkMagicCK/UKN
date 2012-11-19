@@ -103,7 +103,7 @@ namespace ukn {
         glGetIntegerv(GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS, (GLint*)&caps.max_vertex_texture_units);
     }
     
-    void GLGraphicDevice::bindTexture(TexturePtr texture) {
+    void GLGraphicDevice::bindTexture(const TexturePtr& texture) {
         mCurrTexture = texture;
         
         if(mCurrTexture) {
@@ -286,6 +286,34 @@ namespace ukn {
     
     GLuint GLGraphicDevice::getBindedGLFrameBuffer() const {
         return mCurrGLFrameBuffer;
+    }
+    
+    SharedPtr<uint8> GLGraphicDevice::readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format) {
+        return ((GLFrameBuffer*)(buffer.get()))->readFrameBufferData(x,
+                                                                     y,
+                                                                     width,
+                                                                     height,
+                                                                     format);
+    }
+    
+    SharedPtr<uint8> GLGraphicDevice::readTextureData(const TexturePtr& texture, uint8 level) {
+        if(texture->getType() == TT_Texture2D) {
+            return ((GLTexture2D*)(texture.get()))->readTextureData(level);
+        }
+        
+        return SharedPtr<uint8>();
+    }
+    
+    void GLGraphicDevice::updateTextureData(const TexturePtr& texture, void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level) {
+        if(texture->getType() == TT_Texture2D) {
+            return ((GLTexture2D*)(texture.get()))->updateTextureData(data,
+                                                                      x,
+                                                                      y,
+                                                                      width,
+                                                                      height,
+                                                                      level);
+        }
+        
     }
     
     void GLGraphicDevice::setViewMatrix(const Matrix4& mat) {

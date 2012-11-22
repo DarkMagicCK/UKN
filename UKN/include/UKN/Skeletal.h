@@ -13,8 +13,8 @@
 #include "mist/Ptr.h"
 #include "mist/MathUtil.h"
 #include "mist/Serializer.h"
+#include "mist/Animation.h"
 
-#include "UKN/Animation.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/SpriteBatch.h"
 

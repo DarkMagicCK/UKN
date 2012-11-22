@@ -25,7 +25,7 @@ namespace ukn {
         this->mPlanes[4] = col4 - col3;
         this->mPlanes[5] = col4 + col3;
         
-        UKN_FOR_EACH(Plane& plane, this->mPlanes) {
+        MIST_FOR_EACH(Plane& plane, this->mPlanes) {
             plane = static_cast<Vector4>(plane).normalize();
         }
         

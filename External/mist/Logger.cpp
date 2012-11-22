@@ -74,7 +74,7 @@ namespace mist {
     void Logger::log(const MistString& log, LogLevel level) {
         MistString realLog;
         if(mPrependTime) {
-            realLog += String::StringToWString((format_string("[%.3f] ", (float)FrameCounter::Instance().getRunningTime() / Timestamp::Resolution())));
+            realLog += string::StringToWString((format_string("[%.3f] ", (float)FrameCounter::Instance().getRunningTime() / Timestamp::Resolution())));
         }
         if(mPrependLevel) {
             realLog += loglevel_to_string(level);
@@ -84,7 +84,7 @@ namespace mist {
         mLogQueue.push_back(realLog);
         
         if(mOutputStream) {
-            std::string log = String::WStringToString(realLog);
+            std::string log = string::WStringToString(realLog);
 #ifdef MIST_OS_WINDOWS
             log += "\r\n";
             mOutputStream->write(log.c_str(), log.size());

@@ -17,17 +17,17 @@
 
 namespace mist {
     
-    class MIST_API String {
-    public:
-        static std::string WStringToString(const std::wstring& str);
-        static std::wstring StringToWString(const std::string& str);
+    namespace string {
+        
+        std::string WStringToString(const std::wstring& str);
+        std::wstring StringToWString(const std::string& str);
         
         // by direct data copy
-        static std::string WStringToStringFast(const std::wstring& str);
-        static std::wstring StringToWStringFast(const std::string& str);
+        std::string WStringToStringFast(const std::wstring& str);
+        std::wstring StringToWStringFast(const std::string& str);
         
-        static MistString GetFileName(const MistString& str);
-        static MistString GetFilePath(const MistString& str);
+        MistString GetFileName(const MistString& str);
+        MistString GetFilePath(const MistString& str);
         
         template<typename T>
         static std::string AnyToString(const T& val) {
@@ -42,7 +42,8 @@ namespace mist {
             sstr << val;
             return sstr.str();
         }
-    };
+        
+    }
     
     class MIST_API StringTokenlizer {
     public:

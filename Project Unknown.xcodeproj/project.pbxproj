@@ -26,6 +26,8 @@
 		88093C9E14BC258000C6152F /* unzip.c in Sources */ = {isa = PBXBuildFile; fileRef = 88093C8814BC258000C6152F /* unzip.c */; };
 		88093C9F14BC258000C6152F /* zip.c in Sources */ = {isa = PBXBuildFile; fileRef = 88093C8C14BC258000C6152F /* zip.c */; };
 		88093CA014BC258000C6152F /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 88093C8F14BC258000C6152F /* zutil.c */; };
+		880C3F0D165ECF3D0076ED72 /* AutoUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 880C3F0B165ECF350076ED72 /* AutoUpdate.cpp */; };
+		880C3F11165ED0C20076ED72 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 880C3F0F165ED0BB0076ED72 /* Animation.cpp */; };
 		881B520415BBC63C009B9482 /* LocalizedStringTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */; };
 		881B522015BBCD8C009B9482 /* LocalizedStringTableLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */; };
 		88260E651488541E00142365 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E641488541E00142365 /* Window.cpp */; };
@@ -100,11 +102,9 @@
 		88ECF0D2165210E300EA6B47 /* Task.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ECF0A7165210E300EA6B47 /* Task.cpp */; };
 		88ECF0D3165210E300EA6B47 /* Thread.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ECF0AA165210E300EA6B47 /* Thread.cpp */; };
 		88ECF0D4165210E300EA6B47 /* Timeutil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ECF0AC165210E300EA6B47 /* Timeutil.cpp */; };
-		88ECF0D916521BF000EA6B47 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ECF0D616521BF000EA6B47 /* Animation.cpp */; };
 		88ECF0DA16521BF000EA6B47 /* SequencialAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ECF0D716521BF000EA6B47 /* SequencialAnimation.cpp */; };
 		88ECF0DB16521BF000EA6B47 /* Skeletal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ECF0D816521BF000EA6B47 /* Skeletal.cpp */; };
 		88ECF0DE16521C3A00EA6B47 /* ZipUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ECF0DC16521C3900EA6B47 /* ZipUtil.cpp */; };
-		88ECF0E016521F0500EA6B47 /* AutoUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88ECF0DF16521F0400EA6B47 /* AutoUpdate.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -172,13 +172,16 @@
 		88093C8E14BC258000C6152F /* zlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zlib.h; sourceTree = "<group>"; };
 		88093C8F14BC258000C6152F /* zutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = zutil.c; sourceTree = "<group>"; };
 		88093C9014BC258000C6152F /* zutil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zutil.h; sourceTree = "<group>"; };
+		880C3F0B165ECF350076ED72 /* AutoUpdate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AutoUpdate.cpp; sourceTree = "<group>"; };
+		880C3F0C165ECF3A0076ED72 /* AutoUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoUpdate.h; sourceTree = "<group>"; };
+		880C3F0F165ED0BB0076ED72 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Animation.cpp; sourceTree = "<group>"; };
+		880C3F10165ED0BF0076ED72 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animation.h; sourceTree = "<group>"; };
 		881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalizedStringTable.cpp; sourceTree = "<group>"; };
 		881B520B15BBC882009B9482 /* LocalizedStringTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedStringTable.h; sourceTree = "<group>"; };
 		881B521C15BBCD67009B9482 /* LocalizedStringTableLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedStringTableLoader.h; sourceTree = "<group>"; };
 		881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalizedStringTableLoader.cpp; sourceTree = "<group>"; };
 		88260E641488541E00142365 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
 		88278EDF149C947B00C7ED8A /* Scene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Scene.cpp; sourceTree = "<group>"; };
-		882D3CB11497369700963AAD /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
 		8832D1431488C87C00D08C15 /* GLConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLConvert.h; sourceTree = "<group>"; };
 		8832D1441488C9F200D08C15 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
 		8832D1451488C9F700D08C15 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
@@ -354,8 +357,6 @@
 		88E3C434147F2F1D00E8754D /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 		88E3C436147F30EC00E8754D /* GLWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLWindow.h; sourceTree = "<group>"; };
 		88E3C437147F30F100E8754D /* GLWindow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLWindow.cpp; sourceTree = "<group>"; };
-		88EA1C4414A34F970079CCC4 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animation.h; sourceTree = "<group>"; };
-		88EA1C4814A38A440079CCC4 /* AutoUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoUpdate.h; sourceTree = "<group>"; };
 		88EA1C6514A4DE370079CCC4 /* Sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sprite.h; sourceTree = "<group>"; };
 		88EA1C6A14A606DD0079CCC4 /* Audio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Audio.h; sourceTree = "<group>"; };
 		88ECF03A165210E300EA6B47 /* Any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Any.h; sourceTree = "<group>"; };
@@ -474,12 +475,10 @@
 		88ECF0B2165210E300EA6B47 /* Uncopyable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Uncopyable.h; sourceTree = "<group>"; };
 		88ECF0B3165210E300EA6B47 /* UnitTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UnitTest.h; sourceTree = "<group>"; };
 		88ECF0B4165210E300EA6B47 /* Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Util.h; sourceTree = "<group>"; };
-		88ECF0D616521BF000EA6B47 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Animation.cpp; sourceTree = "<group>"; };
 		88ECF0D716521BF000EA6B47 /* SequencialAnimation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SequencialAnimation.cpp; sourceTree = "<group>"; };
 		88ECF0D816521BF000EA6B47 /* Skeletal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skeletal.cpp; sourceTree = "<group>"; };
 		88ECF0DC16521C3900EA6B47 /* ZipUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZipUtil.cpp; sourceTree = "<group>"; };
 		88ECF0DD16521C3A00EA6B47 /* ZipUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZipUtil.h; sourceTree = "<group>"; };
-		88ECF0DF16521F0400EA6B47 /* AutoUpdate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AutoUpdate.cpp; sourceTree = "<group>"; };
 		88F7219814A6E9EF00568FBE /* Skeletal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Skeletal.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -731,9 +730,6 @@
 				88038F47149778AA00C8ACE0 /* Physics.h */,
 				88038F48149778C300C8ACE0 /* Binding.h */,
 				88038F46149778A200C8ACE0 /* Scripting.h */,
-				882D3CB11497369700963AAD /* Task.h */,
-				88EA1C4814A38A440079CCC4 /* AutoUpdate.h */,
-				88EA1C4414A34F970079CCC4 /* Animation.h */,
 				88F7219814A6E9EF00568FBE /* Skeletal.h */,
 				88B0FD4814C5F38800346AC5 /* SequencialAnimation.h */,
 				88EA1C6514A4DE370079CCC4 /* Sprite.h */,
@@ -771,7 +767,6 @@
 				881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */,
 				88AAC14A14868751007A80A4 /* Context.cpp */,
 				88029B0C1491DF9F00AB1490 /* Asset.cpp */,
-				88ECF0DF16521F0400EA6B47 /* AutoUpdate.cpp */,
 				88D1301014CF9677001BB071 /* Input.cpp */,
 				881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */,
 			);
@@ -934,6 +929,10 @@
 		88ECF039165210E200EA6B47 /* mist */ = {
 			isa = PBXGroup;
 			children = (
+				880C3F0F165ED0BB0076ED72 /* Animation.cpp */,
+				880C3F10165ED0BF0076ED72 /* Animation.h */,
+				880C3F0B165ECF350076ED72 /* AutoUpdate.cpp */,
+				880C3F0C165ECF3A0076ED72 /* AutoUpdate.h */,
 				88ECF03A165210E300EA6B47 /* Any.h */,
 				88ECF03B165210E300EA6B47 /* AppleStuff.h */,
 				88ECF03C165210E300EA6B47 /* AppleStuff.mm */,
@@ -1116,7 +1115,6 @@
 		88ECF0D516521BEF00EA6B47 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
-				88ECF0D616521BF000EA6B47 /* Animation.cpp */,
 				88ECF0D716521BF000EA6B47 /* SequencialAnimation.cpp */,
 				88ECF0D816521BF000EA6B47 /* Skeletal.cpp */,
 			);
@@ -1260,12 +1258,12 @@
 				88ECF0D2165210E300EA6B47 /* Task.cpp in Sources */,
 				88ECF0D3165210E300EA6B47 /* Thread.cpp in Sources */,
 				88ECF0D4165210E300EA6B47 /* Timeutil.cpp in Sources */,
-				88ECF0D916521BF000EA6B47 /* Animation.cpp in Sources */,
 				88ECF0DA16521BF000EA6B47 /* SequencialAnimation.cpp in Sources */,
 				88ECF0DB16521BF000EA6B47 /* Skeletal.cpp in Sources */,
 				88ECF0DE16521C3A00EA6B47 /* ZipUtil.cpp in Sources */,
-				88ECF0E016521F0500EA6B47 /* AutoUpdate.cpp in Sources */,
 				8855E32616561118002311E9 /* LeapMotion.cpp in Sources */,
+				880C3F0D165ECF3D0076ED72 /* AutoUpdate.cpp in Sources */,
+				880C3F11165ED0C20076ED72 /* Animation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

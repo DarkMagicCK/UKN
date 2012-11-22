@@ -28,7 +28,7 @@ namespace mist {
     
     MistString ProfileData::toFormattedString() const {
         MistString buffer(L"Profile "+name+L": ");
-        buffer += String::StringToWStringFast(format_string("last time %u, average time %u, max time %u, min time %u, recorded frames %u, average time ratio %.3f, average time ratio in frame %.3f",
+        buffer += string::StringToWStringFast(format_string("last time %u, average time %u, max time %u, min time %u, recorded frames %u, average time ratio %.3f, average time ratio in frame %.3f",
                                                             time,
                                                             average_time,
                                                             max_time,

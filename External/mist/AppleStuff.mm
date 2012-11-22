@@ -50,20 +50,20 @@ namespace mist {
 	}
     
     bool ukn_apple_file_exists(const MistString& file) {        
-		NSString* nsPath = [[NSString alloc] initWithUTF8String:String::WStringToString(file).c_str()];
+		NSString* nsPath = [[NSString alloc] initWithUTF8String:string::WStringToString(file).c_str()];
 		bool result = [[NSFileManager defaultManager] fileExistsAtPath:nsPath];
         
         return result;
     }
     
     MistString ukn_apple_application_path() {
-        return String::StringToWStringFast([[[NSBundle mainBundle] bundlePath] UTF8String]) + L"/";
+        return string::StringToWStringFast([[[NSBundle mainBundle] bundlePath] UTF8String]) + L"/";
     }
     
     MistString ukn_apple_documents_path() {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 		NSString *basePath = ([paths count] > 0) ? [paths objectAtIndex:0] : nil;
-		MistString docPath = String::StringToWStringFast([basePath UTF8String]) + L"/";
+		MistString docPath = string::StringToWStringFast([basePath UTF8String]) + L"/";
         return docPath;
     }
     
@@ -94,7 +94,7 @@ namespace mist {
         SInt32 versionMinor = 0;
         Gestalt( gestaltSystemVersionMajor, &versionMajor );
         Gestalt( gestaltSystemVersionMinor, &versionMinor );
-        return String::StringToWString(format_string("Mac OS X Version %d.%d",
+        return string::StringToWString(format_string("Mac OS X Version %d.%d",
                                                      versionMajor,
                                                      versionMinor));
     }
@@ -113,8 +113,8 @@ namespace mist {
 	}
     
     MessageBoxButton ukn_apple_message_box(const std::wstring& mssg, const std::wstring& title, int option) {
-        CFStringRef header_ref   = CFStringCreateWithCString(NULL, String::WStringToString(mssg).c_str(), (uint32)title.size());
-		CFStringRef message_ref  = CFStringCreateWithCString(NULL, String::WStringToString(title).c_str(), (uint32)mssg.size());
+        CFStringRef header_ref   = CFStringCreateWithCString(NULL, string::WStringToString(mssg).c_str(), (uint32)title.size());
+		CFStringRef message_ref  = CFStringCreateWithCString(NULL, string::WStringToString(title).c_str(), (uint32)mssg.size());
 		
 		CFOptionFlags result;
 		int32 level = mb_option_to_kCFNotificationLevel(option);
@@ -323,8 +323,8 @@ namespace mist {
     }
     
     MessageBoxButton ukn_apple_message_box(const MistString& mssg, const MistString& title, int option) {
-        return ukn_apple_message_box(String::WStringToString(mssg),
-                                     String::WStringToString(title),
+        return ukn_apple_message_box(string::WStringToString(mssg),
+                                     string::WStringToString(title),
                                      option);
     }
     

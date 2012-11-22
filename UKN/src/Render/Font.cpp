@@ -85,7 +85,7 @@ namespace ukn {
                 return true;
             } else {
                 if(FT_New_Face(Font::FTLibrary::Instance().library,
-                               String::WStringToString(resource->getName()).c_str(),
+                               string::WStringToString(resource->getName()).c_str(),
                                0,
                                &face)) {
                     return false;
@@ -149,7 +149,7 @@ namespace ukn {
                         if(imgw == 0 || imgh == 0)
                             return;
                         
-                        uint32* texd = (uint32*)ukn_malloc(imgw * imgh * 4);
+                        uint32* texd = (uint32*)mist_malloc(imgw * imgh * 4);
                         memset(texd, 0, imgw * imgh * 4);
                         uint32* texp = texd;
                         bool cflag = true;
@@ -178,7 +178,7 @@ namespace ukn {
                                                                                           0,
                                                                                           EF_RGBA8,
                                                                                           (uint8*)texd);
-                        ukn_free(texd);
+                        mist_free(texd);
                         cached = true;
                     }
                 }

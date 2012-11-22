@@ -191,7 +191,7 @@ namespace ukn {
         if((mGlfwWindow = glfwOpenWindow(settings.width,
                                          settings.height,
                                          settings.full_screen ? GLFW_FULLSCREEN : GLFW_WINDOWED, 
-                                         String::WStringToString(name).c_str(),
+                                         string::WStringToString(name).c_str(),
                                          0)) == 0) {
             // no window = app exit
             // so exception is acceptable here
@@ -252,7 +252,7 @@ namespace ukn {
     
     void GLWindow::setName(const UknString& name) {
         glfwSetWindowTitle(mGlfwWindow,
-                           String::WStringToString(name).c_str());
+                           string::WStringToString(name).c_str());
     }
     
     void GLWindow::updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h) {

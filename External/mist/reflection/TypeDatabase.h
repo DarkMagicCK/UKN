@@ -115,22 +115,22 @@ namespace mist {
             return reinterpret_cast<T*>((char*)object+field->offset);
         }
         
-#define UKN_RF_BEGIN_TYPE_FIELDS(type) \
+#define MIST_RF_BEGIN_TYPE_FIELDS(type) \
         struct TypeFields {    \
             typedef type Type; \
             \
             static void Set() { \
                 mist::reflection::FieldInfo fields[] = { \
 
-#define UKN_RF_TYPE_FIELD(name) mist::reflection::FieldInfo(#name, &Type::name, offsetof(Type, name))
-#define UKN_RF_TYPE_FIELD_F(name, flags) mist::reflection::FieldInfo(#name, &Type::name, offsetof(Type, name)).defAttr(flags)
-#define UKN_RF_TYPE_FIELD_F_D(name, flags, desc) mist::reflection::FieldInfo(#name, &Type::name, offsetof(Type, name)).defAttr(flags).defDesc(desc)
+#define MIST_RF_TYPE_FIELD(name) mist::reflection::FieldInfo(#name, &Type::name, offsetof(Type, name))
+#define MIST_RF_TYPE_FIELD_F(name, flags) mist::reflection::FieldInfo(#name, &Type::name, offsetof(Type, name)).defAttr(flags)
+#define MIST_RF_TYPE_FIELD_F_D(name, flags, desc) mist::reflection::FieldInfo(#name, &Type::name, offsetof(Type, name)).defAttr(flags).defDesc(desc)
         
-#define UKN_RF_TYPE_FIELD_2(type, name) mist::reflection::FieldInfo(#name, &type::name, offsetof(type, name))
-#define UKN_RF_TYPE_FIELD_2_F(type, name, flags) mist::reflection::FieldInfo(#name, &type::name, offsetof(type, name)).defAttr(flags)
-#define UKN_RF_TYPE_FIELD_2_F_D(type, name, flags, desc) mist::reflection::FieldInfo(#name, &type::name, offsetof(type, name)).defAttr(flags).defDesc(desc)
+#define MIST_RF_TYPE_FIELD_2(type, name) mist::reflection::FieldInfo(#name, &type::name, offsetof(type, name))
+#define MIST_RF_TYPE_FIELD_2_F(type, name, flags) mist::reflection::FieldInfo(#name, &type::name, offsetof(type, name)).defAttr(flags)
+#define MIST_RF_TYPE_FIELD_2_F_D(type, name, flags, desc) mist::reflection::FieldInfo(#name, &type::name, offsetof(type, name)).defAttr(flags).defDesc(desc)
         
-#define UKN_RF_END_TYPE_FIELDS() \
+#define MIST_RF_END_TYPE_FIELDS() \
                 }; \
                 mist::reflection::TypeDB& type_db = mist::reflection::TypeDB::Instance(); \
                 type_db.setTypeFields<Type>(fields); \

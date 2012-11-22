@@ -14,13 +14,11 @@
 #include "mist/Color.h"
 #include "mist/Event.h"
 #include "mist/Serializer.h"
-
-#include "UKN/PreDeclare.h"
-#include "UKN/AutoUpdate.h"
+#include "mist/AutoUpdate.h"
 
 #include <vector>
 
-namespace ukn {
+namespace mist {
     
     enum AnimationStatus {
         AS_Playing,
@@ -261,39 +259,39 @@ namespace ukn {
         virtual bool serialize(const ConfigParserPtr& parser);
         virtual bool deserialize(const ConfigParserPtr& parser);
         
-        bool isStoryBoardExist(const UknString& name) const;
+        bool isStoryBoardExist(const MistString& name) const;
         
-        StoryBoardPtr getStoryBoard(const UknString& name) const;
+        StoryBoardPtr getStoryBoard(const MistString& name) const;
         
-        void play(const UknString& name);
+        void play(const MistString& name);
         void pause();
         void stop();
         
         // property references
         // required for deserialization
-        void  addProperty(const UknString& name, void* prop);
-        void  delProperty(const UknString& name);
-        void* getProperty(const UknString& name) const;
+        void  addProperty(const MistString& name, void* prop);
+        void  delProperty(const MistString& name);
+        void* getProperty(const MistString& name) const;
         
         size_t size() const;
         
         Event<StoryBoardCompletedEventArgs>& onComplete();
         
-        void       setDefault(const UknString& name);
-        UknString getDefault() const;
-        UknString getCurrent() const;
+        void       setDefault(const MistString& name);
+        MistString getDefault() const;
+        MistString getCurrent() const;
                 
     private:
-        typedef std::map<UknString, StoryBoardPtr> StoryBoardMap;
+        typedef std::map<MistString, StoryBoardPtr> StoryBoardMap;
         StoryBoardMap mStoryBoards;
         
         Event<StoryBoardCompletedEventArgs> mCompleteEvent;
         
-        typedef std::map<UknString, void*> PropertyMap;
+        typedef std::map<MistString, void*> PropertyMap;
         PropertyMap mProperties;
         
-        UknString mDefault;
-        UknString mCurrent;
+        MistString mDefault;
+        MistString mCurrent;
         
         void onAnimationFinished(void* sender, StoryBoardCompletedEventArgs& args);
     };

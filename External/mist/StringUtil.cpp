@@ -217,7 +217,7 @@ namespace mist {
         return result;
     }
     
-    std::string String::WStringToString(const std::wstring& str) {
+    std::string string::WStringToString(const std::wstring& str) {
 #if defined(MIST_OS_WINDOWS)
         return ukn_win_wstring_to_string(str);
 #elif defined(MIST_OS_IOS) || defined(MIST_OS_OSX)
@@ -227,7 +227,7 @@ namespace mist {
 #endif
     }
     
-    std::wstring String::StringToWString(const std::string& str) {
+    std::wstring string::StringToWString(const std::string& str) {
 #if defined(MIST_OS_WINDOWS)
         return ukn_win_string_to_wstring(str);
 #elif defined(MIST_OS_IOS) || defined(MIST_OS_OSX)
@@ -237,19 +237,19 @@ namespace mist {
 #endif  
     }
     
-    std::string String::WStringToStringFast(const std::wstring& str) {
+    std::string string::WStringToStringFast(const std::wstring& str) {
         std::string buffer(str.length(), ' ');
 		std::copy(str.begin(), str.end(), buffer.begin());
 		return buffer;
     }
     
-    std::wstring String::StringToWStringFast(const std::string& str) {
+    std::wstring string::StringToWStringFast(const std::string& str) {
         MistString buffer(str.length(), L' ');
 		std::copy(str.begin(), str.end(), buffer.begin());
 		return buffer; 
     }
     
-    MistString String::GetFileName(const MistString& str) {
+    MistString string::GetFileName(const MistString& str) {
         MistString::const_iterator it = str.end();
         it--;
         
@@ -259,7 +259,7 @@ namespace mist {
         return MistString(it, str.end());
     }
     
-    MistString String::GetFilePath(const MistString& str) {
+    MistString string::GetFilePath(const MistString& str) {
         if(str.empty())
             return str;
         

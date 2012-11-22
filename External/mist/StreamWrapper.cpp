@@ -185,62 +185,62 @@ namespace mist {
     
     void TextStreamWriter::write(uint8 val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(char val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(int16 val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(uint16 val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(int32 val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(uint32 val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(int64 val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(uint64 val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(float val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(double val) {
         if(mStream && mStream->isValid())
-            this->write(String::AnyToWString(val));
+            this->write(string::AnyToWString(val));
     }
     
     void TextStreamWriter::write(const uint8* bytes, size_t len) {
         if(mStream && mStream->isValid())
-            this->write(String::StringToWString(std::string((const char*)bytes, len)));
+            this->write(string::StringToWString(std::string((const char*)bytes, len)));
     }
     
     void TextStreamWriter::write(const uint8* bytes, size_t start, size_t end) {
         if(mStream && mStream->isValid())
-            this->write(String::StringToWString(std::string((const char*)bytes, start, end)));
+            this->write(string::StringToWString(std::string((const char*)bytes, start, end)));
     }
     
     void TextStreamWriter::write(const MistString& str) {
@@ -391,13 +391,13 @@ namespace mist {
     
     MistString BinaryStreamReader::readString(size_t char_count) {
         if(mStream && mStream->isValid()) { 
-            uint8* char_data = ukn_malloc_t(uint8, char_count);
+            uint8* char_data = mist_malloc_t(uint8, char_count);
             size_t read_count = mStream->read(char_data, char_count);
             if(read_count != char_count) {
             // exception
             }
-            MistString str(String::StringToWString((const char*)char_data));
-            ukn_free(char_data);
+            MistString str(string::StringToWString((const char*)char_data));
+            mist_free(char_data);
             return str;
         }
         MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");

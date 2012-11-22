@@ -6,11 +6,10 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "UKN/AutoUpdate.h"
-#include "UKN/PreDeclare.h"
+#include "mist/AutoUpdate.h"
 #include "mist/Module.h"
 
-namespace ukn {
+namespace mist {
     
     using namespace mist;
     
@@ -21,8 +20,8 @@ namespace ukn {
             ModuleManager::Instance().addModule(this);
         }
         
-        const UknString& getName() const {
-            static UknString name(L"AutoUpdate");
+        const MistString& getName() const {
+            static MistString name(L"AutoUpdate");
             return name;
         }
         
@@ -31,7 +30,7 @@ namespace ukn {
         }
         
         void update() {
-            UKN_FOR_EACH(AutoUpdate* item, AutoListElement<AutoUpdate>::GetList()) {
+            MIST_FOR_EACH(AutoUpdate* item, AutoListElement<AutoUpdate>::GetList()) {
                 if(item->isEnabled())
                     item->onUpdate();
             }

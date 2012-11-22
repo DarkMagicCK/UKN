@@ -54,7 +54,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<int32>(int32* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -76,7 +76,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<int16>(int16* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -98,7 +98,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<uint16>(uint16* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -120,7 +120,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<uint32>(uint32* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -142,7 +142,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<float>(float* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -164,7 +164,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<double>(double* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -189,7 +189,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<char>(char* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -214,7 +214,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<wchar_t>(wchar_t* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -236,7 +236,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<uint8>(uint8* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -258,7 +258,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<long>(long* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -280,7 +280,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<unsigned long>(unsigned long* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -302,7 +302,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<int64>(int64* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -324,7 +324,7 @@ namespace mist {
     
     template<>
     MistString SerializeHelper::ToString<uint64>(uint64* val) {
-        return String::AnyToWString(*val);
+        return string::AnyToWString(*val);
     }
     
     template<>
@@ -341,12 +341,12 @@ namespace mist {
     template<>
     void SerializeHelper::FromString<std::string>(const MistString& str, std::string* val) {
         mist_assert(val);
-        *val = String::WStringToString(str);
+        *val = string::WStringToString(str);
     }
     
     template<>
     MistString SerializeHelper::ToString<std::string>(std::string* val) {
-        return String::StringToWString(*val);
+        return string::StringToWString(*val);
     }
     
     template<>

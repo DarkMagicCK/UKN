@@ -44,7 +44,7 @@ namespace ukn {
     }
     
     UknString GLGraphicDevice::description() const {
-        static UknString des = String::StringToWString(format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s",
+        static UknString des = string::StringToWString(format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s",
                                                                       (char*)glGetString(GL_VERSION),
                                                                       (char*)glGetString(GL_VENDOR),
                                                                       (char*)glGetString(GL_SHADING_LANGUAGE_VERSION)));
@@ -74,7 +74,7 @@ namespace ukn {
         try {
             mWindow = MakeSharedPtr<GLWindow>(name, settings);
         } catch(Exception& e) {
-            MessageBox::Show(String::StringToWString(format_string("GLGraphic Device: Error creating opengl window, error %s",
+            MessageBox::Show(string::StringToWString(format_string("GLGraphic Device: Error creating opengl window, error %s",
                                            e.what())),
                              L"Fatal Error",
                              MBO_OK | MBO_IconError);
@@ -261,7 +261,7 @@ namespace ukn {
                 counter.waitToNextFrame();
                 
                 {            
-                    UKN_PROFILE(L"__MainFrame__");
+                    MIST_PROFILE(L"__MainFrame__");
 
                     glViewport(fb.getViewport().left,
                                fb.getViewport().top,

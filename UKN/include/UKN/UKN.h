@@ -15,8 +15,8 @@
 #define Project_Unknown_UKN_h
 
 #define UKN_VERSION_MAJOR 0
-#define UKN_VERSION_MINOR 1
-#define UKN_VERSION_REV   10
+#define UKN_VERSION_MINOR 2
+#define UKN_VERSION_REV   0
 
 #define UKN_NAME "Project Unknown"
 
@@ -24,6 +24,12 @@
 
 #include "UKN/GraphicDevice.h"
 #include "UKN/GraphicFactory.h"
+
+namespace ukn {
+    
+    using namespace mist;
+    
+}
 
 
 #endif

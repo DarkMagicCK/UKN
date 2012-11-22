@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef ukn_ptr_h_
-#define ukn_ptr_h_
+#ifndef MIST_ptr_h_
+#define MIST_ptr_h_
 
 #include "mist/Platform.h"
 #include "mist/Exception.h"
@@ -115,12 +115,12 @@ namespace mist {
     template<class C>
     struct SharedPtrFreeReleasePolicy {
         static C* Alloc() {
-            return ukn_malloc_t(C, 1);
+            return mist_malloc_t(C, 1);
         }
         
         static void Release(C* obj) {
             if(obj)
-                ukn_free(obj);
+                mist_free(obj);
         }
     };
 

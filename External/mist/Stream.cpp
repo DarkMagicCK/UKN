@@ -35,12 +35,12 @@ namespace mist {
             if(this->getStreamType() == ST_Memory) {
                 output.write(static_cast<MemoryStream*>(this)->data(), this->size());
             } else if(this->getStreamType() == ST_File) {
-                uint8* buffer = ukn_malloc_t(uint8, this->size());
+                uint8* buffer = mist_malloc_t(uint8, this->size());
                 if(buffer) {
                     size_t readSize = this->read(buffer, this->size());
                     output.write(buffer, readSize);
                     
-                    ukn_free(buffer);
+                    mist_free(buffer);
                 }
             }
             output.close();
@@ -51,7 +51,7 @@ namespace mist {
     
     StreamPtr Stream::readIntoMemory() {
         if(isValid()) {
-            uint8* dataBuffer = (uint8*)ukn_malloc(size());
+            uint8* dataBuffer = (uint8*)mist_malloc(size());
             mist_assert(dataBuffer != 0);
             
             this->seek(0);
@@ -143,13 +143,13 @@ namespace mist {
 	
 	void MemoryStream::resize() {
 		if(size() != capacity() && capacity() != 0) {
-			uint8* tmpData = (uint8*)ukn_malloc(size());
+			uint8* tmpData = (uint8*)mist_malloc(size());
             seek(0);
 			memcpy(tmpData, (void*)(data()), size());
 			
             mData.assign(tmpData, tmpData + size());
             
-            ukn_free(tmpData);
+            mist_free(tmpData);
 		}
 	}
         
@@ -371,10 +371,10 @@ namespace mist {
         
         this->nocache = nocache;
         this->canwrite = canwrite;
-        file = fopen(String::WStringToString(filename).c_str(), canwrite ? (append ? "a+b" : "r+b") : "rb");
+        file = fopen(string::WStringToString(filename).c_str(), canwrite ? (append ? "a+b" : "r+b") : "rb");
         if(file == NULL) {
             if(canwrite)
-                file = fopen(String::WStringToString(filename).c_str(), "w+b");
+                file = fopen(string::WStringToString(filename).c_str(), "w+b");
             if(file == NULL)
                 return false;
         }
@@ -452,7 +452,7 @@ namespace mist {
     
     StreamPtr FileStream::readIntoMemory() {
         if(isValid()) {
-            uint8* dataBuffer = (uint8*)ukn_malloc(size());
+            uint8* dataBuffer = (uint8*)mist_malloc(size());
             mist_assert(dataBuffer != 0);
             
             this->seek(0);
@@ -624,7 +624,7 @@ namespace mist {
     class NetStream::SocketStreambuf: public streambuf {
     public:
         /* Constructor that opens a connection to a remote server. */
-        SocketStreambuf(const string& filename, const short portNum);
+        SocketStreambuf(const std::string& filename, const short portNum);
         
         /* Constructor that waits for an incoming connection from a foreign client. */
         explicit SocketStreambuf(const short portNum);
@@ -647,7 +647,7 @@ namespace mist {
         
         /* Two versions of open. */
         bool open(const short portNum);
-        bool open(const string& hostName, const short portNum);
+        bool open(const std::string& hostName, const short portNum);
         
         /* Closes the socket connection, but first flushses any existing data.
          * If not open, reports an error.
@@ -693,7 +693,7 @@ namespace mist {
     };
     
     /* Ctor 1 is used to connect to a remote host. */
-    NetStream::SocketStreambuf::SocketStreambuf(const string& hostname, const short portNum) :
+    NetStream::SocketStreambuf::SocketStreambuf(const std::string& hostname, const short portNum) :
     sock(NotASocket), good(false) {
         /* Try to set up the socket and fail if unable to do so. */
         open(hostname, portNum);
@@ -732,7 +732,7 @@ namespace mist {
     }
     
     /* Try connecting on the specified address/port combination. */
-    bool NetStream::SocketStreambuf::open(const string& address, const short portNum) {
+    bool NetStream::SocketStreambuf::open(const std::string& address, const short portNum) {
         try {
             /* Now, try to look up the target.  Begin by setting up hints accordingly. */
             addrinfo hints;
@@ -985,7 +985,7 @@ namespace mist {
     }
     
     void NetStream::open(const MistString& filename, uint16 portNum) {
-        if(!connection->open(String::WStringToString(filename).c_str(),
+        if(!connection->open(string::WStringToString(filename).c_str(),
                              portNum))
             setstate(ios_base::failbit);
     }

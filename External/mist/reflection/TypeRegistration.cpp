@@ -18,8 +18,8 @@ namespace mist {
         static void OnMathTypeRegistration(TypeDB& db) {
             {
                 FieldInfo fields[] = {
-                    UKN_RF_TYPE_FIELD_2(Vector2, x),
-                    UKN_RF_TYPE_FIELD_2(Vector2, y),
+                    MIST_RF_TYPE_FIELD_2(Vector2, x),
+                    MIST_RF_TYPE_FIELD_2(Vector2, y),
                 };
                 
                 db.createType<Vector2>().defFields(fields, db);
@@ -28,9 +28,9 @@ namespace mist {
             {
                 
                 FieldInfo fields[] = {
-                    UKN_RF_TYPE_FIELD_2_F_D(Vector3, x, 0, "x component of the vector"),
-                    UKN_RF_TYPE_FIELD_2_F_D(Vector3, y, 0, "y component of the vector"),
-                    UKN_RF_TYPE_FIELD_2_F_D(Vector3, z, 0, "z component of the vector")
+                    MIST_RF_TYPE_FIELD_2_F_D(Vector3, x, 0, "x component of the vector"),
+                    MIST_RF_TYPE_FIELD_2_F_D(Vector3, y, 0, "y component of the vector"),
+                    MIST_RF_TYPE_FIELD_2_F_D(Vector3, z, 0, "z component of the vector")
                 };
                 
                 db.createType<Vector3>().defFields(fields, db);
@@ -43,7 +43,7 @@ namespace mist {
             OnMathTypeRegistration(db);
         }
         
-        UKN_STATIC_RUN_CODE(OnTypeDBInitialize());
+        MIST_STATIC_RUN_CODE(OnTypeDBInitialize());
         
         
     } // namespace mist

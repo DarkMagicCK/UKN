@@ -63,13 +63,13 @@ namespace mist {
         
         SharedPtr<IReadIterator, 
         SharedPtrFreeReleasePolicy<IReadIterator> > Field::getReadIterator(void* object) const {
-            void* buffer = ukn_malloc(container->getReadIteratorSize());
+            void* buffer = mist_malloc(container->getReadIteratorSize());
             return container->newReadIterator(buffer, this->getPtr(object));
         }
         
         SharedPtr<IWriteIterator, 
         SharedPtrFreeReleasePolicy<IWriteIterator> > Field::getWriteIterator(void* object) const {
-            void* buffer = ukn_malloc(container->getWriteIteratorSize());
+            void* buffer = mist_malloc(container->getWriteIteratorSize());
             return container->newWriteIterator(buffer, this->getPtr(object));
         }
     }

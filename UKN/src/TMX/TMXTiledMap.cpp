@@ -162,7 +162,7 @@ namespace ukn {
                 config->toParent();
             }
             if(config->toNode(L"image")) {
-                ts.image = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + config->getString(L"source"));
+                ts.image = AssetManager::Instance().load<Texture>(string::GetFilePath(config->getName()) + config->getString(L"source"));
                 config->toParent();
             }
             parseProperties(ts.property, config);
@@ -223,7 +223,7 @@ namespace ukn {
                     
                     // base64 decode
                     Array<uint8> data(base64_decode(/* node value */
-                                                    String::WStringToStringFast(str_data)
+                                                    string::WStringToStringFast(str_data)
                                                     ));
                     mist_assert(data.size() != 0);
                     
@@ -340,7 +340,7 @@ namespace ukn {
                                      config);
             } else {
                 // external tile set file
-                ConfigParserPtr extern_config = AssetManager::Instance().load<ConfigParser>(String::GetFilePath(config->getName()) + source);
+                ConfigParserPtr extern_config = AssetManager::Instance().load<ConfigParser>(string::GetFilePath(config->getName()) + source);
                 if(extern_config->toNode(L"tileset")) {
                     deserialize_tile_set(ts, 
                                          (uint32)mTileSets.size() - 1, 
@@ -385,7 +385,7 @@ namespace ukn {
                         if(obj.gid != -1) {
                             obj.tile = *getTileWithGid(obj.gid);
                         } else {
-                            obj.image = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + config->getString(L"image"));
+                            obj.image = AssetManager::Instance().load<Texture>(string::GetFilePath(config->getName()) + config->getString(L"image"));
                         }
                         
                         parseProperties(obj.property, config);

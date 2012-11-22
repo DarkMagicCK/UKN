@@ -68,7 +68,7 @@ namespace mist {
     FixedArray<T, Size>::FixedArray():
     mSize(ArraySize) {
         mist_assert(Size != 0);
-        mElements = ukn_malloc_t(T, Size);
+        mElements = mist_malloc_t(T, Size);
         mist_assert(mElements);
     }
 
@@ -76,7 +76,7 @@ namespace mist {
     FixedArray<T, Size>::FixedArray(const T& initialValue):
     mSize(ArraySize) {
         mist_assert(Size != 0);
-        mElements = ukn_malloc_t(T, Size);
+        mElements = mist_malloc_t(T, Size);
         mist_assert(mElements);
 
         for(size_t i=0; i<mSize; ++i)
@@ -666,7 +666,7 @@ namespace mist {
             PointCount = Count,
         };
 
-        ukn_static_assert(Count > 1);
+        mist_static_assert(Count > 1);
 
         template<typename T2>
         SelfType operator+(const PointTemplate<Count, T2>& rhs) const {
@@ -739,9 +739,9 @@ namespace mist {
     };
 
 
-#define UKN_POINT_TEMP_PARAM(n, d) d UKN_CAT(value, n)
-#define UKN_POINT_TEMP_PARAM_ARGS(n, d) UKN_ENUM_N(n, UKN_POINT_TEMP_PARAM, d)
-#define UKN_POINT_PARAM_EXPAND(n, d) d[n] = d##n;
+#define MIST_POINT_TEMP_PARAM(n, d) d MIST_CAT(value, n)
+#define MIST_POINT_TEMP_PARAM_ARGS(n, d) MIST_ENUM_N(n, MIST_POINT_TEMP_PARAM, d)
+#define MIST_POINT_PARAM_EXPAND(n, d) d[n] = d##n;
 
 #define DEF_POINT_TEMPLATE_N(n, Type) \
     template<>                                         \
@@ -753,8 +753,8 @@ namespace mist {
         };                                                          \
         PointTemplate() {                                       \
         }                                                           \
-        PointTemplate(UKN_POINT_TEMP_PARAM_ARGS(n, Type)) {     \
-            UKN_REPEAT_N(n, UKN_POINT_PARAM_EXPAND, value)        \
+        PointTemplate(MIST_POINT_TEMP_PARAM_ARGS(n, Type)) {     \
+            MIST_REPEAT_N(n, MIST_POINT_PARAM_EXPAND, value)        \
         } \
         template<typename T2>                                           \
         SelfType operator+(const PointTemplate<n, T2>& rhs) const { \
@@ -832,9 +832,9 @@ namespace mist {
     DEF_POINT_TEMPLATE_N(4, uint32);
 
 #undef DEF_POINT_TEMPLATE_N
-#undef UKN_POINT_TEMP_PARAM
-#undef UKN_POINT_TEMP_PARAM_ARGS
-#undef UKN_POINT_PARAM_EXPAND
+#undef MIST_POINT_TEMP_PARAM
+#undef MIST_POINT_TEMP_PARAM_ARGS
+#undef MIST_POINT_PARAM_EXPAND
 
     class FourCC {
     public:

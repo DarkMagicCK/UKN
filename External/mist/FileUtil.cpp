@@ -43,7 +43,7 @@ namespace mist {
         
         struct stat sb;
         
-        if (stat(MistString::WStringToString(filepath).c_str(), &sb) == 0 && S_ISREG(sb.st_mode)) {
+        if (stat(Miststring::WStringToString(filepath).c_str(), &sb) == 0 && S_ISREG(sb.st_mode)) {
             return true;
         }
 #endif
@@ -57,7 +57,7 @@ namespace mist {
 #else
         struct stat sb;
         
-        if (stat(String::WStringToString(path).c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)) {
+        if (stat(string::WStringToString(path).c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)) {
             return true;
         }
 #endif
@@ -128,7 +128,7 @@ namespace mist {
         }
         
 #elif defined(MIST_OS_FAMILY_UNIX)
-        return String::StringToWStringFast(getenv(String::WStringToString(env).c_str()));
+        return string::StringToWStringFast(getenv(string::WStringToString(env).c_str()));
 #endif
         
         return MistString();
@@ -154,7 +154,7 @@ namespace mist {
         size_t n = path.size();
         if(n > 0 && path[n-1] != '/')
             path.append("/");
-        return String::StringToWStringFast(path);
+        return string::StringToWStringFast(path);
 #endif      
     }
     
@@ -184,7 +184,7 @@ namespace mist {
         size_t n = path.size();
         if(n > 0 && path[n-1] != '/')
             path.append("/");
-        return String::StringToWStringFast(path);
+        return string::StringToWStringFast(path);
 #endif           
     }
     
@@ -202,7 +202,7 @@ namespace mist {
             else 
                 path = "/tmp/";
         }
-        return String::StringToWStringFast(path);
+        return string::StringToWStringFast(path);
 #endif       
         return MistString();
     }
@@ -229,7 +229,7 @@ namespace mist {
             else 
                 path = "/tmp/";
         }
-        return String::StringToWStringFast(path);
+        return string::StringToWStringFast(path);
         
 #endif    
         return MistString();
@@ -352,7 +352,7 @@ namespace mist {
     class DirectoryIterator::DirectoryIteratorImpl {
     public:
         DirectoryIteratorImpl(const MistString& path) {
-            mDir = opendir(String::WStringToString((path+L"/")).c_str());
+            mDir = opendir(string::WStringToString((path+L"/")).c_str());
             
             if(mDir)
                 next();
@@ -374,7 +374,7 @@ namespace mist {
             do {
                 struct dirent* entry = readdir(mDir);
                 if(entry)
-                    mCurrent = String::StringToWString(entry->d_name);
+                    mCurrent = string::StringToWString(entry->d_name);
                 else
                     mCurrent.clear();
             }

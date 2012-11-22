@@ -89,7 +89,7 @@ namespace ukn {
 
             uint8* texData;
             if(initialData == 0) {
-                texData = ukn_malloc_t(uint8, w*h*sizeof(uint32));
+                texData = mist_malloc_t(uint8, w*h*sizeof(uint32));
                 memset(texData, 0xFF, w*h*sizeof(uint32));
             } else {
                 texData = const_cast<uint8*>(initialData);
@@ -114,7 +114,7 @@ namespace ukn {
                              GL_UNSIGNED_BYTE,
                              texData);
             if(initialData == 0)
-                ukn_free(texData);
+                mist_free(texData);
                 
             mTextureId = (uintPtr)texId;
             mWidth = mOrigWidth = w;

@@ -1,20 +1,20 @@
 //
 //  Task.h
-//  Mist
+//  Project Unknown
 //
 //  Created by Robert Bu on 12/13/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#ifndef MISTTask_h
-#define MISTTask_h
+#ifndef Project_Unknown_Task_h
+#define Project_Unknown_Task_h
 
 #include "mist/Platform.h"
-#include "mist/PreDeclare.h"
 #include "mist/Signal.h"
 #include "mist/Event.h"
 #include "mist/Util.h"
 
+#include "mist/Ptr.h"
 #include <list>
 
 namespace mist {
@@ -25,6 +25,9 @@ namespace mist {
         TN_Canceled,
         TN_Progress,
     };
+    
+    class Task;
+    typedef SharedPtr<Task> TaskPtr;
     
     class TaskNotificationEventArgs {
     public:
@@ -168,6 +171,6 @@ namespace mist {
         NotificationEvent mNoficationEvent;
     };
     
-} // namespace mist
+} // namespace ukn
 
 #endif

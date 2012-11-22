@@ -14,9 +14,9 @@
 #include "mist/Serializer.h"
 #include "mist/Util.h"
 #include "mist/Event.h"
+#include "mist/Animation.h"
 
 #include "UKN/PreDeclare.h"
-#include "UKN/Animation.h"
 
 namespace ukn {
     

@@ -6,13 +6,13 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#include "UKN/Animation.h"
+#include "mist/Animation.h"
 
 #include "mist/TimeUtil.h"
 #include "mist/ConfigParser.h"
 #include "mist/Singleton.h"
 
-namespace ukn {
+namespace mist {
     
     Animation::Animation():
     mDuration(0) {
@@ -191,8 +191,6 @@ namespace ukn {
         return mStoryBoards;
     }
     
-    UKN_STATIC_RUN_CODE(StoryBoardManager::Instance());
-    
     AnimationPlayer::AnimationPlayer() {
         
     }
@@ -206,7 +204,7 @@ namespace ukn {
         return false;
     }
     
-    inline void create_linear_animation(const UknString& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
+    inline void create_linear_animation(const MistString& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
         if(type == L"int") {
             LinearAnimation<int>* anim = new LinearAnimation<int>;
             anim->setFrom(parser->getInt(L"from", 0));
@@ -257,7 +255,7 @@ namespace ukn {
         }
     }
     
-    inline void create_key_frame_animation(const UknString& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
+    inline void create_key_frame_animation(const MistString& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
         
         if(type == L"int") {
             KeyFrameAnimation<int>* anim = new KeyFrameAnimation<int>;
@@ -398,7 +396,7 @@ namespace ukn {
             if(parser->toFirstChild()) {
                 do {
                     StoryBoardPtr storyboard = new StoryBoard;
-                    UknString name = parser->getString(L"name");
+                    MistString name = parser->getString(L"name");
                     if(!name.empty()) {
                         bool isdefault = parser->getBool(L"default", false);
                         if(isdefault)
@@ -406,12 +404,12 @@ namespace ukn {
                         
                         if(parser->toFirstChild()) {
                             do {
-                                UknString type = parser->getCurrentNodeName();
+                                MistString type = parser->getCurrentNodeName();
                                 
                                 // linear animation
                                 if(type == L"linear") {
-                                    UknString prop_name = parser->getString(L"prop");
-                                    UknString prop_type = parser->getString(L"prop_type");
+                                    MistString prop_name = parser->getString(L"prop");
+                                    MistString prop_type = parser->getString(L"prop_type");
                                     
                                     void* prop = getProperty(prop_name);
                                     if(prop) {
@@ -423,8 +421,8 @@ namespace ukn {
                                     
                                 // keyframe animation
                                 } else if(type == L"keyframe") {
-                                    UknString prop_name = parser->getString(L"prop");
-                                    UknString prop_type = parser->getString(L"prop_type");
+                                    MistString prop_name = parser->getString(L"prop");
+                                    MistString prop_type = parser->getString(L"prop_type");
                                     void* prop = getProperty(prop_name);
                                     if(prop) {
                                         create_key_frame_animation(prop_type,
@@ -465,16 +463,16 @@ namespace ukn {
         return true;
     }
     
-    bool AnimationPlayer::isStoryBoardExist(const UknString& name) const {
+    bool AnimationPlayer::isStoryBoardExist(const MistString& name) const {
         return mStoryBoards.find(name) != mStoryBoards.end();
     }
     
-    StoryBoardPtr AnimationPlayer::getStoryBoard(const UknString& name) const {
+    StoryBoardPtr AnimationPlayer::getStoryBoard(const MistString& name) const {
         StoryBoardMap::const_iterator it = mStoryBoards.find(name);
         return it != mStoryBoards.end() ? it->second : StoryBoardPtr();
     }
     
-    void AnimationPlayer::play(const UknString& name) {
+    void AnimationPlayer::play(const MistString& name) {
         StoryBoardMap::const_iterator it = mStoryBoards.find(name);
         if(it != mStoryBoards.end()) {
             it->second->play();
@@ -494,17 +492,17 @@ namespace ukn {
             it->second->stop();
     }
     
-    void AnimationPlayer::addProperty(const UknString& prop_name, void* prop) {
+    void AnimationPlayer::addProperty(const MistString& prop_name, void* prop) {
         mProperties[prop_name] = prop;
     }
     
-    void AnimationPlayer::delProperty(const UknString& name) {
+    void AnimationPlayer::delProperty(const MistString& name) {
         PropertyMap::iterator it = mProperties.find(name);
         if(it != mProperties.end())
             mProperties.erase(it);
     }
     
-    void* AnimationPlayer::getProperty(const UknString& name) const {
+    void* AnimationPlayer::getProperty(const MistString& name) const {
         PropertyMap::const_iterator it = mProperties.find(name);
         return it != mProperties.end() ? it->second : 0;
     }
@@ -517,11 +515,11 @@ namespace ukn {
         return mCompleteEvent;
     }
     
-    void AnimationPlayer::setDefault(const UknString& name) {
+    void AnimationPlayer::setDefault(const MistString& name) {
         mDefault = name;
     }
     
-    UknString AnimationPlayer::getDefault() const {
+    MistString AnimationPlayer::getDefault() const {
         return mDefault;
     }
     
@@ -531,7 +529,7 @@ namespace ukn {
         }
     }
     
-    UknString AnimationPlayer::getCurrent() const {
+    MistString AnimationPlayer::getCurrent() const {
         return mCurrent;
     }
     

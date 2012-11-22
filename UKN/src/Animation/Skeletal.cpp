@@ -109,7 +109,7 @@ namespace ukn {
     
     uint32 BoneAnimation::getDuration() const {
         uint32 duration = 0;
-        UKN_FOR_EACH(BoneKeyFrameData& data, key_frames) {
+        MIST_FOR_EACH(const BoneKeyFrameData& data, key_frames) {
             duration += data.duration;
         }
         return duration;
@@ -378,7 +378,7 @@ namespace ukn {
         if(mTexture)
             mTexture->update();
         
-        UKN_FOR_EACH(BonePtr& ptr, mChildren) {
+        MIST_FOR_EACH(BonePtr& ptr, mChildren) {
             ptr->update(past_time);
         }
     }
@@ -419,7 +419,7 @@ namespace ukn {
             mCurrentAnimation->second.play();
         //mAnimation.play();
         
-        UKN_FOR_EACH(BonePtr& ptr, mChildren) {
+        MIST_FOR_EACH(BonePtr& ptr, mChildren) {
             ptr->playAnimation(name);
         }
     }
@@ -428,7 +428,7 @@ namespace ukn {
         if(mCurrentAnimation != mAnimations.end())
            mCurrentAnimation->second.stop();
         
-        UKN_FOR_EACH(BonePtr& ptr, mChildren) {
+        MIST_FOR_EACH(BonePtr& ptr, mChildren) {
             ptr->stopAnimation();
         }
     }
@@ -441,7 +441,7 @@ namespace ukn {
         if(mCurrentAnimation != mAnimations.end())
             mCurrentAnimation->second.pause();
         
-        UKN_FOR_EACH(BonePtr& ptr, mChildren) {
+        MIST_FOR_EACH(BonePtr& ptr, mChildren) {
             ptr->pauseAnimation();
         }
     }
@@ -484,7 +484,7 @@ namespace ukn {
                             texture_path = config->getString(L"texture");
                         }
                         if (!texture_path.empty()) {
-                            TexturePtr texture = AssetManager::Instance().load<Texture>(String::GetFilePath(config->getName()) + texture_path);
+                            TexturePtr texture = AssetManager::Instance().load<Texture>(string::GetFilePath(config->getName()) + texture_path);
                             if(texture) {
                                 if(config->getString(L"mode", L"texture") == L"texture") {
                                     bone->mTexture = new SequencialAnimation(texture,
@@ -657,7 +657,7 @@ namespace ukn {
                              bone.getLayerDepth());
         }
         
-        UKN_FOR_EACH(BonePtr& ptr, bone.getChildren()) {
+        MIST_FOR_EACH(BonePtr& ptr, bone.getChildren()) {
             render_bone(spriteBatch, *ptr.get()); 
         }
     }

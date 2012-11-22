@@ -73,7 +73,7 @@ namespace mist {
                 continue;
             }
             
-            nextNode = nextNode.child(String::WStringToString((*it)).c_str());
+            nextNode = nextNode.child(string::WStringToString((*it)).c_str());
             if(!nextNode)
                 return false;
             ++it;
@@ -83,13 +83,13 @@ namespace mist {
     
     MistString ConfigParserXmlImpl::getCurrentNodeName() const {
         if(mDocument)
-            return String::StringToWString(mCurrNode.name());
+            return string::StringToWString(mCurrNode.name());
         return MistString();
     }
     
     MistString ConfigParserXmlImpl::getCurrentNodePath() const {
         if(mDocument)
-            return String::StringToWString(mCurrNode.path());
+            return string::StringToWString(mCurrNode.path());
         return MistString();
     }
     
@@ -115,7 +115,7 @@ namespace mist {
                 continue;
             }
             
-            nextNode = nextNode.child(String::WStringToString((*it)).c_str());
+            nextNode = nextNode.child(string::WStringToString((*it)).c_str());
             if(!nextNode)
                 return false;
             ++it;
@@ -133,7 +133,7 @@ namespace mist {
         if(name.empty()) {
             node = mCurrNode.first_child();
         } else {
-            node = mCurrNode.child(String::WStringToString(name).c_str());
+            node = mCurrNode.child(string::WStringToString(name).c_str());
         }
         if(node) {
             mCurrNode = node;
@@ -150,7 +150,7 @@ namespace mist {
         if(name.empty()) {
             node = mCurrNode.next_sibling();
         } else {
-            node = mCurrNode.next_sibling(String::WStringToString(name).c_str());
+            node = mCurrNode.next_sibling(string::WStringToString(name).c_str());
         }
         if(node) {
             mCurrNode = node;
@@ -175,7 +175,7 @@ namespace mist {
         if(!mDocument)
             return false;
         
-        pugi::xml_attribute attr = mCurrNode.attribute(String::WStringToString(name).c_str());
+        pugi::xml_attribute attr = mCurrNode.attribute(string::WStringToString(name).c_str());
         if(attr) {
             return true;
         }
@@ -191,7 +191,7 @@ namespace mist {
         
         std::vector<MistString> attributes;
         for(; it != end; ++it) {
-            attributes.push_back(String::StringToWString(it->name()));
+            attributes.push_back(string::StringToWString(it->name()));
         }
         return attributes;
     }
@@ -201,14 +201,14 @@ namespace mist {
             return opt;
         
         if(attr.empty()) {
-            MistString child_value = String::StringToWString(mCurrNode.child_value());
+            MistString child_value = string::StringToWString(mCurrNode.child_value());
             return child_value;
         }
-        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(string::WStringToString(attr).c_str());
         if(attribute) {
-            return String::StringToWString(attribute.value());
+            return string::StringToWString(attribute.value());
         } else {
-            MistString c = String::StringToWString(mCurrNode.child_value(String::WStringToString(attr).c_str()));
+            MistString c = string::StringToWString(mCurrNode.child_value(string::WStringToString(attr).c_str()));
             if(!c.empty())
                 return c;
         }
@@ -222,7 +222,7 @@ namespace mist {
         if(attr.empty()) {
             return opt;
         }
-        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(string::WStringToString(attr).c_str());
         if(attribute) {
             return attribute.as_bool();
         }
@@ -235,7 +235,7 @@ namespace mist {
         
         if(attr.empty())
             return opt;
-        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(string::WStringToString(attr).c_str());
         if(attribute) {
             return attribute.as_int();
         }
@@ -248,7 +248,7 @@ namespace mist {
         
         if(attr.empty())
             return opt;
-        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(string::WStringToString(attr).c_str());
         if(attribute) {
             return attribute.as_float();
         }
@@ -270,7 +270,7 @@ namespace mist {
         
         myWritter writter(indent);
         mDocument->save(writter, PUGIXML_TEXT("\t"), pugi::format_indent, pugi::encoding_wchar);
-        return String::StringToWString(writter.str);
+        return string::StringToWString(writter.str);
     }
     
     ConfigParserXmlImpl::myStreamWritter::myStreamWritter(const char* indent) {
@@ -294,7 +294,7 @@ namespace mist {
         if(!mDocument)
             return false;
         
-        pugi::xml_node node = mCurrNode.append_child(String::WStringToString(name).c_str());
+        pugi::xml_node node = mCurrNode.append_child(string::WStringToString(name).c_str());
         if(node) {
             mCurrNode = node;
             return true;
@@ -310,18 +310,18 @@ namespace mist {
         if(!mDocument)
             return;
         
-        mCurrNode.set_value(String::WStringToString(val).c_str());
+        mCurrNode.set_value(string::WStringToString(val).c_str());
     }
     
     void ConfigParserXmlImpl::setString(const MistString& attr, const MistString& val) {
         if(!mDocument)
             return;
         
-        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(string::WStringToString(attr).c_str());
         if(attribute)
             attribute.set_value(val.c_str());
         else {
-            attribute = mCurrNode.append_attribute(String::WStringToString(attr).c_str());
+            attribute = mCurrNode.append_attribute(string::WStringToString(attr).c_str());
             attribute.set_value(val.c_str());
         }
     }
@@ -330,11 +330,11 @@ namespace mist {
         if(!mDocument)
             return;
         
-        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(string::WStringToString(attr).c_str());
         if(attribute)
             attribute.set_value(val);
         else {
-            attribute = mCurrNode.append_attribute(String::WStringToString(attr).c_str());
+            attribute = mCurrNode.append_attribute(string::WStringToString(attr).c_str());
             attribute.set_value(val);
         }
     }
@@ -343,11 +343,11 @@ namespace mist {
         if(!mDocument)
             return;
         
-        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(string::WStringToString(attr).c_str());
         if(attribute)
             attribute.set_value(val);
         else {
-            attribute = mCurrNode.append_attribute(String::WStringToString(attr).c_str());
+            attribute = mCurrNode.append_attribute(string::WStringToString(attr).c_str());
             attribute.set_value(val);
         }
     }
@@ -356,11 +356,11 @@ namespace mist {
         if(!mDocument)
             return;
         
-        pugi::xml_attribute attribute = mCurrNode.attribute(String::WStringToString(attr).c_str());
+        pugi::xml_attribute attribute = mCurrNode.attribute(string::WStringToString(attr).c_str());
         if(attribute)
             attribute.set_value(val);
         else {
-            attribute = mCurrNode.append_attribute(String::WStringToString(attr).c_str());
+            attribute = mCurrNode.append_attribute(string::WStringToString(attr).c_str());
             attribute.set_value(val);
         }
     }

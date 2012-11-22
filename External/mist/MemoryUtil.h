@@ -53,20 +53,20 @@ namespace mist {
         g_memory_allocator.ukn_realloc = re;
     }
 
-    inline void* ukn_malloc(size_t size) {
+    inline void* mist_malloc(size_t size) {
         return g_memory_allocator.ukn_malloc(size);
     }
 
-    inline void ukn_free(void* ptr) {
+    inline void mist_free(void* ptr) {
         return g_memory_allocator.ukn_free(ptr);
     }
 
-    inline void* ukn_realloc(void* ptr, size_t size) {
+    inline void* mist_realloc(void* ptr, size_t size) {
         return g_memory_allocator.ukn_realloc(ptr, size);
     }
 
-#define ukn_malloc_t(t, size) \
-    (t*)ukn_malloc(sizeof(t) * size);
+#define mist_malloc_t(t, size) \
+    (t*)mist_malloc(sizeof(t) * size);
 
 } // namespace mist
 

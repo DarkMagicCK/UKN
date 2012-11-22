@@ -22,7 +22,6 @@
 #include "UKN/RenderBuffer.h"
 #include "UKN/Font.h"
 #include "UKN/Asset.h"
-#include "UKN/Animation.h"
 #include "UKN/Skeletal.h"
 #include "UKN/Input.h"
 
@@ -991,9 +990,9 @@ public:
         if(r3) spline1->render();
         if(r4) spline2->render();
         
-     //   sx->render();
-    //    cx->render();
-        sleeping->render();
+        sx->render();
+        cx->render();
+    //    sleeping->render();
         //runge->render();
     }
     
@@ -1021,6 +1020,99 @@ private:
 #include "ukn/asset.h"
 #include "ukn/LeapMotion.h"
 #include "mist/Convert.h"
+
+
+
+template<typename T>
+struct Vector: public std::vector<T> {
+    Vector() {
+        
+    }
+    
+    Vector(const std::initializer_list<T>& init):
+    std::vector<T>(init) {
+        
+    }
+    
+    Vector operator + (const Vector& rhs) const {
+        Vector tmp = *this;
+        for(size_t i = 0; i < tmp.size(); ++i){
+            tmp[i] += rhs[i];
+        }
+        return tmp;
+    }
+    Vector operator - (const Vector& rhs) const {
+        Vector tmp = *this;
+        for(size_t i = 0; i < tmp.size(); ++i){
+            tmp[i] -= rhs[i];
+        }
+        return tmp;
+    }
+    
+    friend Vector operator * (double k, const Vector& rhs) {
+        Vector tmp = rhs;
+        for(size_t i = 0; i < tmp.size(); ++i){
+            tmp[i] *= k;
+        }
+        return tmp;
+    }
+    
+    friend std::ostream& operator<<(std::ostream& os, const Vector& rhs) {
+        os << "[";
+        os.precision(6);
+        os.setf(std::ios::fixed, std::ios::floatfield);
+        
+        std::copy(rhs.begin(),
+                  rhs.end(),
+                  std::ostream_iterator<double>(os, " "));
+        os << "]" << std::endl;
+        
+        return os;
+    }
+};
+
+typedef std::function< Vector<double>(double, Vector<double> ) > fp3;
+
+std::vector<std::pair<double, Vector<double> > > PredictorCorrectorVX(double x0, double xmax, double h, const Vector<double>& y0, const fp3& f) {
+    Vector<double> fval[5];
+    fval[0] = f(x0, y0);
+    
+    double x = x0;
+    Vector<double> y = y0;
+    
+    std::vector<std::pair<double, Vector<double> > > result;
+    
+    result.push_back(std::make_pair(x, y));
+    
+    for(int i = 1; i <= 3; ++i) {
+        Vector<double> k1 = fval[i-1];
+        Vector<double> k2 = f(x + h/2, y + h/2 * k1);
+        Vector<double> k3 = f(x + h/2, y + h/2 * k2);
+        Vector<double> k4 = f(x + h, y + h * k3);
+        
+        y = y + h/6 * (k1 + 2 * k2 + 2 * k3 + k4);
+        x = x + h;
+        
+        result.push_back(std::make_pair(x, y));
+        fval[i] = f(x, y);
+    }
+    
+    
+    while(x < xmax) {
+        Vector<double> yp = y + h/24 * (55 * fval[3] - 59 * fval[2] + 37 * fval[1] - 9 * fval[0]);
+        x = x + h;
+        fval[4] = f(x, yp);
+        
+        y = y + h/24 * (9 * fval[4] + 19 * fval[3] - 5 * fval[2] + fval[1]);
+        result.push_back(std::make_pair(x, y));
+        
+        for(int i = 0; i < 3; ++i) {
+            fval[i] = fval[i+1];
+        }
+        fval[3] = f(x, y);
+    }
+    return result;
+}
 
 class TestApp: public ukn::AppInstance, public ukn::input::LeapMotionListener {
 public:
@@ -1095,6 +1187,33 @@ public:
         mLeapModule = new ukn::input::LeapMotionModule();
         mLeapModule->attachListener(this);
         ukn::ModuleManager::Instance().addModule(mLeapModule);
+        
+        std::vector<std::pair<double, Vector<double> > > result = PredictorCorrectorVX(0,
+                            4000,
+                            1,
+                            { 10000, 1000 },
+                            [](double x, const Vector<double>& y)->Vector<double> {
+                                return Vector<double>({
+                                    -2.0E-6 * y[0] * y[1] + 1.0E-3 * y[0],
+                                    -1.0E-2 * y[1] + 1.0E-6 * y[0] * y[1] });
+                            });
+        
+        for(std::pair<double, Vector<double> > v: result) {
+            ukn::Vertex2D v1;
+            v1.x = v.first / 10.0 + getWindow().width() / 4;
+            v1.y = v.second[0] / 10.0 - 500;
+            v1.z = 0;
+            v1.color = ukn::color::Red.toRGBA();
+            mVertexBuffer->push(v1);
+        }
+        for(std::pair<double, Vector<double> > v: result) {
+            ukn::Vertex2D v1;
+            v1.x = v.first / 10.0 + getWindow().width() / 4;
+            v1.y = v.second[1] / 10.0;
+            v1.z = 0;
+            v1.color = ukn::color::Blue.toRGBA();
+            mVertexBuffer->push(v1);
+        }
     }
     
     void onUpdate() {
@@ -1155,7 +1274,7 @@ int CALLBACK WinMain(
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
-    TestApp instance(L"LeapMotion Test");
+    TestApp instance(L"Rabbit&Fox");
 
     // create app context
     ukn::ContextCfg cfg;

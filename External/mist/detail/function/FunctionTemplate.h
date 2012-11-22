@@ -17,112 +17,112 @@
 
 namespace mist {
 
-#ifdef UKN_FUNCTION_NUM_ARGS
+#ifdef MIST_FUNCTION_NUM_ARGS
 
     namespace detail {
 
-#define UKN_FUNCTION_TEMPLATE_PARAM UKN_ENUM_PARAMS(UKN_FUNCTION_NUM_ARGS, typename T)
+#define MIST_FUNCTION_TEMPLATE_PARAM MIST_ENUM_PARAMS(MIST_FUNCTION_NUM_ARGS, typename T)
 
-#define UKN_FUNCTION_TEMPLATE_ARGS UKN_ENUM_PARAMS(UKN_FUNCTION_NUM_ARGS, T)
+#define MIST_FUNCTION_TEMPLATE_ARGS MIST_ENUM_PARAMS(MIST_FUNCTION_NUM_ARGS, T)
 
-#define UKN_FUNCTION_PARAM(n, d) UKN_CAT(T, n) UKN_CAT(a, n)
-#define UKN_FUNCTION_PARAMS UKN_ENUM_N(UKN_FUNCTION_NUM_ARGS, UKN_FUNCTION_PARAM, UKN_EMPTY)
+#define MIST_FUNCTION_PARAM(n, d) MIST_CAT(T, n) MIST_CAT(a, n)
+#define MIST_FUNCTION_PARAMS MIST_ENUM_N(MIST_FUNCTION_NUM_ARGS, MIST_FUNCTION_PARAM, MIST_EMPTY)
 
-#define UKN_FUNCTION_ARGS UKN_ENUM_PARAMS(UKN_FUNCTION_NUM_ARGS, a)
+#define MIST_FUNCTION_ARGS MIST_ENUM_PARAMS(MIST_FUNCTION_NUM_ARGS, a)
 
-#define UKN_INVOKER UKN_JOIN(invoker, UKN_FUNCTION_NUM_ARGS)
-#define UKN_OBJ_INVOKER UKN_JOIN(obj_invoker, UKN_FUNCTION_NUM_ARGS)
+#define MIST_INVOKER MIST_JOIN(invoker, MIST_FUNCTION_NUM_ARGS)
+#define MIST_OBJ_INVOKER MIST_JOIN(obj_invoker, MIST_FUNCTION_NUM_ARGS)
 
-#define UKN_GET_INVOKER UKN_JOIN(get_function_invoker, UKN_FUNCTION_NUM_ARGS)
-#define UKN_GET_OBJ_INVOKER UKN_JOIN(get_function_obj_invoker, UKN_FUNCTION_NUM_ARGS)
+#define MIST_GET_INVOKER MIST_JOIN(get_function_invoker, MIST_FUNCTION_NUM_ARGS)
+#define MIST_GET_OBJ_INVOKER MIST_JOIN(get_function_obj_invoker, MIST_FUNCTION_NUM_ARGS)
 
-#define UKN_FUNCTION UKN_JOIN(function, UKN_FUNCTION_NUM_ARGS)
+#define MIST_FUNCTION MIST_JOIN(function, MIST_FUNCTION_NUM_ARGS)
 
-#define UKN_FUNCTOR_RELEASE UKN_JOIN(functor_release, UKN_FUNCTION_NUM_ARGS)
-#define UKN_GET_FUNCTOR_RELEASE UKN_JOIN(get_functor_release, UKN_FUNCTION_NUM_ARGS)
+#define MIST_FUNCTOR_RELEASE MIST_JOIN(functor_release, MIST_FUNCTION_NUM_ARGS)
+#define MIST_GET_FUNCTOR_RELEASE MIST_JOIN(get_functor_release, MIST_FUNCTION_NUM_ARGS)
 
-#if UKN_FUNCTION_NUM_ARGS == 0
-#define UKN_FUNCTION_COMMA
+#if MIST_FUNCTION_NUM_ARGS == 0
+#define MIST_FUNCTION_COMMA
 #else
-#define UKN_FUNCTION_COMMA ,
+#define MIST_FUNCTION_COMMA ,
 #endif
 
-        template<typename FunctionPtr, typename R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-        struct UKN_INVOKER {
-            static R invoke(any_ptr ptr UKN_FUNCTION_COMMA UKN_FUNCTION_PARAMS) {
+        template<typename FunctionPtr, typename R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+        struct MIST_INVOKER {
+            static R invoke(any_ptr ptr MIST_FUNCTION_COMMA MIST_FUNCTION_PARAMS) {
                 FunctionPtr f = reinterpret_cast<FunctionPtr>(ptr.func_ptr);
-                return f(UKN_FUNCTION_ARGS);
+                return f(MIST_FUNCTION_ARGS);
             }
         };
 
-        template<typename FunctionObj, typename R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-        struct UKN_FUNCTOR_RELEASE {
+        template<typename FunctionObj, typename R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+        struct MIST_FUNCTOR_RELEASE {
             static void release(any_ptr ptr) {
                 FunctionObj* f = reinterpret_cast<FunctionObj*>(ptr.obj_ptr);
                 delete f;
             }
         };
 
-        template<typename FunctionObj, typename R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-        struct UKN_OBJ_INVOKER {
-            static R invoke(any_ptr ptr UKN_FUNCTION_COMMA UKN_FUNCTION_PARAMS) {
+        template<typename FunctionObj, typename R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+        struct MIST_OBJ_INVOKER {
+            static R invoke(any_ptr ptr MIST_FUNCTION_COMMA MIST_FUNCTION_PARAMS) {
                 FunctionObj* f = reinterpret_cast<FunctionObj*>(ptr.obj_ptr);
-                return (*f)(UKN_FUNCTION_ARGS);
+                return (*f)(MIST_FUNCTION_ARGS);
             }
         };
 
-        template<typename FunctionPtr UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-        struct UKN_INVOKER<FunctionPtr, void UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> {
-            static void invoke(any_ptr ptr UKN_FUNCTION_COMMA UKN_FUNCTION_PARAMS) {
+        template<typename FunctionPtr MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+        struct MIST_INVOKER<FunctionPtr, void MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> {
+            static void invoke(any_ptr ptr MIST_FUNCTION_COMMA MIST_FUNCTION_PARAMS) {
                 FunctionPtr f = reinterpret_cast<FunctionPtr>(ptr.func_ptr);
-                f(UKN_FUNCTION_ARGS);
+                f(MIST_FUNCTION_ARGS);
             }
         };
 
-        template<typename FunctionObj UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-        struct UKN_OBJ_INVOKER<FunctionObj, void UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> {
-            static void invoke(any_ptr ptr UKN_FUNCTION_COMMA UKN_FUNCTION_PARAMS) {
+        template<typename FunctionObj MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+        struct MIST_OBJ_INVOKER<FunctionObj, void MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> {
+            static void invoke(any_ptr ptr MIST_FUNCTION_COMMA MIST_FUNCTION_PARAMS) {
                 FunctionObj* f = reinterpret_cast<FunctionObj*>(ptr.obj_ptr);
-                (*f)(UKN_FUNCTION_ARGS);
+                (*f)(MIST_FUNCTION_ARGS);
             }
         };
 
-        template<typename FunctionPtr, typename R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-        struct UKN_GET_INVOKER {
-            typedef UKN_INVOKER<FunctionPtr, R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> type;
+        template<typename FunctionPtr, typename R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+        struct MIST_GET_INVOKER {
+            typedef MIST_INVOKER<FunctionPtr, R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> type;
         };
 
-        template<typename FunctionPtr, typename R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-        struct UKN_GET_OBJ_INVOKER {
-            typedef UKN_OBJ_INVOKER<FunctionPtr, R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> type;
+        template<typename FunctionPtr, typename R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+        struct MIST_GET_OBJ_INVOKER {
+            typedef MIST_OBJ_INVOKER<FunctionPtr, R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> type;
         };
 
-        template<typename FunctionObj, typename R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-        struct UKN_GET_FUNCTOR_RELEASE {
-            typedef UKN_FUNCTOR_RELEASE<FunctionObj, R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> type;
+        template<typename FunctionObj, typename R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+        struct MIST_GET_FUNCTOR_RELEASE {
+            typedef MIST_FUNCTOR_RELEASE<FunctionObj, R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> type;
         };
 
-        template<typename R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-        class UKN_FUNCTION {
+        template<typename R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+        class MIST_FUNCTION {
         public:
-            typedef UKN_FUNCTION<R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> self_type;
+            typedef MIST_FUNCTION<R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> self_type;
 
             template<typename Functor>
-            UKN_FUNCTION(const Functor& functor):
+            MIST_FUNCTION(const Functor& functor):
             mInvoker(0),
             mReleaser(0),
             mRefCount(NULL) {
                 this->assign_to(functor);
             }
 
-            UKN_FUNCTION():
+            MIST_FUNCTION():
             mInvoker(0),
             mReleaser(0),
             mRefCount(NULL) {
 
             }
 
-            virtual ~UKN_FUNCTION() {
+            virtual ~MIST_FUNCTION() {
                 clear();
             }
 
@@ -149,10 +149,10 @@ namespace mist {
                 this->assign_to(f, tag());
             }
 
-            inline R operator()(UKN_FUNCTION_PARAMS) const {
+            inline R operator()(MIST_FUNCTION_PARAMS) const {
                 assert(mInvoker);
 
-                return mInvoker(mPtr UKN_FUNCTION_COMMA UKN_FUNCTION_ARGS);
+                return mInvoker(mPtr MIST_FUNCTION_COMMA MIST_FUNCTION_ARGS);
             }
 
             operator bool() const {
@@ -180,7 +180,7 @@ namespace mist {
                 return *(F*)this->mPtr.obj_ptr == f;
             }
 
-            typedef R (*invoker_type)(any_ptr UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS);
+            typedef R (*invoker_type)(any_ptr MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS);
             typedef void (*releaser_type)(any_ptr);
 
         private:
@@ -188,7 +188,7 @@ namespace mist {
             template<typename Functor>
             void assign_to(Functor f, function_ptr_tag tag) {
                 if(f) {
-                    typedef typename UKN_GET_INVOKER<Functor, R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>::type invoker_type;
+                    typedef typename MIST_GET_INVOKER<Functor, R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS>::type invoker_type;
 
                     mInvoker = &invoker_type::invoke;
                     mPtr = make_any_pointer((void (*)())f);
@@ -197,8 +197,8 @@ namespace mist {
 
             template<typename Functor>
             void assign_to(Functor f, function_obj_tag tag) {
-                typedef typename UKN_GET_OBJ_INVOKER<Functor, R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>::type invoker_type;
-                typedef typename UKN_GET_FUNCTOR_RELEASE<Functor, R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>::type releaser_type;
+                typedef typename MIST_GET_OBJ_INVOKER<Functor, R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS>::type invoker_type;
+                typedef typename MIST_GET_FUNCTOR_RELEASE<Functor, R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS>::type releaser_type;
 
                 mInvoker = &invoker_type::invoke;
                 mReleaser = &releaser_type::release;
@@ -225,27 +225,27 @@ namespace mist {
             int* mRefCount;
         };
 
-        template<UKN_FUNCTION_TEMPLATE_PARAM>
-        class UKN_FUNCTION<void UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> {
+        template<MIST_FUNCTION_TEMPLATE_PARAM>
+        class MIST_FUNCTION<void MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> {
         public:
-            typedef UKN_FUNCTION<void UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> self_type;
+            typedef MIST_FUNCTION<void MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> self_type;
 
             template<typename Functor>
-            UKN_FUNCTION(const Functor& functor):
+            MIST_FUNCTION(const Functor& functor):
             mInvoker(0),
             mReleaser(0),
             mRefCount(NULL) {
                 this->assign_to(functor);
             }
 
-            UKN_FUNCTION():
+            MIST_FUNCTION():
             mInvoker(0),
             mReleaser(0),
             mRefCount(NULL) {
 
             }
 
-            virtual ~UKN_FUNCTION() {
+            virtual ~MIST_FUNCTION() {
                 clear();
             }
 
@@ -272,10 +272,10 @@ namespace mist {
                 this->assign_to(f, tag());
             }
 
-            inline void operator()(UKN_FUNCTION_PARAMS) const {
+            inline void operator()(MIST_FUNCTION_PARAMS) const {
                 assert(mInvoker);
 
-                mInvoker(mPtr UKN_FUNCTION_COMMA UKN_FUNCTION_ARGS);
+                mInvoker(mPtr MIST_FUNCTION_COMMA MIST_FUNCTION_ARGS);
             }
 
             operator bool() const {
@@ -303,7 +303,7 @@ namespace mist {
                 return *(F*)this->mPtr.obj_ptr == f;
             }
 
-            typedef void (*invoker_type)(any_ptr UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS);
+            typedef void (*invoker_type)(any_ptr MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS);
             typedef void (*releaser_type)(any_ptr);
 
         private:
@@ -311,7 +311,7 @@ namespace mist {
             template<typename Functor>
             void assign_to(Functor f, function_ptr_tag tag) {
                 if(f) {
-                    typedef typename UKN_GET_INVOKER<Functor, void UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>::type invoker_type;
+                    typedef typename MIST_GET_INVOKER<Functor, void MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS>::type invoker_type;
 
                     mInvoker = &invoker_type::invoke;
                     mPtr = make_any_pointer((void (*)())f);
@@ -320,8 +320,8 @@ namespace mist {
 
             template<typename Functor>
             void assign_to(Functor f, function_obj_tag tag) {
-                typedef typename UKN_GET_OBJ_INVOKER<Functor, void UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>::type invoker_type;
-                typedef typename UKN_GET_FUNCTOR_RELEASE<Functor, void UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>::type releaser_type;
+                typedef typename MIST_GET_OBJ_INVOKER<Functor, void MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS>::type invoker_type;
+                typedef typename MIST_GET_FUNCTOR_RELEASE<Functor, void MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS>::type releaser_type;
 
 
                 mInvoker = &invoker_type::invoke;
@@ -352,20 +352,20 @@ namespace mist {
     } // namespace detail
 
 
-    template<typename R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_PARAM>
-    class Function<R(UKN_FUNCTION_TEMPLATE_ARGS)>: public detail::UKN_FUNCTION<R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>
-#if UKN_FUNCTION_NUM_ARGS == 1
+    template<typename R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_PARAM>
+    class Function<R(MIST_FUNCTION_TEMPLATE_ARGS)>: public detail::MIST_FUNCTION<R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS>
+#if MIST_FUNCTION_NUM_ARGS == 1
     , public std::unary_function<T0, R>
-#elif UKN_FUNCTOR_NUM_ARGS == 2
+#elif MIST_FUNCTOR_NUM_ARGS == 2
     , public std::binary_function<T0, T1, R>
 #endif
     {
     public:
-        typedef detail::UKN_FUNCTION<R UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> base_type;
-        typedef Function<R(UKN_FUNCTION_TEMPLATE_ARGS)> self_type;
-#if UKN_FUNCTION_NUM_ARGS == 1
+        typedef detail::MIST_FUNCTION<R MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> base_type;
+        typedef Function<R(MIST_FUNCTION_TEMPLATE_ARGS)> self_type;
+#if MIST_FUNCTION_NUM_ARGS == 1
         typedef T0 argument_type;
-#elif UKN_FUNCTOR_NUM_ARGS == 2
+#elif MIST_FUNCTOR_NUM_ARGS == 2
         typedef T0 first_argument_type;
         typedef T1 second_argument_type;
 #endif
@@ -382,7 +382,7 @@ namespace mist {
         }
 
         template<typename Functor>
-        Function<R(UKN_FUNCTION_TEMPLATE_ARGS)>& operator=(Functor f) {
+        Function<R(MIST_FUNCTION_TEMPLATE_ARGS)>& operator=(Functor f) {
             base_type::assign_to(f);
             return *this;
         }
@@ -420,20 +420,20 @@ namespace mist {
         }
     };
 
-    template<UKN_FUNCTION_TEMPLATE_PARAM>
-    class Function<void(UKN_FUNCTION_TEMPLATE_ARGS)>: public detail::UKN_FUNCTION<void UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS>
-#if UKN_FUNCTION_NUM_ARGS == 1
+    template<MIST_FUNCTION_TEMPLATE_PARAM>
+    class Function<void(MIST_FUNCTION_TEMPLATE_ARGS)>: public detail::MIST_FUNCTION<void MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS>
+#if MIST_FUNCTION_NUM_ARGS == 1
     , public std::unary_function<T0, void>
-#elif UKN_FUNCTOR_NUM_ARGS == 2
+#elif MIST_FUNCTOR_NUM_ARGS == 2
     , public std::binary_function<T0, T1, void>
 #endif
     {
     public:
-        typedef detail::UKN_FUNCTION<void UKN_FUNCTION_COMMA UKN_FUNCTION_TEMPLATE_ARGS> base_type;
-        typedef Function<void(UKN_FUNCTION_TEMPLATE_ARGS)> self_type;
-#if UKN_FUNCTION_NUM_ARGS == 1
+        typedef detail::MIST_FUNCTION<void MIST_FUNCTION_COMMA MIST_FUNCTION_TEMPLATE_ARGS> base_type;
+        typedef Function<void(MIST_FUNCTION_TEMPLATE_ARGS)> self_type;
+#if MIST_FUNCTION_NUM_ARGS == 1
         typedef T0 argument_type;
-#elif UKN_FUNCTOR_NUM_ARGS == 2
+#elif MIST_FUNCTOR_NUM_ARGS == 2
         typedef T0 first_argument_type;
         typedef T1 second_argument_type;
 #endif
@@ -450,7 +450,7 @@ namespace mist {
         }
 
         template<typename Functor>
-        Function<void(UKN_FUNCTION_TEMPLATE_ARGS)>& operator=(Functor f) {
+        Function<void(MIST_FUNCTION_TEMPLATE_ARGS)>& operator=(Functor f) {
             base_type::assign_to(f);
             return *this;
         }
@@ -488,21 +488,21 @@ namespace mist {
         }
     };
 
-#undef UKN_FUNCTION_TEMPLATE_PARAM
-#undef UKN_FUNCTION_TEMPLATE_ARGS
-#undef UKN_FUNCTION_PARAMS
-#undef UKN_FUNCTION_PARAM
-#undef UKN_FUNCTION_ARGS
-#undef UKN_INVOKER
-#undef UKN_OBJ_INVOKER
-#undef UKN_GET_INVOKER
-#undef UKN_GET_OBJ_INVOKER
-#undef UKN_FUNCTION_COMMA
-#undef UKN_FUNCTION
-#undef UKN_GET_FUNCTOR_RELEASE
-#undef UKN_FUNCTOR_RELEASE
+#undef MIST_FUNCTION_TEMPLATE_PARAM
+#undef MIST_FUNCTION_TEMPLATE_ARGS
+#undef MIST_FUNCTION_PARAMS
+#undef MIST_FUNCTION_PARAM
+#undef MIST_FUNCTION_ARGS
+#undef MIST_INVOKER
+#undef MIST_OBJ_INVOKER
+#undef MIST_GET_INVOKER
+#undef MIST_GET_OBJ_INVOKER
+#undef MIST_FUNCTION_COMMA
+#undef MIST_FUNCTION
+#undef MIST_GET_FUNCTOR_RELEASE
+#undef MIST_FUNCTOR_RELEASE
 
-#endif // UKN_FUNCTION_NUM_ARGS
+#endif // MIST_FUNCTION_NUM_ARGS
 
 
 } // namespace sora

@@ -50,7 +50,7 @@ namespace mist {
     
     template<typename T>
     MistString Convert::ToString(T t) {
-        return String::AnyToWString(t);
+        return string::AnyToWString(t);
     }
     
     

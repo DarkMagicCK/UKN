@@ -82,7 +82,7 @@ namespace mist {
         ProfileDataMap mProfiles;
     };
     
-#define UKN_PROFILE(name) mist::detail::Profile UKN_UNIQUE_NAME(ukn_profile_)(name);
+#define MIST_PROFILE(name) mist::detail::Profile MIST_UNIQUE_NAME(ukn_profile_)(name);
     
 } // namespace mist
 

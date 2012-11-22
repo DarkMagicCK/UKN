@@ -12,7 +12,7 @@
 #include "mist/Platform.h"
 #include "mist/Util.h"
 
-namespace ukn {
+namespace mist {
     
     /**
      * Inheritate from this to make the class "auto update" in every frame by calling the onUpdate function

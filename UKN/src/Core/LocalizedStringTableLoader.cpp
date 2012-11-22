@@ -80,7 +80,7 @@ namespace ukn {
             
             UknString content = parser->writeToString();
             
-            FILE* pfile = fopen(String::WStringToString(file).c_str(),
+            FILE* pfile = fopen(string::WStringToString(file).c_str(),
                                 "w+");
             if(!pfile)
                 return false;

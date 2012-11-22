@@ -87,19 +87,19 @@ namespace mist {
     }
     
     inline void log_error(const std::string& log) {
-        Logger::Instance().log(String::StringToWString(log), LL_Error);
+        Logger::Instance().log(string::StringToWString(log), LL_Error);
     }
     
     inline void log_notice(const std::string& log) {
-        Logger::Instance().log(String::StringToWString(log), LL_Notice);
+        Logger::Instance().log(string::StringToWString(log), LL_Notice);
     }
     
     inline void log_warning(const std::string& log) {
-        Logger::Instance().log(String::StringToWString(log), LL_Warning);
+        Logger::Instance().log(string::StringToWString(log), LL_Warning);
     }
     
     inline void log_info(const std::string& log) {
-        Logger::Instance().log(String::StringToWString(log), LL_Info);
+        Logger::Instance().log(string::StringToWString(log), LL_Info);
     }
     
 

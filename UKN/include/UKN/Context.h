@@ -42,8 +42,8 @@ namespace ukn {
         
         GraphicFactory&   getGraphicFactory() const;
         
-        void setScene(const SceneManagerPtr& ptr);
-        SceneManager& getScene();
+        void setSceneManager(const SceneManagerPtr& ptr);
+        SceneManager& getSceneManager();
         
         void registerGraphicFactory(GraphicFactoryPtr factory);
         

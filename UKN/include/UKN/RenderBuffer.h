@@ -32,7 +32,6 @@ namespace ukn {
         RenderMode          getRenderMode() const;
         void                setRenderMode(RenderMode mode);
         
-        
         GraphicBufferPtr    getVertexStream() const;
         void                bindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format);
         

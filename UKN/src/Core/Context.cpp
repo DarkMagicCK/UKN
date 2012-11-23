@@ -47,11 +47,11 @@ namespace ukn {
         return *mApp;
     }
     
-    void Context::setScene(const SceneManagerPtr& ptr) {
+    void Context::setSceneManager(const SceneManagerPtr& ptr) {
         mScene = ptr;
     }
     
-    SceneManager& Context::getScene() {
+    SceneManager& Context::getSceneManager() {
         mist_assert(mScene);
         return *mScene;
     }
@@ -196,6 +196,7 @@ namespace ukn {
     }
     
     GraphicFactory& Context::getGraphicFactory() const {
+        mist_assert(mGraphicFactory.get());
         return *mGraphicFactory;
     }
     

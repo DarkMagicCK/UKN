@@ -139,18 +139,19 @@ namespace ukn {
             if(vertexBuffer->isInMemory()) {
                 glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vertexBuffer->map());
                 glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
-                             0,
-                             vertexBuffer->useCount());
+                             buffer->getVertexStartIndex(),
+                             buffer->getVertexCount());
             } else {
                 Vertex2D* vptr = (Vertex2D*)vertexBuffer->map();
                 Array<Vertex2D> vtxArr;
-                vtxArr.assign(vptr, vptr + vertexBuffer->count());
+                vtxArr.assign(vptr + buffer->getVertexStartIndex(),
+                              vptr + (buffer->getVertexStartIndex() + buffer->getVertexCount()));
                 vertexBuffer->unmap();
                 
                 glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vtxArr.data());
                 glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
                              0,
-                             vertexBuffer->useCount());
+                             (GLuint)vtxArr.size());
             }
             
             return;
@@ -209,15 +210,15 @@ namespace ukn {
             indexBuffer->activate();
             
             glDrawRangeElements(render_mode_to_gl_mode(buffer->getRenderMode()),
-                                0,
+                                buffer->getIndexStartIndex(),
                                 0xffffffff,
-                                indexBuffer->count(),
+                                buffer->getIndexCount(),
                                 GL_UNSIGNED_INT,
-                                BUFFER_OFFSET(vertexBuffer, 0));
+                                BUFFER_OFFSET(vertexBuffer, buffer->getVertexStartIndex()));
         } else {
             glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
-                         0,
-                         vertexBuffer->useCount());
+                         buffer->getVertexStartIndex(),
+                         buffer->getVertexCount());
         }
         
         glBindBuffer(GL_ARRAY_BUFFER, 0);

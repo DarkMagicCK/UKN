@@ -1114,6 +1114,8 @@ std::vector<std::pair<double, Vector<double> > > PredictorCorrectorVX(double x0,
     return result;
 }
 
+#include "UKN/GraphicContext.h"
+
 class TestApp: public ukn::AppInstance, public ukn::input::LeapMotionListener {
 public:
     TestApp(const ukn::UknString& name):
@@ -1187,33 +1189,8 @@ public:
         mLeapModule = new ukn::input::LeapMotionModule();
         mLeapModule->attachListener(this);
         ukn::ModuleManager::Instance().addModule(mLeapModule);
-        
-        std::vector<std::pair<double, Vector<double> > > result = PredictorCorrectorVX(0,
-                            4000,
-                            1,
-                            { 10000, 1000 },
-                            [](double x, const Vector<double>& y)->Vector<double> {
-                                return Vector<double>({
-                                    -2.0E-6 * y[0] * y[1] + 1.0E-3 * y[0],
-                                    -1.0E-2 * y[1] + 1.0E-6 * y[0] * y[1] });
-                            });
-        
-        for(std::pair<double, Vector<double> > v: result) {
-            ukn::Vertex2D v1;
-            v1.x = v.first / 10.0 + getWindow().width() / 4;
-            v1.y = v.second[0] / 10.0 - 500;
-            v1.z = 0;
-            v1.color = ukn::color::Red.toRGBA();
-            mVertexBuffer->push(v1);
-        }
-        for(std::pair<double, Vector<double> > v: result) {
-            ukn::Vertex2D v1;
-            v1.x = v.first / 10.0 + getWindow().width() / 4;
-            v1.y = v.second[1] / 10.0;
-            v1.z = 0;
-            v1.color = ukn::color::Blue.toRGBA();
-            mVertexBuffer->push(v1);
-        }
+
+        mContext = new ukn::GraphicContext();
     }
     
     void onUpdate() {
@@ -1241,12 +1218,43 @@ public:
         sb.draw(mSquareTexture,
                 ukn::Vector2(0, 0));
         sb.end();
+        
+        mContext->begin();
+        mContext->drawCircle(getWindow().width() / 2,
+                             getWindow().height() / 2,
+                             1.f,
+                             200.f);
+        
+        mContext->setFillColor(ukn::color::Red);
+        mContext->fillCircle(getWindow().width() / 4,
+                             getWindow().height() / 4,
+                             0.f,
+                             200.f);
+        mContext->setDrawColor(ukn::color::Blue);
+
+        mContext->moveTo(100.f, 100.f, 0.f);
+        mContext->lineTo(200.f, 200.f, 0.f);
+        mContext->lineTo(300.f, 400.f, 0.f);
+        mContext->moveTo(400.f, 400.f, 0.f);
+        mContext->lineTo(500.f, 500.f, 0.f);
+        
+        mContext->setDrawColor(ukn::color::Green);
+
+        mContext->setFillColor(ukn::color::Skyblue);
+
+        mContext->drawRect(ukn::Rectangle(50.f, 50.f, 100.f, 100.f, true), 0.f);
+        mContext->fillRect(ukn::Rectangle(500.f, 500.f, 100.f, 100.f, true), 0.f);
+        
+        mContext->end();
+
     }
     
 private:
     ukn::TexturePtr mSquareTexture;
     ukn::FontPtr mFont;
     ukn::FrameBufferPtr mFrameBuffer;
+    
+    ukn::GraphicContext* mContext;
     
     ukn::RenderBufferPtr mRenderBuffer;
     ukn::SharedPtr<ukn::MemoryGraphicBuffer<ukn::Vertex2D> > mVertexBuffer;

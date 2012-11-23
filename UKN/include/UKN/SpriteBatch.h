@@ -62,7 +62,7 @@ namespace ukn {
         SpriteBatch();
         
         friend class GraphicFactory;
-    
+        
     public:
         virtual ~SpriteBatch();
         
@@ -73,12 +73,7 @@ namespace ukn {
         Box getBound() const;
         RenderBufferPtr getRenderBuffer() const;
         
-        virtual void onRenderBegin();
-        virtual void onRenderEnd();
-        virtual void onRender();
-        
-        void render();
-
+    public:
         // must be called before any draw call
         void begin(SpriteBatchSortMode mode = SBS_Deffered);
         void begin(SpriteBatchSortMode mode, const Matrix4& transformMat);
@@ -119,6 +114,12 @@ namespace ukn {
         const Matrix4& getTransformMatrix() const;
                 
     protected:
+        void render();
+        
+        virtual void onRenderBegin();
+        virtual void onRenderEnd();
+        virtual void onRender();
+        
         void updateBoundingBox(float x, float y, float z);
         
         struct TextureObject {

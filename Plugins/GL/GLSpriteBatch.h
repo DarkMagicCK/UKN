@@ -21,7 +21,7 @@ namespace ukn {
         GLSpriteBatch();
         virtual ~GLSpriteBatch();
         
-        void onRender();
+        virtual void onRender();
     };
     
     

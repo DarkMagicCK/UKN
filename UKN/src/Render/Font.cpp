@@ -463,10 +463,6 @@ namespace ukn {
         mRenderQueue.push_back(data);
     }
     
-    const UknString& Font::getName() const {
-        return mFontName;
-    }
-    
     float2 Font::getStringDimensions(const wchar_t* str, float kw, float kh) {
         float2 dim(0.f, 0.f);
         
@@ -501,14 +497,6 @@ namespace ukn {
         if(mSpriteBatch) {
             mSpriteBatch->end();
         }
-    }
-    
-    Box Font::getBound() const {
-        return mSpriteBatch->getBound();
-    }
-    
-    RenderBufferPtr Font::getRenderBuffer() const {
-        return mSpriteBatch->getRenderBuffer();
     }
     
     

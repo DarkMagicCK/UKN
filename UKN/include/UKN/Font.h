@@ -47,7 +47,7 @@ namespace ukn {
         FSP_Size,
     };
     
-    class UKN_API Font: Uncopyable, public virtual IRenderable, public virtual IConfigSerializable {
+    class UKN_API Font: Uncopyable, public virtual IConfigSerializable {
     public:
         Font();
         ~Font();
@@ -72,21 +72,16 @@ namespace ukn {
     public:
         // IRenderable
         virtual void render();
-        
-        virtual void onRenderBegin();
-        virtual void onRenderEnd();
-        
-        virtual const UknString& getName() const;
-        
-        virtual Box getBound() const;
-        virtual RenderBufferPtr getRenderBuffer() const;
-        
+                       
     public:
         // IConfigSerializable
         virtual bool deserialize(const ConfigParserPtr& cfg);
         virtual bool serialize(const ConfigParserPtr& cfg);
         
-    private:
+    private:        
+        void onRenderBegin();
+        void onRenderEnd();
+
         friend class AssetManager;
         
         uint32 getGlyphByChar(uint16 chr);

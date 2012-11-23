@@ -139,9 +139,6 @@ namespace ukn {
         mMainWindow->onRender().raise(mMainWindow, _NullEventArgs);
         
         onRender();
-        
-        // render default SpriteBatch
-        SpriteBatch::DefaultObject().render();
     }
     
     void AppInstance::setCamera(CameraPtr camera) {

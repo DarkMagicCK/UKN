@@ -70,6 +70,9 @@ namespace ukn {
     }
     
     uint32 RenderBuffer::getVertexCount() const {
+        if(mVertexCount == 0 && mVertexStream) {
+            return mVertexStream->count();
+        }
         return mVertexCount;
     }
     
@@ -94,6 +97,9 @@ namespace ukn {
     }
     
     uint32 RenderBuffer::getIndexCount() const {
+        if(mIndexStream == 0 && mIndexStream) {
+            return mIndexStream->count();
+        }
         return mIndexCount;
     }
     

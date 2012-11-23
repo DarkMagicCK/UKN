@@ -467,11 +467,9 @@ namespace ukn {
         }
         
         void Map::onRenderBegin() {
-            mMapRenderer->onRenderBegin();
         }
         
         void Map::onRenderEnd() {
-            mMapRenderer->onRenderEnd();
         }
         
         void Map::orthogonalRender() {

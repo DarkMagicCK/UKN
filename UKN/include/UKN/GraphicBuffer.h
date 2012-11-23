@@ -53,15 +53,9 @@ namespace ukn {
         Usage   usage() const;
         Access  access() const;
         
-        // set use count, default = count
-        uint32 useCount() const;
-        void   useCount(uint32 useCount);
-        
     private:
         Access mAccessHint;
         Usage mUsage;
-        
-        uint32 mUseCount;
     };
     
     template<typename T>
@@ -89,6 +83,9 @@ namespace ukn {
         
         virtual void resize(uint32 desired_count) { mContainer.resize(desired_count); }
         virtual bool isInMemory() const { return true; }
+        
+    public:
+        void clear() { mContainer.clear(); }
         
     public:
         MemoryGraphicBuffer& push(const T& t) { mContainer.push_back(t); return *this; }

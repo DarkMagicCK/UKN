@@ -19,18 +19,17 @@
 #include <vector>
 
 #ifdef MIST_OS_WINDOWS
-#include <windows.h>
+    #include <windows.h>
 
-#ifdef UKN_COMPILER_MSVC
-#include <intrin.h>
-#endif
+    #ifdef UKN_COMPILER_MSVC
+        #include <intrin.h>
+    #endif
+
 #elif defined(MIST_OS_LINUX) || defined(MIST_OS_OSX)
-#include <sched.h>
-
-#if defined MIST_OS_OSX
-#include <sys/sysctl.h>
-#include <unistd.h>
-#endif
+        #include <sched.h>
+        #include <unistd.h>
+        #include <sys/utsname.h>
+        #include <sys/sysctl.h>
 #endif
 
 #ifndef _SC_NPROCESSORS_CONF
@@ -126,21 +125,54 @@ namespace mist {
         return ukn_win_message_box(mssg, title, option);
         
 #elif defined(MIST_OS_FAMILY_APPLE)
-        return ukn_apple_message_box(mssg, title, option);
+        return mist_apple_message_box(mssg, title, option);
         
 #elif defined(MIST_OS_LINUX)
 #endif
         return MBB_OK;
     }
     
+    
+#if defined(MIST_OS_FAMILY_UNIX)
+    
+    static uint64 mist_unix_get_processor_speed() {
+        int mib[2] = { CTL_HW, HW_CPU_FREQ };
+        u_int namelen = sizeof(mib) / sizeof(mib[0]);
+        uint64_t freq = 0;
+        size_t len = sizeof(freq);
+        
+        sysctl(mib, namelen, &freq, &len, NULL, 0);
+        return freq / 1000000;
+    }
+    
+    static uint64 mist_unix_get_memory_size() {
+        int mib[2] = { CTL_HW, HW_MEMSIZE };
+        u_int namelen = sizeof(mib) / sizeof(mib[0]);
+        uint64_t size = 0;
+        size_t len = sizeof(size);
+        
+        sysctl(mib, namelen, &size, &len, NULL, 0);
+        return size;
+    }
+    
+    static MistString mist_unix_get_osversion() {
+        utsname name;
+        uname(&name);
+        
+        return MistString(string::StringToWString(format_string("%s %s %s",
+                                                                name.sysname,
+                                                                name.release,
+                                                                name.version)));
+    }
+    
+#endif
+    
     uint64 SystemInformation::GetProcessorSpeed() {
 #ifdef MIST_OS_WINDOWS
         return ukn_win_get_processor_speed();
         
-#elif defined(MIST_OS_FAMILY_APPLE)
-        return ukn_apple_get_processor_speed();
-        
-#elif defined(MIST_OS_LINUX)
+#elif defined(MIST_OS_FAMILY_UNIX)
+        return mist_unix_get_processor_speed();
         
 #endif  
         return 0;
@@ -150,11 +182,9 @@ namespace mist {
 #ifdef MIST_OS_WINDOWS
         return ukn_win_get_memory_size();
         
-#elif defined(MIST_OS_FAMILY_APPLE)
-        return ukn_apple_get_memory_size();
+#elif defined(MIST_OS_FAMILY_UNIX)
+        return mist_unix_get_memory_size();
                 
-#elif defined(MIST_OS_LINUX)
-        
 #endif  
         return 0;
     }
@@ -164,10 +194,11 @@ namespace mist {
         return ukn_win_get_os_version();
         
 #elif defined(MIST_OS_FAMILY_APPLE)
-        return ukn_apple_get_os_version();
+        return mist_apple_get_os_version();
         
-#elif defined(MIST_OS_LINUX)
-        
+#elif defined(MIST_OS_FAMILY_UNIX)
+        mist_unix_get_osversion()
+     
 #endif  
         return MistString(L"Unknown OS");
     }
@@ -175,7 +206,7 @@ namespace mist {
     Array<SystemInformation::DesktopMode> SystemInformation::EnumDesktopMode() {
         Array<SystemInformation::DesktopMode> arr;
 #if defined(MIST_OS_FAMILY_APPLE)
-        ukn_apple_enum_desktop_modes(arr);
+        mist_apple_enum_desktop_modes(arr);
 
 #elif defined(MIST_OS_WINDOWS)
         ukn_win_enum_desktop_modes(arr);

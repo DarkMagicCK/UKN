@@ -24,6 +24,7 @@
 
 #ifdef MIST_OS_FAMILY_UNIX   
 #include <pwd.h>
+#include <sys/fcntl.h>
 #endif // MIST_OS_FAMILTY_UNIX
 
 #include <cstdio>
@@ -38,7 +39,7 @@ namespace mist {
         return PathFileExistsW(filepath.c_str())?true:false;
         
 #elif defined(MIST_OS_FAMILY_APPLE)
-        return ukn_apple_file_exists(filepath);
+        return mist_apple_file_exists(filepath);
 #else
         
         struct stat sb;
@@ -65,6 +66,225 @@ namespace mist {
         return false;
     }
     
+#if defined(MIST_OS_FAMILY_UNIX)
+    
+    static bool mist_generic_cp_mv(const char* bin, const char *source, const char *dest, bool r = false) {
+        int childExitStatus;
+        pid_t pid;
+        int status;
+        if (!source || !dest) {
+            return false;
+        }
+        
+        pid = fork();
+        
+        if (pid == 0) {
+            if(r)
+                execl(bin, bin, "-R", source, dest, (char *)0);
+            else
+                execl(bin, bin, source, dest, (char *)0);
+            
+        }
+        else if (pid < 0) {
+            return false;
+        }
+        else {
+            pid_t ws = waitpid( pid, &childExitStatus, WNOHANG);
+            if (ws == -1) {
+                return false;
+            }
+            
+            if( WIFEXITED(childExitStatus)) {
+                status = WEXITSTATUS(childExitStatus); /* zero is normal exit */
+                return status == 0;
+            }
+        }
+        return false;
+    }
+    
+    static bool mist_generic_rm(const char *source, bool r = false) {
+        int childExitStatus;
+        pid_t pid;
+        int status;
+        if (!source) {
+            return false;
+        }
+        
+        pid = fork();
+        
+        if (pid == 0) {
+            if(r)
+                execl("/bin/rm", "/bin/rm", "-R", source, (char *)0);
+            else
+                execl("/bin/rm", "/bin/rm", source, (char *)0);
+            
+        }
+        else if (pid < 0) {
+            return false;
+        }
+        else {
+            pid_t ws = waitpid( pid, &childExitStatus, WNOHANG);
+            if (ws == -1) {
+                return false;
+            }
+            
+            if( WIFEXITED(childExitStatus)) {
+                status = WEXITSTATUS(childExitStatus); /* zero is normal exit */
+                return status == 0;
+            }
+        }
+        return false;
+    }
+#endif
+    
+    
+    bool File::CopyFile(const MistString& src, const MistString& dst) {
+     
+#if defined(MIST_OS_WINDOWS)
+        
+        return ::CopyFileW(src.c_str(),
+                           dst.c_str(),
+                           FALSE) == TRUE;
+        
+#elif defined(MIST_OS_FAMILY_APPLE)
+        return mist_apple_copyitem(src, dst);
+        
+#elif defined(MIST_OS_FAMILY_UNIX)
+        return mist_generic_cp_mv("/bin/cp",
+                                  string::WStringToString(src).c_str(),
+                                  string::WStringToString(dst).c_str());
+        
+#endif
+        
+    }
+    
+    bool File::CopyDirectory(const MistString& src, const MistString& dst) {
+#if defined(MIST_OS_WINDOWS)
+        SHFILEOPSTRUCTW s = { 0 };
+        s.hwnd = 0;
+        s.wFunc = FO_COPY;
+        s.fFlags = FOF_SILENT;
+        s.pTo = dst.c_str();
+        s.pFrom = src.c_str();
+        return SHFileOperation(&s) == 0;
+        
+#elif defined(MIST_OS_FAMILY_APPLE)
+        return mist_apple_copyitem(src, dst);      
+        
+#elif defined(MIST_OS_FAMILY_UNIX)
+        return mist_generic_cp_mv("/bin/cp",
+                                  string::WStringToString(src).c_str(),
+                                  string::WStringToString(dst).c_str(),
+                                  true);
+        
+#endif
+        
+    }
+    
+    bool File::MoveFile(const MistString& src, const MistString& dst) {
+#if defined(MIST_OS_WINDOWS)
+        return ::MoveFile(src.c_str(),
+                          dst.c_str()) == TRUE;
+        
+#elif defined(MIST_OS_FAMILY_APPLE)
+        return mist_apple_moveitem(src, dst);
+        
+#elif defined(MIST_OS_FAMILY_UNIX)
+        return ::rename(string::WStringToString(src).c_str(),
+                        string::WStringToString(dst).c_str()) == 0;
+        
+#endif
+    }
+    
+    bool File::MoveDirectory(const MistString& src, const MistString& dst) {
+#if defined(MIST_OS_WINDOWS)
+        return ::MoveFile(src.c_str(),
+                          dst.c_str()) == TRUE;
+        
+#elif defined(MIST_OS_FAMILY_APPLE)
+        return mist_apple_moveitem(src, dst);
+        
+#elif defined(MIST_OS_FAMILY_UNIX)
+        return ::rename(string::WStringToString(src).c_str(),
+                        string::WStringToString(dst).c_str()) == 0;
+        
+#endif
+    }
+    
+    bool File::DeleteFile(const MistString& src) {
+#if defined(MIST_OS_WINDOWS)
+        return ::DeleteFile(src.c_str()) == TRUE;
+        
+#elif defined(MIST_OS_FAMILY_APPLE)
+        return mist_apple_deleteitem(src);
+        
+        
+#elif defined(MIST_OS_FAMILY_UNIX)
+        return ::remove(string::WStringToString(src).cstr()) == 0;
+        
+#endif
+    }
+    
+    bool File::DeleteDirectory(const MistString& src) {
+#if defined(MIST_OS_WINDOWS)
+        return ::RemoveDirectoryW(src.c_str()) == TRUE;
+        
+#elif defined(MIST_OS_FAMILY_APPLE)
+        return mist_apple_deleteitem(src);
+        
+#elif defined(MIST_OS_FAMILY_UNIX)
+        return mist_generic_rm(string::WStringToString(src).c_str(),
+                               true);
+        
+#endif
+    }
+    
+    bool File::CreateDirectory(const MistString& dir){
+#if defined(MIST_OS_WINDOWS)
+        return ::CreateDirectoryW(dir.c_str(),
+                                  NULL) == TRUE;
+        
+#elif defined(MIST_OS_FAMILY_APPLE)
+
+        return mist_apple_createdirectory(dir);
+        
+#elif defined(MIST_OS_FAMILY_UNIX)
+        return mkdir(string::WStringToString(dir).c_str(),
+                     S_IRWXU) == 0;
+        
+#endif
+    }
+    
+    File::FileInfo File::GetFileInfo(const MistString& src) {
+        FileInfo info;
+#if defined(MIST_OS_WINDOWS)
+        struct __stat64 fs;
+#else
+        struct stat fs;
+#endif
+        
+        int fd = ::open(string::WStringToString(src).c_str(),
+                    O_RDONLY);
+        
+#if defined(MIST_OS_WINDOWS)
+        ::_fstat64(fd, &fs);
+#else
+        ::fstat(fd, &fs);
+#endif
+        
+        info.creation_time = fs.st_ctimespec.tv_sec;
+        info.accessed_time = fs.st_atimespec.tv_sec;
+        info.modified_time = fs.st_mtimespec.tv_sec;
+        info.size = fs.st_size;
+        info.num_links = fs.st_nlink;
+        info.serial = fs.st_uid;
+        
+        ::close(fd);
+        
+        return info;
+    }
+    
+    
     MistString Path::GetApplicationPath() {
 #ifdef MIST_OS_WINDOWS
         wchar_t buffer[MAX_PATH];
@@ -73,7 +293,7 @@ namespace mist {
         return MistString(buffer)+L"/";
         
 #elif defined(MIST_OS_FAMILY_APPLE)
-        return ukn_apple_application_path() + L"/";
+        return mist_apple_application_path() + L"/";
         
 #endif
         return L"./";
@@ -105,7 +325,7 @@ namespace mist {
         // document path for ios and osx
         {
 #if defined(MIST_OS_FAMILY_APPLE)
-            MistString fullpath(ukn_apple_documents_path());
+            MistString fullpath(mist_apple_documents_path());
             
             if(File::FileExists(fullpath)) {
                 return fullpath;
@@ -240,7 +460,7 @@ namespace mist {
         return L"./";
         
 #elif defined(MIST_OS_FAMILY_APPLE)
-        return ukn_apple_documents_path();
+        return mist_apple_documents_path();
         
 #elif defined(MIST_OS_FAMILY_UNIX)
         return L"./";
@@ -401,7 +621,7 @@ namespace mist {
         if (--mRC) {
             delete this;
         }
-    }    
+    }
 } 
 
 #else

@@ -190,7 +190,7 @@ namespace mist {
 	}
 #endif
     
-    static std::string ukn_normal_wstring_to_string(const std::wstring& ws) {
+    static std::string ukn_c_wstring_to_string(const std::wstring& ws) {
         std::string curLocale = setlocale(LC_ALL, NULL);        // curLocale = "C";
         setlocale(LC_ALL, "chs");
         const wchar_t* _Source = ws.c_str();
@@ -204,7 +204,7 @@ namespace mist {
         return result;
     }
     
-    static std::wstring ukn_normal_string_to_wstring(const std::string& s) {
+    static std::wstring ukn_c_string_to_wstring(const std::string& s) {
         setlocale(LC_ALL, "chs"); 
         const char* _Source = s.c_str();
         size_t _Dsize = s.size() + 1;
@@ -221,9 +221,9 @@ namespace mist {
 #if defined(MIST_OS_WINDOWS)
         return ukn_win_wstring_to_string(str);
 #elif defined(MIST_OS_IOS) || defined(MIST_OS_OSX)
-        return ukn_apple_wstring_to_string(str);
+        return mist_apple_wstring_to_string(str);
 #else
-        return ukn_normal_wstring_to_string(str);
+        return ukn_c_wstring_to_string(str);
 #endif
     }
     
@@ -231,9 +231,9 @@ namespace mist {
 #if defined(MIST_OS_WINDOWS)
         return ukn_win_string_to_wstring(str);
 #elif defined(MIST_OS_IOS) || defined(MIST_OS_OSX)
-        return ukn_apple_string_to_wstring(str);
+        return mist_apple_string_to_wstring(str);
 #else
-        return ukn_normal_string_to_wstring(str);
+        return ukn_c_string_to_wstring(str);
 #endif  
     }
     

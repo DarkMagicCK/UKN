@@ -20,6 +20,29 @@ namespace mist {
     public:
         static bool FileExists(const MistString& filepath);
         static bool PathExists(const MistString& path);
+        
+        static bool CopyFile(const MistString& src, const MistString& dst);
+        static bool CopyDirectory(const MistString& src, const MistString& dst);
+        
+        static bool MoveFile(const MistString& src, const MistString& dst);
+        static bool MoveDirectory(const MistString& src, const MistString& dst);
+        
+        static bool DeleteFile(const MistString& src);
+        static bool DeleteDirectory(const MistString& src);
+        
+        static bool CreateDirectory(const MistString& dir);
+        
+        struct FileInfo {
+            uint64 accessed_time; /* read etc */
+            uint64 modified_time; /* write etc */
+            uint64 creation_time; /* time since created */
+            
+            uint64 size; /* file size */
+            
+            uint32 num_links; /* number of links */
+            uint64 serial; /* unique identifier */
+        };
+        FileInfo GetFileInfo(const MistString& src);
     };
 
     

@@ -23,6 +23,72 @@
 
 namespace ukn {
     
+    ContextCfg& ContextCfg::graphicFactoryName(const UknString& name) {
+        graphic_factory_name = name;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::isFullScreen(bool flag) {
+        render_cfg.full_screen = flag;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::width(uint32 width) {
+        render_cfg.width = width;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::height(uint32 height) {
+        render_cfg.height = height;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::colorFormat(ElementFormat fmt) {
+        render_cfg.color_fmt = fmt;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::depthStencilFormat(ElementFormat fmt) {
+        render_cfg.depth_stencil_fmt = fmt;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::resizable(bool flag) {
+        render_cfg.resizable = flag;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::showMouse(bool flag) {
+        render_cfg.show_mouse = flag;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::sampleCount(int count) {
+        render_cfg.sample_count = count;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::sampleQuality(int quality) {
+        render_cfg.sample_quality = quality;
+        return *this;
+    }
+    
+    ContextCfg& ContextCfg::fsaaSamples(int samples) {
+        render_cfg.fsaa_samples = samples;
+        return *this;
+    }
+    
+    ContextCfg ContextCfg::Default() {
+        return ContextCfg()
+                    .width(640)
+                    .height(480)
+                    .isFullScreen(false)
+                    .resizable(false)
+                    .showMouse(true)
+                    .colorFormat(EF_RGBA8)
+                    .depthStencilFormat(EF_D16);
+    }
+    
     typedef void (*CreateGraphicFactoryFunc)(GraphicFactoryPtr&);
     
     Context& Context::Instance() {
@@ -74,12 +140,18 @@ namespace ukn {
     inline int fmt_string_to_element_format(const UknString& str) {
         if(str == L"EF_RGBA8")
             return EF_RGBA8;
-        else if(str == L"EF_D16")
+        if(str == L"EF_D16")
             return EF_D16;
-        else if(str == L"EF_D24S8")
+        if(str == L"EF_D24S8")
             return EF_D24S8;
-        else if(str == L"EF_D32")
+        if(str == L"EF_D32")
             return EF_D32;
+        if(str == L"EF_RGB565")
+            return EF_RGB565;
+        if(str == L"EF_RGB5A1")
+            return EF_RGB5A1;
+        if(str == L"EF_RGBA4444")
+            return EF_RGBA4444;
         return -1;
     }
     
@@ -93,6 +165,12 @@ namespace ukn {
                 return L"EF_D32";
             case EF_D24S8:
                 return L"EF_D24S8";
+            case EF_RGB565:
+                return L"EF_RGB565";
+            case EF_RGB5A1:
+                return L"EF_RGB5A1";
+            case EF_RGBA4444:
+                return L"EF_RGBA4444";
         }
         return L"unknown_fmt";
     }

@@ -37,7 +37,7 @@ namespace ukn {
         
     }
     
-    void AppInstance::onWindowClose(void* wnd, NullEventArgs&) {
+    void AppInstance::onWindowClose(Window* wnd) {
         terminate();
     }
     
@@ -49,18 +49,28 @@ namespace ukn {
 		return mMainWindow;
 	}
     
-    void AppInstance::create(const UknString& cfgname) {
-        mInited = true;
+    AppInstance& AppInstance::create(const UknString& cfgname) {
+        if(!mInited) {
+            mInited = true;
         
-        Context::Instance().loadCfgFile(cfgname);
-        doCreate();
+            Context::Instance().loadCfgFile(cfgname);
+            doCreate();
+        } else {
+            MIST_THROW_EXCEPTION("app already created");
+        }
+        return *this;
     }
     
-    void AppInstance::create(const ContextCfg& cfg) {
-        mInited = true;
+    AppInstance& AppInstance::create(const ContextCfg& cfg) {
+        if(!mInited) {
+            mInited = true;
         
-        Context::Instance().setCfg(cfg);
-        doCreate();
+            Context::Instance().setCfg(cfg);
+            doCreate();
+        } else {
+            MIST_THROW_EXCEPTION("app already created");
+        }
+        return *this;
     }
     
     void AppInstance::doCreate() {
@@ -151,6 +161,30 @@ namespace ukn {
     
     void AppInstance::onInit() {        
         
+    }
+    
+    AppInstance& AppInstance::updateFunc(const DelegateFuncType& f) {
+        mist_assert(mInited && mMainWindow);
+        
+        mMainWindow->onUpdate() += f;
+        
+        return *this;
+    }
+    
+    AppInstance& AppInstance::renderFunc(const DelegateFuncType& f) {
+        mist_assert(mInited && mMainWindow);
+
+        mMainWindow->onRender() += f;
+        
+        return *this;
+    }
+    
+    AppInstance& AppInstance::initFunc(const DelegateFuncType& f) {
+        mist_assert(mInited && mMainWindow);
+
+        mMainWindow->onInit() += f;
+        
+        return *this;
     }
     
     void AppInstance::run() {

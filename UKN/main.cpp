@@ -1219,7 +1219,7 @@ public:
                 ukn::Vector2(0, 0));
         sb.end();
         
-        mContext->begin();
+      /*  mContext->begin();
         mContext->drawCircle(getWindow().width() / 2,
                              getWindow().height() / 2,
                              1.f,
@@ -1244,9 +1244,9 @@ public:
 
         mContext->drawRect(ukn::Rectangle(50.f, 50.f, 100.f, 100.f, true), 0.f);
         mContext->fillRect(ukn::Rectangle(500.f, 500.f, 100.f, 100.f, true), 0.f);
-        
+       
         mContext->end();
-
+*/
     }
     
 private:
@@ -1277,12 +1277,32 @@ int CALLBACK WinMain(
 ) {
 #endif
     
-    // register plugins by hand for testing purpose
+    // register plugins manually for test
     ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
-    TestApp instance(L"Rabbit&Fox");
+   
+    ukn::AppInstance(L"Test")
+        .create(
+                ukn::ContextCfg::Default()
+                  .width(800)
+                  .height(600)
+               )
+        .renderFunc([](void* wnd) {
+            ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
+            
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Skyblue, 0, 0);
+        })
+        .updateFunc([](void* wnd) {
+            
+        })
+        .initFunc([](void* wnd) {
+            
+        })
+        .run();
+    
+    /*TestApp instance(L"Rabbit&Fox");
 
     // create app context
     ukn::ContextCfg cfg;
@@ -1294,7 +1314,7 @@ int CALLBACK WinMain(
     
     // run app
     instance.run();
-    
+    */
     
     return 0;
 }

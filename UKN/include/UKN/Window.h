@@ -95,24 +95,26 @@ namespace ukn {
         
     // events
     public:
-        typedef Event<NullEventArgs>            WindowCreateEvent;
-        typedef Event<WindowBoolEventArgs>      ActiveEvent;
-        typedef Event<WindowBoolEventArgs>      IconifyEvent;
-        typedef Event<NullEventArgs>            RenderEvent;
-        typedef Event<NullEventArgs>            UpdateEvent;
-        typedef Event<WindowResizeEventArgs>    ResizeEvent;
-        typedef Event<NullEventArgs>            SetCursorEvent;
-        typedef Event<NullEventArgs>            SetIconEvent;
-        typedef Event<NullEventArgs>            CloseEvent;
-        typedef Event<NullEventArgs>            FrameEndEvent;
-        typedef Event<NullEventArgs>            FrameStartEvent;
-        typedef Event<NullEventArgs>            InitializeEvent;
         
-        typedef Event<input::MouseEventArgs>    MouseEvent;
-        typedef Event<input::KeyEventArgs>      KeyEvent;
-        typedef Event<input::JoyStickEventArgs> JoyStickEvent;
         
-        typedef Event<NullEventArgs>            GlobalUpdateEvent;
+        typedef Event<NullEventArgs, Window*>            WindowCreateEvent;
+        typedef Event<WindowBoolEventArgs, Window*>      ActiveEvent;
+        typedef Event<WindowBoolEventArgs, Window*>      IconifyEvent;
+        typedef Event<NullEventArgs, Window*>            RenderEvent;
+        typedef Event<NullEventArgs, Window*>            UpdateEvent;
+        typedef Event<WindowResizeEventArgs, Window*>    ResizeEvent;
+        typedef Event<NullEventArgs, Window*>            SetCursorEvent;
+        typedef Event<NullEventArgs, Window*>            SetIconEvent;
+        typedef Event<NullEventArgs, Window*>            CloseEvent;
+        typedef Event<NullEventArgs, Window*>            FrameEndEvent;
+        typedef Event<NullEventArgs, Window*>            FrameStartEvent;
+        typedef Event<NullEventArgs, Window*>            InitializeEvent;
+        
+        typedef Event<input::MouseEventArgs, Window*>    MouseEvent;
+        typedef Event<input::KeyEventArgs, Window*>      KeyEvent;
+        typedef Event<input::JoyStickEventArgs, Window*> JoyStickEvent;
+        
+        typedef Event<NullEventArgs, Window*>            GlobalUpdateEvent;
         
     private:
         WindowCreateEvent   mWindowCreateEvent;

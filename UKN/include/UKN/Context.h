@@ -21,13 +21,27 @@ namespace ukn {
     /**
      * Manages dynamic registered plugins
      * May load from dynamic librarys(dll, so, dylib)
-     *  or register by hand
+     *  or register manually
      **/
     
     struct ContextCfg {
         UknString graphic_factory_name;
         
         RenderSettings render_cfg;
+        
+        ContextCfg& graphicFactoryName(const UknString& name);
+        ContextCfg& isFullScreen(bool flag);
+        ContextCfg& width(uint32 width);
+        ContextCfg& height(uint32 height);
+        ContextCfg& colorFormat(ElementFormat fmt);
+        ContextCfg& depthStencilFormat(ElementFormat fmt);
+        ContextCfg& resizable(bool flag);
+        ContextCfg& showMouse(bool flag);
+        ContextCfg& sampleCount(int count);
+        ContextCfg& sampleQuality(int quality);
+        ContextCfg& fsaaSamples(int samples);
+        
+        static ContextCfg Default();
     };
     
     class UKN_API Context {

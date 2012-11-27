@@ -34,43 +34,67 @@ namespace mist {
     }
     
     bool ModuleManager::delModule(Module* module) {
-        ModuleList::iterator it = mModules.begin();
-        for(; it != mModules.end(); ++it) {
-            if(*it == module) {
-                (*it)->shutdown();
-                
-                mModules.erase(it);
-                return true;
-            }
+        ModuleList::iterator it = std::find(mModules.begin(),
+                                            mModules.end(),
+                                            module);
+        if(it != mModules.end()) {
+            this->delModule(it);
+            return true;
         }
         return false;
     }
     
     bool ModuleManager::addModuleFromDll(const MistString& name) {
-        DllLoader loader;
-        if(loader.open(string::WStringToString(name).c_str())) {
+        DllLoader* loader = new DllLoader();
+        if(loader->open(string::WStringToString(name).c_str())) {
             typedef Module* (*ModuleCreateFunc)();
-            ModuleCreateFunc func = (ModuleCreateFunc)loader.getProc("CreateModule");
+            ModuleCreateFunc func = (ModuleCreateFunc)loader->getProc("CreateModule");
             
             Module* module = func();
             if(module) {
                 this->addModule(module);
+                
+                mModuleLoaders.insert(std::make_pair(module, loader));
+            } else {
+                delete loader;
             }
+        } else {
+            delete loader;
         }
         return false;
     }
     
     bool ModuleManager::delModule(const MistString& name) {
+#ifdef MIST_CPP11
+        ModuleList::iterator it = std::find_if(mModules.begin(),
+                                               mModules.end(),
+                                               [&](Module* module)->bool { return module->getName() == name; });
+        if(it != mModules.end()) {
+            this->delModule(it);
+            return true;
+        }
+        return false;
+#else
         ModuleList::iterator it = mModules.begin();
         for(; it != mModules.end(); ++it) {
             if((*it)->getName() == name) {
-                (*it)->shutdown();
-                
-                mModules.erase(it);
                 return true;
             }
         }
         return false;
+#endif
+    }
+    
+    void ModuleManager::delModule(ModuleList::iterator it) {
+        (*it)->shutdown();
+        
+        ModuleLoaderMap::iterator itLoader = mModuleLoaders.find((*it));
+        if(itLoader != mModuleLoaders.end()) {
+            delete itLoader->second;
+            mModuleLoaders.erase(itLoader);
+        }
+        
+        mModules.erase(it);
     }
     
     void ModuleManager::onUpdate(void*, NullEventArgs&) {

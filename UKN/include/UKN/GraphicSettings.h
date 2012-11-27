@@ -66,12 +66,12 @@ namespace ukn {
     struct RenderSettings {
         RenderSettings():
         full_screen(false),
-        resizable(false),
+        resizable(true),
         show_mouse(true),
         left(0),
         top(0),
-        width(0),
-        height(0),
+        width(640),
+        height(480),
         color_fmt(EF_RGBA8),
         depth_stencil_fmt(EF_D16),
         sample_count(1),

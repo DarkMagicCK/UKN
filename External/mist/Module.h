@@ -14,8 +14,11 @@
 #include "mist/Event.h"
 
 #include <vector>
+#include <map>
 
 namespace mist {
+    
+    class DllLoader;
     
     class Module: Uncopyable {
     public:
@@ -48,6 +51,11 @@ namespace mist {
     private:
         typedef std::vector<Module*> ModuleList;
         ModuleList mModules;
+        
+        void delModule(ModuleList::iterator it);
+        
+        typedef std::map<Module*, DllLoader*> ModuleLoaderMap;
+        ModuleLoaderMap mModuleLoaders;
     };
     
 } // namespace mist

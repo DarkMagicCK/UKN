@@ -26,11 +26,12 @@ namespace mist {
         
     } _NullEventArgs;
     
-    template<typename EventArgs>
+    template<typename _EVENT_ARGS, typename _SENDER = void*, typename _RT = void>
     class MIST_API Event: public EventBase {
     public:
-        typedef EventArgs event_args_type;
-        typedef Signal<void(void* /* sender */, EventArgs&)> signal_type;
+        typedef _EVENT_ARGS event_args_type;
+        typedef _SENDER sender_type;
+        typedef Signal<_RT(_SENDER /* sender */, event_args_type&)> signal_type;
         
         Event() { }
         
@@ -55,8 +56,46 @@ namespace mist {
             return mSignal;
         }
         
-        void raise(void* sender, EventArgs& args) {
-            mSignal(sender, args);
+        _RT raise(sender_type sender, event_args_type& args) {
+            return mSignal(sender, args);
+        }
+        
+    private:
+        signal_type mSignal;
+    };
+    
+    template<typename _SENDER, typename _RT>
+    class MIST_API Event<NullEventArgs, _SENDER, _RT>: public EventBase {
+    public:
+        typedef NullEventArgs event_args_type;
+        typedef _SENDER sender_type;
+        typedef Signal<_RT(_SENDER /* sender */)> signal_type;
+        
+        Event() { }
+        
+        ~Event() { }
+        
+        template<typename F>
+        Connection connect(const F& func) {
+            return mSignal.connect(func);
+        }
+        
+        template<typename F>
+        void operator += (const F& func) {
+            mSignal.connect(func);
+        }
+        
+        template<typename F>
+        void operator -= (const F& func) {
+            mSignal.disconnect(func);
+        }
+        
+        const signal_type& getSignal() const {
+            return mSignal;
+        }
+        
+        _RT raise(sender_type sender, event_args_type& args) {
+            return mSignal(sender);
         }
         
     private:

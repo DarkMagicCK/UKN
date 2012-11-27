@@ -29,8 +29,8 @@ namespace ukn {
         Window&     getWindow() const;
 		WindowPtr   getWindowPtr() const;
         
-        void create(const UknString& cfgname=L"config.xml");
-        void create(const ContextCfg& cfg);
+        AppInstance& create(const UknString& cfgname=L"config.xml");
+        AppInstance& create(const ContextCfg& cfg);
         
         void run();
         void terminate();
@@ -41,6 +41,14 @@ namespace ukn {
         void        setCamera(CameraPtr camera);
         CameraPtr   getCamera() const;
         
+    public:
+        typedef Function<void(void*)> DelegateFuncType;
+        
+        /* must be called after creat */
+        AppInstance& initFunc(const DelegateFuncType& f);
+        AppInstance& updateFunc(const DelegateFuncType& f);
+        AppInstance& renderFunc(const DelegateFuncType& f);
+        
     protected:
         virtual void onRender();
         virtual void onUpdate();
@@ -48,7 +56,7 @@ namespace ukn {
         
     private:
         void doCreate();
-        void onWindowClose(void* wnd, NullEventArgs&);
+        void onWindowClose(Window* wnd);
         
         UknString mName;
         bool mInited;    

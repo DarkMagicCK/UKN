@@ -189,7 +189,7 @@ namespace ukn {
     const Frustum& Camera3D::getViewFrustum() const {
         if(mFrustumDirty) {
             mFrustum[0].clipMatrix(mViewMat[0] * mProjMat[0]);
-            // mFrustum[1].clipMatrix(mViewMat[1] * mProjMat[1]);
+            mFrustum[1].clipMatrix(mViewMat[1] * mProjMat[1]);
             mFrustumDirty = false;
         }
         return mFrustum[0];

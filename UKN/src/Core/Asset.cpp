@@ -18,12 +18,19 @@
 #include "mist/Stream.h"
 #include "mist/StringUtil.h"
 #include "mist/Logger.h"
+#include "mist/FileUtil.h"
 
 namespace ukn {
 
     
     SharedPtr<Font> AssetLoader<Font>::Load(const UknString& name, const UknString& path) {
-        ResourcePtr resource = ResourceLoader::Instance().loadResource(path);
+        ResourcePtr resource;
+        
+        if(mist::File::FileExists(path)) {
+            resource = ResourceLoader::Instance().loadResource(path);
+        } else {
+            resource = ResourceLoader::Instance().loadResource(mist::Path::GetFont() + path);
+        }
         
         if(resource) {            
             SharedPtr<Font> font = new Font();

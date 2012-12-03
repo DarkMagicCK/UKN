@@ -28,6 +28,7 @@
 		88093CA014BC258000C6152F /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 88093C8F14BC258000C6152F /* zutil.c */; };
 		880C3F0D165ECF3D0076ED72 /* AutoUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 880C3F0B165ECF350076ED72 /* AutoUpdate.cpp */; };
 		880C3F11165ED0C20076ED72 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 880C3F0F165ED0BB0076ED72 /* Animation.cpp */; };
+		880C3F32166704F50076ED72 /* LeapTestApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 880C3F30166704F50076ED72 /* LeapTestApp.cpp */; };
 		881B520415BBC63C009B9482 /* LocalizedStringTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */; };
 		881B522015BBCD8C009B9482 /* LocalizedStringTableLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */; };
 		88260E651488541E00142365 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E641488541E00142365 /* Window.cpp */; };
@@ -40,6 +41,7 @@
 		884CE4011490905900F58E2E /* GLSpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE4001490905600F58E2E /* GLSpriteBatch.cpp */; };
 		8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885449981491E253006B8B60 /* libfreetype.a */; };
 		8855E32616561118002311E9 /* LeapMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8855E32416561118002311E9 /* LeapMotion.cpp */; };
+		887ACB52166C170900EDFBB6 /* Serial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 887ACB50166C170900EDFBB6 /* Serial.cpp */; };
 		8884B3C415F7CCEA0086533E /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C215F7CCE90086533E /* Shader.cpp */; };
 		8884B3C715F7CCFC0086533E /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C515F7CCFB0086533E /* GLShader.cpp */; };
 		8885838616587EF7000D9ADA /* libLeap.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8885838516587EF7000D9ADA /* libLeap.dylib */; };
@@ -176,6 +178,8 @@
 		880C3F0C165ECF3A0076ED72 /* AutoUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoUpdate.h; sourceTree = "<group>"; };
 		880C3F0F165ED0BB0076ED72 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Animation.cpp; sourceTree = "<group>"; };
 		880C3F10165ED0BF0076ED72 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animation.h; sourceTree = "<group>"; };
+		880C3F30166704F50076ED72 /* LeapTestApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeapTestApp.cpp; path = UKN/LeapTestApp.cpp; sourceTree = SOURCE_ROOT; };
+		880C3F31166704F50076ED72 /* LeapTestApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeapTestApp.h; path = UKN/LeapTestApp.h; sourceTree = SOURCE_ROOT; };
 		881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalizedStringTable.cpp; sourceTree = "<group>"; };
 		881B520B15BBC882009B9482 /* LocalizedStringTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedStringTable.h; sourceTree = "<group>"; };
 		881B521C15BBCD67009B9482 /* LocalizedStringTableLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedStringTableLoader.h; sourceTree = "<group>"; };
@@ -285,6 +289,8 @@
 		8855E31E1656107B002311E9 /* LeapMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeapMotion.h; sourceTree = "<group>"; };
 		8855E32416561118002311E9 /* LeapMotion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LeapMotion.cpp; sourceTree = "<group>"; };
 		886DBA3C14C43DCB00652729 /* Basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Basic.h; sourceTree = "<group>"; };
+		887ACB50166C170900EDFBB6 /* Serial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Serial.cpp; sourceTree = "<group>"; };
+		887ACB51166C170900EDFBB6 /* Serial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Serial.h; sourceTree = "<group>"; };
 		8884B3C215F7CCE90086533E /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
 		8884B3C515F7CCFB0086533E /* GLShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLShader.cpp; sourceTree = "<group>"; };
 		8884B3C615F7CCFB0086533E /* GLShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLShader.h; sourceTree = "<group>"; };
@@ -463,7 +469,6 @@
 		88ECF0A6165210E300EA6B47 /* SysUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SysUtil.h; sourceTree = "<group>"; };
 		88ECF0A7165210E300EA6B47 /* Task.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Task.cpp; sourceTree = "<group>"; };
 		88ECF0A8165210E300EA6B47 /* Task.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Task.h; sourceTree = "<group>"; };
-		88ECF0A9165210E300EA6B47 /* Texture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Texture.h; sourceTree = "<group>"; };
 		88ECF0AA165210E300EA6B47 /* Thread.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Thread.cpp; sourceTree = "<group>"; };
 		88ECF0AB165210E300EA6B47 /* Thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Thread.h; sourceTree = "<group>"; };
 		88ECF0AC165210E300EA6B47 /* Timeutil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Timeutil.cpp; sourceTree = "<group>"; };
@@ -873,6 +878,8 @@
 				88AAC170148689ED007A80A4 /* External */,
 				88E3C3C7147F2BAC00E8754D /* Plugins */,
 				88AAC16E14868758007A80A4 /* main.cpp */,
+				880C3F30166704F50076ED72 /* LeapTestApp.cpp */,
+				880C3F31166704F50076ED72 /* LeapTestApp.h */,
 				88DE02DE15F12F4100D81323 /* SqaureGame.h */,
 				88E1938D15EBD13E0098FA28 /* Arial.ttf */,
 			);
@@ -1013,7 +1020,6 @@
 				88ECF0A6165210E300EA6B47 /* SysUtil.h */,
 				88ECF0A7165210E300EA6B47 /* Task.cpp */,
 				88ECF0A8165210E300EA6B47 /* Task.h */,
-				88ECF0A9165210E300EA6B47 /* Texture.h */,
 				88ECF0AA165210E300EA6B47 /* Thread.cpp */,
 				88ECF0AB165210E300EA6B47 /* Thread.h */,
 				88ECF0AC165210E300EA6B47 /* Timeutil.cpp */,
@@ -1027,6 +1033,8 @@
 				88ECF0B4165210E300EA6B47 /* Util.h */,
 				88ECF0DC16521C3900EA6B47 /* ZipUtil.cpp */,
 				88ECF0DD16521C3A00EA6B47 /* ZipUtil.h */,
+				887ACB50166C170900EDFBB6 /* Serial.cpp */,
+				887ACB51166C170900EDFBB6 /* Serial.h */,
 			);
 			name = mist;
 			path = External/mist;
@@ -1264,6 +1272,8 @@
 				8855E32616561118002311E9 /* LeapMotion.cpp in Sources */,
 				880C3F0D165ECF3D0076ED72 /* AutoUpdate.cpp in Sources */,
 				880C3F11165ED0C20076ED72 /* Animation.cpp in Sources */,
+				880C3F32166704F50076ED72 /* LeapTestApp.cpp in Sources */,
+				887ACB52166C170900EDFBB6 /* Serial.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

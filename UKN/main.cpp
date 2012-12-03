@@ -1194,13 +1194,14 @@ public:
     }
     
     void onUpdate() {
+        
     }
     
     void onRender() {
         ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
         
         gd.bindFrameBuffer(mFrameBuffer);
-        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
+        gd.clear(ukn::CM_Color, ukn::Color(0, 0, 0, 0.01f), 0, 0);
         
         gd.setRenderState(ukn::RS_PointSize, mist::Convert::ReinterpretConvert<float, ukn::uint32>(4.0));
         gd.setRenderState(ukn::RS_Blend, ukn::RSP_Enable);
@@ -1209,8 +1210,10 @@ public:
         
         gd.onRenderBuffer(mRenderBuffer);
         
+        mVertexBuffer->clear();
+        
         gd.bindFrameBuffer(gd.getScreenFrameBuffer());
-        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Skyblue, 0, 0);
+        gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
 
                 
         ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
@@ -1218,35 +1221,6 @@ public:
         sb.draw(mSquareTexture,
                 ukn::Vector2(0, 0));
         sb.end();
-        
-      /*  mContext->begin();
-        mContext->drawCircle(getWindow().width() / 2,
-                             getWindow().height() / 2,
-                             1.f,
-                             200.f);
-        
-        mContext->setFillColor(ukn::color::Red);
-        mContext->fillCircle(getWindow().width() / 4,
-                             getWindow().height() / 4,
-                             0.f,
-                             200.f);
-        mContext->setDrawColor(ukn::color::Blue);
-
-        mContext->moveTo(100.f, 100.f, 0.f);
-        mContext->lineTo(200.f, 200.f, 0.f);
-        mContext->lineTo(300.f, 400.f, 0.f);
-        mContext->moveTo(400.f, 400.f, 0.f);
-        mContext->lineTo(500.f, 500.f, 0.f);
-        
-        mContext->setDrawColor(ukn::color::Green);
-
-        mContext->setFillColor(ukn::color::Skyblue);
-
-        mContext->drawRect(ukn::Rectangle(50.f, 50.f, 100.f, 100.f, true), 0.f);
-        mContext->fillRect(ukn::Rectangle(500.f, 500.f, 100.f, 100.f, true), 0.f);
-       
-        mContext->end();
-*/
     }
     
 private:
@@ -1262,6 +1236,7 @@ private:
     ukn::input::LeapMotionModule* mLeapModule;
 };
 
+#include "LeapTestApp.h"
 
 #ifndef MIST_OS_WINDOWS
 int main (int argc, const char * argv[])
@@ -1283,38 +1258,16 @@ int CALLBACK WinMain(
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
    
-    ukn::AppInstance(L"Test")
+    /*
+     TestApp(L"LeapMotion Test")
         .create(
                 ukn::ContextCfg::Default()
                   .width(800)
                   .height(600)
                )
-        .renderFunc([](void* wnd) {
-            ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
-            
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Skyblue, 0, 0);
-        })
-        .updateFunc([](void* wnd) {
-            
-        })
-        .initFunc([](void* wnd) {
-            
-        })
         .run();
-    
-    /*TestApp instance(L"Rabbit&Fox");
-
-    // create app context
-    ukn::ContextCfg cfg;
-    cfg.render_cfg.width = 1200;
-    cfg.render_cfg.height = 800;
-    instance.create(cfg);
-    
-    ukn::FrameCounter::Instance().setDesiredFps(60);
-    
-    // run app
-    instance.run();
     */
+     StartLeapApp();
     
     return 0;
 }

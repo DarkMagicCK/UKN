@@ -1,17 +1,17 @@
 //
 //  Texture.h
-//  Project Unknown
+//  Mist
 //
 //  Created by Robert Bu on 11/23/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#ifndef Project_Unknown_Texture_h
-#define Project_Unknown_Texture_h
+#ifndef MISTTexture_h
+#define MISTTexture_h
 
 #include "mist/Platform.h"
-#include "UKN/PreDeclare.h"
-#include "UKN/GraphicSettings.h"
+#include "ukn/PreDeclare.h"
+#include "ukn/GraphicSettings.h"
 
 namespace ukn {
     
@@ -39,7 +39,7 @@ namespace ukn {
     /**
      * Abstract texture class
      **/
-    class UKN_API Texture {
+    class MIST_API Texture {
     public:
         static TexturePtr NullObject();
         
@@ -53,7 +53,7 @@ namespace ukn {
         virtual uint32 getHeight(uint32 level = 0) const = 0;
         
         virtual uintPtr getTextureId() const = 0;
-        
+                
     protected:
         TextureType mType;
         uint32 mNumMipmaps;

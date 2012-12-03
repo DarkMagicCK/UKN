@@ -101,7 +101,7 @@ namespace ukn {
         bool deserialize(const ConfigParserPtr& config);
         
         static UknString AssetTypeToString(AssetType type);
-        static AssetType  StringToAssetType(const UknString& name);
+        static AssetType StringToAssetType(const UknString& name);
         
     protected:
         AssetManager();

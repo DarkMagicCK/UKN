@@ -11,6 +11,7 @@
 
 #include "mist/Platform.h"
 #include "mist/SysUtil.h"
+#include "mist/Function.h"
 
 namespace mist {
     
@@ -34,6 +35,8 @@ namespace mist {
     bool mist_apple_moveitem(const MistString& src, const MistString& dst);
     bool mist_apple_deleteitem(const MistString& src);
     bool mist_apple_createdirectory(const MistString& src);
+    
+    void mist_apple_run_in_mainthread(const Function<void(void)>& f);
 
 #ifdef MIST_OS_OSX
     int mist_get_os_osx_version();    

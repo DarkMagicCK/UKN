@@ -698,12 +698,47 @@ namespace mist {
         }
         
         namespace {
-            static SingletonHolder<ThreadPool, void> instance;
+            static SingletonHolder<ThreadPool, void> _threadpool_instance;
         }
         
         ThreadPool& ThreadPool::DefaultObject() {
-            return *instance.get();
+            return *_threadpool_instance.get();
         }
+            
+            ThreadTaskPool::ThreadTaskPool() {
+                
+            }
+            
+            ThreadTaskPool::~ThreadTaskPool() {
+                
+            }
+            
+            void ThreadTaskPool::add(const ThreadTask& task) {
+                MutexGuard<Mutex> lock(mMutex);
+                
+                mTasks.push(task);
+            }
+            
+            void ThreadTaskPool::run() {
+                MutexGuard<Mutex> lock(mMutex);
+                
+                while(!mTasks.empty()) {
+                    ThreadTask task = mTasks.back();
+                    
+                    task();
+                    
+                    mTasks.pop();
+                }
+            }
+            
+            namespace {
+                static SingletonHolder<ThreadTaskPool, void> _threadtaskpool_instance;
+            }
+            
+            ThreadTaskPool& ThreadTaskPool::DefaultObject() {
+                return *_threadtaskpool_instance.get();
+            }
+            
     }
     
 } // namespace mist

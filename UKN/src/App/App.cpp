@@ -12,6 +12,7 @@
 #include "mist/SysUtil.h"
 #include "mist/Stream.h"
 #include "mist/Module.h"
+#include "mist/Thread.h"
 
 #include "UKN/App.h"
 #include "UKN/Window.h"
@@ -143,6 +144,8 @@ namespace ukn {
         mMainWindow->onUpdate().raise(mMainWindow, _NullEventArgs);
     
         onUpdate();
+        
+        mist::thread::ThreadTaskPool::DefaultObject().run();
     }
     
     void AppInstance::render() {

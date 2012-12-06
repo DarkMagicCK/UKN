@@ -139,6 +139,14 @@ namespace mist {
         }
         return true;
     }
+    
+    void mist_apple_run_in_mainthread(const Function<void(void)>& f) {
+        __block Function<void(void)> _f = f;
+        dispatch_async(
+                       dispatch_get_current_queue(), ^{
+                           _f();
+                       });
+    }
 
     
 #ifdef MIST_OS_OSX

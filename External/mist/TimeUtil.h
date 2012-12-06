@@ -226,8 +226,49 @@ namespace mist {
         Timestamp mDetalTime;
     };
     
-    inline void msleep(uint32 msec);
-
+    static void msleep(uint32 msec);
+    
+    template<typename T>
+    class FixedStepUpdater {
+    public:
+        FixedStepUpdater(double stepTime):
+        mUpdateObj(NULL),
+        mStepTime(stepTime),
+        mAccumulator(0.f) {
+            
+        }
+        
+        ~FixedStepUpdater() {}
+        
+        void enable(T* obj) {
+            mUpdateObj = obj;
+            mAccumulator = 0.f;
+        }
+        
+        void disable(T* obj) {
+            if(mUpdateObj == obj)
+                mUpdateObj = NULL;
+        }
+        
+        int32 update(double interval) {
+            uint32 result = 0;
+            if(mUpdateObj) {
+                mAccumulator += interval;
+                
+                uint32 step = uint32(mAccumulator / mStepTime);
+                if(step > 0) {
+                    result = mUpdateObj->update(mAccumulator);
+                    mAccumulator -= step * mStepTime;
+                }
+            }
+            return result;
+        }
+        
+    private:
+        T* mUpdateObj;
+        const float mStepTime;
+        float mAccumulator;
+    };
     
 } // namespace mist
 

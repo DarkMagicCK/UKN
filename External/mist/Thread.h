@@ -387,7 +387,26 @@ namespace mist {
             
             bool mRunning;
         };
+        
+        
+        class MIST_API ThreadTaskPool: Uncopyable {
+        public:
+            ThreadTaskPool();
+            ~ThreadTaskPool();
             
+            void add(const ThreadTask&);
+            
+            /* run all in current thread */
+            void run();
+            
+            static ThreadTaskPool& DefaultObject();
+            
+        private:
+            Mutex mMutex;
+            typedef std::queue<ThreadTask> ThreadTaskQueue;
+            ThreadTaskQueue mTasks;
+        };
+
     } // namespace thread
     
 } // namespace mist

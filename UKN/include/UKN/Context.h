@@ -12,6 +12,7 @@
 #include "mist/Platform.h"
 #include "mist/DllLoader.h"
 #include "mist/StringUtil.h"
+#include "mist/Thread.h"
 
 #include "UKN/GraphicSettings.h"
 #include "UKN/PreDeclare.h"
@@ -66,6 +67,9 @@ namespace ukn {
         void setApp(AppInstance* app);
         bool isAppAvailable() const;
         AppInstance& getApp() const;
+        
+    public:
+        static void RunInMainThread(const mist::thread::ThreadTask&);
         
     protected:
         Context();

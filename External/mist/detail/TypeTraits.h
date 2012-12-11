@@ -84,6 +84,16 @@ namespace mist {
         };
         
         template<typename T>
+        struct is_carray {
+            static const bool value = false;
+        };
+    
+        template<typename T, size_t LENGTH>
+        struct is_carray<T[LENGTH]> {
+            static const bool value = true;
+        };
+        
+        template<typename T>
         struct is_member_pointer {
             static const bool value = false;
         };

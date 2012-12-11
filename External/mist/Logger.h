@@ -104,10 +104,12 @@ namespace mist {
     
 
 
-#define ukn_logged_assert(cond, log) \
-    if(!(cond)) { \
-        mist::log_error(mist::format_string("mist::assertion failed with mssg %s at function %s, file %s, line %d", log, __FUNCTION__, __FILE__, __LINE__)); \
-        mist_assert(0); \
+#define mist_assert_l(cond, log) {\
+        if(!(cond)) { \
+            std::string message = mist::format_string("mist::assertion failed with mssg %s at function %s, file %s, line %d", log, __FUNCTION__, __FILE__, __LINE__); \
+            mist::log_error(message); \
+            throw mist::Exception(message, __FUNCTION__, __FILE__, __LINE__); \
+        }\
     }
 } // namespace mist
 

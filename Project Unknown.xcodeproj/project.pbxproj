@@ -41,6 +41,7 @@
 		884CE4011490905900F58E2E /* GLSpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE4001490905600F58E2E /* GLSpriteBatch.cpp */; };
 		8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885449981491E253006B8B60 /* libfreetype.a */; };
 		8855E32616561118002311E9 /* LeapMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8855E32416561118002311E9 /* LeapMotion.cpp */; };
+		88757D441676F70200E31975 /* Query.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88757D421676F70200E31975 /* Query.cpp */; };
 		887ACB52166C170900EDFBB6 /* Serial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 887ACB50166C170900EDFBB6 /* Serial.cpp */; };
 		8884B3C415F7CCEA0086533E /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C215F7CCE90086533E /* Shader.cpp */; };
 		8884B3C715F7CCFC0086533E /* GLShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C515F7CCFB0086533E /* GLShader.cpp */; };
@@ -289,6 +290,8 @@
 		8855E31E1656107B002311E9 /* LeapMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeapMotion.h; sourceTree = "<group>"; };
 		8855E32416561118002311E9 /* LeapMotion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LeapMotion.cpp; sourceTree = "<group>"; };
 		886DBA3C14C43DCB00652729 /* Basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Basic.h; sourceTree = "<group>"; };
+		88757D421676F70200E31975 /* Query.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Query.cpp; sourceTree = "<group>"; };
+		88757D431676F70200E31975 /* Query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Query.h; sourceTree = "<group>"; };
 		887ACB50166C170900EDFBB6 /* Serial.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Serial.cpp; sourceTree = "<group>"; };
 		887ACB51166C170900EDFBB6 /* Serial.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Serial.h; sourceTree = "<group>"; };
 		8884B3C215F7CCE90086533E /* Shader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Shader.cpp; sourceTree = "<group>"; };
@@ -1035,6 +1038,8 @@
 				88ECF0DD16521C3A00EA6B47 /* ZipUtil.h */,
 				887ACB50166C170900EDFBB6 /* Serial.cpp */,
 				887ACB51166C170900EDFBB6 /* Serial.h */,
+				88757D421676F70200E31975 /* Query.cpp */,
+				88757D431676F70200E31975 /* Query.h */,
 			);
 			name = mist;
 			path = External/mist;
@@ -1274,6 +1279,7 @@
 				880C3F11165ED0C20076ED72 /* Animation.cpp in Sources */,
 				880C3F32166704F50076ED72 /* LeapTestApp.cpp in Sources */,
 				887ACB52166C170900EDFBB6 /* Serial.cpp in Sources */,
+				88757D441676F70200E31975 /* Query.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

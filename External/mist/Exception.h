@@ -25,7 +25,7 @@ namespace mist {
 
 	class Exception: public std::exception {
 	public:
-		Exception(const char* mssg, const char* function, const char* file, int line):
+		Exception(const std::string& mssg, const char* function, const char* file, int line):
         mMssg(mssg),
         mFunction(function),
         mFile(file),
@@ -33,7 +33,7 @@ namespace mist {
 
         }
 
-        Exception(const char* mssg):
+        Exception(const std::string& mssg):
         mMssg(mssg),
         mFunction(0),
         mFile(0),
@@ -64,7 +64,7 @@ namespace mist {
             return typeid(*this).name();
         }
 
-		const char* mssg() const {
+		const std::string& mssg() const {
             return mMssg;
         }
 		const char* function() const {
@@ -87,7 +87,7 @@ namespace mist {
         }
 
 	private:
-		const char* mMssg;
+        std::string mMssg;
         const char* mFunction;
         const char* mFile;
         int32 mLine;

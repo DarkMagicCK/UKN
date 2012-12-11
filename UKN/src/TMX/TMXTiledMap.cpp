@@ -391,10 +391,10 @@ namespace ukn {
                         parseProperties(obj.property, config);
                         
                         if(config->toNode(L"polygon")) {
-                            ukn_logged_assert(false, "ukn::tmx::Map: polygon object not supported");
+                            mist_assert_l(false, "ukn::tmx::Map: polygon object not supported");
                             config->toParent();
                         } else if(config->toNode(L"polyline")) {
-                            ukn_logged_assert(false, "ukn::tmx::Map: polyline object not supported");
+                            mist_assert_l(false, "ukn::tmx::Map: polyline object not supported");
                             config->toParent();
                         }
                     }

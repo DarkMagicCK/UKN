@@ -1238,6 +1238,8 @@ private:
 
 #include "LeapTestApp.h"
 
+#include "mist/Query.h"
+
 #ifndef MIST_OS_WINDOWS
 int main (int argc, const char * argv[])
 {
@@ -1252,7 +1254,9 @@ int CALLBACK WinMain(
 ) {
 #endif
     
-    // register plugins manually for test
+    mist::query::_TestQuery();
+    
+  /*  // register plugins manually for test
     ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);
 
@@ -1267,7 +1271,7 @@ int CALLBACK WinMain(
                )
         .run();
     */
-     StartLeapApp();
+    // StartLeapApp();
     
     return 0;
 }

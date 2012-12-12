@@ -6,7 +6,7 @@
 
 namespace mist {
 
-	class Interface: private Uncopyable {
+	class Interface {
 	public:
 		virtual ~Interface() { }
 	};

@@ -1115,6 +1115,7 @@ std::vector<std::pair<double, Vector<double> > > PredictorCorrectorVX(double x0,
 }
 
 #include "UKN/GraphicContext.h"
+#include "mist/Serial.h"
 
 class TestApp: public ukn::AppInstance, public ukn::input::LeapMotionListener {
 public:
@@ -1132,22 +1133,45 @@ public:
             for(const Leap::Finger& f: h.fingers()) {
                 ukn::Vertex2D vert;
                 vert.x = f.tip().position.x * 3 + getWindow().width() / 2;
-                vert.y = f.tip().position.y * 3;
+                vert.y = f.tip().position.y * 2;
                 vert.z = f.tip().position.z;
-                vert.color = ukn::ColorHSV(1.0 - 0.2*f.id(), 1.0 - 0.2*f.id(), 0.5, 0.3).toRGBA();
+                vert.color = ukn::ColorHSV(1.0 - 0.2*f.id(), 1.0 - 0.2*f.id(), 0.5, 1.0).toRGBA();
                // vert.color = ukn::color::Skyblue.toRGBA();
                 
                 mVertexBuffer->push(vert);
             }
         }
+        
+        
+        mLastFrame = c.frame();
+        mPrevFrame = c.frame(1);
+    }
+        
+    void writeCommand(ukn::uint8 instr, const ukn::uint8* d, ukn::uint16 len) {
+        ukn::uint16 real_len = (ukn::uint16)(len + 5);
+        
+        ukn::uint8* data = (ukn::uint8*)mist::mist_malloc(real_len);
+        data[0] = 0xFF;
+        data[1] = 0xFF;
+        data[2] = instr;
+        data[3] = (ukn::uint8)(real_len & 0xFF);
+        data[4] = (ukn::uint8)((real_len >> 8) & 0xFF);
+        if(d && len > 0)
+            memcpy(&data[5], d, len);
+        
+        mArduinoSerial.write((const char*)data, real_len);
     }
     
     void onMouseEvent(void* sender, ukn::input::MouseEventArgs& e) {
+        if(e.state == ukn::input::Mouse::Press) {
+            this->writeCommand(0, 0, 0);
+            mVertexBuffer->clear();
+        }
         
     }
     
     void onKeyEvent(void* sender, ukn::input::KeyEventArgs& e) {
-        
+        mArduinoSerial.write((const char*)&e.key, 1);
     }
     
     void onResize(void * sender, ukn::WindowResizeEventArgs& args) {
@@ -1191,6 +1215,13 @@ public:
         ukn::ModuleManager::Instance().addModule(mLeapModule);
 
         mContext = new ukn::GraphicContext();
+        
+        if(!mArduinoSerial
+           .port("/dev/tty.usbmodemfa141")
+           .baudRate(9600)
+           .open()) {
+            mist::log_error("error opening arduino serial");
+        }
     }
     
     void onUpdate() {
@@ -1201,7 +1232,7 @@ public:
         ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
         
         gd.bindFrameBuffer(mFrameBuffer);
-        gd.clear(ukn::CM_Color, ukn::Color(0, 0, 0, 0.01f), 0, 0);
+        gd.clear(ukn::CM_Color, ukn::Color(0, 0, 0, 1.0), 0, 0);
         
         gd.setRenderState(ukn::RS_PointSize, mist::Convert::ReinterpretConvert<float, ukn::uint32>(4.0));
         gd.setRenderState(ukn::RS_Blend, ukn::RSP_Enable);
@@ -1210,7 +1241,6 @@ public:
         
         gd.onRenderBuffer(mRenderBuffer);
         
-        mVertexBuffer->clear();
         
         gd.bindFrameBuffer(gd.getScreenFrameBuffer());
         gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
@@ -1221,6 +1251,20 @@ public:
         sb.draw(mSquareTexture,
                 ukn::Vector2(0, 0));
         sb.end();
+        
+        
+        if(mLastFrame.hands().size() > 0) {
+            if(mLastFrame.hands()[0].fingers().size() > 0) {
+                Leap::Finger f = mLastFrame.hands()[0].fingers()[0];
+                
+                ukn::uint8 d[2];
+                
+                d[0] = ((float)(f.tip().position.x * 3 + getWindow().width() / 2) / getWindow().width()) * 128;
+                d[1] = ((float)(getWindow().height() - f.tip().position.y * 3) / getWindow().height()) * 160;
+                
+                this->writeCommand(2, d, 2);
+            }
+        }
     }
     
 private:
@@ -1234,6 +1278,17 @@ private:
     ukn::SharedPtr<ukn::MemoryGraphicBuffer<ukn::Vertex2D> > mVertexBuffer;
     
     ukn::input::LeapMotionModule* mLeapModule;
+    
+    
+    Leap::Frame mLastFrame, mPrevFrame;
+    
+    ukn::TexturePtr mCurrentImage;
+    float mCurrentRot;
+    ukn::Vector2 mCurrentPos;
+    ukn::Vector2 mCurrentScale;
+    
+    
+    mist::Serial mArduinoSerial;
 };
 
 #include "LeapTestApp.h"
@@ -1256,13 +1311,13 @@ int CALLBACK WinMain(
     
     mist::query::_TestQuery();
     
-  /*  // register plugins manually for test
+    // register plugins manually for test
     ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
    
-    /*
+    
      TestApp(L"LeapMotion Test")
         .create(
                 ukn::ContextCfg::Default()
@@ -1270,8 +1325,6 @@ int CALLBACK WinMain(
                   .height(600)
                )
         .run();
-    */
-    // StartLeapApp();
     
     return 0;
 }

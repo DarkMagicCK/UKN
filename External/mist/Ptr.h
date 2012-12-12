@@ -621,6 +621,13 @@ namespace mist {
         std::swap(a.mCounter, b.mCounter);
     }
 
+    const struct {
+        template<typename T>
+        operator T*() { return reinterpret_cast<T*>(0); }
+        
+    private:
+        void operator&() const;
+    } nullptr_t = {};
 		
 } // namespace mist
 #endif

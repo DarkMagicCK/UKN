@@ -10,6 +10,11 @@
 #define __Project_Unknown__Query__
 
 #include <vector>
+#include <map>
+#include <unordered_map>
+
+#include "mist/Interfaces.h"
+#include "mist/detail/TypeTraits.h"
 
 namespace mist {
     
@@ -19,7 +24,7 @@ namespace mist {
         struct container_info {
             typedef typename T::iterator iterator;
             typedef typename T::const_iterator const_iterator;
-            typedef typename T::reference element_type;
+            typedef typename T::value_type element_type;
         };
         
         template<typename T, size_t LENGTH>
@@ -27,7 +32,6 @@ namespace mist {
             typedef T*          iterator;
             typedef const T*    const_iterator;
             typedef T           element_type;
-            typedef T*          pointer_type;
         };
         
         template<typename T>
@@ -46,12 +50,14 @@ namespace mist {
         };
         
         template<typename _Cont>
-        struct Selector {
+        struct Selector: public IEnumerable<typename container_info<_Cont>::element_type > {
             typedef Selector<_Cont>                                 self_type;
             typedef typename selector_container_type<_Cont>::type   container_type;
             typedef typename container_info<_Cont>::element_type    element_type;
             typedef typename container_type::iterator               iterator;
             typedef typename container_type::const_iterator         const_iterator;
+            
+            Selector() { }
             
             Selector(const _Cont& c):
             mContainer(c) { }
@@ -74,40 +80,70 @@ namespace mist {
                 
             }
         
-            template<typename Pred>
-            self_type Where(const Pred& pred) const {
-                container_type result;
-                for(const_iterator it = mContainer.begin(), end = mContainer.end();
-                    it != end;
-                    ++it) {
-                    if(pred(*it)) {
-                        result.push_back(*it);
-                    }
-                }
-                return self_type(result);
+            template<typename _Pred>
+            self_type& Where(_Pred pred) {
+                mContainer.erase(mContainer.begin(),
+                                 std::remove_if(mContainer.begin(), mContainer.end(), pred));
+                return *this;
             }
             
-            template<typename Pred>
-            self_type Orderby(const Pred& pred, OrderType order = Ascending) const {
-                container_type result = this->select();
-                std::sort(result.begin(),
-                          result.end(),
+            template<typename _Pred>
+            self_type& OrderBy(_Pred pred, OrderType order = Ascending) {
+                std::sort(mContainer.begin(),
+                          mContainer.end(),
                           [&](const element_type& v1, const element_type& v2) {
                               return (order == Ascending) ? (pred(v1) < pred(v2)) : (pred(v1) > pred(v2));
                           });
-                return self_type(result);
+                return *this;
             }
             
-            self_type Orderby(OrderType order = Ascending) const {
-                return this->Orderby([](element_type t) { return t; },
+            self_type& OrderBy(OrderType order = Ascending) {
+                return this->OrderBy([](element_type t) { return t; },
                                      order);
             }
             
-            operator container_type() const {
+            template<typename _R>
+            Selector<
+                std::unordered_map<
+                    _R,
+                    std::vector<element_type>
+                >
+            > GroupBy(const std::function<_R(const element_type&)>& pred) const {
+                typedef Selector<std::unordered_map<_R, std::vector<element_type> > > selector_ret_type;
+                
+                selector_ret_type result;
+                typename selector_ret_type::container_type& container = result.get();
+                for(const_iterator it = mContainer.begin(), end = mContainer.end();
+                    it != end;
+                    ++it) {
+                    container[pred(*it)].push_back(*it);
+                }
+                return result;
+            }
+            
+            template<typename _R>
+            Selector<std::vector<_R> > Select(const std::function<_R(const element_type&)>& pred) const {
+                typedef Selector<std::vector<_R> > selector_ret_type;
+                
+                selector_ret_type result;
+                typename selector_ret_type::container_type& container = result.get();
+                for(const_iterator it = mContainer.begin(), end = mContainer.end();
+                    it != end;
+                    ++it) {
+                    container.push_back(pred(*it));
+                }
+                return result;
+            }
+            
+            operator container_type() {
                 return mContainer;
             }
             
-            const container_type select() const {
+            container_type& get() {
+                return mContainer;
+            }
+            
+            const container_type& get() const {
                 return mContainer;
             }
             
@@ -122,32 +158,77 @@ namespace mist {
             iterator end() { return mContainer.end(); }
             const_iterator end() const { return mContainer.end(); }
             
+            
+            typedef IEnumerator<element_type> EnumeratorType;
+            struct Enumerator: public IEnumerator<element_type> {
+                Enumerator(const self_type* selector):
+                mSelector(selector),
+                mIterator(mSelector->begin()),
+                mIndex(0) { }
+                
+                IEnumerator<element_type>*  clone() const;
+                const element_type& 		current() const;
+                intPtr                      index() const;
+                bool                        next();
+                bool                        available() const;
+                void                        reset();
+                
+            private:
+                const self_type* mSelector;
+                const_iterator mIterator;
+                intPtr mIndex;
+            };
+            
+            EnumeratorType* createEnumerator() const { return new Enumerator(this); }
+            
         private:
             container_type mContainer;
         };
         
         template<typename _T>
-        struct _Selector {
-            static Selector<_T> Select(const _T& container) {
-                return Selector<_T>(container);
-            }
-        };
-        
-        template<typename _T, size_t _L>
-        struct _Selector<_T[_L]> {
-            static Selector<_T[_L]> Select(_T arr[_L]) {
-                return Selector<_T[_L]>(arr, arr + _L);
-            }
-        };
-        
-        template<typename _T>
-        Selector<_T> Select(_T container) {
+        Selector<_T> From(_T container) {
             return Selector<_T>(container);
         }
         
         template<typename _T, size_t _LENGTH>
-        Selector<_T[_LENGTH]> Select(_T (&arr)[_LENGTH]) {
+        Selector<_T[_LENGTH]> From(_T (&arr)[_LENGTH]) {
             return Selector<_T[_LENGTH]>(arr, arr + _LENGTH);
+        }
+        
+        template<typename _Cont>
+        IEnumerator<typename Selector<_Cont>::element_type >* Selector<_Cont>::Enumerator::clone() const {
+            return new Selector<_Cont>::Enumerator(mSelector);
+        }
+        
+        template<typename _Cont>
+        const typename Selector<_Cont>::element_type& Selector<_Cont>::Enumerator::current() const {
+            return const_cast<const Selector<_Cont>::element_type&>(*mIterator);
+        }
+        
+        template<typename _Cont>
+        intPtr Selector<_Cont>::Enumerator::index() const {
+            return mIndex;
+        }
+        
+        template<typename _Cont>
+        bool Selector<_Cont>::Enumerator::next() {
+            if(mIndex < mSelector->size()) {
+                mIndex ++;
+                mIterator ++;
+                return true;
+            }
+            return false;
+        }
+        
+        template<typename _Cont>
+        bool Selector<_Cont>::Enumerator::available() const {
+            return mIndex < mSelector->size();
+        }
+        
+        template<typename _Cont>
+        void Selector<_Cont>::Enumerator::reset() {
+            mIndex = 0;
+            mIterator = mSelector->begin();
         }
         
         extern void _TestQuery();

@@ -134,6 +134,107 @@ namespace mist {
             enum { value = false };
         };
         
+        template<typename T>
+        struct function_trait;
+        
+        template<typename R>
+        struct function_trait<R()> {
+            typedef R result_type;
+            static const int arity = 0;
+        };
+        
+        template<typename R, typename A1>
+        struct function_trait<R(A1)> {
+            typedef R result_type;
+            static const int arity = 1;
+            
+            typedef A1 arg1_type;
+        };
+        
+        template<typename R, typename A1, typename A2>
+        struct function_trait<R(A1, A2)> {
+            typedef R result_type;
+            static const int arity = 2;
+            
+            typedef A1 arg1_type;
+            typedef A2 arg2_type;
+        };
+        
+        template<typename R, typename A1, typename A2, typename A3>
+        struct function_trait<R(A1, A2, A3)> {
+            typedef R result_type;
+            static const int arity = 3;
+            
+            typedef A1 arg1_type;
+            typedef A2 arg2_type;
+            typedef A3 arg3_type;
+        };
+        
+        template<typename R, typename A1, typename A2, typename A3, typename A4>
+        struct function_trait<R(A1, A2, A3, A4)> {
+            typedef R result_type;
+            static const int arity = 4;
+        
+            typedef A1 arg1_type;
+            typedef A2 arg2_type;
+            typedef A3 arg3_type;
+            typedef A4 arg4_type;
+        };
+        
+        template<typename R, typename A1, typename A2, typename A3, typename A4, typename A5>
+        struct function_trait<R(A1, A2, A3, A4, A5)> {
+            typedef R result_type;
+            static const int arity = 5;
+
+            typedef A1 arg1_type;
+            typedef A2 arg2_type;
+            typedef A3 arg3_type;
+            typedef A4 arg4_type;
+            typedef A5 arg5_type;
+        };
+        
+        template<typename R, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6>
+        struct function_trait<R(A1, A2, A3, A4, A5, A6)> {
+            typedef R result_type;
+            static const int arity = 6;
+
+            typedef A1 arg1_type;
+            typedef A2 arg2_type;
+            typedef A3 arg3_type;
+            typedef A4 arg4_type;
+            typedef A5 arg5_type;
+            typedef A6 arg6_type;
+        };
+        
+        template<typename R, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7>
+        struct function_trait<R(A1, A2, A3, A4, A5, A6, A7)> {
+            typedef R result_type;
+            static const int arity = 7;
+
+            typedef A1 arg1_type;
+            typedef A2 arg2_type;
+            typedef A3 arg3_type;
+            typedef A4 arg4_type;
+            typedef A5 arg5_type;
+            typedef A6 arg6_type;
+            typedef A7 arg7_type;
+        };
+        
+        template<typename R, typename A1, typename A2, typename A3, typename A4, typename A5, typename A6, typename A7, typename A8>
+        struct function_trait<R(A1, A2, A3, A4, A5, A6, A7, A8)> {
+            typedef R result_type;
+            static const int arity = 8;
+
+            typedef A1 arg1_type;
+            typedef A2 arg2_type;
+            typedef A3 arg3_type;
+            typedef A4 arg4_type;
+            typedef A5 arg5_type;
+            typedef A6 arg6_type;
+            typedef A7 arg7_type;
+            typedef A8 arg8_type;
+        };
+        
         template<> struct is_pod<int32>         { enum { value = true }; };
         template<> struct is_pod<uint32>        { enum { value = true }; };
         template<> struct is_pod<intPtr>        { enum { value = true }; };

@@ -2,7 +2,7 @@
 #define MISTInterfaces_H_
 
 #include "mist/Basic.h"
-#include "mist/StringUtil.h"
+#include "mist/Ptr.h"
 
 namespace mist {
 

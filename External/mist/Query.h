@@ -21,6 +21,9 @@ namespace mist {
     namespace query {
         
         template<typename T>
+        struct Selector;
+        
+        template<typename T>
         struct container_info {
             typedef typename T::iterator iterator;
             typedef typename T::const_iterator const_iterator;
@@ -50,32 +53,33 @@ namespace mist {
         };
         
         template<typename _Cont>
-        struct Selector: public IEnumerable<typename container_info<_Cont>::element_type > {
-            typedef Selector<_Cont>                                 self_type;
+        struct Query: public IEnumerable<typename container_info<_Cont>::element_type > {
+            typedef Query<_Cont>                                 self_type;
             typedef typename selector_container_type<_Cont>::type   container_type;
             typedef typename container_info<_Cont>::element_type    element_type;
+            typedef element_type                                    value_type;
             typedef typename container_type::iterator               iterator;
             typedef typename container_type::const_iterator         const_iterator;
             
-            Selector() { }
+            Query() { }
             
-            Selector(const _Cont& c):
+            Query(const _Cont& c):
             mContainer(c) { }
             
             template<typename _Iterator>
-            Selector(_Iterator begin, _Iterator end):
+            Query(_Iterator begin, _Iterator end):
             mContainer(begin, end) {
                 
             }
             
             template<typename _T, size_t _L>
-            Selector(_T (&arr)[_L]):
+            Query(_T (&arr)[_L]):
             mContainer(arr, arr + _L) {
                 
             }
             
             template<typename _OtherCont>
-            Selector(const _OtherCont& c):
+            Query(const _OtherCont& c):
             mContainer(c.begin(), c.end()) {
                 
             }
@@ -103,13 +107,13 @@ namespace mist {
             }
             
             template<typename _R>
-            Selector<
+            Query<
                 std::unordered_map<
                     _R,
                     std::vector<element_type>
                 >
             > GroupBy(const std::function<_R(const element_type&)>& pred) const {
-                typedef Selector<std::unordered_map<_R, std::vector<element_type> > > selector_ret_type;
+                typedef Query<std::unordered_map<_R, std::vector<element_type> > > selector_ret_type;
                 
                 selector_ret_type result;
                 typename selector_ret_type::container_type& container = result.get();
@@ -122,15 +126,171 @@ namespace mist {
             }
             
             template<typename _R>
-            Selector<std::vector<_R> > Select(const std::function<_R(const element_type&)>& pred) const {
-                typedef Selector<std::vector<_R> > selector_ret_type;
+            Query<std::vector<_R> > Select(const std::function<_R(const element_type&)>& pred) const {
+                typedef Query<std::vector<_R> > result_type;
                 
-                selector_ret_type result;
-                typename selector_ret_type::container_type& container = result.get();
+                result_type result;
+                typename result_type::container_type& container = result.get();
                 for(const_iterator it = mContainer.begin(), end = mContainer.end();
                     it != end;
                     ++it) {
                     container.push_back(pred(*it));
+                }
+                return result;
+            }
+            
+            // Inner Join
+            template<typename _OtherCont, typename _Pred>
+            Query<
+                std::vector<
+                    std::pair<
+                        element_type,
+                        typename container_info<_OtherCont>::element_type
+                    >
+                >
+            > JoinOn(const _OtherCont& other_cont, _Pred pred) const {
+                typedef typename container_info<_OtherCont>::element_type other_element_type;
+                typedef typename container_info<_OtherCont>::const_iterator other_const_iterator;
+                typedef std::pair<element_type, other_element_type> pair_type;
+                typedef std::vector<pair_type> container_type;
+                typedef Query<container_type> result_type;
+                
+                result_type result;
+                container_type& container = result.get();
+                for(const_iterator it = mContainer.begin(), end = mContainer.end();
+                    it != end;
+                    ++it) {
+                    const element_type& element = *it;
+                    for(other_const_iterator other_cont_it = other_cont.begin(), other_end = other_cont.end();
+                        other_cont_it != other_end;
+                        ++other_cont_it) {
+                        const other_element_type& other_element = *other_cont_it;
+                    
+                        if(pred(element, other_element)) {
+                            container.push_back(std::make_pair(element, other_element));
+                        }
+                    }
+                }
+                return result;
+            }
+            
+            // Group Join
+            template<typename _OtherCont, typename _Pred>
+            Query<
+                std::vector<
+                    std::pair<
+                        element_type,
+                        std::vector<
+                            typename container_info<_OtherCont>::element_type
+                        >
+                    >
+                >
+            > JoinOnGroup(const _OtherCont& other_cont, _Pred pred) const {
+                typedef typename container_info<_OtherCont>::element_type other_element_type;
+                typedef typename container_info<_OtherCont>::const_iterator other_const_iterator;
+                typedef std::vector<std::pair<element_type, std::vector<other_element_type> > > container_type;
+                typedef Query<container_type> result_type;
+                
+                result_type result;
+                container_type& container = result.get();
+                for(const_iterator it = mContainer.begin(), end = mContainer.end();
+                    it != end;
+                    ++it) {
+                    const element_type& element = *it;
+                    
+                    container.push_back(std::make_pair(element, std::vector<other_element_type>()));
+                    typename container_type::reference& container_pos = container.back();
+                    for(other_const_iterator other_cont_it = other_cont.begin(), other_end = other_cont.end();
+                        other_cont_it != other_end;
+                        ++other_cont_it) {
+                        const other_element_type& other_element = *other_cont_it;
+                        
+                        if(pred(element, other_element)) {
+                            container_pos.second.push_back(other_element);
+                        }
+                    }
+                }
+                return result;
+            }
+            
+            /* Left Outer Join */
+            template<typename _OtherCont, typename _Pred, typename _DefaultIfEmpty>
+            Query<
+                std::vector<
+                    std::pair<
+                        element_type,
+                        typename container_info<_OtherCont>::element_type
+                    >
+                >
+            > JoinOn(const _OtherCont& other_cont, _Pred pred, _DefaultIfEmpty df) const {
+                typedef typename container_info<_OtherCont>::element_type other_element_type;
+                typedef typename container_info<_OtherCont>::const_iterator other_const_iterator;
+                typedef std::pair<element_type, other_element_type> pair_type;
+                typedef std::vector<pair_type> container_type;
+                typedef Query<container_type> result_type;
+                
+                result_type result;
+                container_type& container = result.get();
+                for(const_iterator it = mContainer.begin(), end = mContainer.end();
+                    it != end;
+                    ++it) {
+                    const element_type& element = *it;
+                    bool exist = false;
+                    for(other_const_iterator other_cont_it = other_cont.begin(), other_end = other_cont.end();
+                        other_cont_it != other_end;
+                        ++other_cont_it) {
+                        const other_element_type& other_element = *other_cont_it;
+                        
+                        if(pred(element, other_element)) {
+                            container.push_back(std::make_pair(element, other_element));
+                            exist = true;
+                        }
+                    }
+                    if(!exist) {
+                        container.push_back(std::make_pair(element, df()));
+                    }
+                }
+                return result;
+            }
+            
+            // Left Outer Group Join
+            template<typename _OtherCont, typename _Pred, typename _DefaultIfEmpty>
+            Query<
+                std::vector<
+                    std::pair<
+                        element_type,
+                        std::vector<
+                            typename container_info<_OtherCont>::element_type
+                        >
+                    >
+                >
+            > JoinOnGroup(const _OtherCont& other_cont, _Pred pred, _DefaultIfEmpty df) const {
+                typedef typename container_info<_OtherCont>::element_type other_element_type;
+                typedef typename container_info<_OtherCont>::const_iterator other_const_iterator;
+                typedef std::vector<std::pair<element_type, std::vector<other_element_type> > > container_type;
+                typedef Query<container_type> result_type;
+                
+                result_type result;
+                container_type& container = result.get();
+                for(const_iterator it = mContainer.begin(), end = mContainer.end();
+                    it != end;
+                    ++it) {
+                    const element_type& element = *it;
+                    
+                    container.push_back(std::make_pair(element, std::vector<other_element_type>()));
+                    typename container_type::reference& container_pos = container.back();
+                    for(other_const_iterator other_cont_it = other_cont.begin(), other_end = other_cont.end();
+                        other_cont_it != other_end;
+                        ++other_cont_it) {
+                        const other_element_type& other_element = *other_cont_it;
+                        
+                        if(pred(element, other_element)) {
+                            container_pos.second.push_back(other_element);
+                        }
+                    }
+                    if(container_pos.second.empty()) {
+                        container_pos.second.push_back(df());
+                    }
                 }
                 return result;
             }
@@ -161,9 +321,9 @@ namespace mist {
             
             typedef IEnumerator<element_type> EnumeratorType;
             struct Enumerator: public IEnumerator<element_type> {
-                Enumerator(const self_type* selector):
-                mSelector(selector),
-                mIterator(mSelector->begin()),
+                Enumerator(const self_type* query):
+                mQuery(query),
+                mIterator(mQuery->begin()),
                 mIndex(0) { }
                 
                 IEnumerator<element_type>*  clone() const;
@@ -174,7 +334,7 @@ namespace mist {
                 void                        reset();
                 
             private:
-                const self_type* mSelector;
+                const self_type* mQuery;
                 const_iterator mIterator;
                 intPtr mIndex;
             };
@@ -186,33 +346,33 @@ namespace mist {
         };
         
         template<typename _T>
-        Selector<_T> From(_T container) {
-            return Selector<_T>(container);
+        Query<_T> From(_T container) {
+            return Query<_T>(container);
         }
         
         template<typename _T, size_t _LENGTH>
-        Selector<_T[_LENGTH]> From(_T (&arr)[_LENGTH]) {
-            return Selector<_T[_LENGTH]>(arr, arr + _LENGTH);
+        Query<_T[_LENGTH]> From(_T (&arr)[_LENGTH]) {
+            return Query<_T[_LENGTH]>(arr, arr + _LENGTH);
         }
         
         template<typename _Cont>
-        IEnumerator<typename Selector<_Cont>::element_type >* Selector<_Cont>::Enumerator::clone() const {
-            return new Selector<_Cont>::Enumerator(mSelector);
+        IEnumerator<typename Query<_Cont>::element_type >* Query<_Cont>::Enumerator::clone() const {
+            return new Query<_Cont>::Enumerator(mQuery);
         }
         
         template<typename _Cont>
-        const typename Selector<_Cont>::element_type& Selector<_Cont>::Enumerator::current() const {
-            return const_cast<const Selector<_Cont>::element_type&>(*mIterator);
+        const typename Query<_Cont>::element_type& Query<_Cont>::Enumerator::current() const {
+            return const_cast<const Query<_Cont>::element_type&>(*mIterator);
         }
         
         template<typename _Cont>
-        intPtr Selector<_Cont>::Enumerator::index() const {
+        intPtr Query<_Cont>::Enumerator::index() const {
             return mIndex;
         }
         
         template<typename _Cont>
-        bool Selector<_Cont>::Enumerator::next() {
-            if(mIndex < mSelector->size()) {
+        bool Query<_Cont>::Enumerator::next() {
+            if(mIndex < mQuery->size()) {
                 mIndex ++;
                 mIterator ++;
                 return true;
@@ -221,14 +381,14 @@ namespace mist {
         }
         
         template<typename _Cont>
-        bool Selector<_Cont>::Enumerator::available() const {
-            return mIndex < mSelector->size();
+        bool Query<_Cont>::Enumerator::available() const {
+            return mIndex < mQuery->size();
         }
         
         template<typename _Cont>
-        void Selector<_Cont>::Enumerator::reset() {
+        void Query<_Cont>::Enumerator::reset() {
             mIndex = 0;
-            mIterator = mSelector->begin();
+            mIterator = mQuery->begin();
         }
         
         extern void _TestQuery();

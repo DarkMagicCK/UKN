@@ -1312,7 +1312,7 @@ int CALLBACK WinMain(
     mist::query::_TestQuery();
     
     // register plugins manually for test
-    ukn::GraphicFactoryPtr gl_factory;
+   /* ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
@@ -1325,7 +1325,7 @@ int CALLBACK WinMain(
                   .height(600)
                )
         .run();
-    
+    */
     return 0;
 }
 

@@ -41,7 +41,7 @@ namespace mist {
                     .Where([](const int& i) {
                         return i < 5;
                     })
-            .OrderBy(mist::query::Descending);
+                    .OrderBy(mist::query::Descending);
             
             mist_assert_l(t.size() == 6, "invalid size");
             std::copy(t.begin(), t.end(),
@@ -84,12 +84,51 @@ namespace mist {
                 
                 enumerator->next();
             }
+
             
-            auto c3 = From(cat)
-                        .Where([](const Cat& cat) {return cat.id > 3; })
-                        .Select<std::string>([](const Cat& cat) -> std::string { return cat.name; });
-            for(std::string s: c3) {
-                std::cout << s << std::endl;
+            std::vector<std::string> moews = {
+                "m",
+                "aaaddd",
+                "m",
+                "hsdsd",
+                "m",
+                "hsdsd",
+            };
+            
+            /* inner join */
+            auto c4 = From(cat)
+                        .Where([](const Cat& c) { return c.id >= 2; })
+                        .JoinOn(moews, [](const Cat& cat, const std::string& moew) {
+                            return cat.moew == moew;
+                        })
+                        .Select<std::string>([](const std::pair<Cat, std::string>& p) {
+                            return p.first.name;
+                        });
+            
+            std::cout << "*** Inner Join ***" << std::endl;
+
+            for(decltype(c4)::element_type e: c4) {
+                std::cout << e << std::endl;
+            }
+            
+            /* group left outer join */
+            auto c5 = From(moews)
+                        .JoinOnGroup(cat,
+                                    [](const std::string& moew, const Cat& cat) {
+                                        return cat.moew == moew;
+                                    },
+                                    []() {
+                                        return Cat("-1", "SchrodingerCat", -1);
+                                    });
+            std::cout << "*** Group Inner Join ***" << std::endl;
+
+            for(decltype(c5)::element_type e: c5) {
+                std::cout << "Group: "<< e.first << std::endl;
+                for(decltype(e.second)::const_iterator it = e.second.begin(), end = e.second.end();
+                    it != end;
+                    ++it) {
+                    std::cout << "\t" << it->name << std::endl;
+                }
             }
         }
         

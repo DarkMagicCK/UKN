@@ -29,15 +29,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R invoke(obj* left, ARGS... args) {
+        inline R invoke(obj* left, ARGS... args) const {
             return (left->*mFunc)(args...);
         }
         
-        inline R operator()(obj* left, ARGS... args) {
+        inline R operator()(obj* left, ARGS... args) const {
             return (left->*mFunc)(args...);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != 0;
         }
         
@@ -56,15 +56,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline void invoke(obj* left, ARGS... args) {
+        inline void invoke(obj* left, ARGS... args) const {
             (left->*mFunc)(args...);
         }
         
-        inline void operator()(obj* left, ARGS... args) {
+        inline void operator()(obj* left, ARGS... args) const {
             (left->*mFunc)(args...);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != 0;
         }
         
@@ -94,15 +94,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R invoke(obj* left) {
+        inline R invoke(obj* left) const {
             return (left->*mFunc)();
         }
         
-        inline R operator()(obj* left) {
+        inline R operator()(obj* left) const {
             return (left->*mFunc)();
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -123,15 +123,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R invoke(obj* left, T0 a0) {
+        inline R invoke(obj* left, T0 a0) const {
             return (left->*mFunc)(a0);
         }
 
-        inline R operator()(obj* left, T0 a0) {
+        inline R operator()(obj* left, T0 a0) const {
             return (left->*mFunc)(a0);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -153,15 +153,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R invoke(obj* left, T0 a0, T1 a1) {
+        inline R invoke(obj* left, T0 a0, T1 a1) const {
             return (left->*mFunc)(a0, a1);
         }
         
-        inline R operator()(obj* left, T0 a0, T1 a1) {
+        inline R operator()(obj* left, T0 a0, T1 a1) const {
             return (left->*mFunc)(a0, a1);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -184,15 +184,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2) {
+        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2) const {
             return (left->*mFunc)(a0, a1, a2);
         }
         
-        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2) {
+        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2) const {
             return (left->*mFunc)(a0, a1, a2);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -216,15 +216,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3) {
+        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3) const {
             return (left->*mFunc)(a0, a1, a2, a3);
         }
         
-        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3) {
+        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3) const {
             return (left->*mFunc)(a0, a1, a2, a3);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -249,15 +249,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) {
+        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4);
         }
         
-        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) {
+        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -283,15 +283,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) {
+        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5);
         }
         
-        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) {
+        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -315,15 +315,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) {
+        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6);
         }
         
-        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) {
+        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -351,15 +351,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) {
+        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6, a7);
         }
         
-        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) {
+        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6, a7);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -388,15 +388,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) {
+        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6, a7, a8);
         }
         
-        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) {
+        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6, a7, a8);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -426,15 +426,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) {
+        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
         }
         
-        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) {
+        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         
@@ -465,15 +465,15 @@ namespace mist {
         explicit Memfun(mem_fun func):
         mFunc(func) { }
         
-        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) {
+        inline R operator()(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
         }
         
-        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) {
+        inline R invoke(obj* left, T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) const {
             return (left->*mFunc)(a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
         }
         
-        operator bool() {
+        operator bool() const {
             return this->mFunc != NULL;
         }
         

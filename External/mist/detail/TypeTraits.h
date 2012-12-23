@@ -133,7 +133,12 @@ namespace mist {
         struct is_pod {
             enum { value = false };
         };
-        
+        /*
+        template<typename T>
+        struct function_trait {
+            typedef typename function_trait<decltype(&T::operator())>::result_type result_type;
+        };
+        */
         template<typename T>
         struct function_trait;
         

@@ -68,9 +68,6 @@ namespace ukn {
         bool isAppAvailable() const;
         AppInstance& getApp() const;
         
-    public:
-        static void RunInMainThread(const mist::thread::ThreadTask&);
-        
     protected:
         Context();
         ~Context();

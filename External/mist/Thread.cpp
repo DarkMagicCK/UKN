@@ -20,28 +20,42 @@
 #include "mist/Logger.h"
 #include "mist/Singleton.h"
 
+#if defined(MIST_OS_OSX) || defined(MIST_OS_IOS)
+#include <dispatch/dispatch.h>
+#endif
+
 namespace mist {
+    
+    namespace {
+        static mist::thread::ThreadId _main_thread_id = mist::thread::Thread::GetCurrentThreadId();
+    }
     
     namespace thread {
         
-        Mutex::Mutex() {
-#ifdef MIST_OS_WINDOWS 
+        Mutex::Mutex():
+        mutex(new std::mutex()) {
+#ifndef MIST_CPP11
+#ifdef MIST_OS_WINDOWS
             mLocked = false;
             InitializeCriticalSectionAndSpinCount(&cs, 4000);
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_mutex_init(&mutex, NULL);
 #endif
+#endif
         }
-            
+        
         Mutex::~Mutex() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             DeleteCriticalSection(&cs);
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_mutex_destroy(&mutex);
 #endif
+#endif
         }
-            
+        
         inline void Mutex::lock() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             EnterCriticalSection(&cs);
             while(mLocked) Sleep(1000);
@@ -49,9 +63,17 @@ namespace mist {
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_mutex_lock(&mutex);
 #endif
+#else
+            try {
+                mutex->lock();
+            } catch(std::system_error& e) {
+                log_error(e.what());
+            }
+#endif
         }
-            
+        
         inline bool Mutex::tryLock() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             bool ret = (TryEnterCriticalSection(&cs) ? true: false);
             if(ret && mLocked) {
@@ -62,26 +84,38 @@ namespace mist {
 #elif defined(MIST_OS_FAMILY_UNIX)
             return (pthread_mutex_trylock(&mutex) == 0) ? true: false;
 #endif
+#else
+            return mutex->try_lock();
+#endif
         }
-            
+        
         inline void Mutex::unlock() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             mLocked= false;
             LeaveCriticalSection(&cs);
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_mutex_unlock(&mutex);
 #endif
+#else
+            mutex->unlock();
+#endif
         }
-            
+        
         void* Mutex::getSysMutex() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             return &cs;
 #elif defined(MIST_OS_FAMILY_UNIX)
             return &mutex;
 #endif
+#else
+            return mutex->native_handle();
+#endif
         }
-            
+        
         RecursiveMutex::RecursiveMutex() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             InitializeCriticalSection(&cs);
 #elif defined(MIST_OS_FAMILY_UNIX)
@@ -90,37 +124,52 @@ namespace mist {
             pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
             pthread_mutex_init(&mutex, &attr);
 #endif
+#endif
         }
-            
+        
         RecursiveMutex::~RecursiveMutex() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             DeleteCriticalSection(&cs);
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_mutex_destroy(&mutex);
 #endif
+#endif
         }
-            
+        
         inline void RecursiveMutex::lock() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             EnterCriticalSection(&cs);
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_mutex_lock(&mutex);
 #endif
+#else
+            mutex.lock();
+#endif
         }
-            
+        
         inline bool RecursiveMutex::try_lock() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             return TryEnterCriticalSection(&cs) ? true : false;
 #elif defined(MIST_OS_FAMILY_UNIX)
             return (pthread_mutex_trylock(&mutex) == 0) ? true : false;
 #endif
+#else
+            return mutex.try_lock();
+#endif
         }
-            
+        
         inline void RecursiveMutex::unlock() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             LeaveCriticalSection(&cs);
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_mutex_unlock(&mutex);
+#endif
+#else
+            mutex.unlock();
 #endif
         }
 
@@ -140,51 +189,51 @@ namespace mist {
         }
                 
         Semaphore::Semaphore(int _n, int _max)
-#ifndef MIST_OS_WINDOWS
+//#ifndef MIST_OS_WINDOWS
         :
         mutex(),
         cond(mutex),
         n(_n),
         max(_max)
-#endif
+//#endif
         {
             assert( _n>=0 && _max>0 && _n<=_max);
-
+/*
 #ifdef MIST_OS_WINDOWS
                     
             sema = CreateSemaphoreW(NULL, _n, _max, NULL);
-#endif
+#endif*/
         }
                     
         Semaphore::~Semaphore() { 
-#ifdef MIST_OS_WINDOWS
+/*#ifdef MIST_OS_WINDOWS
             CloseHandle(sema);
-#endif
+#endif*/
         }
                     
         void Semaphore::wait() {
-#ifdef MIST_OS_WINDOWS
+/*#ifdef MIST_OS_WINDOWS
             switch(WaitForSingleObject(sema,INFINITE)) {
                 case WAIT_OBJECT_0:
                     return;
                 default:
                     MIST_THROW_EXCEPTION("mist::Thread::Semaphore: error wait");
             }
-#elif defined(MIST_OS_FAMILY_UNIX)
+#elif defined(MIST_OS_FAMILY_UNIX)*/
             MutexGuard<Mutex> lock(mutex);
             while(n < 1) {
                 cond.wait();
             }
             --n;
-#endif
+//#endif
         }
                     
         void Semaphore::set() {
-#ifdef MIST_OS_WINDOWS
+/*#ifdef MIST_OS_WINDOWS
             if(!ReleaseSemaphore(sema, 1, NULL)) {
                     MIST_THROW_EXCEPTION("mist::Thread::Semaphore: error set");
             }
-#elif defined(MIST_OS_FAMILY_UNIX)
+#elif defined(MIST_OS_FAMILY_UNIX)*/
             MutexGuard<Mutex> lock(mutex);
             if(n < max) {
                 ++n;
@@ -192,7 +241,7 @@ namespace mist {
                 MIST_THROW_EXCEPTION("mist::Thread::Semaphore: Cannot signal semaphore, exceed maximun");
             }
             cond.notify();
-#endif
+//#endif
         }
              
 #ifdef MIST_OS_WINDOWS
@@ -279,22 +328,28 @@ namespace mist {
         
         Condition::Condition(Mutex& mutex):
         _mutex(mutex) {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             _win32_pthread_cond_init(&cond, NULL);
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_cond_init(&cond, NULL);
 #endif
+            
+#endif
         }
         
         Condition::~Condition() {
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             _win32_pthread_cond_destroy(&cond);
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_cond_destroy(&cond);
 #endif
+#endif
         }
         
         void Condition::wait() {
+#ifndef MIST_CPP11
 #ifndef MIST_OS_WINDOWS
             if(pthread_cond_wait(&cond,
                                  static_cast<pthread_mutex_t*>(_mutex.getSysMutex())))
@@ -304,9 +359,14 @@ namespace mist {
                                         static_cast<pthread_mutex_t*>(_mutex.getSysMutex())))
                 MIST_THROW_EXCEPTION("mist::Thread::Condition: error wait");
 #endif
+#else
+            std::unique_lock<std::mutex> lock(*(std::mutex*)_mutex.getSysMutex());
+            cond.wait(lock);
+#endif
         }
         
         void Condition::notify() {
+#ifndef MIST_CPP11
 #ifndef MIST_OS_WINDOWS
             if(pthread_cond_signal(&cond))
                 MIST_THROW_EXCEPTION("mist::Thread::Condition: error notify");
@@ -314,15 +374,22 @@ namespace mist {
             if(_win32_pthread_cond_signal(&cond))
                 MIST_THROW_EXCEPTION("mist::Thread::Condition: error notify");
 #endif
+#else
+            cond.notify_one();
+#endif
         }
         
         void Condition::notifyAll() {
+#ifndef MIST_CPP11
 #ifndef MIST_OS_WINDOWS
             if(pthread_cond_broadcast(&cond))
                 MIST_THROW_EXCEPTION("mist::Thread::Condition: error broadcast");
 #elif defined(MIST_OS_FAMILY_UNIX)
             if(_win32_pthread_cond_broadcast(&cond))
                 MIST_THROW_EXCEPTION("mist::Thread::Condition: error broadcast");
+#endif
+#else
+            cond.notify_all();
 #endif
         }
         
@@ -354,11 +421,20 @@ namespace mist {
         void ThreadTask::operator()() const {
             if(mFunc)
                 mFunc(mArg);
+            if(mCallback)
+                mCallback();
         }
         
         bool ThreadTask::isValid() const {
-            return mFunc;
+            return (bool)mFunc;
         }
+        
+        ThreadTask& ThreadTask::then(const ThreadTask::CallbackFunc& cb) {
+            mCallback = cb;
+            return *this;
+        }
+        
+#ifndef MIST_CPP11
         
 #ifdef MIST_OS_FAMILY_UNIX
         static ThreadId _pthread_t_to_ID(const pthread_t& handle) {
@@ -373,6 +449,10 @@ namespace mist {
         }
 #endif
         
+        
+#endif
+        
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
         
         unsigned int WINAPI Thread::WrapperFunc(LPVOID pthis) {
@@ -382,6 +462,10 @@ namespace mist {
             void* Thread::WrapperFunc(void* pthis) {
                 
 #endif
+#else
+                void Thread::WrapperFunc(void* pthis) {
+#endif
+    
                 Thread* pthread = (Thread*)pthis;
                 
                 try {
@@ -392,17 +476,20 @@ namespace mist {
                 
                 MutexGuard<Mutex> guard(pthread->mDataMutex);
                 pthread->mIsActive = false;
-                
+#ifndef MIST_CPP11
                 return 0;
+#endif
             }
+
             
-            Thread::Thread():
+            Thread::Thread(const ThreadTask& task):
             mIsActive(false) {
-                
+                this->start(task);
             }
             
             Thread::~Thread() {
-              
+                
+                this->join();
             }
             
             bool Thread::start(const ThreadTask& task) {
@@ -412,22 +499,38 @@ namespace mist {
                 mIsActive = true;
                 mTask = task;
                 
+#ifndef MIST_CPP11
+                
 #ifdef MIST_OS_WINDOWS
                 mHandle = (HANDLE)_beginthreadex(0, 0, Thread::WrapperFunc, (void*)this, 0, &mWin32ThreadId);
-                
+                mId = ThreadId(mWin32ThreadId);
 #elif defined(MIST_OS_FAMILY_UNIX)
                 if(pthread_create(&mHandle, NULL, Thread::WrapperFunc, (void*)this) != 0)
                     mHandle = 0;
+                
+                mId = _pthread_t_to_ID(mHandle);
 #endif
+          
                 if(!mHandle) {
                     mIsActive = false;
                 }
+                
+#else
+                mThread = new std::thread(Thread::WrapperFunc, this);
+                mId =  ThreadId(mThread->get_id());
+#endif
                 
                 return mIsActive;
             }
             
             Thread::native_handle_type Thread::getNativeHandle() {
+#ifndef MIST_CPP11
                 return mHandle;
+#else
+                if(mThread)
+                    return mThread->native_handle();
+                return 0;
+#endif
             }
             
             bool Thread::isActive() const {
@@ -443,23 +546,28 @@ namespace mist {
             
             void Thread::join() {
                 if(joinable()) {
+#ifndef MIST_CPP11
+                    
 #ifdef MIST_OS_WINDOWS
                     WaitForSingleObject(mHandle, INFINITE);
 #elif defined(MIST_OS_FAMILY_UNIX)
                     pthread_join(mHandle, 0);
 #endif
+                    
+#else
+                    if(mThread && mThread->joinable())
+                        mThread->join();
+#endif
                 }
             }
             
             ThreadId Thread::getId() const {
-#ifdef MIST_OS_WINDOWS
-                return ThreadId(mWin32ThreadId);
-#elif defined(MIST_OS_FAMILY_UNIX)
-                return _pthread_t_to_ID(mHandle);
-#endif
+                return mId;
             }
             
             uint32 Thread::HardwareConcurrency() {
+#ifndef MIST_CPP11
+                
 #ifdef MIST_OS_WINDOWS
                 SYSTEM_INFO si;
                 GetSystemInfo(&si);
@@ -467,22 +575,46 @@ namespace mist {
 #elif defined(MIST_OS_FAMILY_UNIX)
                 return (uint32)sysconf(_SC_NPROCESSORS_ONLN);
 #endif
+                
+#else
+                return std::thread::hardware_concurrency();
+#endif
                 return 0;
             }
             
             void Thread::exit() {
+                
+#ifndef MIST_CPP11
+                
 #ifdef MIST_OS_WINDOWS
                 TerminateThread(mHandle, 0);
 #elif defined(MIST_OS_FAMILY_UNIX)
                 pthread_exit(&mHandle);
 #endif
+                
+#else
+ 
+// todo with windows, since there's no exit in std::thread
+#if defined(MIST_OS_FAMILY_UNIX)
+
+                if(mThread)
+                    pthread_exit(mThread->native_handle());
+#endif
+                    
+#endif
             }
             
             ThreadId Thread::GetCurrentThreadId() {
+#ifndef MIST_CPP11
+                
 #ifdef MIST_OS_WINDOWS
                 return ThreadId((uint32)::GetCurrentThreadId());
 #elif defined(MIST_OS_FAMILY_UNIX)
                 return _pthread_t_to_ID(pthread_self());
+#endif
+                
+#else
+                return ThreadId(std::this_thread::get_id());
 #endif
             }
             
@@ -640,11 +772,10 @@ namespace mist {
             mRunning = false;
             mThreads.reserve(numThreads);
             for(uint32 i=0; i<numThreads; ++i) {
-                ThreadTask task(Bind(this, &ThreadPool::runInThread));
+                ThreadTask task(Bind(this, &ThreadPool::runInThread), (void*)0);
                 
-                Thread* thread = new Thread;
+                Thread* thread = new Thread(task);
                 mThreads.push_back(thread);
-                thread->start(task);
             }
         }
         
@@ -705,39 +836,61 @@ namespace mist {
             return *_threadpool_instance.get();
         }
             
-            ThreadTaskPool::ThreadTaskPool() {
+        ThreadTaskPool::ThreadTaskPool() {
+            
+        }
+        
+        ThreadTaskPool::~ThreadTaskPool() {
+            
+        }
+        
+        void ThreadTaskPool::add(const ThreadTask& task) {
+            MutexGuard<Mutex> lock(mMutex);
+            
+            mTasks.push(task);
+        }
+        
+        void ThreadTaskPool::run() {
+            MutexGuard<Mutex> lock(mMutex);
+            
+            while(!mTasks.empty()) {
+                ThreadTask task = mTasks.back();
                 
-            }
-            
-            ThreadTaskPool::~ThreadTaskPool() {
+                task();
                 
+                mTasks.pop();
             }
+        }
+        
+        namespace {
+            static SingletonHolder<ThreadTaskPool, void> _threadtaskpool_instance;
+        }
+        
+        ThreadTaskPool& ThreadTaskPool::DefaultObject() {
+            return *_threadtaskpool_instance.get();
+        }
             
-            void ThreadTaskPool::add(const ThreadTask& task) {
-                MutexGuard<Mutex> lock(mMutex);
                 
-                mTasks.push(task);
+        void RunInMainThread(const mist::thread::ThreadTask& task) {
+            if(mist::thread::Thread::GetCurrentThreadId() == _main_thread_id) {
+                task();
+            } else {
+#if defined(MIST_OS_OSX) || defined(MIST_OS_IOS)
+                /* on OSX and iOS, use GCD directly */
+                __block mist::thread::ThreadTask _task = task;
+                dispatch_async(
+                   dispatch_get_main_queue(),
+                   ^() {
+                       _task();
+                   }
+                );
+#else
+                /* otherwise add to main thread task pool, and let app run it when update */
+                mist::thread::ThreadTaskPool::DefaultObject().add(task);
+#endif
             }
-            
-            void ThreadTaskPool::run() {
-                MutexGuard<Mutex> lock(mMutex);
-                
-                while(!mTasks.empty()) {
-                    ThreadTask task = mTasks.back();
-                    
-                    task();
-                    
-                    mTasks.pop();
-                }
-            }
-            
-            namespace {
-                static SingletonHolder<ThreadTaskPool, void> _threadtaskpool_instance;
-            }
-            
-            ThreadTaskPool& ThreadTaskPool::DefaultObject() {
-                return *_threadtaskpool_instance.get();
-            }
+        }
+
             
     }
     

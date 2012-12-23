@@ -31,11 +31,11 @@ namespace mist {
             
         }
         
-        R operator()(ARGS... args) {
+        R operator()(ARGS... args) const {
             return mMemfun.operator()(mObj, args...);
         }
         
-        operator bool() {
+        operator bool() const {
             return mObj && mMemfun;
         }
         
@@ -61,11 +61,11 @@ namespace mist {
             
         }
         
-        void operator()(ARGS... args) {
+        void operator()(ARGS... args) const {
             mMemfun.operator()(mObj, args...);
         }
         
-        operator bool() {
+        operator bool() const {
             return mObj && mMemfun;
         }
         
@@ -100,7 +100,7 @@ namespace mist {
                 
             }
             
-            operator bool() {
+            operator bool() const {
                 return mObj && mMemfun;
             }
             
@@ -132,7 +132,7 @@ namespace mist {
             
         }
         
-        inline R operator()() {
+        inline R operator()() const {
             return base_type::mMemfun(base_type::mObj);
         }
     };
@@ -151,7 +151,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0) {
+        inline R operator()(T0 a0) const {
             return base_type::mMemfun(base_type::mObj, a0);
         }
     };
@@ -170,7 +170,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0, T1 a1) {
+        inline R operator()(T0 a0, T1 a1) const {
             return base_type::mMemfun(base_type::mObj, a0, a1);
         }
     };
@@ -189,7 +189,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0, T1 a1, T2 a2) {
+        inline R operator()(T0 a0, T1 a1, T2 a2) const {
             return base_type::mMemfun(base_type::mObj, a0, a1, a2);
         }
     };
@@ -208,7 +208,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3) {
+        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3) const {
             return base_type::mMemfun(base_type::mObj, a0, a1, a2, a3);
         }
     };
@@ -227,7 +227,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) {
+        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) const {
             return base_type::mMemfun(base_type::mObj, a0, a1, a2, a3, a4);
         }
     };
@@ -282,7 +282,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) {
+        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) const {
             return base_type::mMemfun(base_type::mObj, a0, a1, a2, a3, a4, a5, a6);
         }
     };
@@ -312,7 +312,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) {
+        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) const {
             return base_type::mMemfun(base_type::mObj, a0, a1, a2, a3, a4, a5, a6, a7);
         }
     };
@@ -343,7 +343,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) {
+        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) const {
             return base_type::mMemfun(base_type::mObj, a0, a1, a2, a3, a4, a5, a6, a7, a8);
         }
     };
@@ -375,7 +375,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) {
+        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9) const {
             return base_type::mMemfun(base_type::mObj, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9);
         }
     };
@@ -408,7 +408,7 @@ namespace mist {
             
         }
         
-        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) {
+        inline R operator()(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9, T10 a10) const {
             return base_type::mMemfun(base_type::mObj, a0, a1, a2, a3, a4, a5, a6, a7, a8, a9, a10);
         }
     };

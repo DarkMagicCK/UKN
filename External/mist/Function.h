@@ -12,7 +12,8 @@
 #include "mist/detail/function/Memfun.h"
 #include "mist/detail/function/Bind.h"
 
-#include "mist/detail/function/FunctionDetail.h"
+#include "mist/Platform.h"
 
+#include "mist/detail/function/FunctionDetail.h"
 
 #endif

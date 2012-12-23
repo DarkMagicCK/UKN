@@ -21,15 +21,7 @@
 #include "UKN/Scene.h"
 #include "UKN/Asset.h"
 
-#if defined(MIST_OS_OSX) || defined(MIST_OS_IOS)
-#include <dispatch/dispatch.h>
-#endif
-
 namespace ukn {
-    
-    namespace {
-        static mist::thread::ThreadId _main_thread_id;
-    }
     
     ContextCfg& ContextCfg::graphicFactoryName(const UknString& name) {
         graphic_factory_name = name;
@@ -107,8 +99,6 @@ namespace ukn {
     Context::Context():
     mApp(0) {
         mGraphicFactory = GraphicFactory::NullObject();
-        
-        _main_thread_id = mist::thread::Thread::GetCurrentThreadId();
     }
     
     Context::~Context() {
@@ -305,25 +295,5 @@ namespace ukn {
             }
         }
     }
-    
-    void Context::RunInMainThread(const mist::thread::ThreadTask& task) {
-        if(mist::thread::Thread::GetCurrentThreadId() == _main_thread_id) {
-            task();
-        } else {
-#if defined(MIST_OS_OSX) || defined(MIST_OS_IOS)
-            /* on OSX and iOS, use GCD directly */
-            __block mist::thread::ThreadTask _task = task;
-            dispatch_async(
-                dispatch_get_main_queue(),
-                           ^() {
-                               _task();
-                           }
-            );
-#else
-            /* otherwise add to main thread task pool, and let app run it when update */
-            mist::thread::ThreadTaskPool::DefaultObject().add(task);
-#endif
-        }
-    }
-    
+       
 } // namespace ukn

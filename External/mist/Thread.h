@@ -28,6 +28,14 @@
 #include <deque>
 #include <queue>
 
+#ifdef MIST_CPP11
+#include <thread>
+#include <mutex>
+#include <future>
+#endif
+
+#include "mist/Ptr.h"
+
 namespace mist {
     
     namespace thread {
@@ -44,11 +52,15 @@ namespace mist {
             void* getSysMutex();
             
         private:
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             CRITICAL_SECTION cs;
             bool mLocked;
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_mutex_t mutex;
+#endif
+#else
+            std::mutex* mutex;
 #endif
         };
         
@@ -62,10 +74,14 @@ namespace mist {
             void unlock();
             
         private:
+#ifndef MIST_CPP11
 #ifdef MIST_OS_WINDOWS
             CRITICAL_SECTION cs;
 #elif defined(MIST_OS_FAMILY_UNIX)
             pthread_mutex_t mutex;
+#endif
+#else
+            std::recursive_mutex mutex;
 #endif
             friend class Condition;
         };
@@ -109,10 +125,14 @@ namespace mist {
             void wait();
             void notify();
             void notifyAll();
-            
+        
         private:
-            pthread_cond_t cond;
             
+#ifndef MIST_CPP11
+            pthread_cond_t cond;
+#else
+            std::condition_variable cond;
+#endif
         protected:
             Mutex& _mutex;
         };
@@ -122,9 +142,16 @@ namespace mist {
         
         class MIST_API ThreadId {
         public:
+#ifndef MIST_CPP11
+            typedef uint32 id_type;
             ThreadId(): mId(0) { }
+
+#else
+            typedef std::thread::id id_type;
+            ThreadId() { }
+#endif
             
-            ThreadId(uint32 aid): mId(aid) { }
+            ThreadId(id_type aid): mId(aid) { }
             
             ThreadId(const ThreadId& rhs): mId(rhs.mId) { }
             
@@ -165,16 +192,33 @@ namespace mist {
             }
             
         private:
-            uint32 mId;
+            /* thread id is an point on darwin, so we need uintPtr here */
+            id_type mId;
         };
         
         class MIST_API ThreadTask {
         public:
-            typedef Function<void(void*)> ThreadFunc;
+            typedef std::function<void(void*)> ThreadFunc;
+            typedef std::function<void()> CallbackFunc;
             
             ThreadTask();
             ThreadTask(const ThreadFunc& func);
             ThreadTask(const ThreadFunc& func, void* arg);
+            
+#if defined(MIST_CPP11) 
+            
+#ifdef MIST_VARIADIC_TEMPLATE
+      
+            template<typename _Fp, typename ...ARGS>
+            ThreadTask(_Fp fp, ARGS... args) {
+                mFunc = [=](void*) {
+                    fp(args...);
+                };
+            }
+            
+#endif
+            
+#endif
             
             void    setArg(void* arg);
             void*   getArg() const;
@@ -183,25 +227,31 @@ namespace mist {
             
             bool isValid() const;
             
+            ThreadTask& then(const CallbackFunc& cb);
             
         private:
             void* mArg;
             ThreadFunc mFunc;
+            CallbackFunc mCallback;
         };
         
         class MIST_API Thread {
         public:
+#ifndef MIST_CPP11
+            
 #ifdef MIST_OS_WINDOWS
             typedef HANDLE native_handle_type;
 #elif defined(MIST_OS_FAMILY_UNIX)
             typedef pthread_t native_handle_type;
 #endif
             
-        public:
-            Thread();
-            ~Thread();
+#else
+            typedef std::thread::native_handle_type native_handle_type;
+#endif
             
-            bool start(const ThreadTask& task);
+        public:
+            Thread(const ThreadTask& task);
+            ~Thread();
             
             bool isActive() const;
             
@@ -218,11 +268,14 @@ namespace mist {
             static ThreadId GetCurrentThreadId();
             
         private:
+            bool start(const ThreadTask& task);
+            
             ThreadTask mTask;
             bool mIsActive;
             Mutex mDataMutex;
             
             ThreadId mId;
+#ifndef MIST_CPP11
             
 #ifdef MIST_OS_WINDOWS
             uint32 mWin32ThreadId;
@@ -235,8 +288,14 @@ namespace mist {
             pthread_t mHandle;
             pthread_attr_t mAttr;
 #endif
+            
+#else
+            std::future<int> f;
+            std::thread* mThread;
+            static void WrapperFunc(void* pthis);
+#endif
         };
-                
+        
         class MIST_API Semaphore {
         public:
             Semaphore(int _n);
@@ -247,15 +306,11 @@ namespace mist {
             void set();
             
         private:
-#ifdef MIST_OS_WINDOWS
-            HANDLE sema;
-#elif defined(MIST_OS_FAMILY_UNIX)
             volatile int n;
             int max;
             
             mutable Mutex mutex;
             Condition cond;
-#endif
         };
         
         template<typename T>
@@ -406,6 +461,103 @@ namespace mist {
             typedef std::queue<ThreadTask> ThreadTaskQueue;
             ThreadTaskQueue mTasks;
         };
+        
+        template<typename _R>
+        struct RTask {
+#if defined(MIST_CPP11) && defined(MIST_VARIADIC_TEMPLATE)
+            
+            template<typename _Fp, typename ...ARGS>
+            RTask(_Fp fp, ARGS... args) {
+                task = ThreadTask([this, fp, args...]() {
+                    result = fp(args...);
+                });
+            }
+            
+#endif
+            explicit RTask(const std::function<_R()>& f):
+            fp(f) {
+                task = ThreadTask(Bind(this, &RTask<_R>::execute), (void*)0);
+            }
+            
+            void execute(void* args) {
+                printf("tett");
+                this->result = fp();
+            }
+            
+            explicit RTask(const ThreadTask& task):
+            task(task) {
+                
+            }
+            
+            std::function<_R()> fp;
+            ThreadTask task;
+            _R result;
+        };
+        
+        template<>
+        struct RTask<void> {
+#if defined(MIST_CPP11) && defined(MIST_VARIADIC_TEMPLATE)
+            
+            template<typename _Fp, typename ...ARGS>
+            RTask(_Fp fp, ARGS... args) {
+                task = ThreadTask([=]() {
+                    fp(args...);
+                });
+            }
+            
+#endif
+            explicit RTask(const std::function<void()>& f):
+            fp(f) {
+                task = ThreadTask(Bind(this, &RTask<void>::execute), (void*)0);
+            }
+            
+            void execute(void* args) {
+                fp();
+            }
+            
+            explicit RTask(const ThreadTask& task):
+            task(task) {
+                
+            }
+            
+            std::function<void()> fp;
+            ThreadTask task;
+        };
+        
+        template<typename _T>
+        class Future {
+        public:
+            Future(SharedPtr<RTask<_T> > task):
+            mTask(task) {
+                mThread = new Thread(task->task);
+            }
+            
+            void wait() {
+                while(true) {
+                    if(!mThread->isActive())
+                        break;
+                }
+            }
+            
+            bool isFinished() const {
+                return mThread->isActive();
+            }
+            
+            _T getResult() const {
+                return mTask->result;
+            }
+            
+        private:
+            SharedPtr<RTask<_T> > mTask;
+            SharedPtr<Thread> mThread;
+        };
+        
+        template<typename _T>
+        Future<_T> RunAsync(std::function<_T()> f) {
+            return Future<_T>(new RTask<_T>(f));
+        }
+        
+        static void RunInMainThread(const mist::thread::ThreadTask&);
 
     } // namespace thread
     

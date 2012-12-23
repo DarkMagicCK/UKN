@@ -149,7 +149,6 @@ namespace mist {
         
         const TaskList& allTasks() const;
         
-        // notifications would be posted under SoraTaskNotification subclass
         NotificationEvent& onTaskNotification();
         
         static TaskManager& DefaultManager(bool multiThreaded=false);

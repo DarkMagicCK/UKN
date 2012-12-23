@@ -1117,11 +1117,13 @@ std::vector<std::pair<double, Vector<double> > > PredictorCorrectorVX(double x0,
 #include "UKN/GraphicContext.h"
 #include "mist/Serial.h"
 
+#include "mist/Thread.h"
+
 class TestApp: public ukn::AppInstance, public ukn::input::LeapMotionListener {
 public:
     TestApp(const ukn::UknString& name):
     ukn::AppInstance(name) {
-        
+  
     }
     virtual ~TestApp() {
         
@@ -1311,6 +1313,17 @@ int CALLBACK WinMain(
     
     mist::query::_TestQuery();
     
+    mist::thread::Future<double> f = mist::thread::RunAsync<double>([]()->double {
+        double result = 0.f;
+        for(int i=0; i<100; ++i) {
+            result += std::erf(i);
+            printf("%f\n", result);
+        }
+        return result;
+    });
+    
+    f.wait();
+    printf("%f\n", f.getResult());
     // register plugins manually for test
    /* ukn::GraphicFactoryPtr gl_factory;
     ukn::CreateGraphicFactory(gl_factory);

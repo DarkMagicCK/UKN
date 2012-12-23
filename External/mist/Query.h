@@ -21,7 +21,7 @@ namespace mist {
     namespace query {
         
         template<typename T>
-        struct Selector;
+        struct Query;
         
         template<typename T>
         struct container_info {

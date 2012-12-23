@@ -215,7 +215,7 @@ namespace mist {
             
     }
         
-    static Function<void(FSMState&)> fsm_do_nothing_func = fsm_do_nothing;
+    static Function<void(FSMState&)> fsm_do_nothing_func(fsm_do_nothing);
     
     class FunctionFSMState: public FSMState {
     public:

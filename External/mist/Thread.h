@@ -35,6 +35,7 @@
 #endif
 
 #include "mist/Ptr.h"
+#include "mist/TimeUtil.h"
 
 namespace mist {
     
@@ -60,7 +61,7 @@ namespace mist {
             pthread_mutex_t mutex;
 #endif
 #else
-            std::mutex* mutex;
+            ScopedPtr<std::mutex> mutex;
 #endif
         };
         
@@ -536,6 +537,7 @@ namespace mist {
                 while(true) {
                     if(!mThread->isActive())
                         break;
+                    mist::msleep(1);
                 }
             }
             

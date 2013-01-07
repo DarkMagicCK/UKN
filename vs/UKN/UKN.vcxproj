@@ -16,6 +16,94 @@
     <ClInclude Include="..\..\External\glew\wglew.h" />
     <ClInclude Include="..\..\External\glfw\glfw3.h" />
     <ClInclude Include="..\..\External\md5lib\md5lib.h" />
+    <ClInclude Include="..\..\External\mist\Animation.h" />
+    <ClInclude Include="..\..\External\mist\Any.h" />
+    <ClInclude Include="..\..\External\mist\AppleStuff.h" />
+    <ClInclude Include="..\..\External\mist\AutoUpdate.h" />
+    <ClInclude Include="..\..\External\mist\Base64.h" />
+    <ClInclude Include="..\..\External\mist\Basic.h" />
+    <ClInclude Include="..\..\External\mist\Color.h" />
+    <ClInclude Include="..\..\External\mist\Common.h" />
+    <ClInclude Include="..\..\External\mist\Component.h" />
+    <ClInclude Include="..\..\External\mist\Condition.h" />
+    <ClInclude Include="..\..\External\mist\ConfigParser.h" />
+    <ClInclude Include="..\..\External\mist\ConfigParserXml.h" />
+    <ClInclude Include="..\..\External\mist\Convert.h" />
+    <ClInclude Include="..\..\External\mist\detail\function\Bind.h" />
+    <ClInclude Include="..\..\External\mist\detail\function\FunctionBase.h" />
+    <ClInclude Include="..\..\External\mist\detail\function\FunctionDetail.h" />
+    <ClInclude Include="..\..\External\mist\detail\function\FunctionFoward.h" />
+    <ClInclude Include="..\..\External\mist\detail\function\FunctionInclude.h" />
+    <ClInclude Include="..\..\External\mist\detail\function\FunctionTemplate.h" />
+    <ClInclude Include="..\..\External\mist\detail\function\Memfun.h" />
+    <ClInclude Include="..\..\External\mist\detail\operations\OperationForEach.h" />
+    <ClInclude Include="..\..\External\mist\detail\TypeTraits.h" />
+    <ClInclude Include="..\..\External\mist\DllLoader.h" />
+    <ClInclude Include="..\..\External\mist\Encode.h" />
+    <ClInclude Include="..\..\External\mist\Entity.h" />
+    <ClInclude Include="..\..\External\mist\Error.h" />
+    <ClInclude Include="..\..\External\mist\Event.h" />
+    <ClInclude Include="..\..\External\mist\Exception.h" />
+    <ClInclude Include="..\..\External\mist\Factory.h" />
+    <ClInclude Include="..\..\External\mist\FileUtil.h" />
+    <ClInclude Include="..\..\External\mist\FSM.h" />
+    <ClInclude Include="..\..\External\mist\Function.h" />
+    <ClInclude Include="..\..\External\mist\functional\Cond.h" />
+    <ClInclude Include="..\..\External\mist\Hashing.h" />
+    <ClInclude Include="..\..\External\mist\Interfaces.h" />
+    <ClInclude Include="..\..\External\mist\Lazy.h" />
+    <ClInclude Include="..\..\External\mist\Lexer.h" />
+    <ClInclude Include="..\..\External\mist\ListenerManager.h" />
+    <ClInclude Include="..\..\External\mist\Logger.h" />
+    <ClInclude Include="..\..\External\mist\MathUtil.h" />
+    <ClInclude Include="..\..\External\mist\md5lib\md5lib.h" />
+    <ClInclude Include="..\..\External\mist\MemoryUtil.h" />
+    <ClInclude Include="..\..\External\mist\Message.h" />
+    <ClInclude Include="..\..\External\mist\Module.h" />
+    <ClInclude Include="..\..\External\mist\Operations.h" />
+    <ClInclude Include="..\..\External\mist\Platform.h" />
+    <ClInclude Include="..\..\External\mist\Port.h" />
+    <ClInclude Include="..\..\External\mist\PreDeclare.h" />
+    <ClInclude Include="..\..\External\mist\Preprocessor.h" />
+    <ClInclude Include="..\..\External\mist\Profiler.h" />
+    <ClInclude Include="..\..\External\mist\Ptr.h" />
+    <ClInclude Include="..\..\External\mist\pugixml\pugiconfig.hpp" />
+    <ClInclude Include="..\..\External\mist\pugixml\pugixml.hpp" />
+    <ClInclude Include="..\..\External\mist\Query.h" />
+    <ClInclude Include="..\..\External\mist\RandomUtil.h" />
+    <ClInclude Include="..\..\External\mist\RefCounted.h" />
+    <ClInclude Include="..\..\External\mist\Reflection.h" />
+    <ClInclude Include="..\..\External\mist\reflection\ArrayContainer.h" />
+    <ClInclude Include="..\..\External\mist\reflection\Container.h" />
+    <ClInclude Include="..\..\External\mist\reflection\Field.h" />
+    <ClInclude Include="..\..\External\mist\reflection\Method.h" />
+    <ClInclude Include="..\..\External\mist\reflection\Object.h" />
+    <ClInclude Include="..\..\External\mist\reflection\Serialize.h" />
+    <ClInclude Include="..\..\External\mist\reflection\Type.h" />
+    <ClInclude Include="..\..\External\mist\reflection\TypeDatabase.h" />
+    <ClInclude Include="..\..\External\mist\reflection\TypeInfo.h" />
+    <ClInclude Include="..\..\External\mist\reflection\TypeName.h" />
+    <ClInclude Include="..\..\External\mist\Resource.h" />
+    <ClInclude Include="..\..\External\mist\Serial.h" />
+    <ClInclude Include="..\..\External\mist\Serializer.h" />
+    <ClInclude Include="..\..\External\mist\Signal.h" />
+    <ClInclude Include="..\..\External\mist\Singleton.h" />
+    <ClInclude Include="..\..\External\mist\StackTrace.h" />
+    <ClInclude Include="..\..\External\mist\Stream.h" />
+    <ClInclude Include="..\..\External\mist\StreamWrapper.h" />
+    <ClInclude Include="..\..\External\mist\StringUtil.h" />
+    <ClInclude Include="..\..\External\mist\SysUtil.h" />
+    <ClInclude Include="..\..\External\mist\Task.h" />
+    <ClInclude Include="..\..\External\mist\Thread.h" />
+    <ClInclude Include="..\..\External\mist\TimeUtil.h" />
+    <ClInclude Include="..\..\External\mist\Transform.h" />
+    <ClInclude Include="..\..\External\mist\Trigger.h" />
+    <ClInclude Include="..\..\External\mist\Type.h" />
+    <ClInclude Include="..\..\External\mist\TypeInfo.h" />
+    <ClInclude Include="..\..\External\mist\Uncopyable.h" />
+    <ClInclude Include="..\..\External\mist\UnitTest.h" />
+    <ClInclude Include="..\..\External\mist\Util.h" />
+    <ClInclude Include="..\..\External\mist\ZipUtil.h" />
     <ClInclude Include="..\..\External\pugixml\pugiconfig.hpp" />
     <ClInclude Include="..\..\External\pugixml\pugixml.hpp" />
     <ClInclude Include="..\..\External\soil\image_DXT.h" />
@@ -40,124 +128,102 @@
     <ClInclude Include="..\..\External\zlib\zip.h" />
     <ClInclude Include="..\..\External\zlib\zlib.h" />
     <ClInclude Include="..\..\External\zlib\zutil.h" />
-    <ClInclude Include="..\..\Plugins\DirectX\DXConvert.h" />
-    <ClInclude Include="..\..\Plugins\DirectX\DXFrameBuffer.h" />
-    <ClInclude Include="..\..\Plugins\DirectX\DXGraphicDevice.h" />
-    <ClInclude Include="..\..\Plugins\DirectX\DXGraphicFactory.h" />
-    <ClInclude Include="..\..\Plugins\DirectX\DXPreq.h" />
-    <ClInclude Include="..\..\Plugins\DirectX\DXRenderView.h" />
-    <ClInclude Include="..\..\Plugins\DirectX\DXTexture.h" />
-    <ClInclude Include="..\..\Plugins\DirectX\DXWindow.h" />
     <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLFWInput.h" />
     <ClInclude Include="..\..\Plugins\GL\GLGraphicBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h" />
     <ClInclude Include="..\..\Plugins\GL\GLGraphicFactory.h" />
     <ClInclude Include="..\..\Plugins\GL\GLPreq.h" />
     <ClInclude Include="..\..\Plugins\GL\GLRenderBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLRenderView.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLShader.h" />
     <ClInclude Include="..\..\Plugins\GL\GLSpriteBatch.h" />
     <ClInclude Include="..\..\Plugins\GL\GLTexture.h" />
     <ClInclude Include="..\..\Plugins\GL\GLWindow.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Action.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Animation.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Any.h" />
     <ClInclude Include="..\..\UKN\include\UKN\App.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Asset.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Audio.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\AutoUpdate.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Base64.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Basic.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Binding.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Camera.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Class.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Color.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Common.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Component.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Condition.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\ConfigParser.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Context.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Bind.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionBase.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionDetail.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionFoward.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionInclude.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\FunctionTemplate.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\function\Memfun.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\detail\TypeTraits.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\DllLoader.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Entity.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Event.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Exception.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Factory.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\FileUtil.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Font.h" />
     <ClInclude Include="..\..\UKN\include\UKN\FrameBuffer.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Frustum.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\FSM.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Function.h" />
     <ClInclude Include="..\..\UKN\include\UKN\GraphicBuffer.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicContext.h" />
     <ClInclude Include="..\..\UKN\include\UKN\GraphicDevice.h" />
     <ClInclude Include="..\..\UKN\include\UKN\GraphicFactory.h" />
     <ClInclude Include="..\..\UKN\include\UKN\GraphicSettings.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Hashing.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Input.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Key.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Logger.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\ListenerManager.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTable.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTableLoader.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Material.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\MathUtil.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\MemoryUtil.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Mesh.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Message.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Module.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Physics.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Platform.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Port.h" />
     <ClInclude Include="..\..\UKN\include\UKN\PreDeclare.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Preprocessor.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Profiler.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Ptr.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\RandomUtil.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\RefCounted.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Renderable.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderBuffer.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderEffect.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\RenderTarget.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderView.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Resource.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Scene.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Scripting.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Sensor.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Serializer.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\SequencialAnimation.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Shader.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Signal.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Singleton.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Skeletal.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Sprite.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SpriteBatch.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\StackTrace.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Stream.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\StringUtil.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\SysUtil.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Task.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Texture.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Thread.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\TimeUtil.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\tmx\TMXTiledMap.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Transform.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Trigger.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Type.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\TypeInfo.h" />
     <ClInclude Include="..\..\UKN\include\UKN\UKN.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Uncopyable.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Util.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Vertex.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Viewport.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Window.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\ZipUtil.h" />
-    <ClInclude Include="..\..\UKN\src\Core\AppleStuff.h" />
-    <ClInclude Include="..\..\UKN\src\Core\ConfigParserXml.h" />
+    <ClInclude Include="..\..\UKN\SqaureGame.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\External\glew\glew.c" />
     <ClCompile Include="..\..\External\md5lib\md5lib.cpp" />
+    <ClCompile Include="..\..\External\mist\Animation.cpp" />
+    <ClCompile Include="..\..\External\mist\AutoUpdate.cpp" />
+    <ClCompile Include="..\..\External\mist\Base64.cpp" />
+    <ClCompile Include="..\..\External\mist\Component.cpp" />
+    <ClCompile Include="..\..\External\mist\ConfigParser.cpp" />
+    <ClCompile Include="..\..\External\mist\ConfigParserXml.cpp" />
+    <ClCompile Include="..\..\External\mist\Convert.cpp" />
+    <ClCompile Include="..\..\External\mist\DllLoader.cpp" />
+    <ClCompile Include="..\..\External\mist\Event.cpp" />
+    <ClCompile Include="..\..\External\mist\FileUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\Hashing.cpp" />
+    <ClCompile Include="..\..\External\mist\Lexer.cpp" />
+    <ClCompile Include="..\..\External\mist\Logger.cpp" />
+    <ClCompile Include="..\..\External\mist\md5lib\md5lib.cpp" />
+    <ClCompile Include="..\..\External\mist\Module.cpp" />
+    <ClCompile Include="..\..\External\mist\Port.cpp" />
+    <ClCompile Include="..\..\External\mist\Profiler.cpp" />
+    <ClCompile Include="..\..\External\mist\pugixml\pugixml.cpp" />
+    <ClCompile Include="..\..\External\mist\Query.cpp" />
+    <ClCompile Include="..\..\External\mist\RandomUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\reflection\Field.cpp" />
+    <ClCompile Include="..\..\External\mist\reflection\Type.cpp" />
+    <ClCompile Include="..\..\External\mist\reflection\TypeDatabase.cpp" />
+    <ClCompile Include="..\..\External\mist\reflection\TypeRegistration.cpp" />
+    <ClCompile Include="..\..\External\mist\Resource.cpp" />
+    <ClCompile Include="..\..\External\mist\Serial.cpp" />
+    <ClCompile Include="..\..\External\mist\Serializer.cpp" />
+    <ClCompile Include="..\..\External\mist\Signal.cpp" />
+    <ClCompile Include="..\..\External\mist\Stream.cpp" />
+    <ClCompile Include="..\..\External\mist\StreamWrapper.cpp" />
+    <ClCompile Include="..\..\External\mist\StringUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\SysUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\Task.cpp" />
+    <ClCompile Include="..\..\External\mist\Thread.cpp" />
+    <ClCompile Include="..\..\External\mist\Timeutil.cpp" />
+    <ClCompile Include="..\..\External\mist\ZipUtil.cpp" />
     <ClCompile Include="..\..\External\pugixml\pugixml.cpp" />
     <ClCompile Include="..\..\External\soil\image_DXT.c" />
     <ClCompile Include="..\..\External\soil\image_helper.c" />
@@ -179,67 +245,44 @@
     <ClCompile Include="..\..\External\zlib\unzip.c" />
     <ClCompile Include="..\..\External\zlib\zip.c" />
     <ClCompile Include="..\..\External\zlib\zutil.c" />
-    <ClCompile Include="..\..\Plugins\DirectX\DXFrameBuffer.cpp" />
-    <ClCompile Include="..\..\Plugins\DirectX\DXGraphicDevice.cpp" />
-    <ClCompile Include="..\..\Plugins\DirectX\DXGraphicFactory.cpp" />
-    <ClCompile Include="..\..\Plugins\DirectX\DXRenderView.cpp" />
-    <ClCompile Include="..\..\Plugins\DirectX\DXTexture.cpp" />
-    <ClCompile Include="..\..\Plugins\DirectX\DXWindow.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicFactory.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLRenderView.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLShader.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLSpriteBatch.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLTexture.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLWindow.cpp" />
-    <ClCompile Include="..\..\UKN\main.cpp" />
+    <ClCompile Include="..\..\UKN\src\Animation\SequencialAnimation.cpp" />
+    <ClCompile Include="..\..\UKN\src\Animation\Skeletal.cpp" />
     <ClCompile Include="..\..\UKN\src\App\App.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\Asset.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\AutoUpdate.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Base64.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Class.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\ConfigParser.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\ConfigParserXml.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\Context.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\DllLoader.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\FileUtil.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Hashing.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Logger.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Module.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Port.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Profiler.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\RandomUtil.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Resource.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Serializer.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Signal.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Stream.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\StringUtil.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\SysUtil.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Task.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Thread.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Timeutil.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\ZipUtil.cpp" />
-    <ClCompile Include="..\..\UKN\src\Game\Component.cpp" />
-    <ClCompile Include="..\..\UKN\src\Game\Entity.cpp" />
-    <ClCompile Include="..\..\UKN\src\Game\Event.cpp" />
-    <ClCompile Include="..\..\UKN\src\Game\Trigger.cpp" />
-    <ClCompile Include="..\..\UKN\src\Presentation\Animation.cpp" />
-    <ClCompile Include="..\..\UKN\src\Presentation\Skeletal.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Input.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTable.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTableLoader.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Font.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\FrameBuffer.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Frustum.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\GraphicBuffer.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\GraphicContext.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\GraphicDevice.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\GraphicFactory.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\Renderable.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderBuffer.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\RenderTarget.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderView.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Scene.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Shader.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Texture.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Window.cpp" />
+    <ClCompile Include="..\..\UKN\src\TMX\TMXTiledMap.cpp" />
+    <ClCompile Include="main_win.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\External\mist\AppleStuff.mm" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{33687FF7-7B1D-4ACC-BE3F-85190D3C657C}</ProjectGuid>
@@ -251,12 +294,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -289,6 +334,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -306,6 +353,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalDependencies>OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

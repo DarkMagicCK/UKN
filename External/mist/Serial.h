@@ -41,7 +41,7 @@ namespace mist {
     private:
         void init();
         
-        class SerialImpl;
+		struct SerialImpl;
         SerialImpl* mImpl;
         
         std::string mPort;

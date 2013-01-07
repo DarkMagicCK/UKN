@@ -87,7 +87,7 @@ namespace mist {
             std::string log = string::WStringToString(realLog);
 #ifdef MIST_OS_WINDOWS
             log += "\r\n";
-            mOutputStream->write(log.c_str(), log.size());
+            mOutputStream->write((uint8*)log.c_str(), log.size());
 #else
 			log += "\n";
             mOutputStream->write((uint8*)log.c_str(), log.size());

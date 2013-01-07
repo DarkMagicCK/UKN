@@ -97,7 +97,7 @@ namespace ukn {
     }
     
     uint32 RenderBuffer::getIndexCount() const {
-        if(mIndexStream == 0 && mIndexStream) {
+        if(mIndexCount == 0 && mIndexStream) {
             return mIndexStream->count();
         }
         return mIndexCount;

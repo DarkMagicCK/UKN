@@ -11,8 +11,14 @@
 
 #ifdef MIST_OS_WINDOWS
 #include <Windows.h>
-#include "Shlwapi.h"
+#include <Shlwapi.h>
 #pragma comment(lib,"shlwapi.lib")
+
+#include <shellapi.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <fcntl.h>
+#include <io.h>
 
 #elif defined(MIST_OS_FAMILY_APPLE)
 #include "AppleStuff.h"
@@ -33,6 +39,11 @@
 #include "mist/StringUtil.h"
 
 namespace mist {
+
+#undef CopyFile
+#undef MoveFile
+#undef DeleteFile
+#undef CreateDirectory
     
     bool File::FileExists(const MistString& filepath) {
 #ifdef MIST_OS_WINDOWS
@@ -160,7 +171,7 @@ namespace mist {
     
     bool File::CopyDirectory(const MistString& src, const MistString& dst) {
 #if defined(MIST_OS_WINDOWS)
-        SHFILEOPSTRUCTW s = { 0 };
+        SHFILEOPSTRUCT s = { 0 };
         s.hwnd = 0;
         s.wFunc = FO_COPY;
         s.fFlags = FOF_SILENT;
@@ -183,8 +194,8 @@ namespace mist {
     
     bool File::MoveFile(const MistString& src, const MistString& dst) {
 #if defined(MIST_OS_WINDOWS)
-        return ::MoveFile(src.c_str(),
-                          dst.c_str()) == TRUE;
+        return ::MoveFileW(src.c_str(),
+                           dst.c_str()) == TRUE;
         
 #elif defined(MIST_OS_FAMILY_APPLE)
         return mist_apple_moveitem(src, dst);
@@ -198,8 +209,8 @@ namespace mist {
     
     bool File::MoveDirectory(const MistString& src, const MistString& dst) {
 #if defined(MIST_OS_WINDOWS)
-        return ::MoveFile(src.c_str(),
-                          dst.c_str()) == TRUE;
+        return ::MoveFileW(src.c_str(),
+                           dst.c_str()) == TRUE;
         
 #elif defined(MIST_OS_FAMILY_APPLE)
         return mist_apple_moveitem(src, dst);
@@ -213,7 +224,7 @@ namespace mist {
     
     bool File::DeleteFile(const MistString& src) {
 #if defined(MIST_OS_WINDOWS)
-        return ::DeleteFile(src.c_str()) == TRUE;
+        return ::DeleteFileW(src.c_str()) == TRUE;
         
 #elif defined(MIST_OS_FAMILY_APPLE)
         return mist_apple_deleteitem(src);
@@ -262,19 +273,32 @@ namespace mist {
 #else
         struct stat fs;
 #endif
-        
+
+#if defined(MIST_OS_WINDOWS)
+		
+		int fd = ::_open(string::WStringToString(src).c_str(),
+                         O_RDONLY);
+#else
         int fd = ::open(string::WStringToString(src).c_str(),
-                    O_RDONLY);
-        
+                        O_RDONLY);
+#endif
+
 #if defined(MIST_OS_WINDOWS)
         ::_fstat64(fd, &fs);
 #else
         ::fstat(fd, &fs);
 #endif
         
-        info.creation_time = fs.st_ctimespec.tv_sec;
+#if defined(MIST_OS_WINDOWS)
+		info.creation_time = fs.st_ctime;
+        info.accessed_time = fs.st_atime;
+        info.modified_time = fs.st_mtime;
+#else
+		info.creation_time = fs.st_ctimespec.tv_sec;
         info.accessed_time = fs.st_atimespec.tv_sec;
         info.modified_time = fs.st_mtimespec.tv_sec;
+#endif
+
         info.size = fs.st_size;
         info.num_links = fs.st_nlink;
         info.serial = fs.st_uid;
@@ -340,7 +364,7 @@ namespace mist {
 #if defined(MIST_OS_WINDOWS)
         DWORD len = GetEnvironmentVariableW(env.c_str(), 0, 0);
         if (len != 0) {
-            char* buffer = new char[len];
+            wchar_t* buffer = new wchar_t[len];
             GetEnvironmentVariableW(env.c_str(), buffer, len);
             MistString result(buffer);
             delete [] buffer;
@@ -380,8 +404,8 @@ namespace mist {
     
     MistString Path::GetHome() {
 #if defined(MIST_OS_WINDOWS)
-        MistString result = Path::GetEnv("HOMEDRIVE");
-        result.append(Path::GetEnv("HOMEPATH"));
+        MistString result = Path::GetEnv(L"HOMEDRIVE");
+        result.append(Path::GetEnv(L"HOMEPATH"));
        
         size_t n = result.size();
         if(n > 0 && result[n-1] != L'\\')
@@ -633,9 +657,9 @@ namespace mist {
     class DirectoryIterator::DirectoryIteratorImpl {
     public:
         DirectoryIteratorImpl(const MistString& path) {
-            std::MistString findPath = path + "/*";
+            MistString findPath = path + L"/*";
             
-            mFH = FindFirstFileA(findPath.c_str(), &mFD);
+            mFH = FindFirstFileW(findPath.c_str(), &mFD);
             if(mFH == INVALID_HANDLE_VALUE) {
 				DWORD error = GetLastError();
                 if(error != ERROR_NO_MORE_FILES) {
@@ -643,7 +667,7 @@ namespace mist {
                 }
             } else {
                 mCurrent = mFD.cFileName;
-                if(mCurrent == "." || mCurrent == "..")
+                if(mCurrent == L"." || mCurrent == L"..")
                     next();
             }
         }
@@ -659,24 +683,24 @@ namespace mist {
         const MistString& get() const;
         const MistString& next() {
             do {
-                if(FindNextFileA(mFH, &mFD) != 0) {
+                if(FindNextFileW(mFH, &mFD) != 0) {
                     mCurrent = mFD.cFileName;
                 } else 
                     mCurrent.clear();
             }
-            while(mCurrent == "." || mCurrent == "..");
+            while(mCurrent == L"." || mCurrent == L"..");
             
             return mCurrent;
         }
         
     private:
         HANDLE mFH;
-        WIN32_FIND_DATAA mFD;
+        WIN32_FIND_DATAW mFD;
         MistString mCurrent;
         int mRC;
     };
     
-    const std::MistString& DirectoryIterator::DirectoryIteratorImpl::get() const {
+    const MistString& DirectoryIterator::DirectoryIteratorImpl::get() const {
         return mCurrent;
     }
     

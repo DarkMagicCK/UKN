@@ -23,7 +23,7 @@
 
 #else
 
-#include <Window.h>
+#include <Windows.h>
 
 #endif
 
@@ -140,6 +140,21 @@ namespace mist {
     
     
 #elif defined(MIST_OS_WINDOWS)
+
+	struct Serial::SerialImpl {
+		bool open(const std::string& port, int baudRate) {
+            return false;
+        }
+        void close() {
+            
+        }
+        int write(const char* data, size_t len) {
+            return -1;
+        }
+        std::string read(char until) {
+            return std::string();
+        }
+	};
     
     
 #else

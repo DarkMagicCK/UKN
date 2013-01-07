@@ -21,6 +21,7 @@
 namespace ukn {
     
     namespace tmx {
+
         
         /**
          Tiled tmx map reader & renderer
@@ -54,8 +55,8 @@ namespace ukn {
                 x = local_id % (image_width / tile_width) * tile_width
                 y = local_id / (image_width / tile_width) * tile_height
              */
-            Rectangle tile_texture_rect;
-            Rectangle tile_bounding_rect;
+            mist::Rectangle tile_texture_rect;
+            mist::Rectangle tile_bounding_rect;
             
             /* bit 32 - 30 in tile data */
             bool flipped_horizontally;
@@ -208,8 +209,8 @@ namespace ukn {
             Tile& getTileAt(uint32 layer_index, const Vector2& pos);
 
             // in pixel
-            void                setMapViewRect(const Rectangle& vr);
-            const Rectangle&    getMapViewRect() const;
+            void                setMapViewRect(const mist::Rectangle& vr);
+            const mist::Rectangle&    getMapViewRect() const;
             
             void                setPosition(const Vector2& pos);
             const Vector2&      getPosition() const;
@@ -219,10 +220,10 @@ namespace ukn {
             virtual bool deserialize(const ConfigParserPtr& config) override;
             
             // IRenderable
-            virtual const UknString&   getName() override const;
+            virtual const UknString&   getName() const;
             
-            virtual Box             getBound() override const;
-            virtual RenderBufferPtr getRenderBuffer() override const;
+            virtual Box             getBound() const;
+            virtual RenderBufferPtr getRenderBuffer() const;
             
             virtual void onRenderBegin() override;
             virtual void onRenderEnd() override;
@@ -257,7 +258,7 @@ namespace ukn {
             MapOrientation mOrientation;
             
             Vector2   mPosition;
-            Rectangle mViewRect;
+            mist::Rectangle mViewRect;
         };
         
     } // namespace tmx

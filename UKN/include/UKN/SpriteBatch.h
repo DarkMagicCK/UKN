@@ -40,8 +40,8 @@ namespace ukn {
         float       rotation;
         float       layer_depth;
         Color       color;
-        Rectangle   source_rect;
-        Rectangle   dest_rect;
+        mist::Rectangle   source_rect;
+        mist::Rectangle   dest_rect;
         
         bool    vflip;
         bool    hflip;
@@ -87,16 +87,16 @@ namespace ukn {
         void draw(const TexturePtr& texture, const Vector2& pos, float layerDepth, const Color& color=color::White);
 
         // draw with a custom destination rect
-        void draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color=color::White);
-        void draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const mist::Rectangle& dstRect, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const mist::Rectangle& dstRect, float layerDepth, const Color& color=color::White);
 
         // draw with custom source rect and position
-        void draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Vector2& center, float rot, const Vector2& scale, const Color& color=color::White);        
-        void draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Vector2& center, float rot, const Vector2& scale, float layerDetph, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const Vector2& pos, const mist::Rectangle& src, const Vector2& center, float rot, const Vector2& scale, const Color& color=color::White);        
+        void draw(const TexturePtr& texture, const Vector2& pos, const mist::Rectangle& src, const Vector2& center, float rot, const Vector2& scale, float layerDetph, const Color& color=color::White);
 
 
         // draw with custom source and destination rect
-        void draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color=color::White);
+        void draw(const TexturePtr& texture, const mist::Rectangle& srcRect, const mist::Rectangle& dstRect, const Color& color=color::White);
         
         // draw with position, center, rotation and scale
         void draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, const Color& color=color::White);

@@ -145,7 +145,7 @@
 #endif
 
 // are we building a dll or not
-#if defined(MIST_OS_WINDOWS) && defined(UKN_HAS_DECLSPEC)
+#if defined(MIST_OS_WINDOWS) && defined(MIST_HAS_DECLSPEC)
     #if defined(MIST_DLL_EXPORT)
         #define MIST_API __declspec(dllexport)
         #define MIST_EXTERN extern

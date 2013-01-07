@@ -174,18 +174,18 @@ namespace mist {
         }
 
         Semaphore::Semaphore(int _n)
-#ifndef MIST_OS_WINDOWS
+//#ifndef MIST_OS_WINDOWS
         :
         mutex(),
         cond(mutex),
         n(_n),
         max(_n)     
-#endif
+//#endif
         {
                 
-#ifdef MIST_OS_WINDOWS
-            sema = CreateSemaphoreW(NULL, _n, _n, NULL);
-#endif
+//#ifdef MIST_OS_WINDOWS
+//            sema = CreateSemaphoreW(NULL, _n, _n, NULL);
+//#endif
         }
                 
         Semaphore::Semaphore(int _n, int _max)

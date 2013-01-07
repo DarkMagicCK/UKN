@@ -32,7 +32,7 @@ namespace mist {
 
 #define INVALID_FP_RET_ADDR_VALUE 0x0000000
 
-    inline MistString DisplaySymbolDetails(DWORD dwAddress) {
+    inline std::string DisplaySymbolDetails(DWORD dwAddress) {
         DWORD64 displacement = 0;
         ULONG64 buffer[(sizeof(SYMBOL_INFO) + MAX_SYM_NAME*sizeof(TCHAR) + sizeof(ULONG64) - 1) / sizeof(ULONG64)];
 
@@ -40,7 +40,7 @@ namespace mist {
         pSymbol->SizeOfStruct = sizeof(SYMBOL_INFO);
         pSymbol->MaxNameLen = MAX_SYM_NAME;
 
-        MistString info;
+        std::string info;
 
         if (SymFromAddr(GetCurrentProcess(), dwAddress, &displacement, pSymbol)) {
 			IMAGEHLP_MODULE64 moduleinfo;
@@ -63,7 +63,7 @@ namespace mist {
         return info;
 	}
 
-    inline MistString win_GetStackTrace() {
+    inline std::string win_GetStackTrace() {
 		HANDLE process = GetCurrentProcess();
 		if(SymInitialize(process, NULL, TRUE)) {
             DWORD _ebp = INVALID_FP_RET_ADDR_VALUE;
@@ -82,7 +82,7 @@ namespace mist {
             DWORD *pCurFP = (DWORD *)_ebp;
             BOOL fFirstFP = TRUE;
 
-            MistString stackTrace("CurrFP\t\tRetAddr\t\tFunction\n");
+            std::string stackTrace("CurrFP\t\tRetAddr\t\tFunction\n");
             while (pCurFP != INVALID_FP_RET_ADDR_VALUE) {
                 DWORD pRetAddrInCaller = (*((DWORD *)(pCurFP + 1)));
 

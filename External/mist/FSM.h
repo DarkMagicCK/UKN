@@ -228,15 +228,6 @@ namespace mist {
         typedef Function<void(FSMState&)> DestroyFunc;
         
     public:
-        FunctionFSMState():
-        mOnInit(fsm_do_nothing_func),
-        mOnUpdate(fsm_do_nothing_func),
-        mOnEnter(fsm_do_nothing_func),
-        mOnLeave(fsm_do_nothing_func),
-        mOnDestroy(fsm_do_nothing_func) {
-        
-        }
-        
         FunctionFSMState(const InitiateFunc& init = fsm_do_nothing_func,
                          const UpdateFunc& update = fsm_do_nothing_func,
                          const EnterFunc& enter = fsm_do_nothing_func,

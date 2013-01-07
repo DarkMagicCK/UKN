@@ -45,7 +45,7 @@ namespace mist {
 #ifdef MIST_OS_WINDOWS
     
     inline MessageBoxButton ukn_win_message_box(const std::wstring& mssg, const std::wstring& title, int option) {
-        return (MessageBoxButton)MessageBoxW(0, mssg.c_str(), title.c_str(), option);
+        return (MessageBoxButton)::MessageBoxW(0, mssg.c_str(), title.c_str(), option);
     }
     
     inline uint32 ukn_win_get_processor_speed() {
@@ -86,7 +86,7 @@ namespace mist {
         
         GetVersionEx(&osvi);
         
-        return format_string("Windows %d.%d Build %d %s", osvi.dwMajorVersion, osvi.dwMinorVersion, osvi.dwBuildNumber, osvi.szCSDVersion);
+        return string::StringToWString(format_string("Windows %d.%d Build %d %s", osvi.dwMajorVersion, osvi.dwMinorVersion, osvi.dwBuildNumber, osvi.szCSDVersion));
     }
     
     inline void ukn_win_enum_desktop_modes(Array<SystemInformation::DesktopMode>& arr) {
@@ -107,7 +107,7 @@ namespace mist {
         
 		DWORD n = 0;
 		while(EnumDisplaySettings(0, n, &devmode) != 0) {
-			DesktopMode mode;
+			SystemInformation::DesktopMode mode;
             mode.width  = devmode.dmPelsWidth;
             mode.height = devmode.dmPelsHeight;
             mode.bpp    = devmode.dmBitsPerPel;

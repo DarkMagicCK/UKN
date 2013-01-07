@@ -12,6 +12,8 @@
 #include <vector>
 #include <map>
 #include <unordered_map>
+#include <functional>
+#include <algorithm>
 
 #include "mist/Interfaces.h"
 #include "mist/detail/TypeTraits.h"
@@ -54,7 +56,7 @@ namespace mist {
         
         template<typename _Cont>
         struct Query: public IEnumerable<typename container_info<_Cont>::element_type > {
-            typedef Query<_Cont>                                 self_type;
+            typedef Query<_Cont>                                    self_type;
             typedef typename selector_container_type<_Cont>::type   container_type;
             typedef typename container_info<_Cont>::element_type    element_type;
             typedef element_type                                    value_type;

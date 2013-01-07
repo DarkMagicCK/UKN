@@ -307,11 +307,11 @@ namespace ukn {
         draw(texture, pos, 0.f, color);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const mist::Rectangle& dstRect, const Color& color) {
         draw(texture, dstRect, 0.f, color);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& srcRect, const Rectangle& dstRect, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const mist::Rectangle& srcRect, const mist::Rectangle& dstRect, const Color& color) {
         draw(texture, srcRect, dstRect, 0.f);
     }
     
@@ -335,7 +335,7 @@ namespace ukn {
         mRenderQueue.push_back(obj);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, const Rectangle& dstRect, float layerDepth, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const mist::Rectangle& dstRect, float layerDepth, const Color& color) {
         if(!mBegan) {
             MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
@@ -369,7 +369,7 @@ namespace ukn {
         mRenderQueue.push_back(obj);
     }
         
-    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& src, const Vector2& center, float rot, const Vector2& scale, const Color& color) {
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const mist::Rectangle& src, const Vector2& center, float rot, const Vector2& scale, const Color& color) {
         draw(texture, pos, src, center, rot, scale, 0.f, color);
     }
     
@@ -384,7 +384,7 @@ namespace ukn {
         mRenderQueue.push_back(obj);
     }
     
-    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Rectangle& srcRect, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {        
+    void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const mist::Rectangle& srcRect, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {        
         if(!mBegan) {
             MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
         }

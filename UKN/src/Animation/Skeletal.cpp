@@ -647,7 +647,7 @@ namespace ukn {
             const SequencialAnimation::GridInfo& current_info = bone.getTexture()->getCurrentGridInfo();
             spriteBatch.draw(current_info.texture,
                              bone.getPosition(),
-                             Rectangle(current_info.texture_pos_x,
+                             mist::Rectangle(current_info.texture_pos_x,
                                        current_info.texture_pos_y,
                                        current_info.grid_width + current_info.texture_pos_x,
                                        current_info.grid_height + current_info.texture_pos_y),

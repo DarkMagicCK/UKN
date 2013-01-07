@@ -32,6 +32,8 @@
 #include <thread>
 #include <mutex>
 #include <future>
+#include <functional>
+
 #endif
 
 #include "mist/Ptr.h"

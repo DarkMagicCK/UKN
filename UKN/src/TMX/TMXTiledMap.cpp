@@ -97,11 +97,11 @@ namespace ukn {
             return false;
         }
         
-        void Map::setMapViewRect(const Rectangle& vr) {
+        void Map::setMapViewRect(const mist::Rectangle& vr) {
             mViewRect = vr;
         }
         
-        const Rectangle& Map::getMapViewRect() const {
+        const mist::Rectangle& Map::getMapViewRect() const {
             return mViewRect;
         }
         
@@ -139,10 +139,10 @@ namespace ukn {
                     
                     int32 x = (i % wcount) * (tileset.tile_width + tileset.spacing);
                     int32 y = (i / wcount) * (tileset.tile_height + tileset.spacing);
-                    tile.tile_texture_rect = Rectangle(x + tileset.margin,
-                                                       y + tileset.margin,
-                                                       x + tileset.tile_width + tileset.margin,
-                                                       y + tileset.tile_height + tileset.margin);
+                    tile.tile_texture_rect = mist::Rectangle(x + tileset.margin,
+															y + tileset.margin,
+															x + tileset.tile_width + tileset.margin,
+															y + tileset.tile_height + tileset.margin);
                     
                     tile.tileset_id = tileset_id;
                 }
@@ -276,10 +276,10 @@ namespace ukn {
                                     tile.flipped_vertically = flipped_vertically;
                                     
                                     TileSet& tileset = mTileSets[tile.tileset_id];
-                                    tile.tile_bounding_rect = Rectangle((i % layer.width) * tileset.tile_width,
-                                                                        (i / layer.width) * tileset.tile_height,
-                                                                        (i % layer.width) * tileset.tile_width + tileset.tile_width,
-                                                                        (i / layer.width) * tileset.tile_height + tileset.tile_height);
+                                    tile.tile_bounding_rect = mist::Rectangle((i % layer.width) * tileset.tile_width,
+																			(i / layer.width) * tileset.tile_height,
+																			(i % layer.width) * tileset.tile_width + tileset.tile_width,
+																			(i / layer.width) * tileset.tile_height + tileset.tile_height);
                                 } else
                                     log_error(L"ukn::tmx::Map::parseLayer: invalid tile with gid " + Convert::ToString(global_tile_id));
                             }
@@ -299,10 +299,10 @@ namespace ukn {
                                 tile = *g_tile;
                                 
                                 TileSet& tileset = mTileSets[tile.tileset_id];
-                                tile.tile_bounding_rect = Rectangle((i % layer.width) * tileset.tile_width,
-                                                                    (i / layer.width) * tileset.tile_height,
-                                                                    (i % layer.width) * tileset.tile_width + tileset.tile_width,
-                                                                    (i / layer.width) * tileset.tile_height + tileset.tile_height);
+                                tile.tile_bounding_rect = mist::Rectangle((i % layer.width) * tileset.tile_width,
+																			(i / layer.width) * tileset.tile_height,
+																			(i % layer.width) * tileset.tile_width + tileset.tile_width,
+																			(i / layer.width) * tileset.tile_height + tileset.tile_height);
                             } else
                                 log_error(L"ukn::tmx::Map::parseLayer: invalid tile with gid " + tiles[j * layer.width + i]);
                         }
@@ -565,7 +565,7 @@ namespace ukn {
                 if(layer.visible) {
                     mMapRenderer->startBatch();
                     
-                    Rectangle vr = mViewRect;
+                    mist::Rectangle vr = mViewRect;
                     vr.set(mViewRect.x(),
                            mViewRect.y(),
                            mViewRect.right(),

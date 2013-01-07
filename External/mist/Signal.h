@@ -26,7 +26,7 @@ namespace mist {
     template<typename T> struct Signal;
     template<typename RT, typename ...ARGS> struct Signal<RT(ARGS...)> {
         typedef typename std::decay<RT(ARGS...)>::type func_type;
-        typedef Signal<void(ARGS...)> self_type;
+        typedef Signal<RT(ARGS...)> self_type;
         
         self_type& operator+=(func_type f) {
             mSlots.push_back(f); return *this;

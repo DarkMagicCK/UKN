@@ -481,7 +481,6 @@ namespace mist {
             }
             
             void execute(void* args) {
-                printf("tett");
                 this->result = fp();
             }
             

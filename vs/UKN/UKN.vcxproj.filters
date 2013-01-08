@@ -43,6 +43,9 @@
     <Filter Include="Plugins\GL">
       <UniqueIdentifier>{a524b039-4e99-4546-b8c1-13dc12135529}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Plugins\D3D10">
+      <UniqueIdentifier>{66c08f9c-97c6-4721-821b-4894f72227f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\External\glew\glxew.h">
@@ -564,6 +567,30 @@
     <ClInclude Include="..\..\Plugins\GL\GLGraphicBuffer.h">
       <Filter>Plugins\GL</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Convert.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10FrameBuffer.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10GraphicDevice.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10GraphicFactory.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Preq.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10RenderView.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Texture.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Window.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\External\glew\glew.c">
@@ -847,6 +874,24 @@
     </ClCompile>
     <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp">
       <Filter>Plugins\GL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10FrameBuffer.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10GraphicDevice.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10GraphicFactory.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10RenderView.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10Texture.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10Window.cpp">
+      <Filter>Plugins\D3D10</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

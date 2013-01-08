@@ -41,6 +41,8 @@ namespace ukn {
         ContextCfg& sampleCount(int count);
         ContextCfg& sampleQuality(int quality);
         ContextCfg& fsaaSamples(int samples);
+		ContextCfg& icon(const MistString& icon);
+		ContextCfg& cursor(const MistString& cursor);
         
         static ContextCfg Default();
     };

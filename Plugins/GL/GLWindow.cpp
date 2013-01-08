@@ -284,7 +284,7 @@ namespace ukn {
     }
     
     void GLWindow::onWindowMove(Window& wnd, uint32 x, uint32 y) {
-        updateWindowProperties(x, y, width(), height());
+       
     }
     
     int2 GLWindow::getMousePos() {

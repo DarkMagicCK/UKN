@@ -128,6 +128,14 @@
     <ClInclude Include="..\..\External\zlib\zip.h" />
     <ClInclude Include="..\..\External\zlib\zlib.h" />
     <ClInclude Include="..\..\External\zlib\zutil.h" />
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Convert.h" />
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10FrameBuffer.h" />
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10GraphicDevice.h" />
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10GraphicFactory.h" />
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Preq.h" />
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10RenderView.h" />
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Texture.h" />
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Window.h" />
     <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFWInput.h" />
@@ -245,6 +253,12 @@
     <ClCompile Include="..\..\External\zlib\unzip.c" />
     <ClCompile Include="..\..\External\zlib\zip.c" />
     <ClCompile Include="..\..\External\zlib\zutil.c" />
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10FrameBuffer.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10GraphicDevice.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10GraphicFactory.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10RenderView.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10Texture.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10Window.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />

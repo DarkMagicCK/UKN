@@ -35,7 +35,7 @@ namespace mist {
             TypeDB();
             ~TypeDB();
             
-            friend class ClassInstantiator<TypeDB>;
+            friend struct ClassInstantiator<TypeDB>;
             
             template<typename T>
             Type& createType();

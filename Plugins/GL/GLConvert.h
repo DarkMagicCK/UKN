@@ -37,6 +37,7 @@ namespace ukn {
             case EF_D16: return GL_DEPTH_COMPONENT;
             case EF_D24S8: return GL_DEPTH_STENCIL;
         }
+		return GL_UNSIGNED_BYTE;
     }
     
     inline GLenum element_format_to_gl_element_type(ElementFormat format) {
@@ -49,6 +50,7 @@ namespace ukn {
             case EF_D16: return GL_UNSIGNED_SHORT;
             case EF_D24S8: return GL_UNSIGNED_INT_24_8;
         }
+		return GL_UNSIGNED_BYTE;
     }
     
     inline GLenum render_state_to_gl_state(RenderStateType type) {

@@ -188,6 +188,18 @@ namespace ukn {
         };
         
         struct KeyEventArgs {
+			KeyEventArgs() {
+
+			}
+
+			KeyEventArgs(Key::KeyState state, Key::KeyCode key, int flag, bool isIME = false):
+				state(state),
+				key(key),
+				flag(flag),
+				isIME(isIME) {
+
+			}
+
             Key::KeyState      state;		// state
             Key::KeyCode       key;			// key code
             int                flag;
@@ -204,11 +216,23 @@ namespace ukn {
             bool isCtrlFlag() const;
             bool isAltFlag() const;
             
-            
             char toCharCode() const;
         };
         
         struct MouseEventArgs {
+			MouseEventArgs() {
+
+			}
+
+			MouseEventArgs(Mouse::MouseState state, Mouse::MouseButton btn, int flag, int x, int y, int wheel):
+				state(state),
+				button(btn),
+				flag(flag),
+				x(x),
+				y(y),
+				wheel(wheel) {
+			}
+
             Mouse::MouseState   state;
             Mouse::MouseButton  button;
 

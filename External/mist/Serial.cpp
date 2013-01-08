@@ -8,6 +8,8 @@
 
 #include "Serial.h"
 #include "Logger.h"
+#include "MemoryUtil.h"
+#include "TimeUtil.h"
 
 #ifdef MIST_OS_FAMILY_UNIX
 
@@ -132,6 +134,37 @@ namespace mist {
             
             return result;
         }
+
+		std::string readN(size_t nSize) {
+			char* buffer = mist_malloc_t(char, nSize);
+			if(!buffer)
+				return std::string();
+
+			long n = ::read(_fd, buffer, nSize);
+			if(n == -1) {
+				mist_free(buffer);
+				return std::string();
+			}
+			std::string result = std::string(buffer, buffer+nSize);
+			mist_free(buffer);
+			return result;
+		}
+
+		std::string readAll() {
+			std::string result;
+
+			char buffer[100];
+			do {
+				long n = ::read(_fd, buffer, 100);
+				if(n == -1)
+					return std::string();
+				if(n == 0)
+					break;
+				result += std::string(buffer, buffer + n);
+			} while(bytesRead > 0);
+			
+			return result;
+		}
         
         std::string _port;
         speed_t _baudRate;
@@ -142,18 +175,112 @@ namespace mist {
 #elif defined(MIST_OS_WINDOWS)
 
 	struct Serial::SerialImpl {
+		Serial::SerialImpl():
+		mPortHandle(0) {
+
+		}
+
 		bool open(const std::string& port, int baudRate) {
-            return false;
+			mPortHandle = CreateFileA(port.c_str(),
+									  GENERIC_READ | GENERIC_WRITE,
+									  0,
+									  NULL,
+									  OPEN_EXISTING,
+									  0,
+									  NULL);
+			DCB config;
+			if(GetCommState(mPortHandle, &config) == 0) {
+				CloseHandle(mPortHandle);
+				return false;
+			}
+
+			config.BaudRate = baudRate;
+
+			if(SetCommState(mPortHandle, &config) == 0) {
+				CloseHandle(mPortHandle);
+				return false;
+			}
+
+			COMMTIMEOUTS comTimeout;
+			comTimeout.ReadIntervalTimeout = 3;
+			comTimeout.ReadTotalTimeoutMultiplier = 3;
+			comTimeout.ReadTotalTimeoutConstant = 2;
+			comTimeout.WriteTotalTimeoutConstant = 2;
+			comTimeout.WriteTotalTimeoutMultiplier = 3;
+
+			if(SetCommTimeouts(mPortHandle, &comTimeout) == 0) {
+				CloseHandle(mPortHandle);
+				return false;
+			}
+			return false;
         }
         void close() {
-            
+            if(mPortHandle) {
+				CloseHandle(mPortHandle);
+			}
         }
         int write(const char* data, size_t len) {
-            return -1;
+			DWORD bytesWritten;
+			if(WriteFile(mPortHandle,
+				         data,
+						 len,
+						 &bytesWritten,
+						 NULL) == 0) {
+				return -1;
+			}
+            return (int)bytesWritten;
         }
         std::string read(char until) {
-            return std::string();
+			std::string result;
+            
+            char b[1];
+            do {
+				DWORD bytesRead;
+                if(ReadFile(mPortHandle, b, 1, &bytesRead, NULL) == 0) {
+					return result;
+				}
+                if( bytesRead == 0 ) {
+                    msleep( 10 ); // wait 10 msec try again
+                    continue;
+                }
+                result += b[0];
+            } while( b[0] != until );
+            
+            return result;
         }
+		std::string readN(size_t nSize) {
+			char* buffer = mist_malloc_t(char, nSize);
+			if(!buffer)
+				return std::string();
+
+			DWORD bytesRead = 0;
+		
+			if(ReadFile(mPortHandle, buffer, nSize, &bytesRead, NULL) == 0) {
+				mist_free(buffer);
+				return std::string();
+			}
+			
+			std::string result = std::string(buffer, buffer+nSize);
+			mist_free(buffer);
+			return result;
+		}
+		std::string readAll() {
+			std::string result;
+			DWORD bytesRead;
+			
+			char buffer[100];
+			do {
+				if(ReadFile(mPortHandle, buffer, sizeof(buffer), &bytesRead, NULL) == 0)
+					return result;
+				if(bytesRead == 0)
+					break;
+				result += std::string(buffer, buffer + bytesRead);
+			} while(bytesRead > 0);
+			
+			return result;
+		}
+
+		HANDLE mPortHandle;
 	};
     
     
@@ -220,6 +347,14 @@ namespace mist {
     std::string Serial::read(char until) {
         return mImpl->read(until);
     }
+
+	std::string Serial::readN(size_t nSize) {
+		return mImpl->readN(nSize);
+	}
+
+	std::string Serial::readAll() {
+		return mImpl->readAll();
+	}
     
     Serial& Serial::port(const std::string& port) {
         mPort = port;

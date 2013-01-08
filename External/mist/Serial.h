@@ -36,7 +36,13 @@ namespace mist {
         bool        open();
         void        close();
         int         write(const char* data, size_t len);
+		/* all read functions return empty string when error */
+		/* will block until until has been read */
         std::string read(char until);
+		/* will return read string even read size is less then nSize */
+		std::string readN(size_t nSize);
+		/* read all available bytes */
+		std::string readAll();
         
     private:
         void init();

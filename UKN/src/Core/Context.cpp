@@ -78,6 +78,16 @@ namespace ukn {
         return *this;
     }
     
+	ContextCfg& ContextCfg::icon(const MistString& icon) {
+		render_cfg.icon = icon;
+		return *this;
+	}
+
+	ContextCfg& ContextCfg::cursor(const MistString& cursor) {
+		render_cfg.cursor = cursor;
+		return *this;
+	}
+
     ContextCfg ContextCfg::Default() {
         return ContextCfg()
                     .width(640)

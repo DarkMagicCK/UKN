@@ -61,6 +61,7 @@ namespace ukn {
             case EF_D32: return 4;
             case EF_D16: return 2;
         };
+		return 0;
     };
         
     struct RenderSettings {
@@ -94,6 +95,9 @@ namespace ukn {
         uint32 sample_count;
         uint32 sample_quality;        
         uint32 fsaa_samples;
+
+		MistString icon;
+		MistString cursor;
     };
 
     enum BlendMode {

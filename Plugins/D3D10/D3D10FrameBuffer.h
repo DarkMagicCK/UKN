@@ -1,3 +1,6 @@
+#ifndef Project_Unknown_D3D10FrameBuffer_h
+#define Project_Unknown_D3D10FrameBuffer_h
+
 #include "mist/Platform.h"
 #include "UKN/FrameBuffer.h"
 
@@ -27,3 +30,5 @@ namespace ukn {
     typedef SharedPtr<D3D10FrameBuffer> GLFrameBufferPtr;
 
 } // namespace ukn
+
+#endif

@@ -1,13 +1,13 @@
 //
-//  PluginContents.h
+//  Context.h
 //  Project Unknown
 //
 //  Created by Robert Bu on 11/24/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
-#ifndef Project_Unknown_PluginContents_h
-#define Project_Unknown_PluginContents_h
+#ifndef Project_Unknown_Contexts_h
+#define Project_Unknown_Contexts_h
 
 #include "mist/Platform.h"
 #include "mist/DllLoader.h"
@@ -38,6 +38,7 @@ namespace ukn {
         ContextCfg& depthStencilFormat(ElementFormat fmt);
         ContextCfg& resizable(bool flag);
         ContextCfg& showMouse(bool flag);
+		ContextCfg& enableVSync(bool flag);
         ContextCfg& sampleCount(int count);
         ContextCfg& sampleQuality(int quality);
         ContextCfg& fsaaSamples(int samples);

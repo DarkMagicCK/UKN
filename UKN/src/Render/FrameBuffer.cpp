@@ -220,6 +220,13 @@ namespace ukn {
     void FrameBuffer::swapBuffers() {
         
     }
+
+	void FrameBuffer::updateScreen(uint32 left, uint32 top, uint32 w, uint32 h) {
+		mLeft = left;
+		mTop = top;
+		mWidth = w;
+		mHeight = h;
+	}
     
     bool FrameBuffer::isDirty() const {
         return mViewsDirty;

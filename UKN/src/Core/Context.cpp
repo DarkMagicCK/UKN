@@ -83,6 +83,11 @@ namespace ukn {
 		return *this;
 	}
 
+	ContextCfg& ContextCfg::enableVSync(bool flag) {
+		render_cfg.vsync = flag;
+		return *this;
+	}
+
 	ContextCfg& ContextCfg::cursor(const MistString& cursor) {
 		render_cfg.cursor = cursor;
 		return *this;

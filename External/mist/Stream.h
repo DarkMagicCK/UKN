@@ -209,7 +209,7 @@ namespace mist {
      * such as size and pos
      * implementation from http://www.keithschwarz.com/interesting/code/?dir=nstream by Keith Schwarz
      **/
-    class NetStream: public Stream, public std::iostream {
+    class NetStream: public Stream, public virtual std::iostream {
     public:
         NetStream();
         explicit NetStream(const MistString& hostName, uint16 portNum);

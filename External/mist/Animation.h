@@ -69,7 +69,7 @@ namespace mist {
         }
         
         virtual void update(uint32 past_time, void* property_ptr) {
-            *(T*)property_ptr = (lerp((float)getFrom(), (float)getTo(), (real)past_time/getDuration())+0.5);
+            *(T*)property_ptr = (T)(lerp((float)getFrom(), (float)getTo(), (real)past_time/getDuration())+0.5);
         }
         
     protected:

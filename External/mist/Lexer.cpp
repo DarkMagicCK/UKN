@@ -33,61 +33,61 @@ namespace mist {
     
     
     //determines if a character is numeric
-    inline bool isCharNumericLex(char cChar) {
-        if(cChar >= '0' &&
-           cChar <= '9')
+    inline bool isCharNumericLex(wchar_t cChar) {
+        if(cChar >= L'0' &&
+           cChar <= L'9')
             return true;
         return false;
     }
     
-    inline bool isCharNumericSpecial(char cChar) {
+    inline bool isCharNumericSpecial(wchar_t cChar) {
         if(
            // hex
-           cChar == 'x'
+           cChar == L'x'
            )
             return true;
         return false;
     }
     
     //determines if a character is whitespace
-    inline bool isCharWhitespaceLex(char cChar) {
-        if(cChar == ' ' ||
-           cChar == '\t' ||
-           cChar == '\n' ||
-           cChar == '\r')
+    inline bool isCharWhitespaceLex(wchar_t cChar) {
+        if(cChar == L' ' ||
+           cChar == L'\t' ||
+           cChar == L'\n' ||
+           cChar == L'\r')
             return true;
         return false;
     }
     
     //determines if a character is ASCII character
-    inline bool isCharASCIIChar(char cChar) {
+    inline bool isCharASCIIChar(wchar_t cChar) {
         // ascii head 0
         return ((cChar&0x80) == 0);
     }
     
     //determines if a charatcter could be part of a valid identifier
-    inline bool isCharIdentLex(char cChar) {
-        if((cChar >= '0' && cChar <= '9') ||
-           (cChar >= 'A' && cChar <= 'Z') ||
-           (cChar >= 'a' && cChar <= 'z') ||
-           (cChar == '_') ||
+    inline bool isCharIdentLex(wchar_t cChar) {
+        if((cChar >= L'0' && cChar <= L'9') ||
+           (cChar >= L'A' && cChar <= L'Z') ||
+           (cChar >= L'a' && cChar <= L'z') ||
+           (cChar == L'_') ||
            (!isCharASCIIChar(cChar)))
             return true;
         return false;
     }
     
     //determines if a character is a delimiter
-    inline bool isCharDelimiterLex(char cChar) {
-        if(cChar == ',' ||
-           cChar == '(' ||
-           cChar == ')' ||
-           cChar == '[' ||
-           cChar == ']' ||
-           cChar == ';' ||
-           cChar == '{' ||
-           cChar == '}' ||
-           cChar == '.' ||
-           cChar == ':')
+    inline bool isCharDelimiterLex(wchar_t cChar) {
+        if(cChar == L',' ||
+           cChar == L'(' ||
+           cChar == L')' ||
+           cChar == L'[' ||
+           cChar == L']' ||
+           cChar == L';' ||
+           cChar == L'{' ||
+           cChar == L'}' ||
+           cChar == L'.' ||
+           cChar == L':')
             return true;
         return false;
     }
@@ -170,20 +170,20 @@ namespace mist {
         return false;
     }
     
-    Lexer::Token Lexer::errorInvalidChar(char cCurrChar) {
+    Lexer::Token Lexer::errorInvalidChar(wchar_t cCurrChar) {
         strInvalidChar = cCurrChar;
         usErrorCode = LexInvalidInput;
         return TokenInvalidInput;
     }
     
-    char Lexer::getNextChar() {
+    wchar_t Lexer::getNextChar() {
         if(currState.iCurrLexemeIndex < contSource[currState.iCurrLine].size()) {
             return contSource[currState.iCurrLine][currState.iCurrLexemeIndex++];
         } else {
             //	printf("line %d/%d, char %d/%d, %s :", iCurrLine, contSource.size(), iCurrLexemeIndex, contSource[iCurrLine].size(), contSource[iCurrLine].c_str());
             currState.iCurrLexemeIndex = 0;
             ++currState.iCurrLine;
-            return '\n';
+            return L'\n';
         }
     }
     
@@ -193,7 +193,7 @@ namespace mist {
         }
     }
     
-    char Lexer::getLookAheadChar() {
+    wchar_t Lexer::getLookAheadChar() {
         if(currState.iCurrLexemeIndex < contSource[currState.iCurrLine].size()-1) {
             return contSource[currState.iCurrLine][currState.iCurrLexemeIndex+1];
         } else {
@@ -205,7 +205,7 @@ namespace mist {
         if(usErrorCode == LexNoError) return getNextToken();
         else if(usErrorCode == LexInvalidInput) {
             rewindChar();
-            char cCurrChar = getNextChar();
+            wchar_t cCurrChar = getNextChar();
             while(!(isCharWhitespaceLex(cCurrChar) ||
                     isCharDelimiterLex(cCurrChar) ||
                     isCharIdentLex(cCurrChar) ||
@@ -456,7 +456,7 @@ namespace mist {
         return currState.iCurrOp;
     }
     
-    char Lexer::getCurrInvalidChar() const {
+    wchar_t Lexer::getCurrInvalidChar() const {
         return strInvalidChar;
     }
     

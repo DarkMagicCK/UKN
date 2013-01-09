@@ -1,5 +1,6 @@
 
 #include "../Plugins/GL/GLGraphicFactory.h"
+#include "../Plugins/D3D10/D3D10GraphicFactory.h"
 
 #include "UKN/App.h"
 #include "UKN/Context.h"
@@ -54,7 +55,7 @@ int CALLBACK WinMain(
     printf("%f\n", f.getResult());
     // register plugins manually for test
     ukn::GraphicFactoryPtr gl_factory;
-    ukn::CreateGraphicFactory(gl_factory);
+    ukn::CreateGraphicFactoryD3D(gl_factory);
 
     ukn::Context::Instance().registerGraphicFactory(gl_factory);
    

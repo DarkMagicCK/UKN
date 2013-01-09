@@ -588,7 +588,7 @@
     <ClInclude Include="..\..\Plugins\D3D10\D3D10Texture.h">
       <Filter>Plugins\D3D10</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D10Window.h">
+    <ClInclude Include="..\..\Plugins\D3D10\WindowsWindow.h">
       <Filter>Plugins\D3D10</Filter>
     </ClInclude>
   </ItemGroup>
@@ -845,9 +845,6 @@
     <ClCompile Include="..\..\UKN\src\TMX\TMXTiledMap.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="main_win.cpp">
-      <Filter>头文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp">
       <Filter>Plugins\GL</Filter>
     </ClCompile>
@@ -890,8 +887,11 @@
     <ClCompile Include="..\..\Plugins\D3D10\D3D10Texture.cpp">
       <Filter>Plugins\D3D10</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D10Window.cpp">
+    <ClCompile Include="..\..\Plugins\D3D10\WindowsWindow.cpp">
       <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="main_win.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

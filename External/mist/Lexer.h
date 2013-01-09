@@ -156,7 +156,7 @@ namespace mist {
          get invalid char, use when LEX_INVALID_INPUT happens to get the invalid char, returns 0 if there's no LEX_INVALID_INPUT error happened
          @retval, invalid char
          */
-        char getCurrInvalidChar() const;
+        wchar_t getCurrInvalidChar() const;
         
         /*
          rewind the token stream to previous state
@@ -175,12 +175,12 @@ namespace mist {
         Lexer(const Lexer&);
         Lexer& operator=(const Lexer&);
         
-        inline char	getNextChar();
+        inline wchar_t	getNextChar();
         inline void rewindChar();
-        inline char getLookAheadChar();
-        Token errorInvalidChar(char cCurrChar);
+        inline wchar_t getLookAheadChar();
+        Token errorInvalidChar(wchar_t cCurrChar);
 		
-        char strInvalidChar;
+        wchar_t strInvalidChar;
         unsigned long lSourceSize;
         
         typedef std::vector<MistString> SourceCont;
@@ -218,7 +218,7 @@ namespace mist {
                 }
                 return -1;
             }
-            int checkChar(char cChar) {
+            int checkChar(wchar_t cChar) {
                 iterator it = mOperators.begin();
                 while(it != this->mOperators.end()) {
                     if(it->first[0] == cChar) return 1;

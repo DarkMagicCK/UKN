@@ -32,8 +32,8 @@ namespace ukn {
         
         void setName(const UknString& name) { }
         
-        bool isKeyDown(input::Key::KeyCode key) { return false; }
-        bool isMouseButtonDown(input::Mouse::MouseButton btn) { return false; }
+        bool isKeyDown(input::KeyCode key) { return false; }
+        bool isMouseButtonDown(input::MouseButton btn) { return false; }
         
         void setMousePos(int32 x, int32 y) { }
     };

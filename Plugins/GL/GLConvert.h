@@ -29,13 +29,13 @@ namespace ukn {
     
     inline GLenum element_format_to_gl_format(ElementFormat format) {
         switch(format) {
-            case EF_RGBA8: return GL_RGBA;
-            case EF_RGBA4444: return GL_RGBA;
-            case EF_RGB565: return GL_RGB;
-            case EF_RGB5A1: return GL_RGBA;
-            case EF_D32: return GL_DEPTH_COMPONENT;
-            case EF_D16: return GL_DEPTH_COMPONENT;
-            case EF_D24S8: return GL_DEPTH_STENCIL;
+            case EF_RGBA8: return GL_RGBA8;
+            case EF_RGBA4444: return GL_RGBA4;
+            case EF_RGB565: return GL_RGB5;
+            case EF_RGB5A1: return GL_RGB5_A1;
+			case EF_D32: return GL_DEPTH_COMPONENT32;
+			case EF_D16: return GL_DEPTH_COMPONENT16;
+            case EF_D24S8: return GL_DEPTH24_STENCIL8;
         }
 		return GL_UNSIGNED_BYTE;
     }

@@ -27,7 +27,7 @@ namespace ukn {
     class GLGraphicFactory: public GraphicFactory {
     public:
         GLGraphicFactory();
-        ~GLGraphicFactory();
+        virtual ~GLGraphicFactory();
         
         GraphicDevice& getGraphicDevice() const;
         

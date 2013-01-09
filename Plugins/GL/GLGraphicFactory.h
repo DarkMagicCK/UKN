@@ -13,7 +13,7 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicFactory.h"
 
-#ifdef UKN_HAS_DECLSPEC
+#ifdef MIST_HAS_DECLSPEC
     #ifdef UKN_GL_AS_SOURCE					 // Build dll
         #define UKN_GL_API __declspec(dllexport)
     #elif defined(UKN_GL_AS_LIBRARY)								     // Use dll

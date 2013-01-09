@@ -68,8 +68,8 @@ namespace ukn {
         virtual int2 getMousePos() = 0;
         virtual int  getMouseWheel() = 0;
         
-        virtual bool isKeyDown(input::Key::KeyCode key) = 0;
-        virtual bool isMouseButtonDown(input::Mouse::MouseButton btn) = 0;
+        virtual bool isKeyDown(input::KeyCode key) = 0;
+        virtual bool isMouseButtonDown(input::MouseButton btn) = 0;
         
         virtual void setMousePos(int32 x, int32 y) = 0;
         

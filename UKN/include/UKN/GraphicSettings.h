@@ -12,6 +12,11 @@
 #include "mist/Platform.h"
 
 namespace ukn {
+
+#undef FAR
+#undef NEAR
+#undef far
+#undef near
     
     using namespace mist;
     
@@ -76,18 +81,24 @@ namespace ukn {
         color_fmt(EF_RGBA8),
         depth_stencil_fmt(EF_D16),
         sample_count(1),
-        sample_quality(0) {
+        sample_quality(0),
+		far(1.f),
+		near(0.f) {
             
         }
         
         bool full_screen;
         bool resizable;
+		bool vsync;
         bool show_mouse;
         
         int32 left;
         int32 top;
         uint32 width;
         uint32 height;
+
+		float far;
+		float near;
         
         ElementFormat color_fmt;
         ElementFormat depth_stencil_fmt;

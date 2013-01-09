@@ -1,3 +1,8 @@
+
+#ifndef Project_Unknown_D3D10Texture_h
+#define Project_Unknown_D3D10Texture_h
+
+
 #include "mist/Platform.h"
 #include "UKN/Texture.h"
 
@@ -9,3 +14,5 @@ namespace ukn {
 	};
 
 } // namespace ukn
+
+#endif

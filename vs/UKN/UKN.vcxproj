@@ -135,7 +135,7 @@
     <ClInclude Include="..\..\Plugins\D3D10\D3D10Preq.h" />
     <ClInclude Include="..\..\Plugins\D3D10\D3D10RenderView.h" />
     <ClInclude Include="..\..\Plugins\D3D10\D3D10Texture.h" />
-    <ClInclude Include="..\..\Plugins\D3D10\D3D10Window.h" />
+    <ClInclude Include="..\..\Plugins\D3D10\WindowsWindow.h" />
     <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFWInput.h" />
@@ -258,7 +258,7 @@
     <ClCompile Include="..\..\Plugins\D3D10\D3D10GraphicFactory.cpp" />
     <ClCompile Include="..\..\Plugins\D3D10\D3D10RenderView.cpp" />
     <ClCompile Include="..\..\Plugins\D3D10\D3D10Texture.cpp" />
-    <ClCompile Include="..\..\Plugins\D3D10\D3D10Window.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D10\WindowsWindow.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />
@@ -329,13 +329,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)/../External/freetype/;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)/../External/freetype/;$(LibraryPath)</LibraryPath>
+    <TargetName>ukn</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)/../External/freetype/;$(SolutionDir)/../../Plugins/GL/;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)/../External/freetype/;$(SolutionDir)/../../Plugins/GL/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

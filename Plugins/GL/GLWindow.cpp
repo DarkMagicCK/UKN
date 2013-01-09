@@ -31,19 +31,19 @@ namespace ukn {
     static void update_key_flag(GLFWwindow window) {
         g_key_flag = 0;
         if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))
-            g_key_flag |= input::Key::FlagShift;
+            g_key_flag |= input::FlagShift;
         if(glfwGetKey(window, GLFW_KEY_LEFT_ALT) || glfwGetKey(window, GLFW_KEY_RIGHT_ALT))
-            g_key_flag |= input::Key::FlagAlt;
+            g_key_flag |= input::FlagAlt;
         if(glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) || glfwGetKey(window, GLFW_KEY_RIGHT_ALT))
-            g_key_flag |= input::Key::FlagCtrl;
+            g_key_flag |= input::FlagCtrl;
         if(glfwGetKey(window, GLFW_KEY_CAPS_LOCK))
-            g_key_flag |= input::Key::FlagCapslock;
+            g_key_flag |= input::FlagCapslock;
         if(glfwGetKey(window, GLFW_KEY_SCROLL_LOCK))
-            g_key_flag |= input::Key::FlagScrolllock;
+            g_key_flag |= input::FlagScrolllock;
         if(glfwGetKey(window, GLFW_KEY_NUM_LOCK))
-            g_key_flag |= input::Key::FlagNumlock;
+            g_key_flag |= input::FlagNumlock;
         if(glfwGetKey(window, GLFW_KEY_REPEAT))
-            g_key_flag |= input::Key::FlagRepeat;
+            g_key_flag |= input::FlagRepeat;
     }
     
     static void WindowSizeFunc(GLFWwindow window, int w, int h) {
@@ -97,8 +97,8 @@ namespace ukn {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
                 
         input::MouseEventArgs args;
-        args.button = input::Mouse::Null;
-        args.state  = input::Mouse::Move;
+        args.button = input::Nothing;
+        args.state  = input::Move;
         args.flag   = g_key_flag;
         args.x      = x;
         args.y      = y;
@@ -256,22 +256,20 @@ namespace ukn {
     }
     
     void GLWindow::updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h) {
-        mFrameBuffer->mLeft = 0;
-        mFrameBuffer->mTop = 0;
-        mFrameBuffer->mWidth = w;
-        mFrameBuffer->mHeight = h;
-        
+        mFrameBuffer->updateScreen(0, 0, w, h);
+
         Window::mLeft = x;
         Window::mTop = y;
         Window::mWidth = w;
         Window::mHeight = h;
         
-        mFrameBuffer->mViewPort.left = 0;
-        mFrameBuffer->mViewPort.top = 0;
-        mFrameBuffer->mViewPort.width = w;
-        mFrameBuffer->mViewPort.height = h;
+		Viewport& vp = mFrameBuffer->getViewport();
         
-        Viewport& vp = mFrameBuffer->getViewport();
+        vp.left = 0;
+        vp.top = 0;
+        vp.width = w;
+        vp.height = h;
+        
         vp.camera = MakeSharedPtr<Camera2D>();
         ((Camera2D*)vp.camera.get())->setOrthoParams(0, mFrameBuffer->width(), mFrameBuffer->height(), 0);
 
@@ -298,11 +296,11 @@ namespace ukn {
         return 0;
     }
     
-    bool GLWindow::isKeyDown(input::Key::KeyCode key) {
+    bool GLWindow::isKeyDown(input::KeyCode key) {
         return glfwGetKey(mGlfwWindow, ukn_key_to_glfw(key)) == GLFW_PRESS;
     }
     
-    bool GLWindow::isMouseButtonDown(input::Mouse::MouseButton btn) {
+    bool GLWindow::isMouseButtonDown(input::MouseButton btn) {
         return glfwGetKey(mGlfwWindow, ukn_mouse_to_glfw(btn)) == GLFW_PRESS;
     }
     

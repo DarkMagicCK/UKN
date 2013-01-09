@@ -12,12 +12,12 @@ namespace ukn {
     
     namespace input {
         
-        bool KeyEventArgs::isKeyDown(Key::KeyCode k) const {
-            return (k == this->key && state == Key::Press);
+        bool KeyEventArgs::isKeyDown(KeyCode k) const {
+            return (k == this->key && state == Press);
         }
         
-        bool KeyEventArgs::isKeyUp(Key::KeyCode k) const {
-            return (k == this->key && state == Key::Release);
+        bool KeyEventArgs::isKeyUp(KeyCode k) const {
+            return (k == this->key && state == Release);
         }
         
         bool KeyEventArgs::isDigit() const {
@@ -31,43 +31,43 @@ namespace ukn {
                     && (this->key != 215) && (this->key != 247));
         }
         
-        char KeyEventArgs::toCharCode() const {
+        wchar_t KeyEventArgs::toCharCode() const {
             if(isPrintable()) {
-                return (char)key;
+                return (wchar_t)key;
             }
             return '?';
         }
         
         bool KeyEventArgs::isPrintable() const {
-            if((this->key >= Key::Num0 && key <= Key::Num9) ||
-               (this->key >= Key::A && key <= Key::Z) ||
-               (this->key == Key::Grave) ||
-               (this->key == Key::Minus) ||
-               (this->key == Key::Equals) ||
-               (this->key == Key::Backslash) ||
-               (this->key == Key::LeftBracket) ||
-               (this->key == Key::RightBracket) ||
-               (this->key == Key::Semicolon) ||
-               (this->key == Key::Apostrophe) ||
-               (this->key == Key::Comma) ||
-               (this->key == Key::Period) ||
-               (this->key == Key::Slash) ||
-               (this->key == Key::Space)
+            if((this->key >= Num0 && key <= Num9) ||
+               (this->key >= A && key <= Z) ||
+               (this->key == Grave) ||
+               (this->key == Minus) ||
+               (this->key == Equals) ||
+               (this->key == Backslash) ||
+               (this->key == LeftBracket) ||
+               (this->key == RightBracket) ||
+               (this->key == Semicolon) ||
+               (this->key == Apostrophe) ||
+               (this->key == Comma) ||
+               (this->key == Period) ||
+               (this->key == Slash) ||
+               (this->key == Space)
                )
                 return true;
             return false;
         }
         
         bool KeyEventArgs::isShiftFlag() const {
-            return this->flag & Key::FlagShift;
+            return this->flag & FlagShift;
         }
         
         bool KeyEventArgs::isCtrlFlag() const {
-            return this->flag & Key::FlagCtrl;
+            return this->flag & FlagCtrl;
         }
         
         bool KeyEventArgs::isAltFlag() const {
-            return this->flag & Key::FlagAlt;
+            return this->flag & FlagAlt;
         }
 
     } // namespace input

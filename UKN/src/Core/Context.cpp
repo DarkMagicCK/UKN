@@ -73,10 +73,6 @@ namespace ukn {
         return *this;
     }
     
-    ContextCfg& ContextCfg::fsaaSamples(int samples) {
-        render_cfg.fsaa_samples = samples;
-        return *this;
-    }
     
 	ContextCfg& ContextCfg::icon(const MistString& icon) {
 		render_cfg.icon = icon;
@@ -203,7 +199,6 @@ namespace ukn {
         cfg.render_cfg.show_mouse = true;
         cfg.render_cfg.sample_count = 0;
         cfg.render_cfg.sample_quality = 0;
-        cfg.render_cfg.fsaa_samples = 0;
         
         ConfigParserPtr configParser = AssetManager::Instance().load<ConfigParser>(name);
         if(configParser) {            
@@ -219,7 +214,6 @@ namespace ukn {
                 
                 cfg.render_cfg.sample_count     = configParser->getInt(L"sample_count", cfg.render_cfg.sample_count);
                 cfg.render_cfg.sample_quality   = configParser->getInt(L"sample_quality", cfg.render_cfg.sample_quality);
-                cfg.render_cfg.fsaa_samples     = configParser->getInt(L"fsaa_samples", cfg.render_cfg.fsaa_samples);
                 
                 UknString fmt_string;
                 int fmt_id;
@@ -270,7 +264,6 @@ namespace ukn {
             configParser->setBool(L"resizable", mCfg.render_cfg.resizable);
             configParser->setInt(L"sample_count", mCfg.render_cfg.sample_count);
             configParser->setInt(L"sample_quality", mCfg.render_cfg.sample_quality);
-            configParser->setInt(L"fsaa_samples", mCfg.render_cfg.fsaa_samples);
             configParser->setString(L"color_fmt", element_format_to_string(mCfg.render_cfg.color_fmt));
             configParser->setString(L"depth_stencil_fmt", element_format_to_string(mCfg.render_cfg.depth_stencil_fmt));
             

@@ -23,7 +23,7 @@ namespace mist {
 		virtual IEnumerator<T>*	createEnumerator() const = 0;
 	};
 	
-    class IResource: public virtual Interface {
+    class MIST_API IResource: public virtual Interface {
     public:
         virtual const MistString& getName() const = 0;
     };

@@ -19,6 +19,9 @@
 
 #include <vector>
 
+#include <ft2build.h>
+#include <freetype/freetype.h>
+
 namespace ukn {
     
     /**
@@ -46,7 +49,7 @@ namespace ukn {
         FSP_Stroke_Width,
         FSP_Size,
     };
-    
+
     class UKN_API Font: Uncopyable, public virtual IConfigSerializable {
     public:
         Font();
@@ -100,7 +103,40 @@ namespace ukn {
         
         SpriteBatchPtr mSpriteBatch;
         
-        struct StringData;
+        
+		struct UKN_API StringData {
+			std::wstring string_to_render;
+			float x;
+			float y;
+			float char_rot;
+			float kerning_width;
+			float kerning_height;
+			float line_width;
+			FontAlignment alignment;
+			Color clr;
+        
+			StringData():
+			x(0),
+			y(0),
+			char_rot(0),
+			kerning_width(0),
+			kerning_height(0),
+			line_width(0),
+			alignment(FA_Left) {
+        
+			}
+        
+			StringData(const wchar_t* str, float _x, float _y, FontAlignment align):
+			x(_x),
+			y(_y),
+			char_rot(0),
+			kerning_width(0),
+			kerning_height(0),
+			line_width(0),
+			alignment(align) {
+				string_to_render = str;
+			}
+		};
         std::vector<StringData> mRenderQueue;
         
         void doRender(const StringData& data);
@@ -112,6 +148,27 @@ namespace ukn {
         friend struct FTGlyph;
         
         ScopedPtr<FTFace> mFace;
+
+		struct Font::FTGlyph {
+			FTGlyph();
+			~FTGlyph();
+			bool cached;
+        
+			void resetFontSize(uint32 newsize);
+			void cache(uint32 index, Font& font);
+        
+			FT_Face* face;
+        
+			uint32 size;
+			uint32 top;
+			uint32 left;
+			uint32 texw;
+			uint32 texh;
+			uint32 imgw;
+			uint32 imgh;
+        
+			TexturePtr texture;
+		};
         std::vector<FTGlyph> mGlyphs;
     };
     

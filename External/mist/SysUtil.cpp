@@ -848,5 +848,27 @@ namespace mist {
             mNumCores = static_cast<int>(count);
             
 #endif
+
+		
+        }
+
+		const std::string& CpuInfo::getCPUString() const {
+            return mCPUString;
+        }
+        
+        const std::string& CpuInfo::getCPUBrandString() const {
+            return mCPUBrandString;
+        }
+        
+        bool CpuInfo::testFeature(Feature feature) const {
+            return mFeatureMask & feature ? true : false;
+        }
+        
+        int CpuInfo::getNumHWThreads() const {
+            return mNumHWThreads;
+        }
+        
+        int CpuInfo::getNumCores() const {
+            return mNumCores;
         }
 } // namespace mist

@@ -22,8 +22,8 @@ namespace mist {
         ZCM_Zlib,
     };
     
-    Array<uint8> zlib_compress(uint8* input, uint32 input_length, ZlibCompressionMethod method = ZCM_Gzip);
-    Array<uint8> zlib_decompress(uint8* input, uint32 input_length);
+    MIST_API Array<uint8> zlib_compress(uint8* input, uint32 input_length, ZlibCompressionMethod method = ZCM_Gzip);
+    MIST_API Array<uint8> zlib_decompress(uint8* input, uint32 input_length);
     
     
 } // namespace ukn

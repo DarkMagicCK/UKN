@@ -36,7 +36,7 @@ namespace mist {
         LL_Info,
     };
     
-    class Logger {
+    class MIST_API Logger {
     protected:
         Logger(StreamPtr outputStream = StreamPtr());
         ~Logger();

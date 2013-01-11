@@ -54,7 +54,6 @@ namespace ukn {
 		ID3D10Device* mDevice;
 		IDXGISwapChain* mSwapChain;
 		ID3D10RasterizerState* mRasterState;
-		FrameBufferPtr mScreenBuffer;
 
 		D3DXMATRIX mProjectionMatrix;
 		D3DXMATRIX mViewMatrix;

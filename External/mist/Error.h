@@ -1,6 +1,8 @@
 #ifndef MISTError_H_
 #define MISTError_H_
 
+#include <string>
+
 namespace mist {
 
 	class Error {

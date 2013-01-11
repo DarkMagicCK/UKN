@@ -74,6 +74,7 @@ namespace ukn {
         full_screen(false),
         resizable(true),
         show_mouse(true),
+		vsync(false),
         left(0),
         top(0),
         width(640),
@@ -104,8 +105,7 @@ namespace ukn {
         ElementFormat depth_stencil_fmt;
         
         uint32 sample_count;
-        uint32 sample_quality;        
-        uint32 fsaa_samples;
+        uint32 sample_quality;
 
 		MistString icon;
 		MistString cursor;

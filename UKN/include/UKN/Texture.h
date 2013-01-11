@@ -39,7 +39,7 @@ namespace ukn {
     /**
      * Abstract texture class
      **/
-    class MIST_API Texture {
+    class UKN_API Texture {
     public:
         static TexturePtr NullObject();
         

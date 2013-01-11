@@ -6,12 +6,12 @@
 
 namespace mist {
 
-	class Interface {
+	class MIST_API Interface {
 	public:
 		virtual ~Interface() { }
 	};
 	
-	class Object {
+	class MIST_API Object {
 	public:
 		virtual ~Object() { }
 	};

@@ -22,9 +22,6 @@
 #include "UKN/SpriteBatch.h"
 #include "UKN/Texture.h"
 
-#include <ft2build.h>
-#include <freetype/freetype.h>
-
 #ifdef MIST_OS_WINDOWS
 #pragma comment(lib, "freetype244ST.lib")
 #endif
@@ -96,141 +93,92 @@ namespace ukn {
         }
     };
     
-    struct Font::FTGlyph {
-        FTGlyph():
-        cached(false),
-        face(0),
-        size(0),
-        top(0),
-        left(0),
-        texw(0),
-        texh(0),
-        imgw(0),
-        imgh(0),
-        texture(TexturePtr()) { 
+    Font::FTGlyph::FTGlyph():
+    cached(false),
+    face(0),
+    size(0),
+    top(0),
+    left(0),
+    texw(0),
+    texh(0),
+    imgw(0),
+    imgh(0),
+    texture(TexturePtr()) { 
+    }
+        
+    Font::FTGlyph:: ~FTGlyph() {
+    }
+       
+    void Font::FTGlyph::resetFontSize(uint32 newsize) {
+        if(size != newsize) {
+            size = newsize; 
+            cached = false;
         }
+    }
         
-        ~FTGlyph() {
-        }
-        
-        bool cached;
-        
-        void resetFontSize(uint32 newsize) {
-            if(size != newsize) {
-                size = newsize; 
-                cached = false;
-            }
-        }
-        
-        void cache(uint32 index, Font& font) {
-            if(cached)
-                return;
+    void Font::FTGlyph::cache(uint32 index, Font& font) {
+        if(cached)
+            return;
             
-            FT_Set_Pixel_Sizes(*face, 0, size);
-            if(!FT_Load_Glyph(*face, index, FT_LOAD_DEFAULT)) {
-                FT_GlyphSlot glyph = (*face)->glyph;
-                FT_Bitmap bits;
-                if(glyph->format == ft_glyph_format_outline) {
-                    if(!FT_Render_Glyph(glyph, FT_RENDER_MODE_NORMAL)) {
-                        bits = glyph->bitmap;
-                        uint8* pt = bits.buffer;
+        FT_Set_Pixel_Sizes(*face, 0, size);
+        if(!FT_Load_Glyph(*face, index, FT_LOAD_DEFAULT)) {
+            FT_GlyphSlot glyph = (*face)->glyph;
+            FT_Bitmap bits;
+            if(glyph->format == ft_glyph_format_outline) {
+                if(!FT_Render_Glyph(glyph, FT_RENDER_MODE_NORMAL)) {
+                    bits = glyph->bitmap;
+                    uint8* pt = bits.buffer;
                         
-                        top = glyph->bitmap_top;
-                        left = glyph->bitmap_left;
-                        imgw = 1;
-                        imgh = 1;
-                        texw = bits.width;
-                        texh = bits.rows;
+                    top = glyph->bitmap_top;
+                    left = glyph->bitmap_left;
+                    imgw = 1;
+                    imgh = 1;
+                    texw = bits.width;
+                    texh = bits.rows;
                         
-                        imgw = next_pow_of_2(texw);
-                        imgh = next_pow_of_2(texh);
-                        imgw > imgh ? imgh = imgw : imgw = imgh;
+                    imgw = next_pow_of_2(texw);
+                    imgh = next_pow_of_2(texh);
+                    imgw > imgh ? imgh = imgw : imgw = imgh;
                         
-                        if(imgw == 0 || imgh == 0)
-                            return;
+                    if(imgw == 0 || imgh == 0)
+                        return;
                         
-                        uint32* texd = (uint32*)mist_malloc(imgw * imgh * 4);
-                        memset(texd, 0, imgw * imgh * 4);
-                        uint32* texp = texd;
-                        bool cflag = true;
-                        for(int i = 0; i < bits.rows; ++i) {
-                            uint32* rowp = texp;
-                            for(int j=0; j < bits.width; ++j) {
-                                if(*pt) {
-                                    if(cflag) {
-                                        *rowp = *pt;
-                                        *rowp *= 0x01010101;
-                                    } else {
-                                        *rowp = *pt << 24;
-                                        *rowp |= 0xffffffff;
-                                    }
+                    uint32* texd = (uint32*)mist_malloc(imgw * imgh * 4);
+                    memset(texd, 0, imgw * imgh * 4);
+                    uint32* texp = texd;
+                    bool cflag = true;
+                    for(int i = 0; i < bits.rows; ++i) {
+                        uint32* rowp = texp;
+                        for(int j=0; j < bits.width; ++j) {
+                            if(*pt) {
+                                if(cflag) {
+                                    *rowp = *pt;
+                                    *rowp *= 0x01010101;
                                 } else {
-                                    *rowp = 0;
+                                    *rowp = *pt << 24;
+                                    *rowp |= 0xffffffff;
                                 }
-                                pt++;
-                                rowp++;
+                            } else {
+                                *rowp = 0;
                             }
-                            texp += imgw;
+                            pt++;
+                            rowp++;
                         }
-                        
-                        texture = Context::Instance().getGraphicFactory().create2DTexture(imgw,
-                                                                                          imgh,
-                                                                                          0,
-                                                                                          EF_RGBA8,
-                                                                                          (uint8*)texd);
-                        mist_free(texd);
-                        cached = true;
+                        texp += imgw;
                     }
+                        
+                    texture = Context::Instance().getGraphicFactory().create2DTexture(imgw,
+                                                                                        imgh,
+                                                                                        0,
+                                                                                        EF_RGBA8,
+                                                                                        (uint8*)texd);
+                    mist_free(texd);
+                    cached = true;
                 }
             }
         }
-        
-        FT_Face* face;
-        
-        uint32 size;
-        uint32 top;
-        uint32 left;
-        uint32 texw;
-        uint32 texh;
-        uint32 imgw;
-        uint32 imgh;
-        
-        TexturePtr texture;
-    };
+    }
     
-    struct Font::StringData {
-        std::wstring string_to_render;
-        float x;
-        float y;
-        float char_rot;
-        float kerning_width;
-        float kerning_height;
-        float line_width;
-        FontAlignment alignment;
-        Color clr;
-        
-        StringData():
-        x(0),
-        y(0),
-        char_rot(0),
-        kerning_width(0),
-        kerning_height(0),
-        line_width(0),
-        alignment(FA_Left) {
-        
-        }
-        
-        StringData(const wchar_t* str, float _x, float _y, FontAlignment align):
-        x(_x),
-        y(_y),
-        char_rot(0),
-        kerning_width(0),
-        kerning_height(0),
-        line_width(0),
-        alignment(align) {
-            string_to_render = str;
-        }
-    };
     
     Font::Font():
     mFontSize(0),

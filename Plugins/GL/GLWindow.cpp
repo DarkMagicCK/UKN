@@ -175,8 +175,8 @@ namespace ukn {
                 break;
         }
 
-        if(settings.fsaa_samples > 0) {
-            glfwOpenWindowHint(GLFW_FSAA_SAMPLES, settings.fsaa_samples);
+        if(settings.sample_quality > 0) {
+            glfwOpenWindowHint(GLFW_FSAA_SAMPLES, settings.sample_quality);
         }
         
         glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, settings.resizable);

@@ -20,7 +20,7 @@ namespace mist {
     
     class DllLoader;
     
-    class Module: Uncopyable {
+    class MIST_API Module: Uncopyable {
     public:
         virtual const MistString& getName() const = 0;
         
@@ -31,7 +31,7 @@ namespace mist {
         virtual void shutdown() = 0;
     };
         
-    class ModuleManager: Uncopyable {
+    class MIST_API ModuleManager: Uncopyable {
     protected:
         ModuleManager();
         ~ModuleManager();

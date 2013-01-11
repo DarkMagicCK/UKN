@@ -54,7 +54,11 @@ namespace ukn {
     
     
     D3D10GraphicFactory::D3D10GraphicFactory() {
-        mGraphicDevice = new D3D10GraphicDevice();
+		try {
+			mGraphicDevice = new D3D10GraphicDevice();
+		} catch(Exception& exp) {
+			MessageBoxA(0, exp.what(), "Fatal Error", MB_OK | MB_ICONERROR);
+		}
     }
     
     D3D10GraphicFactory::~D3D10GraphicFactory() {

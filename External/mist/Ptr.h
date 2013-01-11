@@ -41,7 +41,7 @@ namespace mist {
     }
     
     
-    class SharedPtrRefCounter {
+    class MIST_API SharedPtrRefCounter {
     public:
         SharedPtrRefCounter(): mRef(1), mWeakRef(1) {}
         

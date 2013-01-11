@@ -9,8 +9,9 @@
 #ifndef Project_Unknown_GLRenderView_h
 #define Project_Unknown_GLRenderView_h
 
-#include "UKN/RenderView.h"
 #include "mist/Uncopyable.h"
+
+#include "UKN/RenderView.h"
 #include "UKN/GraphicSettings.h"
 
 #include "GLPreq.h"

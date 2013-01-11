@@ -34,6 +34,7 @@ namespace ukn {
 		if(!this->initD3DDevice(settings, mWindow->getHWnd())) {
 			MIST_THROW_EXCEPTION("Error initializing d3d10 device");
 		}
+		return mWindow;
 	}
 
 	bool D3D10GraphicDevice::initD3DDevice(const RenderSettings& settings, HWND hWnd) {
@@ -101,8 +102,8 @@ namespace ukn {
 		swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 		swapChainDesc.OutputWindow = hWnd;
 
-		swapChainDesc.SampleDesc.Count = 1;
-		swapChainDesc.SampleDesc.Quality = settings.fsaa_samples;
+		swapChainDesc.SampleDesc.Count = settings.sample_count;
+		swapChainDesc.SampleDesc.Quality = settings.sample_quality;
 
 		swapChainDesc.Windowed = !settings.full_screen;
 
@@ -133,21 +134,23 @@ namespace ukn {
 			CHECK_RESULT(result);
 		}
 
-		mScreenBuffer = MakeSharedPtr<D3D10FrameBuffer>(false);
-		mScreenBuffer->attach(ATT_Color0,
+		mScreenFrameBuffer = MakeSharedPtr<D3D10FrameBuffer>(false);
+		mScreenFrameBuffer->attach(ATT_Color0,
 							  MakeSharedPtr<D3D10ScreenColorRenderView>(settings.width,
 																		settings.height,
 																		settings.color_fmt));
-		mScreenBuffer->attach(ATT_DepthStencil,
+		mScreenFrameBuffer->attach(ATT_DepthStencil,
 							  MakeSharedPtr<D3D10DepthStencilRenderView>(settings.width,
 																		 settings.height,
 																		 settings.depth_stencil_fmt));
-		((WindowsWindow*)mWindow.get())->setFrameBuffer(mScreenBuffer);
+		((WindowsWindow*)mWindow.get())->setFrameBuffer(mScreenFrameBuffer);
+		((WindowsWindow*)mWindow.get())->updateWindowProperties(0, 0, settings.width, settings.height);
+		this->bindFrameBuffer(mScreenFrameBuffer);
 
-		ID3D10RenderTargetView* screenRenderView = ((D3D10ScreenColorRenderView*)mScreenBuffer->attached(ATT_Color0).get())->getD3D10RenderTargetView();
+		ID3D10RenderTargetView* screenRenderView = ((D3D10ScreenColorRenderView*)mScreenFrameBuffer->attached(ATT_Color0).get())->getD3D10RenderTargetView();
 		mDevice->OMSetRenderTargets(1, 
 									&screenRenderView, 
-									((D3D10DepthStencilRenderView*)mScreenBuffer->attached(ATT_DepthStencil).get())->getD3D10DepthStencilView());
+									((D3D10DepthStencilRenderView*)mScreenFrameBuffer->attached(ATT_DepthStencil).get())->getD3D10DepthStencilView());
 
 		D3D10_RASTERIZER_DESC rasterDesc;
 		ZeroMemory(&rasterDesc, sizeof(rasterDesc));
@@ -158,17 +161,14 @@ namespace ukn {
 		rasterDesc.DepthClipEnable = true;
 		rasterDesc.FillMode = D3D10_FILL_SOLID;
 		rasterDesc.FrontCounterClockwise = false;
-		rasterDesc.MultisampleEnable = settings.fsaa_samples > 0;
+		rasterDesc.MultisampleEnable = settings.sample_quality > 0;
 		rasterDesc.ScissorEnable = false;
 		rasterDesc.SlopeScaledDepthBias = 0.f;
 
 		result = mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
 		CHECK_RESULT(result);
-
-		
-		//float fieldOfView = (float)D3DX_PI / 4.0f;
-		//float screenAspect = (float)settings.width / (float)settings.height;
-
+	
+		return true;
 	}
 
 	void D3D10GraphicDevice::beginFrame() {
@@ -188,7 +188,7 @@ namespace ukn {
 	}
 
 	void D3D10GraphicDevice::beginRendering() {
-		 FrameBuffer& fb = *this->getScreenFrameBuffer();
+		FrameBuffer& fb = *this->getScreenFrameBuffer();
         
         FrameCounter& counter = FrameCounter::Instance();
         AppInstance& app = Context::Instance().getApp();
@@ -209,8 +209,8 @@ namespace ukn {
 
 					mDevice->RSSetViewports(1, &viewport);
                    
-                    setViewMatrix(fb.getViewport().camera->getViewMatrix());
-                    setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
+                    this->setViewMatrix(fb.getViewport().camera->getViewMatrix());
+                    this->setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
                     
                     app.update();
                     app.render();
@@ -237,6 +237,7 @@ namespace ukn {
 		for(int row = 0; row < 4; ++row)
 			for(int col = 0; col < 4; ++col)
 				mViewMatrix(row, col) = mat.c[col][row];
+		
 	}
 
 	void D3D10GraphicDevice::setProjectionMatrix(const Matrix4& mat) {

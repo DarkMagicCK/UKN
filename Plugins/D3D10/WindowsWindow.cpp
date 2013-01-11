@@ -35,116 +35,115 @@ namespace ukn {
     
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 		WindowsWindow* window = (WindowsWindow*)GetWindowLongPtr(hWnd, GWL_USERDATA);
-		switch (message)
-		{
-		case WM_DESTROY:
-			PostQuitMessage(0);
-			break;
+		switch (message) {
+			case WM_DESTROY:
+				PostQuitMessage(0);
+				break;
 
-		case WM_CLOSE:
-			PostQuitMessage(0);
-			break;
+			case WM_CLOSE:
+				PostQuitMessage(0);
+				break;
 
-		case WM_KEYDOWN:
-			window->onKeyEvent().raise(
-				window, 
-				input::KeyEventArgs(input::Press, win_keycode_to_ukn(wParam),
-				g_key_flag)
-			);
-			break;
+			case WM_KEYDOWN:
+				window->onKeyEvent().raise(
+					window, 
+					input::KeyEventArgs(input::Press, win_keycode_to_ukn(wParam),
+					g_key_flag)
+				);
+				break;
 
-		case WM_IME_CHAR: {
-			input::KeyEventArgs args(input::Press, (mist::uint16)wParam, g_key_flag);
-			args.isIME = true;
-			window->onKeyEvent().raise(
-				window, 
-				args
-			);
-			break;
-	    }
+			case WM_IME_CHAR: {
+				input::KeyEventArgs args(input::Press, (mist::uint16)wParam, g_key_flag);
+				args.isIME = true;
+				window->onKeyEvent().raise(
+					window, 
+					args
+				);
+				break;
+			}
 
-		case WM_KEYUP:
-			window->onKeyEvent().raise(
-				window,
-				input::KeyEventArgs(input::Release, win_keycode_to_ukn(wParam), 
-				g_key_flag)
-			);
-			break;
+			case WM_KEYUP:
+				window->onKeyEvent().raise(
+					window,
+					input::KeyEventArgs(input::Release, win_keycode_to_ukn(wParam), 
+					g_key_flag)
+				);
+				break;
 
-		case WM_MOUSEMOVE: {
-			int2 pos = window->getMousePos();
-			window->onMouseEvent().raise(
-				window,
-				input::MouseEventArgs(input::Move,
-									  input::Nothing,
-									  g_key_flag,
-									  pos[0],
-									  pos[1],
-									  GET_WHEEL_DELTA_WPARAM(wParam))
-            );
-			break;
+			case WM_MOUSEMOVE: {
+				int2 pos = window->getMousePos();
+				window->onMouseEvent().raise(
+					window,
+					input::MouseEventArgs(input::Move,
+										  input::Nothing,
+										  g_key_flag,
+										  pos[0],
+										  pos[1],
+										  GET_WHEEL_DELTA_WPARAM(wParam))
+				);
+				break;
+			}
+
+			case WM_MOUSEWHEEL: {
+				int2 pos = window->getMousePos();
+				window->onMouseEvent().raise(
+					window,
+					input::MouseEventArgs(input::Wheel,
+										  input::Nothing,
+										  g_key_flag,
+										  pos[0],
+										  pos[1],
+										  GET_WHEEL_DELTA_WPARAM(wParam))
+				);
+				break;
+			}
+
+			case WM_LBUTTONDOWN:
+			case WM_LBUTTONUP: {
+				int2 pos = window->getMousePos();
+				window->onMouseEvent().raise(
+					window,
+					input::MouseEventArgs(message == WM_LBUTTONDOWN ? input::Press : input::Release,
+										  input::LeftButton,
+										  g_key_flag,
+										  pos[0],
+										  pos[1],
+										  GET_WHEEL_DELTA_WPARAM(wParam))
+				);
+				break;
+			}
+
+			case WM_RBUTTONDOWN:
+			case WM_RBUTTONUP: {
+				int2 pos = window->getMousePos();
+				window->onMouseEvent().raise(
+					window,
+					input::MouseEventArgs(message == WM_RBUTTONDOWN ? input::Press : input::Release,
+										  input::MouseButton::RightButton,
+										  g_key_flag,
+										  pos[0],
+										  pos[1],
+										  GET_WHEEL_DELTA_WPARAM(wParam))
+				);
+				break;
+			}
+
+			case WM_MBUTTONDOWN:
+			case WM_MBUTTONUP: {
+				int2 pos = window->getMousePos();
+				window->onMouseEvent().raise(
+					window,
+					input::MouseEventArgs(message == WM_MBUTTONDOWN ? input::Press : input::Release,
+										  input::MouseButton::MiddleButton,
+										  g_key_flag,
+										  pos[0],
+										  pos[1],
+										  GET_WHEEL_DELTA_WPARAM(wParam))
+				);
+				break;
+			}
 		}
-
-		case WM_MOUSEWHEEL: {
-			int2 pos = window->getMousePos();
-			window->onMouseEvent().raise(
-				window,
-				input::MouseEventArgs(input::Wheel,
-									  input::Nothing,
-									  g_key_flag,
-									  pos[0],
-									  pos[1],
-									  GET_WHEEL_DELTA_WPARAM(wParam))
-            );
-			break;
-		}
-
-		case WM_LBUTTONDOWN:
-		case WM_LBUTTONUP: {
-			int2 pos = window->getMousePos();
-			window->onMouseEvent().raise(
-				window,
-				input::MouseEventArgs(message == WM_LBUTTONDOWN ? input::Press : input::Release,
-									  input::LeftButton,
-									  g_key_flag,
-									  pos[0],
-									  pos[1],
-									  GET_WHEEL_DELTA_WPARAM(wParam))
-            );
-			break;
-		}
-
-		case WM_RBUTTONDOWN:
-		case WM_RBUTTONUP: {
-			int2 pos = window->getMousePos();
-			window->onMouseEvent().raise(
-				window,
-				input::MouseEventArgs(message == WM_RBUTTONDOWN ? input::Press : input::Release,
-									  input::MouseButton::RightButton,
-									  g_key_flag,
-									  pos[0],
-									  pos[1],
-									  GET_WHEEL_DELTA_WPARAM(wParam))
-            );
-			break;
-		}
-
-		case WM_MBUTTONDOWN:
-		case WM_MBUTTONUP: {
-			int2 pos = window->getMousePos();
-			window->onMouseEvent().raise(
-				window,
-				input::MouseEventArgs(message == WM_MBUTTONDOWN ? input::Press : input::Release,
-									  input::MouseButton::MiddleButton,
-									  g_key_flag,
-									  pos[0],
-									  pos[1],
-									  GET_WHEEL_DELTA_WPARAM(wParam))
-            );
-			break;
-	    }
-		}
-		return true;
+		return DefWindowProcW(hWnd, message, wParam, lParam);
 	}
 	
 	WindowsWindow::WindowsWindow(const UknString& name, const RenderSettings& settings):
@@ -165,6 +164,7 @@ namespace ukn {
 
 		mInstance = GetModuleHandle(0);
 
+		ZeroMemory(&wc, sizeof(WNDCLASSEXW));
 		wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 		wc.lpfnWndProc = WndProc;
 		wc.cbClsExtra = 0;
@@ -201,10 +201,16 @@ namespace ukn {
 			}
 		}
 
-		mhWnd = ::CreateWindowExW(WS_EX_APPWINDOW,
+		DWORD style = WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+		DWORD exStyle = WS_EX_APPWINDOW;
+		if(settings.resizable) {
+			style |= WS_SIZEBOX | WS_MAXIMIZEBOX;
+			exStyle |= WS_EX_WINDOWEDGE;
+		}
+		mhWnd = ::CreateWindowExW(exStyle,
 			                      name.c_str(),
 								  name.c_str(),
-								  WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
+								  style,
 								  settings.full_screen ? 0 : (GetSystemMetrics(SM_CXSCREEN) - settings.width) / 2,
 								  settings.full_screen ? 0 : (GetSystemMetrics(SM_CYSCREEN) - settings.height) / 2,
 								  settings.width,
@@ -236,13 +242,11 @@ namespace ukn {
 		bool gotMsg;
 		MSG  msg;
         
-		while(::PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE)) {
-        
+		while(::PeekMessageW(&msg, NULL, 0, 0, PM_NOREMOVE)) {
 			if (WM_QUIT != msg.message && WM_CLOSE != msg.message) {
-				gotMsg = ::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE) ? true : false;
+				gotMsg = ::PeekMessageW(&msg, NULL, 0, 0, PM_REMOVE) == TRUE ? true : false;
 				
-				if (gotMsg)
-				{
+				if (gotMsg) {
 					::TranslateMessage(&msg);
 					::DispatchMessage(&msg);
 				}
@@ -312,24 +316,27 @@ namespace ukn {
 	}
        
 	void WindowsWindow::updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h) {
-		mFrameBuffer->updateScreen(0, 0, w, h);
-
+		
         Window::mLeft = x;
         Window::mTop = y;
         Window::mWidth = w;
         Window::mHeight = h;
         
-		Viewport& vp = mFrameBuffer->getViewport();
-        
-        vp.left = 0;
-        vp.top = 0;
-        vp.width = w;
-        vp.height = h;
-        
-        vp.camera = MakeSharedPtr<Camera2D>();
-        ((Camera2D*)vp.camera.get())->setOrthoParams(0, mFrameBuffer->width(), mFrameBuffer->height(), 0);
+		if(mFrameBuffer) {
+			mFrameBuffer->updateScreen(0, 0, w, h);
 
-        vp.camera->update();
+			Viewport& vp = mFrameBuffer->getViewport();
+        
+		    vp.left = 0;
+		    vp.top = 0;
+		    vp.width = w;
+		    vp.height = h;
+        
+			vp.camera = MakeSharedPtr<Camera2D>();
+		    ((Camera2D*)vp.camera.get())->setOrthoParams(0, mFrameBuffer->width(), mFrameBuffer->height(), 0);
+
+			vp.camera->update();
+		}
 	}
 
 

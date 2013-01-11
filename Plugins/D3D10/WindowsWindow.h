@@ -35,11 +35,12 @@ namespace ukn {
         
 		void setFrameBuffer(const FrameBufferPtr& frameBuffer);
 		FrameBufferPtr getFrameBuffer() const;
+		
+		void updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h);
 
     private:
 		void createWindow(const UknString& name, const RenderSettings& settings);
-        void updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h);
-
+        
 		HINSTANCE mInstance;
 		HWND mhWnd;
 		FrameBufferPtr mFrameBuffer;

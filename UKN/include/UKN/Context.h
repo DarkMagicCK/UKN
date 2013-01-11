@@ -25,7 +25,7 @@ namespace ukn {
      *  or register manually
      **/
     
-    struct ContextCfg {
+    struct UKN_API ContextCfg {
         UknString graphic_factory_name;
         
         RenderSettings render_cfg;
@@ -41,7 +41,6 @@ namespace ukn {
 		ContextCfg& enableVSync(bool flag);
         ContextCfg& sampleCount(int count);
         ContextCfg& sampleQuality(int quality);
-        ContextCfg& fsaaSamples(int samples);
 		ContextCfg& icon(const MistString& icon);
 		ContextCfg& cursor(const MistString& cursor);
         

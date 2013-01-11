@@ -28,7 +28,7 @@ namespace ukn {
     /**
      * Graphic Device Caps
      **/
-    struct GraphicDeviceCaps {
+    struct UKN_API GraphicDeviceCaps {
         uint32 max_indices;
         uint32 max_vertices;
         
@@ -40,7 +40,7 @@ namespace ukn {
         uint32 max_vertex_texture_units;
     };
     
-    class GraphicDevice {
+    class UKN_API GraphicDevice {
     public:
         GraphicDevice();
         virtual ~GraphicDevice();

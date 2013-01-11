@@ -16,7 +16,7 @@
 
 namespace mist {
     
-    class File {
+    class MIST_API File {
     public:
         static bool FileExists(const MistString& filepath);
         static bool PathExists(const MistString& path);

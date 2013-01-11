@@ -10,6 +10,7 @@
 #define Project_Unknown_Input_h
 
 #include "mist/Event.h"
+#include "UKN/PreDeclare.h"
 
 namespace ukn {
     
@@ -170,7 +171,7 @@ namespace ukn {
             Joystick16,
         };
            
-        struct KeyEventArgs {
+        struct UKN_API KeyEventArgs {
 			KeyEventArgs() {
 
 			}
@@ -202,7 +203,7 @@ namespace ukn {
             wchar_t toCharCode() const;
         };
         
-        struct MouseEventArgs {
+        struct UKN_API MouseEventArgs {
 			MouseEventArgs() {
 
 			}
@@ -226,7 +227,7 @@ namespace ukn {
             
         };
         
-        struct JoyStickEventArgs {
+        struct UKN_API JoyStickEventArgs {
             InputState        flag;
             mist::uint8       button;
         };

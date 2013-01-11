@@ -19,15 +19,15 @@ namespace mist {
     
     namespace string {
         
-        std::string WStringToString(const std::wstring& str);
-        std::wstring StringToWString(const std::string& str);
+        MIST_API std::string WStringToString(const std::wstring& str);
+        MIST_API std::wstring StringToWString(const std::string& str);
         
         // by direct data copy
-        std::string WStringToStringFast(const std::wstring& str);
-        std::wstring StringToWStringFast(const std::string& str);
+        MIST_API std::string WStringToStringFast(const std::wstring& str);
+        MIST_API std::wstring StringToWStringFast(const std::string& str);
         
-        MistString GetFileName(const MistString& str);
-        MistString GetFilePath(const MistString& str);
+        MIST_API MistString GetFileName(const MistString& str);
+        MIST_API MistString GetFilePath(const MistString& str);
         
         template<typename T>
         static std::string AnyToString(const T& val) {
@@ -76,8 +76,8 @@ namespace mist {
         MistString operator[](size_t index);
         
     protected:
-        bool isSpace(char c);
-        bool isAlpha(char c);
+        bool isSpace(wchar_t c);
+        bool isAlpha(wchar_t c);
         
         TokenContainer mTokens;
     };

@@ -118,8 +118,8 @@ namespace mist {
          **/
         virtual void setFloat(const MistString& attr, float val) = 0;
         
-        MIST_API static ConfigParserPtr MakeEmptyParser(ConfigParserType type);
-        MIST_API static ConfigParserPtr MakeParser(ResourcePtr resource);
+        static ConfigParserPtr MakeEmptyParser(ConfigParserType type);
+        static ConfigParserPtr MakeParser(ResourcePtr resource);
     };
     
     

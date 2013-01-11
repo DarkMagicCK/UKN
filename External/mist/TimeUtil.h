@@ -226,7 +226,7 @@ namespace mist {
         Timestamp mDetalTime;
     };
     
-    extern void msleep(uint32 msec);
+    MIST_API extern void msleep(uint32 msec);
     
     template<typename T>
     class FixedStepUpdater {

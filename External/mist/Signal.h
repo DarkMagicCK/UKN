@@ -91,7 +91,7 @@ namespace mist {
         class SignalImpl;
     }
     
-    class Connection {
+    class MIST_API Connection {
     public:
         friend class detail::SignalImpl;
         
@@ -117,7 +117,7 @@ namespace mist {
     
     namespace detail {
         
-        class SignalImpl {
+        class MIST_API SignalImpl {
         public:
             typedef std::multimap<int, Connection> ConnectionMap;
             typedef std::multimap<int, Connection>::iterator IteratorType;
@@ -153,7 +153,7 @@ namespace mist {
             FuncType fn;
         };
         
-        class ConnectionBase {
+        class MIST_API ConnectionBase {
         public:
             ConnectionBase() {
                 __in_delete_list = false;

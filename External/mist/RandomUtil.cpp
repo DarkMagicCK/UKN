@@ -48,7 +48,7 @@ namespace mist {
     }
     
     int32 Random::RandomInt(int32 min, int32 max) {
-        return random_generator.normalized_random_func() * (max - min + 1) + min;
+        return (int32)(random_generator.normalized_random_func() * (max - min + 1)) + min;
     }
     
     float Randomizer<float>::Randomize(float min, float max) {

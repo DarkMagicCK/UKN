@@ -52,7 +52,7 @@ namespace mist {
         STI_RAW
     };
     
-    class SerializeHelper {
+    class MIST_API SerializeHelper {
     public:
         template<class T> static void               FromString(const MistString& str, T* val);
         template<class T> static T                  DefaultValue();
@@ -61,13 +61,13 @@ namespace mist {
         template<class T> static SerializableTypeId GetTypeId();
     };
         
-    class IBinarySerializable: public virtual Interface {
+    class MIST_API IBinarySerializable: public virtual Interface {
     public:
         virtual bool serialize(const SharedPtr<StreamWriter>& serializer) = 0;
         virtual bool deserialize(const SharedPtr<StreamWriter>& serializer) = 0;
     };
     
-    class IConfigSerializable: public virtual Interface {
+    class MIST_API IConfigSerializable: public virtual Interface {
     public:
         virtual bool serialize(const ConfigParserPtr& config) = 0;
         virtual bool deserialize(const ConfigParserPtr& config) = 0;

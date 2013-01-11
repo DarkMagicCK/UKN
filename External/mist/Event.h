@@ -17,7 +17,7 @@
 
 namespace mist {
   
-    class EventBase {
+    class MIST_API EventBase {
     public:
         virtual ~EventBase() { };
     };
@@ -27,7 +27,7 @@ namespace mist {
     } _NullEventArgs;
     
     template<typename _EVENT_ARGS, typename _SENDER = void*, typename _RT = void>
-    class MIST_API Event: public EventBase {
+    class  Event: public EventBase {
     public:
         typedef _EVENT_ARGS event_args_type;
         typedef _SENDER sender_type;
@@ -65,7 +65,7 @@ namespace mist {
     };
     
     template<typename _SENDER, typename _RT>
-    class MIST_API Event<NullEventArgs, _SENDER, _RT>: public EventBase {
+    class  Event<NullEventArgs, _SENDER, _RT>: public EventBase {
     public:
         typedef NullEventArgs event_args_type;
         typedef _SENDER sender_type;

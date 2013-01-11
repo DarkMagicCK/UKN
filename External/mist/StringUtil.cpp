@@ -75,12 +75,12 @@ namespace mist {
         return mTokens;
     }
     
-    bool StringTokenlizer::isSpace(char c) {
-        return (c == '\n' || c == ' ' || c == 'r' || c == '\t');
+    bool StringTokenlizer::isSpace(wchar_t c) {
+        return (c == L'\n' || c == L' ' || c == L'r' || c == L'\t');
     }
     
-    bool StringTokenlizer::isAlpha(char c) {
-        return ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9'));
+    bool StringTokenlizer::isAlpha(wchar_t c) {
+        return ((c >= L'a' && c <= L'z') || (c >= L'A' && c <= L'Z') || (c >= L'0' && c <= L'9'));
     }
     
     void StringTokenlizer::parse(const MistString& str) {

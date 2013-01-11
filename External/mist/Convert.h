@@ -15,7 +15,7 @@
 
 namespace mist {
     
-    class Convert {
+    class MIST_API Convert {
     public:
         template<typename T>
         static MistString ToString(T t);

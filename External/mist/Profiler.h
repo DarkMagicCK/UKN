@@ -23,7 +23,7 @@ namespace mist {
     
     namespace detail {
         
-        struct Profile {
+        struct MIST_API Profile {
             Profile(const MistString& name);
             ~Profile();
             
@@ -32,7 +32,7 @@ namespace mist {
         };
     }
     
-    struct ProfileData {
+    struct MIST_API  ProfileData {
         uint64 time;
         
         uint64 average_time;
@@ -61,7 +61,7 @@ namespace mist {
         }
     };
         
-    class Profiler {
+    class MIST_API Profiler {
     protected:
         Profiler() { }
         ~Profiler() { }

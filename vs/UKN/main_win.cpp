@@ -1,6 +1,5 @@
 
 #include "../Plugins/GL/GLGraphicFactory.h"
-#include "../Plugins/D3D10/D3D10GraphicFactory.h"
 
 #include "UKN/App.h"
 #include "UKN/Context.h"
@@ -32,6 +31,10 @@ int main (int argc, const char * argv[])
 #else
 #pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
 
+#pragma comment(lib, "mist.lib")
+#pragma comment(lib, "ukn_dll.lib")
+#pragma comment(lib, "GLPlugin.lib")
+
 int CALLBACK WinMain(
   __in  HINSTANCE hInstance,
   __in  HINSTANCE hPrevInstance,
@@ -39,32 +42,21 @@ int CALLBACK WinMain(
   __in  int nCmdShow
 ) {
 #endif
-    
-    mist::query::_TestQuery();
-    
-    mist::thread::Future<double> f = mist::thread::RunAsync<double>([]()->double {
-        double result = 0.f;
-        for(int i=0; i<100; ++i) {
-            result += (i * 100);
-            printf("%f\n", result);
-        }
-        return result;
-    });
-    
-    f.wait();
-    printf("%f\n", f.getResult());
-    // register plugins manually for test
-    ukn::GraphicFactoryPtr gl_factory;
-    ukn::CreateGraphicFactoryD3D(gl_factory);
 
-    ukn::Context::Instance().registerGraphicFactory(gl_factory);
+    // register plugins manually for test
+  //  ukn::GraphicFactoryPtr gl_factory;
+    
+//	ukn::CreateGraphicFactory(gl_factory);
+//    ukn::Context::Instance().registerGraphicFactory(gl_factory);
    
+
     
      ukn::AppInstance(L"LeapMotion Test")
         .create(
                 ukn::ContextCfg::Default()
                   .width(800)
                   .height(600)
+				  .graphicFactoryName(L"GLPlugin.dll")
                )
 		.updateFunc([](void* ) {
 

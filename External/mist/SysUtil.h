@@ -82,25 +82,11 @@ namespace mist {
     public:
         CpuInfo();
         
-        const std::string& getCPUString() const {
-            return mCPUString;
-        }
-        
-        const std::string& getCPUBrandString() const {
-            return mCPUBrandString;
-        }
-        
-        bool testFeature(Feature feature) const {
-            return mFeatureMask & feature ? true : false;
-        }
-        
-        int getNumHWThreads() const {
-            return mNumHWThreads;
-        }
-        
-        int getNumCores() const {
-            return mNumCores;
-        }
+        const std::string& getCPUString() const;
+        const std::string& getCPUBrandString() const;
+        bool testFeature(Feature feature) const;
+        int getNumHWThreads() const;
+        int getNumCores() const;
         
     private:
         std::string mCPUString;

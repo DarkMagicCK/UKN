@@ -25,7 +25,20 @@ namespace ukn {
     
     using namespace mist;
     
-#define UKN_API MIST_API 
+// are we building a dll or not
+#if defined(MIST_OS_WINDOWS) && defined(MIST_HAS_DECLSPEC)
+    #if defined(UKN_EXPORTS) || defined(UKN_DLL_EXPORTS)
+        #define UKN_API __declspec(dllexport)
+        #define UKN_EXTERN extern
+    #else
+        #define UKN_API __declspec(dllimport)
+        #define UKN_EXTERN extern
+    #endif
+#else
+    #define UKN_API
+    #define UKN_EXTERN
+#endif
+
     
     typedef MistString UknString;
     

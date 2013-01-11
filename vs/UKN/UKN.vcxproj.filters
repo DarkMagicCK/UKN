@@ -40,9 +40,6 @@
     <Filter Include="Plugins">
       <UniqueIdentifier>{042abb47-9664-42d3-83cd-0103ee091223}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Plugins\GL">
-      <UniqueIdentifier>{a524b039-4e99-4546-b8c1-13dc12135529}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Plugins\D3D10">
       <UniqueIdentifier>{66c08f9c-97c6-4721-821b-4894f72227f5}</UniqueIdentifier>
     </Filter>
@@ -528,45 +525,6 @@
     <ClInclude Include="..\..\UKN\SqaureGame.h">
       <Filter>源文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLGraphicFactory.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLPreq.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLRenderBuffer.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLRenderView.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLShader.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLSpriteBatch.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLTexture.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLWindow.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLConvert.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLFWInput.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLGraphicBuffer.h">
-      <Filter>Plugins\GL</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Plugins\D3D10\D3D10Convert.h">
       <Filter>Plugins\D3D10</Filter>
     </ClInclude>
@@ -844,33 +802,6 @@
     </ClCompile>
     <ClCompile Include="..\..\UKN\src\TMX\TMXTiledMap.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp">
-      <Filter>Plugins\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLGraphicFactory.cpp">
-      <Filter>Plugins\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLRenderView.cpp">
-      <Filter>Plugins\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLShader.cpp">
-      <Filter>Plugins\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLSpriteBatch.cpp">
-      <Filter>Plugins\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLTexture.cpp">
-      <Filter>Plugins\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLWindow.cpp">
-      <Filter>Plugins\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp">
-      <Filter>Plugins\GL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp">
-      <Filter>Plugins\GL</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Plugins\D3D10\D3D10FrameBuffer.cpp">
       <Filter>Plugins\D3D10</Filter>

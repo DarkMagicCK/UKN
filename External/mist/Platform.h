@@ -146,15 +146,12 @@
 
 // are we building a dll or not
 #if defined(MIST_OS_WINDOWS) && defined(MIST_HAS_DECLSPEC)
-    #if defined(MIST_DLL_EXPORT)
+    #if defined(MIST_EXPORTS)
         #define MIST_API __declspec(dllexport)
         #define MIST_EXTERN extern
-    #elif defined(MIST_DLL_IMPORT)
+    #else
         #define MIST_API __declspec(dllimport)
         #define MIST_EXTERN extern
-    #else
-        #define MIST_API
-        #define MIST_EXTERN
     #endif
 #else
     #define MIST_API

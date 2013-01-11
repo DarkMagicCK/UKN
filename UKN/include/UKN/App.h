@@ -21,7 +21,7 @@ namespace ukn {
     
     // Game App Luncher
     
-    class AppInstance: public Uncopyable {
+    class UKN_API AppInstance: public Uncopyable {
     public:
         AppInstance(const UknString& name);
         ~AppInstance();

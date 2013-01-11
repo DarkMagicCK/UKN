@@ -5,9 +5,17 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
@@ -136,19 +144,6 @@
     <ClInclude Include="..\..\Plugins\D3D10\D3D10RenderView.h" />
     <ClInclude Include="..\..\Plugins\D3D10\D3D10Texture.h" />
     <ClInclude Include="..\..\Plugins\D3D10\WindowsWindow.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLFWInput.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLGraphicBuffer.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLGraphicFactory.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLPreq.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLRenderBuffer.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLRenderView.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLShader.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLSpriteBatch.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLTexture.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLWindow.h" />
     <ClInclude Include="..\..\UKN\include\UKN\App.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Asset.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Audio.h" />
@@ -259,15 +254,6 @@
     <ClCompile Include="..\..\Plugins\D3D10\D3D10RenderView.cpp" />
     <ClCompile Include="..\..\Plugins\D3D10\D3D10Texture.cpp" />
     <ClCompile Include="..\..\Plugins\D3D10\WindowsWindow.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLGraphicFactory.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLRenderView.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLShader.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLSpriteBatch.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLTexture.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLWindow.cpp" />
     <ClCompile Include="..\..\UKN\src\Animation\SequencialAnimation.cpp" />
     <ClCompile Include="..\..\UKN\src\Animation\Skeletal.cpp" />
     <ClCompile Include="..\..\UKN\src\App\App.cpp" />
@@ -317,6 +303,12 @@
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <PlatformToolset>v110</PlatformToolset>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -331,12 +323,15 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)/../External/freetype/;$(LibraryPath)</LibraryPath>
-    <TargetName>ukn</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)/../External/freetype/;$(SolutionDir)/../../Plugins/GL/;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)/../External/freetype/;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -350,7 +345,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

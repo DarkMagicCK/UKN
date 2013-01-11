@@ -36,8 +36,8 @@ namespace ukn {
 		ID3D10Device* device = gd.getD3DDevice();
 		IDXGISwapChain* swapChain = gd.getSwapChain();
 
-		ID3D10Texture2D* backBuffer;
-		HRESULT result = swapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (LPVOID*)backBuffer);
+		ID3D10Texture2D* backBuffer = 0;
+		HRESULT result = swapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (void**)&backBuffer);
 		if(FAILED(result))
 			MIST_THROW_EXCEPTION("Error getting backbuffer");
 

@@ -9,15 +9,18 @@
 #ifndef MISTUncopyable_h
 #define MISTUncopyable_h
 
+#include "Platform.h"
+
 namespace mist {
     
-    class Uncopyable {
+    class MIST_API Uncopyable {
     public:
         Uncopyable() { }
+		virtual ~Uncopyable() { }
         
     protected:
-        Uncopyable(const Uncopyable&);
-        Uncopyable& operator=(const Uncopyable&);
+		Uncopyable(const Uncopyable&) {}
+		Uncopyable& operator=(const Uncopyable&) { return *this; }
     };
     
 } // namespace mist

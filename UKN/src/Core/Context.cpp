@@ -116,11 +116,11 @@ namespace ukn {
         mGraphicFactoryLoader.close();
     }
     
-    void Context::setApp(AppInstance* app) {
+    void Context::setApp(AppLauncher* app) {
         mApp = app;
     }
     
-    AppInstance& Context::getApp() const {
+    AppLauncher& Context::getApp() const {
         return *mApp;
     }
     

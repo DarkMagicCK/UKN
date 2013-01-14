@@ -191,7 +191,7 @@ namespace ukn {
 		FrameBuffer& fb = *this->getScreenFrameBuffer();
         
         FrameCounter& counter = FrameCounter::Instance();
-        AppInstance& app = Context::Instance().getApp();
+        AppLauncher& app = Context::Instance().getApp();
         
         while(true) {
 
@@ -275,7 +275,8 @@ namespace ukn {
 	}
 
 	void D3D10GraphicDevice::fillGraphicCaps(GraphicDeviceCaps& caps) {
-
+		caps.max_texture_width = 8192;
+		caps.max_texture_height = 8192;
 	}
 
 	void D3D10GraphicDevice::setRenderState(RenderStateType type, uint32 func) {

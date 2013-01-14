@@ -15,7 +15,6 @@
 #include "mist/Thread.h"
 
 #include "UKN/App.h"
-#include "UKN/Window.h"
 
 #include "UKN/Context.h"
 #include "UKN/GraphicDevice.h"
@@ -28,29 +27,29 @@
 
 namespace ukn {
     
-    AppInstance::AppInstance(const UknString& name):
+    AppLauncher::AppLauncher(const UknString& name):
     mName(name),
     mInited(false) {
         Context::Instance().setApp(this);
     }
     
-    AppInstance::~AppInstance() {
+    AppLauncher::~AppLauncher() {
         
     }
     
-    void AppInstance::onWindowClose(Window* wnd) {
+    void AppLauncher::onWindowClose(Window* wnd) {
         terminate();
     }
     
-    Window& AppInstance::getWindow() const {
+    Window& AppLauncher::getWindow() const {
         return *mMainWindow;
     }
 
-	WindowPtr AppInstance::getWindowPtr() const {
+	WindowPtr AppLauncher::getWindowPtr() const {
 		return mMainWindow;
 	}
     
-    AppInstance& AppInstance::create(const UknString& cfgname) {
+    AppLauncher& AppLauncher::create(const UknString& cfgname) {
         if(!mInited) {
             mInited = true;
         
@@ -62,7 +61,7 @@ namespace ukn {
         return *this;
     }
     
-    AppInstance& AppInstance::create(const ContextCfg& cfg) {
+    AppLauncher& AppLauncher::create(const ContextCfg& cfg) {
         if(!mInited) {
             mInited = true;
         
@@ -74,7 +73,7 @@ namespace ukn {
         return *this;
     }
     
-    void AppInstance::doCreate() {
+    void AppLauncher::doCreate() {
         mist_assert(mInited);
         
         GraphicDevice& graphic_device = Context::Instance().getGraphicFactory().getGraphicDevice();
@@ -84,7 +83,7 @@ namespace ukn {
         if(!mMainWindow)
             return terminate();
         
-        mMainWindow->onClose() += Bind(this, &AppInstance::onWindowClose);
+        mMainWindow->onClose() += Bind(this, &AppLauncher::onWindowClose);
         
         // log basic information
         Logger::Instance().setFeature(LF_PrependRunningTime, false);
@@ -123,11 +122,11 @@ namespace ukn {
         
     }
     
-    void AppInstance::terminate() {
+    void AppLauncher::terminate() {
         mist::ModuleManager::Destroy();
         
         try {
-#ifdef MIST_OS_WINDOWS
+#ifdef MIST_OS_AppLauncherS
         ::PostQuitMessage(0);
 		exit(0);
 #else
@@ -138,77 +137,78 @@ namespace ukn {
         }
     }
     
-    void AppInstance::update() {
+    void AppLauncher::update() {
         mMainWindow->OnGlobalUpdate().raise(0, _NullEventArgs);
-
         mMainWindow->onUpdate().raise(mMainWindow, _NullEventArgs);
-    
-        onUpdate();
-        
         mist::thread::ThreadTaskPool::DefaultObject().run();
     }
     
-    void AppInstance::render() {
+    void AppLauncher::render() {
         mMainWindow->onRender().raise(mMainWindow, _NullEventArgs);
-        
-        onRender();
     }
     
-    void AppInstance::setCamera(CameraPtr camera) {
-        mCamera = camera;
-    }
-    
-    CameraPtr AppInstance::getCamera() const {
-        return mCamera;
-    }
-    
-    void AppInstance::onInit() {        
-        
-    }
-    
-    AppInstance& AppInstance::updateFunc(const DelegateFuncType& f) {
-        mist_assert(mInited && mMainWindow);
-        
-        mMainWindow->onUpdate() += f;
-        
-        return *this;
-    }
-    
-    AppInstance& AppInstance::renderFunc(const DelegateFuncType& f) {
-        mist_assert(mInited && mMainWindow);
-
-        mMainWindow->onRender() += f;
-        
-        return *this;
-    }
-    
-    AppInstance& AppInstance::initFunc(const DelegateFuncType& f) {
-        mist_assert(mInited && mMainWindow);
-
-        mMainWindow->onInit() += f;
-        
-        return *this;
-    }
-    
-    void AppInstance::run() {
+    AppLauncher& AppLauncher::run() {
         if(!mMainWindow) {
-            log_error("ukn::AppInstance::run: cannot without a window");
-            return ;
+            log_error("ukn::AppLauncher::run: cannot without a AppLauncher");
+            return *this;
         }
         
         // on init
         mMainWindow->onInit().raise(mMainWindow, _NullEventArgs);
-        onInit();
         
         Context::Instance().getGraphicFactory().getGraphicDevice().beginRendering();
+
+		return *this;
     }
     
-    void AppInstance::onUpdate() {
-        
-    }
     
-    void AppInstance::onRender() {
-        
-    }
-    
+	AppLauncher& AppLauncher::connectInit(const Window::InitializeEvent::signal_type::SlotType& f) {
+		mMainWindow->connectInit(f);
+		return *this;
+	}
+
+	AppLauncher& AppLauncher::connectUpdate(const Window::UpdateEvent::signal_type::SlotType& f) {
+		mMainWindow->connectUpdate(f);
+		return *this;
+	}
+
+	AppLauncher& AppLauncher::connectRender(const Window::RenderEvent::signal_type::SlotType& f) {
+		mMainWindow->connectRender(f);
+		return *this;
+	}
+
+	AppLauncher& AppLauncher::connectMouse(const Window::MouseEvent::signal_type::SlotType& f) {
+		mMainWindow->connectMouse(f);
+		return *this;
+	}
+
+	AppLauncher& AppLauncher::connectKey(const Window::KeyEvent::signal_type::SlotType& f) {
+		mMainWindow->connectKey(f);
+		return *this;
+	}
+
+	AppLauncher& AppLauncher::connectClose(const Window::CloseEvent::signal_type::SlotType& f) {
+		mMainWindow->connectClose(f);
+		return *this;
+	}
+
+	AppLauncher& AppLauncher::connectResize(const Window::ResizeEvent::signal_type::SlotType& f) {
+		mMainWindow->connectResize(f);
+		return *this;
+	}
+
+	AppLauncher& AppLauncher::connectFrameStart(const Window::FrameStartEvent::signal_type::SlotType& f) {
+		mMainWindow->connectFrameStart(f);
+		return *this;
+	}
+
+	AppLauncher& AppLauncher::connectFrameEnd(const Window::FrameEndEvent::signal_type::SlotType& f) {
+		mMainWindow->connectFrameEnd(f);
+		return *this;
+	}
+
+	AppLauncher& AppLauncher::connectWindowCreate(const Window::WindowCreateEvent::signal_type::SlotType& f) {
+		mMainWindow->connectWindowCreate(f);
+		return *this;
+	}
 } // namespace ukn

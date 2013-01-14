@@ -51,22 +51,22 @@ int CALLBACK WinMain(
    
 
     
-     ukn::AppInstance(L"LeapMotion Test")
+     ukn::AppLauncher(L"LeapMotion Test")
         .create(
                 ukn::ContextCfg::Default()
                   .width(800)
                   .height(600)
-				  .graphicFactoryName(L"GLPlugin.dll")
+				  .graphicFactoryName(L"D3D10Plugin.dll")
                )
-		.updateFunc([](void* ) {
+		.connectUpdate([](void* ) {
 
 	    })
-	    .renderFunc([](void*) {
+	    .connectRender([](void*) {
 			ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
 			gd.clear(ukn::CM_Color, mist::color::Skyblue, 0, 0);
 			
 		})
-        .run();
+		.run();
     
     return 0;
 }

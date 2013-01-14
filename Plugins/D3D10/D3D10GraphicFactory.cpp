@@ -46,7 +46,7 @@ namespace ukn {
     };
     
     extern "C" {
-        UKN_D3D10_API void CreateGraphicFactoryD3D(GraphicFactoryPtr& ptr) {
+        UKN_D3D10_API void CreateGraphicFactory(GraphicFactoryPtr& ptr) {
             static GraphicFactoryPtr static_ptr = MakeSharedPtr<D3D10GraphicFactory>();
             ptr = static_ptr;
         }

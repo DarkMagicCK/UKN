@@ -254,7 +254,7 @@ namespace ukn {
         FrameBuffer& fb = *this->getScreenFrameBuffer();
         
         FrameCounter& counter = FrameCounter::Instance();
-        AppInstance& app = Context::Instance().getApp();
+        AppLauncher& app = Context::Instance().getApp();
         
         while(true) {
 

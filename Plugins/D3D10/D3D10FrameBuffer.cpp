@@ -3,12 +3,14 @@
 #include "D3D10RenderView.h"
 
 #include "ukn/Context.h"
-#include "ukn/GraphicFactory.h"
+
+#include "D3D10GraphicDevice.h"
 
 namespace ukn {
 
-	D3D10FrameBuffer::D3D10FrameBuffer(bool offscreen):
-    mOffscreen(offscreen) {
+	D3D10FrameBuffer::D3D10FrameBuffer(bool offscreen,  D3D10GraphicDevice* device):
+    mOffscreen(offscreen),
+	mGraphicDevice(device) {
 
     }
     
@@ -21,13 +23,12 @@ namespace ukn {
     }
     
     void D3D10FrameBuffer::swapBuffers() {
-		D3D10GraphicDevice& gd = *checked_cast<D3D10GraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
 		HRESULT result;
 
 		if(Context::Instance().getCfg().render_cfg.vsync) {
-			result = gd.getSwapChain()->Present(1, 0);
+			result = mGraphicDevice->getSwapChain()->Present(1, 0);
 		} else {
-			result = gd.getSwapChain()->Present(0, 0);
+			result = mGraphicDevice->getSwapChain()->Present(0, 0);
 		}
 		if(FAILED(result)) {
 			MIST_THROW_EXCEPTION("unable to present framebuffer");
@@ -54,13 +55,12 @@ namespace ukn {
     }
     
     void D3D10FrameBuffer::onBind() {
-        D3D10GraphicDevice& gd = *checked_cast<D3D10GraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
         
+
     }
     
     void D3D10FrameBuffer::onUnbind() {
-        D3D10GraphicDevice& gd = *checked_cast<D3D10GraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
-        
+       
     }
     
 

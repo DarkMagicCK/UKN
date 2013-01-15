@@ -38,7 +38,7 @@ namespace ukn {
 	}
 
 	bool D3D10GraphicDevice::initD3DDevice(const RenderSettings& settings, HWND hWnd) {
-#define CHECK_RESULT(result) if(FAILED(result)) return false;
+
 		IDXGIFactory* factory;
 		HRESULT result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
 		CHECK_RESULT(result);
@@ -134,15 +134,18 @@ namespace ukn {
 			CHECK_RESULT(result);
 		}
 
-		mScreenFrameBuffer = MakeSharedPtr<D3D10FrameBuffer>(false);
+		mScreenFrameBuffer = MakeSharedPtr<D3D10FrameBuffer>(false, this);
 		mScreenFrameBuffer->attach(ATT_Color0,
 							  MakeSharedPtr<D3D10ScreenColorRenderView>(settings.width,
 																		settings.height,
-																		settings.color_fmt));
+																		settings.color_fmt,
+																		this));
 		mScreenFrameBuffer->attach(ATT_DepthStencil,
 							  MakeSharedPtr<D3D10DepthStencilRenderView>(settings.width,
 																		 settings.height,
-																		 settings.depth_stencil_fmt));
+																		 settings.depth_stencil_fmt,
+																		 this));
+
 		((WindowsWindow*)mWindow.get())->setFrameBuffer(mScreenFrameBuffer);
 		((WindowsWindow*)mWindow.get())->updateWindowProperties(0, 0, settings.width, settings.height);
 		this->bindFrameBuffer(mScreenFrameBuffer);

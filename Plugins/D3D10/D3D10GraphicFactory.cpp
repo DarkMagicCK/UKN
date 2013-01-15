@@ -104,7 +104,7 @@ namespace ukn {
     }
     
     FrameBufferPtr D3D10GraphicFactory::createFrameBuffer() const {
-       return FrameBufferPtr(new D3D10FrameBuffer(true));
+       return FrameBufferPtr(new D3D10FrameBuffer(true, (D3D10GraphicDevice*)mGraphicDevice.get()));
     }
     
     TexturePtr D3D10GraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const {

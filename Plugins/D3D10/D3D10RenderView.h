@@ -9,9 +9,11 @@
 
 namespace ukn {
 
+	class D3D10GraphicDevice;
+
 	class D3D10RenderView: public RenderView {
 	public:
-		D3D10RenderView();
+		D3D10RenderView(D3D10GraphicDevice* device);
 		virtual ~D3D10RenderView();
 
 		virtual void clearDepth(float depth);
@@ -19,13 +21,14 @@ namespace ukn {
 		virtual void clearDepthStencil(float depth, int32 stencil);
 
 	protected:
+		D3D10GraphicDevice* mGraphicDevice;
 	};
 
 	typedef SharedPtr<D3D10RenderView> D3D10RenderViewPtr;
 
 	class D3D10ScreenColorRenderView: Uncopyable, public D3D10RenderView {
 	public:
-		D3D10ScreenColorRenderView(uint32 width, uint32 height, ElementFormat ef);
+		D3D10ScreenColorRenderView(uint32 width, uint32 height, ElementFormat ef, D3D10GraphicDevice* device);
 		virtual ~D3D10ScreenColorRenderView();
 
 		void clearColor(const Color& clr);
@@ -46,7 +49,7 @@ namespace ukn {
 
 	class D3D10DepthStencilRenderView: Uncopyable, public D3D10RenderView {
 	public:
-		D3D10DepthStencilRenderView(uint32 width, uint32 height, ElementFormat ef);
+		D3D10DepthStencilRenderView(uint32 width, uint32 height, ElementFormat ef, D3D10GraphicDevice* device);
 		virtual ~D3D10DepthStencilRenderView();
 
 		void clearColor(const Color& clr);

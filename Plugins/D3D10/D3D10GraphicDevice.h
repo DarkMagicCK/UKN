@@ -4,11 +4,15 @@
 
 
 #include "mist/Platform.h"
+
 #include "UKN/GraphicDevice.h"
 #include "UKN/Texture.h"
+
 #include "D3D10Preq.h"
 
 namespace ukn {
+
+	class D3D10Effect;
 
 	class D3D10GraphicDevice: public GraphicDevice {
 	public:
@@ -45,6 +49,8 @@ namespace ukn {
 		ID3D10Device* getD3DDevice() const;
         IDXGISwapChain* getSwapChain() const;
 
+		void bindEffect(D3D10Effect* effect);
+
     private:
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
 
@@ -55,8 +61,11 @@ namespace ukn {
 		IDXGISwapChain* mSwapChain;
 		ID3D10RasterizerState* mRasterState;
 
+		D3DXMATRIX mWorldMatrix;
 		D3DXMATRIX mProjectionMatrix;
 		D3DXMATRIX mViewMatrix;
+
+		D3D10Effect* mEffect;
 	};
 
 } // namespace ukn

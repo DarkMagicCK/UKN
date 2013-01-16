@@ -10,6 +10,7 @@
 namespace ukn {
 
 	class D3D10GraphicDevice;
+	class D3D10Texture2D;
 
 	class D3D10RenderView: public RenderView {
 	public:
@@ -70,26 +71,25 @@ namespace ukn {
 
 	typedef SharedPtr<D3D10DepthStencilRenderView> D3D10DepthStencilRenderViewPtr;
 
-	/*
+	
 	class D3D10Texture2DRenderView: Uncopyable, public D3D10RenderView {
 	public:
-	D3D10Texture2DRenderView(Texture& texture, int32 index, int32 level);
+		D3D10Texture2DRenderView(Texture& texture, int32 index, int32 level);
+		virtual ~D3D10Texture2DRenderView();
 
-	void clearColor(const Color& clr);
+		void clearColor(const Color& clr);
 
-	void onAttached(FrameBuffer& fb, uint32 att);
-	void onDetached(FrameBuffer& fb, uint32 att);
+		void onAttached(FrameBuffer& fb, uint32 att);
+		void onDetached(FrameBuffer& fb, uint32 att);
 
 	private:
-	D3D10Texture2D& mTexture;
-	int32 mIndex;
-	int32 mLevel;
+		D3D10Texture2D& mTexture;
+		int32 mIndex;
+		int32 mLevel;
 	};
 
 	typedef SharedPtr<D3D10Texture2DRenderView> D3D10Texture2DRenderViewPtr;
 
-
-	*/
 } // namespace ukn
 
 #endif

@@ -242,7 +242,7 @@ namespace ukn {
 	void D3D10IndexBuffer::deactivate() {
 		ID3D10Buffer* emptyBuffer = NULL;
 		if(mDevice) {
-			mDevice->getD3DDevice()->IASetIndexBuffer(&emptyBuffer,
+			mDevice->getD3DDevice()->IASetIndexBuffer(emptyBuffer,
 													  DXGI_FORMAT_R32_UINT,
 													  0);
 		}

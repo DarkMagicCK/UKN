@@ -97,7 +97,7 @@ namespace ukn {
 		depthBufferDesc.Height = height;
 		depthBufferDesc.MipLevels = 1;
 		depthBufferDesc.ArraySize = 1;
-		depthBufferDesc.Format = ColorFormatToDxGIFormat(ef);
+		depthBufferDesc.Format = ElementFormatToDxGIFormat(ef);
 		depthBufferDesc.SampleDesc.Count = 1;
 		depthBufferDesc.SampleDesc.Quality = 0;
 		depthBufferDesc.Usage = D3D10_USAGE_DEFAULT;
@@ -135,7 +135,7 @@ namespace ukn {
 
 		D3D10_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 		ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
-		depthStencilViewDesc.Format = ColorFormatToDxGIFormat(ef);
+		depthStencilViewDesc.Format = ElementFormatToDxGIFormat(ef);
 		depthStencilViewDesc.ViewDimension = D3D10_DSV_DIMENSION_TEXTURE2D;
 		depthStencilViewDesc.Texture2D.MipSlice = 0;
 

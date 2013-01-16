@@ -1,11 +1,18 @@
 #include "D3D10GraphicDevice.h"
-#include "WindowsWindow.h"
 #include "D3D10FrameBuffer.h"
 #include "D3D10RenderView.h"
 
+#include "WindowsWindow.h"
+
 #include "UKN/Context.h"
 #include "UKN/App.h"
+#include "UKN/RenderBuffer.h"
+#include "UKN/GraphicBuffer.h"
+
 #include "mist/Profiler.h"
+
+#include "D3D10Shader.h"
+#include "D3D10RenderBuffer.h"
 
 #pragma comment(lib, "d3d10.lib")
 #pragma comment(lib, "d3dx10.lib")
@@ -14,7 +21,8 @@
 namespace ukn {
 
 	D3D10GraphicDevice::D3D10GraphicDevice():
-		mDevice(0) {
+		mDevice(0),
+		mEffect(0) {
 
 	}
 
@@ -51,7 +59,7 @@ namespace ukn {
 		result = adapter->EnumOutputs(0, &adapterOutput);
 		CHECK_RESULT(result);
 
-		DXGI_FORMAT colorFormat = ColorFormatToDxGIFormat(settings.color_fmt);
+		DXGI_FORMAT colorFormat = ElementFormatToDxGIFormat(settings.color_fmt);
 
 		unsigned int numModes;
 		result = adapterOutput->GetDisplayModeList(colorFormat,
@@ -136,15 +144,15 @@ namespace ukn {
 
 		mScreenFrameBuffer = MakeSharedPtr<D3D10FrameBuffer>(false, this);
 		mScreenFrameBuffer->attach(ATT_Color0,
-							  MakeSharedPtr<D3D10ScreenColorRenderView>(settings.width,
-																		settings.height,
-																		settings.color_fmt,
-																		this));
+			MakeSharedPtr<D3D10ScreenColorRenderView>(settings.width,
+			settings.height,
+			settings.color_fmt,
+			this));
 		mScreenFrameBuffer->attach(ATT_DepthStencil,
-							  MakeSharedPtr<D3D10DepthStencilRenderView>(settings.width,
-																		 settings.height,
-																		 settings.depth_stencil_fmt,
-																		 this));
+			MakeSharedPtr<D3D10DepthStencilRenderView>(settings.width,
+			settings.height,
+			settings.depth_stencil_fmt,
+			this));
 
 		((WindowsWindow*)mWindow.get())->setFrameBuffer(mScreenFrameBuffer);
 		((WindowsWindow*)mWindow.get())->updateWindowProperties(0, 0, settings.width, settings.height);
@@ -152,8 +160,8 @@ namespace ukn {
 
 		ID3D10RenderTargetView* screenRenderView = ((D3D10ScreenColorRenderView*)mScreenFrameBuffer->attached(ATT_Color0).get())->getD3D10RenderTargetView();
 		mDevice->OMSetRenderTargets(1, 
-									&screenRenderView, 
-									((D3D10DepthStencilRenderView*)mScreenFrameBuffer->attached(ATT_DepthStencil).get())->getD3D10DepthStencilView());
+			&screenRenderView, 
+			((D3D10DepthStencilRenderView*)mScreenFrameBuffer->attached(ATT_DepthStencil).get())->getD3D10DepthStencilView());
 
 		D3D10_RASTERIZER_DESC rasterDesc;
 		ZeroMemory(&rasterDesc, sizeof(rasterDesc));
@@ -170,12 +178,10 @@ namespace ukn {
 
 		result = mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
 		CHECK_RESULT(result);
-	
-		return true;
-	}
 
-	void D3D10GraphicDevice::beginFrame() {
-		mWindow->onFrameStart().raise(mWindow.get(), _NullEventArgs);
+		D3DXMatrixIdentity(&mWorldMatrix);
+
+		return true;
 	}
 
 	ID3D10Device* D3D10GraphicDevice::getD3DDevice() const {
@@ -186,23 +192,27 @@ namespace ukn {
 		return mSwapChain;
 	}
 
+	void D3D10GraphicDevice::beginFrame() {
+		mWindow->onFrameStart().raise(mWindow.get(), _NullEventArgs);
+	}
+
 	void D3D10GraphicDevice::endFrame() {
 		mWindow->onFrameEnd().raise(mWindow.get(), _NullEventArgs);
 	}
 
 	void D3D10GraphicDevice::beginRendering() {
 		FrameBuffer& fb = *this->getScreenFrameBuffer();
-        
-        FrameCounter& counter = FrameCounter::Instance();
-        AppLauncher& app = Context::Instance().getApp();
-        
-        while(true) {
 
-            if(fb.isActive()) {
-                counter.waitToNextFrame();
-                
-                {            
-                    MIST_PROFILE(L"__MainFrame__");
+		FrameCounter& counter = FrameCounter::Instance();
+		AppLauncher& app = Context::Instance().getApp();
+
+		while(true) {
+
+			if(fb.isActive()) {
+				counter.waitToNextFrame();
+
+				{            
+					MIST_PROFILE(L"__MainFrame__");
 
 					D3D10_VIEWPORT viewport;
 					viewport.Width = fb.getViewport().width;
@@ -211,25 +221,67 @@ namespace ukn {
 					viewport.TopLeftY = fb.getViewport().top;
 
 					mDevice->RSSetViewports(1, &viewport);
-                   
-                    this->setViewMatrix(fb.getViewport().camera->getViewMatrix());
-                    this->setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
-                    
-                    app.update();
-                    app.render();
-                    
-                    if(mWindow->pullEvents())
-                        break;
-                    
-                    fb.swapBuffers();
-                }
-                
-            }
-        }
+
+					this->setViewMatrix(fb.getViewport().camera->getViewMatrix());
+					this->setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
+
+					app.update();
+					app.render();
+
+					if(mWindow->pullEvents())
+						break;
+
+					fb.swapBuffers();
+				}
+
+			}
+		}
 	}
 
 	void D3D10GraphicDevice::onRenderBuffer(const RenderBufferPtr& buffer) {
+		mist_assert(buffer.isValid());
 
+		GraphicBufferPtr vertexBuffer = buffer->getVertexStream();
+		if(!vertexBuffer.isValid()) {
+			log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid vertex buffer stream");
+			return;
+		}
+
+		GraphicBufferPtr indexBuffer = buffer->getIndexStream();
+
+		D3D10RenderBuffer* d3d10buffer = checked_cast<D3D10RenderBuffer*>(buffer.get());
+		if(d3d10buffer) {
+			SharedPtr<D3D10Effect> effect = d3d10buffer->getEffect();
+
+			if(effect.isValid()) {
+				effect->setMatrixVariable("worldMatrix", mWorldMatrix);
+				effect->setMatrixVariable("projectionMatrix", mProjectionMatrix);
+				effect->setMatrixVariable("viewMatrix", mViewMatrix);
+
+				effect->bind();
+
+				vertexBuffer->activate();
+				if(indexBuffer.isValid()) {
+					indexBuffer->activate();
+				}
+				for(uint32 i=0; i<effect->getPasses(); ++i) {
+					effect->applyPass(i);
+
+					if(indexBuffer.isValid()) {
+						mDevice->DrawIndexed(buffer->getIndexCount(),
+											 buffer->getIndexStartIndex(),
+											 buffer->getVertexStartIndex());
+					} else {
+						mDevice->Draw(buffer->getVertexCount(),
+									  buffer->getVertexStartIndex());
+					}
+				}
+				vertexBuffer->deactivate();
+				if(indexBuffer.isValid()) {
+					indexBuffer->deactivate();
+				}
+			}
+		}
 	}
 
 	void D3D10GraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
@@ -240,7 +292,7 @@ namespace ukn {
 		for(int row = 0; row < 4; ++row)
 			for(int col = 0; col < 4; ++col)
 				mViewMatrix(row, col) = mat.c[col][row];
-		
+
 	}
 
 	void D3D10GraphicDevice::setProjectionMatrix(const Matrix4& mat) {
@@ -284,6 +336,10 @@ namespace ukn {
 
 	void D3D10GraphicDevice::setRenderState(RenderStateType type, uint32 func) {
 
+	}
+
+	void D3D10GraphicDevice::bindEffect(D3D10Effect* effect) {
+		mEffect = effect;
 	}
 
 

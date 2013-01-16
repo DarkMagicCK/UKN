@@ -10,7 +10,7 @@
 
 namespace ukn {
 
-	inline DXGI_FORMAT ColorFormatToDxGIFormat(ukn::ElementFormat format) {
+	inline DXGI_FORMAT ElementFormatToDxGIFormat(ukn::ElementFormat format) {
 		switch(format) {
 		case ElementFormat::EF_RGBA8:
 			return DXGI_FORMAT_R8G8B8A8_UNORM;

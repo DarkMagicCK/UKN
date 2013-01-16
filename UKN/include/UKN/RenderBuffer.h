@@ -55,6 +55,15 @@ namespace ukn {
         
         uint32              getIndexStartIndex() const;
         void                setIndexStartIndex(uint32 index);
+
+	protected:
+		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format);
+		virtual void onSetVertexFormat(const VertexFormat& format);
+		virtual void onBindIndexStream(GraphicBufferPtr indexStream);
+		virtual void onSetIndexCount(uint32 count);
+		virtual void onSetVertexCount(uint32 count);
+		virtual void onSetIndexStartIndex(uint32 index);
+		virtual void onUseIndexStream(bool flag);
         
     private:
         RenderMode mRenderMode;

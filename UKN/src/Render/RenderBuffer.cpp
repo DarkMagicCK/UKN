@@ -123,4 +123,32 @@ namespace ukn {
         return mUseIndexStream;
     }
     
+	void RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format) {
+
+	}
+
+	void RenderBuffer::onSetVertexFormat(const VertexFormat& format) {
+
+	}
+
+	void RenderBuffer::onBindIndexStream(GraphicBufferPtr indexStream) {
+
+	}
+
+	void RenderBuffer::onSetIndexCount(uint32 count) {
+
+	}
+
+	void RenderBuffer::onSetVertexCount(uint32 count) {
+
+	}
+
+	void RenderBuffer::onSetIndexStartIndex(uint32 index) {
+
+	}
+
+	void RenderBuffer::onUseIndexStream(bool flag) {
+
+	}
+
 } // namespace ukn

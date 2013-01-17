@@ -761,20 +761,7 @@ public:
     }
     
     void onKeyEvent(void* sender, ukn::input::KeyEventArgs& e) {
-        if(e.state == ukn::input::Key::Press) {
-            if(e.key == ukn::input::Key::Num1) {
-                r1 = !r1;
-            }
-            if(e.key == ukn::input::Key::Num2) {
-                r2 = !r2;
-            }
-            if(e.key == ukn::input::Key::Num3) {
-                r3 = !r3;
-            }
-            if(e.key == ukn::input::Key::Num4) {
-                r4 = !r4;
-            }
-        }
+        
     }
     
     void onResize(void * sender, ukn::WindowResizeEventArgs& args) {
@@ -1165,11 +1152,7 @@ public:
     }
     
     void onMouseEvent(void* sender, ukn::input::MouseEventArgs& e) {
-        if(e.state == ukn::input::Mouse::Press) {
-            this->writeCommand(0, 0, 0);
-            mVertexBuffer->clear();
-        }
-        
+       
     }
     
     void onKeyEvent(void* sender, ukn::input::KeyEventArgs& e) {

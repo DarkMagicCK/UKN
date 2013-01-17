@@ -38,7 +38,8 @@ namespace ukn {
 	}
 
 	bool D3D10GraphicDevice::initD3DDevice(const RenderSettings& settings, HWND hWnd) {
-#define CHECK_RESULT(result) if(FAILED(result)) return false;
+		#define CHECK_RESULT(result) if(FAILED(result)) return false;
+		
 		IDXGIFactory* factory;
 		HRESULT result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
 		CHECK_RESULT(result);

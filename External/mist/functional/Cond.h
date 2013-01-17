@@ -61,7 +61,7 @@ namespace mist {
             Expr _else;
         };
         
-#ifdef MIST_VARIADIC_TEMPLATE
+#if defined(MIST_CPP11) && defined(MIST_VARIADIC_TEMPLATE)
         
         template<typename _RT, typename ...ARGS>
         struct CondV {

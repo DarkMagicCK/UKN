@@ -119,7 +119,7 @@ namespace ukn {
         this->setViewParams(Vector3(0, 0, 0),
                             Vector3(0, 0, 1), 
                             Vector3(0, 1, 0));
-        this->setProjParams(pi / 4, 1, 1, 1000);
+        this->setProjParams(pi / 4, 1, 0, 1.0);
     }
     
     Camera3D::~Camera3D() {

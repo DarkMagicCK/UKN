@@ -16,6 +16,7 @@
 
 #include "UKN/GraphicSettings.h"
 #include "UKN/PreDeclare.h"
+#include "UKN/App.h"
 
 namespace ukn {
         
@@ -24,7 +25,6 @@ namespace ukn {
      * May load from dynamic librarys(dll, so, dylib)
      *  or register manually
      **/
-    
     struct UKN_API ContextCfg {
         UknString graphic_factory_name;
         
@@ -66,18 +66,18 @@ namespace ukn {
         
         void loadGraphicFactory(const UknString& name);
         
-        void setApp(AppInstance* app);
+        void setApp(AppLauncher* app);
         bool isAppAvailable() const;
-        AppInstance& getApp() const;
+        AppLauncher& getApp() const;
         
     protected:
         Context();
         ~Context();
         
-        friend class AppInstance;
+        friend class AppLauncher;
         
     private:
-        AppInstance* mApp;
+        AppLauncher* mApp;
         ContextCfg mCfg;
         
         DllLoader mGraphicFactoryLoader;

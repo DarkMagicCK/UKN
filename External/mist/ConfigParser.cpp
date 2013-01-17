@@ -14,7 +14,7 @@
 
 namespace mist {
     
-    MIST_API ConfigParserPtr ConfigParser::MakeParser(ResourcePtr resource) {
+    ConfigParserPtr ConfigParser::MakeParser(ResourcePtr resource) {
         if(*resource) {
             ConfigParserPtr ptr = MakeSharedPtr<ConfigParserXmlImpl>();
             if(ptr && ptr->open(resource)) {
@@ -27,7 +27,7 @@ namespace mist {
         return ConfigParserPtr();
     }
 
-    MIST_API ConfigParserPtr ConfigParser::MakeEmptyParser(ConfigParserType type) {
+    ConfigParserPtr ConfigParser::MakeEmptyParser(ConfigParserType type) {
         switch(type) {
             case CPT_XML: {
                 ConfigParserPtr ptr = MakeSharedPtr<ConfigParserXmlImpl>();

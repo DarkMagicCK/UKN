@@ -2,6 +2,11 @@
 
 #include "D3D10GraphicDevice.h"
 #include "D3D10FrameBuffer.h"
+#include "D3D10RenderBuffer.h"
+#include "D3D10GraphicBuffer.h"
+#include "D3D10Shader.h"
+#include "D3D10Texture.h"
+#include "D3D10RenderView.h"
 
 #include "UKN/RenderView.h"
 #include "UKN/SpriteBatch.h"
@@ -46,7 +51,7 @@ namespace ukn {
     };
     
     extern "C" {
-        UKN_D3D10_API void CreateGraphicFactoryD3D(GraphicFactoryPtr& ptr) {
+        UKN_D3D10_API void CreateGraphicFactory(GraphicFactoryPtr& ptr) {
             static GraphicFactoryPtr static_ptr = MakeSharedPtr<D3D10GraphicFactory>();
             ptr = static_ptr;
         }
@@ -75,28 +80,28 @@ namespace ukn {
     }
     
     GraphicBufferPtr D3D10GraphicFactory::createVertexBuffer(GraphicBuffer::Access access, 
-                                                          GraphicBuffer::Usage usage,
-                                                          uint32 count, 
-                                                          const void* initialData, 
-                                                          const VertexFormat& format) const {
-        return GraphicBufferPtr();
+                                                             GraphicBuffer::Usage usage,
+                                                             uint32 count, 
+                                                             const void* initialData, 
+                                                             const VertexFormat& format) const {
+        return MakeSharedPtr<D3D10VertexBuffer>(access, usage, count, initialData, format, (D3D10GraphicDevice*)mGraphicDevice.get());
     }
     
     GraphicBufferPtr D3D10GraphicFactory::createIndexBuffer(GraphicBuffer::Access access, 
-                                                         GraphicBuffer::Usage usage, 
-                                                         uint32 count, 
-                                                         const void* initialData) const {
-        return GraphicBufferPtr();
+															GraphicBuffer::Usage usage, 
+															uint32 count, 
+															const void* initialData) const {
+        return MakeSharedPtr<D3D10IndexBuffer>(access, usage, count, initialData, (D3D10GraphicDevice*)mGraphicDevice.get());
     }
     
     
     RenderBufferPtr D3D10GraphicFactory::createRenderBuffer() const {
-        return RenderBufferPtr();
+        return MakeSharedPtr<D3D10RenderBuffer>((D3D10GraphicDevice*)mGraphicDevice.get());
     }
     
     RenderViewPtr D3D10GraphicFactory::create2DRenderView(TexturePtr texture) const {
        // return new GLTexture2DRenderView(*texture.get(), 0, 0);
-		return RenderViewPtr();
+		return RenderView::NullObject();
     }
     
     RenderViewPtr D3D10GraphicFactory::create2DDepthStencilView(TexturePtr texture) const {
@@ -104,17 +109,25 @@ namespace ukn {
     }
     
     FrameBufferPtr D3D10GraphicFactory::createFrameBuffer() const {
-       return FrameBufferPtr(new D3D10FrameBuffer(true));
+       return FrameBufferPtr(new D3D10FrameBuffer(true, (D3D10GraphicDevice*)mGraphicDevice.get()));
     }
     
     TexturePtr D3D10GraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const {
-       
-        return TexturePtr();
+        SharedPtr<D3D10Texture2D> texture = MakeSharedPtr<D3D10Texture2D>((D3D10GraphicDevice*)mGraphicDevice.get());
+		if(texture &&
+			texture->create(width, height, numMipmaps, format, initialData)) {
+			return texture;
+		}
+		return SharedPtr<D3D10Texture2D>();
     }
     
     TexturePtr D3D10GraphicFactory::load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps) const {
-        
-        return TexturePtr();
+        SharedPtr<D3D10Texture2D> texture = MakeSharedPtr<D3D10Texture2D>((D3D10GraphicDevice*)mGraphicDevice.get());
+		if(texture &&
+			texture->load(rsrc, generateMipmaps)) {
+			return texture;
+		}
+		return SharedPtr<D3D10Texture2D>();
     }
 
 } // namespace ukn

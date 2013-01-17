@@ -6,24 +6,27 @@
 
 namespace ukn {
 
+	class D3D10GraphicDevice;
+
 	class D3D10FrameBuffer: public FrameBuffer {
     public:
-        D3D10FrameBuffer(bool offscreen);
+        D3D10FrameBuffer(bool offscreen, D3D10GraphicDevice* device);
         virtual ~D3D10FrameBuffer();
         
         bool requiresFlipping() const;
         
-        void onBind();
-        void onUnbind();
-        void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
+        void onBind() override;
+        void onUnbind() override;
+        void clear(uint32 flags, const class Color& clr, float depth, int32 stencil) override;
         
-        void swapBuffers();
+        void swapBuffers() override;
         
         SharedPtr<uint8> readFrameBufferData(int32 x, int32 y, uint32 width, uint32 height, ElementFormat format);
         
     private:
         bool mOffscreen;
-        
+        D3D10GraphicDevice* mGraphicDevice;
+
         friend class GLWindow;
     };
     

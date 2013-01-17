@@ -57,6 +57,11 @@ namespace ukn {
     typedef mist::PointTemplate<3, uint32> uint3;
     typedef mist::PointTemplate<4, uint32> uint4;
 
+	typedef mist::PointTemplate<1, bool> bool1;
+    typedef mist::PointTemplate<2, bool> bool2;
+    typedef mist::PointTemplate<3, bool> bool3;
+    typedef mist::PointTemplate<4, bool> bool4;
+
     struct VertexFormat;
     
     struct ContextCfg;

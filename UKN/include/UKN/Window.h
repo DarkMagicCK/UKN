@@ -95,8 +95,6 @@ namespace ukn {
         
     // events
     public:
-        
-        
         typedef Event<NullEventArgs, Window*>            WindowCreateEvent;
         typedef Event<WindowBoolEventArgs, Window*>      ActiveEvent;
         typedef Event<WindowBoolEventArgs, Window*>      IconifyEvent;
@@ -126,79 +124,47 @@ namespace ukn {
         SetIconEvent        mSetIconEvent;
         CloseEvent          mCloseEvent;
         IconifyEvent        mIconifyEvent;
-        FrameStartEvent     mFrameStart;
-        FrameEndEvent       mFrameEnd;
+        FrameStartEvent     mFrameStartEvent;
+        FrameEndEvent       mFrameEndEvent;
         InitializeEvent     mInitEvent;
         MouseEvent          mMouseEvent;
         KeyEvent            mKeyEvent;
         JoyStickEvent       mJoyStickEvent;
         
     public:
-        ActiveEvent& onActive() {
-            return mActiveEvent;
-        }
+        ActiveEvent& onActive();
+        RenderEvent& onRender();
+        UpdateEvent& onUpdate();
+        ResizeEvent& onResize();
+        SetCursorEvent& onSetCursor();
+        SetIconEvent& onSetIcon();
+        CloseEvent& onClose();
+        IconifyEvent& onIconify();
+        FrameStartEvent& onFrameStart();
+        FrameEndEvent& onFrameEnd();
+        InitializeEvent& onInit();
+        WindowCreateEvent& onWindowCreate();
+        MouseEvent& onMouseEvent();
+        KeyEvent& onKeyEvent();
+        JoyStickEvent& onJoyStickEvent();
         
-        RenderEvent& onRender() {
-            return mRenderEvent;
-        }
+        static GlobalUpdateEvent& OnGlobalUpdate();
         
-        UpdateEvent& onUpdate() {
-            return mUpdateEvent;
-        }
-        
-        ResizeEvent& onResize() {
-            return mResizeEvent;
-        }
-        
-        SetCursorEvent& onSetCursor() {
-            return mSetCursorEvent;
-        }
-        
-        SetIconEvent& onSetIcon() {
-            return mSetIconEvent;
-        }
-            
-        CloseEvent& onClose() {
-            return mCloseEvent;
-        }
-        
-        IconifyEvent& onIconify() {
-            return mIconifyEvent;
-        }
-        
-        FrameStartEvent& onFrameStart() {
-            return mFrameStart;
-        }
-        
-        FrameEndEvent& onFrameEnd() {
-            return mFrameEnd;
-        }
-        
-        InitializeEvent& onInit() {
-            return mInitEvent;
-        }
-        
-        WindowCreateEvent& onWindowCreate() {
-            return mWindowCreateEvent;
-        }
-        
-        MouseEvent& onMouseEvent() {
-            return mMouseEvent;
-        }
-        
-        KeyEvent& onKeyEvent() {
-            return mKeyEvent;
-        }
-        
-        JoyStickEvent& onJoyStickEvent() {
-            return mJoyStickEvent;
-        }
-        
-        static GlobalUpdateEvent& OnGlobalUpdate() {
-			static GlobalUpdateEvent globalUpdate;
-            return globalUpdate;
-        }
-        
+	public:
+		/* 
+			helper functions 
+			very handy with lambda functions
+		*/
+		Window& connectInit(const InitializeEvent::signal_type::SlotType& f);
+		Window& connectUpdate(const UpdateEvent::signal_type::SlotType& f);
+		Window& connectRender(const RenderEvent::signal_type::SlotType& f);
+		Window& connectMouse(const MouseEvent::signal_type::SlotType& f);
+		Window& connectKey(const KeyEvent::signal_type::SlotType& f);
+		Window& connectClose(const CloseEvent::signal_type::SlotType& f);
+		Window& connectResize(const ResizeEvent::signal_type::SlotType& f);
+		Window& connectFrameStart(const FrameStartEvent::signal_type::SlotType& f);
+		Window& connectFrameEnd(const FrameEndEvent::signal_type::SlotType& f);
+		Window& connectWindowCreate(const WindowCreateEvent::signal_type::SlotType& f);
     };
     
 } // namespace ukn

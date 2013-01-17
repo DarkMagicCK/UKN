@@ -220,6 +220,8 @@ namespace mist {
 
 namespace mist {
     
+	/* get CPUID from KlayGE(klayge.org) by Minmin Gong */
+
     namespace
     {
         using namespace mist;
@@ -227,8 +229,8 @@ namespace mist {
         
         void get_cpuid(int op, uint32_t* peax, uint32_t* pebx, uint32_t* pecx, uint32_t* pedx)
         {	
-#ifdef UKN_COMPILER_MSVC
-#if UKN_COMPILER_VERSION >= 80 
+#ifdef MIST_COMPILER_MSVC
+#if MIST_COMPILER_VERSION >= 80 
             int CPUInfo[4];
             __cpuid(CPUInfo, op);
             *peax = CPUInfo[0];
@@ -246,8 +248,8 @@ namespace mist {
                 mov		[pecx], edx
             }
 #endif
-#elif defined UKN_COMPILER_GCC
-#ifdef UKN_CPU_X64
+#elif defined MIST_COMPILER_GCC
+#ifdef MIST_CPU_X64
             __asm__
             (
              "cpuid": "=a" (*peax), "=b" (*pebx), "=c" (*pecx), "=d" (*pedx) : "a" (op)
@@ -269,7 +271,7 @@ namespace mist {
         }
         
         
-#if defined(UKN_CPU_X86) || defined(UKN_CPU_X64)
+//#if defined(MIST_CPU_X86) || defined(MIST_CPU_X64)
         enum CPUIDFeatureMask
         {
             // In EBX of type 1. Intel only.
@@ -311,7 +313,7 @@ namespace mist {
         };
         
 #ifdef MIST_OS_WINDOWS
-#ifdef UKN_COMPILER_GCC
+#ifdef MIST_COMPILER_GCC
         typedef enum _LOGICAL_PROCESSOR_RELATIONSHIP
         {
             RelationProcessorCore,
@@ -480,7 +482,7 @@ namespace mist {
         
         char const GenuineIntel[] = "GenuineIntel";
         char const AuthenticAMD[] = "AuthenticAMD";
-#endif
+//#endif
     }
     
     CpuInfo::CpuInfo():
@@ -488,7 +490,7 @@ namespace mist {
         mNumHWThreads = 1;
         mNumCores = 1;
         
-#if defined(UKN_CPU_X64) || defined(UKN_CPU_X86)
+///#if defined(UKN_CPU_X64) || defined(UKN_CPU_X86)
         Cpuid cpuid;
         
         cpuid.Call(0);
@@ -830,7 +832,7 @@ namespace mist {
                     mNumCores = static_cast<int>(pkg_core_ids.size());
                 }
             }
-#endif
+//#endif
             
 #if defined MIST_OS_OSX
             int nm[2];

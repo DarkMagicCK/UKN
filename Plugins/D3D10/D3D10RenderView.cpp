@@ -6,7 +6,8 @@
 
 namespace ukn {
 
-	D3D10RenderView::D3D10RenderView() {
+	D3D10RenderView::D3D10RenderView(D3D10GraphicDevice* device):
+	mGraphicDevice(device) {
 
 	}
 
@@ -26,22 +27,21 @@ namespace ukn {
 
 	}
 
-	D3D10ScreenColorRenderView::D3D10ScreenColorRenderView(uint32 width, uint32 height, ElementFormat ef) {
+	D3D10ScreenColorRenderView::D3D10ScreenColorRenderView(uint32 width, uint32 height, ElementFormat ef, D3D10GraphicDevice* device):
+	D3D10RenderView(device) {
 		mWidth = width;
 		mHeight = height;
 		mElementFormat = ef;
 
-		D3D10GraphicDevice& gd = *checked_cast<D3D10GraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
-
-		ID3D10Device* device = gd.getD3DDevice();
-		IDXGISwapChain* swapChain = gd.getSwapChain();
+		ID3D10Device* idevice = device->getD3DDevice();
+		IDXGISwapChain* swapChain = device->getSwapChain();
 
 		ID3D10Texture2D* backBuffer = 0;
 		HRESULT result = swapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (void**)&backBuffer);
 		if(FAILED(result))
 			MIST_THROW_EXCEPTION("Error getting backbuffer");
 
-		result = device->CreateRenderTargetView(backBuffer, NULL, &mRenderView);
+		result = idevice->CreateRenderTargetView(backBuffer, NULL, &mRenderView);
 		if(FAILED(result))
 			MIST_THROW_EXCEPTION("Error creating render target view");
 
@@ -58,10 +58,9 @@ namespace ukn {
 	}
 
 	void D3D10ScreenColorRenderView::clearColor(const Color& clr) {
-		D3D10GraphicDevice& gd = *checked_cast<D3D10GraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
 		float color[4];
 		color[0] = clr.r; color[1] = clr.g; color[2] = clr.b; color[3] = clr.a;
-		gd.getD3DDevice()->ClearRenderTargetView(mRenderView, color); 
+		mGraphicDevice->getD3DDevice()->ClearRenderTargetView(mRenderView, color); 
 	}
 
 	void D3D10ScreenColorRenderView::clearDepth(float depth) {
@@ -84,14 +83,13 @@ namespace ukn {
 
 	}
 
-	D3D10DepthStencilRenderView::D3D10DepthStencilRenderView(uint32 width, uint32 height, ElementFormat ef) {
+	D3D10DepthStencilRenderView::D3D10DepthStencilRenderView(uint32 width, uint32 height, ElementFormat ef, D3D10GraphicDevice* device):
+	D3D10RenderView(device) {
 		mWidth = width;
 		mHeight = height;
 		mElementFormat = ef;
 
-		D3D10GraphicDevice& gd = *checked_cast<D3D10GraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
-
-		ID3D10Device* device = gd.getD3DDevice();
+		ID3D10Device* idevice = device->getD3DDevice();
 
 		D3D10_TEXTURE2D_DESC depthBufferDesc;
 		ZeroMemory(&depthBufferDesc, sizeof(depthBufferDesc));
@@ -99,7 +97,7 @@ namespace ukn {
 		depthBufferDesc.Height = height;
 		depthBufferDesc.MipLevels = 1;
 		depthBufferDesc.ArraySize = 1;
-		depthBufferDesc.Format = ColorFormatToDxGIFormat(ef);
+		depthBufferDesc.Format = ElementFormatToDxGIFormat(ef);
 		depthBufferDesc.SampleDesc.Count = 1;
 		depthBufferDesc.SampleDesc.Quality = 0;
 		depthBufferDesc.Usage = D3D10_USAGE_DEFAULT;
@@ -107,7 +105,7 @@ namespace ukn {
 		depthBufferDesc.CPUAccessFlags = 0;
 		depthBufferDesc.MiscFlags = 0;
 
-		HRESULT result = device->CreateTexture2D(&depthBufferDesc, NULL, &mDepthStencilBuffer);
+		HRESULT result = idevice->CreateTexture2D(&depthBufferDesc, NULL, &mDepthStencilBuffer);
 		if(FAILED(result))
 			MIST_THROW_EXCEPTION("Error create depth stencil texture 2d");
 
@@ -128,20 +126,20 @@ namespace ukn {
 		depthStencilDesc.BackFace.StencilPassOp = D3D10_STENCIL_OP_KEEP;
 		depthStencilDesc.BackFace.StencilFunc = D3D10_COMPARISON_ALWAYS;
 
-		result = device->CreateDepthStencilState(&depthStencilDesc, &mDepthStencilState);
+		result = idevice->CreateDepthStencilState(&depthStencilDesc, &mDepthStencilState);
 		if(FAILED(result))
 			MIST_THROW_EXCEPTION("Error create depth stencil state");
 
 
-		device->OMSetDepthStencilState(mDepthStencilState, 1);
+		idevice->OMSetDepthStencilState(mDepthStencilState, 1);
 
 		D3D10_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 		ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
-		depthStencilViewDesc.Format = ColorFormatToDxGIFormat(ef);
+		depthStencilViewDesc.Format = ElementFormatToDxGIFormat(ef);
 		depthStencilViewDesc.ViewDimension = D3D10_DSV_DIMENSION_TEXTURE2D;
 		depthStencilViewDesc.Texture2D.MipSlice = 0;
 
-		result = device->CreateDepthStencilView(mDepthStencilBuffer, &depthStencilViewDesc, &mDepthStencilView);
+		result = idevice->CreateDepthStencilView(mDepthStencilBuffer, &depthStencilViewDesc, &mDepthStencilView);
 		if(FAILED(result))
 			MIST_THROW_EXCEPTION("Error create depth stencil view");
 
@@ -162,18 +160,15 @@ namespace ukn {
 	}
 
 	void D3D10DepthStencilRenderView::clearDepth(float depth) {
-		D3D10GraphicDevice& gd = *checked_cast<D3D10GraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
-		gd.getD3DDevice()->ClearDepthStencilView(mDepthStencilView, D3D10_CLEAR_DEPTH, depth, 0);
+		mGraphicDevice->getD3DDevice()->ClearDepthStencilView(mDepthStencilView, D3D10_CLEAR_DEPTH, depth, 0);
 	}
 
 	void D3D10DepthStencilRenderView::clearStencil(int32 stencil) {
-		D3D10GraphicDevice& gd = *checked_cast<D3D10GraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
-		gd.getD3DDevice()->ClearDepthStencilView(mDepthStencilView, D3D10_CLEAR_STENCIL, 0, stencil);
+		mGraphicDevice->getD3DDevice()->ClearDepthStencilView(mDepthStencilView, D3D10_CLEAR_STENCIL, 0, stencil);
 	}
 
 	void D3D10DepthStencilRenderView::clearDepthStencil(float depth, int32 stencil) {
-		D3D10GraphicDevice& gd = *checked_cast<D3D10GraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
-		gd.getD3DDevice()->ClearDepthStencilView(mDepthStencilView, D3D10_CLEAR_DEPTH | D3D10_CLEAR_STENCIL, depth, stencil);
+		mGraphicDevice->getD3DDevice()->ClearDepthStencilView(mDepthStencilView, D3D10_CLEAR_DEPTH | D3D10_CLEAR_STENCIL, depth, stencil);
 	}
 
 	void D3D10DepthStencilRenderView::onAttached(FrameBuffer& fb, uint32 att) {

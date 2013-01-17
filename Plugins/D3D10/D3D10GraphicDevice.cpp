@@ -219,6 +219,8 @@ namespace ukn {
 					viewport.Height = fb.getViewport().height;
 					viewport.TopLeftX = fb.getViewport().left;
 					viewport.TopLeftY = fb.getViewport().top;
+					viewport.MaxDepth = 1.0f;
+					viewport.MinDepth = 0.0f;
 
 					mDevice->RSSetViewports(1, &viewport);
 
@@ -227,11 +229,11 @@ namespace ukn {
 
 					app.update();
 					app.render();
+					
+					fb.swapBuffers();
 
 					if(mWindow->pullEvents())
 						break;
-
-					fb.swapBuffers();
 				}
 
 			}
@@ -254,32 +256,45 @@ namespace ukn {
 			SharedPtr<D3D10Effect> effect = d3d10buffer->getEffect();
 
 			if(effect.isValid()) {
-				effect->setMatrixVariable("worldMatrix", mWorldMatrix);
-				effect->setMatrixVariable("projectionMatrix", mProjectionMatrix);
-				effect->setMatrixVariable("viewMatrix", mViewMatrix);
-
-				effect->bind();
+				if(!effect->setMatrixVariable("worldMatrix", mWorldMatrix))
+					log_error("error setting world matrix in effect");
+				if(!effect->setMatrixVariable("projectionMatrix", mProjectionMatrix))
+					log_error("error setting projection matrix in effect");
+				if(!effect->setMatrixVariable("viewMatrix", mViewMatrix))
+					log_error("error setting view matrix in effect");
+				if(mCurrTexture) {
+					if(!effect->setShaderResourceVariable("tex", 
+						(ID3D10ShaderResourceView*)mCurrTexture->getTextureId()))
+						log_error("error setting texture in effect");
+				}
 
 				vertexBuffer->activate();
 				if(indexBuffer.isValid()) {
 					indexBuffer->activate();
-				}
+				} 
+
+				mDevice->IASetPrimitiveTopology(RenderModeToPrimitiveTopology(buffer->getRenderMode()));
+				
+				
+				effect->bind();
 				for(uint32 i=0; i<effect->getPasses(); ++i) {
 					effect->applyPass(i);
 
 					if(indexBuffer.isValid()) {
 						mDevice->DrawIndexed(buffer->getIndexCount(),
-											 buffer->getIndexStartIndex(),
-											 buffer->getVertexStartIndex());
+							buffer->getIndexStartIndex(),
+							buffer->getVertexStartIndex());
 					} else {
 						mDevice->Draw(buffer->getVertexCount(),
-									  buffer->getVertexStartIndex());
+							buffer->getVertexStartIndex());
 					}
 				}
+		/*		effect->unbind();
+
 				vertexBuffer->deactivate();
 				if(indexBuffer.isValid()) {
 					indexBuffer->deactivate();
-				}
+				}*/
 			}
 		}
 	}
@@ -289,32 +304,23 @@ namespace ukn {
 	}
 
 	void D3D10GraphicDevice::setViewMatrix(const Matrix4& mat) {
-		for(int row = 0; row < 4; ++row)
-			for(int col = 0; col < 4; ++col)
-				mViewMatrix(row, col) = mat.c[col][row];
-
+		memcpy((float*)&mViewMatrix, mat.x, sizeof(float) * 16);
 	}
 
 	void D3D10GraphicDevice::setProjectionMatrix(const Matrix4& mat) {
-		for(int row = 0; row < 4; ++row)
-			for(int col = 0; col < 4; ++col)
-				mProjectionMatrix(row, col) = mat.c[col][row];
+		memcpy((float*)&mProjectionMatrix, mat.x, sizeof(float) * 16);
 	}
 
 	void D3D10GraphicDevice::getViewMatrix(Matrix4& mat) {
-		for(int row = 0; row < 4; ++row)
-			for(int col = 0; col < 4; ++col)
-				mat.c[col][row] = mViewMatrix(row, col);
+		memcpy(mat.x, (float*)&mViewMatrix, sizeof(float) * 16);
 	}
 
 	void D3D10GraphicDevice::getProjectionMatrix(Matrix4& mat) {
-		for(int row = 0; row < 4; ++row)
-			for(int col = 0; col < 4; ++col)
-				mat.c[col][row] = mProjectionMatrix(row, col);
+		memcpy(mat.x, (float*)&mProjectionMatrix, sizeof(float) * 16);
 	}
 
 	void D3D10GraphicDevice::bindTexture(const TexturePtr& texture) {
-
+		mCurrTexture = texture;
 	}
 
 	SharedPtr<uint8> D3D10GraphicDevice::readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format) {

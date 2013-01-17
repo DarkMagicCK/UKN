@@ -26,7 +26,7 @@ namespace ukn {
 		// vector variables are four-components 
 		bool setFloatVectorVariable(const char* name, float* vec);
 		bool setIntVectorVariable(const char* name, int* vec);
-
+		bool setShaderResourceVariable(const char* name, ID3D10ShaderResourceView* resource);
 		/*
 			Variable Getters
 		*/

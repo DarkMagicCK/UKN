@@ -29,6 +29,17 @@ namespace ukn {
 		}
 	}
 
+	inline D3D10_PRIMITIVE_TOPOLOGY RenderModeToPrimitiveTopology(ukn::RenderMode mode) {
+		switch(mode) {
+		case ukn::RenderMode::RM_Line: return D3D10_PRIMITIVE_TOPOLOGY_LINELIST;
+		case ukn::RenderMode::RM_LineLoop: return D3D10_PRIMITIVE_TOPOLOGY_LINELIST_ADJ;
+		case ukn::RenderMode::RM_Point: return D3D10_PRIMITIVE_TOPOLOGY_POINTLIST;
+		case ukn::RenderMode::RM_Triangle: return D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+		case ukn::RenderMode::RM_TriangleFan: return D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST; /* to fix */
+		case ukn::RenderMode::RM_TriangleStrip: return D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+		}
+	}
+
 
 } // namespace ukn
 

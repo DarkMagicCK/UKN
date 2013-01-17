@@ -22,6 +22,9 @@ namespace ukn {
 	}
 
 	bool D3D10Texture2D::load(const ResourcePtr& resource, bool createMipmap) {
+		if(!resource->getResourceStream())
+			return false;
+
 		StreamPtr memStream = resource->getResourceStream()->readIntoMemory();
 
         if(memStream) {

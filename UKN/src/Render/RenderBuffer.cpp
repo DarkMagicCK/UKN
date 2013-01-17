@@ -59,6 +59,8 @@ namespace ukn {
     void RenderBuffer::bindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format) {
         mVertexStream = vertexStream;
         mVertexFormat = format;
+
+		this->onBindVertexStream(vertexStream, format);
     }
     
     const VertexFormat& RenderBuffer::getVertexFormat() const {
@@ -67,6 +69,8 @@ namespace ukn {
     
     void RenderBuffer::setVertexFormat(const VertexFormat& format) {
         mVertexFormat = format;
+
+		this->onSetVertexFormat(format);
     }
     
     uint32 RenderBuffer::getVertexCount() const {
@@ -78,6 +82,8 @@ namespace ukn {
     
     void RenderBuffer::setVertexCount(uint32 count) {
         mVertexCount = count;
+
+		this->onSetVertexCount(count);
     }
     
     uint32 RenderBuffer::getVertexStartIndex() const {
@@ -86,6 +92,8 @@ namespace ukn {
     
     void RenderBuffer::setVertexStartIndex(uint32 index) {
         mVertexStartIndex = index;
+
+		this->setVertexStartIndex(index);
     }
     
     GraphicBufferPtr RenderBuffer::getIndexStream() const {
@@ -94,6 +102,8 @@ namespace ukn {
     
     void RenderBuffer::bindIndexStream(GraphicBufferPtr indexStream) {
         mIndexStream = indexStream;
+
+		this->onBindIndexStream(indexStream);
     }
     
     uint32 RenderBuffer::getIndexCount() const {
@@ -105,6 +115,8 @@ namespace ukn {
     
     void RenderBuffer::setIndexCount(uint32 count) {
         mIndexCount = count;
+
+		this->onSetIndexCount(count);
     }
     
     uint32 RenderBuffer::getIndexStartIndex() const {
@@ -113,10 +125,14 @@ namespace ukn {
     
     void RenderBuffer::setIndexStartIndex(uint32 index) {
         mIndexStartIndex = index;
+
+		this->onSetIndexStartIndex(index);
     }
     
     void RenderBuffer::useIndexStream(bool flag) {
         mUseIndexStream = flag;
+
+		this->onUseIndexStream(flag);
     }
     
     bool RenderBuffer::isUseIndexStream() const {

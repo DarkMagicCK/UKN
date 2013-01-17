@@ -943,7 +943,7 @@ namespace mist {
         
         static Matrix4 PerspectiveMat(real field_of_view, real aspect, real n, real f) {
             Matrix4 m;
-            real ff = 1.0f / tan(degree_to_radius(field_of_view) / 2.0f);
+            real ff = 1.0f / tan(field_of_view / 2.0f);
             m.x[0] = ff / aspect;
             m.x[5] = ff;
             m.x[10] = (n + f) / (n - f);

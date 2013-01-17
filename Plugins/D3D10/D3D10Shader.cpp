@@ -35,7 +35,7 @@ namespace ukn {
 													  NULL,
 													  NULL,
 													  "fx_4_0",
-													  0,
+													  D3D10_SHADER_ENABLE_STRICTNESS,
 													  0,
 													  mDevice->getD3DDevice(),
 													  0,
@@ -46,10 +46,11 @@ namespace ukn {
 		if(FAILED(result)) {
 			if(error) {
 				this->logError(error);
+				return false;
 			}
 		}
 
-		mTechnique = mEffect->GetTechniqueByIndex(0);
+		mTechnique = mEffect->GetTechniqueByName("TextureTechnique");
 		if(!mTechnique) {
 			mEffect->Release();
 			mEffect = 0;
@@ -218,6 +219,17 @@ namespace ukn {
 
 		if(var) {
 			var->GetIntVector(vec);
+			return true;
+		}
+		return false;
+	}
+
+	bool D3D10Effect::setShaderResourceVariable(const char* name, ID3D10ShaderResourceView* resource) {
+		if(!mEffect) return false;
+		ID3D10EffectShaderResourceVariable* var = mEffect->GetVariableByName(name)->AsShaderResource();
+
+		if(var) {
+			var->SetResource(resource);
 			return true;
 		}
 		return false;

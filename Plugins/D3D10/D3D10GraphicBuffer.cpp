@@ -26,7 +26,7 @@ namespace ukn {
 			return D3D10_CPU_ACCESS_WRITE;
 			
 		case ukn::GraphicBuffer::ReadWrite:
-			return D3D10_CPU_ACCESS_READ & D3D10_CPU_ACCESS_WRITE;
+			return D3D10_CPU_ACCESS_READ | D3D10_CPU_ACCESS_WRITE;
 		}
 	}
 
@@ -50,13 +50,14 @@ namespace ukn {
 				const VertexFormat& format,
 				D3D10GraphicDevice* device):
 	GraphicBuffer(access, usage),
-	mFormat(mFormat),
+	mFormat(format),
 	mMaped(false),
 	mDevice(device),
 	mOffset(0) {
 
 		D3D10_BUFFER_DESC vertexBufferDesc;
 
+		ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 		vertexBufferDesc.Usage = GraphicBufferUsageToD3D10Usage(usage);
 		vertexBufferDesc.ByteWidth = format.totalSize() * desired_count;
 		vertexBufferDesc.BindFlags = D3D10_BIND_VERTEX_BUFFER;
@@ -66,6 +67,7 @@ namespace ukn {
 		HRESULT result;
 		if(initData) {
 			D3D10_SUBRESOURCE_DATA vertexData;
+			ZeroMemory(&vertexData, sizeof(vertexData));
 			vertexData.pSysMem = initData;
 
 			result = mDevice->getD3DDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &mBuffer);

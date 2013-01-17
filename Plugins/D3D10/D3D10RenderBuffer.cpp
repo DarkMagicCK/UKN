@@ -10,7 +10,11 @@ namespace ukn {
 	D3D10RenderBuffer::D3D10RenderBuffer(D3D10GraphicDevice* device):
 	mEffect(0),
 	mDevice(device) {
-
+		mEffect = new D3D10Effect(mDevice);
+		if(!mEffect->initialize(mist::ResourceLoader::Instance().loadResource(L"color.fx"))) {
+			delete mEffect;
+			mEffect = 0;
+		}
 	}
 
 	D3D10RenderBuffer::~D3D10RenderBuffer() {

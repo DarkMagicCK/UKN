@@ -39,11 +39,11 @@ namespace ukn {
 		ID3D10Texture2D* backBuffer = 0;
 		HRESULT result = swapChain->GetBuffer(0, __uuidof(ID3D10Texture2D), (void**)&backBuffer);
 		if(FAILED(result))
-			MIST_THROW_EXCEPTION("Error getting backbuffer");
+			MIST_THROW_EXCEPTION(L"Error getting backbuffer");
 
 		result = idevice->CreateRenderTargetView(backBuffer, NULL, &mRenderView);
 		if(FAILED(result))
-			MIST_THROW_EXCEPTION("Error creating render target view");
+			MIST_THROW_EXCEPTION(L"Error creating render target view");
 
 		backBuffer->Release();
 	}
@@ -107,7 +107,7 @@ namespace ukn {
 
 		HRESULT result = idevice->CreateTexture2D(&depthBufferDesc, NULL, &mDepthStencilBuffer);
 		if(FAILED(result))
-			MIST_THROW_EXCEPTION("Error create depth stencil texture 2d");
+			MIST_THROW_EXCEPTION(L"Error create depth stencil texture 2d");
 
 		D3D10_DEPTH_STENCIL_DESC depthStencilDesc;
 		ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
@@ -128,7 +128,7 @@ namespace ukn {
 
 		result = idevice->CreateDepthStencilState(&depthStencilDesc, &mDepthStencilState);
 		if(FAILED(result))
-			MIST_THROW_EXCEPTION("Error create depth stencil state");
+			MIST_THROW_EXCEPTION(L"Error create depth stencil state");
 
 		D3D10_DEPTH_STENCIL_DESC depthStencilDisabledDesc;
 		memcpy(&depthStencilDisabledDesc, &depthStencilDesc, sizeof(depthStencilDesc));
@@ -136,7 +136,7 @@ namespace ukn {
 
 		result = idevice->CreateDepthStencilState(&depthStencilDisabledDesc, &mDepthStencilDisabledState);
 		if(FAILED(result))
-			MIST_THROW_EXCEPTION("Error create depth stencil disabled state");
+			MIST_THROW_EXCEPTION(L"Error create depth stencil disabled state");
 
 		idevice->OMSetDepthStencilState(mDepthStencilState, 1);
 
@@ -148,7 +148,7 @@ namespace ukn {
 
 		result = idevice->CreateDepthStencilView(mDepthStencilBuffer, &depthStencilViewDesc, &mDepthStencilView);
 		if(FAILED(result))
-			MIST_THROW_EXCEPTION("Error create depth stencil view");
+			MIST_THROW_EXCEPTION(L"Error create depth stencil view");
 
 	}
 

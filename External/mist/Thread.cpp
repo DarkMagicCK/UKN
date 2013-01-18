@@ -217,7 +217,7 @@ namespace mist {
                 case WAIT_OBJECT_0:
                     return;
                 default:
-                    MIST_THROW_EXCEPTION("mist::Thread::Semaphore: error wait");
+                    MIST_THROW_EXCEPTION(L"mist::Thread::Semaphore: error wait");
             }
 #elif defined(MIST_OS_FAMILY_UNIX)*/
             MutexGuard<Mutex> lock(mutex);
@@ -231,14 +231,14 @@ namespace mist {
         void Semaphore::set() {
 /*#ifdef MIST_OS_WINDOWS
             if(!ReleaseSemaphore(sema, 1, NULL)) {
-                    MIST_THROW_EXCEPTION("mist::Thread::Semaphore: error set");
+                    MIST_THROW_EXCEPTION(L"mist::Thread::Semaphore: error set");
             }
 #elif defined(MIST_OS_FAMILY_UNIX)*/
             MutexGuard<Mutex> lock(mutex);
             if(n < max) {
                 ++n;
             } else {
-                MIST_THROW_EXCEPTION("mist::Thread::Semaphore: Cannot signal semaphore, exceed maximun");
+                MIST_THROW_EXCEPTION(L"mist::Thread::Semaphore: Cannot signal semaphore, exceed maximun");
             }
             cond.notify();
 //#endif
@@ -353,11 +353,11 @@ namespace mist {
 #ifndef MIST_OS_WINDOWS
             if(pthread_cond_wait(&cond,
                                  static_cast<pthread_mutex_t*>(_mutex.getSysMutex())))
-                MIST_THROW_EXCEPTION("mist::Thread::Condition: error wait");
+                MIST_THROW_EXCEPTION(L"mist::Thread::Condition: error wait");
 #elif defined(MIST_OS_FAMILY_UNIX)
             if(_win32_pthread_cond_wait(&cond,
                                         static_cast<pthread_mutex_t*>(_mutex.getSysMutex())))
-                MIST_THROW_EXCEPTION("mist::Thread::Condition: error wait");
+                MIST_THROW_EXCEPTION(L"mist::Thread::Condition: error wait");
 #endif
 #else
             std::unique_lock<std::mutex> lock(*(std::mutex*)_mutex.getSysMutex());
@@ -369,10 +369,10 @@ namespace mist {
 #ifndef MIST_CPP11
 #ifndef MIST_OS_WINDOWS
             if(pthread_cond_signal(&cond))
-                MIST_THROW_EXCEPTION("mist::Thread::Condition: error notify");
+                MIST_THROW_EXCEPTION(L"mist::Thread::Condition: error notify");
 #elif defined(MIST_OS_FAMILY_UNIX)
             if(_win32_pthread_cond_signal(&cond))
-                MIST_THROW_EXCEPTION("mist::Thread::Condition: error notify");
+                MIST_THROW_EXCEPTION(L"mist::Thread::Condition: error notify");
 #endif
 #else
             cond.notify_one();
@@ -383,10 +383,10 @@ namespace mist {
 #ifndef MIST_CPP11
 #ifndef MIST_OS_WINDOWS
             if(pthread_cond_broadcast(&cond))
-                MIST_THROW_EXCEPTION("mist::Thread::Condition: error broadcast");
+                MIST_THROW_EXCEPTION(L"mist::Thread::Condition: error broadcast");
 #elif defined(MIST_OS_FAMILY_UNIX)
             if(_win32_pthread_cond_broadcast(&cond))
-                MIST_THROW_EXCEPTION("mist::Thread::Condition: error broadcast");
+                MIST_THROW_EXCEPTION(L"mist::Thread::Condition: error broadcast");
 #endif
 #else
             cond.notify_all();
@@ -662,11 +662,11 @@ namespace mist {
                         ReleaseMutex(mutex);
                         break;
                     default:
-                        MIST_THROW_EXCEPTION("mist::Thread::RWLock: Cannot lock reader/writer lock");
+                        MIST_THROW_EXCEPTION(L"mist::Thread::RWLock: Cannot lock reader/writer lock");
                 }
 #elif defined(MIST_OS_FAMILY_UNIX)
                 if(pthread_rwlock_rdlock(&rwl))
-                    MIST_THROW_EXCEPTION("mist::Thread::RWLock: Cannot lock reader/writer lock");
+                    MIST_THROW_EXCEPTION(L"mist::Thread::RWLock: Cannot lock reader/writer lock");
 #endif
             }
             
@@ -688,11 +688,11 @@ namespace mist {
                         break;
                     default:
                         removeWriter();
-                        MIST_THROW_EXCEPTION("mist::Thread::RWLock: Cannot lock reader/writer lock");
+                        MIST_THROW_EXCEPTION(L"mist::Thread::RWLock: Cannot lock reader/writer lock");
                 }
 #elif defined(MIST_OS_FAMILY_UNIX)
                 if(pthread_rwlock_wrlock(&rwl))
-                    MIST_THROW_EXCEPTION("mist::Thread::RWLock: Cannot lock reader/writer lock");
+                    MIST_THROW_EXCEPTION(L"mist::Thread::RWLock: Cannot lock reader/writer lock");
 #endif     
             }
             
@@ -708,11 +708,11 @@ namespace mist {
                         ReleaseMutex(mutex);
                         break;
                     default:
-                        MIST_THROW_EXCEPTION("mist::Thread::RWLock: Cannot unlock reader/writer lock");
+                        MIST_THROW_EXCEPTION(L"mist::Thread::RWLock: Cannot unlock reader/writer lock");
                 }
 #elif defined(MIST_OS_FAMILY_UNIX)
                 if(pthread_rwlock_unlock(&rwl))
-                    MIST_THROW_EXCEPTION("mist::Thread::RWLock: Cannot unlock reader/writer lock");
+                    MIST_THROW_EXCEPTION(L"mist::Thread::RWLock: Cannot unlock reader/writer lock");
 #endif   
             }
             
@@ -730,7 +730,7 @@ namespace mist {
                         ReleaseMutex(mutex);
                         break;
                     default:
-                        MIST_THROW_EXCEPTION("mist::Thread::RWLock: Cannot add writer");
+                        MIST_THROW_EXCEPTION(L"mist::Thread::RWLock: Cannot add writer");
                 }
             }
             
@@ -742,7 +742,7 @@ namespace mist {
                         ReleaseMutex(mutex);
                         break;
                     default:
-                        MIST_THROW_EXCEPTION("mist::Thread::RWLock: Cannot remove writer");
+                        MIST_THROW_EXCEPTION(L"mist::Thread::RWLock: Cannot remove writer");
                 }
             }  
 			  

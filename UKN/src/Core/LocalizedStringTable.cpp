@@ -62,7 +62,7 @@ namespace ukn {
         if(it != mLocalizedString.end()) {
             return it->second;
         } else {
-            throw Exception("cannot find language name");
+            throw Exception(L"cannot find language name");
         }
     }
     
@@ -71,7 +71,7 @@ namespace ukn {
         if(it != mLocalizedString.end()) {
             return it->second;
         } else {
-            throw Exception("cannot find language name");
+            throw Exception(L"cannot find language name");
         }
     }
     

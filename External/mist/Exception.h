@@ -23,9 +23,9 @@
 
 namespace mist {
 
-	class Exception: public std::exception {
+	class Exception {
 	public:
-		Exception(const std::string& mssg, const char* function, const char* file, int line):
+		Exception(const std::wstring& mssg, const char* function, const char* file, int line):
         mMssg(mssg),
         mFunction(function),
         mFile(file),
@@ -33,7 +33,7 @@ namespace mist {
 
         }
 
-        Exception(const std::string& mssg):
+        Exception(const std::wstring& mssg):
         mMssg(mssg),
         mFunction(0),
         mFile(0),
@@ -44,8 +44,8 @@ namespace mist {
         virtual ~Exception() throw() {}
 
 		// get a formatted exception mssg
-		virtual const char* what() const throw() {
-            std::ostringstream mssg;
+		virtual const wchar_t* what() const throw() {
+            std::wostringstream mssg;
             mssg << "mist::Exception: class=" << name() << "\nMessage=" << mMssg;
             if(mFunction != 0) mssg << "\nFunction=" << mFunction;
             if(mFile != 0) mssg << "\nFile=" << mFile;
@@ -64,7 +64,7 @@ namespace mist {
             return typeid(*this).name();
         }
 
-		const std::string& mssg() const {
+		const std::wstring& mssg() const {
             return mMssg;
         }
 		const char* function() const {
@@ -87,7 +87,7 @@ namespace mist {
         }
 
 	private:
-        std::string mMssg;
+        std::wstring mMssg;
         const char* mFunction;
         const char* mFile;
         int32 mLine;

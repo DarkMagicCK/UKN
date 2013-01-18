@@ -15,7 +15,7 @@ namespace mist {
     
     uint8 Stream::readByte() {
         if(!canRead()) {
-            MIST_THROW_EXCEPTION("mist::Stream: cannot read byte because the stream cannot read");
+            MIST_THROW_EXCEPTION(L"mist::Stream: cannot read byte because the stream cannot read");
         }
         uint8 buffer;
         this->read(&buffer, 1);
@@ -24,7 +24,7 @@ namespace mist {
     
     void Stream::writeByte(uint8 byte) {
         if(!canRead()) {
-            MIST_THROW_EXCEPTION("mist::Stream: cannot write byte because the stream cannot write");
+            MIST_THROW_EXCEPTION(L"mist::Stream: cannot write byte because the stream cannot write");
         }
         this->write(&byte, 1);
     }
@@ -539,7 +539,7 @@ namespace mist {
             mBuffer.clear();
             mStream->flush();
         } else 
-            MIST_THROW_EXCEPTION("mist::BufferedStream::flush: attempted to write a invalid stream, maybe the stream had been closed?");
+            MIST_THROW_EXCEPTION(L"mist::BufferedStream::flush: attempted to write a invalid stream, maybe the stream had been closed?");
     }
     
     StreamType BufferedStream::getStreamType() const {

@@ -125,7 +125,7 @@ namespace mist {
             this->mCurrPos += size;
             return t;
         } else 
-            MIST_THROW_EXCEPTION("mist::MemoryStream::read<T>: stream length not enough");
+            MIST_THROW_EXCEPTION(L"mist::MemoryStream::read<T>: stream length not enough");
         return 0;
     }
     

@@ -99,7 +99,7 @@ namespace mist {
             mStream->write(mBuffer.data(), mBuffer.size());
             mBuffer.clear();
         } else {
-            MIST_THROW_EXCEPTION("mist::BinaryStreamWriter::flush: stream not valid, maybe it has been closed before flush?");
+            MIST_THROW_EXCEPTION(L"mist::BinaryStreamWriter::flush: stream not valid, maybe it has been closed before flush?");
         }
     }
     
@@ -291,7 +291,7 @@ namespace mist {
             mStream->read(&buffer, 1);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     uint16 BinaryStreamReader::readUInt16() {
@@ -300,7 +300,7 @@ namespace mist {
             mStream->read((uint8*)&buffer, 2);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     uint32 BinaryStreamReader::readUInt32() {
@@ -309,7 +309,7 @@ namespace mist {
             mStream->read((uint8*)&buffer, 4);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     uint64 BinaryStreamReader::readUInt64() {
@@ -318,7 +318,7 @@ namespace mist {
             mStream->read((uint8*)&buffer, 8);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     int8 BinaryStreamReader::readChar() {
@@ -327,7 +327,7 @@ namespace mist {
             mStream->read((uint8*)&buffer, 1);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     int16 BinaryStreamReader::readInt16() {
@@ -336,7 +336,7 @@ namespace mist {
             mStream->read((uint8*)&buffer, 2);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     int32 BinaryStreamReader::readInt32() {
@@ -345,7 +345,7 @@ namespace mist {
             mStream->read((uint8*)&buffer, 4);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     int64 BinaryStreamReader::readInt64() {
@@ -354,7 +354,7 @@ namespace mist {
             mStream->read((uint8*)&buffer, 8);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     float BinaryStreamReader::readFloat() {
@@ -363,7 +363,7 @@ namespace mist {
             mStream->read((uint8*)&buffer, 4);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     double BinaryStreamReader::readDouble() {
@@ -372,7 +372,7 @@ namespace mist {
             mStream->read((uint8*)&buffer, 8);
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     MistString BinaryStreamReader::readString() {
@@ -386,7 +386,7 @@ namespace mist {
             }
             return buffer;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     MistString BinaryStreamReader::readString(size_t char_count) {
@@ -400,7 +400,7 @@ namespace mist {
             mist_free(char_data);
             return str;
         }
-        MIST_THROW_EXCEPTION("mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
+        MIST_THROW_EXCEPTION(L"mist::BinaryStreamReader::read: invalid stream, maybe it's the end");
     }
     
     TextStreamReader::TextStreamReader(const StreamPtr& stream):

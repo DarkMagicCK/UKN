@@ -56,7 +56,7 @@ namespace ukn {
             Context::Instance().loadCfgFile(cfgname);
             doCreate();
         } else {
-            MIST_THROW_EXCEPTION("app already created");
+            MIST_THROW_EXCEPTION(L"app already created");
         }
         return *this;
     }
@@ -68,7 +68,7 @@ namespace ukn {
             Context::Instance().setCfg(cfg);
             doCreate();
         } else {
-            MIST_THROW_EXCEPTION("app already created");
+            MIST_THROW_EXCEPTION(L"app already created");
         }
         return *this;
     }
@@ -76,10 +76,15 @@ namespace ukn {
     void AppLauncher::doCreate() {
         mist_assert(mInited);
         
-        GraphicDevice& graphic_device = Context::Instance().getGraphicFactory().getGraphicDevice();
-        
-        mMainWindow = graphic_device.createRenderWindow(mName, Context::Instance().getCfg().render_cfg);
-        
+		GraphicDevice& graphic_device = Context::Instance().getGraphicFactory().getGraphicDevice();
+        	
+		try {
+			mMainWindow = graphic_device.createRenderWindow(mName, Context::Instance().getCfg().render_cfg);
+		} catch(mist::Exception& e) {
+			mist::MessageBox::Show(e.what(),
+								   L"Error",
+								   mist::MBB_OK | mist::MBO_IconError);
+		}
         if(!mMainWindow)
             return terminate();
         

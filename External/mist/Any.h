@@ -116,7 +116,7 @@ namespace mist {
     inline ValueType AnyCast(const Any& operand) {
         ValueType* result = AnyCast<ValueType>(const_cast<Any*>(&operand));
         if(!result)
-            MIST_THROW_EXCEPTION("mist::AnyCast: Faild to conver between const any types");
+            MIST_THROW_EXCEPTION(L"mist::AnyCast: Faild to conver between const any types");
         return *result;
     }
     
@@ -124,7 +124,7 @@ namespace mist {
     inline ValueType AnyCast(Any& operand) {
         ValueType* result = AnyCast<ValueType>(&operand);
         if(!result)
-            MIST_THROW_EXCEPTION("mist::AnyCast: Faild to conver between const any types");
+            MIST_THROW_EXCEPTION(L"mist::AnyCast: Faild to conver between const any types");
         return *result;
     }
     
@@ -132,7 +132,7 @@ namespace mist {
     inline const ValueType& RefAnyCast(const Any& operand) {
         ValueType* result = AnyCast<ValueType>(const_cast<Any*>(&operand));
         if(!result)
-            MIST_THROW_EXCEPTION("mist::RefAnyCast: Faild to conver between const any types");
+            MIST_THROW_EXCEPTION(L"mist::RefAnyCast: Faild to conver between const any types");
         return *result;
     }
     

@@ -321,7 +321,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, float layerDepth, const Color& color) {
         if(!mBegan) {
-            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION(L"ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
         TextureObject obj(texture);
@@ -337,7 +337,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const mist::Rectangle& dstRect, float layerDepth, const Color& color) {
         if(!mBegan) {
-            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION(L"ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
         TextureObject obj(texture);
@@ -355,7 +355,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {
         if(!mBegan) {
-            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION(L"ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         TextureObject obj(texture);
         
@@ -375,7 +375,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const SpriteDescriptor& descriptor) {
         if(!mBegan) {
-            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION(L"ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
         TextureObject obj(texture);
@@ -386,7 +386,7 @@ namespace ukn {
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const mist::Rectangle& srcRect, const Vector2& center, float rot, const Vector2& scale, float layerDepth, const Color& color) {        
         if(!mBegan) {
-            MIST_THROW_EXCEPTION("ukn::SpriteBatch::draw: begin must be called before any draw function");
+            MIST_THROW_EXCEPTION(L"ukn::SpriteBatch::draw: begin must be called before any draw function");
         }
         
         TextureObject obj(texture);

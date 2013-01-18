@@ -195,13 +195,13 @@ namespace ukn {
                                          0)) == 0) {
             // no window = app exit
             // so exception is acceptable here
-            MIST_THROW_EXCEPTION("GLWindow::GLWindow: Error opening window");
+            MIST_THROW_EXCEPTION(L"GLWindow::GLWindow: Error opening window");
         } 
 
 #if defined(MIST_OS_WINDOWS)
 		GLenum err = glewInit();
 		if (GLEW_OK != err) {
-			MIST_THROW_EXCEPTION(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err)));
+			MIST_THROW_EXCEPTION(mist::string::StringToWString(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err))));
 		}
 #endif
     

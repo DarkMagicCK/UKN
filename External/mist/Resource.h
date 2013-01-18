@@ -169,7 +169,7 @@ namespace mist {
             it->second.owner_num = 1;
             it->second.name = name;
             if(!mNew(name, it->second.obj)) {
-                MIST_THROW_EXCEPTION("mist::ResourcePool<T, SIZE>::get: error creating new resource obj");
+                MIST_THROW_EXCEPTION(L"mist::ResourcePool<T, SIZE>::get: error creating new resource obj");
             }
             
             mSize ++;

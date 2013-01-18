@@ -106,7 +106,7 @@ namespace mist {
 
 #define mist_assert_l(cond, log) {\
         if(!(cond)) { \
-            std::string message = mist::format_string("mist::assertion failed with mssg %s at function %s, file %s, line %d", log, __FUNCTION__, __FILE__, __LINE__); \
+            std::wstring message = mist::string::StringToWString(mist::format_string("mist::assertion failed with mssg %s at function %s, file %s, line %d", log, __FUNCTION__, __FILE__, __LINE__)); \
             mist::log_error(message); \
             throw mist::Exception(message, __FUNCTION__, __FILE__, __LINE__); \
         }\

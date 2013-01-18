@@ -36,7 +36,7 @@ namespace mist {
     static T checked_cast(Base* pointer) {
         T derived = dynamic_cast<T>(pointer);
         if(!derived)
-            MIST_THROW_EXCEPTION("checked_cast: failed to cast from parent to child");
+            MIST_THROW_EXCEPTION(L"checked_cast: failed to cast from parent to child");
         return derived;
     }
     
@@ -345,7 +345,7 @@ namespace mist {
 		
         inline T* deref() const {
             if(!this->mPtr)
-                MIST_THROW_EXCEPTION("mist::SharedPtr: invalid ptr to deref");
+                MIST_THROW_EXCEPTION(L"mist::SharedPtr: invalid ptr to deref");
             return this->mPtr;
         }
         

@@ -197,7 +197,7 @@ namespace ukn {
 			screenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
 			if(::ChangeDisplaySettingsW(&screenSettings, CDS_FULLSCREEN) != DISP_CHANGE_SUCCESSFUL) {
-				MIST_THROW_EXCEPTION("Error change screen settings to fullscreen");
+				MIST_THROW_EXCEPTION(L"Error change screen settings to fullscreen");
 			}
 		}
 
@@ -220,7 +220,7 @@ namespace ukn {
 								  mInstance,
 								  0);
 		if(mhWnd == NULL) {
-			MIST_THROW_EXCEPTION("Error create window");
+			MIST_THROW_EXCEPTION(L"Error create window");
 		}
 		SetWindowLongPtr(mhWnd, GWL_USERDATA, (LONG_PTR)this);
 		ShowWindow(mhWnd, SW_SHOW);

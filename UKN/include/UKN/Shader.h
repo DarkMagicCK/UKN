@@ -10,23 +10,42 @@
 #define Project_Unknown_Shader_h
 
 #include "ukn/PreDeclare.h"
+#include "ukn/Vertex.h"
 
 namespace ukn {
     
-    struct ShaderDesc {
-        UknString func;
-        UknString profile;
+	enum ShaderType {
+        ST_FragmentShader,
+        ST_VertexShader,
+		ST_GeometryShader, /* todo, may not support */
     };
+
+    struct ShaderDesc {
+        std::string entry;
+        std::string profile;
+
+		ShaderType type;
+		VertexFormat format; /* used by vertex shaders */
+
+		ShaderDesc() { }
+		ShaderDesc(ShaderType type, const std::string& entry, const std::string& profile, const VertexFormat& format):
+		type(type),
+		entry(entry),
+		profile(profile),
+		format(format) { }
+
+		ShaderDesc(ShaderType type, const std::string& entry, const std::string& profile):
+		type(type),
+		entry(entry),
+		profile(profile) { }
+    };
+	
     
     class Shader {
     public:
-        enum ShaderType {
-            ST_FragmentShader,
-            ST_VertexShader,
-            
-            // geometry shaders to do
-        };
-        
+		virtual ~Shader()  { }
+
+        virtual bool initialize(const ResourcePtr& content, const ShaderDesc& desc);
         virtual void bind() = 0;
         virtual void unbind() = 0;
     };

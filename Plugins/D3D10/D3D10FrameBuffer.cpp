@@ -31,7 +31,7 @@ namespace ukn {
 			result = mGraphicDevice->getSwapChain()->Present(0, 0);
 		}
 		if(FAILED(result)) {
-			MIST_THROW_EXCEPTION("unable to present framebuffer");
+			MIST_THROW_EXCEPTION(L"unable to present framebuffer");
 		}
 	}
     

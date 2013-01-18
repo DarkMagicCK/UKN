@@ -62,7 +62,7 @@ namespace ukn {
 		try {
 			mGraphicDevice = new D3D10GraphicDevice();
 		} catch(Exception& exp) {
-			MessageBoxA(0, exp.what(), "Fatal Error", MB_OK | MB_ICONERROR);
+			MessageBoxW(0, exp.what(), L"Fatal Error", MB_OK | MB_ICONERROR);
 		}
     }
     

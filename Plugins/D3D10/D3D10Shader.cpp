@@ -7,16 +7,95 @@
 #include "ukn/Vertex.h"
 
 #include "D3D10GraphicDevice.h"
+#include "D3D10Debug.h"
 
 #include <D3DX10.h>
 
 namespace ukn {
 
+	struct D3D10ShaderUtilities {
+		static ID3D10InputLayout* CreateLayout(ID3D10Device* device, const void* signature, SIZE_T size, const ukn::VertexFormat& format) {
+			D3D10_INPUT_ELEMENT_DESC layoutDesc[5];
+
+			UINT numElements = 0;
+
+			if(format.checkFormat(VF_XYZ)) {
+				layoutDesc[numElements].SemanticName = "POSITION";
+				layoutDesc[numElements].SemanticIndex = 0;
+				layoutDesc[numElements].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+				layoutDesc[numElements].InputSlot = 0;
+				layoutDesc[numElements].AlignedByteOffset = format.offsetXYZ();
+				layoutDesc[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
+				layoutDesc[numElements].InstanceDataStepRate = 0;
+				numElements += 1;
+			}
+			if(format.checkFormat(VF_Color0)) {
+				layoutDesc[numElements].SemanticName = "COLOR";
+				layoutDesc[numElements].SemanticIndex = 0;
+				layoutDesc[numElements].Format = DXGI_FORMAT_R8G8B8A8_UINT;
+				layoutDesc[numElements].InputSlot = 0;
+				layoutDesc[numElements].AlignedByteOffset = format.offsetColor0();
+				layoutDesc[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
+				layoutDesc[numElements].InstanceDataStepRate = 0;
+				numElements += 1;
+			}
+			if(format.checkFormat(VF_UV)) {
+				layoutDesc[numElements].SemanticName = "TEXCOORD";
+				layoutDesc[numElements].SemanticIndex = 0;
+				layoutDesc[numElements].Format = DXGI_FORMAT_R32G32_FLOAT;
+				layoutDesc[numElements].InputSlot = 0;
+				layoutDesc[numElements].AlignedByteOffset = format.offsetUV();
+				layoutDesc[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
+				layoutDesc[numElements].InstanceDataStepRate = 0;
+				numElements += 1;
+			}
+			if(format.checkFormat(VF_Color1)) {
+				layoutDesc[numElements].SemanticName = "COLOR1";
+				layoutDesc[numElements].SemanticIndex = 0;
+				layoutDesc[numElements].Format = DXGI_FORMAT_R8G8B8A8_UINT;
+				layoutDesc[numElements].InputSlot = 0;
+				layoutDesc[numElements].AlignedByteOffset = format.offsetColor1();
+				layoutDesc[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
+				layoutDesc[numElements].InstanceDataStepRate = 0;
+				numElements += 1;
+			}
+			if(format.checkFormat(VF_Normal)) {
+				layoutDesc[numElements].SemanticName = "COLOR1";
+				layoutDesc[numElements].SemanticIndex = 0;
+				layoutDesc[numElements].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+				layoutDesc[numElements].InputSlot = 0;
+				layoutDesc[numElements].AlignedByteOffset = format.offsetNormal();
+				layoutDesc[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
+				layoutDesc[numElements].InstanceDataStepRate = 0;
+				numElements += 1;
+			}
+
+			ID3D10InputLayout* layout = 0;
+
+			HRESULT result = device->CreateInputLayout(layoutDesc,
+				numElements,
+				signature,
+				size,
+				&layout);
+			if(!D3D10Debug::CHECK_RESULT(result)) {
+				return 0;
+			}
+			return layout;
+		}
+		static void LogError(ID3D10Blob* error) {
+			if(error) {
+				std::string error_mssg((char*)error->GetBufferPointer(), (char*)error->GetBufferPointer() + error->GetBufferSize());
+				log_error(error_mssg);
+			}
+		}
+
+	};
+
 	D3D10Effect::D3D10Effect(D3D10GraphicDevice* device):
-	mEffect(0),
-	mTechnique(0),
-	mLayout(0),
-	mDevice(device) {
+		mEffect(0),
+		mTechnique(0),
+		mLayout(0),
+		mDevice(device) {
 
 	}
 
@@ -30,24 +109,21 @@ namespace ukn {
 
 		ID3D10Blob* error;
 		HRESULT result = D3DX10CreateEffectFromMemory(memContent->data(),
-													  memContent->size(),
-													  mist::string::WStringToString(content->getName()).c_str(),
-													  NULL,
-													  NULL,
-													  "fx_4_0",
-													  D3D10_SHADER_ENABLE_STRICTNESS,
-													  0,
-													  mDevice->getD3DDevice(),
-													  0,
-													  0,
-													  &mEffect,
-													  &error,
-													  0);
+			memContent->size(),
+			mist::string::WStringToString(content->getName()).c_str(),
+			NULL,
+			NULL,
+			"fx_4_0",
+			D3D10_SHADER_ENABLE_STRICTNESS,
+			0,
+			mDevice->getD3DDevice(),
+			0,
+			0,
+			&mEffect,
+			&error,
+			0);
 		if(FAILED(result)) {
-			if(error) {
-				this->logError(error);
-				return false;
-			}
+			D3D10ShaderUtilities::LogError(error);
 		}
 
 		mTechnique = mEffect->GetTechniqueByIndex(0);
@@ -64,82 +140,20 @@ namespace ukn {
 		if(!mEffect)
 			return false;
 
-		D3D10_INPUT_ELEMENT_DESC layout[5];
+		D3D10_PASS_DESC desc;
+		mTechnique->GetPassByIndex(0)->GetDesc(&desc);
 
-		UINT numElements = 0;
-
-		if(format.checkFormat(VF_XYZ)) {
-			layout[numElements].SemanticName = "POSITION";
-			layout[numElements].SemanticIndex = 0;
-			layout[numElements].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-			layout[numElements].InputSlot = 0;
-			layout[numElements].AlignedByteOffset = format.offsetXYZ();
-			layout[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
-			layout[numElements].InstanceDataStepRate = 0;
-			numElements += 1;
-		}
-		if(format.checkFormat(VF_Color0)) {
-			layout[numElements].SemanticName = "COLOR";
-			layout[numElements].SemanticIndex = 0;
-			layout[numElements].Format = DXGI_FORMAT_R8G8B8A8_UINT;
-			layout[numElements].InputSlot = 0;
-			layout[numElements].AlignedByteOffset = format.offsetColor0();
-			layout[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
-			layout[numElements].InstanceDataStepRate = 0;
-			numElements += 1;
-		}
-		if(format.checkFormat(VF_UV)) {
-			layout[numElements].SemanticName = "TEXCOORD";
-			layout[numElements].SemanticIndex = 0;
-			layout[numElements].Format = DXGI_FORMAT_R32G32_FLOAT;
-			layout[numElements].InputSlot = 0;
-			layout[numElements].AlignedByteOffset = format.offsetUV();
-			layout[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
-			layout[numElements].InstanceDataStepRate = 0;
-			numElements += 1;
-		}
-		if(format.checkFormat(VF_Color1)) {
-			layout[numElements].SemanticName = "COLOR1";
-			layout[numElements].SemanticIndex = 0;
-			layout[numElements].Format = DXGI_FORMAT_R8G8B8A8_UINT;
-			layout[numElements].InputSlot = 0;
-			layout[numElements].AlignedByteOffset = format.offsetColor1();
-			layout[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
-			layout[numElements].InstanceDataStepRate = 0;
-			numElements += 1;
-		}
-		if(format.checkFormat(VF_Normal)) {
-			layout[numElements].SemanticName = "COLOR1";
-			layout[numElements].SemanticIndex = 0;
-			layout[numElements].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-			layout[numElements].InputSlot = 0;
-			layout[numElements].AlignedByteOffset = format.offsetNormal();
-			layout[numElements].InputSlotClass = D3D10_INPUT_PER_VERTEX_DATA;
-			layout[numElements].InstanceDataStepRate = 0;
-			numElements += 1;
-		}
-		
-		D3D10_PASS_DESC passDesc;
-		mTechnique->GetPassByIndex(0)->GetDesc(&passDesc);
-		
-		HRESULT result = mDevice->getD3DDevice()->CreateInputLayout(layout,
-																	numElements,
-																	passDesc.pIAInputSignature,
-																	passDesc.IAInputSignatureSize,
-																	&mLayout);
-		if(FAILED(result)) {
-			mEffect->Release();
-			mEffect = 0;
-			mTechnique = 0;
+		mLayout = D3D10ShaderUtilities::CreateLayout(mDevice->getD3DDevice(), desc.pIAInputSignature, desc.IAInputSignatureSize, format);
+		if(!mLayout)
 			return false;
-		}
 
+		return true;
 	}
 
 	bool D3D10Effect::setMatrixVariable(const char* name, const D3DXMATRIX& mat) {
 		if(!mEffect) return false;
 		ID3D10EffectMatrixVariable* var = mEffect->GetVariableByName(name)->AsMatrix();
-	
+
 		if(var) {
 			var->SetMatrix(const_cast<float*>((const float*)mat));
 			return true;
@@ -150,7 +164,7 @@ namespace ukn {
 	bool D3D10Effect::setRawVariable(const char* name, void* data, uint32 length) {
 		if(!mEffect) return false;
 		ID3D10EffectVariable* var = mEffect->GetVariableByName(name);
-		
+
 		if(var) {
 			var->SetRawValue(data, 0, length);
 			return true;
@@ -183,7 +197,7 @@ namespace ukn {
 	bool D3D10Effect::getMatrixVariable(const char* name, D3DXMATRIX* mat) {
 		if(!mEffect) return false;
 		ID3D10EffectMatrixVariable* var = mEffect->GetVariableByName(name)->AsMatrix();
-	
+
 		if(var) {
 			var->GetMatrix((float*)mat);
 			return true;
@@ -194,7 +208,7 @@ namespace ukn {
 	bool D3D10Effect::getRawVariable(const char* name, void* data, uint32 len) {
 		if(!mEffect) return false;
 		ID3D10EffectMatrixVariable* var = mEffect->GetVariableByName(name)->AsMatrix();
-	
+
 		if(var) {
 			var->GetRawValue(data, 0, len);
 			return true;
@@ -235,11 +249,6 @@ namespace ukn {
 		return false;
 	}
 
-	void D3D10Effect::logError(ID3D10Blob* error) {
-		std::string error_mssg((char*)error->GetBufferPointer(), (char*)error->GetBufferPointer() + error->GetBufferSize());
-		log_error(error_mssg);
-	}
-
 	void D3D10Effect::bind() {
 		if(mLayout) {
 			mDevice->getD3DDevice()->IASetInputLayout(mLayout);
@@ -255,6 +264,36 @@ namespace ukn {
 		}
 	}
 
+
+	inline ID3D10Blob* CompileShader(const ResourcePtr& content, const ShaderDesc& desc) {
+		StreamPtr memStream = content->readIntoMemory();
+		MemoryStream* memContent = (MemoryStream*)memStream.get();
+
+		ID3D10Blob* error;
+		ID3D10Blob* compiled;
+		DWORD compileFlags = 0;
+#if defined(MIST_DEBUG)
+		compileFlags |= D3D10_SHADER_DEBUG;
+#endif
+		if(!D3D10Debug::CHECK_RESULT(D3DX10CompileFromMemory((LPCSTR)memContent->data(),
+			memContent->size(),
+			mist::string::WStringToString(content->getName()).c_str(),
+			0,
+			0,
+			desc.entry.c_str(),
+			desc.profile.c_str(),
+			compileFlags,
+			0,
+			0,
+			&compiled,
+			&error,
+			0))) {
+				D3D10ShaderUtilities::LogError(error);
+				return 0;
+		}
+		return compiled;
+	}
+
 	uint32 D3D10Effect::getPasses() const {
 		if(!mEffect || !mTechnique) 
 			return 0;
@@ -266,5 +305,123 @@ namespace ukn {
 	void D3D10Effect::applyPass(uint32 pass) {
 		mTechnique->GetPassByIndex(pass)->Apply(0);
 	}
+
+	D3D10VertexShader::D3D10VertexShader(D3D10GraphicDevice* device):
+		mDevice(device),
+		mShader(0) {
+
+	}
+
+	D3D10VertexShader::~D3D10VertexShader() {
+		if(mShader)
+			mShader->Release();
+	}
+
+	bool D3D10VertexShader::initialize(const ResourcePtr& content, const ShaderDesc& desc) {
+		ID3D10Blob* compiled = CompileShader(content, desc);
+		if(compiled) {
+			HRESULT result = mDevice->getD3DDevice()->CreateVertexShader(compiled->GetBufferPointer(),
+																		 compiled->GetBufferSize(),
+																		 &mShader);
+			if(!D3D10Debug::CHECK_RESULT(result))
+				return false;
+
+			mLayout = D3D10ShaderUtilities::CreateLayout(mDevice->getD3DDevice(),
+														 compiled->GetBufferPointer(),
+														 compiled->GetBufferSize(),
+														 desc.format);
+			compiled->Release();
+			
+			if(!mLayout) {
+				mShader->Release();
+				mShader = 0;
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	void D3D10VertexShader::bind() {
+		if(mLayout) {
+			mDevice->getD3DDevice()->IASetInputLayout(mLayout);
+		}
+
+		if(mShader) {
+			mDevice->getD3DDevice()->VSSetShader(mShader);
+		}
+	}
+
+	void D3D10VertexShader::unbind() {
+		mDevice->getD3DDevice()->VSSetShader(0);
+	}
+
+	D3D10FragmentShader::D3D10FragmentShader(D3D10GraphicDevice* device):
+		mDevice(device),
+		mShader(0) {
+
+	}
+
+	D3D10FragmentShader::~D3D10FragmentShader() {
+		if(mShader)
+			mShader->Release();
+	}
+
+	bool D3D10FragmentShader::initialize(const ResourcePtr& content, const ShaderDesc& desc) {
+		ID3D10Blob* compiled = CompileShader(content, desc);
+		if(compiled) {
+			HRESULT result = mDevice->getD3DDevice()->CreatePixelShader(compiled->GetBufferPointer(),
+																		compiled->GetBufferSize(),
+																		&mShader);
+			compiled->Release();
+			return D3D10Debug::CHECK_RESULT(result);
+		}
+		return false;
+	}
+
+	void D3D10FragmentShader::bind() {
+		if(mShader) {
+			mDevice->getD3DDevice()->PSSetShader(mShader);
+		}
+	}
+
+	void D3D10FragmentShader::unbind() {
+		mDevice->getD3DDevice()->PSSetShader(0);
+	}
+
+	D3D10GeometryShader::D3D10GeometryShader(D3D10GraphicDevice* device):
+		mDevice(device),
+		mShader(0) {
+
+	}
+
+	D3D10GeometryShader::~D3D10GeometryShader() {
+		if(mShader)
+			mShader->Release();
+	}
+
+	bool D3D10GeometryShader::initialize(const ResourcePtr& content, const ShaderDesc& desc) {
+		ID3D10Blob* compiled = CompileShader(content, desc);
+		if(compiled) {
+			HRESULT result = mDevice->getD3DDevice()->CreateGeometryShader(compiled->GetBufferPointer(),
+																		   compiled->GetBufferSize(),
+																		   &mShader);
+			compiled->Release();
+			return D3D10Debug::CHECK_RESULT(result);
+		}
+		return false;
+	}
+
+	void D3D10GeometryShader::bind() {
+		if(mShader) {
+			mDevice->getD3DDevice()->GSSetShader(mShader);
+		}
+	}
+
+	void D3D10GeometryShader::unbind() {
+		mDevice->getD3DDevice()->GSSetShader(0);
+	}
+
+
 
 }

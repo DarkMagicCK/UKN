@@ -38,10 +38,10 @@ namespace ukn {
 	WindowPtr D3D10GraphicDevice::doCreateRenderWindow(const UknString& name, const RenderSettings& settings) {
 		mWindow = MakeSharedPtr<WindowsWindow>(name, settings);
 		if(!mWindow) {
-			MIST_THROW_EXCEPTION("Error creating window");
+			MIST_THROW_EXCEPTION(L"Error creating window");
 		}
 		if(!this->initD3DDevice(settings, mWindow->getHWnd())) {
-			MIST_THROW_EXCEPTION("Error initializing d3d10 device");
+			MIST_THROW_EXCEPTION(L"Error initializing d3d10 device");
 		}
 		return mWindow;
 	}

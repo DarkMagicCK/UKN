@@ -13,6 +13,7 @@
 
 #include "D3D10Shader.h"
 #include "D3D10RenderBuffer.h"
+#include "D3D10Debug.h"
 
 #pragma comment(lib, "d3d10.lib")
 #pragma comment(lib, "d3dx10.lib")
@@ -46,19 +47,19 @@ namespace ukn {
 	}
 
 	bool D3D10GraphicDevice::initD3DDevice(const RenderSettings& settings, HWND hWnd) {
-		#define CHECK_RESULT(result) if(FAILED(result)) return false;
+		#define CHECK_RESULT_AND_RETURN(result, mssg) if(!D3D10Debug::CHECK_RESULT(result, mssg)) return false;
 
 		IDXGIFactory* factory;
 		HRESULT result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
-		CHECK_RESULT(result);
+		CHECK_RESULT_AND_RETURN(result, L"CreateDXGIFactory");
 
 		IDXGIAdapter* adapter;
 		result = factory->EnumAdapters(0, &adapter);
-		CHECK_RESULT(result);
+		CHECK_RESULT_AND_RETURN(result, L"EnumAdapters");
 
 		IDXGIOutput* adapterOutput;
 		result = adapter->EnumOutputs(0, &adapterOutput);
-		CHECK_RESULT(result);
+		CHECK_RESULT_AND_RETURN(result, L"IDXGIAdapter->EnumOutputs");
 
 		DXGI_FORMAT colorFormat = ElementFormatToDxGIFormat(settings.color_fmt);
 
@@ -67,14 +68,14 @@ namespace ukn {
 			DXGI_ENUM_MODES_INTERLACED,
 			&numModes,
 			NULL);
-		CHECK_RESULT(result);
+		CHECK_RESULT_AND_RETURN(result, L"IDXGIAdapter->GetDisplayModeList");
 
 		DXGI_MODE_DESC* displayModeList = new DXGI_MODE_DESC[numModes];
 		result = adapterOutput->GetDisplayModeList(colorFormat,
 			DXGI_ENUM_MODES_INTERLACED,
 			&numModes,
 			displayModeList);
-		CHECK_RESULT(result);
+		CHECK_RESULT_AND_RETURN(result, L"IDXGIAdapter->GetDisplayModeList");
 
 		unsigned int numerator = 0, denominator = 1;
 		for(int i=0; i<numModes; ++i) {
@@ -87,7 +88,7 @@ namespace ukn {
 
 		DXGI_ADAPTER_DESC adapterDesc;
 		result = adapter->GetDesc(&adapterDesc);
-		CHECK_RESULT(result);
+		CHECK_RESULT_AND_RETURN(result, L"IDXGIAdapter->GetDesc");
 
 		delete[] displayModeList;
 		adapterOutput->Release();
@@ -122,26 +123,35 @@ namespace ukn {
 		swapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 		swapChainDesc.Flags = 0;
 
+		DWORD creationFlags = 0;
+#if defined(MIST_DEBUG)
+		creationFlags |= D3D10_CREATE_DEVICE_DEBUG;
+#endif
+
 		result = D3D10CreateDeviceAndSwapChain(NULL,
 			D3D10_DRIVER_TYPE_HARDWARE,
 			NULL,
-			0,
+			creationFlags,
 			D3D10_SDK_VERSION,
 			&swapChainDesc,
 			&mSwapChain,
 			&mDevice);
-		if(FAILED(result)) {
+		if(!D3D10Debug::CHECK_RESULT(result, L"Create Device with D3D10_DRIVE_TYPE_HARDWARE")) {
 			/* if hardware creation failed, try software */
 			result = D3D10CreateDeviceAndSwapChain(NULL,
 				D3D10_DRIVER_TYPE_WARP /* software rasterizer */,
 				NULL,
-				0,
+				creationFlags,
 				D3D10_SDK_VERSION,
 				&swapChainDesc,
 				&mSwapChain,
 				&mDevice);
-			CHECK_RESULT(result);
+			CHECK_RESULT_AND_RETURN(result, L"D3D10CreateDeviceAndSwapChain");
 		}
+
+#if defined(MIST_DEBUG)
+		mDebug = new D3D10Debug(mDevice);
+#endif
 
 		mScreenFrameBuffer = MakeSharedPtr<D3D10FrameBuffer>(false, this);
 		mScreenFrameBuffer->attach(ATT_Color0,
@@ -159,10 +169,18 @@ namespace ukn {
 		((WindowsWindow*)mWindow.get())->updateWindowProperties(0, 0, settings.width, settings.height);
 		this->bindFrameBuffer(mScreenFrameBuffer);
 
-		ID3D10RenderTargetView* screenRenderView = ((D3D10ScreenColorRenderView*)mScreenFrameBuffer->attached(ATT_Color0).get())->getD3D10RenderTargetView();
-		mDevice->OMSetRenderTargets(1, 
-			&screenRenderView, 
-			((D3D10DepthStencilRenderView*)mScreenFrameBuffer->attached(ATT_DepthStencil).get())->getD3D10DepthStencilView());
+		try {
+			ID3D10RenderTargetView* screenRenderView = ((D3D10ScreenColorRenderView*)mScreenFrameBuffer->attached(ATT_Color0).get())->getD3D10RenderTargetView();
+			mDevice->OMSetRenderTargets(1, 
+				&screenRenderView, 
+				((D3D10DepthStencilRenderView*)mScreenFrameBuffer->attached(ATT_DepthStencil).get())->getD3D10DepthStencilView());
+		} catch(mist::Exception& exp) {
+			MessageBoxW(mWindow->getHWnd(),
+						L"Error",
+						L"Error",
+						MB_OK | MB_ICONERROR);
+			return false;
+		}
 
 		D3D10_RASTERIZER_DESC rasterDesc;
 		ZeroMemory(&rasterDesc, sizeof(rasterDesc));
@@ -178,10 +196,24 @@ namespace ukn {
 		rasterDesc.SlopeScaledDepthBias = 0.f;
 
 		result = mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
-		CHECK_RESULT(result);
+		CHECK_RESULT_AND_RETURN(result, L"ID3D10Device->CreateRasterizerState");
 
 		D3DXMatrixIdentity(&mWorldMatrix);
 
+		/* default D3D10 Blend State */
+		D3D10_BLEND_DESC blendDesc;
+		ZeroMemory(&blendDesc, sizeof(blendDesc));
+		blendDesc.BlendEnable[0] = FALSE;
+		blendDesc.RenderTargetWriteMask[0] = D3D10_COLOR_WRITE_ENABLE_ALL;
+		blendDesc.BlendOp = D3D10_BLEND_OP_ADD;
+		blendDesc.SrcBlend = D3D10_BLEND_ONE;
+		blendDesc.DestBlend = D3D10_BLEND_ZERO;
+		blendDesc.SrcBlendAlpha = D3D10_BLEND_ONE;
+		blendDesc.DestBlendAlpha = D3D10_BLEND_ZERO;
+		blendDesc.BlendOpAlpha = D3D10_BLEND_OP_ADD;
+		CHECK_RESULT_AND_RETURN(mDevice->CreateBlendState(&blendDesc, &mBlendState),
+								L"ID3D10Device->CreateBlendState");
+		
 		return true;
 	}
 
@@ -224,6 +256,7 @@ namespace ukn {
 					viewport.MinDepth = 0.0f;
 
 					mDevice->RSSetViewports(1, &viewport);
+					mDevice->OMSetBlendState(mBlendState, 0, 0xffffffff);
 
 					this->setViewMatrix(fb.getViewport().camera->getViewMatrix());
 					this->setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
@@ -235,6 +268,10 @@ namespace ukn {
 
 					if(mWindow->pullEvents())
 						break;
+
+#if defined(MIST_DEBUG)
+					if(mDebug) mDebug->logAvailableMessages();
+#endif
 				}
 
 			}
@@ -276,7 +313,6 @@ namespace ukn {
 
 				mDevice->IASetPrimitiveTopology(RenderModeToPrimitiveTopology(buffer->getRenderMode()));
 				
-				
 				effect->bind();
 				for(uint32 i=0; i<effect->getPasses(); ++i) {
 					effect->applyPass(i);
@@ -290,12 +326,6 @@ namespace ukn {
 							buffer->getVertexStartIndex());
 					}
 				}
-		/*		effect->unbind();
-
-				vertexBuffer->deactivate();
-				if(indexBuffer.isValid()) {
-					indexBuffer->deactivate();
-				}*/
 			}
 		}
 	}

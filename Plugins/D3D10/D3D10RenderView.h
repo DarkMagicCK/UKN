@@ -61,12 +61,16 @@ namespace ukn {
 		void onAttached(FrameBuffer& fb, uint32 att);
 		void onDetached(FrameBuffer& fb, uint32 att);
 
+		void enableDepth(bool flag);
+
 		ID3D10DepthStencilView* getD3D10DepthStencilView() const;
 
 	private:
 		ID3D10Texture2D* mDepthStencilBuffer;
 		ID3D10DepthStencilView* mDepthStencilView;
 		ID3D10DepthStencilState* mDepthStencilState;
+		/* for 2d rendering */
+		ID3D10DepthStencilState* mDepthStencilDisabledState;
 	};
 
 	typedef SharedPtr<D3D10DepthStencilRenderView> D3D10DepthStencilRenderViewPtr;

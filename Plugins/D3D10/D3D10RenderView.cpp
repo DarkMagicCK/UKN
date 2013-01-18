@@ -130,6 +130,13 @@ namespace ukn {
 		if(FAILED(result))
 			MIST_THROW_EXCEPTION("Error create depth stencil state");
 
+		D3D10_DEPTH_STENCIL_DESC depthStencilDisabledDesc;
+		memcpy(&depthStencilDisabledDesc, &depthStencilDesc, sizeof(depthStencilDesc));
+		depthStencilDisabledDesc.DepthEnable = false;
+
+		result = idevice->CreateDepthStencilState(&depthStencilDisabledDesc, &mDepthStencilDisabledState);
+		if(FAILED(result))
+			MIST_THROW_EXCEPTION("Error create depth stencil disabled state");
 
 		idevice->OMSetDepthStencilState(mDepthStencilState, 1);
 
@@ -177,5 +184,10 @@ namespace ukn {
 
 	void D3D10DepthStencilRenderView::onDetached(FrameBuffer& fb, uint32 att) {
 
+	}
+
+	void D3D10DepthStencilRenderView::enableDepth(bool flag) {
+		mGraphicDevice->getD3DDevice()->OMSetDepthStencilState(flag ? mDepthStencilState : mDepthStencilDisabledState,
+															   1);
 	}
 }

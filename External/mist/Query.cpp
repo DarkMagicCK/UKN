@@ -123,7 +123,7 @@ namespace mist {
                         .JoinOn(moews, [](const Cat& cat, const std::string& moew) {
                             return cat.moew == moew;
                         })
-                        .Select([](const std::pair<Cat, std::string>& p) {
+                        .Select<std::string>([](const std::pair<Cat, std::string>& p) {
                             return p.first.name;
                         });
             

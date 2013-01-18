@@ -50,7 +50,7 @@ namespace ukn {
 			}
 		}
 
-		mTechnique = mEffect->GetTechniqueByName("TextureTechnique");
+		mTechnique = mEffect->GetTechniqueByIndex(0);
 		if(!mTechnique) {
 			mEffect->Release();
 			mEffect = 0;

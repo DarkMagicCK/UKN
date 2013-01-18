@@ -14,7 +14,7 @@
 #endif
 
 #if defined(DEBUG) || defined(_DEBUG)
-    #define UKN_DEBUG
+    #define MIST_DEBUG
 #endif
 
 // cpp standard version check, however, some compilers such as llvm currently define this as 1

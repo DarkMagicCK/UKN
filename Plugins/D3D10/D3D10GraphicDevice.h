@@ -13,6 +13,7 @@
 namespace ukn {
 
 	class D3D10Effect;
+	class D3D10Debug;
 
 	class D3D10GraphicDevice: public GraphicDevice {
 	public:
@@ -53,6 +54,7 @@ namespace ukn {
 
     private:
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
+		void onWindowResize();
 
         WindowPtr mWindow;
         TexturePtr mCurrTexture;
@@ -60,12 +62,14 @@ namespace ukn {
 		ID3D10Device* mDevice;
 		IDXGISwapChain* mSwapChain;
 		ID3D10RasterizerState* mRasterState;
+		ID3D10BlendState* mBlendState;
 
 		D3DXMATRIX mWorldMatrix;
 		D3DXMATRIX mProjectionMatrix;
 		D3DXMATRIX mViewMatrix;
 
 		D3D10Effect* mEffect;
+		D3D10Debug* mDebug;
 	};
 
 } // namespace ukn

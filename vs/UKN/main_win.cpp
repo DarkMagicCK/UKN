@@ -95,6 +95,7 @@ int CALLBACK WinMain(
 				renderBuffer->setRenderMode(ukn::RM_Triangle);
 			}
 
+
 			texture = gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"test.png"));
 			if(!texture) {
 				mist::MessageBox::Show(L"error loading texture", L"Error", mist::MBO_OK);

@@ -71,13 +71,13 @@ namespace ukn {
 			vertexData.pSysMem = initData;
 
 			result = mDevice->getD3DDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &mBuffer);
-			if(FAILED(result)) {
+			if(!D3D10Debug::CHECK_RESULT(result, L"CreateVertexBuffer")) {
 				log_error(L"error creating vertex buffer");
 				mBuffer = 0;
 			}
 		} else {
 			result = mDevice->getD3DDevice()->CreateBuffer(&vertexBufferDesc, 0, &mBuffer);
-			if(FAILED(result)) {
+			if(!D3D10Debug::CHECK_RESULT(result, L"CreateVertexBuffer")) {
 				log_error(L"error creating vertex buffer");
 				mBuffer = 0;
 			}
@@ -153,9 +153,7 @@ namespace ukn {
 	}
 
 	void D3D10VertexBuffer::resize(uint32 desired_count) {
-		if(mBuffer) {
-			mBuffer->Release();
-		}
+		ID3D10Buffer* buffer;
 
 		D3D10_BUFFER_DESC vertexBufferDesc;
 
@@ -165,11 +163,16 @@ namespace ukn {
 		vertexBufferDesc.CPUAccessFlags = GraphicBufferAccessToD3D10Access(access());
 		vertexBufferDesc.MiscFlags = 0;
 
-		if(FAILED(mDevice->getD3DDevice()->CreateBuffer(&vertexBufferDesc, 0, &mBuffer))) {
-			log_error(L"error creating vertex buffer");
-			mBuffer = 0;
+		if(!D3D10Debug::CHECK_RESULT(mDevice->getD3DDevice()->CreateBuffer(&vertexBufferDesc, 0, &buffer),
+									 L"Resize vertex bfufer")) {
+			log_error(L"error resizing vertex buffer");
 		} else {
 			mCount = desired_count;
+			
+			if(mBuffer) {
+				mBuffer->Release();
+			}
+			mBuffer = buffer;
 		}
 	}
 
@@ -196,14 +199,14 @@ namespace ukn {
 			indexData.pSysMem = initData;
 
 			result = mDevice->getD3DDevice()->CreateBuffer(&indexBufferDesc, &indexData, &mBuffer);
-			if(FAILED(result)) {
-				log_error(L"error creating vertex buffer");
+			if(!D3D10Debug::CHECK_RESULT(result, L"CreateIndexBuffer")) {
+				log_error(L"error creating index buffer");
 				mBuffer = 0;
 			}
 		} else {
 			result = mDevice->getD3DDevice()->CreateBuffer(&indexBufferDesc, 0, &mBuffer);
-			if(FAILED(result)) {
-				log_error(L"error creating vertex buffer");
+			if(!D3D10Debug::CHECK_RESULT(result, L"CreateIndexBuffer")) {
+				log_error(L"error creating index buffer");
 				mBuffer = 0;
 			}
 		}
@@ -267,8 +270,7 @@ namespace ukn {
 	}
 
 	void D3D10IndexBuffer::resize(uint32 desired_count) {
-		if(mBuffer)
-			mBuffer->Release();
+		ID3D10Buffer* buffer;
 
 		D3D10_BUFFER_DESC indexBufferDesc;
 
@@ -278,12 +280,17 @@ namespace ukn {
 		indexBufferDesc.CPUAccessFlags = GraphicBufferAccessToD3D10Access(access());
 		indexBufferDesc.MiscFlags = 0;
 
-		HRESULT result = mDevice->getD3DDevice()->CreateBuffer(&indexBufferDesc, 0, &mBuffer);
-		if(FAILED(result)) {
-			log_error(L"error creating vertex buffer");
-			mBuffer = 0;
+		HRESULT result = mDevice->getD3DDevice()->CreateBuffer(&indexBufferDesc, 0, &buffer);
+		if(!D3D10Debug::CHECK_RESULT(mDevice->getD3DDevice()->CreateBuffer(&indexBufferDesc, 0, &buffer),
+									 L"Resize index bfufer")) {
+			log_error(L"error resizeing index buffer");
+
 		} else {
 			mCount = desired_count;
+	
+			if(mBuffer)
+				mBuffer->Release();
+			mBuffer = buffer;
 		}
 	}
 

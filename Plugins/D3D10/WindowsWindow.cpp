@@ -334,8 +334,8 @@ namespace ukn {
         
 			vp.camera = MakeSharedPtr<Camera3D>();
 		   //((Camera2D*)vp.camera.get())->setOrthoParams(0, mFrameBuffer->width(), 0, mFrameBuffer->height());
-			((Camera3D*)vp.camera.get())->setProjParams(d_pi_4 * 2,  (float)mFrameBuffer->width() / (float)mFrameBuffer->height(), 0.0, 1.0);
-			((Camera3D*)vp.camera.get())->setViewParams(Vector3(0, 0, 0.f), Vector3(0, 0, 1)); 
+			((Camera3D*)vp.camera.get())->setProjParams(d_pi / 4,  (float)mFrameBuffer->width() / (float)mFrameBuffer->height(), 0.0, 1.0);
+			((Camera3D*)vp.camera.get())->setViewParams(Vector3(0, 0, -10.f), Vector3(0, 0, 1)); 
 			vp.camera->update();
 		}
 	}

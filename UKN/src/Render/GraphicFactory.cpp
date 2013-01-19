@@ -14,6 +14,7 @@
 #include "UKN/RenderBuffer.h"
 #include "UKN/GraphicDevice.h"
 #include "UKN/SpriteBatch.h"
+#include "UKN/Shader.h"
 
 namespace ukn {
     
@@ -69,6 +70,10 @@ namespace ukn {
         
         TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const {
             return Texture::NullObject();
+        }
+
+        EffectPtr loadEffect(const ResourcePtr& rsrc) const {
+            return Effect::NullObject();
         }
         
     };

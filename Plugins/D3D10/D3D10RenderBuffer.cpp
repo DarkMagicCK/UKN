@@ -8,45 +8,22 @@
 namespace ukn {
 
 	D3D10RenderBuffer::D3D10RenderBuffer(D3D10GraphicDevice* device):
-	mEffect(0),
 	mDevice(device) {
-
 	}
 
 	D3D10RenderBuffer::~D3D10RenderBuffer() {
 
 	}
 
-	bool D3D10RenderBuffer::setEffect(mist::ResourcePtr& resourcePtr) {
-		D3D10Effect* effect  = new D3D10Effect(mDevice);
-		if(!effect->initialize(resourcePtr)) {
-			delete effect;
-			return false;
-		}
-		if(getVertexStream().isValid()) {
-			if(!effect->setLayout(this->getVertexFormat())) {
-				delete effect;
-				return false;
-			}
-		}
-
-		mEffect = effect;
-		return true;
-	}
-
-	SharedPtr<D3D10Effect> D3D10RenderBuffer::getEffect() const {
-		return mEffect;
-	}
-
 	void D3D10RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format) {
 		if(mEffect) {
-			mEffect->setLayout(format);
+			((D3D10Effect*)mEffect.get())->setLayout(format);
 		}
 	}
 
 	void D3D10RenderBuffer::onSetVertexFormat(const VertexFormat& format) {
 		if(mEffect) {
-			mEffect->setLayout(format);
+			((D3D10Effect*)mEffect.get())->setLayout(format);
 		}
 	}
 
@@ -69,5 +46,11 @@ namespace ukn {
 	void D3D10RenderBuffer::onUseIndexStream(bool flag) {
 
 	}
+
+    void D3D10RenderBuffer::onSetEffect(const EffectPtr& effect) {
+        if(getVertexStream().isValid()) {
+			((D3D10Effect*)mEffect.get())->setLayout(this->getVertexFormat());
+		}
+    }
 
 }

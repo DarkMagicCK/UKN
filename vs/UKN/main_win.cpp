@@ -94,6 +94,7 @@ int CALLBACK WinMain(
                 renderBuffer->bindVertexStream(vertexBuffer, ukn::Vertex2D::Format());
                 renderBuffer->setRenderMode(ukn::RM_Triangle);
             }
+            renderBuffer->setEffect(gf.loadEffect(ukn::ResourceLoader::Instance().loadResource(L"color.fx")));
 
 
             texture = gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"test.png"));

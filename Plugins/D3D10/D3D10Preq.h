@@ -1,7 +1,7 @@
-// d3d9 headers
+/*// d3d9 headers
 #include <d3d9.h>
 #include <d3dx9.h>
-
+*/
 // d3d10 headers
 #include <d3d10.h>
 #include <d3dx10.h>

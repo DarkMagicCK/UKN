@@ -334,6 +334,10 @@ namespace ukn {
     void GLGraphicDevice::getProjectionMatrix(Matrix4& mat) {
         glGetFloatv(GL_PROJECTION_MATRIX, &mat.x[0]);
     }
+
+    void GLGraphicDevice::bindEffect(const EffectPtr& effect) {
+        mEffect = effect;
+    }
     
     void GLGraphicDevice::setRenderState(RenderStateType type, uint32 func) {
         switch(type) {

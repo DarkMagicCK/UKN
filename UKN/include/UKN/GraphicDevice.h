@@ -84,6 +84,7 @@ namespace ukn {
         
     public:
         virtual void bindTexture(const TexturePtr& texture) = 0;
+        virtual void bindEffect(const EffectPtr& effect) = 0;
         
         virtual SharedPtr<uint8> readFrameBufferData(const FrameBufferPtr& buffer, int32 x = 0, int32 y = 0, uint32 width = 0, uint32 height = 0, ElementFormat format = EF_RGBA8) = 0;
         virtual SharedPtr<uint8> readTextureData(const TexturePtr& texture, uint8 level = 0) = 0;

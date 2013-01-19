@@ -160,7 +160,7 @@ namespace ukn {
                     dxmat(row, col) = mat.c[col][row];
                 }
             }
-			var->SetMatrix(const_cast<float*>((const float*)dxmat));
+			var->SetMatrix((float*)(dxmat.m));
 			return true;
 		}
 		return false;

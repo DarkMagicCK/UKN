@@ -9,9 +9,6 @@ namespace ukn {
 	public:
 		D3D10RenderBuffer(D3D10GraphicDevice* device);
 		virtual ~D3D10RenderBuffer();
-
-		bool setEffect(mist::ResourcePtr& resourcePtr);
-		SharedPtr<D3D10Effect> getEffect() const;
 		
 	protected:
 		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format);
@@ -21,9 +18,9 @@ namespace ukn {
 		virtual void onSetVertexCount(uint32 count);
 		virtual void onSetIndexStartIndex(uint32 index);
 		virtual void onUseIndexStream(bool flag);
+        virtual void onSetEffect(const EffectPtr& effect);
 
 	private:
-		SharedPtr<D3D10Effect> mEffect;
 		D3D10GraphicDevice* mDevice;
 	};
 

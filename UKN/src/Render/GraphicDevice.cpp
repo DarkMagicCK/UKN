@@ -72,6 +72,7 @@ namespace ukn {
         }
         
         void bindTexture(const TexturePtr& tex) { }
+        void bindEffect(const EffectPtr& effect) { }
         
         SharedPtr<uint8> readFrameBufferData(const FrameBufferPtr& ptr, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format) { return SharedPtr<uint8>(); }
         SharedPtr<uint8> readTextureData(const TexturePtr& ptr, uint8 level) { return SharedPtr<uint8>(); }

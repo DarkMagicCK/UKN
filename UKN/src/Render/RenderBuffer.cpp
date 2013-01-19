@@ -8,6 +8,7 @@
 
 #include "UKN/RenderBuffer.h"
 #include "UKN/GraphicBuffer.h"
+#include "UKN/Shader.h"
 
 namespace ukn {
     
@@ -36,7 +37,8 @@ namespace ukn {
     mUseIndexStream(false),
     mIndexStream(GraphicBufferPtr()),
     mIndexStartIndex(0),
-    mIndexCount(0) {
+    mIndexCount(0),
+    mEffect(EffectPtr()) {
         
     }
     
@@ -166,5 +168,18 @@ namespace ukn {
 	void RenderBuffer::onUseIndexStream(bool flag) {
 
 	}
+
+    void RenderBuffer::onSetEffect(const EffectPtr& effect) {
+
+    }
+
+    void RenderBuffer::setEffect(const EffectPtr& effect) {
+        mEffect = effect;
+        this->onSetEffect(effect);
+    }
+
+    EffectPtr RenderBuffer::getEffect() const {
+        return mEffect;
+    }
 
 } // namespace ukn

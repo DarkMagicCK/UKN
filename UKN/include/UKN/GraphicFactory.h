@@ -51,9 +51,10 @@ namespace ukn {
         
         // textures
         virtual TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const = 0;
-        
         virtual TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const = 0;
         
+        // shaders & effects
+        virtual EffectPtr loadEffect(const ResourcePtr& rsrc) const = 0;
         
         template<typename T>
         SharedPtr<MemoryGraphicBuffer<T> > createMemoryVertexBuffer(uint32 count,

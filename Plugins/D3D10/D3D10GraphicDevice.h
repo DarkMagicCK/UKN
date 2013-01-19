@@ -38,7 +38,8 @@ namespace ukn {
         void getProjectionMatrix(Matrix4& mat) override;
         
         void bindTexture(const TexturePtr& texture) override;
-        
+     	void bindEffect(const EffectPtr& effect) override;
+
         SharedPtr<uint8> readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format) override;
         SharedPtr<uint8> readTextureData(const TexturePtr& texture, uint8 level) override;
         void  updateTextureData(const TexturePtr& texture, void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level) override;
@@ -50,14 +51,13 @@ namespace ukn {
 		ID3D10Device* getD3DDevice() const;
         IDXGISwapChain* getSwapChain() const;
 
-		void bindEffect(D3D10Effect* effect);
-
     private:
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
 		void onWindowResize();
 
         WindowPtr mWindow;
         TexturePtr mCurrTexture;
+        EffectPtr mEffect;
 
 		ID3D10Device* mDevice;
 		IDXGISwapChain* mSwapChain;
@@ -68,7 +68,6 @@ namespace ukn {
 		Matrix4 mProjectionMatrix;
 		Matrix4 mViewMatrix;
 
-		D3D10Effect* mEffect;
 		D3D10Debug* mDebug;
 	};
 

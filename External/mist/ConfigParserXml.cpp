@@ -319,10 +319,10 @@ namespace mist {
         
         pugi::xml_attribute attribute = mCurrNode.attribute(string::WStringToString(attr).c_str());
         if(attribute)
-            attribute.set_value(val.c_str());
+            attribute.set_value(string::WStringToString(val).c_str());
         else {
             attribute = mCurrNode.append_attribute(string::WStringToString(attr).c_str());
-            attribute.set_value(val.c_str());
+            attribute.set_value(string::WStringToString(val).c_str());
         }
     }
     

@@ -37,6 +37,7 @@ namespace ukn {
         void getProjectionMatrix(Matrix4& mat);
         
         void bindTexture(const TexturePtr& texture);
+        void bindEffect(const EffectPtr& effect);
         
         SharedPtr<uint8> readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format);
         SharedPtr<uint8> readTextureData(const TexturePtr& texture, uint8 level);
@@ -52,6 +53,7 @@ namespace ukn {
     private:
         WindowPtr mWindow;
         TexturePtr mCurrTexture;
+        EffectPtr mEffect;
         
         GLuint mCurrGLFrameBuffer;
     };

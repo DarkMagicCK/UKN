@@ -46,8 +46,10 @@ namespace ukn {
     we need to find some way to simulate this
     customized shader format ? cg?
     */
-    class Effect: public Uncopyable {
+    class UKN_API Effect: public Uncopyable {
     public:
+        static EffectPtr NullObject();
+
         virtual void bind() = 0;
         virtual void unbind() = 0;
         /*
@@ -69,7 +71,7 @@ namespace ukn {
 		virtual void applyPass(uint32 pass) = 0;
     };
     
-    class Shader: public Uncopyable {
+    class UKN_API Shader: public Uncopyable {
     public:
 		virtual ~Shader()  { }
 

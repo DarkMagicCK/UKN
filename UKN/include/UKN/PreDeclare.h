@@ -100,6 +100,8 @@ namespace ukn {
     class RenderEffect;
     typedef SharedPtr<RenderEffect> RenderEffectPtr;
     
+    class Effect;
+    typedef SharedPtr<Effect> EffectPtr;
     
     class Texture;
     typedef SharedPtr<Texture> TexturePtr;

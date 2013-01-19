@@ -68,7 +68,7 @@ int CALLBACK WinMain(
 			if(texture)
 				gd.bindTexture(texture);
 			if(renderBuffer)
-				gd.onRenderBuffer(renderBuffer);
+				gd.renderBuffer(renderBuffer);
 		})
 		.connectInit([&](ukn::Window*) {
 			ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();

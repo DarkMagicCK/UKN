@@ -20,32 +20,32 @@ namespace ukn {
 		D3D10GraphicDevice();
 		virtual ~D3D10GraphicDevice();
 
-		UknString description() const;
+		UknString description() const override;
         
         WindowPtr doCreateRenderWindow(const UknString& name, const RenderSettings& settings);
         
-        void beginFrame();
-        void endFrame();
-        void beginRendering();
+        void beginFrame() override;
+        void endFrame() override;
+        void beginRendering() override;
         
-        void onRenderBuffer(const RenderBufferPtr& buffer);
-        void onBindFrameBuffer(const FrameBufferPtr& frameBuffer);
+        void renderBuffer(const RenderBufferPtr& buffer) override;
+        void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) override;
         
-        void setViewMatrix(const Matrix4& mat);
-        void setProjectionMatrix(const Matrix4& mat);
+        void setViewMatrix(const Matrix4& mat) override;
+        void setProjectionMatrix(const Matrix4& mat) override;
         
-        void getViewMatrix(Matrix4& mat);
-        void getProjectionMatrix(Matrix4& mat);
+        void getViewMatrix(Matrix4& mat) override;
+        void getProjectionMatrix(Matrix4& mat) override;
         
-        void bindTexture(const TexturePtr& texture);
+        void bindTexture(const TexturePtr& texture) override;
         
-        SharedPtr<uint8> readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format);
-        SharedPtr<uint8> readTextureData(const TexturePtr& texture, uint8 level);
-        void  updateTextureData(const TexturePtr& texture, void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level);
+        SharedPtr<uint8> readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format) override;
+        SharedPtr<uint8> readTextureData(const TexturePtr& texture, uint8 level) override;
+        void  updateTextureData(const TexturePtr& texture, void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level) override;
         
-        void fillGraphicCaps(GraphicDeviceCaps& caps);
+        void fillGraphicCaps(GraphicDeviceCaps& caps) override;
         
-        void setRenderState(RenderStateType type, uint32 func);
+        void setRenderState(RenderStateType type, uint32 func) override;
 
 		ID3D10Device* getD3DDevice() const;
         IDXGISwapChain* getSwapChain() const;
@@ -64,9 +64,9 @@ namespace ukn {
 		ID3D10RasterizerState* mRasterState;
 		ID3D10BlendState* mBlendState;
 
-		D3DXMATRIX mWorldMatrix;
-		D3DXMATRIX mProjectionMatrix;
-		D3DXMATRIX mViewMatrix;
+		Matrix4 mWorldMatrix;
+		Matrix4 mProjectionMatrix;
+		Matrix4 mViewMatrix;
 
 		D3D10Effect* mEffect;
 		D3D10Debug* mDebug;

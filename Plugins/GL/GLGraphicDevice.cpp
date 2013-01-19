@@ -120,7 +120,7 @@ namespace ukn {
         }
     }
     
-    void GLGraphicDevice::onRenderBuffer(const RenderBufferPtr& buffer) {
+    void GLGraphicDevice::renderBuffer(const RenderBufferPtr& buffer) {
 #define BUFFER_OFFSET(buffer, i) (buffer->isInMemory() ? ((char*)buffer->map() + (i)) : ((char *)NULL + (i)))
         
         mist_assert(buffer.isValid());

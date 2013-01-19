@@ -8,8 +8,7 @@
 
 #include "D3D10GraphicDevice.h"
 #include "D3D10Debug.h"
-
-#include <D3DX10.h>
+#include "D3D10Texture.h"
 
 namespace ukn {
 
@@ -150,12 +149,18 @@ namespace ukn {
 		return true;
 	}
 
-	bool D3D10Effect::setMatrixVariable(const char* name, const D3DXMATRIX& mat) {
+	bool D3D10Effect::setMatrixVariable(const char* name, const Matrix4& mat) {
 		if(!mEffect) return false;
 		ID3D10EffectMatrixVariable* var = mEffect->GetVariableByName(name)->AsMatrix();
 
 		if(var) {
-			var->SetMatrix(const_cast<float*>((const float*)mat));
+            D3DXMATRIX dxmat;
+            for(int col = 0; col < 4; ++col) {
+                for(int row = 0; row < 4; ++row) {
+                    dxmat(row, col) = mat.c[col][row];
+                }
+            }
+			var->SetMatrix(const_cast<float*>((const float*)dxmat));
 			return true;
 		}
 		return false;
@@ -194,12 +199,19 @@ namespace ukn {
 		return false;
 	}
 
-	bool D3D10Effect::getMatrixVariable(const char* name, D3DXMATRIX* mat) {
+	bool D3D10Effect::getMatrixVariable(const char* name, Matrix4* mat) {
 		if(!mEffect) return false;
 		ID3D10EffectMatrixVariable* var = mEffect->GetVariableByName(name)->AsMatrix();
 
 		if(var) {
-			var->GetMatrix((float*)mat);
+            D3DXMATRIX dxmat;
+
+			var->GetMatrix((float*)dxmat);
+            for(int col = 0; col < 4; ++col) {
+                for(int row = 0; row < 4; ++row) {
+                    mat->c[col][row] = dxmat(row, col);
+                }
+            }
 			return true;
 		}
 		return false;
@@ -238,12 +250,12 @@ namespace ukn {
 		return false;
 	}
 
-	bool D3D10Effect::setShaderResourceVariable(const char* name, ID3D10ShaderResourceView* resource) {
+	bool D3D10Effect::setTextureVariable(const char* name, Texture* resource) {
 		if(!mEffect) return false;
 		ID3D10EffectShaderResourceVariable* var = mEffect->GetVariableByName(name)->AsShaderResource();
 
 		if(var) {
-			var->SetResource(resource);
+			var->SetResource((ID3D10ShaderResourceView*)resource->getTextureId());
 			return true;
 		}
 		return false;
@@ -306,9 +318,56 @@ namespace ukn {
 		mTechnique->GetPassByIndex(pass)->Apply(0);
 	}
 
+    D3D10Shader::D3D10Shader(D3D10GraphicDevice* device):
+	mDevice(device) {
+
+	}
+	
+	D3D10Shader::~D3D10Shader() {
+	}
+    /*
+    bool D3D10Shader::setMatrixVariable(const char* name, const D3DXMATRIX& worldMat) {
+        if(mConstantTable) {
+            mConstantTable->SetMatrix(mDevice->getD3DDevice(),
+                                      
+        }
+    }
+
+	bool D3D10Shader::setRawVariable(const char* name, void* data, uint32 length) {
+
+    }
+
+	bool D3D10Shader::setFloatVectorVariable(const char* name, float* vec) {
+
+    }
+
+	bool D3D10Shader::setIntVectorVariable(const char* name, int* vec) {
+
+    }
+
+	bool D3D10Shader::setShaderResourceVariable(const char* name, ID3D10ShaderResourceView* resource) {
+
+    }
+
+	bool D3D10Shader::getMatrixVariable(const char* name, D3DXMATRIX* mat) {
+
+    }
+
+    bool D3D10Shader::getRawVariable(const char* name, void* data, uint32 len) {
+
+    }
+
+    bool D3D10Shader::getFloatVectorVariable(const char* name, float* vec) {
+
+    }
+
+	bool D3D10Shader::getIntVectorVariable(const char* name, int* vec) {
+
+    }
+    */
 	D3D10VertexShader::D3D10VertexShader(D3D10GraphicDevice* device):
-		mDevice(device),
-		mShader(0) {
+	D3D10Shader(device),
+	mShader(0) {
 
 	}
 
@@ -357,8 +416,8 @@ namespace ukn {
 	}
 
 	D3D10FragmentShader::D3D10FragmentShader(D3D10GraphicDevice* device):
-		mDevice(device),
-		mShader(0) {
+	D3D10Shader(device),
+	mShader(0) {
 
 	}
 
@@ -390,8 +449,8 @@ namespace ukn {
 	}
 
 	D3D10GeometryShader::D3D10GeometryShader(D3D10GraphicDevice* device):
-		mDevice(device),
-		mShader(0) {
+	D3D10Shader(device),
+	mShader(0) {
 
 	}
 

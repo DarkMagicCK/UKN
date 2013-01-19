@@ -211,7 +211,7 @@ namespace ukn {
                 mRenderBuffer->setVertexCount(seg.length);
                 mRenderBuffer->setVertexStartIndex(seg.start_index);
                 
-                gd.onRenderBuffer(mRenderBuffer);
+                gd.renderBuffer(mRenderBuffer);
             }
             
             mSegments.clear();

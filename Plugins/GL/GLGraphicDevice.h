@@ -27,7 +27,7 @@ namespace ukn {
         void endFrame();
         void beginRendering();
         
-        void onRenderBuffer(const RenderBufferPtr& buffer);
+        void renderBuffer(const RenderBufferPtr& buffer);
         void onBindFrameBuffer(const FrameBufferPtr& frameBuffer);
         
         void setViewMatrix(const Matrix4& mat);

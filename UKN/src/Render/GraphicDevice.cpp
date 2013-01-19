@@ -45,7 +45,7 @@ namespace ukn {
             return static_ptr;
         }
         
-        void onRenderBuffer(const RenderBufferPtr& buffer) { }
+        void renderBuffer(const RenderBufferPtr& buffer) { }
         
         UknString description() const {
             return UknString(L"Null GraphicDevice");

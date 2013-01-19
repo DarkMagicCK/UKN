@@ -242,7 +242,7 @@ namespace ukn {
             mVertexBuffer->unmap();
             
             gd.bindTexture(it->texture);
-            gd.onRenderBuffer(mRenderBuffer);
+            gd.renderBuffer(mRenderBuffer);
             
             ++it;
         }
@@ -275,7 +275,7 @@ namespace ukn {
             GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
             gd.bindTexture(mRenderQueue[mCurrentBatchIndex].texture);
-            gd.onRenderBuffer(mRenderBuffer);
+            gd.renderBuffer(mRenderBuffer);
             
             onRenderEnd();
         }

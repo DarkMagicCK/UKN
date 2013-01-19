@@ -24,7 +24,7 @@ namespace ukn {
         int32 getMouseWheel();
         
         bool isKeyDown(input::KeyCode key);
-        bool isMouseButtonDown(input::MouseButton btn);
+		bool isMouseButtonDown(input::MouseButton btn);
         
         void setMousePos(int32 x, int32 y);
 

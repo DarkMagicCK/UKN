@@ -198,7 +198,7 @@ namespace ukn {
 		result = mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
 		CHECK_RESULT_AND_RETURN(result, L"ID3D10Device->CreateRasterizerState");
 
-		D3DXMatrixIdentity(&mWorldMatrix);
+		mWorldMatrix = Matrix4();
 
 		/* default D3D10 Blend State */
 		D3D10_BLEND_DESC blendDesc;
@@ -278,7 +278,7 @@ namespace ukn {
 		}
 	}
 
-	void D3D10GraphicDevice::onRenderBuffer(const RenderBufferPtr& buffer) {
+	void D3D10GraphicDevice::renderBuffer(const RenderBufferPtr& buffer) {
 		mist_assert(buffer.isValid());
 
 		GraphicBufferPtr vertexBuffer = buffer->getVertexStream();
@@ -301,8 +301,7 @@ namespace ukn {
 				if(!effect->setMatrixVariable("viewMatrix", mViewMatrix))
 					log_error("error setting view matrix in effect");
 				if(mCurrTexture) {
-					if(!effect->setShaderResourceVariable("tex", 
-						(ID3D10ShaderResourceView*)mCurrTexture->getTextureId()))
+					if(!effect->setTextureVariable("tex", mCurrTexture))
 						log_error("error setting texture in effect");
 				}
 
@@ -335,20 +334,20 @@ namespace ukn {
 	}
 
 	void D3D10GraphicDevice::setViewMatrix(const Matrix4& mat) {
-		memcpy((float*)&mViewMatrix, mat.x, sizeof(float) * 16);
+		mViewMatrix = mat;
 	}
 
 	void D3D10GraphicDevice::setProjectionMatrix(const Matrix4& mat) {
-		memcpy((float*)&mProjectionMatrix, mat.x, sizeof(float) * 16);
+		mProjectionMatrix = mat;
 	}
 
 	void D3D10GraphicDevice::getViewMatrix(Matrix4& mat) {
-		memcpy(mat.x, (float*)&mViewMatrix, sizeof(float) * 16);
-	}
+	    mat = mViewMatrix;
+    }
 
 	void D3D10GraphicDevice::getProjectionMatrix(Matrix4& mat) {
-		memcpy(mat.x, (float*)&mProjectionMatrix, sizeof(float) * 16);
-	}
+	    mat = mProjectionMatrix;
+    }
 
 	void D3D10GraphicDevice::bindTexture(const TexturePtr& texture) {
 		mCurrTexture = texture;

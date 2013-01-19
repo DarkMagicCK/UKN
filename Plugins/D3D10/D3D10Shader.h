@@ -3,13 +3,11 @@
 
 #include "D3D10Preq.h"
 
-#include <d3dx9.h>
-
 namespace ukn {
 
 	class D3D10GraphicDevice;
 
-	class D3D10Effect: public Shader {
+	class D3D10Effect: public Effect {
 	public:
 		D3D10Effect(D3D10GraphicDevice* device);
 		virtual ~D3D10Effect();
@@ -23,22 +21,24 @@ namespace ukn {
 		/*
 			Variable Setters
 		*/
-		bool setMatrixVariable(const char* name, const D3DXMATRIX& worldMat);
-		bool setRawVariable(const char* name, void* data, uint32 length);
+		virtual bool setMatrixVariable(const char* name, const Matrix4& worldMat) override;
 		// vector variables are four-components 
-		bool setFloatVectorVariable(const char* name, float* vec);
-		bool setIntVectorVariable(const char* name, int* vec);
-		bool setShaderResourceVariable(const char* name, ID3D10ShaderResourceView* resource);
+		virtual bool setFloatVectorVariable(const char* name, float* vec) override;
+		virtual bool setIntVectorVariable(const char* name, int* vec) override;
+		virtual bool setTextureVariable(const char* name, Texture* resource) override;
 		/*
 			Variable Getters
 		*/
-	    bool getMatrixVariable(const char* name, D3DXMATRIX* mat);
-		bool getRawVariable(const char* name, void* data, uint32 len);
-		bool getFloatVectorVariable(const char* name, float* vec);
-		bool getIntVectorVariable(const char* name, int* vec);
+	    virtual bool getMatrixVariable(const char* name, Matrix4* mat) override;
+		virtual bool getFloatVectorVariable(const char* name, float* vec) override;
+		virtual bool getIntVectorVariable(const char* name, int* vec) override;
 
-		uint32 getPasses() const;
-		void applyPass(uint32 pass);
+        
+        bool setRawVariable(const char* name, void* data, uint32 length);
+	    bool getRawVariable(const char* name, void* data, uint32 len);
+
+		virtual uint32 getPasses() const;
+		virtual void applyPass(uint32 pass);
 
 	private:
 		ID3D10Effect* mEffect;
@@ -48,28 +48,21 @@ namespace ukn {
 		D3D10GraphicDevice* mDevice;
 	};
 
+    /* 
+    if we use seperate shaders in d3d10
+    constant buffer is needed to set shader variables
+    however, name mapping might be a problem,
+    since there's no such thing in glsl
+    to do with this part
+    */
 	class D3D10Shader: public Shader {
 	public:
+		D3D10Shader(D3D10GraphicDevice* device);
 		virtual ~D3D10Shader() = 0;
-		/*
-			Variable Setters
-		*/
-		bool setMatrixVariable(const char* name, const D3DXMATRIX& worldMat);
-		bool setRawVariable(const char* name, void* data, uint32 length);
-		// vector variables are four-components 
-		bool setFloatVectorVariable(const char* name, float* vec);
-		bool setIntVectorVariable(const char* name, int* vec);
-		bool setShaderResourceVariable(const char* name, ID3D10ShaderResourceView* resource);
-		/*
-			Variable Getters
-		*/
-	    bool getMatrixVariable(const char* name, D3DXMATRIX* mat);
-		bool getRawVariable(const char* name, void* data, uint32 len);
-		bool getFloatVectorVariable(const char* name, float* vec);
-		bool getIntVectorVariable(const char* name, int* vec);
-
+	
 	protected:
-		ID3DXConstantTable* mConstantTable;
+		D3D10GraphicDevice* mDevice;
+        ID3D10Buffer* mConstantBuffer;
 	};
 
 	class D3D10VertexShader: public D3D10Shader {
@@ -82,7 +75,6 @@ namespace ukn {
 		virtual void unbind() override;
 
 	private:
-		D3D10GraphicDevice* mDevice;
 		ID3D10VertexShader* mShader;
 		ID3D10InputLayout* mLayout;
 	};
@@ -97,7 +89,6 @@ namespace ukn {
 		virtual void unbind() override;
 
 	private:
-		D3D10GraphicDevice* mDevice;
 		ID3D10PixelShader* mShader;
 	};
 
@@ -111,7 +102,6 @@ namespace ukn {
 		virtual void unbind() override;
 
 	private:
-		D3D10GraphicDevice* mDevice;
 		ID3D10GeometryShader* mShader;
 	};
 

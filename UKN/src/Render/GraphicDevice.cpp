@@ -55,9 +55,11 @@ namespace ukn {
         
         void setViewMatrix(const Matrix4& mat) { }
         void setProjectionMatrix(const Matrix4& mat) { }
+        void setWorldMatrix(const Matrix4& mat) { }
         
-        void getViewMatrix(Matrix4& mat) { }
-        void getProjectionMatrix(Matrix4& mat) { }
+        void getViewMatrix(Matrix4& mat) const { }
+        void getProjectionMatrix(Matrix4& mat) const { }
+        void getWorldMatrix(Matrix4& mat) const { }
         
         void setRenderState(RenderStateType, uint32) { }
         

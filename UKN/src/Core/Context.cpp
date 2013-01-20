@@ -89,6 +89,11 @@ namespace ukn {
 		return *this;
 	}
 
+    ContextCfg& ContextCfg::fps(uint32 fps) {
+        desired_fps = fps;
+        return *this;
+    }
+
     ContextCfg ContextCfg::Default() {
         return ContextCfg()
                     .width(640)

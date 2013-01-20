@@ -66,6 +66,8 @@ namespace ukn {
             mInited = true;
         
             Context::Instance().setCfg(cfg);
+            
+            FrameCounter::Instance().setDesiredFps(cfg.desired_fps);
             doCreate();
         } else {
             MIST_THROW_EXCEPTION(L"app already created");
@@ -131,9 +133,8 @@ namespace ukn {
         mist::ModuleManager::Destroy();
         
         try {
-#ifdef MIST_OS_AppLauncherS
+#ifdef MIST_OS_WINDOWS
         ::PostQuitMessage(0);
-		exit(0);
 #else
         exit(0);
 #endif

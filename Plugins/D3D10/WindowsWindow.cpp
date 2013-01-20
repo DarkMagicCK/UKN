@@ -316,7 +316,6 @@ namespace ukn {
 	}
        
 	void WindowsWindow::updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h) {
-		
         Window::mLeft = x;
         Window::mTop = y;
         Window::mWidth = w;
@@ -332,11 +331,9 @@ namespace ukn {
 		    vp.width = w;
 		    vp.height = h;
         
-			vp.camera = MakeSharedPtr<Camera3D>();
-		   //((Camera2D*)vp.camera.get())->setOrthoParams(0, mFrameBuffer->width(), 0, mFrameBuffer->height());
-			((Camera3D*)vp.camera.get())->setProjParams(d_pi / 4,  (float)mFrameBuffer->width() / (float)mFrameBuffer->height(), 0.0, 1.0);
-			((Camera3D*)vp.camera.get())->setViewParams(Vector3(0, 0, -10.f), Vector3(0, 0, 1)); 
-			vp.camera->update();
+			vp.camera = MakeSharedPtr<Camera>();
+		    vp.camera->setProjParams(d_pi / 2,  (float)mFrameBuffer->width() / (float)mFrameBuffer->height(), 0.1, 1000.f);
+			vp.camera->setViewParams(Vector3(0, 0, -5), Vector3(0, 0, 1));
 		}
 	}
 

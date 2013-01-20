@@ -71,9 +71,11 @@ namespace ukn {
                
         virtual void setViewMatrix(const Matrix4& mat) = 0;
         virtual void setProjectionMatrix(const Matrix4& mat) = 0;
-        
-        virtual void getViewMatrix(Matrix4& mat) = 0;
-        virtual void getProjectionMatrix(Matrix4& mat) = 0;
+        virtual void setWorldMatrix(const Matrix4& mat) = 0;
+
+        virtual void getViewMatrix(Matrix4& mat) const = 0;
+        virtual void getProjectionMatrix(Matrix4& mat) const = 0;
+        virtual void getWorldMatrix(Matrix4& mat) const = 0;
         
         virtual void fillGraphicCaps(GraphicDeviceCaps& caps) = 0;
     
@@ -81,6 +83,8 @@ namespace ukn {
         virtual void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) = 0;
         
         virtual void setRenderState(RenderStateType type, uint32 func) = 0;
+
+        virtual void adjustPerspectiveMat(Matrix4& mat) {}
         
     public:
         virtual void bindTexture(const TexturePtr& texture) = 0;

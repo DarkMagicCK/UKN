@@ -13,11 +13,6 @@
 
 namespace ukn {
 
-#undef FAR
-#undef NEAR
-#undef far
-#undef near
-    
     using namespace mist;
     
     enum ElementFormat {
@@ -83,8 +78,8 @@ namespace ukn {
         depth_stencil_fmt(EF_D16),
         sample_count(1),
         sample_quality(0),
-		far(1.f),
-		near(0.f) {
+		zfar(1.f),
+		znear(0.f) {
             
         }
         
@@ -98,8 +93,8 @@ namespace ukn {
         uint32 width;
         uint32 height;
 
-		float far;
-		float near;
+		float zfar;
+		float znear;
         
         ElementFormat color_fmt;
         ElementFormat depth_stencil_fmt;

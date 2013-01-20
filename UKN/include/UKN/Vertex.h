@@ -12,6 +12,8 @@
 #include "mist/Platform.h"
 
 namespace ukn {
+
+    using namespace mist;
     
     enum VertexFormatFlag {
         VF_XYZ       = 1UL, 
@@ -146,6 +148,40 @@ namespace ukn {
         
         static uint32 FormatFlag() {
             return VF_XYZ | VF_UV | VF_Color0;
+        }
+    };
+
+    struct VertexUVNormal {
+        float u, v;
+        float x, y, z;
+        float nx, ny, nz;
+
+        VertexUVNormal():
+        u(0.f), v(0.f),
+        x(0.f), y(0.f), z(0.f),
+        nx(0.f), ny(0.f), nz(0.f) {
+
+        }
+
+        void setNormal(float _x, float _y, float _z) {
+            nx = _x; ny = _y; nz = _z;
+        }
+        void setPosition(float _x, float _y, float _z) {
+            x = _x; y = _y; z = _z;
+        }
+
+        static VertexFormat& Format() {
+            static VertexFormat static_vertexuvnormal_format(VF_XYZ | VF_UV | VF_Normal,
+                                                       sizeof(float) * 2,
+                                                       0,
+                                                       0,
+                                                       0,
+                                                       sizeof(float) * 5);
+            return static_vertexuvnormal_format;
+        }
+        
+        static uint32 FormatFlag() {
+            return VF_XYZ | VF_UV | VF_Normal;
         }
     };
     

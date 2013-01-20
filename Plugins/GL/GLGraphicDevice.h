@@ -32,9 +32,11 @@ namespace ukn {
         
         void setViewMatrix(const Matrix4& mat);
         void setProjectionMatrix(const Matrix4& mat);
+        void setWorldMatrix(const Matrix4& mat);
         
-        void getViewMatrix(Matrix4& mat);
-        void getProjectionMatrix(Matrix4& mat);
+        void getViewMatrix(Matrix4& mat) const;
+        void getProjectionMatrix(Matrix4& mat) const;
+        void getWorldMatrix(Matrix4& mat) const;
         
         void bindTexture(const TexturePtr& texture);
         void bindEffect(const EffectPtr& effect);
@@ -49,11 +51,17 @@ namespace ukn {
         
         void bindGLFrameBuffer(GLuint fbo);
         GLuint getBindedGLFrameBuffer() const;
+
+        void adjustPerspectiveMat(Matrix4& mat) override;
         
     private:
         WindowPtr mWindow;
         TexturePtr mCurrTexture;
         EffectPtr mEffect;
+
+        Matrix4 mWorldMat;
+        Matrix4 mViewMat;
+        Matrix4 mProjectionMat;
         
         GLuint mCurrGLFrameBuffer;
     };

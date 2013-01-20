@@ -59,7 +59,7 @@ namespace ukn {
 				numElements += 1;
 			}
 			if(format.checkFormat(VF_Normal)) {
-				layoutDesc[numElements].SemanticName = "COLOR1";
+				layoutDesc[numElements].SemanticName = "NORMAL";
 				layoutDesc[numElements].SemanticIndex = 0;
 				layoutDesc[numElements].Format = DXGI_FORMAT_R32G32B32_FLOAT;
 				layoutDesc[numElements].InputSlot = 0;
@@ -123,6 +123,7 @@ namespace ukn {
 			0);
 		if(FAILED(result)) {
 			D3D10ShaderUtilities::LogError(error);
+            return false;
 		}
 
 		mTechnique = mEffect->GetTechniqueByIndex(0);

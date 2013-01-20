@@ -4,11 +4,28 @@
 
 
 #include "mist/Platform.h"
+#include "mist/MathUtil.h"
 #include "UKN/GraphicSettings.h"
 
 #include <d3d10.h>
 
 namespace ukn {
+
+    inline void D3DXMatrixToMatrix4(const D3DXMATRIX& d3dmat, Matrix4& mat) {
+        for(int col = 0; col < 4; ++col) {
+            for(int row = 0; row < 4; ++row) {
+                mat.c[col][row] = d3dmat(row, col);
+            }
+        }
+    }
+
+    inline void Matrix4ToD3DMatrix(const Matrix4& mat, D3DXMATRIX& d3dmat) {
+        for(int col = 0; col < 4; ++col) {
+            for(int row = 0; row < 4; ++row) {
+                d3dmat(row, col) = mat.c[col][row];
+            }
+        }
+    }
 
 	inline DXGI_FORMAT ElementFormatToDxGIFormat(ukn::ElementFormat format) {
 		switch(format) {

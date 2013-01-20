@@ -33,10 +33,12 @@ namespace ukn {
         
         void setViewMatrix(const Matrix4& mat) override;
         void setProjectionMatrix(const Matrix4& mat) override;
-        
-        void getViewMatrix(Matrix4& mat) override;
-        void getProjectionMatrix(Matrix4& mat) override;
-        
+        void setWorldMatrix(const Matrix4& mat) override;
+
+        void getViewMatrix(Matrix4& mat) const override;
+        void getProjectionMatrix(Matrix4& mat) const override;
+        void getWorldMatrix(Matrix4& mat) const override;
+
         void bindTexture(const TexturePtr& texture) override;
      	void bindEffect(const EffectPtr& effect) override;
 

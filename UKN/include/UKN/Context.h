@@ -28,6 +28,7 @@ namespace ukn {
     struct UKN_API ContextCfg {
         UknString graphic_factory_name;
         
+        uint32 desired_fps;
         RenderSettings render_cfg;
         
         ContextCfg& graphicFactoryName(const UknString& name);
@@ -43,7 +44,8 @@ namespace ukn {
         ContextCfg& sampleQuality(int quality);
 		ContextCfg& icon(const MistString& icon);
 		ContextCfg& cursor(const MistString& cursor);
-        
+        ContextCfg& fps(uint32 fps);
+
         static ContextCfg Default();
     };
     

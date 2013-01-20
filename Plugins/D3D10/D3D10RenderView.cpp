@@ -138,8 +138,6 @@ namespace ukn {
 		if(FAILED(result))
 			MIST_THROW_EXCEPTION(L"Error create depth stencil disabled state");
 
-		idevice->OMSetDepthStencilState(mDepthStencilState, 1);
-
 		D3D10_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 		ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 		depthStencilViewDesc.Format = ElementFormatToDxGIFormat(ef);
@@ -179,7 +177,7 @@ namespace ukn {
 	}
 
 	void D3D10DepthStencilRenderView::onAttached(FrameBuffer& fb, uint32 att) {
-
+		mGraphicDevice->getD3DDevice()->OMSetDepthStencilState(mDepthStencilState, 1);
 	}
 
 	void D3D10DepthStencilRenderView::onDetached(FrameBuffer& fb, uint32 att) {

@@ -24,7 +24,14 @@ namespace ukn {
     D3D10GraphicDevice::D3D10GraphicDevice():
         mDevice(0),
         mEffect(0) {
-
+            /*
+            LH to RH and fix z
+            www.klayge.org/2011/07/15
+            1  0   0   0
+            0  1   0   0
+            0  0   2   0
+            0  0   -1  1
+            */
     }
 
     D3D10GraphicDevice::~D3D10GraphicDevice() {
@@ -185,7 +192,7 @@ namespace ukn {
         D3D10_RASTERIZER_DESC rasterDesc;
         ZeroMemory(&rasterDesc, sizeof(rasterDesc));
         rasterDesc.AntialiasedLineEnable = false;
-        rasterDesc.CullMode = D3D10_CULL_BACK;
+        rasterDesc.CullMode = D3D10_CULL_NONE;
         rasterDesc.DepthBias = 0;
         rasterDesc.DepthBiasClamp = 0.f;
         rasterDesc.DepthClipEnable = true;
@@ -197,6 +204,7 @@ namespace ukn {
 
         result = mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
         CHECK_RESULT_AND_RETURN(result, L"ID3D10Device->CreateRasterizerState");
+        mDevice->RSSetState(mRasterState);
 
         mWorldMatrix = Matrix4();
 
@@ -257,6 +265,8 @@ namespace ukn {
 
                     mDevice->RSSetViewports(1, &viewport);
                     mDevice->OMSetBlendState(mBlendState, 0, 0xffffffff);
+
+                    fb.getViewport().camera->update();
 
                     this->setViewMatrix(fb.getViewport().camera->getViewMatrix());
                     this->setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
@@ -339,23 +349,22 @@ namespace ukn {
 
     void D3D10GraphicDevice::setProjectionMatrix(const Matrix4& mat) {
         mProjectionMatrix = mat;
-        Matrix4 A;
-        A.c[0][0] = 1;
-        A.c[1][1] = 1;
-        A.c[2][2] = 2;
-        A.c[2][3] = -1;
-        A.c[3][3] = 1;
-        A = A.inverted();
-        mProjectionMatrix = mProjectionMatrix * A;
-
     }
 
-    void D3D10GraphicDevice::getViewMatrix(Matrix4& mat) {
+    void D3D10GraphicDevice::setWorldMatrix(const Matrix4& mat) {
+        mWorldMatrix = mat;
+    }
+
+    void D3D10GraphicDevice::getViewMatrix(Matrix4& mat) const {
         mat = mViewMatrix;
     }
 
-    void D3D10GraphicDevice::getProjectionMatrix(Matrix4& mat) {
+    void D3D10GraphicDevice::getProjectionMatrix(Matrix4& mat) const {
         mat = mProjectionMatrix;
+    }
+
+    void D3D10GraphicDevice::getWorldMatrix(Matrix4& mat) const {
+        mat = mWorldMatrix;
     }
 
     void D3D10GraphicDevice::bindTexture(const TexturePtr& texture) {

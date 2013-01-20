@@ -125,6 +125,12 @@ namespace ukn {
         
         mist_assert(buffer.isValid());
         
+        glMatrixMode(GL_MODELVIEW);
+        glLoadMatrixf(( mViewMat).x);
+        
+        glMatrixMode(GL_PROJECTION);
+        glLoadMatrixf(mProjectionMat.x);
+
         GraphicBufferPtr vertexBuffer = buffer->getVertexStream();
         if(!vertexBuffer.isValid()) {
             log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid vertex buffer stream");
@@ -199,7 +205,7 @@ namespace ukn {
         } else {
             glDisable(GL_TEXTURE_2D);
         }
-        
+
         if(buffer->isUseIndexStream()) {
             GraphicBufferPtr indexBuffer = buffer->getIndexStream();
             if(!indexBuffer.isValid()) {
@@ -269,9 +275,11 @@ namespace ukn {
                                fb.getViewport().width,
                                fb.getViewport().height);
                     
+                    fb.getViewport().camera->update();
+
                     setViewMatrix(fb.getViewport().camera->getViewMatrix());
                     setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
-                    
+
                     app.update();
                     app.render();
                     
@@ -318,21 +326,27 @@ namespace ukn {
     }
     
     void GLGraphicDevice::setViewMatrix(const Matrix4& mat) {
-        glMatrixMode(GL_MODELVIEW);
-        glLoadMatrixf(&mat.x[0]);
+        mViewMat = mat;
+    }
+
+    void GLGraphicDevice::setWorldMatrix(const Matrix4& mat) {
+        mWorldMat = mat;
     }
     
     void GLGraphicDevice::setProjectionMatrix(const Matrix4& mat) {
-        glMatrixMode(GL_PROJECTION);
-        glLoadMatrixf(&mat.x[0]);
+        mProjectionMat = mat;
     }
     
-    void GLGraphicDevice::getViewMatrix(Matrix4& mat) {
-        glGetFloatv(GL_MODELVIEW_MATRIX, &mat.x[0]);
+    void GLGraphicDevice::getViewMatrix(Matrix4& mat) const {
+        mat = mViewMat;
     }
     
-    void GLGraphicDevice::getProjectionMatrix(Matrix4& mat) {
-        glGetFloatv(GL_PROJECTION_MATRIX, &mat.x[0]);
+    void GLGraphicDevice::getProjectionMatrix(Matrix4& mat) const {
+        mat = mProjectionMat;
+    }
+
+    void GLGraphicDevice::getWorldMatrix(Matrix4& mat) const {
+        mat = mWorldMat;
     }
 
     void GLGraphicDevice::bindEffect(const EffectPtr& effect) {
@@ -394,6 +408,10 @@ namespace ukn {
                 glPointSize(mist::Convert::ReinterpretConvert<uint32, float>(func));
                 break;
         }
+    }
+
+    void GLGraphicDevice::adjustPerspectiveMat(Matrix4& mat) {
+        mat *= (Matrix4::ScaleMat(1.f, 1.f, 2.f) * Matrix4::TransMat(0.f, 0.f, -1.f));
     }
     
 } // namespace ukn

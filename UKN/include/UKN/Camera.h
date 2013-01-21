@@ -23,10 +23,10 @@ namespace ukn {
         void setViewParams(const Vector3& eye, const Vector3& lookat, const Vector3& up = Vector3(0, 1, 0));
         void setProjParams(float fov, float aspect, float near, float far);
     
-        const Vector3& getEyePos() const;
-        const Vector3& getLookAt() const;
-        const Vector3& getUpVec() const;
-        const Vector3& getViewVec() const;
+        Vector3 getEyePos() const;
+        Vector3 getLookAt() const;
+        Vector3 getUpVec() const;
+        Vector3 getViewVec() const;
         
         float getFOV() const;
         float getAspect() const;

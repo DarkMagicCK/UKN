@@ -762,6 +762,10 @@ namespace mist {
             return Vector3(x, y, z);
         }
 
+        float length() const {
+            return sqrt(x * x + y * y + z * z + w * w);
+        }
+
         inline Quaternion& operator=(const Quaternion& rhs) {
             this->x = rhs.x; 
             this->y = rhs.y;
@@ -1796,7 +1800,25 @@ namespace mist {
             mat.c[index][3]);
     }
 
+    namespace math {
+     
+        inline Vector3 TransformQuaternion(const Vector3& v, const Quaternion& q) {
+            float a(q.w * q.w - q.get().length());
+            float b(2 * v.dot(q.get()));
+            float c(q.w + q.w);
 
+            Vector3 cross_v(q.get().cross(v));
+            return Vector3(a * v.x + b * q.x + c * cross_v.x,
+                a * v.y + b * q.y + c * cross_v.y,
+                a * v.z + b * q.z + c * cross_v.z);
+        }
+
+        inline Quaternion InverseQuaternion(const Quaternion& q) {
+            float inv(1.f / q.length());
+            return Quaternion(-q.x * inv, -q.y * inv, -q.z * inv, q.w * inv);
+        }
+    
+    }
 
 } // namespace mist
 

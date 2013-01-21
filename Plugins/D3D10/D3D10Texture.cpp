@@ -59,7 +59,7 @@ namespace ukn {
 		ZeroMemory(&desc, sizeof(desc));
 		desc.Width = w;
 		desc.Height = h;
-		desc.MipLevels = mipmaps;
+		desc.MipLevels = mipmaps == 0 ? 1: mipmaps;
 		desc.ArraySize = 1;
 		desc.Format = ElementFormatToDxGIFormat(format);
 		desc.SampleDesc.Count = 1;
@@ -86,6 +86,7 @@ namespace ukn {
 
 		D3D10_SUBRESOURCE_DATA textureData;
 		textureData.pSysMem = texData;
+        textureData.SysMemPitch = w * GetElementSize(format);
 
 		if(FAILED(mDevice->getD3DDevice()->CreateTexture2D(&desc, &textureData, &mTexture))) {
 			return false;

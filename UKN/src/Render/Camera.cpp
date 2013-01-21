@@ -47,19 +47,19 @@ namespace ukn {
         gd.adjustPerspectiveMat(mProjMat[0]);
     }
     
-    const Vector3& Camera::getEyePos() const {
+    Vector3 Camera::getEyePos() const {
         return mEysPos;
     }
     
-    const Vector3& Camera::getLookAt() const {
+    Vector3 Camera::getLookAt() const {
         return mLookAt;
     }
     
-    const Vector3& Camera::getUpVec() const {
+    Vector3 Camera::getUpVec() const {
         return mUpVec;
     }
     
-    const Vector3& Camera::getViewVec() const {
+    Vector3 Camera::getViewVec() const {
         return mViewVec;
     }
     

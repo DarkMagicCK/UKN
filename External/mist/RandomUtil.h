@@ -13,7 +13,7 @@
 
 namespace mist {
     
-    class Random {
+    class MIST_API Random {
     public:
         static void SetRandomSeed(uint32 seed);
         static uint32 GetRandomSeed();
@@ -29,16 +29,16 @@ namespace mist {
      * Global RandomGenerator
      * You can change the functions in it to make the random generator use your funcs instead of internal generator funcs
      **/
-    static struct RandomGenerator {
+     struct MIST_API RandomGenerator {
         RandomGenerator();
         
         typedef void (*set_random_seed_func_ptr)(uint32 seed);
         typedef float (*normalized_random_func_ptr)();
         
         set_random_seed_func_ptr random_seed_func;
-        normalized_random_func_ptr normalized_random_func;
-        
-    } random_generator;
+        normalized_random_func_ptr normalized_random_func;  
+    };
+    static RandomGenerator random_generator;
     
     /**
      * Specialize this to support your types
@@ -78,19 +78,19 @@ namespace mist {
     class Color;
     
     template<> struct Randomizer<float> {
-        static float Randomize(float min, float max);
+        MIST_API static float Randomize(float min, float max);
     };
     
     template<> struct Randomizer<Vector2> {
-        static Vector2 Randomize(const Vector2& min, const Vector2& max);
+        MIST_API static Vector2 Randomize(const Vector2& min, const Vector2& max);
     };
     
     template<> struct Randomizer<Vector3> {
-        static Vector3 Randomize(const Vector3& min, const Vector3& max);
+        MIST_API static Vector3 Randomize(const Vector3& min, const Vector3& max);
     };
     
     template<> struct Randomizer<Color> {
-        static Color Randomize(const Color& min, const Color& max);
+        MIST_API static Color Randomize(const Color& min, const Color& max);
     };
     
     typedef RandomObject<float>     RandomRange;

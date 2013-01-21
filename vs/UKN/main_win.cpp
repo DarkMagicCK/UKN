@@ -76,16 +76,6 @@ int CALLBACK WinMain(
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
 
-            ukn::Viewport& vp = gd.getCurrFrameBuffer()->getViewport();
-         
-            float camPos[3] = {vp.camera->getEyePos().x, vp.camera->getEyePos().y, vp.camera->getEyePos().z};
-            effect->setFloatVectorVariable("cameraPosition", camPos);
-
-            ukn::log_info(ukn::format_string("eye: %.2f, %.2f, %.2f, lookat: %.2f, %.2f, %.2f, up: %.2f, %.2f, %.2f",
-                    vp.camera->getEyePos().x, vp.camera->getEyePos().y, vp.camera->getEyePos().z,
-                    vp.camera->getLookAt().x, vp.camera->getLookAt().y, vp.camera->getLookAt().z,
-                    vp.camera->getUpVec().x, vp.camera->getUpVec().y, vp.camera->getUpVec().z));
-
             worldMat.rotate(0, 0.01 * ukn::d_pi, 0);
             if(texture)
                 gd.bindTexture(texture);

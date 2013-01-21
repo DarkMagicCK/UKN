@@ -26,6 +26,7 @@ namespace ukn {
 		ID3D10InfoQueue* getInfoQueue() const;
 
 	private:
+        mist::int64 mLastLoggesIndex;
 		ID3D10Device* mDevice;
 		ID3D10InfoQueue* mInfoQueue;
 	};

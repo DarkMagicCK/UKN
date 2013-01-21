@@ -10,6 +10,7 @@ namespace ukn {
 	using namespace mist;
 
 	D3D10Debug::D3D10Debug(ID3D10Device* device):
+    mLastLoggesIndex(0),
 	mDevice(device),
 	mInfoQueue(0) {
 		if(!D3D10Debug::CHECK_RESULT(mDevice->QueryInterface(__uuidof(ID3D10InfoQueue), (void**)&mInfoQueue)))
@@ -65,7 +66,7 @@ namespace ukn {
 		if(mInfoQueue &&
 			mInfoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() > 0) {
 				/* log from back to front */
-			for(mist::int64 i = mInfoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() - 1; i >= 0 ; --i) {
+			for(mist::int64 i = mInfoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() - 1; i >= mLastLoggesIndex ; --i) {
 				SIZE_T messageLength = 0;
 				if(SUCCEEDED(mInfoQueue->GetMessage(i, NULL, &messageLength))) {
 					D3D10_MESSAGE* message = mist_malloc_t(D3D10_MESSAGE, messageLength);
@@ -86,6 +87,7 @@ namespace ukn {
 					}
 				}
 			}
+            mLastLoggesIndex = mInfoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() + 1;
 		}
 	}
 

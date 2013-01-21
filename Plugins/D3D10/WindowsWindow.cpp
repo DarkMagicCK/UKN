@@ -332,7 +332,7 @@ namespace ukn {
 		    vp.height = h;
         
 			vp.camera = MakeSharedPtr<Camera>();
-		    vp.camera->setProjParams(d_pi / 2,  (float)mFrameBuffer->width() / (float)mFrameBuffer->height(), 0.1, 1000.f);
+		    vp.camera->setProjParams(d_pi / 2,  (float)mFrameBuffer->width() / (float)mFrameBuffer->height(), 0.1, 100.f);
 			vp.camera->setViewParams(Vector3(0, 0, -5), Vector3(0, 0, 1));
 		}
 	}

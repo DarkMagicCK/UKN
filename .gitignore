@@ -4,3 +4,5 @@ xcuserdata
 .DS_Store
 ._DS_Store
 External/leapmotion
+Debug
+Release

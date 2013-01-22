@@ -154,14 +154,15 @@ namespace mist {
 			std::string result;
 
 			char buffer[100];
+            long n;
 			do {
-				long n = ::read(_fd, buffer, 100);
+				n = ::read(_fd, buffer, 100);
 				if(n == -1)
 					return std::string();
 				if(n == 0)
 					break;
 				result += std::string(buffer, buffer + n);
-			} while(bytesRead > 0);
+			} while(n > 0);
 			
 			return result;
 		}

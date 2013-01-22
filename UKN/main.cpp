@@ -140,7 +140,7 @@ public:
     
     void render() {
         ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
-        gd.onRenderBuffer(mRenderBuffer);
+        gd.renderBuffer(mRenderBuffer);
     }
     
     float a() const { return mA; }

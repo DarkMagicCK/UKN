@@ -56,14 +56,14 @@ namespace mist {
     }
     
     Vector2 Randomizer<Vector2>::Randomize(const Vector2& min, const Vector2& max) {
-        return Vector2(Random::RandomFloat(min.x, max.x),
-                       Random::RandomFloat(min.y, max.y));
+        return Vector2(Random::RandomFloat(min.x(), max.x()),
+                       Random::RandomFloat(min.y(), max.y()));
     }
     
     Vector3 Randomizer<Vector3>::Randomize(const Vector3& min, const Vector3& max) {
-        return Vector3(Random::RandomFloat(min.x, max.x),
-                       Random::RandomFloat(min.y, max.y),
-                       Random::RandomFloat(min.z, max.z));
+        return Vector3(Random::RandomFloat(min.x(), max.x()),
+                       Random::RandomFloat(min.y(), max.y()),
+                       Random::RandomFloat(min.z(), max.z()));
     }
     
     Color Randomizer<Color>::Randomize(const Color& min, const Color& max) {

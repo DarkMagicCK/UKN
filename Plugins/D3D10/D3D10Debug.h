@@ -2,6 +2,7 @@
 #define Project_Unknown_D3D10Debug_h
 
 #include <d3d10.h>
+#include "mist/Platform.h"
 
 namespace ukn {
 

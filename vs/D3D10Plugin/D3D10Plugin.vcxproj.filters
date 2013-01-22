@@ -63,6 +63,9 @@
     <ClInclude Include="..\..\Plugins\D3D10\D3D10Debug.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\MetroWindows.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -102,6 +105,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Plugins\D3D10\D3D10Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\MetroWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

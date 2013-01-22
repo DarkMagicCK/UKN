@@ -13,10 +13,10 @@
 namespace ukn {
     
     void Frustum::clipMatrix(const Matrix4& clip) {
-        Vector4 col1 = get_matrix_col(clip, 0);
-        Vector4 col2 = get_matrix_col(clip, 1);
-        Vector4 col3 = get_matrix_col(clip, 2);
-        Vector4 col4 = get_matrix_col(clip, 3);
+        Vector4 col1 = math::get_matrix_col(clip, 0);
+        Vector4 col2 = math::get_matrix_col(clip, 1);
+        Vector4 col3 = math::get_matrix_col(clip, 2);
+        Vector4 col4 = math::get_matrix_col(clip, 3);
         
         this->mPlanes[0] = col4 - col1;
         this->mPlanes[1] = col4 + col1;
@@ -41,12 +41,12 @@ namespace ukn {
         for(int i=0; i<6; ++i) {
             const int n = mLookupTable[i];
             
-            Vector3 v0((n & 1) ? box.getMin().x : box.getMax().x, 
-                       (n & 2) ? box.getMin().y : box.getMax().y,
-                       (n & 4) ? box.getMin().z : box.getMax().z);
-            Vector3 v1((n & 1) ? box.getMax().x : box.getMin().x, 
-                       (n & 2) ? box.getMax().y : box.getMin().y,
-                       (n & 4) ? box.getMax().z : box.getMin().z);
+            Vector3 v0((n & 1) ? box.getMin().x() : box.getMax().x(), 
+                       (n & 2) ? box.getMin().y() : box.getMax().y(),
+                       (n & 4) ? box.getMin().z() : box.getMax().z());
+            Vector3 v1((n & 1) ? box.getMax().x() : box.getMin().x(), 
+                       (n & 2) ? box.getMax().y() : box.getMin().y(),
+                       (n & 4) ? box.getMax().z() : box.getMin().z());
             
             if(this->mPlanes[i].normal().dot(v1) < 0)
                 return No;

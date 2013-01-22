@@ -314,7 +314,7 @@ namespace mist {
     void unicode_strcpy(uint16 *dst, const uint16 *src, size_t swap) {
         if ( swap ) {
             while ( *src ) {
-                *dst = flip_bytes(*src);
+                *dst = math::flip_bytes(*src);
                 ++src;
                 ++dst;
             }

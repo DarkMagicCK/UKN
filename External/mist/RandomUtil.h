@@ -10,6 +10,7 @@
 #define MISTRandomUtil_h
 
 #include "mist/Platform.h"
+#include "mist/MathUtil.h"
 
 namespace mist {
     
@@ -73,13 +74,11 @@ namespace mist {
         T max;
     };
     
-    class Vector2;
-    class Vector3;
-    class Color;
-    
     template<> struct Randomizer<float> {
         MIST_API static float Randomize(float min, float max);
     };
+    
+    typedef RandomObject<float> RandomRange;
     
     template<> struct Randomizer<Vector2> {
         MIST_API static Vector2 Randomize(const Vector2& min, const Vector2& max);
@@ -88,16 +87,16 @@ namespace mist {
     template<> struct Randomizer<Vector3> {
         MIST_API static Vector3 Randomize(const Vector3& min, const Vector3& max);
     };
+    typedef RandomObject<Vector2>   RandomArea;
+    typedef RandomObject<Vector3>   RandomVolume;
     
+    class Color;
     template<> struct Randomizer<Color> {
         MIST_API static Color Randomize(const Color& min, const Color& max);
     };
     
-    typedef RandomObject<float>     RandomRange;
-    typedef RandomObject<Vector2>   RandomArea;
-    typedef RandomObject<Vector3>   RandomVolume;
     typedef RandomObject<Color>     RandomColor;
-    
+
 } // namespace mist
 
 #endif

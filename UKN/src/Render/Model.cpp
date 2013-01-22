@@ -18,7 +18,7 @@ namespace ukn {
         vertex.z = r * cosf(a);
 
         Vector3 normal = Vector3(vertex.x, vertex.y, vertex.z).normalize();
-        vertex.setNormal(normal.x, normal.y, normal.z);
+        vertex.setNormal(normal.x(), normal.y(), normal.z());
 
         double phi = acos(vertex.nz);
         vertex.v = phi / d_pi;
@@ -53,8 +53,8 @@ namespace ukn {
                 for(a = 0.0, i = 0; i < h; i++, a += hStep)
                     for(b = 0.0, j = 0; j < w; j++, b += wStep) {
                         _get_sphere_vertex(sphere.radius(),
-                            degree_to_radius(a),
-                            degree_to_radius(b),
+                            math::degree_to_radius(a),
+                            math::degree_to_radius(b),
                             vertices[i * w + j]);
                     }
                     

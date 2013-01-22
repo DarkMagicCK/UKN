@@ -468,7 +468,7 @@ namespace mist {
     }
     
     float TextStreamReader::readFloat() {
-        return Convert::ToDouble(this->readNumber());
+        return float(Convert::ToDouble(this->readNumber()));
     }
     
     double TextStreamReader::readDouble() {

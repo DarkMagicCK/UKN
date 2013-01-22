@@ -434,6 +434,9 @@
     <ClCompile Include="..\..\External\zlib\zutil.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\External\mist\MathUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\External\mist\AppleStuff.mm">

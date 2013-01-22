@@ -10,6 +10,7 @@
 #define MISTMath_h
 
 #include "mist/Platform.h"
+#include "mist/Preprocessor.h"
 #include "mist/Basic.h"
 
 #include "mist/detail/TypeTraits.h"
@@ -30,154 +31,69 @@ namespace mist {
     const double d_pi_4   = 0.7853981633974483096156608458198;
     const double d_pi_8   = 0.3926990816987241548078304229099;
 
-    inline real degree_to_radius(real dgr) {
-        return (real)((d_pi * dgr) / 180.0);
-    }
-
-    inline real radius_to_degree(real rad) {
-        return (real)((180.0 * rad) / d_pi);
-    }
-
-    inline real sin_dgr(real dgr) {
-        return (real)(sin(degree_to_radius(dgr)));
-    }
-
-    inline real cos_dgr(real dgr) {
-        return (real)(cos(degree_to_radius(dgr)));
-    }
-
-    inline real tan_dgr(real dgr) {
-        return (real)(tan(degree_to_radius(dgr)));
-    }
-
-#ifndef UKN_TINY
-#define UKN_TINY 0.00000001f
+#ifndef MIST_TINY
+#define MIST_TINY 0.00000001f
 #endif
 
-#define UKN_MIN(a, b) a < b ? a : b
-#define UKN_MAX(a, b) a > b ? a : b
+#define MIST_MIN(a, b) (a) < (b) ? (a) : (b)
+#define MIST_MAX(a, b) (a) > (b) ? (a) : (b)
+#define MIST_ABS(a) (a) < 0 ? -(a) : (a)
 
-    inline bool float_equal(real f1, real f2) {
-        return fabs(f1 - f2) < UKN_TINY;
-    }
+    namespace math {
 
-    // fast inv sqrt by Join Carmack
-    inline real fast_inv_sqrt(real x) {
-        {
-            union
-            {
-                int intPart;
-                real realPart;
-            } convertor;
+        MIST_API real degree_to_radius(real dgr);
+        MIST_API real radius_to_degree(real rad);
+        MIST_API real sin_dgr(real dgr);
+        MIST_API real cos_dgr(real dgr);
+        MIST_API real tan_dgr(real dgr);
+        MIST_API bool float_equal(real f1, real f2);
+        // fast inv sqrt by Join Carmack
+        MIST_API real fast_inv_sqrt(real x);
 
-            convertor.realPart = x;
-            convertor.intPart = 0x5f3759df - (convertor.intPart >> 1);
-            return convertor.realPart*(1.5f - 0.4999f*x*convertor.realPart*convertor.realPart);
+        MIST_API int is_pow_of_2(uint32 x);
+
+        MIST_API uint32 next_pow_of_2(uint32 x);
+
+        // compress a unit float to nBits integer
+        // there would be some data loss but good for some condition
+        // it is safe to cast the result to nBits integer, such as uint16 if you pass nBits as 16
+        MIST_API uint32 compress_unit_float(real unitFloat, uint32 nBits);
+        // decompress a unit float from a quantized uint
+        MIST_API real decompress_unit_float(uint32 quantized, uint32 nBits);
+        // compress a float within a specific range
+        MIST_API uint32 compress_float(real value, real min, real max, uint32 nBits);
+        MIST_API real decompress_float(uint32 quantized, real min, real max, uint32 nBits);
+
+        MIST_API uint16 flip_bytes(uint16 value);
+        MIST_API uint32 flip_bytes(uint32 value);
+
+        MIST_API int16 flip_bytes(int16 value);
+        MIST_API int32 flip_bytes(int32 value);
+
+        template <typename T>
+        inline T lerp(T t1, T t2, real t) {
+            if(t < 0.f) t = 0.f;
+            else if(t > 1.f) t = 1.f;
+            return t1 + (t2-t1) * t;
+        }
+
+        template<typename T>
+        inline T slerp(T t1, T t2, real t) {
+            if(t < 0.f) t = 0.f;
+            else if(t > 1.f) t = 1.f;
+
+            float a = acos(t1 * t2);
+            float sina = sin(a);
+            return (sin(1-t) * a) / sina * t1 + sin(t * a) / sina * t2;
+        }
+
+        template<typename T>
+        inline T clamp(T t1, T t2, real v) {
+            if(v > t2) return t2;
+            else if(v < t1) return t1;
+            return v;
         }
     }
-
-    static inline int is_pow_of_2(uint32 x) {
-        return !(x & (x-1));
-    }
-
-    static inline uint32 next_pow_of_2(uint32 x) {
-        if ( is_pow_of_2(x) )
-            return x;
-        x |= x>>1;
-        x |= x>>2;
-        x |= x>>4;
-        x |= x>>8;
-        x |= x>>16;
-        return x+1;
-    }
-
-    // compress a unit float to nBits integer
-    // there would be some data loss but good for some condition
-    // it is safe to cast the result to nBits integer, such as uint16 if you pass nBits as 16
-    inline uint32 compress_unit_float(real unitFloat, uint32 nBits) {
-        // determine the number of intervals based on the number of output
-        uint32 nInterval = 1u << nBits;
-
-        // scale the input value from the range [0, 1] into the range [0, nIntervals - 1]
-        // substract 1 because we want the largest output value to fit into nBits bits
-        real scaled = unitFloat * (real)(nInterval - 1u);
-
-        // finally round to the nearest interval center
-        // by adding 0.5f, then truncating to the next-lowest interval index
-        uint32 rounded = (uint32)(scaled + 0.5f);
-
-        if(rounded > nInterval-1u)
-            rounded = nInterval-1u;
-
-        return rounded;
-    }
-
-    // decompress a unit float from a quantized uint
-    inline real decompress_unit_float(uint32 quantized, uint32 nBits) {
-        // determine the number of intervals based on the number of bits
-        uint32 nIntervals = 1u << nBits;
-
-        // decode by simply converting the uint32 to an float, then scaling by the interval size
-        real intervalSize = 1.f / (real)(nIntervals - 1u);
-
-        real approxUnitFloat = (real)quantized * intervalSize;
-        return approxUnitFloat;
-    }
-
-    // compress a float within a specific range
-    inline uint32 compress_float(real value, real min, real max, uint32 nBits) {
-        float unitFloat = (value - min) / (max - min);
-        uint32 quantized = compress_unit_float(unitFloat, nBits);
-        return quantized;
-    }
-
-    inline real decompress_float(uint32 quantized, real min, real max, uint32 nBits) {
-        real unitFloat = decompress_unit_float(quantized, nBits);
-        real value = min + (unitFloat * (max - min));
-        return value;
-    }
-
-    inline uint16 flip_bytes(uint16 value) {
-        return ((value >> 8) & 0x00FF) | ((value << 8) & 0xFF00);
-    }
-
-    inline uint32 flip_bytes(uint32 value) {
-        return ((value >> 24) & 0x000000FF) | ((value >> 8) & 0x0000FF00) |
-            ((value << 8) & 0x00FF0000) | ((value << 24) & 0xFF000000);
-    }
-
-    inline int16 flip_bytes(int16 value) {
-        return int16(flip_bytes(uint16(value)));
-    }
-
-    inline int32 flip_bytes(int32 value) {
-        return int32(flip_bytes(uint32(value)));
-    }
-
-    template <typename T>
-    inline T lerp(T t1, T t2, real t) {
-        if(t < 0.f) t = 0.f;
-        else if(t > 1.f) t = 1.f;
-        return t1 + (t2-t1) * t;
-    }
-
-    template<typename T>
-    inline T slerp(T t1, T t2, real t) {
-        if(t < 0.f) t = 0.f;
-        else if(t > 1.f) t = 1.f;
-
-        float a = acos(t1 * t2);
-        float sina = sin(a);
-        return (sin(1-t) * a) / sina * t1 + sin(t * a) / sina * t2;
-    }
-
-    template<typename T>
-    inline T clamp(T t1, T t2, real v) {
-        if(v > t2) return t2;
-        else if(v < t1) return t1;
-        return v;
-    }
-
     // represents a value range
     template<typename T>
     struct Range {
@@ -267,122 +183,309 @@ namespace mist {
         T mEnd;
     };
 
-#define ukn_min(a, b) a < b ? a : b
-#define ukn_max(a, b) a > b ? a : b
-#define ukn_abs(x) x < 0 ? -x : x
 
-    class Vector2 {
+    template<int Count, typename Type>
+    struct PointTemplate {
+
+        typedef PointTemplate<Count, Type> SelfType;
+        typedef Type PointType;
+
+        enum {
+            Size = Count,
+        };
+
+        mist_static_assert(Count > 1);
+
+        template<typename T2>
+        SelfType operator+(const PointTemplate<Count, T2>& rhs) const {
+            SelfType tmp = *this;
+            for(int i=0; i<Size; ++i) {
+                tmp.value[i] += Type(rhs.value[i]);
+            }
+            return tmp;
+        }
+
+        template<typename T2>
+        SelfType operator-(const PointTemplate<Count, T2>& rhs) const {
+            SelfType tmp = *this;
+            for(int i=0; i<Size; ++i) {
+                tmp.value[i] -= Type(rhs.value[i]);
+            }
+            return tmp;
+        }
+
+        template<typename T2>
+        SelfType& operator=(const PointTemplate<Count, T2>& rhs) {
+            for(int i=0; i<Size; ++i) {
+                this->value[i] = Type(rhs.value[i]);
+            }
+            return *this;
+        }
+
+        template<typename T2>
+        bool operator==(const PointTemplate<Count, T2>& rhs) {
+            for(int i=0; i<Size; ++i) {
+                if(this->value[i] != Type(rhs.value[i]))
+                    return false;
+            }
+            return true;
+        }
+
+        template<typename T2>
+        bool operator!=(const PointTemplate<Count, T2>& rhs) {
+            return !(*this == rhs);
+        }
+
+        template<typename T2>
+        SelfType& operator+=(const PointTemplate<Count, T2>& rhs) {
+            for(int i=0; i<Size; ++i) {
+                this->value[i] += Type(rhs.value[i]);
+            }
+            return *this;
+        }
+
+        template<typename T2>
+        SelfType& operator-=(const PointTemplate<Count, T2>& rhs) {
+            for(int i=0; i<Size; ++i) {
+                this->value[i] -= Type(rhs.value[i]);
+            }
+            return *this;
+        }
+
+        Type& operator[](uint32 index) {
+            mist_assert(index >= 0 && index < Size);
+            return this->value[index];
+        }
+
+        const Type& operator[](uint32 index) const {
+            mist_assert(index >= 0 && index < Size);
+            return this->value[index];
+        }
+
+
+        Type value[Count];
+    };
+
+
+#define MIST_POINT_TEMP_PARAM(n, d) d MIST_CAT(value, n)
+#define MIST_POINT_TEMP_PARAM_ARGS(n, d) MIST_ENUM_N(n, MIST_POINT_TEMP_PARAM, d)
+#define MIST_POINT_PARAM_EXPAND(n, d) d[n] = d##n;
+
+#define DEF_POINT_TEMPLATE_N(n, Type) \
+    template<>                                         \
+    struct MIST_API PointTemplate<n, Type> {                             \
+    typedef PointTemplate<n, Type> SelfType;                \
+    typedef Type PointType;                                     \
+    enum {                                                      \
+    Size = n,                                         \
+    };                                                          \
+    \
+    Type value[Size];\
+    PointTemplate() {                                       \
+    }                                                           \
+    PointTemplate(MIST_POINT_TEMP_PARAM_ARGS(n, Type)) {     \
+    MIST_REPEAT_N(n, MIST_POINT_PARAM_EXPAND, value)        \
+    } \
+    \
+    SelfType operator -() const { \
+    return this->negate(); \
+    }\
+    SelfType negate() const {\
+    SelfType tmp = *this;                                       \
+    for(int i=0; i<Size; ++i) {                           \
+    tmp.value[i] = -this->value[i];        \
+    }                                                           \
+    return tmp;\
+    }\
+    template<typename T2>                                           \
+    SelfType operator+(const PointTemplate<n, T2>& rhs) const { \
+    SelfType tmp = *this;                                       \
+    for(int i=0; i<Size; ++i) {                           \
+    tmp.value[i] += Type(rhs.value[i]);        \
+    }                                                           \
+    return tmp;                                                 \
+    }                                                               \
+    template<typename T2>                                           \
+    SelfType operator-(const PointTemplate<n, T2>& rhs) const { \
+    SelfType tmp = *this;                                       \
+    for(int i=0; i<Size; ++i) {                           \
+    tmp.value[i] -= Type(rhs.value[i]);        \
+    }\
+    return tmp;\
+    }\
+    template<typename T2>\
+    SelfType& operator=(const PointTemplate<n, T2>& rhs) {\
+    for(int i=0; i<Size; ++i) {\
+    this->value[i] = Type(rhs.value[i]);\
+    }\
+    return *this;\
+    }\
+    template<typename T2>\
+    bool operator==(const PointTemplate<n, T2>& rhs) {\
+       return this->equals(rhs); \
+    }\
+    template<typename T2> \
+    bool equals(const PointTemplate<n, T2> &rhs) const {\
+    for(int i=0; i<Size; ++i) {\
+    if(this->value[i] != Type(rhs.value[i]))\
+    return false;\
+    }\
+    return true;\
+    }\
+    template<typename T2>\
+    bool operator!=(const PointTemplate<n, T2>& rhs) {\
+    return !(*this == rhs);\
+    }\
+    template<typename T2>\
+    SelfType& operator+=(const PointTemplate<n, T2>& rhs) {\
+    for(int i=0; i<Size; ++i) {\
+    this->value[i] += Type(rhs.value[i]);\
+    }\
+    return *this;\
+    }\
+    template<typename T2>\
+    SelfType& operator-=(const PointTemplate<n, T2>& rhs) {\
+    for(int i=0; i<Size; ++i) {\
+    this->value[i] -= Type(rhs.value[i]);\
+    }\
+    return *this;\
+    }\
+    Type& operator[](int index) {\
+    mist_assert(index >= 0 && index < Size);\
+    return this->value[index];\
+    }\
+    const Type& operator[](int index) const {\
+    mist_assert(index >= 0 && index < Size);\
+    return this->value[index];\
+    }\
+    SelfType operator*(real r) const {\
+    SelfType tmp = *this;\
+    for(int i=0; i<Size; ++i) {\
+    tmp.value[i] = Type(tmp.value[i] * r);\
+    }\
+    return tmp;\
+    }\
+    SelfType operator/(real r) const {\
+    SelfType tmp = *this;\
+    for(int i=0; i<Size; ++i) {\
+    tmp.value[i] = Type(tmp.value[i] / r);\
+    }\
+    return tmp;\
+    }\
+    SelfType& operator*=(real r) {\
+    for(int i=0; i<Size; ++i) {\
+    this->value[i] = Type(this->value[i] * r);\
+    }\
+    return *this;\
+    }\
+    SelfType& operator/=(real r) {\
+    for(int i=0; i<Size; ++i) {\
+    this->value[i] = Type(this->value[i] / r);\
+    }\
+    return *this;\
+    }\
+    \
+    Type dot(const SelfType& vec) const {\
+    Type result(0);\
+    for(int i=0; i<Size; ++i)\
+    result += this->value[i] * vec.value[i];\
+    return result;\
+    }\
+    Type sqrLength() const {\
+    return Type(this->dot(*this));\
+    }\
+    \
+    Type length() const {\
+    return Type(sqrt(sqrLength()));\
+    }\
+    SelfType normalize() const {\
+    real invLength = 1.f / length();\
+    SelfType result;\
+    for(int i=0; i<Size; ++i)\
+    result.value[i] = Type(this->value[i] * invLength);\
+    return result;\
+    }\
+    \
+    };
+
+    DEF_POINT_TEMPLATE_N(1, float);
+    DEF_POINT_TEMPLATE_N(2, float);
+    DEF_POINT_TEMPLATE_N(3, float);
+    DEF_POINT_TEMPLATE_N(4, float);
+
+    DEF_POINT_TEMPLATE_N(1, int32);
+    DEF_POINT_TEMPLATE_N(2, int32);
+    DEF_POINT_TEMPLATE_N(3, int32);
+    DEF_POINT_TEMPLATE_N(4, int32);
+
+#undef DEF_POINT_TEMPLATE_N
+#undef MIST_POINT_TEMP_PARAM
+#undef MIST_POINT_TEMP_PARAM_ARGS
+#undef MIST_POINT_PARAM_EXPAND
+
+    template<typename T>
+    class Vector2_T: public PointTemplate<2, T> {
     public:
-        real x, y;
+        Vector2_T(const T& _x, const T& _y) {
+            this->set(_x, _y);
+        }
 
-        Vector2(real _x, real _y):
-            x(_x),
-            y(_y) { }
-
-        Vector2():
-            x(0.f),
-            y(0.f) {
+        Vector2_T() {
 
         }
 
-        void set(real _x, real _y) {
-            this->x = _x;
-            this->y = _y;
+        Vector2_T(const Vector2_T& rhs) {
+            this->set(rhs.x(), rhs.y());
         }
 
-        Vector2 operator -() const { 
-            return Vector2(-this->x, -this->y);
+        Vector2_T(const PointTemplate<2, T>& rhs) {
+            this->set(rhs.value[0], rhs.value[1]);
         }
 
-        Vector2 operator -(const Vector2& rhs) const { 
-            return Vector2(this->x-rhs.x, this->y-rhs.y);
+        T x() const { return this->value[0]; }
+        T y() const { return this->value[1]; }
+        T& x() { return this->value[0]; }
+        T& y() { return this->value[1]; }
+
+        void set(const T& _x, const T& _y) {
+            this->value[0] = _x;
+            this->value[1] = _y;
         }
 
-        Vector2 operator +(const Vector2& rhs) const { 
-            return Vector2(this->x+rhs.x, this->y+rhs.y);
-        }
-
-        Vector2& operator+=(const Vector2& rhs) { 
-            this->x += rhs.x; this->y += rhs.y; return *this;
-        }
-
-        Vector2& operator-=(const Vector2& rhs) { 
-            this->x -= rhs.x; this->y -= rhs.y; return *this;
-        }
-
-        bool operator ==(const Vector2& rhs) const { 
-            return float_equal(this->x, rhs.x) && float_equal(this->y, rhs.y); 
-        }
-
-        bool operator !=(const Vector2& rhs) const { 
-            return this->x!=rhs.x && this->y!=rhs.y; 
-        }
-
-        Vector2 operator/(real s) const { 
-            return Vector2(this->x/s, this->y/s);
-        }
-
-        Vector2 operator*(real s) const { 
-            return Vector2(this->x*s, this->y*s);
-        }
-
-        Vector2& operator*=(real s) { 
-            this->x *= s; this->y *= s; return *this;
-        }
-
-        real dot(const Vector2& rhs) const { 
-            return this->x*rhs.x + this->y*rhs.y;
-        }
-
-        real length() const { 
-            return sqrtf(dot(*this));
-        }
-
-        real lengthsq() const { 
-            return dot(*this);
-        }
-
-        real angle(const Vector2* rhs = 0) const {
+        T angle(const Vector2_T* rhs = 0) const {
             if(rhs) {
-                Vector2 s = *this, t = *rhs;
+                Vector2_T s = *this, t = *rhs;
                 s.normalize();
                 t.normalize();
                 return acosf(s.dot(t));
             } else
-                return atan2f(this->y, this->x);
+                return atan2f(this->y(), this->x());
         }
 
-        void clamp(const real max) {
+        void clamp(const T max) {
             if(length() > max) {
                 normalize();
-                this->x *= max;
-                this->y *= max;
+                this->x() *= max;
+                this->y() *= max;
             }
         }
 
-        Vector2& normalize() {
-            real rc = fast_inv_sqrt(dot(*this));
-            this->x *= rc;
-            this->y *= rc;
+        Vector2_T& rotate(T a) {
+            Vector2_T v;
+            v.x = T(this->x() * cos(a) - this->y() * sin(a));
+            v.y = T(this->x() * sin(a) + this->y() * cos(a));
+            this->x() = v.x; this->y() = v.y;
             return *this;
         }
 
-        Vector2& rotate(real a) {
-            Vector2 v;
-            v.x = this->x * cosf(a) - this->y * sinf(a);
-            v.y = this->x * sinf(a) + this->y * cosf(a);
-            this->x = v.x; this->y = v.y;
-            return *this;
-        }
+        Vector2_T normal(const Vector2_T& rhs) const {
+            Vector2_T normal;
 
-        Vector2 normal(const Vector2& rhs) const {
-            Vector2 normal;
-
-            normal.x = this->y - rhs.y;
-            normal.y = rhs.x - this->x;
+            normal.x = T(this->y() - rhs.y());
+            normal.y = T(rhs.x() - this->x());
             real len = sqrt(normal.x * normal.x + normal.y * normal.y);
             if(len == 0.f) {
-                return Vector2();
+                return Vector2_T();
             }
 
             normal.x /= len;
@@ -391,188 +494,109 @@ namespace mist {
             return normal;
         }
 
-        friend Vector2 operator * (const Vector2& lhs, const Vector2& rhs) {
-            return Vector2(lhs.x * rhs.x, lhs.y * rhs.y);
+        Vector2_T& operator=(const PointTemplate<2, T>& rhs) {
+            this->value[0] = rhs.value[0];
+            this->value[1] = rhs.value[1];
+            return *this;
+        }
+
+        friend Vector2_T operator * (const Vector2_T& lhs, const Vector2_T& rhs) {
+            return Vector2_T(lhs.x() * rhs.x(), lhs.y() * rhs.y());
         }
     };
+    typedef Vector2_T<float> Vector2;
 
-    class Vector3 {
+    template<typename T>
+    class Vector3_T: public PointTemplate<3, T> {
     public:		
-        Vector3(): x(0.f), y(0.f), z(0.f) {
+        Vector3_T() {
         }
 
-        Vector3(real _x, real _y, real _z): x(_x), y(_y), z(_z) {
+        Vector3_T(const T& _x, const T& _y, const T& _z) {
+            this->set(_x, _y, _z);
         }
 
-        Vector3(const Vector3& rhs): x(rhs.x), y(rhs.y), z(rhs.z) {
+        Vector3_T(const Vector3_T& rhs) {
+            this->set(rhs.x(), rhs.y(), rhs.z());
         }
 
-        void set(real _x, real _y, real _z) {
-            this->x = _x; this->y = _y; this->z = _z;
+
+        Vector3_T(const PointTemplate<3, T>& rhs) {
+            this->set(rhs.value[0], rhs.value[1], rhs.value[2]);
         }
 
-        Vector3& operator=(const Vector3& rhs)  {
-            this->x = rhs.x; this->y = rhs.y; this->z = rhs.z;
+        void set(const T& _x, const T& _y, const T& _z) {
+            this->value[0] = _x;
+            this->value[1] = _y;
+            this->value[2] = _z;
+        }
+
+        T x() const { return this->value[0]; }
+        T y() const { return this->value[1]; }
+        T z() const { return this->value[2]; }
+        T& x() { return this->value[0]; }
+        T& y() { return this->value[1]; }
+        T& z() { return this->value[2]; }
+
+        Vector3_T cross(const Vector3_T& rhs) const {
+            return Vector3_T(-this->z()*rhs.y() + this->y()*rhs.z(), 
+                this->z()*rhs.x() - this->x()*rhs.z(), 
+                -this->y()*rhs.x() + this->x()*rhs.y());
+        }
+
+        Vector3_T& operator=(const PointTemplate<3, T>& rhs) {
+            this->value[0] = rhs.value[0];
+            this->value[1] = rhs.value[1];
+            this->value[2] = rhs.value[2];
             return *this;
         }
 
-        Vector3 operator-(const Vector3& rhs) const {
-            return Vector3(this->x-rhs.x, this->y-rhs.y, this->z-rhs.z);
+        friend Vector3_T operator *(const Vector3_T& lhs, const Vector3_T& rhs) {
+            return Vector3_T(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
         }
-
-        Vector3 operator+(const Vector3& rhs) const {
-            return Vector3(this->x+rhs.x, this->y+rhs.y, this->z+rhs.z);
-        }
-
-        Vector3 operator*(real f) const {
-            return Vector3(this->x*f, this->y*f, this->z*f);
-        }
-
-        Vector3 operator/(real f) const {
-            assert(f != 0);
-            return Vector3(this->x/f, this->y/f, this->z/f);
-        }
-
-        Vector3& operator+=(const Vector3& rhs) {
-            this->x += rhs.x; this->y += rhs.y; this->z += rhs.z;
-            return *this;
-        }
-
-        Vector3& operator-=(const Vector3& rhs) {
-            this->x -= rhs.x; this->y -= rhs.y; this->z -= rhs.z;
-            return *this;
-        }
-
-        Vector3 operator-() const {
-            return Vector3(-this->x, -this->y, -this->z);
-        }
-
-        real operator*(const Vector3& rhs) {
-            return this->dot(rhs);
-        }
-
-        real dot(const Vector3& rhs) const {
-            return this->x*rhs.x+this->y*rhs.y+this->z*rhs.z;
-        }
-
-        Vector3 cross(const Vector3& rhs) const {
-            return Vector3(-this->z*rhs.y+this->y*rhs.z, this->z*rhs.x-this->x*rhs.z, -this->y*rhs.x+this->x*rhs.y);
-        }
-
-        real length() const {
-            return (real)sqrtf(this->x*this->x + this->y*this->y + this->z*this->z);
-        }
-
-        real sqrLength() const {
-            return this->x*this->x + this->y*this->y + this->z*this->z;
-        }
-
-        Vector3 normalize() const {
-            real inv = 1.0/length();
-            return Vector3(this->x*inv, this->y*inv, this->z*inv);
-        }
-
-        Vector3 negate() const {
-            return Vector3(-this->x, -this->y, -this->z);
-        }
-
-        bool operator==(const Vector3& rhs) const {
-            return this->x == rhs.x && this->y == rhs.y && this->z == rhs.z;
-        }
-
-        friend Vector3 operator *(const Vector3& lhs, const Vector3& rhs) {
-            return Vector3(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
-        }
-
-        real x, y, z;
     };
+    typedef Vector3_T<float> Vector3;
 
-    class Vector4 {
+    template<typename T>
+    class Vector4_T: public PointTemplate<4, T> {
     public:
-        real x, y, z, w;
-
-        Vector4():
-            x( 0 ), 
-            y( 0 ), 
-            z( 0 ), 
-            w( 0 ) { }
-
-        Vector4(const real x, const real y, const real z, const real w):
-            x( x ), 
-            y( y ), 
-            z( z ), 
-            w( w ) { }
-
-        Vector4(const Vector3& v):
-            x( v.x ), 
-            y( v.y ), 
-            z( v.z ),
-            w( 1.0f ) { }
-
-        void set(real _x, real _y, real _z, real _w) {
-            this->x = _x;
-            this->y = _y;
-            this->z = _z;
-            this->w = _w;
+        Vector4_T() {
         }
 
-        Vector4 operator-() const {
-            return Vector4(-x, -y, -z, -w);
+        Vector4_T(const T& _x, const T& _y, const T& _z, const T& _w) {
+            this->set(_x, _y, _z, _w);
         }
 
-        Vector4 operator+(const Vector4 &v) const {
-            return Vector4(this->x + v.x, 
-                this->y + v.y, 
-                this->z + v.z, 
-                this->w + v.w);
+        Vector4_T(const Vector3_T<T>& v) {
+            this->set(v.x(), v.y(), v.z(), 1.f);
         }
 
-        Vector4 operator-(const Vector4 &v) const {
-            return Vector4(this->x - v.x, 
-                this->y - v.y, 
-                this->z - v.z, 
-                this->w - v.w);
+        Vector4_T(const PointTemplate<4, T>& rhs) {
+            this->set(rhs.value[0], rhs.value[1], rhs.value[2], rhs.value[3]);
         }
 
-        Vector4 operator*(const real f) const {
-            return Vector4(this->x * f, 
-                this->y * f, 
-                this->z * f, 
-                this->w * f);
+        Vector4_T& operator=(const PointTemplate<4, T>& rhs) {
+            this->set(rhs.value[0], rhs.value[1], rhs.value[2], rhs.value[3]);
+            return *this;
         }
 
-        real dot(const Vector4& vec) const {
-            return this->x * vec.x + this->y * vec.y + this->z * vec.z + this->w * vec.w;
-        }
+        T x() const { return this->value[0]; }
+        T y() const { return this->value[1]; }
+        T z() const { return this->value[2]; }
+        T w() const { return this->value[3]; }
+        T& x() { return this->value[0]; }
+        T& y() { return this->value[1]; }
+        T& z() { return this->value[2]; }
+        T& w() { return this->value[3]; }
 
-        real sqrLength() const {
-            return this->dot(*this);
-        }
-
-        real length() const {
-            return sqrtf(sqrLength());
-        }
-
-        Vector4 normalize() const {
-            float invLength = 1 / length();
-            return Vector4(x * invLength,
-                y * invLength,
-                z * invLength,
-                w * invLength);
-        }
-
-        operator Vector3() {
-            return Vector3(x, y, z);
-        }
-
-        real operator*(const Vector4& rhs) const {
-            return this->x * rhs.x + this->y * rhs.y + this->z * rhs.z + this->w * rhs.w;
-        }
-
-        bool operator==(const Vector4& rhs) const {
-            return this->x == rhs.x && this->y == rhs.y && this->z == rhs.z && this->w == rhs.w;
+        void set(const T& _x, const T& _y, const T& _z, const T& _w) {
+            this->value[0] = _x;
+            this->value[1] = _y;
+            this->value[2] = _z;
+            this->value[3] = _w;
         }
     };
+    typedef Vector4_T<float> Vector4;
 
     class AABB2 {
     public:
@@ -591,13 +615,13 @@ namespace mist {
         }
 
         AABB2(const Vector2& upper, const Vector2& lower):
-            x1(upper.x), y1(upper.y),
-            x2(lower.x), y2(lower.y) {
+            x1(upper.x()), y1(upper.y()),
+            x2(lower.x()), y2(lower.y()) {
 
         }
 
         AABB2(const Vector2& pos, real r) {
-            setAsBox(pos.x, pos.y, r);
+            setAsBox(pos.x(), pos.y(), r);
         }
 
         AABB2(const AABB2& rhs) {
@@ -608,10 +632,10 @@ namespace mist {
         }
 
         void set(const Vector2& upper, const Vector2& lower) {
-            this->x1 = upper.x;
-            this->y1 = upper.y;
-            this->x2 = lower.x;
-            this->y2 = lower.y;
+            this->x1 = upper.x();
+            this->y1 = upper.y();
+            this->x2 = lower.x();
+            this->y2 = lower.y();
         }
 
         void setXY(real _x1, real _y1) {
@@ -697,7 +721,7 @@ namespace mist {
         }
 
         bool contains(const Vector2& pos) const {
-            return contains(pos.x, pos.y);
+            return contains(pos.x(), pos.y());
         }
 
         bool intersect(const AABB2& rhs) const {
@@ -817,7 +841,7 @@ namespace mist {
         }
 
         void makeRotate(real angle, const Vector3& vec) {
-            makeRotate(angle, vec.x, vec.y, vec.z);
+            makeRotate(angle, vec.x(), vec.y(), vec.z());
         }
 
         void makeRotate(real roll, real pitch, real yaw) {
@@ -835,10 +859,10 @@ namespace mist {
         }
 
         Vector3 rotate(const Vector3& v) const {
-            real ux = this->w*v.x + this->y*v.z - this->z*v.y;
-            real uy = this->w*v.y + this->z*v.x - this->x*v.z;
-            real uz = this->w*v.z + this->x*v.y - this->y*v.x;
-            real uw = -this->x*v.x - this->y*v.y - this->z*v.z;
+            real ux = this->w*v.x() + this->y*v.z() - this->z*v.y();
+            real uy = this->w*v.y() + this->z*v.x() - this->x*v.z();
+            real uz = this->w*v.z() + this->x*v.y() - this->y*v.x();
+            real uw = -this->x*v.x() - this->y*v.y() - this->z*v.z();
             real vx = -uw*this->x + ux*this->w - uy*this->z + uz*this->y;
             real vy = -uw*this->y + uy*this->w - uz*this->x + ux*this->z;
             real vz = -uw*this->z + uz*this->w - ux*this->y + uz*this->x;
@@ -860,7 +884,7 @@ namespace mist {
         }
 
         void getRotate(real& angle, Vector3& vec) const {
-            getRotate(angle, vec.x, vec.y, vec.z);
+            getRotate(angle, vec.x(), vec.y(), vec.z());
         }
 
         void slerp(real t, const Quaternion& from, const Quaternion& to) {
@@ -928,7 +952,7 @@ namespace mist {
 
         static Matrix4 RotMat( Vector3 axis, real angle ) {
             axis = axis * sinf( angle * 0.5f );
-            return Matrix4( Quaternion( axis.x, axis.y, axis.z, cosf( angle * 0.5f ) ) );
+            return Matrix4( Quaternion( axis.x(), axis.y(), axis.z(), cosf( angle * 0.5f ) ) );
         }
 
         static Matrix4 RotX(real x) {
@@ -1059,19 +1083,19 @@ namespace mist {
             Vector3 y = z.cross(x);
 
             Matrix4 mat;
-            mat.c[0][0] = x.x;
-            mat.c[1][0] = y.x;
-            mat.c[2][0] = z.x;
+            mat.c[0][0] = x.x();
+            mat.c[1][0] = y.x();
+            mat.c[2][0] = z.x();
             mat.c[3][0] = 0;
 
-            mat.c[0][1] = x.y;
-            mat.c[1][1] = y.y;
-            mat.c[2][1] = z.y;
+            mat.c[0][1] = x.y();
+            mat.c[1][1] = y.y();
+            mat.c[2][1] = z.y();
             mat.c[3][1] = 0;
 
-            mat.c[0][2] = x.z;
-            mat.c[1][2] = y.z;
-            mat.c[2][2] = z.z;
+            mat.c[0][2] = x.z();
+            mat.c[1][2] = y.z();
+            mat.c[2][2] = z.z();
             mat.c[3][2] = 0;
 
             mat.c[0][3] = -x.dot(eye);
@@ -1127,7 +1151,7 @@ namespace mist {
         Matrix4( const real *realArray16 ) {
             for( unsigned int i = 0; i < 4; ++i ) {
                 for( unsigned int j = 0; j < 4; ++j ) {
-                    c[i][j] = realArray16[i * 4 + j];
+                    this->c[i][j] = realArray16[i * 4 + j];
                 }
             }
         }
@@ -1139,14 +1163,24 @@ namespace mist {
             real yy = q.y * y2,  yz = q.y * z2,  zz = q.z * z2;
             real wx = q.w * x2,  wy = q.w * y2,  wz = q.w * z2;
 
-            c[0][0] = 1 - (yy + zz);  c[1][0] = xy - wz;	
-            c[2][0] = xz + wy;        c[3][0] = 0;
-            c[0][1] = xy + wz;        c[1][1] = 1 - (xx + zz);
-            c[2][1] = yz - wx;        c[3][1] = 0;
-            c[0][2] = xz - wy;        c[1][2] = yz + wx;
-            c[2][2] = 1 - (xx + yy);  c[3][2] = 0;
-            c[0][3] = 0;              c[1][3] = 0;
-            c[2][3] = 0;              c[3][3] = 1;
+            this->c[0][0] = 1 - (yy + zz);  this->c[1][0] = xy - wz;	
+            this->c[2][0] = xz + wy;        this->c[3][0] = 0;
+            this->c[0][1] = xy + wz;        this->c[1][1] = 1 - (xx + zz);
+            this->c[2][1] = yz - wx;        this->c[3][1] = 0;
+            this->c[0][2] = xz - wy;        this->c[1][2] = yz + wx;
+            this->c[2][2] = 1 - (xx + yy);  this->c[3][2] = 0;
+            this->c[0][3] = 0;              this->c[1][3] = 0;
+            this->c[2][3] = 0;              this->c[3][3] = 1;
+        }
+
+        Matrix4(real x11, real x12, real x13, real x14,
+                real x21, real x22, real x23, real x24,
+                real x31, real x32, real x33, real x34,
+                real x41, real x42, real x43, real x44) {
+            this->c[0][0] = x11; this->c[1][0] = x12; this->c[2][0] = x13; this->c[3][0] = x14;
+            this->c[0][1] = x21; this->c[1][1] = x22; this->c[2][1] = x23; this->c[3][1] = x24;
+            this->c[0][2] = x31; this->c[1][2] = x32; this->c[2][2] = x33; this->c[3][2] = x34;
+            this->c[0][3] = x41; this->c[1][3] = x42; this->c[2][3] = x43; this->c[3][3] = x44;
         }
 
         Matrix4 operator+( const Matrix4 &m ) const {
@@ -1219,22 +1253,22 @@ namespace mist {
         }
 
         Vector3 operator*( const Vector3 &v ) const {
-            return Vector3( v.x * c[0][0] + v.y * c[1][0] + v.z * c[2][0] + c[3][0],
-                v.x * c[0][1] + v.y * c[1][1] + v.z * c[2][1] + c[3][1],
-                v.x * c[0][2] + v.y * c[1][2] + v.z * c[2][2] + c[3][2] );
+            return Vector3( v.x() * c[0][0] + v.y() * c[1][0] + v.z() * c[2][0] + c[3][0],
+                v.x() * c[0][1] + v.y() * c[1][1] + v.z() * c[2][1] + c[3][1],
+                v.x() * c[0][2] + v.y() * c[1][2] + v.z() * c[2][2] + c[3][2] );
         }
 
         Vector4 operator*( const Vector4 &v ) const {
-            return Vector4( v.x * c[0][0] + v.y * c[1][0] + v.z * c[2][0] + v.w * c[3][0],
-                v.x * c[0][1] + v.y * c[1][1] + v.z * c[2][1] + v.w * c[3][1],
-                v.x * c[0][2] + v.y * c[1][2] + v.z * c[2][2] + v.w * c[3][2],
-                v.x * c[0][3] + v.y * c[1][3] + v.z * c[2][3] + v.w * c[3][3] );
+            return Vector4( v.x() * c[0][0] + v.y() * c[1][0] + v.z() * c[2][0] + v.w() * c[3][0],
+                v.x() * c[0][1] + v.y() * c[1][1] + v.z() * c[2][1] + v.w() * c[3][1],
+                v.x() * c[0][2] + v.y() * c[1][2] + v.z() * c[2][2] + v.w() * c[3][2],
+                v.x() * c[0][3] + v.y() * c[1][3] + v.z() * c[2][3] + v.w() * c[3][3] );
         }
 
         Vector3 mult33Vec( const Vector3 &v ) const {
-            return Vector3( v.x * c[0][0] + v.y * c[1][0] + v.z * c[2][0],
-                v.x * c[0][1] + v.y * c[1][1] + v.z * c[2][1],
-                v.x * c[0][2] + v.y * c[1][2] + v.z * c[2][2] );
+            return Vector3( v.x() * c[0][0] + v.y() * c[1][0] + v.z() * c[2][0],
+                v.x() * c[0][1] + v.y() * c[1][1] + v.z() * c[2][1],
+                v.x() * c[0][2] + v.y() * c[1][2] + v.z() * c[2][2] );
         }
 
         Matrix4& translate( const real x, const real y, const real z ) {
@@ -1308,14 +1342,14 @@ namespace mist {
             trans = Vector3( c[3][0], c[3][1], c[3][2] );
 
             // Scale is length of columns
-            scale.x = sqrtf( c[0][0] * c[0][0] + c[0][1] * c[0][1] + c[0][2] * c[0][2] );
-            scale.y = sqrtf( c[1][0] * c[1][0] + c[1][1] * c[1][1] + c[1][2] * c[1][2] );
-            scale.z = sqrtf( c[2][0] * c[2][0] + c[2][1] * c[2][1] + c[2][2] * c[2][2] );
+            scale.x() = sqrtf( c[0][0] * c[0][0] + c[0][1] * c[0][1] + c[0][2] * c[0][2] );
+            scale.y() = sqrtf( c[1][0] * c[1][0] + c[1][1] * c[1][1] + c[1][2] * c[1][2] );
+            scale.z() = sqrtf( c[2][0] * c[2][0] + c[2][1] * c[2][1] + c[2][2] * c[2][2] );
 
-            if( scale.x == 0 || scale.y == 0 || scale.z == 0 ) return;
+            if( scale.x() == 0 || scale.y() == 0 || scale.z() == 0 ) return;
 
             // Detect negative scale with determinant and flip one arbitrary axis
-            if( determinant() < 0 ) scale.x = -scale.x;
+            if( determinant() < 0 ) scale.x() = -scale.x();
 
             // Combined rotation matrix YXZ
             //
@@ -1323,23 +1357,23 @@ namespace mist {
             // Cos[x]*Sin[z]                        Cos[x]*Cos[z]                       -Sin[x]
             // -Cos[z]*Sin[y]+Cos[y]*Sin[x]*Sin[z]  Cos[y]*Cos[z]*Sin[x]+Sin[y]*Sin[z]  Cos[x]*Cos[y]
 
-            rot.x = asinf( -c[2][1] / scale.z );
+            rot.x() = asinf( -c[2][1] / scale.z() );
 
             // Special case: Cos[x] == 0 (when Sin[x] is +/-1)
-            real f = fabsf( c[2][1] / scale.z );
+            real f = fabsf( c[2][1] / scale.z() );
             if( f > 0.999f && f < 1.001f ) {
                 // Pin arbitrarily one of y or z to zero
                 // Mathematical equivalent of gimbal lock
-                rot.y = 0;
+                rot.y() = 0;
 
                 // Now: Cos[x] = 0, Sin[x] = +/-1, Cos[y] = 1, Sin[y] = 0
                 // => m[0][0] = Cos[z] and m[1][0] = Sin[z]
-                rot.z = atan2f( -c[1][0] / scale.y, c[0][0] / scale.x );
+                rot.z() = atan2f( -c[1][0] / scale.y(), c[0][0] / scale.x() );
             }
             // Standard case
             else {
-                rot.y = atan2f( c[2][0] / scale.z, c[2][2] / scale.z );
-                rot.z = atan2f( c[0][1] / scale.x, c[1][1] / scale.y );
+                rot.y() = atan2f( c[2][0] / scale.z(), c[2][2] / scale.z() );
+                rot.z() = atan2f( c[0][1] / scale.x(), c[1][1] / scale.y() );
             }
         }
 
@@ -1358,9 +1392,9 @@ namespace mist {
         Vector3 getScale() const {
             Vector3 scale;
             // Scale is length of columns
-            scale.x = sqrtf( c[0][0] * c[0][0] + c[0][1] * c[0][1] + c[0][2] * c[0][2] );
-            scale.y = sqrtf( c[1][0] * c[1][0] + c[1][1] * c[1][1] + c[1][2] * c[1][2] );
-            scale.z = sqrtf( c[2][0] * c[2][0] + c[2][1] * c[2][1] + c[2][2] * c[2][2] );
+            scale.x() = sqrtf( c[0][0] * c[0][0] + c[0][1] * c[0][1] + c[0][2] * c[0][2] );
+            scale.y() = sqrtf( c[1][0] * c[1][0] + c[1][1] * c[1][1] + c[1][2] * c[1][2] );
+            scale.z() = sqrtf( c[2][0] * c[2][0] + c[2][1] * c[2][1] + c[2][2] * c[2][2] );
             return scale;
         }
     };
@@ -1418,40 +1452,40 @@ namespace mist {
         }
 
         void transform(const Matrix4& mat) {
-            Vector4 box[8];
-            Vector4 newMin, newMax;
+            Vector3 box[8];
+            Vector3 newMin, newMax;
 
-            box[0].x = this->min.x;
-            box[0].y = this->min.y;
-            box[0].z = this->min.z;
+            box[0].x() = this->min.x();
+            box[0].y() = this->min.y();
+            box[0].z() = this->min.z();
 
-            box[1].x = this->min.x;
-            box[1].y = this->min.y;
-            box[1].z = this->max.z;
+            box[1].x() = this->min.x();
+            box[1].y() = this->min.y();
+            box[1].z() = this->max.z();
 
-            box[2].x = this->min.x;
-            box[2].y = this->max.y;
-            box[2].z = this->min.z;
+            box[2].x() = this->min.x();
+            box[2].y() = this->max.y();
+            box[2].z() = this->min.z();
 
-            box[3].x = this->min.x;
-            box[3].y = this->max.y;
-            box[3].z = this->max.z;
+            box[3].x() = this->min.x();
+            box[3].y() = this->max.y();
+            box[3].z() = this->max.z();
 
-            box[4].x = this->max.x;
-            box[4].y = this->min.y;
-            box[4].z = this->min.z;
+            box[4].x() = this->max.x();
+            box[4].y() = this->min.y();
+            box[4].z() = this->min.z();
 
-            box[5].x = this->max.x;
-            box[5].y = this->min.y;
-            box[5].z = this->max.z;
+            box[5].x() = this->max.x();
+            box[5].y() = this->min.y();
+            box[5].z() = this->max.z();
 
-            box[6].x = this->max.x;
-            box[6].y = this->max.y;
-            box[6].z = this->min.z;
+            box[6].x() = this->max.x();
+            box[6].y() = this->max.y();
+            box[6].z() = this->min.z();
 
-            box[7].x = this->max.x;
-            box[7].y = this->max.y;
-            box[7].z = this->max.z;
+            box[7].x() = this->max.x();
+            box[7].y() = this->max.y();
+            box[7].z() = this->max.z();
 
             newMin = mat * box[0];
             newMax = newMin;
@@ -1459,17 +1493,17 @@ namespace mist {
             for(int i=1; i<8; ++i) {
                 box[i] = mat * box[i];
 
-                newMin.x = ukn_min(box[i].x, newMin.x);
-                newMin.y = ukn_min(box[i].x, newMin.y);
-                newMin.z = ukn_min(box[i].x, newMin.z);
+                newMin.x() = MIST_MIN(box[i].x(), newMin.x());
+                newMin.y() = MIST_MIN(box[i].x(), newMin.y());
+                newMin.z() = MIST_MIN(box[i].x(), newMin.z());
 
-                newMax.x = ukn_max(box[i].x, newMax.x);
-                newMax.y = ukn_max(box[i].x, newMax.y);
-                newMax.z = ukn_max(box[i].x, newMax.z);
+                newMax.x() = MIST_MAX(box[i].x(), newMax.x());
+                newMax.y() = MIST_MAX(box[i].x(), newMax.y());
+                newMax.z() = MIST_MAX(box[i].x(), newMax.z());
             }
 
-            set(static_cast<Vector3>(newMin),
-                static_cast<Vector3>(newMax));
+            set(Vector3(newMin),
+                Vector3(newMax));
         }
 
         const Vector3& getMin() const {
@@ -1487,13 +1521,13 @@ namespace mist {
         }
 
         real getWidth() const {
-            return abs(this->max.x - this->min.x);
+            return abs(this->max.x() - this->min.x());
         }
         real getHeight() const {
-            return abs(this->max.y - this->min.y);
+            return abs(this->max.y() - this->min.y());
         }
         real getDepth() const {
-            return abs(this->max.z - this->min.z);
+            return abs(this->max.z() - this->min.z());
         }
 
         void scale(float scale) {
@@ -1504,7 +1538,7 @@ namespace mist {
         }
 
         operator AABB2() {
-            return AABB2(min.x, min.y, max.x, max.y);
+            return AABB2(min.x(), min.y(), max.x(), max.y());
         }
     };
 
@@ -1537,7 +1571,7 @@ namespace mist {
         }
 
         bool operator==(const Plane& rhs) const {
-            return this->mPlane == rhs.mPlane;
+            return this->mPlane.equals(rhs.mPlane);
         }
 
         void set(real x, real y, real z, real w) {
@@ -1549,14 +1583,14 @@ namespace mist {
         }
 
         Vector3 normal() const {
-            return Vector3(this->mPlane.x, this->mPlane.y, this->mPlane.z);
+            return Vector3(this->mPlane.x(), this->mPlane.y(), this->mPlane.z());
         }
 
         real getDistance(const Vector3 point) {
-            real num = this->mPlane * Vector4(point);
-            real dom = fast_inv_sqrt(this->mPlane.x * this->mPlane.x + 
-                this->mPlane.y * this->mPlane.y + 
-                this->mPlane.z * this->mPlane.z);
+            real num = this->mPlane.dot(Vector4(point));
+            real dom = mist::math::fast_inv_sqrt(this->mPlane.x() * this->mPlane.x() + 
+                this->mPlane.y() * this->mPlane.y() + 
+                this->mPlane.z() * this->mPlane.z());
             return num/dom;
         }
 
@@ -1565,19 +1599,19 @@ namespace mist {
         }
 
         float a() const {
-            return mPlane.x;
+            return mPlane.x();
         }
 
         float b() const {
-            return mPlane.y;
+            return mPlane.y();
         }
 
         float c() const {
-            return mPlane.z;
+            return mPlane.z();
         }
 
         float d() const {
-            return mPlane.w;
+            return mPlane.w();
         }
 
     private:
@@ -1595,8 +1629,8 @@ namespace mist {
             mCenter(pos) { }
 
         explicit Sphere(const Vector4& vec) {
-            this->mCenter.set(vec.x, vec.y, vec.z);
-            this->mRadius = vec.w;
+            this->mCenter.set(vec.x(), vec.y(), vec.z());
+            this->mRadius = vec.w();
         }
 
         const real& radius() const {
@@ -1616,7 +1650,7 @@ namespace mist {
         }
 
         bool isEmpty() {
-            return float_equal(this->mRadius, 0.f);
+            return math::float_equal(this->mRadius, 0.f);
         }
 
         Sphere& operator+=(const Vector3& trans) {
@@ -1650,11 +1684,12 @@ namespace mist {
         }
 
         Vector4 asVector4() const {
-            return Vector4(mCenter.x, mCenter.y, mCenter.z, mRadius);
+            return Vector4(mCenter.x(), mCenter.y(), mCenter.z(), mRadius);
         }
 
         bool operator==(const Sphere& rhs) const {
-            return this->mCenter == rhs.mCenter && this->mRadius == rhs.mRadius;
+            return this->mCenter.equals(rhs.mCenter) && 
+                this->mRadius == rhs.mRadius;
         }
 
         bool vecInBound(const Vector3& point) {
@@ -1682,70 +1717,6 @@ namespace mist {
         static float grad(int hash, float x, float y, float z);
     };
 
-    static int _ukn_perlin_noise_perm[512] = {60,137,91,90,15,
-        131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
-        190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
-        88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,
-        77,146,158,231,83,111,229,122,60,211,133,230,220,105,92,41,55,46,245,40,244,
-        102,143,54, 65,25,63,161, 1,216,80,73,209,76,132,187,208, 89,18,169,200,196,
-        135,130,116,188,159,86,164,100,109,198,173,186, 3,64,52,217,226,250,124,123,
-        5,202,38,147,118,126,255,82,85,212,207,206,59,227,47,16,58,17,182,189,28,42,
-        223,183,170,213,119,248,152, 2,44,154,163, 70,221,153,101,155,167, 43,172,9,
-        129,22,39,253, 19,98,108,110,79,113,224,232,178,185, 112,104,218,246,97,228,
-        251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107,
-        49,192,214, 31,181,199,106,157,184, 84,204,176,115,121,50,45,127, 4,150,254,
-        138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
-    };
-
-    inline float PerlinNoise::fade(float t) {
-        return t*t*t*(t*(t*6.0f-15.0f)+10.f);
-    }
-
-    inline float PerlinNoise::lerp(float t, float a, float b) {
-        return a + t * (b-a);
-    }
-
-    inline float PerlinNoise::grad(int hash, float x, float y, float z) {
-        int h = hash & 15;
-        float u = h < 8 ? x : y;
-        float v = h < 4 ? y : ((h == 12) || (h == 14)) ? x : z;
-        return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
-    }
-
-    inline float PerlinNoise::Gen(float x, float y, float z) {
-        float floorX = floorf(x);
-        float floorY = floorf(y);
-        float floorZ = floorf(z);
-
-        int X = int(floorX) & 255;
-        int Y = int(floorY) & 255;
-        int Z = int(floorZ) & 255;
-
-        x -= floorX;
-        y -= floorY;
-        z -= floorZ;
-
-        float u = fade(x);
-        float v = fade(y);
-        float w = fade(z);
-
-        int A = _ukn_perlin_noise_perm[X] + Y;
-        int AA = _ukn_perlin_noise_perm[A] + Z;
-        int AB = _ukn_perlin_noise_perm[A+1] + Z;
-        int B = _ukn_perlin_noise_perm[X+1] + Y;
-        int BA = _ukn_perlin_noise_perm[B] + Z;
-        int BB = _ukn_perlin_noise_perm[B+1] + Z;
-
-        return lerp(w,  lerp(v, lerp(u, grad(_ukn_perlin_noise_perm[AA], x, y, z),
-            grad(_ukn_perlin_noise_perm[BA], x-1, y, z)),
-            lerp(u, grad(_ukn_perlin_noise_perm[AB], x, y-1, z),
-            grad(_ukn_perlin_noise_perm[BB], x-1, y-1, z))),
-            lerp(v, lerp(u, grad(_ukn_perlin_noise_perm[AA+1], x, y, z-1),
-            grad(_ukn_perlin_noise_perm[BA+1], x-1, y, z-1)),
-            lerp(u, grad(_ukn_perlin_noise_perm[AB+1], x, y-1, z-1),
-            grad(_ukn_perlin_noise_perm[BB+1], x-1, y-1, z-1))));    
-    }
-
     namespace traits {
         template<> struct is_pod<Vector2>   { enum { value = true }; };
         template<> struct is_pod<Vector3>   { enum { value = true }; };
@@ -1772,54 +1743,16 @@ namespace mist {
 
 #include "PreDeclare.h"
 #include "Util.h"
-
 namespace mist {
 
-    inline Vector3 float3_to_vector3(const float3& f3) {
-        return Vector3(f3[0],
-            f3[1],
-            f3[2]);
-    }
-
-    inline Vector2 float2_to_vector2(const float2& f2) {
-        return Vector2(f2[0],
-            f2[1]);
-    }
-
-    inline Vector4 float4_to_vector4(const float4& f4) {
-        return Vector4(f4[0],
-            f4[1],
-            f4[2],
-            f4[3]);
-    }
-
-    inline Vector4 get_matrix_col(const Matrix4& mat, uint32 index) {
-        return Vector4(mat.c[index][0],
-            mat.c[index][1],
-            mat.c[index][2],
-            mat.c[index][3]);
-    }
-
     namespace math {
-     
-        inline Vector3 TransformQuaternion(const Vector3& v, const Quaternion& q) {
-            float a(q.w * q.w - q.get().length());
-            float b(2 * v.dot(q.get()));
-            float c(q.w + q.w);
 
-            Vector3 cross_v(q.get().cross(v));
-            return Vector3(a * v.x + b * q.x + c * cross_v.x,
-                a * v.y + b * q.y + c * cross_v.y,
-                a * v.z + b * q.z + c * cross_v.z);
-        }
+        MIST_API Vector4 get_matrix_col(const Matrix4& mat, uint32 index);
 
-        inline Quaternion InverseQuaternion(const Quaternion& q) {
-            float inv(1.f / q.length());
-            return Quaternion(-q.x * inv, -q.y * inv, -q.z * inv, q.w * inv);
-        }
-    
+        MIST_API Vector3 transform_quaternion(const Vector3& v, const Quaternion& q);
+        MIST_API Quaternion inverse_quaternion(const Quaternion& q);
     }
-
+    
 } // namespace mist
 
 #endif

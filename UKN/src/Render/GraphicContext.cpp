@@ -104,7 +104,7 @@ namespace ukn {
         addSeg(mCurrRenderMode);
         
         uint32 seg_size = uint32(ceil(r / 100.f) * 100);
-        double step = mist::degree_to_radius(360.f / seg_size);
+        double step = mist::math::degree_to_radius(360.f / seg_size);
         for(uint32 i = 0; i < seg_size; ++i) {
             Vertex2D vertex;
             vertex.x = x + r * cosf(i * step);
@@ -128,7 +128,7 @@ namespace ukn {
         vertex.color = mFillColor.toRGBA();
         
         uint32 seg_size = uint32(ceil(r / 100.f) * 100);
-        double step = mist::degree_to_radius(360.f / seg_size);
+        double step = mist::math::degree_to_radius(360.f / seg_size);
         for(uint32 i = 0; i <= seg_size; ++i) {
             Vertex2D vertex;
             vertex.x = x + r * cosf(i * step);

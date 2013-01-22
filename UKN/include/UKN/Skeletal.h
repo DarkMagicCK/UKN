@@ -46,11 +46,11 @@ namespace ukn {
     
     inline BoneKeyFrameData lerp(const BoneKeyFrameData& t1, const BoneKeyFrameData& t2, real t) {
         BoneKeyFrameData data;
-        data.scale = mist::lerp(t1.scale, t2.scale, t);
-        data.position = mist::lerp(t1.position, t2.position, t);
-        data.rotation = mist::lerp(t1.rotation, t2.rotation, t);
-        data.opacity = mist::lerp(t1.opacity, t2.opacity, t);
-        data.layer_depth = mist::lerp(t1.layer_depth, t2.layer_depth, t);
+        data.scale = mist::math::lerp(t1.scale, t2.scale, t);
+        data.position = mist::math::lerp(t1.position, t2.position, t);
+        data.rotation = mist::math::lerp(t1.rotation, t2.rotation, t);
+        data.opacity = mist::math::lerp(t1.opacity, t2.opacity, t);
+        data.layer_depth = mist::math::lerp(t1.layer_depth, t2.layer_depth, t);
         
         if(t < 1.0f)
             data.visible = t1.visible;

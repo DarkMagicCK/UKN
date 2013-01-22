@@ -69,7 +69,7 @@ namespace mist {
         }
         
         virtual void update(uint32 past_time, void* property_ptr) {
-            *(T*)property_ptr = (T)(lerp((float)getFrom(), (float)getTo(), (real)past_time/getDuration())+0.5);
+            *(T*)property_ptr = (T)(math::lerp((float)getFrom(), (float)getTo(), (real)past_time/getDuration())+0.5);
         }
         
     protected:
@@ -154,7 +154,7 @@ namespace mist {
                         *(double*)property_ptr = kf.value;
                         break;
                     case KFT_Linear:
-                        *(double*)property_ptr = (int32)(lerp((float)kf.value, 
+                        *(double*)property_ptr = (int32)(math::lerp((float)kf.value, 
                                                              (float)mKeyFrames[timepos].value,
                                                              (real)(past_time-prevtime)/mKeyFrames[timepos].duration)+0.5);
                         break;

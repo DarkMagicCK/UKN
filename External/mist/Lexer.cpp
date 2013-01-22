@@ -445,7 +445,7 @@ namespace mist {
     }
     
     float Lexer::asFloat() const {
-        return Convert::ToDouble(getCurrLexeme());
+        return (float)Convert::ToDouble(getCurrLexeme());
     }
     
     const MistString& Lexer::getCurrLexeme() const {

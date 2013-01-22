@@ -84,41 +84,41 @@ namespace ukn {
         tmpVert[3].u = u1; tmpVert[3].v = v2; tmpVert[0].z = descriptor.layer_depth;
         
         if(descriptor.dest_rect.isEmpty()) {
-            float tx1 = -descriptor.center.x * descriptor.scale.x;
-            float ty1 = -descriptor.center.y * descriptor.scale.y;
+            float tx1 = -descriptor.center.x() * descriptor.scale.x();
+            float ty1 = -descriptor.center.y() * descriptor.scale.y();
             float tx2, ty2;
             
             if(descriptor.source_rect.isEmpty() && texture) {
-                tx2 = (texture->getWidth() - descriptor.center.x) * descriptor.scale.x;
-                ty2 = (texture->getHeight() - descriptor.center.y) * descriptor.scale.y;
+                tx2 = (texture->getWidth() - descriptor.center.x()) * descriptor.scale.x();
+                ty2 = (texture->getHeight() - descriptor.center.y()) * descriptor.scale.y();
             } else {
-                tx2 = (descriptor.source_rect.width() - descriptor.center.x) * descriptor.scale.x;
-                ty2 = (descriptor.source_rect.height() - descriptor.center.y) * descriptor.scale.y;
+                tx2 = (descriptor.source_rect.width() - descriptor.center.x()) * descriptor.scale.x();
+                ty2 = (descriptor.source_rect.height() - descriptor.center.y()) * descriptor.scale.y();
             }
                         
             if(descriptor.rotation != 0.0f) {
                 float cost = cosf(descriptor.rotation);
                 float sint = sinf(descriptor.rotation);
                 
-                tmpVert[0].x  = tx1*cost - ty1*sint + descriptor.position.x;
-                tmpVert[1].x  = tx2*cost - ty1*sint + descriptor.position.x;
-                tmpVert[2].x  = tx2*cost - ty2*sint + descriptor.position.x;
-                tmpVert[3].x  = tx1*cost - ty2*sint + descriptor.position.x;
+                tmpVert[0].x  = tx1*cost - ty1*sint + descriptor.position.x();
+                tmpVert[1].x  = tx2*cost - ty1*sint + descriptor.position.x();
+                tmpVert[2].x  = tx2*cost - ty2*sint + descriptor.position.x();
+                tmpVert[3].x  = tx1*cost - ty2*sint + descriptor.position.x();
                 
-                tmpVert[0].y  = tx1*sint + ty1*cost + descriptor.position.y;	
-                tmpVert[1].y  = tx2*sint + ty1*cost + descriptor.position.y;	
-                tmpVert[2].y  = tx2*sint + ty2*cost + descriptor.position.y;	
-                tmpVert[3].y  = tx1*sint + ty2*cost + descriptor.position.y;
+                tmpVert[0].y  = tx1*sint + ty1*cost + descriptor.position.y();	
+                tmpVert[1].y  = tx2*sint + ty1*cost + descriptor.position.y();	
+                tmpVert[2].y  = tx2*sint + ty2*cost + descriptor.position.y();	
+                tmpVert[3].y  = tx1*sint + ty2*cost + descriptor.position.y();
             }
             else {
-                tmpVert[0].x = tx1 + descriptor.position.x; 
-                tmpVert[1].x = tx2 + descriptor.position.x; 
+                tmpVert[0].x = tx1 + descriptor.position.x(); 
+                tmpVert[1].x = tx2 + descriptor.position.x(); 
                 tmpVert[2].x = tmpVert[1].x; 
                 tmpVert[3].x = tmpVert[0].x; 
                 
-                tmpVert[0].y = ty1 + descriptor.position.y;
+                tmpVert[0].y = ty1 + descriptor.position.y();
                 tmpVert[1].y = tmpVert[0].y;
-                tmpVert[2].y = ty2 + descriptor.position.y;
+                tmpVert[2].y = ty2 + descriptor.position.y();
                 tmpVert[3].y = tmpVert[2].y;
             }
             
@@ -283,23 +283,23 @@ namespace ukn {
     }
     
     void SpriteBatch::updateBoundingBox(float x, float y, float z) {
-        if(mBoundingBox.min.x > x) {
-            mBoundingBox.min.x = x;
+        if(mBoundingBox.min.x() > x) {
+            mBoundingBox.min.x() = x;
         }
-        if(mBoundingBox.min.y > y) {
-            mBoundingBox.min.y = y;
+        if(mBoundingBox.min.y() > y) {
+            mBoundingBox.min.y() = y;
         }
-        if(mBoundingBox.max.x < x) {
-            mBoundingBox.max.x = x;
+        if(mBoundingBox.max.x() < x) {
+            mBoundingBox.max.x() = x;
         }
-        if(mBoundingBox.max.y < y) {
-            mBoundingBox.max.y = y;
+        if(mBoundingBox.max.y() < y) {
+            mBoundingBox.max.y() = y;
         }
-        if(mBoundingBox.min.z > z) {
-            mBoundingBox.min.z = z;
+        if(mBoundingBox.min.z() > z) {
+            mBoundingBox.min.z() = z;
         }
-        if(mBoundingBox.max.z < z) {
-            mBoundingBox.max.z = z;
+        if(mBoundingBox.max.z() < z) {
+            mBoundingBox.max.z() = z;
         }
     }
     

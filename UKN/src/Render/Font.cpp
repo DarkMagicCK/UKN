@@ -136,8 +136,8 @@ namespace ukn {
                     texw = bits.width;
                     texh = bits.rows;
                         
-                    imgw = next_pow_of_2(texw);
-                    imgh = next_pow_of_2(texh);
+                    imgw = math::next_pow_of_2(texw);
+                    imgh = math::next_pow_of_2(texh);
                     imgw > imgh ? imgh = imgw : imgw = imgh;
                         
                     if(imgw == 0 || imgh == 0)

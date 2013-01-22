@@ -182,6 +182,7 @@
     <ClCompile Include="..\..\External\mist\Hashing.cpp" />
     <ClCompile Include="..\..\External\mist\Lexer.cpp" />
     <ClCompile Include="..\..\External\mist\Logger.cpp" />
+    <ClCompile Include="..\..\External\mist\MathUtil.cpp" />
     <ClCompile Include="..\..\External\mist\Module.cpp" />
     <ClCompile Include="..\..\External\mist\Port.cpp" />
     <ClCompile Include="..\..\External\mist\Profiler.cpp" />

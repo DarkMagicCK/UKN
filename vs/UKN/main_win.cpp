@@ -121,7 +121,9 @@ int CALLBACK WinMain(
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
             vp.camera->setViewParams(ukn::Vector3(0, 0, -10), ukn::Vector3(0, 0, 1));
             
-            float camPos[3] = {vp.camera->getEyePos().x, vp.camera->getEyePos().y, vp.camera->getEyePos().z};
+            float camPos[3] = {vp.camera->getEyePos().x(), 
+                                vp.camera->getEyePos().y(), 
+                                vp.camera->getEyePos().z()};
             effect->setFloatVectorVariable("cameraPosition", camPos);
             
             camController->attachCamera(vp.camera);

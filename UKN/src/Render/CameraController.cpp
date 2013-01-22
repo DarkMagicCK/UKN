@@ -56,13 +56,13 @@ namespace ukn {
         Vector3 scale, trans, rot;
         camera->getViewMatrix().decompose(trans, rot, scale);
 
-        Quaternion rotQ = Quaternion(rot.x, rot.y, rot.z);
+        Quaternion rotQ = Quaternion(rot.x(), rot.y(), rot.z());
         float sqx = rotQ.x * rotQ.x;
         float sqy = rotQ.y * rotQ.y;
         float sqz = rotQ.z * rotQ.z;
         float sqw = rotQ.w * rotQ.w;
         float unit = sqx + sqy + sqz + sqw;
-        float test = rot.x * rot.y * rot.z;
+        float test = rot.x() * rot.y() * rot.z();
         float yaw, pitch, roll;
         if(test > 0.499f * unit) {
             yaw = 2 * atan2(rotQ.z, rotQ.w);
@@ -84,7 +84,7 @@ namespace ukn {
         mRotY[0] = sin(yaw / 2); mRotY[1] = cos(yaw / 2);
         mRotZ[0] = sin(roll / 2); mRotZ[1] = cos(roll / 2);
 
-        mInvRot = mist::math::InverseQuaternion(rotQ);
+        mInvRot = mist::math::inverse_quaternion(rotQ);
         
         CameraController::attachCamera(camera);
     }
@@ -94,7 +94,7 @@ namespace ukn {
             Vector3 move(x, y, z);
             move = move * getMoveScaler();
 
-            Vector3 newEye = mCamera->getEyePos() + mist::math::TransformQuaternion(move, mInvRot);
+            Vector3 newEye = mCamera->getEyePos() + mist::math::transform_quaternion(move, mInvRot);
             mCamera->setViewParams(newEye, newEye + mCamera->getViewVec(), mCamera->getUpVec());
         }
     }
@@ -118,9 +118,9 @@ namespace ukn {
             mRotY = float2(quat_y.y, quat_y.w);
             mRotZ = float2(quat_z.z, quat_z.w);
 
-            mInvRot = mist::math::InverseQuaternion(quat_y * quat_x * quat_z);
-            Vector3 view_vec = mist::math::TransformQuaternion(Vector3(0, 0, 1), mInvRot);
-            Vector3 up_vec = mist::math::TransformQuaternion(Vector3(0, 1, 0), mInvRot);
+            mInvRot = mist::math::inverse_quaternion(quat_y * quat_x * quat_z);
+            Vector3 view_vec = mist::math::transform_quaternion(Vector3(0, 0, 1), mInvRot);
+            Vector3 up_vec = mist::math::transform_quaternion(Vector3(0, 1, 0), mInvRot);
 
             mCamera->setViewParams(mCamera->getEyePos(), mCamera->getEyePos() + view_vec, up_vec);
         }
@@ -134,8 +134,8 @@ namespace ukn {
             mPrevX = e.x;
             mPrevY = e.y;
 
-            this->rotate(delta_x < 0 ? -0.1 : 0.1, 0, 0);
-            this->rotate(0, delta_y < 0 ? -0.1 : 0.1, 0);
+            this->rotate(delta_x < 0 ? 0.1 : 0-.1, 0, 0);
+            this->rotate(0, delta_y < 0 ? 0.1 : -0.1, 0);
         }
     }
 
@@ -159,13 +159,6 @@ namespace ukn {
         case input::D:
         case input::Right:
             this->move(0.1, 0, 0);
-            break;
-
-        case input::Q:
-            this->rotate(0.1, 0, 0);
-            break;
-        case input::E:
-            this->rotate(0, 0.1, 0);
             break;
         }
     }

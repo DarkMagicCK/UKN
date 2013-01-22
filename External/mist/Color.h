@@ -215,10 +215,10 @@ namespace mist {
         }
         
         Color& normalize() {
-            this->r = clamp(0.f, 1.f, r);
-            this->g = clamp(0.f, 1.f, g);
-            this->b = clamp(0.f, 1.f, b);
-            this->a = clamp(0.f, 1.f, a);
+            this->r = math::clamp(0.f, 1.f, r);
+            this->g = math::clamp(0.f, 1.f, g);
+            this->b = math::clamp(0.f, 1.f, b);
+            this->a = math::clamp(0.f, 1.f, a);
             return *this;
         }
         

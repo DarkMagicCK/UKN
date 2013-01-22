@@ -444,7 +444,7 @@ namespace ukn {
         }
         
         Tile& Layer::getTileAt(const Vector2& pos) {
-            return tiles[pos.x / parent->getTileWidth() + pos.y / parent->getTileHeight() * parent->getMapWidth()];
+            return tiles[pos.x() / parent->getTileWidth() + pos.y() / parent->getTileHeight() * parent->getMapWidth()];
         }
         
         Tile& Map::getTileAt(uint32 layer_index, const Vector2& pos) {
@@ -486,11 +486,11 @@ namespace ukn {
                     int32 endx = layer.width;
                     int32 endy = layer.height;
                     
-                    startx = UKN_MAX(mViewRect.left() / mTileWidth, 0);
-                    starty = UKN_MAX(mViewRect.top() / mTileHeight, 0);
+                    startx = MIST_MAX(mViewRect.left() / mTileWidth, 0);
+                    starty = MIST_MAX(mViewRect.top() / mTileHeight, 0);
                     
-                    endx = UKN_MIN(mViewRect.right() / mTileWidth + 1, endx);
-                    endy = UKN_MIN(mViewRect.bottom() / mTileHeight + 1, endy);
+                    endx = MIST_MIN(mViewRect.right() / mTileWidth + 1, endx);
+                    endy = MIST_MIN(mViewRect.bottom() / mTileHeight + 1, endy);
                     
                     for(int32 y = starty; y < endy; ++y) {
                         for(int32 x = startx; x < endx; ++x) {
@@ -653,7 +653,7 @@ namespace ukn {
         }
         
         void Map::render() {
-            mMapRenderer->begin(SBS_Deffered, Matrix4::TransMat(mPosition.x, mPosition.y, 0.f));
+            mMapRenderer->begin(SBS_Deffered, Matrix4::TransMat(mPosition.x(), mPosition.y(), 0.f));
             
             if(mOrientation == MO_Orthogonal)
                 orthogonalRender();

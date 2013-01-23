@@ -21,43 +21,46 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\WindowsWindow.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11Convert.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\MetroWindows.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11Debug.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11Convert.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11FrameBuffer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11Debug.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11GraphicBuffer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11FrameBuffer.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11GraphicDevice.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11GraphicBuffer.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11GraphicFactory.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11GraphicDevice.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11Plugin.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11GraphicFactory.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11Preq.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11RenderBuffer.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11RenderBuffer.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11RenderView.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11RenderView.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11Shader.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11Shader.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11Texture.h">
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11Texture.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D11Preq.h">
+    <ClInclude Include="..\..\Plugins\D3D11\MetroWindows.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D11\WindowsWindow.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -68,43 +71,43 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\WindowsWindow.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11Convert.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\MetroWindow.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11Debug.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11Debug.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11FrameBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11FrameBuffer.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11GraphicBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11GraphicBuffer.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11GraphicDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11GraphicDevice.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11GraphicFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11GraphicFactory.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11Plugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11Plugin.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11RenderBuffer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11RenderBuffer.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11RenderView.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11RenderView.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11Shader.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11Texture.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\MetroWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D11Convert.cpp">
+    <ClCompile Include="..\..\Plugins\D3D11\WindowsWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

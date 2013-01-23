@@ -134,8 +134,8 @@ namespace ukn {
             mPrevX = e.x;
             mPrevY = e.y;
 
-            this->rotate(delta_x < 0 ? 0.1 : 0-.1, 0, 0);
-            this->rotate(0, delta_y < 0 ? 0.1 : -0.1, 0);
+            this->rotate(delta_x < 0 ? -0.1 : 0.1, 0, 0);
+            this->rotate(0, delta_y < 0 ? -0.1 : 0.1, 0);
         }
     }
 

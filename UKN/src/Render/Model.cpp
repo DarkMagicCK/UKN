@@ -12,10 +12,10 @@ namespace ukn {
 #define MIN(a, b) (a < b) ? (a) : (b)
 
     inline void _get_sphere_vertex(double r, double a, double b, VertexUVNormal& vertex) {
-        double sina = sinf(a);
-        vertex.x = r * sina * cosf(b);
-        vertex.y = r * sina * sinf(b);
-        vertex.z = r * cosf(a);
+        double sina = sin(a);
+        vertex.x = r * sina * cos(b);
+        vertex.y = r * sina * sin(b);
+        vertex.z = r * cos(a);
 
         Vector3 normal = Vector3(vertex.x, vertex.y, vertex.z).normalize();
         vertex.setNormal(normal.x(), normal.y(), normal.z());

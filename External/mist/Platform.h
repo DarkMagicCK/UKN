@@ -99,13 +99,29 @@
     #define MIST_OS_ANDROID
 
 // windows
-#elif defined(_WIN32) || defined(_MSC_VER)
+#elif defined(_WIN32) || defined(_WIN64)
     #define MIST_OS_WINDOWS
 
     #if defined(_WIN64)
         #define MIST_PLATFORM_64
     #else
         #define MIST_PLATFORM_32
+    #endif
+
+    #if defined(_M_IX86)
+        #define MIST_PROCESSOR_X86  
+    #elif defined(_M_X64)
+        #define MIST_PROCESSOR_X64
+    #endif
+
+    #if defined(_CPPRTTI)
+        #define MIST_HAS_RTTI
+    #endif
+
+    // windows 8 C++/CX, Some Components in WinRT is different, such as FileUtil, to do
+    // /ZW
+    #if defined(__cplusplus_winrt)
+        #define MIST_OS_WINRT
     #endif
 
     #ifndef NOMINMAX

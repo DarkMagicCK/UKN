@@ -30,6 +30,20 @@
 
 #include <numeric>
 
+template<typename T, int N>
+struct NDArray {
+    NDArray()  {} 
+    NDArray<T, N-1>& operator [](size_t index) { return a[index]; }
+    std::vector<NDArray<T, N-1> > a;
+};
+
+template<typename T>
+struct NDArray<T, 1> {
+    NDArray() {} 
+    T& operator [](size_t index) { return a[index]; }
+    std::vector<T> a;
+};
+
 #ifndef MIST_OS_WINDOWS
 int main (int argc, const char * argv[])
 {

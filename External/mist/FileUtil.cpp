@@ -37,6 +37,7 @@
 #include <fstream>
 
 #include "mist/StringUtil.h"
+#include "mist/Logger.h"
 
 namespace mist {
 
@@ -382,7 +383,7 @@ namespace mist {
 #if defined(MIST_OS_WINDOWS)
         wchar_t buffer[_MAX_PATH];
         DWORD n = GetCurrentDirectoryW(sizeof(buffer), buffer);
-        if(n > 0 && n < sizeof(buffer)) {
+        if(n > 0) {
             MistString result(buffer, n);
             if(result[n-1] != L'\\')
                 result.append(L"\\");
@@ -400,6 +401,7 @@ namespace mist {
             path.append("/");
         return string::StringToWStringFast(path);
 #endif      
+        return MistString(L"./");
     }
     
     MistString Path::GetHome() {
@@ -454,13 +456,22 @@ namespace mist {
     MistString Path::GetTemp() {
 #if defined(MIST_OS_WINDOWS)
         wchar_t buffer[_MAX_PATH];
+        
+#ifndef MIST_OS_WINRT
         DWORD n = GetTempPathW(sizeof(buffer), buffer);
-        if(n > 0 && n < sizeof(buffer)) {
-            MistString result(buffer, n);
-            if(result[n-1] != L'\\')
-                result.append(L"\\");
-            return result;
+        if(n == 0) {
+            log_error("GetTempPathW failed");
+            return MistString(L"./temp/");
         } 
+#else
+        auto folder = Window::Storage::ApplicationData::Current->TemporaryFolder;
+        wcscpy_s(buffer, _MAX_PATH, folder->Path->Data());
+        
+#endif
+        MistString result(buffer, n);
+        if(result[n-1] != L'\\')
+            result.append(L"\\");
+        return result;
         
 #elif defined(MIST_OS_FAMILY_UNIX)
         std::string path;
@@ -476,7 +487,7 @@ namespace mist {
         return string::StringToWStringFast(path);
         
 #endif    
-        return MistString();
+        return MistString(L"./temp/");
     }
     
     MistString Path::GetWrittable() {

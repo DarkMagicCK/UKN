@@ -76,9 +76,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="..\..\External\md5lib\md5lib.h" />
     <ClInclude Include="..\..\External\mist\Animation.h" />
     <ClInclude Include="..\..\External\mist\Any.h" />

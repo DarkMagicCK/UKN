@@ -139,10 +139,10 @@ namespace ukn {
                     
                     int32 x = (i % wcount) * (tileset.tile_width + tileset.spacing);
                     int32 y = (i / wcount) * (tileset.tile_height + tileset.spacing);
-                    tile.tile_texture_rect = mist::Rectangle(x + tileset.margin,
-															y + tileset.margin,
-															x + tileset.tile_width + tileset.margin,
-															y + tileset.tile_height + tileset.margin);
+                    tile.tile_texture_rect = mist::Rectangle(real(x + tileset.margin),
+															 real(y + tileset.margin),
+															 real(x + tileset.tile_width + tileset.margin),
+															 real(y + tileset.tile_height + tileset.margin));
                     
                     tile.tileset_id = tileset_id;
                 }
@@ -276,10 +276,10 @@ namespace ukn {
                                     tile.flipped_vertically = flipped_vertically;
                                     
                                     TileSet& tileset = mTileSets[tile.tileset_id];
-                                    tile.tile_bounding_rect = mist::Rectangle((i % layer.width) * tileset.tile_width,
-																			(i / layer.width) * tileset.tile_height,
-																			(i % layer.width) * tileset.tile_width + tileset.tile_width,
-																			(i / layer.width) * tileset.tile_height + tileset.tile_height);
+                                    tile.tile_bounding_rect = mist::Rectangle(real((i % layer.width) * tileset.tile_width),
+																			  real((i / layer.width) * tileset.tile_height),
+																			  real((i % layer.width) * tileset.tile_width + tileset.tile_width),
+																			  real((i / layer.width) * tileset.tile_height + tileset.tile_height));
                                 } else
                                     log_error(L"ukn::tmx::Map::parseLayer: invalid tile with gid " + Convert::ToString(global_tile_id));
                             }
@@ -457,8 +457,8 @@ namespace ukn {
         
         Box Map::getBound() const {
             return Box(Vector3(0.f, 0.f, 0.f),
-                       Vector3(mMapWidth * mTileWidth,
-                               mMapHeight * mTileHeight,
+                       Vector3(real(mMapWidth * mTileWidth),
+                               real(mMapHeight * mTileHeight),
                                0.f));
         }
         
@@ -486,11 +486,11 @@ namespace ukn {
                     int32 endx = layer.width;
                     int32 endy = layer.height;
                     
-                    startx = MIST_MAX(mViewRect.left() / mTileWidth, 0);
-                    starty = MIST_MAX(mViewRect.top() / mTileHeight, 0);
+                    startx = int32(MIST_MAX(mViewRect.left() / mTileWidth, 0));
+                    starty = int32(MIST_MAX(mViewRect.top() / mTileHeight, 0));
                     
-                    endx = MIST_MIN(mViewRect.right() / mTileWidth + 1, endx);
-                    endy = MIST_MIN(mViewRect.bottom() / mTileHeight + 1, endy);
+                    endx = int32(MIST_MIN(mViewRect.right() / mTileWidth + 1, endx));
+                    endy = int32(MIST_MIN(mViewRect.bottom() / mTileHeight + 1, endy));
                     
                     for(int32 y = starty; y < endy; ++y) {
                         for(int32 x = startx; x < endx; ++x) {

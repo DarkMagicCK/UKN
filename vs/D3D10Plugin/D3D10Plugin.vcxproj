@@ -43,12 +43,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)\Include;$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\External\Cg;$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)\Include;$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\External\Cg;$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -79,6 +79,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Plugins\D3D11\CgShader.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Convert.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Debug.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11FrameBuffer.h" />
@@ -97,6 +98,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Plugins\D3D11\CgShader.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Convert.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Debug.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11FrameBuffer.cpp" />

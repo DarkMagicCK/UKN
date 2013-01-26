@@ -72,8 +72,8 @@ namespace ukn {
             return Texture::NullObject();
         }
 
-        EffectPtr loadEffect(const ResourcePtr& rsrc) const {
-            return Effect::NullObject();
+        EffectPtr createEffect() const {
+            return EffectPtr();
         }
         
     };

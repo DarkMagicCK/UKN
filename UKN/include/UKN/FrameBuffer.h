@@ -72,7 +72,7 @@ namespace ukn {
         
         bool isDirty() const;
 
-		void updateScreen(uint32 left, uint32 top, uint32 w, uint32 h);
+		void updateScreenSize(uint32 left, uint32 top, uint32 w, uint32 h);
     
     protected:
         uint32 mLeft;

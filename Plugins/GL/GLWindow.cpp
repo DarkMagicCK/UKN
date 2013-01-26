@@ -256,7 +256,7 @@ namespace ukn {
     }
 
     void GLWindow::updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h) {
-        mFrameBuffer->updateScreen(0, 0, w, h);
+        mFrameBuffer->updateScreenSize(0, 0, w, h);
 
         Window::mLeft = x;
         Window::mTop = y;

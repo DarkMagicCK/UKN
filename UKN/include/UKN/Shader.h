@@ -39,6 +39,9 @@ namespace ukn {
 		entry(entry),
 		profile(profile) { }
     };
+    
+    class Shader;
+    typedef SharedPtr<Shader> ShaderPtr;
 	
     /* 
     idea from d3d10
@@ -48,36 +51,59 @@ namespace ukn {
     */
     class UKN_API Effect: public Uncopyable {
     public:
-        static EffectPtr NullObject();
+        Effect();
+        virtual ~Effect();
 
-        virtual void bind() = 0;
-        virtual void unbind() = 0;
-        /*
-			Variable Setters
-		*/
-		virtual bool setMatrixVariable(const char* name, const Matrix4& worldMat) = 0;
-		// vector variables are four-components 
-		virtual bool setFloatVectorVariable(const char* name, float* vec) = 0;
-		virtual bool setIntVectorVariable(const char* name, int* vec) = 0;
-		virtual bool setTextureVariable(const char* name, Texture* resource) = 0;
-		/*
-			Variable Getters
-		*/
-	    virtual bool getMatrixVariable(const char* name, Matrix4* mat) = 0;
-		virtual bool getFloatVectorVariable(const char* name, float* vec) = 0;
-		virtual bool getIntVectorVariable(const char* name, int* vec) = 0;
+        /* to do in custom shader compiler, no use now */		
+        bool loadEffectFile(const ResourcePtr& content);
+        virtual void emitCode();
 
-		virtual uint32 getPasses() const = 0;
-		virtual void applyPass(uint32 pass) = 0;
+        uint32 getPasses() const;
+
+        virtual ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc) = 0;
+
+        /* begin */
+        void bind(uint32 pass = 0);
+        void unbind();
+
+        void setFragmentShader(const ShaderPtr& shader);
+        void setVertexShader(const ShaderPtr& shader);
+        void setGeometryShader(const ShaderPtr& shader);
+
+        ShaderPtr getFragmentShader() const;
+        ShaderPtr getVertexShader() const;
+        ShaderPtr getGeometryShader() const;
+
+    protected:
+        virtual void onBind(uint32 pass);
+        virtual void onUnbind();
+
+        ShaderPtr mFragmentShader;
+        ShaderPtr mVertexShader;
+        ShaderPtr mGeometryShader;
     };
     
     class UKN_API Shader: public Uncopyable {
     public:
 		virtual ~Shader()  { }
 
-        virtual bool initialize(const ResourcePtr& content, const ShaderDesc& desc) = 0;
         virtual void bind() = 0;
         virtual void unbind() = 0;
+
+        /*
+			Variable Setters
+		*/
+		virtual bool setMatrixVariable(const char* name, const Matrix4& worldMat) = 0;
+		virtual bool setFloatVectorVariable(const char* name, const float4& vec) = 0;
+		virtual bool setIntVectorVariable(const char* name, const int4& vec) = 0;
+		virtual bool setTextureVariable(const char* name, const TexturePtr& resource) = 0;
+		/*
+			Variable Getters
+		*/
+	    virtual bool getMatrixVariable(const char* name, Matrix4& mat) = 0;
+		virtual bool getFloatVectorVariable(const char* name, float4& vec) = 0;
+		virtual bool getIntVectorVariable(const char* name, int4& vec) = 0;
+
     };
     
 } // namespace ukn

@@ -305,26 +305,6 @@ namespace ukn {
                                                                      format);
     }
     
-    SharedPtr<uint8> GLGraphicDevice::readTextureData(const TexturePtr& texture, uint8 level) {
-        if(texture->getType() == TT_Texture2D) {
-            return ((GLTexture2D*)(texture.get()))->readTextureData(level);
-        }
-        
-        return SharedPtr<uint8>();
-    }
-    
-    void GLGraphicDevice::updateTextureData(const TexturePtr& texture, void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level) {
-        if(texture->getType() == TT_Texture2D) {
-            return ((GLTexture2D*)(texture.get()))->updateTextureData(data,
-                                                                      x,
-                                                                      y,
-                                                                      width,
-                                                                      height,
-                                                                      level);
-        }
-        
-    }
-    
     void GLGraphicDevice::setViewMatrix(const Matrix4& mat) {
         mViewMat = mat;
     }

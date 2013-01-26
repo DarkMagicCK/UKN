@@ -26,12 +26,15 @@ namespace ukn {
         
         uintPtr getTextureId() const override;
         
-        SharedPtr<uint8> readTextureData(uint8 level);
-        void updateTextureData(void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level);
-        
+        void* map(uint32 level = 0) override;
+        void unmap() override;
+
     private:
         uintPtr mTextureId;
-        
+
+        void* mTextureData;
+        uint32 mMappedLevel;
+
         uint32 mWidth;
         uint32 mHeight;
         uint32 mOrigWidth;

@@ -7,28 +7,73 @@
 //
 
 #include "UKN/Shader.h"
+#include "UKN/Context.h"
 
 namespace ukn {
 
-    class NullEffect: public Effect {
-    public:
-        void bind() { }
-        void unbind() { }
-        
-        bool setMatrixVariable(const char* name, const Matrix4& worldMat) { return true; }
-		bool setFloatVectorVariable(const char* name, float* vec) { return true; }
-		bool setIntVectorVariable(const char* name, int* vec) { return true; }
-		bool setTextureVariable(const char* name, Texture* resource) { return true; }
-		bool getMatrixVariable(const char* name, Matrix4* mat) { return true; }
-		bool getFloatVectorVariable(const char* name, float* vec) { return true; }
-		bool getIntVectorVariable(const char* name, int* vec) { return true; }
+    Effect::Effect() {
 
-		uint32 getPasses() const { return 1; }
-		void applyPass(uint32 pass) {  }
-    };
+    }
 
-    EffectPtr Effect::NullObject() {
-        return SharedPtr<Effect>(new NullEffect());
+    Effect::~Effect() {
+    
+    }
+
+    bool Effect::loadEffectFile(const ResourcePtr& content) {
+        return false;
+    }
+
+    void Effect::emitCode() {
+        // null
+    }
+
+    uint32 Effect::getPasses() const {
+        return 1;
+    }
+
+    void Effect::bind(uint32 pass) {
+        if(mVertexShader)
+            mVertexShader->bind();
+        if(mFragmentShader)
+            mFragmentShader->bind();
+
+        this->onBind(pass);
+    }
+
+    void Effect::unbind() {
+
+    }
+
+    void Effect::setFragmentShader(const ShaderPtr& shader) {
+        mFragmentShader = shader;
+    }
+
+    void Effect::setVertexShader(const ShaderPtr& shader) {
+        mVertexShader = shader;
+    }
+
+    void Effect::setGeometryShader(const ShaderPtr& shader) {
+        mGeometryShader = shader;
+    }
+
+    ShaderPtr Effect::getFragmentShader() const {
+        return mFragmentShader;
+    }
+
+    ShaderPtr Effect::getVertexShader() const {
+        return mVertexShader;
+    }
+
+    ShaderPtr Effect::getGeometryShader() const {
+        return mGeometryShader;
+    }
+
+    void Effect::onBind(uint32 pass) {
+
+    }
+
+    void Effect::onUnbind() {
+
     }
 
 }

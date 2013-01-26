@@ -15,6 +15,14 @@
 #include <vector>
 
 namespace mist {
+
+#undef DeleteFile
+#undef DeleteDirectory
+#undef CreateDirectory
+#undef CopyFile
+#undef CopyDirectory
+#undef FileExists
+#undef PathExists
     
     class MIST_API File {
     public:

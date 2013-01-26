@@ -56,7 +56,7 @@ namespace ukn {
         TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const;
         
         TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const;
-        EffectPtr loadEffect(const ResourcePtr& rsrc) const;
+        EffectPtr createEffect() const;
 
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -143,8 +143,8 @@ namespace ukn {
         return TexturePtr();
     }
 
-    EffectPtr GLGraphicFactory::loadEffect(const ResourcePtr& rsrc) const {
-        return Effect::NullObject();
+    EffectPtr GLGraphicFactory::createEffect() const {
+        return EffectPtr();
     }
     
 } // namespace ukn

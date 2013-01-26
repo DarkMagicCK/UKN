@@ -80,7 +80,7 @@ int CALLBACK WinMain(
                 ukn::ContextCfg::Default()
                   .width(800)
                   .height(600)
-                  .graphicFactoryName(L"D3D10Plugin.dll")
+                  .graphicFactoryName(L"D3D11Plugin.dll")
                   .fps(60)
                )
         .connectUpdate([](ukn::Window* ) {
@@ -107,21 +107,22 @@ int CALLBACK WinMain(
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
      
             renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 5.5), 20);
-            effect = gf.loadEffect(ukn::ResourceLoader::Instance().loadResource(L"color.fx"));
+
+            effect = gf.createEffect();
             renderBuffer->setEffect(effect);
+
+            ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex.cg"), 
+                    ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", "", ukn::VertexUVNormal::Format()));
+            ukn::ShaderPtr fragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment.cg"), 
+                    ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram", ""));
+
+            effect->setFragmentShader(fragmentShader);
+            effect->setVertexShader(vertexShader);
             
-            float diffuseColor[4] = { 1.f, 1.f, 1.f, 1.f};
-            float lightDirection[3] = {0.5f, 1.f, 0.5f};
-            float ambientColor[4] = {0.15, 0.15, 0.15, 1.f};
-
-            effect->setFloatVectorVariable("diffuseColor", diffuseColor);
-            effect->setFloatVectorVariable("lightDirection", lightDirection);
-            effect->setFloatVectorVariable("ambientColor", ambientColor);
-
-            float specularColor[4] = { 0.f, 0.f, 1.f, 1.f };
-            float specularPower= 32.f;
-
-            effect->setFloatVectorVariable("specularColor", specularColor);
+            fragmentShader->setFloatVectorVariable("diffuseColor", ukn::float4(1.f, 1.f, 1.f, 1.f));
+            fragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(0.5f, 1.f, 0.5f, 1.f));
+            fragmentShader->setFloatVectorVariable("ambientColor", ukn::float4(0.15f, 0.15f, 0.15f, 1.f));
+            fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(0.f, 0.f, 0.f, 0.f));
 
             texture = gf.create2DTexture(800, 600, 0, ukn::EF_RGBA8, 0);
             if(!texture) {
@@ -134,11 +135,8 @@ int CALLBACK WinMain(
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
             vp.camera->setViewParams(ukn::Vector3(0, 0, -10), ukn::Vector3(0, 0, 1));
-            
-            float camPos[3] = {vp.camera->getEyePos().x(), 
-                                vp.camera->getEyePos().y(), 
-                                vp.camera->getEyePos().z()};
-            effect->setFloatVectorVariable("cameraPosition", camPos);
+
+            vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
             
             camController->attachCamera(vp.camera);
         })

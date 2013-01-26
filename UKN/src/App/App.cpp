@@ -13,6 +13,7 @@
 #include "mist/Stream.h"
 #include "mist/Module.h"
 #include "mist/Thread.h"
+#include "mist/FileUtil.h"
 
 #include "UKN/App.h"
 
@@ -51,6 +52,7 @@ namespace ukn {
     
     AppLauncher& AppLauncher::create(const UknString& cfgname) {
         if(!mInited) {
+            mist::File::DeleteFile(L"ukn_log.txt");
             mInited = true;
         
             Context::Instance().loadCfgFile(cfgname);
@@ -63,6 +65,7 @@ namespace ukn {
     
     AppLauncher& AppLauncher::create(const ContextCfg& cfg) {
         if(!mInited) {
+            mist::File::DeleteFile(L"ukn_log.txt");
             mInited = true;
         
             Context::Instance().setCfg(cfg);

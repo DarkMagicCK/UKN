@@ -20,7 +20,9 @@
 namespace ukn {
 
     GLTexture2D::GLTexture2D():
-    Texture(TT_Texture2D) {
+    Texture(TT_Texture2D),
+    mMappedLevel(0),
+    mTextureData(0) {
 
     }
 
@@ -135,11 +137,16 @@ namespace ukn {
         return mOrigHeight;
     }
     
-    SharedPtr<uint8> GLTexture2D::readTextureData(uint8 level) {
+    void* GLTexture2D::map(uint32 level) {
+        if(mTextureData) {
+            log_error(L"GLTexture2D::map, texture already mapped");
+            return mTextureData;
+        }
+
         GLint prevTexture;
         glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
         
-        uint8* texData = new uint8[mOrigWidth * mOrigHeight * GetElementSize(this->getFormat())];
+        uint8* texData = mist_malloc_t(uint8, mOrigWidth * mOrigHeight * GetElementSize(this->getFormat()));
         
         glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
         glGetTexImage(GL_TEXTURE_2D,
@@ -152,34 +159,38 @@ namespace ukn {
         }
         
         glBindTexture(GL_TEXTURE_2D, prevTexture);
-        return SharedPtr<uint8>(texData);
+        mTextureData = texData;
+        mMappedLevel = level;
     }
     
-    void GLTexture2D::updateTextureData(void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level) {
-        if(width == 0)
-            width = mOrigWidth;
-        if(height == 0)
-            height = mOrigHeight;
-        
+    void GLTexture2D::unmap() {
+        if(!mTextureData) {
+            log_error(L"GLTexture2D::unmap: texture not mapped");
+            return;
+        }
+
         GLint prevTexture;
         glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
         
         glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
         glTexSubImage2D(GL_TEXTURE_2D,
-                        level,
-                        x,
-                        y,
-                        width,
-                        height,
+                        mMappedLevel,
+                        0,
+                        0,
+                        mWidth,
+                        mHeight,
                         element_format_to_gl_format(this->getFormat()),
                         element_format_to_gl_element_type(this->getFormat()),
-                        data);
+                        mTextureData);
         
         if(glGetError() != GL_NO_ERROR) {
             log_error("GLGraphicDevice: error when updating texture");
         }
         
         glBindTexture(GL_TEXTURE_2D, prevTexture);
+
+        mist_free(mTextureData);
+        mTextureData = 0;
     }
 
     uintPtr GLTexture2D::getTextureId() const {

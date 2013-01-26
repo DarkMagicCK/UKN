@@ -322,7 +322,7 @@ namespace ukn {
         Window::mHeight = h;
         
 		if(mFrameBuffer) {
-			mFrameBuffer->updateScreen(0, 0, w, h);
+			mFrameBuffer->updateScreenSize(0, 0, w, h);
 
 			Viewport& vp = mFrameBuffer->getViewport();
         

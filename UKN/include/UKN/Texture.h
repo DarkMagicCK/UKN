@@ -53,6 +53,9 @@ namespace ukn {
         virtual uint32 getHeight(uint32 level = 0) const = 0;
         
         virtual uintPtr getTextureId() const = 0;
+
+        virtual void* map(uint32 level = 0) = 0;
+        virtual void unmap() = 0;
                 
     protected:
         TextureType mType;

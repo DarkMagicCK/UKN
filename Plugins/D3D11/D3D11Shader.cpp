@@ -160,119 +160,7 @@ namespace ukn {
 		return true;
 	}
 
-	bool D3D11Effect::setMatrixVariable(const char* name, const Matrix4& mat) {
-		if(!mEffect) return false;
-		ID3DX11EffectMatrixVariable* var = mEffect->GetVariableByName(name)->AsMatrix();
-
-		if(var) {
-            D3DXMATRIX dxmat;
-            for(int col = 0; col < 4; ++col) {
-                for(int row = 0; row < 4; ++row) {
-                    dxmat(row, col) = mat.c[col][row];
-                }
-            }
-			var->SetMatrix((float*)(dxmat.m));
-			return true;
-		}
-		return false;
-	}
-
-	bool D3D11Effect::setRawVariable(const char* name, void* data, uint32 length) {
-		if(!mEffect) return false;
-		ID3DX11EffectVariable* var = mEffect->GetVariableByName(name);
-
-		if(var) {
-			var->SetRawValue(data, 0, length);
-			return true;
-		}
-		return false;
-	}
-
-	bool D3D11Effect::setFloatVectorVariable(const char* name, float* vec) {
-		if(!mEffect) return false;
-		ID3DX11EffectVectorVariable* var = mEffect->GetVariableByName(name)->AsVector();
-
-		if(var) {
-			var->SetFloatVector(vec);
-			return true;
-		}
-		return false;
-	}
-
-	bool D3D11Effect::setIntVectorVariable(const char* name, int* vec) {
-		if(!mEffect) return false;
-		ID3DX11EffectVectorVariable* var = mEffect->GetVariableByName(name)->AsVector();
-
-		if(var) {
-			var->SetIntVector(vec);
-			return true;
-		}
-		return false;
-	}
-
-	bool D3D11Effect::getMatrixVariable(const char* name, Matrix4* mat) {
-		if(!mEffect) return false;
-		ID3DX11EffectMatrixVariable* var = mEffect->GetVariableByName(name)->AsMatrix();
-
-		if(var) {
-            D3DXMATRIX dxmat;
-
-			var->GetMatrix((float*)dxmat);
-            for(int col = 0; col < 4; ++col) {
-                for(int row = 0; row < 4; ++row) {
-                    mat->c[col][row] = dxmat(row, col);
-                }
-            }
-			return true;
-		}
-		return false;
-	}
-
-	bool D3D11Effect::getRawVariable(const char* name, void* data, uint32 len) {
-		if(!mEffect) return false;
-		ID3DX11EffectMatrixVariable* var = mEffect->GetVariableByName(name)->AsMatrix();
-
-		if(var) {
-			var->GetRawValue(data, 0, len);
-			return true;
-		}
-		return false;
-	}
-
-	bool D3D11Effect::getFloatVectorVariable(const char* name, float* vec) {
-		if(!mEffect) return false;
-		ID3DX11EffectVectorVariable* var = mEffect->GetVariableByName(name)->AsVector();
-
-		if(var) {
-			var->GetFloatVector(vec);
-			return true;
-		}
-		return false;
-	}
-
-	bool D3D11Effect::getIntVectorVariable(const char* name, int* vec) {
-		if(!mEffect) return false;
-		ID3DX11EffectVectorVariable* var = mEffect->GetVariableByName(name)->AsVector();
-
-		if(var) {
-			var->GetIntVector(vec);
-			return true;
-		}
-		return false;
-	}
-
-	bool D3D11Effect::setTextureVariable(const char* name, Texture* resource) {
-		if(!mEffect) return false;
-		ID3DX11EffectShaderResourceVariable* var = mEffect->GetVariableByName(name)->AsShaderResource();
-
-		if(var) {
-			var->SetResource((ID3D11ShaderResourceView*)resource->getTextureId());
-			return true;
-		}
-		return false;
-	}
-
-	void D3D11Effect::bind() {
+	void D3D11Effect::onBind(uint32 pass) {
 		if(mLayout) {
 			mDevice->getD3DDeviceContext()->IASetInputLayout(mLayout);
 		}
@@ -281,12 +169,15 @@ namespace ukn {
 		}
 	}
 
-	void D3D11Effect::unbind() {
+	void D3D11Effect::onUnbind() {
 		if(mLayout) {
 			mDevice->getD3DDeviceContext()->IASetInputLayout(0);
 		}
 	}
 
+    ShaderPtr D3D11Effect::createShader(const ResourcePtr& content, const ShaderDesc& desc) {
+        return ShaderPtr();
+    }
 
 	inline ID3D10Blob* CompileShader(const ResourcePtr& content, const ShaderDesc& desc) {
 		StreamPtr memStream = content->readIntoMemory();
@@ -317,18 +208,6 @@ namespace ukn {
 		return compiled;
 	}
 
-	uint32 D3D11Effect::getPasses() const {
-		if(!mEffect || !mTechnique) 
-			return 0;
-		D3DX11_TECHNIQUE_DESC desc;
-		mTechnique->GetDesc(&desc);
-		return desc.Passes;
-	}
-
-	void D3D11Effect::applyPass(uint32 pass) {
-		mTechnique->GetPassByIndex(pass)->Apply(0, mDevice->getD3DDeviceContext());
-	}
-
     D3D11Shader::D3D11Shader(D3D11GraphicDevice* device):
 	mDevice(device) {
 
@@ -336,46 +215,36 @@ namespace ukn {
 	
 	D3D11Shader::~D3D11Shader() {
 	}
-    /*
-    bool D3D11Shader::setMatrixVariable(const char* name, const D3DXMATRIX& worldMat) {
-        if(mConstantTable) {
-            mConstantTable->SetMatrix(mDevice->getD3DDevice(),
-                                      
-        }
+    
+    bool D3D11Shader::setMatrixVariable(const char* name, const Matrix4& worldMat) {
+        return false; 
     }
 
-	bool D3D11Shader::setRawVariable(const char* name, void* data, uint32 length) {
-
+	bool D3D11Shader::setFloatVectorVariable(const char* name, const float4& vec) {
+         return false; 
     }
 
-	bool D3D11Shader::setFloatVectorVariable(const char* name, float* vec) {
-
+	bool D3D11Shader::setIntVectorVariable(const char* name, const int4& vec) {
+         return false; 
     }
 
-	bool D3D11Shader::setIntVectorVariable(const char* name, int* vec) {
 
+	bool D3D11Shader::getMatrixVariable(const char* name, Matrix4& mat) {
+         return false; 
     }
 
-	bool D3D11Shader::setShaderResourceVariable(const char* name, ID3D11ShaderResourceView* resource) {
-
+    bool D3D11Shader::getFloatVectorVariable(const char* name, float4& vec) {
+         return false; 
     }
 
-	bool D3D11Shader::getMatrixVariable(const char* name, D3DXMATRIX* mat) {
-
+	bool D3D11Shader::getIntVectorVariable(const char* name, int4& vec) {
+         return false; 
     }
 
-    bool D3D11Shader::getRawVariable(const char* name, void* data, uint32 len) {
-
+    bool D3D11Shader::setTextureVariable(const char* name, const TexturePtr& tex) {
+        return false;
     }
-
-    bool D3D11Shader::getFloatVectorVariable(const char* name, float* vec) {
-
-    }
-
-	bool D3D11Shader::getIntVectorVariable(const char* name, int* vec) {
-
-    }
-    */
+    
 	D3D11VertexShader::D3D11VertexShader(D3D11GraphicDevice* device):
 	D3D11Shader(device),
 	mShader(0) {

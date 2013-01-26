@@ -28,8 +28,11 @@ namespace ukn {
         uint32 getWidth(uint32 level = 0) const override;
         uint32 getHeight(uint32 level = 0) const override;
         
-		/* uintPtr of texture resource view instead of texture */
+		/* uintPtr of texture resource instead of shader resource view */
         uintPtr getTextureId() const override;
+
+        void* map(uint32 level = 0) override;
+        void unmap() override;
         
 		ID3D11Texture2D* getTexture() const;
 		ID3D11ShaderResourceView* getTextureResourceView() const;

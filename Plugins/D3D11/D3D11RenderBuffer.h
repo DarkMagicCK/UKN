@@ -1,5 +1,7 @@
 #include "UKN/RenderBuffer.h"
 
+class ID3D11InputLayout;
+
 namespace ukn {
 
 	class D3D11Effect;
@@ -22,6 +24,7 @@ namespace ukn {
 
 	private:
 		D3D11GraphicDevice* mDevice;
+        ID3D11InputLayout* mLayout;
 	};
 
 }

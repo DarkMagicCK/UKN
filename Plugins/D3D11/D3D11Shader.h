@@ -20,31 +20,11 @@ namespace ukn {
 
 		bool initialize(mist::ResourcePtr& content);
 		bool setLayout(const ukn::VertexFormat& format);
-
-		virtual void bind() override;
-		virtual void unbind() override;
-
-		/*
-			Variable Setters
-		*/
-		virtual bool setMatrixVariable(const char* name, const Matrix4& worldMat) override;
-		// vector variables are four-components 
-		virtual bool setFloatVectorVariable(const char* name, float* vec) override;
-		virtual bool setIntVectorVariable(const char* name, int* vec) override;
-		virtual bool setTextureVariable(const char* name, Texture* resource) override;
-		/*
-			Variable Getters
-		*/
-	    virtual bool getMatrixVariable(const char* name, Matrix4* mat) override;
-		virtual bool getFloatVectorVariable(const char* name, float* vec) override;
-		virtual bool getIntVectorVariable(const char* name, int* vec) override;
-
         
-        bool setRawVariable(const char* name, void* data, uint32 length);
-	    bool getRawVariable(const char* name, void* data, uint32 len);
+        ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc);
 
-		virtual uint32 getPasses() const;
-		virtual void applyPass(uint32 pass);
+        virtual void onBind(uint32 pass) override;
+        virtual void onUnbind() override;
 
 	private:
 		ID3DX11Effect* mEffect;
@@ -54,21 +34,22 @@ namespace ukn {
 		D3D11GraphicDevice* mDevice;
 	};
 
-    /* 
-    if we use seperate shaders in D3D11
-    constant buffer is needed to set shader variables
-    however, name mapping might be a problem,
-    since there's no such thing in glsl
-    to do with this part
-    */
 	class D3D11Shader: public Shader {
 	public:
 		D3D11Shader(D3D11GraphicDevice* device);
 		virtual ~D3D11Shader() = 0;
 	
+        virtual bool setMatrixVariable(const char* name, const Matrix4& worldMat) override;
+		virtual bool setFloatVectorVariable(const char* name, const float4& vec) override;
+		virtual bool setIntVectorVariable(const char* name, const int4& vec) override;
+		virtual bool setTextureVariable(const char* name, const TexturePtr& resource) override;
+
+	    virtual bool getMatrixVariable(const char* name, Matrix4& mat) override;
+		virtual bool getFloatVectorVariable(const char* name, float4& vec) override;
+		virtual bool getIntVectorVariable(const char* name, int4& vec) override;
+
 	protected:
 		D3D11GraphicDevice* mDevice;
-        ID3D11Buffer* mConstantBuffer;
 	};
 
 	class D3D11VertexShader: public D3D11Shader {
@@ -76,9 +57,10 @@ namespace ukn {
 		D3D11VertexShader(D3D11GraphicDevice* device);
 		virtual ~D3D11VertexShader();
 
-		virtual bool initialize(const ResourcePtr& content, const ShaderDesc& desc) override;
+	    bool initialize(const ResourcePtr& content, const ShaderDesc& desc);
 		virtual void bind() override;
 		virtual void unbind() override;
+
 
 	private:
 		ID3D11VertexShader* mShader;
@@ -90,9 +72,10 @@ namespace ukn {
 		D3D11FragmentShader(D3D11GraphicDevice* device);
 		virtual ~D3D11FragmentShader();
 		
-		virtual bool initialize(const ResourcePtr& content, const ShaderDesc& desc) override;
+		bool initialize(const ResourcePtr& content, const ShaderDesc& desc);
 		virtual void bind() override;
 		virtual void unbind() override;
+
 
 	private:
 		ID3D11PixelShader* mShader;
@@ -103,9 +86,10 @@ namespace ukn {
 		D3D11GeometryShader(D3D11GraphicDevice* device);
 		virtual ~D3D11GeometryShader();
 
-		virtual bool initialize(const ResourcePtr& content, const ShaderDesc& desc) override;
+	    bool initialize(const ResourcePtr& content, const ShaderDesc& desc);
 		virtual void bind() override;
 		virtual void unbind() override;
+
 
 	private:
 		ID3D11GeometryShader* mShader;

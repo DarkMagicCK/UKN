@@ -29,6 +29,9 @@ namespace ukn {
             return 0;
         }
 
+        void* map(uint32 pass) { return 0; }
+        void unmap() { }
+
     };
     
     TexturePtr Texture::NullObject() {

@@ -221,7 +221,7 @@ namespace ukn {
         
     }
 
-	void FrameBuffer::updateScreen(uint32 left, uint32 top, uint32 w, uint32 h) {
+	void FrameBuffer::updateScreenSize(uint32 left, uint32 top, uint32 w, uint32 h) {
 		mLeft = left;
 		mTop = top;
 		mWidth = w;

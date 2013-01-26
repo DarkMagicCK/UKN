@@ -8,6 +8,8 @@
 #include "D3D11Texture.h"
 #include "D3D11RenderView.h"
 
+#include "CgShader.h"
+
 #include "UKN/RenderView.h"
 #include "UKN/SpriteBatch.h"
 #include "UKN/RenderBuffer.h"
@@ -45,7 +47,7 @@ namespace ukn {
         TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const;
         TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const;
 
-        EffectPtr loadEffect(const ResourcePtr& effect) const;
+        EffectPtr createEffect() const;
 
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -131,10 +133,9 @@ namespace ukn {
         return SharedPtr<D3D11Texture2D>();
     }
 
-    EffectPtr D3D11GraphicFactory::loadEffect(const ResourcePtr& rsrc) const {
-        D3D11Effect* effect = new D3D11Effect((D3D11GraphicDevice*)mGraphicDevice.get());
-        if(effect &&
-            effect->initialize(const_cast<ResourcePtr&>(rsrc))) {
+    EffectPtr D3D11GraphicFactory::createEffect() const {
+        CgDxEffect* effect = new CgDxEffect((D3D11GraphicDevice*)mGraphicDevice.get());
+        if(effect) {
             return EffectPtr(effect);
         }
         return EffectPtr();

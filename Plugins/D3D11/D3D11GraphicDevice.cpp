@@ -153,7 +153,7 @@ namespace ukn {
         if(!D3D11Debug::CHECK_RESULT(result, L"Create Device with D3D11_DRIVE_TYPE_HARDWARE")) {
             /* if hardware creation failed, try software */
             result = D3D11CreateDeviceAndSwapChain(NULL,
-               D3D_DRIVER_TYPE_WARP, /* software rasterizer */
+                D3D_DRIVER_TYPE_WARP, /* software rasterizer */
                 NULL,
                 creationFlags,
                 &featureLevel,
@@ -216,13 +216,13 @@ namespace ukn {
         result = mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
         CHECK_RESULT_AND_RETURN(result, L"ID3D11Device->CreateRasterizerState");
         mDeviceContext->RSSetState(mRasterState);
-        
+
         mWorldMatrix = Matrix4();
 
         /* default D3D11 Blend State */
         D3D11_BLEND_DESC blendDesc;
         ZeroMemory(&blendDesc, sizeof(blendDesc));
-        
+
         blendDesc.AlphaToCoverageEnable = FALSE;
         blendDesc.IndependentBlendEnable = FALSE;
         blendDesc.RenderTarget[0].BlendEnable = FALSE;
@@ -317,15 +317,17 @@ namespace ukn {
             D3D11Effect* effect = (D3D11Effect*)D3D11buffer->getEffect().get();
 
             if(effect) {
-                if(!effect->setMatrixVariable("worldMatrix", mWorldMatrix))
-                    log_error("error setting world matrix in effect");
-                if(!effect->setMatrixVariable("projectionMatrix", mProjectionMatrix))
-                    log_error("error setting projection matrix in effect");
-                if(!effect->setMatrixVariable("viewMatrix", mViewMatrix))
-                    log_error("error setting view matrix in effect");
-                if(mCurrTexture) {
-                    if(!effect->setTextureVariable("tex", mCurrTexture))
-                        log_error("error setting texture in effect");
+                if(effect->getVertexShader()) {
+                    if(!effect->getVertexShader()->setMatrixVariable("worldMatrix", mWorldMatrix))
+                        log_error("error setting world matrix in effect");
+                    if(!effect->getVertexShader()->setMatrixVariable("projectionMatrix", mProjectionMatrix))
+                        log_error("error setting projection matrix in effect");
+                    if(!effect->getVertexShader()->setMatrixVariable("viewMatrix", mViewMatrix))
+                        log_error("error setting view matrix in effect");
+                    if(mCurrTexture) {
+                        if(!effect->getFragmentShader()->setTextureVariable("tex", mCurrTexture))
+                            log_error("error setting texture in effect");
+                    }
                 }
 
                 vertexBuffer->activate();
@@ -337,7 +339,7 @@ namespace ukn {
 
                 effect->bind();
                 for(uint32 i=0; i<effect->getPasses(); ++i) {
-                    effect->applyPass(i);
+                    effect->bind(i);
 
                     if(indexBuffer.isValid()) {
                         mDeviceContext->DrawIndexed(buffer->getIndexCount(),
@@ -382,18 +384,6 @@ namespace ukn {
 
     void D3D11GraphicDevice::bindTexture(const TexturePtr& texture) {
         mCurrTexture = texture;
-    }
-
-    SharedPtr<uint8> D3D11GraphicDevice::readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format) {
-        return SharedPtr<uint8>();
-    }
-
-    SharedPtr<uint8> D3D11GraphicDevice::readTextureData(const TexturePtr& texture, uint8 level) {
-        return SharedPtr<uint8>();
-    }
-
-    void D3D11GraphicDevice::updateTextureData(const TexturePtr& texture, void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level) {
-
     }
 
     void D3D11GraphicDevice::fillGraphicCaps(GraphicDeviceCaps& caps) {

@@ -2,6 +2,7 @@
 
 #include "D3D11GraphicDevice.h"
 #include "D3D11Shader.h"
+#include "CgShader.h"
 
 #include "ukn/RenderBuffer.h"
 
@@ -17,13 +18,13 @@ namespace ukn {
 
 	void D3D11RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format) {
 		if(mEffect) {
-			((D3D11Effect*)mEffect.get())->setLayout(format);
+			((CgDxEffect*)mEffect.get())->setLayout(format);
 		}
 	}
 
 	void D3D11RenderBuffer::onSetVertexFormat(const VertexFormat& format) {
 		if(mEffect) {
-			((D3D11Effect*)mEffect.get())->setLayout(format);
+			((CgDxEffect*)mEffect.get())->setLayout(format);
 		}
 	}
 
@@ -49,7 +50,7 @@ namespace ukn {
 
     void D3D11RenderBuffer::onSetEffect(const EffectPtr& effect) {
         if(getVertexStream().isValid()) {
-			((D3D11Effect*)mEffect.get())->setLayout(this->getVertexFormat());
+            ((CgDxEffect*)mEffect.get())->setLayout(getVertexFormat());
 		}
     }
 

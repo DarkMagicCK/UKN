@@ -63,6 +63,9 @@
     <ClInclude Include="..\..\Plugins\D3D11\WindowsWindow.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D11\CgShader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -108,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Plugins\D3D11\WindowsWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D11\CgShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

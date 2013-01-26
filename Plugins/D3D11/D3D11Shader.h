@@ -19,12 +19,12 @@ namespace ukn {
 		virtual ~D3D11Effect();
 
 		bool initialize(mist::ResourcePtr& content);
-		bool setLayout(const ukn::VertexFormat& format);
+		void setVertexFormat(const ukn::VertexFormat& format) override;
         
-        ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc);
+        ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc) override;
 
-        virtual void onBind(uint32 pass) override;
-        virtual void onUnbind() override;
+        virtual void bind(uint32 pass) override;
+        virtual void unbind() override;
 
 	private:
 		ID3DX11Effect* mEffect;

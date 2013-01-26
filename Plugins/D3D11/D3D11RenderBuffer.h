@@ -24,7 +24,6 @@ namespace ukn {
 
 	private:
 		D3D11GraphicDevice* mDevice;
-        ID3D11InputLayout* mLayout;
 	};
 
 }

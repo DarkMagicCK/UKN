@@ -109,8 +109,6 @@ int CALLBACK WinMain(
             renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 5.5), 20);
 
             effect = gf.createEffect();
-            renderBuffer->setEffect(effect);
-
             ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex.cg"), 
                     ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", "", ukn::VertexUVNormal::Format()));
             ukn::ShaderPtr fragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment.cg"), 
@@ -138,6 +136,8 @@ int CALLBACK WinMain(
 
             vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
             
+            renderBuffer->setEffect(effect);
+
             camController->attachCamera(vp.camera);
         })
         .run();

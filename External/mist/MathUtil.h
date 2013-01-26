@@ -1399,48 +1399,50 @@ namespace mist {
         }
     };
 
+#undef min
+#undef max
 
     class AABB3 {
     public:
-        Vector3 min;
-        Vector3 max;
+        Vector3 lower_left;
+        Vector3 upper_right;
         real boundingRadius;
 
         AABB3(): 
-            min(Vector3()), 
-            max(Vector3()), 
+            lower_left(Vector3()), 
+            upper_right(Vector3()), 
             boundingRadius(0.f) { 
         }
 
         AABB3(const Vector3& u, const Vector3& l): 
-            min(u), 
-            max(l), 
-            boundingRadius((max - min).length() / 2.0f) { 
+            lower_left(u), 
+            upper_right(l), 
+            boundingRadius((upper_right - lower_left).length() / 2.0f) { 
         }
 
         AABB3(const AABB3& rhs): 
-            min(rhs.min), 
-            max(rhs.max), 
+            lower_left(rhs.lower_left), 
+            upper_right(rhs.upper_right), 
             boundingRadius(rhs.boundingRadius) {
         }
 
         AABB3& operator=(const AABB3& rhs) {
             if(this != &rhs) {
-                this->min = rhs.min;
-                this->max = rhs.max;
+                this->lower_left = rhs.lower_left;
+                this->upper_right = rhs.upper_right;
                 this->boundingRadius = rhs.boundingRadius;
             }
             return *this;
         }
 
         void set(const Vector3& min, const Vector3& max) {
-            this->min = min;
-            this->max = max;
-            this->boundingRadius = (this->max - this->min).length() / 2.0f;
+            this->lower_left = min;
+            this->upper_right = max;
+            this->boundingRadius = (this->upper_right - this->lower_left).length() / 2.0f;
         }
         void set(const Vector3& min, const Vector3& max, real boundingRadius) {
-            this->min = min;
-            this->max = max;
+            this->lower_left = min;
+            this->upper_right = max;
             this->boundingRadius = boundingRadius;
         }
 
@@ -1448,44 +1450,44 @@ namespace mist {
             return this->boundingRadius;
         }
         Vector3 getCenter() const {
-            return (this->max - this->min) / 2.0f;
+            return (this->upper_right - this->lower_left) / 2.0f;
         }
 
         void transform(const Matrix4& mat) {
             Vector3 box[8];
             Vector3 newMin, newMax;
 
-            box[0].x() = this->min.x();
-            box[0].y() = this->min.y();
-            box[0].z() = this->min.z();
+            box[0].x() = this->lower_left.x();
+            box[0].y() = this->lower_left.y();
+            box[0].z() = this->lower_left.z();
 
-            box[1].x() = this->min.x();
-            box[1].y() = this->min.y();
-            box[1].z() = this->max.z();
+            box[1].x() = this->lower_left.x();
+            box[1].y() = this->lower_left.y();
+            box[1].z() = this->upper_right.z();
 
-            box[2].x() = this->min.x();
-            box[2].y() = this->max.y();
-            box[2].z() = this->min.z();
+            box[2].x() = this->lower_left.x();
+            box[2].y() = this->upper_right.y();
+            box[2].z() = this->lower_left.z();
 
-            box[3].x() = this->min.x();
-            box[3].y() = this->max.y();
-            box[3].z() = this->max.z();
+            box[3].x() = this->lower_left.x();
+            box[3].y() = this->upper_right.y();
+            box[3].z() = this->upper_right.z();
 
-            box[4].x() = this->max.x();
-            box[4].y() = this->min.y();
-            box[4].z() = this->min.z();
+            box[4].x() = this->upper_right.x();
+            box[4].y() = this->lower_left.y();
+            box[4].z() = this->lower_left.z();
 
-            box[5].x() = this->max.x();
-            box[5].y() = this->min.y();
-            box[5].z() = this->max.z();
+            box[5].x() = this->upper_right.x();
+            box[5].y() = this->lower_left.y();
+            box[5].z() = this->upper_right.z();
 
-            box[6].x() = this->max.x();
-            box[6].y() = this->max.y();
-            box[6].z() = this->min.z();
+            box[6].x() = this->upper_right.x();
+            box[6].y() = this->upper_right.y();
+            box[6].z() = this->lower_left.z();
 
-            box[7].x() = this->max.x();
-            box[7].y() = this->max.y();
-            box[7].z() = this->max.z();
+            box[7].x() = this->upper_right.x();
+            box[7].y() = this->upper_right.y();
+            box[7].z() = this->upper_right.z();
 
             newMin = mat * box[0];
             newMax = newMin;
@@ -1507,38 +1509,38 @@ namespace mist {
         }
 
         const Vector3& getMin() const {
-            return this->min;
+            return this->lower_left;
         }
         const Vector3& getMax() const {
-            return this->max;
+            return this->upper_right;
         }
 
         Vector3& getMin() {
-            return this->min;
+            return this->lower_left;
         }
         Vector3& getMax() {
-            return this->max; 
+            return this->upper_right; 
         }
 
         real getWidth() const {
-            return abs(this->max.x() - this->min.x());
+            return abs(this->upper_right.x() - this->lower_left.x());
         }
         real getHeight() const {
-            return abs(this->max.y() - this->min.y());
+            return abs(this->upper_right.y() - this->lower_left.y());
         }
         real getDepth() const {
-            return abs(this->max.z() - this->min.z());
+            return abs(this->upper_right.z() - this->lower_left.z());
         }
 
         void scale(float scale) {
             Vector3 center = this->getCenter();
-            Vector3 dist = (this->max - center) / 2.0 * scale;
+            Vector3 dist = (this->upper_right - center) / 2.0 * scale;
 
             set(center - dist, center + dist);
         }
 
         operator AABB2() {
-            return AABB2(min.x(), min.y(), max.x(), max.y());
+            return AABB2(lower_left.x(), lower_left.y(), upper_right.x(), upper_right.y());
         }
     };
 

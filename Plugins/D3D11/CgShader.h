@@ -22,17 +22,20 @@ namespace ukn {
         CgDxEffect(D3D11GraphicDevice* device);
         virtual ~CgDxEffect();
 
-        virtual void onBind(uint32 pass) override;
-        virtual void onUnbind() override;
+        void setVertexFormat(const VertexFormat& format) override;
 
-        virtual ShaderPtr createShader(const ResourcePtr& resource, const ShaderDesc& desc) override;
+        void bind(uint32 pass) override;
+        void unbind() override;
+        uint32 getPasses() const override;
 
-        void setLayout(const VertexFormat& format);
+        ShaderPtr createShader(const ResourcePtr& resource, const ShaderDesc& desc) override;
 
         CGcontext getContext() const;
 
     private:
         CGcontext mContext;
+        ID3D11InputLayout* mLayout;
+        D3D11GraphicDevice* mDevice;
     };
 
     class CgDxShader: public Shader {
@@ -54,14 +57,14 @@ namespace ukn {
         void bind() override;
         void unbind() override;
         
-        void setLayout(const VertexFormat& format);
+        CGprogram getProgram() const;
+        CGcontext getContext() const;
+        const ShaderDesc& getDesc() const;
 
     private:
         CGprogram mProgram;
         CGcontext mContext;
         ShaderDesc mDesc;
-
-        ID3D11InputLayout* mLayout;
     };
 
 }

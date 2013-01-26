@@ -19,31 +19,6 @@ namespace ukn {
     
     }
 
-    bool Effect::loadEffectFile(const ResourcePtr& content) {
-        return false;
-    }
-
-    void Effect::emitCode() {
-        // null
-    }
-
-    uint32 Effect::getPasses() const {
-        return 1;
-    }
-
-    void Effect::bind(uint32 pass) {
-        if(mVertexShader)
-            mVertexShader->bind();
-        if(mFragmentShader)
-            mFragmentShader->bind();
-
-        this->onBind(pass);
-    }
-
-    void Effect::unbind() {
-
-    }
-
     void Effect::setFragmentShader(const ShaderPtr& shader) {
         mFragmentShader = shader;
     }
@@ -66,14 +41,6 @@ namespace ukn {
 
     ShaderPtr Effect::getGeometryShader() const {
         return mGeometryShader;
-    }
-
-    void Effect::onBind(uint32 pass) {
-
-    }
-
-    void Effect::onUnbind() {
-
     }
 
 }

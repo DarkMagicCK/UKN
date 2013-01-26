@@ -136,7 +136,7 @@ namespace ukn {
         creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-        D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_10_1;
+        D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 
         result = D3D11CreateDeviceAndSwapChain(NULL,
             D3D_DRIVER_TYPE_HARDWARE,
@@ -232,6 +232,7 @@ namespace ukn {
         blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
         blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
         blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+        blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
         CHECK_RESULT_AND_RETURN(mDevice->CreateBlendState(&blendDesc, &mBlendState),
             L"ID3D11Device->CreateBlendState");
 
@@ -337,7 +338,6 @@ namespace ukn {
 
                 mDeviceContext->IASetPrimitiveTopology(RenderModeToPrimitiveTopology(buffer->getRenderMode()));
 
-                effect->bind();
                 for(uint32 i=0; i<effect->getPasses(); ++i) {
                     effect->bind(i);
 

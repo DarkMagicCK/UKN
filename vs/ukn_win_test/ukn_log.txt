@@ -12,4 +12,3 @@ Graphic Device Caps:
 	MaxPixelTextureUnits:	-858993460
 	MaxVertexTextureUnits:	-858993460
 
-[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The Vertex Shader expects application provided input data (which is to say data other than hardware auto-generated values such as VertexID or InstanceID). Therefore an Input Assembler object is expected, but none is bound.

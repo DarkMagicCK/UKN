@@ -3,6 +3,7 @@
 #include "D3D11GraphicDevice.h"
 #include "D3D11Debug.h"
 #include "D3D11Texture.h"
+#include "D3D11Helper.h"
 
 #include "Cg/cgD3D11.h"
 
@@ -13,7 +14,7 @@
 #include <D3Dcompiler.h>
 
 namespace ukn {
-    
+
     bool _check_error(CGcontext context) {
         CGerror error;
         const char* str = cgGetLastErrorString(&error);
@@ -28,11 +29,13 @@ namespace ukn {
     }
 
     CgDxEffect::CgDxEffect(D3D11GraphicDevice* device):
-    mContext(0) {
-        mContext = cgCreateContext();
-        mist_assert(mContext);
+    mContext(0),
+    mDevice(device),
+    mLayout(0) {
+            mContext = cgCreateContext();
+            mist_assert(mContext);
 
-        cgD3D11SetDevice(mContext, device->getD3DDevice());
+            cgD3D11SetDevice(mContext, device->getD3DDevice());
     }
 
     CgDxEffect::~CgDxEffect() {
@@ -41,17 +44,40 @@ namespace ukn {
         }
     }
 
-    void CgDxEffect::onBind(uint32 pass) {
-        if(mVertexShader)
-            mVertexShader->bind();
-        if(mFragmentShader)
-            mFragmentShader->bind();
-        if(mGeometryShader)
-            mGeometryShader->bind();
+    void CgDxEffect::setVertexFormat(const VertexFormat& format) {
+        if(mVertexShader) {
+            CgDxShader* vertexShader = checked_cast<CgDxShader*>(mVertexShader.get());
+            if(vertexShader) {
+                ID3DBlob* vsBlob = cgD3D11GetCompiledProgram(vertexShader->getProgram());
+                mLayout = D3D11ShaderUtilities::CreateLayout(mDevice->getD3DDevice(),
+                    vsBlob->GetBufferPointer(),
+                    vsBlob->GetBufferSize(),
+                    format);
+
+            }
+        }
     }
 
-    void CgDxEffect::onUnbind() {
+    void CgDxEffect::bind(uint32 pass) {
+        if(mLayout) {
+            mDevice->getD3DDeviceContext()->IASetInputLayout(mLayout);
+            if(mVertexShader)
+                mVertexShader->bind();
+            if(mFragmentShader) {
+                mFragmentShader->bind();
+            }
+            if(mGeometryShader)
+                mGeometryShader->bind();
+        }
+    }
 
+    void CgDxEffect::unbind() {
+        if(mVertexShader)
+            mVertexShader->unbind();
+        if(mFragmentShader)
+            mFragmentShader->unbind();
+        if(mGeometryShader)
+            mGeometryShader->unbind();
     }
 
     ShaderPtr CgDxEffect::createShader(const ResourcePtr& resource, const ShaderDesc& desc) {
@@ -60,6 +86,10 @@ namespace ukn {
             return ShaderPtr(shader);
         }
         return ShaderPtr();
+    }
+    
+    uint32 CgDxEffect::getPasses() const {
+        return 1;
     }
 
     CGcontext CgDxEffect::getContext() const {
@@ -85,33 +115,32 @@ namespace ukn {
         switch (desc.type)
         {
         case ukn::ST_FragmentShader:
-            profile = CG_PROFILE_PS_4_0;
+            profile = cgD3D11GetLatestPixelProfile();;
             break;
         case ukn::ST_VertexShader:
-            profile = CG_PROFILE_VS_4_0;
+            profile = cgD3D11GetLatestVertexProfile();
             break;
         case ukn::ST_GeometryShader:
-            profile = cgD3D11GetLatestGeometryProfile();
+            profile = CG_PROFILE_GS_4_0;
             break;
         }
         StreamPtr stream = resource->readIntoMemory();
         MemoryStream* memStream = ((MemoryStream*)stream.get());
         std::string content(memStream->data(), memStream->data() + memStream->size());
         mProgram = cgCreateProgram(mContext, 
-                                   CG_SOURCE, 
-                                   content.c_str(), 
-                                   profile, 
-                                   desc.entry.c_str(), 
-                                   0);
+            CG_SOURCE, 
+            content.c_str(), 
+            profile, 
+            desc.entry.c_str(), 
+            cgD3D11GetOptimalOptions(profile));
         if(_check_error(mContext) &&
-            D3D11Debug::CHECK_RESULT( cgD3D11LoadProgram(mProgram, D3DCOMPILE_DEBUG))) {
+            D3D11Debug::CHECK_RESULT( cgD3D11LoadProgram(mProgram, 0))) {
                 return true;
         }
         return true;
     }
 
     void CgDxShader::bind() {
-        
         if(mProgram)
             D3D11Debug::CHECK_RESULT(cgD3D11BindProgram(mProgram));
     }
@@ -125,9 +154,7 @@ namespace ukn {
         if(mProgram) {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
-                D3DXMATRIX dxmat;
-                Matrix4ToD3DMatrix(mat, dxmat);
-                cgSetParameterValuefc(param, 16, (const float*)&dxmat); 
+                cgSetParameterValuefc(param, 16, (const float*)mat.x); 
                 return _check_error(mContext);
             }
         }
@@ -161,6 +188,7 @@ namespace ukn {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
                 cgD3D11SetTextureParameter(param, (ID3D11Resource*)tex->getTextureId());
+                cgD3D11SetSamplerStateParameter(param, 0);
                 return _check_error(mContext);
             }
         }
@@ -171,9 +199,7 @@ namespace ukn {
         if(mProgram) {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
-                D3DXMATRIX dxmat;
-                cgGetParameterValuefc(param, 16, (float*)&dxmat); 
-                D3DXMatrixToMatrix4(dxmat, mat);
+                cgGetParameterValuefc(param, 16, (float*)mat.x);
                 return _check_error(mContext);
             }
         }
@@ -203,96 +229,16 @@ namespace ukn {
         return false;
     }
 
-    void CgDxEffect::setLayout(const VertexFormat& format) {
-
+    CGprogram CgDxShader::getProgram() const {
+        return mProgram;
     }
 
-    struct D3D11ShaderUtilities {
-		static ID3D11InputLayout* CreateLayout(ID3D11Device* device, const void* signature, SIZE_T size, const ukn::VertexFormat& format) {
-			D3D11_INPUT_ELEMENT_DESC layoutDesc[5];
+    CGcontext CgDxShader::getContext() const {
+        return mContext;
+    }
 
-			UINT numElements = 0;
-
-			if(format.checkFormat(VF_XYZ)) {
-				layoutDesc[numElements].SemanticName = "POSITION";
-				layoutDesc[numElements].SemanticIndex = 0;
-				layoutDesc[numElements].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-				layoutDesc[numElements].InputSlot = 0;
-				layoutDesc[numElements].AlignedByteOffset = format.offsetXYZ();
-				layoutDesc[numElements].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-				layoutDesc[numElements].InstanceDataStepRate = 0;
-				numElements += 1;
-			}
-			if(format.checkFormat(VF_Color0)) {
-				layoutDesc[numElements].SemanticName = "COLOR";
-				layoutDesc[numElements].SemanticIndex = 0;
-				layoutDesc[numElements].Format = DXGI_FORMAT_R8G8B8A8_UINT;
-				layoutDesc[numElements].InputSlot = 0;
-				layoutDesc[numElements].AlignedByteOffset = format.offsetColor0();
-				layoutDesc[numElements].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-				layoutDesc[numElements].InstanceDataStepRate = 0;
-				numElements += 1;
-			}
-			if(format.checkFormat(VF_UV)) {
-				layoutDesc[numElements].SemanticName = "TEXCOORD";
-				layoutDesc[numElements].SemanticIndex = 0;
-				layoutDesc[numElements].Format = DXGI_FORMAT_R32G32_FLOAT;
-				layoutDesc[numElements].InputSlot = 0;
-				layoutDesc[numElements].AlignedByteOffset = format.offsetUV();
-				layoutDesc[numElements].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-				layoutDesc[numElements].InstanceDataStepRate = 0;
-				numElements += 1;
-			}
-			if(format.checkFormat(VF_Color1)) {
-				layoutDesc[numElements].SemanticName = "COLOR1";
-				layoutDesc[numElements].SemanticIndex = 0;
-				layoutDesc[numElements].Format = DXGI_FORMAT_R8G8B8A8_UINT;
-				layoutDesc[numElements].InputSlot = 0;
-				layoutDesc[numElements].AlignedByteOffset = format.offsetColor1();
-				layoutDesc[numElements].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-				layoutDesc[numElements].InstanceDataStepRate = 0;
-				numElements += 1;
-			}
-			if(format.checkFormat(VF_Normal)) {
-				layoutDesc[numElements].SemanticName = "NORMAL";
-				layoutDesc[numElements].SemanticIndex = 0;
-				layoutDesc[numElements].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-				layoutDesc[numElements].InputSlot = 0;
-				layoutDesc[numElements].AlignedByteOffset = format.offsetNormal();
-				layoutDesc[numElements].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
-				layoutDesc[numElements].InstanceDataStepRate = 0;
-				numElements += 1;
-			}
-
-			ID3D11InputLayout* layout = 0;
-
-			HRESULT result = device->CreateInputLayout(layoutDesc,
-				numElements,
-				signature,
-				size,
-				&layout);
-			if(!D3D11Debug::CHECK_RESULT(result)) {
-				return 0;
-			}
-			return layout;
-		}
-		static void LogError(ID3D10Blob* error) {
-			if(error) {
-				std::string error_mssg((char*)error->GetBufferPointer(), (char*)error->GetBufferPointer() + error->GetBufferSize());
-				log_error(error_mssg);
-			}
-		}
-
-	};
-
-    void CgDxShader::setLayout(const VertexFormat& format) {
-        ID3D10Blob* blob = cgD3D11GetIASignatureByPass(0);
-        mLayout = D3D11ShaderUtilities::CreateLayout(
-            cgD3D11GetDevice(mContext), 
-            blob->GetBufferPointer(),
-            blob->GetBufferSize(),
-            format);
-		
+    const ShaderDesc& CgDxShader::getDesc() const {
+        return mDesc;
     }
 
 

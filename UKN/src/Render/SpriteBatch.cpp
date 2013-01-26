@@ -283,23 +283,23 @@ namespace ukn {
     }
     
     void SpriteBatch::updateBoundingBox(float x, float y, float z) {
-        if(mBoundingBox.min.x() > x) {
-            mBoundingBox.min.x() = x;
+        if(mBoundingBox.lower_left.x() > x) {
+            mBoundingBox.lower_left.x() = x;
         }
-        if(mBoundingBox.min.y() > y) {
-            mBoundingBox.min.y() = y;
+        if(mBoundingBox.lower_left.y() > y) {
+            mBoundingBox.lower_left.y() = y;
         }
-        if(mBoundingBox.max.x() < x) {
-            mBoundingBox.max.x() = x;
+        if(mBoundingBox.upper_right.x() < x) {
+            mBoundingBox.upper_right.x() = x;
         }
-        if(mBoundingBox.max.y() < y) {
-            mBoundingBox.max.y() = y;
+        if(mBoundingBox.upper_right.y() < y) {
+            mBoundingBox.upper_right.y() = y;
         }
-        if(mBoundingBox.min.z() > z) {
-            mBoundingBox.min.z() = z;
+        if(mBoundingBox.lower_left.z() > z) {
+            mBoundingBox.lower_left.z() = z;
         }
-        if(mBoundingBox.max.z() < z) {
-            mBoundingBox.max.z() = z;
+        if(mBoundingBox.upper_right.z() < z) {
+            mBoundingBox.upper_right.z() = z;
         }
     }
     

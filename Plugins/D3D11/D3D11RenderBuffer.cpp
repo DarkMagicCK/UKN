@@ -18,13 +18,13 @@ namespace ukn {
 
 	void D3D11RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format) {
 		if(mEffect) {
-			((CgDxEffect*)mEffect.get())->setLayout(format);
+            mEffect->setVertexFormat(format);
 		}
 	}
 
 	void D3D11RenderBuffer::onSetVertexFormat(const VertexFormat& format) {
 		if(mEffect) {
-			((CgDxEffect*)mEffect.get())->setLayout(format);
+			mEffect->setVertexFormat(format);
 		}
 	}
 
@@ -50,7 +50,7 @@ namespace ukn {
 
     void D3D11RenderBuffer::onSetEffect(const EffectPtr& effect) {
         if(getVertexStream().isValid()) {
-            ((CgDxEffect*)mEffect.get())->setLayout(getVertexFormat());
+             mEffect->setVertexFormat(getVertexFormat());
 		}
     }
 

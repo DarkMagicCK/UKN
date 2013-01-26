@@ -55,16 +55,15 @@ namespace ukn {
         virtual ~Effect();
 
         /* to do in custom shader compiler, no use now */		
-        bool loadEffectFile(const ResourcePtr& content);
-        virtual void emitCode();
-
-        uint32 getPasses() const;
-
-        virtual ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc) = 0;
+       // virtual bool initialize(const ResourcePtr& content, const VertexFormat& format) = 0;
+        virtual void setVertexFormat(const VertexFormat& format) = 0;
+        virtual uint32 getPasses() const = 0;
 
         /* begin */
-        void bind(uint32 pass = 0);
-        void unbind();
+        virtual void bind(uint32 pass = 0) = 0;
+        virtual void unbind() = 0;
+
+        virtual ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc) = 0;
 
         void setFragmentShader(const ShaderPtr& shader);
         void setVertexShader(const ShaderPtr& shader);
@@ -75,9 +74,6 @@ namespace ukn {
         ShaderPtr getGeometryShader() const;
 
     protected:
-        virtual void onBind(uint32 pass);
-        virtual void onUnbind();
-
         ShaderPtr mFragmentShader;
         ShaderPtr mVertexShader;
         ShaderPtr mGeometryShader;

@@ -42,12 +42,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\External\Cg;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\External\Cg;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -89,6 +89,7 @@
     <ClInclude Include="..\..\External\soil\stbi_DDS_aug.h" />
     <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h" />
     <ClInclude Include="..\..\External\soil\stb_image_aug.h" />
+    <ClInclude Include="..\..\Plugins\GL\CgShader.h" />
     <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFWInput.h" />
@@ -112,6 +113,7 @@
     <ClCompile Include="..\..\External\soil\image_helper.c" />
     <ClCompile Include="..\..\External\soil\SOIL.c" />
     <ClCompile Include="..\..\External\soil\stb_image_aug.c" />
+    <ClCompile Include="..\..\Plugins\GL\CgShader.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />

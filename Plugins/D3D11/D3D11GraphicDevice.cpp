@@ -23,8 +23,9 @@
 namespace ukn {
 
     D3D11GraphicDevice::D3D11GraphicDevice():
-        mDevice(0),
-        mEffect(0) {
+    mDevice(0),
+    mEffect(0),
+    mDebug(0) {
             /*
             LH to RH and fix z
             www.klayge.org/2011/07/15
@@ -168,7 +169,7 @@ namespace ukn {
         }
 
 #if defined(MIST_DEBUG)
-        mDebug = new D3D11Debug(mDevice);
+        mDebug.reset(new D3D11Debug(mDevice));
 #endif
 
         mScreenFrameBuffer = MakeSharedPtr<D3D11FrameBuffer>(false, this);

@@ -4,6 +4,7 @@
 
 
 #include "mist/Platform.h"
+#include "mist/Ptr.h"
 
 #include "UKN/GraphicDevice.h"
 #include "UKN/Texture.h"
@@ -68,7 +69,7 @@ namespace ukn {
 		Matrix4 mProjectionMatrix;
 		Matrix4 mViewMatrix;
 
-		D3D11Debug* mDebug;
+		ScopedPtr<D3D11Debug> mDebug;
 	};
 
 } // namespace ukn

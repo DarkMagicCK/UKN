@@ -90,6 +90,9 @@
     <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\CgShader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -138,6 +141,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\External\soil\image_DXT.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\CgShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

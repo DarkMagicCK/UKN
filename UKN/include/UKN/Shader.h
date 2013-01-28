@@ -44,10 +44,9 @@ namespace ukn {
     typedef SharedPtr<Shader> ShaderPtr;
 	
     /* 
-    idea from d3d10
-    however, for d3d9 & opengl,
-    we need to find some way to simulate this
-    customized shader format ? cg?
+    currently
+    effect is only a container of shaders
+    not acctually "effect" files such as CgFx, D3D Effect etc
     */
     class UKN_API Effect: public Uncopyable {
     public:
@@ -93,7 +92,11 @@ namespace ukn {
 		virtual bool setFloatVectorVariable(const char* name, const float4& vec) = 0;
 		virtual bool setIntVectorVariable(const char* name, const int4& vec) = 0;
 		virtual bool setTextureVariable(const char* name, const TexturePtr& resource) = 0;
-		/*
+		
+        virtual bool setFloatVariable(const char* name, uint32 len, const float* vals) = 0;
+        virtual bool setIntVariable(const char* name, uint32 len, const int* val) = 0;
+        
+        /*
 			Variable Getters
 		*/
 	    virtual bool getMatrixVariable(const char* name, Matrix4& mat) = 0;

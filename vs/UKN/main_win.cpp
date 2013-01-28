@@ -106,7 +106,7 @@ int CALLBACK WinMain(
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
      
-            renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 5.5), 20);
+            renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 0.5), 20);
 
             effect = gf.createEffect();
             ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex.cg"), 

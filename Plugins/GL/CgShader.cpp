@@ -137,7 +137,7 @@ namespace ukn {
         if(mProgram) {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
-                cgSetParameterValuefc(param, 16, (const float*)mat.x); 
+                cgSetMatrixParameterfc(param, (const float*)mat.x); 
                 return _check_error(mContext);
             }
         }
@@ -166,6 +166,28 @@ namespace ukn {
         return false;
     }
 
+     bool CgGLShader::setFloatVariable(const char* name, uint32 len, const float* vals) {
+        if(mProgram) {
+            CGparameter param = cgGetNamedParameter(mProgram, name);
+            if(_check_error(mContext) && param) {
+                cgSetParameterValuefc(param, len, (const float*)vals);
+                return _check_error(mContext);
+            }
+        }
+        return false;
+    }
+
+    bool CgGLShader::setIntVariable(const char* name, uint32 len, const int* vals) {
+        if(mProgram) {
+            CGparameter param = cgGetNamedParameter(mProgram, name);
+            if(_check_error(mContext) && param) {
+                cgSetParameterValueic(param, len, (const int*)vals);
+                return _check_error(mContext);
+            }
+        }
+        return false;
+    }
+
     bool CgGLShader::setTextureVariable(const char* name, const TexturePtr& tex) {
         if(mProgram) {
             CGparameter param = cgGetNamedParameter(mProgram, name);
@@ -182,7 +204,7 @@ namespace ukn {
         if(mProgram) {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
-                cgGetParameterValuefc(param, 16, (float*)mat.x);
+                cgGetMatrixParameterfc(param, (float*)mat.x);
                 return _check_error(mContext);
             }
         }

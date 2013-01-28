@@ -11,7 +11,7 @@
 #pragma comment(lib, "libx.64/cgD3D11.lib")
 #endif
 
-class ID3D11InputLayout;
+struct ID3D11InputLayout;
 
 namespace ukn {
 
@@ -49,6 +49,10 @@ namespace ukn {
 	    bool setFloatVectorVariable(const char* name, const float4& vec) override;
 	    bool setIntVectorVariable(const char* name, const int4& vec) override;
 	    bool setTextureVariable(const char* name, const TexturePtr& tex) override;
+
+        bool setFloatVariable(const char* name, uint32 len, const float* vals) override;
+        bool setIntVariable(const char* name, uint32 len, const int* vals) override;
+        
 
 	    bool getMatrixVariable(const char* name, Matrix4& mat) override;
 	    bool getFloatVectorVariable(const char* name, float4& vec) override;

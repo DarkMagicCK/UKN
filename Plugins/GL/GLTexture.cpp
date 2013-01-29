@@ -29,6 +29,7 @@ namespace ukn {
     GLTexture2D::~GLTexture2D() {
         if(mTextureId != 0)
             glDeleteTextures(1, (GLuint*)&mTextureId);
+    
     }
 
     bool GLTexture2D::load(const ResourcePtr& resource, bool mipmap) {

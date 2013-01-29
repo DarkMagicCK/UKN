@@ -308,5 +308,9 @@ namespace ukn {
             }
         }
     }
+
+    void Context::terminate() {
+        mGraphicFactory.deref();
+    }
        
 } // namespace ukn

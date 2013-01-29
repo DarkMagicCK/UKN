@@ -72,6 +72,8 @@ namespace ukn {
         bool isAppAvailable() const;
         AppLauncher& getApp() const;
         
+        void terminate();
+
     protected:
         Context();
         ~Context();

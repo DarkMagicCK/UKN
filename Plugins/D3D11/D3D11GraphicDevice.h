@@ -47,9 +47,14 @@ namespace ukn {
         
         void setRenderState(RenderStateType type, uint32 func) override;
 
+        void switchTo2D(const OrthogonalParams& params) override;
+
 		ID3D11Device* getD3DDevice() const;
         ID3D11DeviceContext* getD3DDeviceContext() const;
         IDXGISwapChain* getSwapChain() const;
+
+        /* get device feature level, this flag is required to determine shader profiles etc*/ 
+        D3D_FEATURE_LEVEL getDeviceFeatureLevel() const;
 
     private:
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
@@ -69,7 +74,11 @@ namespace ukn {
 		Matrix4 mProjectionMatrix;
 		Matrix4 mViewMatrix;
 
+        bool mIs2D;
+        EffectPtr m2DEffect;
+
 		ScopedPtr<D3D11Debug> mDebug;
+        D3D_FEATURE_LEVEL mFeatureLevel;
 	};
 
 } // namespace ukn

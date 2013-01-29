@@ -39,6 +39,25 @@ namespace ukn {
         uint32 max_pixel_texture_units;
         uint32 max_vertex_texture_units;
     };
+
+    struct UKN_API OrthogonalParams {
+        float x;
+        float y;
+        float width;
+        float height;
+        /* displacement x, y*/
+        float dx;
+        float dy;
+
+        OrthogonalParams(float _x = 0, float _y = 0, float _width = 0, float _height = 0, float _dx = 0, float _dy = 0):
+            x(_x),
+            y(_y),
+            width(_width),
+            height(_height),
+            dx(_dx),
+            dy(_dy) {
+        }
+    };
     
     class UKN_API GraphicDevice {
     public:
@@ -85,6 +104,9 @@ namespace ukn {
         virtual void setRenderState(RenderStateType type, uint32 func) = 0;
 
         virtual void adjustPerspectiveMat(Matrix4& mat) {}
+        
+        /* sets up orthogonal projection with ortho parameters */
+        virtual void switchTo2D(const OrthogonalParams& params = OrthogonalParams()) = 0;
         
     public:
         virtual void bindTexture(const TexturePtr& texture) = 0;

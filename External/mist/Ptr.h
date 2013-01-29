@@ -395,12 +395,17 @@ namespace mist {
     inline void swap(SharedPtr<C, RP>& p1, SharedPtr<C, RP>& p2) {
         p1.swap(p2);
     }
-    
+
     template<typename T>
     struct COMReleasePolicy {
         static void Release(T* pointer) {
-            T::Release();
+           pointer->Release();
         }
+    };
+    
+    template<typename T>
+    struct COM {
+        typedef SharedPtr<T, COMReleasePolicy<T> > ComPtr;
     };
     
     template<typename T>

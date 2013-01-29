@@ -23,6 +23,8 @@
 #include "GLSpriteBatch.h"
 #include "GLRenderView.h"
 
+#include "CgShader.h"
+
 namespace ukn {
     
     class GLGraphicFactory: public GraphicFactory {
@@ -144,7 +146,7 @@ namespace ukn {
     }
 
     EffectPtr GLGraphicFactory::createEffect() const {
-        return EffectPtr();
+        return new CgGLEffect((GLGraphicDevice*)mGraphicDevice.get());
     }
     
 } // namespace ukn

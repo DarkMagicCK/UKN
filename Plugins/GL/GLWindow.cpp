@@ -181,12 +181,8 @@ namespace ukn {
 
             glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, settings.resizable);
 
-#if defined(UKN_OPENGL_3_2) && defined(UKN_REQUEST_OPENGL_3_2_PROFILE)
-
-            glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, 3);
-            glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, 2);
-
-#endif // UKN_HAS_OPENGL_3_2
+        //    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, UKN_OPENGL_VERSION_MAJOR);
+        //    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, UKN_OPENGL_VERSION_MINOR);
 
             if((mGlfwWindow = glfwOpenWindow(settings.width,
                 settings.height,
@@ -198,12 +194,12 @@ namespace ukn {
                     MIST_THROW_EXCEPTION(L"GLWindow::GLWindow: Error opening window");
             } 
 
-#if defined(MIST_OS_WINDOWS)
+            
             GLenum err = glewInit();
             if (GLEW_OK != err) {
                 MIST_THROW_EXCEPTION(mist::string::StringToWString(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err))));
             }
-#endif
+
 
             // if wnd pos is (0, 0), then put it in the center of current screen
             int32 wndPosX = settings.left, wndPosY = settings.top;

@@ -133,6 +133,8 @@ namespace ukn {
     }
     
     void AppLauncher::terminate() {
+        Context::Instance().terminate();
+
         mist::ModuleManager::Destroy();
         
         try {

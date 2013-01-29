@@ -137,9 +137,11 @@ namespace ukn {
         creationFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
+        D3D_DRIVER_TYPE driverTypes[] = {D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP};
         D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 
-        result = D3D11CreateDeviceAndSwapChain(NULL,
+        for(int i=0; i < sizeof(driverTypes) / sizeof(D3D_DRIVER_TYPE); ++i) {
+             result = D3D11CreateDeviceAndSwapChain(NULL,
             D3D_DRIVER_TYPE_HARDWARE,
             NULL,
             creationFlags,
@@ -151,21 +153,8 @@ namespace ukn {
             &mDevice,
             NULL,
             &mDeviceContext);
-        if(!D3D11Debug::CHECK_RESULT(result, L"Create Device with D3D11_DRIVE_TYPE_HARDWARE")) {
-            /* if hardware creation failed, try software */
-            result = D3D11CreateDeviceAndSwapChain(NULL,
-                D3D_DRIVER_TYPE_WARP, /* software rasterizer */
-                NULL,
-                creationFlags,
-                &featureLevel,
-                1,
-                D3D11_SDK_VERSION,
-                &swapChainDesc,
-                &mSwapChain,
-                &mDevice,
-                NULL,
-                &mDeviceContext);
-            CHECK_RESULT_AND_RETURN(result, L"D3D11CreateDeviceAndSwapChain");
+            if(D3D11Debug::CHECK_RESULT(result, L"Create Device with D3D11_DRIVE_TYPE_HARDWARE")) 
+                break;
         }
 
 #if defined(MIST_DEBUG)
@@ -316,9 +305,9 @@ namespace ukn {
 
         D3D11RenderBuffer* D3D11buffer = checked_cast<D3D11RenderBuffer*>(buffer.get());
         if(D3D11buffer) {
-            D3D11Effect* effect = (D3D11Effect*)D3D11buffer->getEffect().get();
-
+            EffectPtr effect = buffer->getEffect();
             if(effect) {
+                /* temporary */
                 if(effect->getVertexShader()) {
                     if(!effect->getVertexShader()->setMatrixVariable("worldMatrix", mWorldMatrix))
                         log_error("error setting world matrix in effect");
@@ -326,6 +315,8 @@ namespace ukn {
                         log_error("error setting projection matrix in effect");
                     if(!effect->getVertexShader()->setMatrixVariable("viewMatrix", mViewMatrix))
                         log_error("error setting view matrix in effect");
+                }
+                if(effect->getFragmentShader()) {
                     if(mCurrTexture) {
                         if(!effect->getFragmentShader()->setTextureVariable("tex", mCurrTexture))
                             log_error("error setting texture in effect");
@@ -333,7 +324,8 @@ namespace ukn {
                 }
 
                 vertexBuffer->activate();
-                if(indexBuffer.isValid()) {
+                if(indexBuffer.isValid() &&
+                    buffer->isUseIndexStream()) {
                     indexBuffer->activate();
                 } 
 
@@ -342,7 +334,8 @@ namespace ukn {
                 for(uint32 i=0; i<effect->getPasses(); ++i) {
                     effect->bind(i);
 
-                    if(indexBuffer.isValid()) {
+                    if(indexBuffer.isValid() &&
+                    buffer->isUseIndexStream()) {
                         mDeviceContext->DrawIndexed(buffer->getIndexCount(),
                             buffer->getIndexStartIndex(),
                             buffer->getVertexStartIndex());
@@ -402,6 +395,10 @@ namespace ukn {
 
     ID3D11DeviceContext* D3D11GraphicDevice::getD3DDeviceContext() const {
         return mDeviceContext;
+    }
+
+    void D3D11GraphicDevice::switchTo2D(const OrthogonalParams& params) {
+
     }
 
 } // namespace ukn

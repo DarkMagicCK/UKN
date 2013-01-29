@@ -124,13 +124,16 @@ namespace ukn {
     }
 
     void CgGLShader::bind() {
-        if(mProgram)
+        if(mProgram) {
+            cgGLEnableProfile(mProfile);
             cgGLBindProgram(mProgram);
+        }
     }
 
     void CgGLShader::unbind() {
-        if(mProgram)
+        if(mProgram) {
             cgGLUnbindProgram(mProfile);
+        }
     }
 
     bool CgGLShader::setMatrixVariable(const char* name, const Matrix4& mat) {

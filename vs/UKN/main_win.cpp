@@ -86,17 +86,19 @@ int CALLBACK WinMain(
         .connectUpdate([](ukn::Window* ) {
 
         })
+        .connectKey([&](ukn::Window* window, ukn::input::KeyEventArgs& e) {
+            if(e.key == ukn::input::W) 
+                worldMat.translate(0, 0, -0.1f);
+            else if(e.key == ukn::input::S)
+                worldMat.translate(0, 0, 0.1f);
+        })
         .connectRender([&](ukn::Window*) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
 
-            worldMat.rotate(0, 0.01 * ukn::d_pi, 0);
             if(texture)
                 gd.bindTexture(texture);
             for(int i=0; i <1 ; ++i) {
-                worldMat = ukn::Matrix4::TransMat(0,
-                                                  0,
-                                                  0); 
                 gd.setWorldMatrix(worldMat);
 
                 if(renderBuffer)

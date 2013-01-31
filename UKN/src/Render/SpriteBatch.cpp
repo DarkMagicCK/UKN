@@ -167,8 +167,8 @@ namespace ukn {
         mRenderBuffer = Context::Instance().getGraphicFactory().createRenderBuffer();
         mist_assert(mRenderBuffer);
         
-        mVertexBuffer = Context::Instance().getGraphicFactory().createVertexBuffer(GraphicBuffer::ReadWrite, 
-                                                                                   GraphicBuffer::Static, 
+        mVertexBuffer = Context::Instance().getGraphicFactory().createVertexBuffer(GraphicBuffer::WriteOnly, 
+                                                                                   GraphicBuffer::Dynamic, 
                                                                                    6, 
                                                                                    0, 
                                                                                    Vertex2D::Format());
@@ -206,8 +206,8 @@ namespace ukn {
         
         Camera* cam = gd.getCurrFrameBuffer()->getViewport().camera.get();
         
-        gd.setProjectionMatrix(cam->getProjMatrix());
-        gd.setViewMatrix(mTransformMatrix * cam->getViewMatrix());
+  //      gd.setProjectionMatrix(cam->getProjMatrix());
+  //      gd.setViewMatrix(mTransformMatrix * cam->getViewMatrix());
     }
     
     void SpriteBatch::onRenderEnd() {

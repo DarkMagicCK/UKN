@@ -22,22 +22,18 @@ namespace ukn {
 
     struct ShaderDesc {
         std::string entry;
-        std::string profile;
-
 		ShaderType type;
 		VertexFormat format; /* used by vertex shaders */
 
 		ShaderDesc() { }
-		ShaderDesc(ShaderType type, const std::string& entry, const std::string& profile, const VertexFormat& format):
+		ShaderDesc(ShaderType type, const std::string& entry, const VertexFormat& format):
 		type(type),
 		entry(entry),
-		profile(profile),
 		format(format) { }
 
-		ShaderDesc(ShaderType type, const std::string& entry, const std::string& profile):
+		ShaderDesc(ShaderType type, const std::string& entry):
 		type(type),
-		entry(entry),
-		profile(profile) { }
+		entry(entry) { }
     };
     
     class Shader;

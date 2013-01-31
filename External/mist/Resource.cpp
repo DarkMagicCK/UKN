@@ -23,6 +23,10 @@ namespace mist {
     Resource::operator bool() {
         return (mResourceStream && mResourceStream->isValid());
     }
+
+    ResourcePtr Resource::MakeResourcePtr(const StreamPtr& stream, const MistString& name) {
+        return MakeSharedPtr<Resource>(name, stream);
+    }
     
     class DiskResourceFactory: public ResourceFactory {
     public:

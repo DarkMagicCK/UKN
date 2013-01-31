@@ -53,8 +53,9 @@ namespace ukn {
         GLuint getBindedGLFrameBuffer() const;
 
         void adjustPerspectiveMat(Matrix4& mat) override;
-        void switchTo2D(const OrthogonalParams& params) override;
 
+        void begin2DRendering(const OrthogonalParams& params) override;
+        void end2DRendering() override;
 
         
     private:

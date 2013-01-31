@@ -57,8 +57,7 @@ int CALLBACK WinMain(
   __in  HINSTANCE hInstance,
   __in  HINSTANCE hPrevInstance,
   __in  LPSTR lpCmdLine,
-  __in  int nCmdShow
-) {
+  __in  int nCmdSho) {
 #endif
 
     ukn::RenderBufferPtr renderBuffer;
@@ -96,14 +95,20 @@ int CALLBACK WinMain(
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
 
-            if(texture)
-                gd.bindTexture(texture);
             for(int i=0; i <1 ; ++i) {
                 gd.setWorldMatrix(worldMat);
 
                 if(renderBuffer)
                     gd.renderBuffer(renderBuffer);
             }
+
+            
+            gd.begin2DRendering();
+            ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
+            sb.begin();
+                sb.draw(texture, ukn::Vector2(0, 0), 0);
+            sb.end();
+            gd.end2DRendering();
         })
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
@@ -112,9 +117,9 @@ int CALLBACK WinMain(
 
             effect = gf.createEffect();
             ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex.cg"), 
-                    ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", "", ukn::VertexUVNormal::Format()));
+                    ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", ukn::VertexUVNormal::Format()));
             ukn::ShaderPtr fragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment.cg"), 
-                    ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram", ""));
+                    ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram"));
 
             effect->setFragmentShader(fragmentShader);
             effect->setVertexShader(vertexShader);
@@ -124,23 +129,17 @@ int CALLBACK WinMain(
             fragmentShader->setFloatVectorVariable("ambientColor", ukn::float4(0.15f, 0.15f, 0.15f, 1.f));
             fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(0.f, 0.f, 0.f, 0.f));
 
-            texture = gf.create2DTexture(800, 600, 0, ukn::EF_RGBA8, 0);
-            if(!texture) {
-                mist::MessageBox::Show(L"error loading texture", L"Error", mist::MBO_OK);
-            } else {
-                ukn::GraphicDevice& gd = gf.getGraphicDevice();
-                
-            }
+            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
+          //  texture = gf.create2DTexture(800, 600, 1, ukn::EF_RGBA8, 0);
 
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
             vp.camera->setViewParams(ukn::Vector3(0, 0, -10), ukn::Vector3(0, 0, 1));
 
             vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
-            
             renderBuffer->setEffect(effect);
 
-            camController->attachCamera(vp.camera);
+      //      camController->attachCamera(vp.camera);
         })
         .run();
     

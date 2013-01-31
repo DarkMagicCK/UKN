@@ -83,7 +83,8 @@ namespace ukn {
         void beginFrame() { }
         void endFrame() { }
         void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {  }
-        void switchTo2D(const OrthogonalParams& params) { }
+        void begin2DRendering(const OrthogonalParams& params) { }
+        void end2DRendering() { }
     };
     
     GraphicDevicePtr GraphicDevice::NullObject() {

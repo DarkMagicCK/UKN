@@ -1,6 +1,7 @@
-#include "D3D11GraphicDevice.h"
+﻿#include "D3D11GraphicDevice.h"
 #include "D3D11FrameBuffer.h"
 #include "D3D11RenderView.h"
+#include "D3D11GraphicFactory.h"
 
 #include "WindowsWindow.h"
 
@@ -9,6 +10,7 @@
 #include "UKN/RenderBuffer.h"
 #include "UKN/GraphicBuffer.h"
 
+#include "mist/Stream.h"
 #include "mist/Profiler.h"
 
 #include "D3D11Shader.h"
@@ -23,9 +25,9 @@
 namespace ukn {
 
     D3D11GraphicDevice::D3D11GraphicDevice():
-    mDevice(0),
-    mEffect(0),
-    mDebug(0) {
+        mDevice(0),
+        mEffect(0),
+        mDebug(0) {
             /*
             LH to RH and fix z
             www.klayge.org/2011/07/15
@@ -141,18 +143,18 @@ namespace ukn {
         D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 
         for(int i=0; i < sizeof(driverTypes) / sizeof(D3D_DRIVER_TYPE); ++i) {
-             result = D3D11CreateDeviceAndSwapChain(NULL,
-            D3D_DRIVER_TYPE_HARDWARE,
-            NULL,
-            creationFlags,
-            &featureLevel,
-            1,
-            D3D11_SDK_VERSION,
-            &swapChainDesc,
-            &mSwapChain,
-            &mDevice,
-            NULL,
-            &mDeviceContext);
+            result = D3D11CreateDeviceAndSwapChain(NULL,
+                D3D_DRIVER_TYPE_HARDWARE,
+                NULL,
+                creationFlags,
+                &featureLevel,
+                1,
+                D3D11_SDK_VERSION,
+                &swapChainDesc,
+                &mSwapChain,
+                &mDevice,
+                NULL,
+                &mDeviceContext);
             if(D3D11Debug::CHECK_RESULT(result, L"Create Device with D3D11_DRIVE_TYPE_HARDWARE")) 
                 break;
         }
@@ -305,7 +307,7 @@ namespace ukn {
 
         D3D11RenderBuffer* D3D11buffer = checked_cast<D3D11RenderBuffer*>(buffer.get());
         if(D3D11buffer) {
-            EffectPtr effect = buffer->getEffect();
+            EffectPtr effect = mIs2D ? m2DEffect: buffer->getEffect();
             if(effect) {
                 /* temporary */
                 if(effect->getVertexShader()) {
@@ -326,7 +328,7 @@ namespace ukn {
                 vertexBuffer->activate();
                 if(indexBuffer.isValid() &&
                     buffer->isUseIndexStream()) {
-                    indexBuffer->activate();
+                        indexBuffer->activate();
                 } 
 
                 mDeviceContext->IASetPrimitiveTopology(RenderModeToPrimitiveTopology(buffer->getRenderMode()));
@@ -335,10 +337,10 @@ namespace ukn {
                     effect->bind(i);
 
                     if(indexBuffer.isValid() &&
-                    buffer->isUseIndexStream()) {
-                        mDeviceContext->DrawIndexed(buffer->getIndexCount(),
-                            buffer->getIndexStartIndex(),
-                            buffer->getVertexStartIndex());
+                        buffer->isUseIndexStream()) {
+                            mDeviceContext->DrawIndexed(buffer->getIndexCount(),
+                                buffer->getIndexStartIndex(),
+                                buffer->getVertexStartIndex());
                     } else {
                         mDeviceContext->Draw(buffer->getVertexCount(),
                             buffer->getVertexStartIndex());
@@ -397,8 +399,101 @@ namespace ukn {
         return mDeviceContext;
     }
 
-    void D3D11GraphicDevice::switchTo2D(const OrthogonalParams& params) {
+    namespace {
 
+        static const char* _2d_vert_program = "const uniform float4x4 viewMatrix;\
+                                              const uniform float4x4 projectionMatrix;\
+                                              const uniform float4x4 worldMatrix;\
+                                              struct VertexOutputType {\
+                                              float4 position: POSITION;\
+                                              float2 texCoord: TEXCOORD0;\
+                                              float4 color: COLOR;\
+                                              };\
+                                              VertexOutputType VertexProgram(in float2 texCoord: TEXCOORD0,\
+                                              in float3 position: POSITION,\
+                                              in float4 color: COLOR) {\
+                                              VertexOutputType output;\
+                                              output.position = float4(position, 1);\
+                                              output.position = mul(output.position, viewMatrix);\
+                                              output.position = mul(output.position, projectionMatrix);\
+                                              output.texCoord = texCoord;\
+                                              output.color = color;\
+                                              return output;\
+                                              }\0";
+
+        static const char* _2d_frag_program = "struct VertexOutputType {\
+                                              float4 position: POSITION;\
+                                              float2 texCoord: TEXCOORD0;\
+                                              float4 color: COLOR;\
+                                              };\
+                                              float4 FragmentProgram(VertexOutputType input,\
+                                              uniform sampler2D tex: TEX): COLOR {\
+                                              float4 texColor = tex2D(tex, input.texCoord);\
+                                              texColor = saturate(texColor + input.color);\
+                                              return texColor;\
+                                              }\0";
+
+    }
+
+    EffectPtr D3D11GraphicDevice::createEffectFor2DRendering() const {
+        EffectPtr effect = Context::Instance().getGraphicFactory().createEffect();
+        effect->setFragmentShader(effect->createShader(ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_2d_frag_program, 
+            strlen(_2d_frag_program)), L""),
+            ukn::ShaderDesc(ST_FragmentShader,
+            "FragmentProgram")));
+        effect->setVertexShader(effect->createShader(ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_2d_vert_program, 
+            strlen(_2d_vert_program)), L""),
+            ukn::ShaderDesc(ST_VertexShader,
+            "VertexProgram")));
+        effect->setVertexFormat(ukn::Vertex2D::Format());
+        return effect;
+    }
+
+    void D3D11GraphicDevice::begin2DRendering(const OrthogonalParams& params) {
+        mIs2D = true;
+
+        if(!m2DEffect) {
+            m2DEffect = createEffectFor2DRendering();
+            this->bindEffect(m2DEffect);
+        }
+        
+        float width = params.width;
+        if(width == 0.f) width = mWindow->width();
+        float height = params.height;
+        if(height == 0.f) height = mWindow->height();
+
+        this->setProjectionMatrix(
+            mist::Matrix4::OrthoOffCenterMatLH(
+                params.x,
+                params.x + width,
+                params.y + height,
+                params.y,
+                0.0,
+                1.0f));
+
+        Matrix4 viewMat;
+        viewMat.translate(params.x + params.dx, params.y + params.dy, 0.f);
+        viewMat.rotate(0.f, params.rotation, 0.f);
+        viewMat.scale(params.scalex, params.scaley, 1.f);
+        viewMat.translate(-params.dx, -params.dy, 0.f);
+        this->setViewMatrix(viewMat);
+
+        if(mCurrFrameBuffer) {
+            RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
+            if(dsView) dsView->enableDepth(false);
+        }
+    }
+
+    void D3D11GraphicDevice::end2DRendering() {
+        mIs2D = false;
+        if(mCurrFrameBuffer) {
+            CameraPtr cam = mCurrFrameBuffer->getViewport().camera;
+            this->setProjectionMatrix(cam->getProjMatrix());
+            this->setViewMatrix(cam->getViewMatrix());
+
+            RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
+            if(dsView) dsView->enableDepth(true);
+        }
     }
 
 } // namespace ukn

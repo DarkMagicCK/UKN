@@ -405,7 +405,11 @@ namespace ukn {
         mat *= (Matrix4::ScaleMat(1.f, 1.f, 2.f) * Matrix4::TransMat(0.f, 0.f, -1.f));
     }
 
-    void GLGraphicDevice::switchTo2D(const OrthogonalParams& params) {
+    void GLGraphicDevice::begin2DRendering(const OrthogonalParams& params) {
+
+    }
+
+    void GLGraphicDevice::end2DRendering() {
 
     }
 

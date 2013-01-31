@@ -116,7 +116,7 @@ namespace ukn {
 			0,
 			0,
 			desc.entry.c_str(),
-			desc.profile.c_str(),
+			"",
 			compileFlags,
 			0,
 			0,

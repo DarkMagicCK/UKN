@@ -54,7 +54,7 @@ namespace ukn {
                     srvDesc.Format = desc.Format;
                     srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
                     srvDesc.Texture2D.MipLevels = desc.MipLevels;
-                    srvDesc.Texture1D.MostDetailedMip = desc.MipLevels - 1;
+                    srvDesc.Texture1D.MostDetailedMip = 0;
 
                     if(!D3D11Debug::CHECK_RESULT(mDevice->getD3DDevice()->CreateShaderResourceView(mTexture, &srvDesc, &mTextureResourceView))) {
                         mTexture->Release();
@@ -184,7 +184,7 @@ namespace ukn {
         D3D11_TEXTURE2D_DESC desc;
         if(mTexture) {
             mTexture->GetDesc(&desc);
-            return desc.Width / (1U << (level - 1));
+            return desc.Width / (1U << (level));
         }
     }
 
@@ -192,7 +192,7 @@ namespace ukn {
         D3D11_TEXTURE2D_DESC desc;
         if(mTexture) {
             mTexture->GetDesc(&desc);
-            return desc.Height / (1U << (level - 1));
+            return desc.Height / (1U << (level));
         }
     }
 

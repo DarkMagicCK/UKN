@@ -54,6 +54,8 @@ namespace ukn {
         virtual void onBind(FrameBuffer& fb, uint32 att);
         virtual void onUnbind(FrameBuffer& fb, uint32 att);
         
+        virtual void enableDepth(bool flag);
+
     protected:
         uint32 mWidth, mHeight;
         

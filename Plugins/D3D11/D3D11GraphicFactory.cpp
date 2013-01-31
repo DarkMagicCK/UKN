@@ -23,7 +23,7 @@ namespace ukn {
 
         GraphicDevice& getGraphicDevice() const;
 
-        SpriteBatchPtr createSpriteBatch() const;
+   //     SpriteBatchPtr createSpriteBatch() const;
 
         GraphicBufferPtr createVertexBuffer(GraphicBuffer::Access, 
             GraphicBuffer::Usage, 
@@ -77,10 +77,10 @@ namespace ukn {
         return *mGraphicDevice;
     }
 
-    SpriteBatchPtr D3D11GraphicFactory::createSpriteBatch() const {
+   // SpriteBatchPtr D3D11GraphicFactory::createSpriteBatch() const {
         //return SpriteBatchPtr(new SpriteBatch());
-        return SpriteBatchPtr();
-    }
+        //return SpriteBatchPtr();
+    //}
 
     GraphicBufferPtr D3D11GraphicFactory::createVertexBuffer(GraphicBuffer::Access access, 
         GraphicBuffer::Usage usage,

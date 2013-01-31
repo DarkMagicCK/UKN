@@ -47,7 +47,8 @@ namespace ukn {
         
         void setRenderState(RenderStateType type, uint32 func) override;
 
-        void switchTo2D(const OrthogonalParams& params) override;
+        void begin2DRendering(const OrthogonalParams& params) override;
+        void end2DRendering() override;
 
 		ID3D11Device* getD3DDevice() const;
         ID3D11DeviceContext* getD3DDeviceContext() const;
@@ -59,6 +60,7 @@ namespace ukn {
     private:
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
 		void onWindowResize();
+        EffectPtr createEffectFor2DRendering() const;
 
         WindowPtr mWindow;
         TexturePtr mCurrTexture;

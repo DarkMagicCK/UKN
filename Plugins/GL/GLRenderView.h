@@ -62,6 +62,8 @@ namespace ukn {
         
         void onAttached(FrameBuffer& fb, uint32 att);
         void onDetached(FrameBuffer& fb, uint32 att);
+
+        void enableDepth(bool flag);
     };
     
     typedef SharedPtr<GLScreenDepthStencilRenderView> GLScreenDepthStencilRenderViewPtr;

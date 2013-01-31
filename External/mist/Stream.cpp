@@ -85,7 +85,8 @@ namespace mist {
     
 	MemoryStream::MemoryStream(const uint8* data, size_t length):
 	mCurrPos(0) {
-	}
+         mData.assign(data, data + length);
+    }
 	
 	MemoryStream::~MemoryStream() {
         

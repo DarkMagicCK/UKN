@@ -48,14 +48,28 @@ namespace ukn {
         /* displacement x, y*/
         float dx;
         float dy;
+        float rotation;
+        float scalex;
+        float scaley;
 
-        OrthogonalParams(float _x = 0, float _y = 0, float _width = 0, float _height = 0, float _dx = 0, float _dy = 0):
+        OrthogonalParams(float _x = 0, 
+                         float _y = 0, 
+                         float _width = 0, 
+                         float _height = 0, 
+                         float _dx = 0, 
+                         float _dy = 0, 
+                         float _rot = 0, 
+                         float _scalex = 1.f, 
+                         float _scaley = 1.f):
             x(_x),
             y(_y),
             width(_width),
             height(_height),
             dx(_dx),
-            dy(_dy) {
+            dy(_dy),
+            rotation(_rot),
+            scalex(_scalex),
+            scaley(_scaley) {
         }
     };
     
@@ -106,8 +120,9 @@ namespace ukn {
         virtual void adjustPerspectiveMat(Matrix4& mat) {}
         
         /* sets up orthogonal projection with ortho parameters */
-        virtual void switchTo2D(const OrthogonalParams& params = OrthogonalParams()) = 0;
-        
+        virtual void begin2DRendering(const OrthogonalParams& params = OrthogonalParams()) = 0;
+        virtual void end2DRendering() = 0;
+
     public:
         virtual void bindTexture(const TexturePtr& texture) = 0;
         virtual void bindEffect(const EffectPtr& effect) = 0;

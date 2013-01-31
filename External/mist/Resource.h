@@ -52,7 +52,10 @@ namespace mist {
         StreamPtr readIntoMemory();
         
         operator bool();
-        
+
+    public:
+        static ResourcePtr MakeResourcePtr(const StreamPtr& stream, const MistString& name);
+    
     private:
         friend class ResourceLoader;
         
@@ -68,7 +71,7 @@ namespace mist {
         
         StreamPtr mResourceStream;
     };
-    
+
     class MIST_API ResourceFactory {
     public:
         virtual ~ResourceFactory() { }

@@ -60,7 +60,6 @@ namespace ukn {
     private:
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
 		void onWindowResize();
-        EffectPtr createEffectFor2DRendering() const;
 
         WindowPtr mWindow;
         TexturePtr mCurrTexture;

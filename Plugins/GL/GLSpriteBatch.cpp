@@ -30,6 +30,8 @@ namespace ukn {
     }
     
     void GLSpriteBatch::onRender() {
+        SpriteBatch::onRender();
+        /*
         if(mRenderQueue.size() == 0)
             return ;
                 
@@ -70,7 +72,7 @@ namespace ukn {
             glDrawArrays(GL_TRIANGLES, 
                          0, 
                          (GLsizei)buffer.size());
-        }
+        }*/
     }
     
 } // namespace ukn

@@ -89,6 +89,7 @@
     <ClInclude Include="..\..\UKN\include\UKN\Binding.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Camera.h" />
     <ClInclude Include="..\..\UKN\include\UKN\CameraController.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\CgHelper.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Context.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Font.h" />
     <ClInclude Include="..\..\UKN\include\UKN\FrameBuffer.h" />
@@ -141,6 +142,7 @@
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTableLoader.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\CameraController.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\CgHelper.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Font.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\FrameBuffer.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Frustum.cpp" />

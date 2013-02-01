@@ -12,5 +12,713 @@ Graphic Device Caps:
 	MaxPixelTextureUnits:	-858993460
 	MaxVertexTextureUnits:	-858993460
 
-[0.001] *Warning* ID3D11DeviceContext::Draw: The Pixel Shader unit expects a Sampler to be set at Slot 0, but none is bound. This is perfectly valid, as a NULL Sampler maps to default Sampler state. However, the developer may not want to rely on the defaults. 
-[0.001] *Warning* ID3D11Device::CreateInputLayout: The provided input signature expects to read an element with SemanticName/Index: 'COLOR'/0 and component(s) of the type 'float32'.  However, the matching entry in the Input Layout declaration, element[1], specifies mismatched format: 'R8G8B8A8_UINT'.  This is not an error, since behavior is well defined: The element format determines what data conversion algorithm gets applied before it shows up in a shader register. Independently, the shader input signature defines how the shader will interpret the data that has been placed in its input registers, with no change in the bits stored.  It is valid for the application to reinterpret data as a different type once it is in the vertex shader, so this warning is issued just in case reinterpretation was not intended by the author.
+[0.000] *Error* D3D error: fail 
+[0.000] *Error* D3D error: fail 
+[0.000] *Error* D3D error: invalid arg 
+[0.000] *Error* CgDxEffect::setVertexFormat: Error get compiled vertex program
+[0.001] *Error* D3D error: fail 
+[0.001] *Error* D3D error: fail 
+[0.001] *Error* CgDxEffect::setVertexFormat: Error get compiled vertex program
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11Device::CreateTexture2D: Returning E_INVALIDARG, meaning invalid parameters were passed.
+[0.001] *Error* ID3D11Device::CreateTexture2D: CreateResource: Texture2D height or width is not a power of 2 and multiple mip levels are specified. This is not supported at feature levels below 10.0.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.001] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.001] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.001] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.002] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.002] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.002] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.
+[0.003] *Error* ID3D11DeviceContext::Draw: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: Rasterization Unit is enabled (PixelShader is not NULL or Depth/Stencil test is enabled and RasterizedStream is not D3D11_SO_NO_RASTERIZED_STREAM) but position is not provided by the last shader before the Rasterization Unit.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: The current IndexBufferFormat (0x2a, R32_UINT) is not valid for usage as an IAIndexBuffer Format.
+[0.003] *Error* ID3D11DeviceContext::DrawIndexed: A Vertex Shader is always required when drawing, but none is currently bound.
+[0.003] *Error* ID3D11DeviceContext::IASetIndexBuffer: CreateResource: 32-bit indices are not supported.

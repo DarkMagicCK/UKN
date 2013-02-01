@@ -43,7 +43,7 @@ namespace ukn {
         CgDxShader(CGcontext context);
         virtual ~CgDxShader();
 
-        bool initialize(const ResourcePtr& resource, const ShaderDesc& desc);
+        bool initialize(D3D11GraphicDevice* device, const ResourcePtr& resource, const ShaderDesc& desc);
 
         bool setMatrixVariable(const char* name, const Matrix4& mat) override;
 	    bool setFloatVectorVariable(const char* name, const float4& vec) override;

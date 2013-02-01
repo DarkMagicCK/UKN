@@ -66,6 +66,9 @@ namespace ukn {
         Matrix4 mWorldMat;
         Matrix4 mViewMat;
         Matrix4 mProjectionMat;
+
+        bool mIs2D;
+        EffectPtr m2DEffect;
         
         GLuint mCurrGLFrameBuffer;
     };

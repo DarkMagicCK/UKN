@@ -26,11 +26,13 @@
 #include "UKN/Window.h"
 #include "UKN/Context.h"
 #include "UKN/App.h"
+#include "UKN/CgHelper.h"
 
 #include "GLFrameBuffer.h"
 #include "GLRenderView.h"
 #include "GLTexture.h"
 #include "GLPreq.h"
+#include "GLGraphicFactory.h"
 
 #include "CgShader.h"
 
@@ -129,7 +131,7 @@ namespace ukn {
 #define BUFFER_OFFSET(buffer, i) (buffer->isInMemory() ? ((char*)buffer->map() + (i)) : ((char *)NULL + (i)))
 
         if(buffer.isValid()) {
-            EffectPtr effect = buffer->getEffect();
+            EffectPtr effect = mIs2D ? m2DEffect : buffer->getEffect();
             if(effect) {
                 /* temporary */
                 if(effect->getVertexShader()) {
@@ -404,13 +406,54 @@ namespace ukn {
     void GLGraphicDevice::adjustPerspectiveMat(Matrix4& mat) {
         mat *= (Matrix4::ScaleMat(1.f, 1.f, 2.f) * Matrix4::TransMat(0.f, 0.f, -1.f));
     }
-
     void GLGraphicDevice::begin2DRendering(const OrthogonalParams& params) {
+        mIs2D = true;
 
+        if(!m2DEffect) {
+            m2DEffect = ukn::CreateCgEffet2D();
+            if(m2DEffect) 
+                this->bindEffect(m2DEffect);
+            else 
+                log_error("Error creating effect for 2d rendering");
+        }
+        
+        float width = params.width;
+        if(width == 0.f) width = mWindow->width();
+        float height = params.height;
+        if(height == 0.f) height = mWindow->height();
+
+        this->setProjectionMatrix(
+            mist::Matrix4::OrthoOffCenterMatRH(
+                params.x,
+                params.x + width,
+                params.y + height,
+                params.y,
+                0.0,
+                1.0f));
+
+        Matrix4 viewMat;
+        viewMat.translate(params.x + params.dx, params.y + params.dy, 0.f);
+        viewMat.rotate(0.f, params.rotation, 0.f);
+        viewMat.scale(params.scalex, params.scaley, 1.f);
+        viewMat.translate(-params.dx, -params.dy, 0.f);
+        this->setViewMatrix(viewMat);
+
+        if(mCurrFrameBuffer) {
+            RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
+            if(dsView) dsView->enableDepth(false);
+        }
     }
 
     void GLGraphicDevice::end2DRendering() {
+        mIs2D = false;
+        if(mCurrFrameBuffer) {
+            CameraPtr cam = mCurrFrameBuffer->getViewport().camera;
+            this->setProjectionMatrix(cam->getProjMatrix());
+            this->setViewMatrix(cam->getViewMatrix());
 
+            RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
+            if(dsView) dsView->enableDepth(true);
+        }
     }
 
 } // namespace ukn

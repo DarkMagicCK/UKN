@@ -9,6 +9,7 @@
 #include "UKN/App.h"
 #include "UKN/RenderBuffer.h"
 #include "UKN/GraphicBuffer.h"
+#include "UKN/CgHelper.h"
 
 #include "mist/Stream.h"
 #include "mist/Profiler.h"
@@ -140,14 +141,14 @@ namespace ukn {
 #endif
 
         D3D_DRIVER_TYPE driverTypes[] = {D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP};
-        D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
+        mFeatureLevel = D3D_FEATURE_LEVEL_10_1;
 
         for(int i=0; i < sizeof(driverTypes) / sizeof(D3D_DRIVER_TYPE); ++i) {
             result = D3D11CreateDeviceAndSwapChain(NULL,
                 D3D_DRIVER_TYPE_HARDWARE,
                 NULL,
                 creationFlags,
-                &featureLevel,
+                &mFeatureLevel,
                 1,
                 D3D11_SDK_VERSION,
                 &swapChainDesc,
@@ -399,62 +400,15 @@ namespace ukn {
         return mDeviceContext;
     }
 
-    namespace {
-
-        static const char* _2d_vert_program = "const uniform float4x4 viewMatrix;\
-                                              const uniform float4x4 projectionMatrix;\
-                                              const uniform float4x4 worldMatrix;\
-                                              struct VertexOutputType {\
-                                              float4 position: POSITION;\
-                                              float2 texCoord: TEXCOORD0;\
-                                              float4 color: COLOR;\
-                                              };\
-                                              VertexOutputType VertexProgram(in float2 texCoord: TEXCOORD0,\
-                                              in float3 position: POSITION,\
-                                              in float4 color: COLOR) {\
-                                              VertexOutputType output;\
-                                              output.position = float4(position, 1);\
-                                              output.position = mul(output.position, viewMatrix);\
-                                              output.position = mul(output.position, projectionMatrix);\
-                                              output.texCoord = texCoord;\
-                                              output.color = color;\
-                                              return output;\
-                                              }\0";
-
-        static const char* _2d_frag_program = "struct VertexOutputType {\
-                                              float4 position: POSITION;\
-                                              float2 texCoord: TEXCOORD0;\
-                                              float4 color: COLOR;\
-                                              };\
-                                              float4 FragmentProgram(VertexOutputType input,\
-                                              uniform sampler2D tex: TEX): COLOR {\
-                                              float4 texColor = tex2D(tex, input.texCoord);\
-                                              texColor = saturate(texColor + input.color);\
-                                              return texColor;\
-                                              }\0";
-
-    }
-
-    EffectPtr D3D11GraphicDevice::createEffectFor2DRendering() const {
-        EffectPtr effect = Context::Instance().getGraphicFactory().createEffect();
-        effect->setFragmentShader(effect->createShader(ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_2d_frag_program, 
-            strlen(_2d_frag_program)), L""),
-            ukn::ShaderDesc(ST_FragmentShader,
-            "FragmentProgram")));
-        effect->setVertexShader(effect->createShader(ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_2d_vert_program, 
-            strlen(_2d_vert_program)), L""),
-            ukn::ShaderDesc(ST_VertexShader,
-            "VertexProgram")));
-        effect->setVertexFormat(ukn::Vertex2D::Format());
-        return effect;
-    }
-
     void D3D11GraphicDevice::begin2DRendering(const OrthogonalParams& params) {
         mIs2D = true;
 
         if(!m2DEffect) {
-            m2DEffect = createEffectFor2DRendering();
-            this->bindEffect(m2DEffect);
+            m2DEffect = ukn::CreateCgEffet2D();
+            if(m2DEffect) 
+                this->bindEffect(m2DEffect);
+            else 
+                log_error("Error creating effect for 2d rendering");
         }
         
         float width = params.width;
@@ -494,6 +448,10 @@ namespace ukn {
             RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
             if(dsView) dsView->enableDepth(true);
         }
+    }
+
+    D3D_FEATURE_LEVEL D3D11GraphicDevice::getDeviceFeatureLevel() const {
+        return mFeatureLevel;
     }
 
 } // namespace ukn

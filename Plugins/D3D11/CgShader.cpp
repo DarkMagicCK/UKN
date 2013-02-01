@@ -28,6 +28,40 @@ namespace ukn {
         return true;
     }
 
+    CGprofile _d3d_feature_level_to_cgprofile(D3D_FEATURE_LEVEL level, ShaderType type) {
+        switch(level) {
+            case D3D_FEATURE_LEVEL_10_0:
+            case D3D_FEATURE_LEVEL_10_1: {
+                /* d3d10 shader model 4, 10.1 shader model 4.1 */
+                switch(type){
+                case ST_FragmentShader: return CG_PROFILE_PS_4_0;
+                case ST_VertexShader: return CG_PROFILE_VS_4_0;
+                case ST_GeometryShader: return CG_PROFILE_GS_4_0;
+                }
+                break;
+            }
+
+            case D3D_FEATURE_LEVEL_9_1:
+                if(type == ST_FragmentShader)
+                    return CG_PROFILE_PS_3_0;
+                else
+                    return CG_PROFILE_VS_3_0;
+                // no geometry shader
+                return CG_PROFILE_UNKNOWN;
+                break;
+
+            case D3D_FEATURE_LEVEL_11_0: {
+                /* d3d11 shader model 5 */
+                switch(type){
+                case ST_FragmentShader: return CG_PROFILE_PS_5_0;
+                case ST_VertexShader: return CG_PROFILE_VS_5_0;
+                case ST_GeometryShader: return CG_PROFILE_GS_5_0;
+                }
+                break;
+            }
+        }
+    }
+
     CgDxEffect::CgDxEffect(D3D11GraphicDevice* device):
         mContext(0),
         mDevice(device),
@@ -49,11 +83,13 @@ namespace ukn {
             CgDxShader* vertexShader = checked_cast<CgDxShader*>(mVertexShader.get());
             if(vertexShader) {
                 ID3DBlob* vsBlob = cgD3D11GetCompiledProgram(vertexShader->getProgram());
-                mLayout = D3D11ShaderUtilities::CreateLayout(mDevice->getD3DDevice(),
-                    vsBlob->GetBufferPointer(),
-                    vsBlob->GetBufferSize(),
-                    format);
-
+                if(vsBlob)
+                    mLayout = D3D11ShaderUtilities::CreateLayout(mDevice->getD3DDevice(),
+                        vsBlob->GetBufferPointer(),
+                        vsBlob->GetBufferSize(),
+                        format);
+                else
+                    log_error("CgDxEffect::setVertexFormat: Error get compiled vertex program");
             }
         }
     }
@@ -82,7 +118,7 @@ namespace ukn {
 
     ShaderPtr CgDxEffect::createShader(const ResourcePtr& resource, const ShaderDesc& desc) {
         CgDxShader* shader = new CgDxShader(mContext);
-        if(shader->initialize(resource, desc)) {
+        if(shader->initialize(mDevice, resource, desc)) {
             return ShaderPtr(shader);
         }
         return ShaderPtr();
@@ -109,24 +145,15 @@ namespace ukn {
         }
     }
 
-    bool CgDxShader::initialize(const ResourcePtr& resource, const ShaderDesc& desc) {
-        CGprofile profile;
+    bool CgDxShader::initialize(D3D11GraphicDevice* device, const ResourcePtr& resource, const ShaderDesc& desc) {
         mDesc = desc;
-        switch (desc.type)
-        {
-        case ukn::ST_FragmentShader:
-            profile = cgD3D11GetLatestPixelProfile();;
-            break;
-        case ukn::ST_VertexShader:
-            profile = cgD3D11GetLatestVertexProfile();
-            break;
-        case ukn::ST_GeometryShader:
-            profile = cgD3D11GetLatestGeometryProfile();
-            break;
-        }
+        
         StreamPtr stream = resource->readIntoMemory();
         MemoryStream* memStream = ((MemoryStream*)stream.get());
         std::string content(memStream->data(), memStream->data() + memStream->size());
+        
+        CGprofile profile = _d3d_feature_level_to_cgprofile(device->getDeviceFeatureLevel(), desc.type);
+        CGprofile p2 = cgD3D11GetLatestPixelProfile();
         mProgram = cgCreateProgram(mContext, 
             CG_SOURCE, 
             content.c_str(), 

@@ -26,9 +26,10 @@
 namespace ukn {
 
     D3D11GraphicDevice::D3D11GraphicDevice():
-        mDevice(0),
-        mEffect(0),
-        mDebug(0) {
+    mDevice(0),
+    mEffect(0),
+    mDebug(0),
+    mIs2D(false) {
             /*
             LH to RH and fix z
             www.klayge.org/2011/07/15

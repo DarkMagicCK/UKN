@@ -22,6 +22,7 @@
 #include "mist/SysUtil.h"
 #include "mist/TimeUtil.h"
 #include "mist/RandomUtil.h"
+#include "mist/Convert.h"
 
 #include <vector>
 #include <map>
@@ -68,6 +69,7 @@ int CALLBACK WinMain(
     ukn::Matrix4 worldMat;
     ukn::EffectPtr effect;
     ukn::CameraController* camController;
+    ukn::FontPtr font;
 
     ukn::Vector3 positions[5];
     for(int i=0; i<5; ++i) {
@@ -103,28 +105,30 @@ int CALLBACK WinMain(
         .connectRender([&](ukn::Window*) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+            
+            gd.begin2DRendering();
+            ukn::SpriteBatch::DefaultObject().begin();
+            ukn::SpriteBatch::DefaultObject().draw(texture, ukn::Vector2(0, 0), 0);
+            ukn::SpriteBatch::DefaultObject().end();
+
+            font->draw(mist::Convert::ToString(mist::Random::RandomFloat(0, 100)).c_str(), 100, 100, ukn::FA_Left);
+            font->render();
+
+            gd.end2DRendering();
 
             for(int i=0; i <1 ; ++i) {
                 gd.setWorldMatrix(worldMat);
 
-         //       if(renderBuffer)
-         //           gd.renderBuffer(renderBuffer);
+                if(renderBuffer)
+                    gd.renderBuffer(renderBuffer);
             }
-
-            
-            gd.begin2DRendering();
-            ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
-            sb.begin();
-                sb.draw(texture, ukn::Vector2(0, 0), 0);
-            sb.end();
-            gd.end2DRendering();
         })
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
      
-            renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 0.5), 20);
+            renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 1.5), 20);
 
-           /* effect = gf.createEffect();
+            effect = gf.createEffect();
             ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex.cg"), 
                     ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", ukn::VertexUVNormal::Format()));
             ukn::ShaderPtr fragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment.cg"), 
@@ -136,19 +140,22 @@ int CALLBACK WinMain(
             fragmentShader->setFloatVectorVariable("diffuseColor", ukn::float4(1.f, 1.f, 1.f, 1.f));
             fragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(0.5f, 1.f, 0.5f, 1.f));
             fragmentShader->setFloatVectorVariable("ambientColor", ukn::float4(0.15f, 0.15f, 0.15f, 1.f));
-            fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(0.f, 0.f, 0.f, 0.f));*/
+            fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(0.f, 0.f, 0.f, 0.f));
 
-            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"angel.png"));
+            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
           //  texture = gf.create2DTexture(800, 600, 1, ukn::EF_RGBA8, 0);
 
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
-            vp.camera->setViewParams(ukn::Vector3(0, 0, -10), ukn::Vector3(0, 0, 1));
+            vp.camera->setViewParams(ukn::Vector3(0, 0, -3), ukn::Vector3(0, 0, 1));
 
-          //  vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
-          //  renderBuffer->setEffect(effect);
+            vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
+            renderBuffer->setEffect(effect);
 
-      //      camController->attachCamera(vp.camera);
+       //     camController->attachCamera(vp.camera);
+
+            font = ukn::AssetManager::Instance().load<ukn::Font>(L"Arial.ttf");
+            font->setStyleProperty(ukn::FSP_Size, 20);
         })
         .run();
     

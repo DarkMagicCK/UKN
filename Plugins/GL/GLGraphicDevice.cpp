@@ -39,8 +39,9 @@
 namespace ukn {
 
     GLGraphicDevice::GLGraphicDevice():
-        mCurrTexture(TexturePtr()),
-        mCurrGLFrameBuffer(0) {
+    mCurrTexture(TexturePtr()),
+    mCurrGLFrameBuffer(0),
+    mIs2D(false) {
     }
 
     GLGraphicDevice::~GLGraphicDevice() {

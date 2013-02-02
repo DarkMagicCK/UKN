@@ -41,30 +41,30 @@ namespace ukn {
     class AssetLoader;
     
     template<>
-    class AssetLoader<Font> {
+    class UKN_API AssetLoader<Font> {
     public:
         static SharedPtr<Font> Load(const UknString& name, const UknString& path);
     };
     
     template<>
-    class AssetLoader<Texture> {
+    class UKN_API AssetLoader<Texture> {
     public:
         static SharedPtr<Texture> Load(const UknString& name, const UknString& path);
     };
     
     template<>
-    class AssetLoader<ConfigParser> {
+    class UKN_API AssetLoader<ConfigParser> {
     public:
         static SharedPtr<ConfigParser> Load(const UknString& name, const UknString& path);
     };
     
     template<>
-    class AssetLoader<Resource> {
+    class UKN_API AssetLoader<Resource> {
     public:
         static SharedPtr<Resource> Load(const UknString& name, const UknString& path);
     };
     
-    class AssetManager: Uncopyable, public IConfigSerializable {
+    class UKN_API AssetManager: Uncopyable, public IConfigSerializable {
     public:
         static AssetManager& Instance();
         

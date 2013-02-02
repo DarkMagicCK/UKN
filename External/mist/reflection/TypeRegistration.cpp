@@ -14,7 +14,7 @@
 namespace mist {
     
     namespace reflection {
-        
+        /*
         static void OnMathTypeRegistration(TypeDB& db) {
             {
                 FieldInfo fields[] = {
@@ -36,11 +36,11 @@ namespace mist {
                 db.createType<Vector3>().defFields(fields, db);
             }
         }
-        
+        */
         static void OnTypeDBInitialize() {
             TypeDB& db = TypeDB::Default();
             
-            OnMathTypeRegistration(db);
+        //    OnMathTypeRegistration(db);
         }
         
         MIST_STATIC_RUN_CODE(OnTypeDBInitialize());

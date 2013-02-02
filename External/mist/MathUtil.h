@@ -463,8 +463,8 @@ namespace mist {
         }
 
         void clamp(const T max) {
-            if(length() > max) {
-                normalize();
+            if(this->length() > max) {
+                this->normalize();
                 this->x() *= max;
                 this->y() *= max;
             }

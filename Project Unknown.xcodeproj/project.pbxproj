@@ -28,7 +28,6 @@
 		88093CA014BC258000C6152F /* zutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 88093C8F14BC258000C6152F /* zutil.c */; };
 		880C3F0D165ECF3D0076ED72 /* AutoUpdate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 880C3F0B165ECF350076ED72 /* AutoUpdate.cpp */; };
 		880C3F11165ED0C20076ED72 /* Animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 880C3F0F165ED0BB0076ED72 /* Animation.cpp */; };
-		880C3F32166704F50076ED72 /* LeapTestApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 880C3F30166704F50076ED72 /* LeapTestApp.cpp */; };
 		881B520415BBC63C009B9482 /* LocalizedStringTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */; };
 		881B522015BBCD8C009B9482 /* LocalizedStringTableLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */; };
 		88260E651488541E00142365 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E641488541E00142365 /* Window.cpp */; };
@@ -41,6 +40,14 @@
 		884CE4011490905900F58E2E /* GLSpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE4001490905600F58E2E /* GLSpriteBatch.cpp */; };
 		8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885449981491E253006B8B60 /* libfreetype.a */; };
 		8855E32616561118002311E9 /* LeapMotion.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8855E32416561118002311E9 /* LeapMotion.cpp */; };
+		88563D3116BCD1D4008D0F1C /* CgHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D3016BCD1D4008D0F1C /* CgHelper.cpp */; };
+		88563D3316BCD1F7008D0F1C /* main_win.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D3216BCD1F7008D0F1C /* main_win.cpp */; };
+		88563D3616BCD2B7008D0F1C /* CgShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D3416BCD2B7008D0F1C /* CgShader.cpp */; };
+		88563D3C16BCD2C7008D0F1C /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 88563D3816BCD2C7008D0F1C /* glew.c */; };
+		88563D4316BCD366008D0F1C /* CameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D4216BCD365008D0F1C /* CameraController.cpp */; };
+		88563D4516BCD37C008D0F1C /* MathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D4416BCD37C008D0F1C /* MathUtil.cpp */; };
+		88563D4716BCD393008D0F1C /* Model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D4616BCD393008D0F1C /* Model.cpp */; };
+		88563D4B16BCD492008D0F1C /* Cg.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88563D4A16BCD492008D0F1C /* Cg.framework */; };
 		88757D441676F70200E31975 /* Query.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88757D421676F70200E31975 /* Query.cpp */; };
 		887ACB52166C170900EDFBB6 /* Serial.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 887ACB50166C170900EDFBB6 /* Serial.cpp */; };
 		8884B3C415F7CCEA0086533E /* Shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8884B3C215F7CCE90086533E /* Shader.cpp */; };
@@ -64,7 +71,6 @@
 		88AAC16B14868751007A80A4 /* RenderBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC15814868751007A80A4 /* RenderBuffer.cpp */; };
 		88AAC16C14868751007A80A4 /* RenderView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC15914868751007A80A4 /* RenderView.cpp */; };
 		88AAC16D14868751007A80A4 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC15A14868751007A80A4 /* Texture.cpp */; };
-		88AAC16F14868758007A80A4 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC16E14868758007A80A4 /* main.cpp */; };
 		88B2236914CDE18D00C871C8 /* RenderTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B2236814CDE18D00C871C8 /* RenderTarget.cpp */; };
 		88D1301114CF9677001BB071 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D1301014CF9677001BB071 /* Input.cpp */; };
 		88E1938F15EBD1F40098FA28 /* Arial.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88E1938D15EBD13E0098FA28 /* Arial.ttf */; };
@@ -111,6 +117,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		88563D4016BCD319008D0F1C /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8885838816587F00000D9ADA /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -179,8 +194,6 @@
 		880C3F0C165ECF3A0076ED72 /* AutoUpdate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AutoUpdate.h; sourceTree = "<group>"; };
 		880C3F0F165ED0BB0076ED72 /* Animation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Animation.cpp; sourceTree = "<group>"; };
 		880C3F10165ED0BF0076ED72 /* Animation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Animation.h; sourceTree = "<group>"; };
-		880C3F30166704F50076ED72 /* LeapTestApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = LeapTestApp.cpp; path = UKN/LeapTestApp.cpp; sourceTree = SOURCE_ROOT; };
-		880C3F31166704F50076ED72 /* LeapTestApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = LeapTestApp.h; path = UKN/LeapTestApp.h; sourceTree = SOURCE_ROOT; };
 		881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalizedStringTable.cpp; sourceTree = "<group>"; };
 		881B520B15BBC882009B9482 /* LocalizedStringTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedStringTable.h; sourceTree = "<group>"; };
 		881B521C15BBCD67009B9482 /* LocalizedStringTableLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedStringTableLoader.h; sourceTree = "<group>"; };
@@ -289,6 +302,19 @@
 		885449981491E253006B8B60 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libfreetype.a; sourceTree = "<group>"; };
 		8855E31E1656107B002311E9 /* LeapMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeapMotion.h; sourceTree = "<group>"; };
 		8855E32416561118002311E9 /* LeapMotion.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LeapMotion.cpp; sourceTree = "<group>"; };
+		88563D2D16BCD1B6008D0F1C /* CgHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CgHelper.h; sourceTree = "<group>"; };
+		88563D3016BCD1D4008D0F1C /* CgHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CgHelper.cpp; sourceTree = "<group>"; };
+		88563D3216BCD1F7008D0F1C /* main_win.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main_win.cpp; path = vs/UKN/main_win.cpp; sourceTree = SOURCE_ROOT; };
+		88563D3416BCD2B7008D0F1C /* CgShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CgShader.cpp; sourceTree = "<group>"; };
+		88563D3516BCD2B7008D0F1C /* CgShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CgShader.h; sourceTree = "<group>"; };
+		88563D3816BCD2C7008D0F1C /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glew.c; sourceTree = "<group>"; };
+		88563D3916BCD2C7008D0F1C /* glew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glew.h; sourceTree = "<group>"; };
+		88563D3A16BCD2C7008D0F1C /* glxew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glxew.h; sourceTree = "<group>"; };
+		88563D3B16BCD2C7008D0F1C /* wglew.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = wglew.h; sourceTree = "<group>"; };
+		88563D4216BCD365008D0F1C /* CameraController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CameraController.cpp; sourceTree = "<group>"; };
+		88563D4416BCD37C008D0F1C /* MathUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MathUtil.cpp; sourceTree = "<group>"; };
+		88563D4616BCD393008D0F1C /* Model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Model.cpp; sourceTree = "<group>"; };
+		88563D4A16BCD492008D0F1C /* Cg.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cg.framework; path = External/Cg/Cg.framework; sourceTree = "<group>"; };
 		886DBA3C14C43DCB00652729 /* Basic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Basic.h; sourceTree = "<group>"; };
 		88757D421676F70200E31975 /* Query.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Query.cpp; sourceTree = "<group>"; };
 		88757D431676F70200E31975 /* Query.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Query.h; sourceTree = "<group>"; };
@@ -348,7 +374,6 @@
 		88AAC15814868751007A80A4 /* RenderBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderBuffer.cpp; sourceTree = "<group>"; };
 		88AAC15914868751007A80A4 /* RenderView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderView.cpp; sourceTree = "<group>"; };
 		88AAC15A14868751007A80A4 /* Texture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Texture.cpp; sourceTree = "<group>"; };
-		88AAC16E14868758007A80A4 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = UKN/main.cpp; sourceTree = SOURCE_ROOT; };
 		88B0FD4814C5F38800346AC5 /* SequencialAnimation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SequencialAnimation.h; sourceTree = "<group>"; };
 		88B2236514CDE10A00C871C8 /* RenderTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RenderTarget.h; sourceTree = "<group>"; };
 		88B2236814CDE18D00C871C8 /* RenderTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderTarget.cpp; sourceTree = "<group>"; };
@@ -356,7 +381,6 @@
 		88CC31191477915700558EA1 /* Project Unknown */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Project Unknown"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88D1300E14CF812C001BB071 /* GLFWInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFWInput.h; sourceTree = "<group>"; };
 		88D1301014CF9677001BB071 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
-		88DE02DE15F12F4100D81323 /* SqaureGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SqaureGame.h; path = UKN/SqaureGame.h; sourceTree = SOURCE_ROOT; };
 		88E1938D15EBD13E0098FA28 /* Arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Arial.ttf; path = /Library/Fonts/Arial.ttf; sourceTree = "<absolute>"; };
 		88E3C3DC147F2BBD00E8754D /* GLGraphicDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGraphicDevice.h; sourceTree = "<group>"; };
 		88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLGraphicDevice.cpp; sourceTree = "<group>"; };
@@ -500,6 +524,7 @@
 				88871FE2148CB1800026B2B8 /* libglfw.a in Frameworks */,
 				8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */,
 				8885838616587EF7000D9ADA /* libLeap.dylib in Frameworks */,
+				88563D4B16BCD492008D0F1C /* Cg.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -638,6 +663,18 @@
 			path = Experiment;
 			sourceTree = "<group>";
 		};
+		88563D3716BCD2C7008D0F1C /* glew */ = {
+			isa = PBXGroup;
+			children = (
+				88563D3816BCD2C7008D0F1C /* glew.c */,
+				88563D3916BCD2C7008D0F1C /* glew.h */,
+				88563D3A16BCD2C7008D0F1C /* glxew.h */,
+				88563D3B16BCD2C7008D0F1C /* wglew.h */,
+			);
+			name = glew;
+			path = External/glew;
+			sourceTree = SOURCE_ROOT;
+		};
 		8885838316587EF7000D9ADA /* leapmotion */ = {
 			isa = PBXGroup;
 			children = (
@@ -743,6 +780,7 @@
 				88EA1C6514A4DE370079CCC4 /* Sprite.h */,
 				88EA1C6A14A606DD0079CCC4 /* Audio.h */,
 				88B2236514CDE10A00C871C8 /* RenderTarget.h */,
+				88563D2D16BCD1B6008D0F1C /* CgHelper.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";
@@ -784,6 +822,8 @@
 		88AAC15114868751007A80A4 /* Render */ = {
 			isa = PBXGroup;
 			children = (
+				88563D4216BCD365008D0F1C /* CameraController.cpp */,
+				88563D3016BCD1D4008D0F1C /* CgHelper.cpp */,
 				88260E641488541E00142365 /* Window.cpp */,
 				88AAC15214868751007A80A4 /* Camera.cpp */,
 				88AAC15314868751007A80A4 /* FrameBuffer.cpp */,
@@ -793,6 +833,7 @@
 				88AAC15714868751007A80A4 /* GraphicFactory.cpp */,
 				88AAC15814868751007A80A4 /* RenderBuffer.cpp */,
 				88AAC15914868751007A80A4 /* RenderView.cpp */,
+				88563D4616BCD393008D0F1C /* Model.cpp */,
 				88AAC15A14868751007A80A4 /* Texture.cpp */,
 				884CE3F6148F74D600F58E2E /* SpriteBatch.cpp */,
 				88029B091491DB8B00AB1490 /* Font.cpp */,
@@ -807,6 +848,7 @@
 		88AAC170148689ED007A80A4 /* External */ = {
 			isa = PBXGroup;
 			children = (
+				88563D3716BCD2C7008D0F1C /* glew */,
 				8885838316587EF7000D9ADA /* leapmotion */,
 				88C308991492DFCB001262DF /* zlib */,
 				8854493E1491E253006B8B60 /* freetype */,
@@ -858,6 +900,7 @@
 		88CC310E1477915700558EA1 = {
 			isa = PBXGroup;
 			children = (
+				88563D4A16BCD492008D0F1C /* Cg.framework */,
 				88CC311C1477915700558EA1 /* Project Unknown */,
 				88E3C431147F2EC300E8754D /* Frameworks */,
 				88CC311A1477915700558EA1 /* Products */,
@@ -880,10 +923,7 @@
 				88AAC14414868751007A80A4 /* src */,
 				88AAC170148689ED007A80A4 /* External */,
 				88E3C3C7147F2BAC00E8754D /* Plugins */,
-				88AAC16E14868758007A80A4 /* main.cpp */,
-				880C3F30166704F50076ED72 /* LeapTestApp.cpp */,
-				880C3F31166704F50076ED72 /* LeapTestApp.h */,
-				88DE02DE15F12F4100D81323 /* SqaureGame.h */,
+				88563D3216BCD1F7008D0F1C /* main_win.cpp */,
 				88E1938D15EBD13E0098FA28 /* Arial.ttf */,
 			);
 			path = "Project Unknown";
@@ -900,6 +940,8 @@
 		88E3C3C8147F2BAF00E8754D /* GL */ = {
 			isa = PBXGroup;
 			children = (
+				88563D3416BCD2B7008D0F1C /* CgShader.cpp */,
+				88563D3516BCD2B7008D0F1C /* CgShader.h */,
 				88E3C3DC147F2BBD00E8754D /* GLGraphicDevice.h */,
 				88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */,
 				88E3C3DF147F2D5B00E8754D /* GLGraphicFactory.h */,
@@ -984,6 +1026,7 @@
 				88ECF06C165210E300EA6B47 /* ListenerManager.h */,
 				88ECF06D165210E300EA6B47 /* Logger.cpp */,
 				88ECF06E165210E300EA6B47 /* Logger.h */,
+				88563D4416BCD37C008D0F1C /* MathUtil.cpp */,
 				88ECF06F165210E300EA6B47 /* MathUtil.h */,
 				88ECF070165210E300EA6B47 /* md5lib */,
 				88ECF073165210E300EA6B47 /* MemoryUtil.h */,
@@ -1145,6 +1188,7 @@
 				88CC31161477915700558EA1 /* Frameworks */,
 				88CC31171477915700558EA1 /* CopyFiles */,
 				8885838816587F00000D9ADA /* CopyFiles */,
+				88563D4016BCD319008D0F1C /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -1200,7 +1244,6 @@
 				88AAC16B14868751007A80A4 /* RenderBuffer.cpp in Sources */,
 				88AAC16C14868751007A80A4 /* RenderView.cpp in Sources */,
 				88AAC16D14868751007A80A4 /* Texture.cpp in Sources */,
-				88AAC16F14868758007A80A4 /* main.cpp in Sources */,
 				88260E651488541E00142365 /* Window.cpp in Sources */,
 				8832D1461488C9F700D08C15 /* GLTexture.cpp in Sources */,
 				8832D14A1488CFDC00D08C15 /* GLFrameBuffer.cpp in Sources */,
@@ -1277,9 +1320,15 @@
 				8855E32616561118002311E9 /* LeapMotion.cpp in Sources */,
 				880C3F0D165ECF3D0076ED72 /* AutoUpdate.cpp in Sources */,
 				880C3F11165ED0C20076ED72 /* Animation.cpp in Sources */,
-				880C3F32166704F50076ED72 /* LeapTestApp.cpp in Sources */,
 				887ACB52166C170900EDFBB6 /* Serial.cpp in Sources */,
 				88757D441676F70200E31975 /* Query.cpp in Sources */,
+				88563D3116BCD1D4008D0F1C /* CgHelper.cpp in Sources */,
+				88563D3316BCD1F7008D0F1C /* main_win.cpp in Sources */,
+				88563D3616BCD2B7008D0F1C /* CgShader.cpp in Sources */,
+				88563D3C16BCD2C7008D0F1C /* glew.c in Sources */,
+				88563D4316BCD366008D0F1C /* CameraController.cpp in Sources */,
+				88563D4516BCD37C008D0F1C /* MathUtil.cpp in Sources */,
+				88563D4716BCD393008D0F1C /* Model.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1346,6 +1395,10 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/Cg\"",
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(PROJECT_DIR)/External/freetype\"",
 					"\"$(PROJECT_DIR)/External/\"",
@@ -1368,6 +1421,10 @@
 			buildSettings = {
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/External/Cg\"",
+				);
 				HEADER_SEARCH_PATHS = (
 					"\"$(PROJECT_DIR)/External/freetype\"",
 					"\"$(PROJECT_DIR)/External/\"",

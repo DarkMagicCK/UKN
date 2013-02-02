@@ -149,7 +149,7 @@ namespace ukn {
         
         ScopedPtr<FTFace> mFace;
 
-		struct Font::FTGlyph {
+		struct FTGlyph {
 			FTGlyph();
 			~FTGlyph();
 			bool cached;

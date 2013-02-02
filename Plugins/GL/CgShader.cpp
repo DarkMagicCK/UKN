@@ -64,9 +64,13 @@ namespace ukn {
     }
 
     ShaderPtr CgGLEffect::createShader(const ResourcePtr& resource, const ShaderDesc& desc) {
-        CgGLShader* shader = new CgGLShader(mContext);
-        if(shader->initialize(resource, desc)) {
-            return ShaderPtr(shader);
+        if(resource) {
+            CgGLShader* shader = new CgGLShader(mContext);
+            if(shader->initialize(resource, desc)) {
+                return ShaderPtr(shader);
+            }
+        } else {
+            log_error("CgGLEffect::createShader: invalid resource");
         }
         return ShaderPtr();
     }

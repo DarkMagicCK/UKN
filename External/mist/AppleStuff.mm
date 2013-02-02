@@ -89,7 +89,7 @@ namespace mist {
     bool mist_apple_copyitem(const MistString& src, const MistString& dst) {
         NSFileManager* fm = [NSFileManager defaultManager];
         
-        NSError* error;
+        NSError* error = nil;
         [fm copyItemAtPath:WStringToNSString(src) toPath:WStringToNSString(dst) error:&error];
 
         if(error != nil) {
@@ -102,7 +102,7 @@ namespace mist {
     bool mist_apple_moveitem(const MistString& src, const MistString& dst) {
         NSFileManager* fm = [NSFileManager defaultManager];
         
-        NSError* error;
+        NSError* error = nil;
         [fm moveItemAtPath:WStringToNSString(src) toPath:WStringToNSString(dst) error:&error];
         
         if(error != nil) {
@@ -115,7 +115,7 @@ namespace mist {
     bool mist_apple_deleteitem(const MistString& src) {
         NSFileManager* fm = [NSFileManager defaultManager];
         
-        NSError* error;
+        NSError* error = nil;
         [fm removeItemAtPath:WStringToNSString(src) error:&error];
         
         if(error != nil) {
@@ -128,7 +128,7 @@ namespace mist {
     bool mist_apple_createdirectory(const MistString& src) {
         NSFileManager* fm = [NSFileManager defaultManager];
         
-        NSError* error;
+        NSError* error = nil;
         [fm createDirectoryAtPath:WStringToNSString(src)
       withIntermediateDirectories:YES
                        attributes:nil

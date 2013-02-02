@@ -757,7 +757,7 @@ public:
     }
     
     void onMouseEvent(void* sender, ukn::input::MouseEventArgs& e) {
-   
+        
     }
     
     void onKeyEvent(void* sender, ukn::input::KeyEventArgs& e) {
@@ -766,12 +766,8 @@ public:
     
     void onResize(void * sender, ukn::WindowResizeEventArgs& args) {
     }
-        
+    
     void onInit() {
-        getWindow().onMouseEvent() += ukn::Bind(this, &MyApp::onMouseEvent);
-        getWindow().onKeyEvent() += ukn::Bind(this, &MyApp::onKeyEvent);
-        getWindow().onResize() += ukn::Bind(this, &MyApp::onResize);
-       
         std::vector<Vector2> vec {
             Vector2(33, 1),
             Vector2(35, 2),
@@ -814,15 +810,15 @@ public:
             t.y = tt;
         });
         /*
-        std::vector<Vector2> vec2 {
-            Vector2(2, 1),
-            Vector2(18, 2),
-            Vector2(22, 3),
-            Vector2(24, 4),
-            Vector2(36, 5),
-            Vector2(42, 6),
-        };
-        */
+         std::vector<Vector2> vec2 {
+         Vector2(2, 1),
+         Vector2(18, 2),
+         Vector2(22, 3),
+         Vector2(24, 4),
+         Vector2(36, 5),
+         Vector2(42, 6),
+         };
+         */
         float scale = 100;
         
         s1 = Spline(vec);
@@ -845,20 +841,20 @@ public:
         
         s2 = Spline(points);
         
-                
-     /*   lag2->setColor(ukn::color::White);
-        spline1->setColor(ukn::color::Pink);
-        spline2->setColor(ukn::color::Green);
-       */ 
+        
+        /*   lag2->setColor(ukn::color::White);
+         spline1->setColor(ukn::color::Pink);
+         spline2->setColor(ukn::color::Green);
+         */
         runge = new Graph<std::function<float(float)> >(1,
-                                            13,
-                                            13000,
-                                            [&](float x) -> float {
-                                                return s2(x);
-                                            },
-                                            [&](float x) -> float {
-                                                return s1(x);
-                                            },
+                                                        13,
+                                                        13000,
+                                                        [&](float x) -> float {
+                                                            return s2(x);
+                                                        },
+                                                        [&](float x) -> float {
+                                                            return s1(x);
+                                                        },
                                                         1.f,
                                                         -500.f,
                                                         200.f);
@@ -964,7 +960,7 @@ public:
     }
     
     void onUpdate() {
-       
+        
     }
     
     void onRender() {
@@ -979,7 +975,7 @@ public:
         
         sx->render();
         cx->render();
-    //    sleeping->render();
+        //    sleeping->render();
         //runge->render();
     }
     
@@ -1110,7 +1106,7 @@ class TestApp: public ukn::AppInstance, public ukn::input::LeapMotionListener {
 public:
     TestApp(const ukn::UknString& name):
     ukn::AppInstance(name) {
-  
+        
     }
     virtual ~TestApp() {
         
@@ -1125,7 +1121,7 @@ public:
                 vert.y = f.tip().position.y * 2;
                 vert.z = f.tip().position.z;
                 vert.color = ukn::ColorHSV(1.0 - 0.2*f.id(), 1.0 - 0.2*f.id(), 0.5, 1.0).toRGBA();
-               // vert.color = ukn::color::Skyblue.toRGBA();
+                // vert.color = ukn::color::Skyblue.toRGBA();
                 
                 mVertexBuffer->push(vert);
             }
@@ -1135,7 +1131,7 @@ public:
         mLastFrame = c.frame();
         mPrevFrame = c.frame(1);
     }
-        
+    
     void writeCommand(ukn::uint8 instr, const ukn::uint8* d, ukn::uint16 len) {
         ukn::uint16 real_len = (ukn::uint16)(len + 5);
         
@@ -1152,7 +1148,7 @@ public:
     }
     
     void onMouseEvent(void* sender, ukn::input::MouseEventArgs& e) {
-       
+        
     }
     
     void onKeyEvent(void* sender, ukn::input::KeyEventArgs& e) {
@@ -1167,7 +1163,7 @@ public:
         getWindow().onMouseEvent() += mist::Bind(this, &TestApp::onMouseEvent);
         getWindow().onKeyEvent() += mist::Bind(this, &TestApp::onKeyEvent);
         getWindow().onResize() += mist::Bind(this, &TestApp::onResize);
-      
+        
         
         ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
         mSquareTexture = gf.create2DTexture(getWindow().width(),
@@ -1182,7 +1178,7 @@ public:
                                                                                                    0,
                                                                                                    ukn::EF_D16,
                                                                                                    0)));
-    
+        
         
         mRenderBuffer = gf.createRenderBuffer();
         mist_assert(mRenderBuffer);
@@ -1198,7 +1194,7 @@ public:
         mLeapModule = new ukn::input::LeapMotionModule();
         mLeapModule->attachListener(this);
         ukn::ModuleManager::Instance().addModule(mLeapModule);
-
+        
         mContext = new ukn::GraphicContext();
         
         if(!mArduinoSerial
@@ -1229,8 +1225,8 @@ public:
         
         gd.bindFrameBuffer(gd.getScreenFrameBuffer());
         gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 0, 0);
-
-                
+        
+        
         ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
         sb.begin();
         sb.draw(mSquareTexture,
@@ -1275,6 +1271,7 @@ private:
     
     mist::Serial mArduinoSerial;
 };
+
 
 #include "LeapTestApp.h"
 

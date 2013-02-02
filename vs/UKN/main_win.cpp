@@ -45,6 +45,9 @@ struct NDArray<T, 1> {
 };
 
 #ifndef MIST_OS_WINDOWS
+
+#include "../Plugins/gl/GLGraphicFactory.h"
+
 int main (int argc, const char * argv[])
 {
 #else
@@ -73,6 +76,12 @@ int CALLBACK WinMain(
                                    0);
                
     }
+    
+#ifndef MIST_OS_WINDOWS
+    ukn::GraphicFactoryPtr factory;
+    ukn::CreateGraphicFactory(factory);
+    ukn::Context::Instance().registerGraphicFactory(factory);
+#endif
 
      ukn::AppLauncher(L"Windows Test")
         .create(
@@ -98,8 +107,8 @@ int CALLBACK WinMain(
             for(int i=0; i <1 ; ++i) {
                 gd.setWorldMatrix(worldMat);
 
-                if(renderBuffer)
-                    gd.renderBuffer(renderBuffer);
+         //       if(renderBuffer)
+         //           gd.renderBuffer(renderBuffer);
             }
 
             
@@ -115,7 +124,7 @@ int CALLBACK WinMain(
      
             renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 0.5), 20);
 
-            effect = gf.createEffect();
+           /* effect = gf.createEffect();
             ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex.cg"), 
                     ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", ukn::VertexUVNormal::Format()));
             ukn::ShaderPtr fragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment.cg"), 
@@ -127,17 +136,17 @@ int CALLBACK WinMain(
             fragmentShader->setFloatVectorVariable("diffuseColor", ukn::float4(1.f, 1.f, 1.f, 1.f));
             fragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(0.5f, 1.f, 0.5f, 1.f));
             fragmentShader->setFloatVectorVariable("ambientColor", ukn::float4(0.15f, 0.15f, 0.15f, 1.f));
-            fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(0.f, 0.f, 0.f, 0.f));
+            fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(0.f, 0.f, 0.f, 0.f));*/
 
-            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
+            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"angel.png"));
           //  texture = gf.create2DTexture(800, 600, 1, ukn::EF_RGBA8, 0);
 
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
             vp.camera->setViewParams(ukn::Vector3(0, 0, -10), ukn::Vector3(0, 0, 1));
 
-            vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
-            renderBuffer->setEffect(effect);
+          //  vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
+          //  renderBuffer->setEffect(effect);
 
       //      camController->attachCamera(vp.camera);
         })

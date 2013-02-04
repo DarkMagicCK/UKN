@@ -90,6 +90,7 @@ namespace ukn {
             case EF_Float4: return 4;
             case EF_UInt32: return 1;
         };
+        return 0;
     }
         
     struct RenderSettings {

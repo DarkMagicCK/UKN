@@ -120,6 +120,11 @@ namespace ukn {
         virtual void adjustPerspectiveMat(Matrix4& mat) {}
         
         /* sets up orthogonal projection with ortho parameters */
+        /* (0,0) = top left
+            (width, height) = bottom right
+            alpha blending = on
+            depth test = off
+            */
         virtual void begin2DRendering(const OrthogonalParams& params = OrthogonalParams()) = 0;
         virtual void end2DRendering() = 0;
 

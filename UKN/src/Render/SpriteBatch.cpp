@@ -201,23 +201,13 @@ namespace ukn {
     void SpriteBatch::onRenderBegin() {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
-        gd.pushProjectionMatrix();
-        gd.pushViewMatrix();
-        
-        Camera* cam = gd.getCurrFrameBuffer()->getViewport().camera.get();
-        
-  //      gd.setProjectionMatrix(cam->getProjMatrix());
-  //      gd.setViewMatrix(mTransformMatrix * cam->getViewMatrix());
+        gd.begin2DRendering();
     }
     
     void SpriteBatch::onRenderEnd() {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
-        gd.bindTexture(TexturePtr());
-        
-        gd.popProjectionMatrix();
-        gd.popViewMatrix();
-        
+        gd.end2DRendering();
         if(!mBatchRendering)
             mRenderQueue.clear();
         else  
@@ -420,6 +410,10 @@ namespace ukn {
         
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
+        /* alpha blend will be turned on default by begin2Drendering
+            to do with blend state object
+            */
+        /*
         switch(blend) {
             case SBB_Alpha:
                 gd.setRenderState(RS_Blend, RSP_Enable);
@@ -438,7 +432,7 @@ namespace ukn {
                 break;
         }
         gd.setRenderState(RS_DepthTest, RSP_Disable);
-        gd.setRenderState(RS_DepthMask, RSP_Disable);
+        gd.setRenderState(RS_DepthMask, RSP_Disable);*/
     }
     
     void SpriteBatch::end() {

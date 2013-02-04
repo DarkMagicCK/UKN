@@ -57,6 +57,9 @@ namespace ukn {
         /* get device feature level, this flag is required to determine shader profiles etc*/ 
         D3D_FEATURE_LEVEL getDeviceFeatureLevel() const;
 
+        void enableAlphaBlending();
+        void disableAlphaBlending();
+
     private:
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
 		void onWindowResize();
@@ -65,11 +68,13 @@ namespace ukn {
         TexturePtr mCurrTexture;
         EffectPtr mEffect;
 
-		ID3D11Device* mDevice;
-        ID3D11DeviceContext* mDeviceContext;
-		IDXGISwapChain* mSwapChain;
-		ID3D11RasterizerState* mRasterState;
-		ID3D11BlendState* mBlendState;
+		COM<ID3D11Device>::Ptr mDevice;
+        COM<ID3D11DeviceContext>::Ptr mDeviceContext;
+		COM<IDXGISwapChain>::Ptr mSwapChain;
+		COM<ID3D11RasterizerState>::Ptr mRasterState;
+		COM<ID3D11BlendState>::Ptr mBlendOffBlendState;
+        COM<ID3D11BlendState>::Ptr mAlphaBlendState;
+        COM<ID3D11SamplerState>::Ptr mSamplerState;
 
 		Matrix4 mWorldMatrix;
 		Matrix4 mProjectionMatrix;

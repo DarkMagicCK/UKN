@@ -16,9 +16,9 @@ namespace ukn {
                                               float2 texCoord: TEXCOORD0;\
                                               float4 color: COLOR;\
                                               };\
-                                              VertexOutputType VertexProgram(in float2 texCoord: TEXCOORD0: ATTR8,\
-                                              in float3 position: POSITION: ATTR0,\
-                                              in float4 color: COLOR: ATTR3) {\
+                                              VertexOutputType VertexProgram(in float2 texCoord: ATTR8: TEXCOORD0,\
+                                              in float3 position: ATTR0: POSITION,\
+                                              in float4 color: ATTR3: COLOR) {\
                                               VertexOutputType output;\
                                               output.position = float4(position, 1);\
                                               output.position = mul(output.position, viewMatrix);\
@@ -44,13 +44,13 @@ namespace ukn {
     EffectPtr CreateCgEffet2D() {
         EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
         effect->setFragmentShader(effect->createShader(ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_2d_frag_program, 
-            strlen(_2d_frag_program)), L""),
+                strlen(_2d_frag_program)), L""),
             ukn::ShaderDesc(ST_FragmentShader,
-            "FragmentProgram")));
+                "FragmentProgram")));
         effect->setVertexShader(effect->createShader(ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_2d_vert_program, 
-            strlen(_2d_vert_program)), L""),
+                strlen(_2d_vert_program)), L""),
             ukn::ShaderDesc(ST_VertexShader,
-            "VertexProgram")));
+                "VertexProgram")));
         effect->setVertexFormat(ukn::Vertex2D::Format());
         return effect;
     }

@@ -36,7 +36,7 @@ namespace ukn {
 			return D3D11_MAP_READ;
 
 		case ukn::GraphicBuffer::WriteOnly:
-			return D3D11_MAP_WRITE_NO_OVERWRITE;
+			return D3D11_MAP_WRITE_DISCARD;
 			
 		case ukn::GraphicBuffer::ReadWrite:
 			return D3D11_MAP_READ_WRITE;

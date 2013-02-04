@@ -26,10 +26,10 @@
 namespace ukn {
 
     D3D11GraphicDevice::D3D11GraphicDevice():
-    mDevice(0),
-    mEffect(0),
-    mDebug(0),
-    mIs2D(false) {
+        mDevice(0),
+        mEffect(0),
+        mDebug(0),
+        mIs2D(false) {
             /*
             LH to RH and fix z
             www.klayge.org/2011/07/15
@@ -144,6 +144,9 @@ namespace ukn {
         D3D_DRIVER_TYPE driverTypes[] = {D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP};
         mFeatureLevel = D3D_FEATURE_LEVEL_10_1;
 
+        ID3D11Device* device;
+        IDXGISwapChain* swapChain;
+        ID3D11DeviceContext* deviceContext;
         for(int i=0; i < sizeof(driverTypes) / sizeof(D3D_DRIVER_TYPE); ++i) {
             result = D3D11CreateDeviceAndSwapChain(NULL,
                 D3D_DRIVER_TYPE_HARDWARE,
@@ -153,13 +156,16 @@ namespace ukn {
                 1,
                 D3D11_SDK_VERSION,
                 &swapChainDesc,
-                &mSwapChain,
-                &mDevice,
+                &swapChain,
+                &device,
                 NULL,
-                &mDeviceContext);
+                &deviceContext);
             if(D3D11Debug::CHECK_RESULT(result, L"Create Device with D3D11_DRIVE_TYPE_HARDWARE")) 
                 break;
         }
+        mDevice = MakeCOMPtr(device);
+        mSwapChain = MakeCOMPtr(swapChain);
+        mDeviceContext = MakeCOMPtr(deviceContext);
 
 #if defined(MIST_DEBUG)
         mDebug.reset(new D3D11Debug(mDevice));
@@ -188,57 +194,109 @@ namespace ukn {
                 ((D3D11DepthStencilRenderView*)mScreenFrameBuffer->attached(ATT_DepthStencil).get())->getD3D11DepthStencilView());
         } catch(mist::Exception& exp) {
             MessageBoxW(mWindow->getHWnd(),
-                L"Error",
+                L"Error setting screen render view",
                 L"Error",
                 MB_OK | MB_ICONERROR);
             return false;
         }
 
-        D3D11_RASTERIZER_DESC rasterDesc;
-        ZeroMemory(&rasterDesc, sizeof(rasterDesc));
-        rasterDesc.AntialiasedLineEnable = false;
-        rasterDesc.CullMode = D3D11_CULL_NONE;
-        rasterDesc.DepthBias = 0;
-        rasterDesc.DepthBiasClamp = 0.f;
-        rasterDesc.DepthClipEnable = true;
-        rasterDesc.FillMode = D3D11_FILL_SOLID;
-        rasterDesc.FrontCounterClockwise = false;
-        rasterDesc.MultisampleEnable = settings.sample_quality > 0;
-        rasterDesc.ScissorEnable = false;
-        rasterDesc.SlopeScaledDepthBias = 0.f;
+        // rasterizer state
+        {
+            D3D11_RASTERIZER_DESC rasterDesc;
+            ZeroMemory(&rasterDesc, sizeof(rasterDesc));
+            rasterDesc.AntialiasedLineEnable = false;
+            rasterDesc.CullMode = D3D11_CULL_NONE;
+            rasterDesc.DepthBias = 0;
+            rasterDesc.DepthBiasClamp = 0.f;
+            rasterDesc.DepthClipEnable = true;
+            rasterDesc.FillMode = D3D11_FILL_SOLID;
+            rasterDesc.FrontCounterClockwise = false;
+            rasterDesc.MultisampleEnable = settings.sample_quality > 0;
+            rasterDesc.ScissorEnable = false;
+            rasterDesc.SlopeScaledDepthBias = 0.f;
 
-        result = mDevice->CreateRasterizerState(&rasterDesc, &mRasterState);
-        CHECK_RESULT_AND_RETURN(result, L"ID3D11Device->CreateRasterizerState");
-        mDeviceContext->RSSetState(mRasterState);
+            ID3D11RasterizerState* rasterState;
+            result = mDevice->CreateRasterizerState(&rasterDesc, &rasterState);
+            CHECK_RESULT_AND_RETURN(result, L"ID3D11Device->CreateRasterizerState");
 
+            mDeviceContext->RSSetState(rasterState);
+            mRasterState = MakeCOMPtr(rasterState);
+        }
         mWorldMatrix = Matrix4();
 
-        /* default D3D11 Blend State */
-        D3D11_BLEND_DESC blendDesc;
-        ZeroMemory(&blendDesc, sizeof(blendDesc));
+        /* blend states */
+        {
+            D3D11_BLEND_DESC blendDesc;
+            ZeroMemory(&blendDesc, sizeof(blendDesc));
 
-        blendDesc.AlphaToCoverageEnable = FALSE;
-        blendDesc.IndependentBlendEnable = FALSE;
-        blendDesc.RenderTarget[0].BlendEnable = FALSE;
-        blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-        blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-        blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
-        blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-        blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-        blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-        blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-        CHECK_RESULT_AND_RETURN(mDevice->CreateBlendState(&blendDesc, &mBlendState),
-            L"ID3D11Device->CreateBlendState");
+            ID3D11BlendState* blendState;
+            blendDesc.AlphaToCoverageEnable = FALSE;
+            blendDesc.IndependentBlendEnable = FALSE;
+            blendDesc.RenderTarget[0].BlendEnable = FALSE;
+            blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+            blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+            blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
+            blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+            blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+            blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+            blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+            CHECK_RESULT_AND_RETURN(mDevice->CreateBlendState(&blendDesc, &blendState),
+                L"ID3D11Device->CreateBlendState");
+
+            mBlendOffBlendState = MakeCOMPtr(blendState);
+
+            // alpha blend
+            blendDesc.RenderTarget[0].BlendEnable = TRUE;
+            blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+            blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+            blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+            blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+            blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+            blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+            blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+            CHECK_RESULT_AND_RETURN(mDevice->CreateBlendState(&blendDesc, &blendState),
+                L"ID3D11Device->CreateBlendState");
+
+            mAlphaBlendState = MakeCOMPtr(blendState);
+        }
+
+        {
+            ID3D11SamplerState* samplerState;
+            D3D11_SAMPLER_DESC samplerDesc;
+
+            samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+            samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+            samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+            samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+            samplerDesc.MipLODBias = 0.f;
+            samplerDesc.MaxAnisotropy = 1;
+            samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+            samplerDesc.BorderColor[0] = 0;
+            samplerDesc.BorderColor[1] = 0;
+            samplerDesc.BorderColor[2] = 0;
+            samplerDesc.BorderColor[3] = 0;
+            samplerDesc.MinLOD = 0;
+            samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
+
+            CHECK_RESULT_AND_RETURN(mDevice->CreateSamplerState(&samplerDesc, &samplerState), 
+                L"ID3D11Device->CreateSamplerState");
+
+            mSamplerState = MakeCOMPtr(samplerState);
+        }
 
         return true;
     }
 
     ID3D11Device* D3D11GraphicDevice::getD3DDevice() const {
-        return mDevice;
+        return mDevice.get();
     }
 
     IDXGISwapChain* D3D11GraphicDevice::getSwapChain() const {
-        return mSwapChain;
+        return mSwapChain.get();
+    }
+
+    ID3D11DeviceContext* D3D11GraphicDevice::getD3DDeviceContext() const {
+        return mDeviceContext.get();
     }
 
     void D3D11GraphicDevice::beginFrame() {
@@ -272,7 +330,7 @@ namespace ukn {
                     viewport.MinDepth = 0.0f;
 
                     mDeviceContext->RSSetViewports(1, &viewport);
-                    mDeviceContext->OMSetBlendState(mBlendState, 0, 0xffffffff);
+                    disableAlphaBlending();
 
                     fb.getViewport().camera->update();
 
@@ -324,6 +382,7 @@ namespace ukn {
                     if(mCurrTexture) {
                         if(!effect->getFragmentShader()->setTextureVariable("tex", mCurrTexture))
                             log_error("error setting texture in effect");
+
                     }
                 }
 
@@ -338,6 +397,9 @@ namespace ukn {
                 for(uint32 i=0; i<effect->getPasses(); ++i) {
                     effect->bind(i);
 
+                    ID3D11SamplerState* samplerState = mSamplerState.get();
+                    mDeviceContext->PSSetSamplers(0, 1, &samplerState);
+
                     if(indexBuffer.isValid() &&
                         buffer->isUseIndexStream()) {
                             mDeviceContext->DrawIndexed(buffer->getIndexCount(),
@@ -348,6 +410,8 @@ namespace ukn {
                             buffer->getVertexStartIndex());
                     }
                 }
+
+                vertexBuffer->deactivate();
             }
         }
     }
@@ -397,21 +461,23 @@ namespace ukn {
         mEffect = effect;
     }
 
-    ID3D11DeviceContext* D3D11GraphicDevice::getD3DDeviceContext() const {
-        return mDeviceContext;
-    }
-
     void D3D11GraphicDevice::begin2DRendering(const OrthogonalParams& params) {
+        if(mIs2D)
+            return;
+
         mIs2D = true;
+        enableAlphaBlending();
 
         if(!m2DEffect) {
             m2DEffect = ukn::CreateCgEffet2D();
             if(m2DEffect) 
                 this->bindEffect(m2DEffect);
-            else 
+            else  {
                 log_error("Error creating effect for 2d rendering");
+                mIs2D = false;
+            }
         }
-        
+
         float width = params.width;
         if(width == 0.f) width = mWindow->width();
         float height = params.height;
@@ -419,12 +485,12 @@ namespace ukn {
 
         this->setProjectionMatrix(
             mist::Matrix4::OrthoOffCenterMatLH(
-                params.x,
-                params.x + width,
-                params.y + height,
-                params.y,
-                0.0,
-                1.0f));
+            params.x,
+            params.x + width,
+            params.y + height,
+            params.y,
+            0.0,
+            1.0f));
 
         Matrix4 viewMat;
         viewMat.translate(params.x + params.dx, params.y + params.dy, 0.f);
@@ -441,6 +507,8 @@ namespace ukn {
 
     void D3D11GraphicDevice::end2DRendering() {
         mIs2D = false;
+        disableAlphaBlending();
+
         if(mCurrFrameBuffer) {
             CameraPtr cam = mCurrFrameBuffer->getViewport().camera;
             this->setProjectionMatrix(cam->getProjMatrix());
@@ -449,6 +517,16 @@ namespace ukn {
             RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
             if(dsView) dsView->enableDepth(true);
         }
+    }
+
+    void D3D11GraphicDevice::enableAlphaBlending() {
+        float4 factor(0, 0, 0, 0);
+        mDeviceContext->OMSetBlendState(mAlphaBlendState.get(), factor.value, 0xffffffff);
+    }
+
+    void D3D11GraphicDevice::disableAlphaBlending() {
+        float4 factor(0, 0, 0, 0);
+        mDeviceContext->OMSetBlendState(mBlendOffBlendState.get(), factor.value, 0xffffffff);
     }
 
     D3D_FEATURE_LEVEL D3D11GraphicDevice::getDeviceFeatureLevel() const {

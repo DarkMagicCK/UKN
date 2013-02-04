@@ -16,7 +16,7 @@ namespace ukn {
             layoutDesc[index].SemanticIndex = 0;
             layoutDesc[index].Format = ElementFormatToDxGIFormat(it->format);
             layoutDesc[index].InputSlot = 0;
-            layoutDesc[index].AlignedByteOffset = offset;
+            layoutDesc[index].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
             layoutDesc[index].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
             layoutDesc[index].InstanceDataStepRate = 0;
             index += 1;

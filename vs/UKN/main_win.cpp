@@ -107,15 +107,9 @@ int CALLBACK WinMain(
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
             
-            gd.begin2DRendering();
-            ukn::SpriteBatch::DefaultObject().begin();
-            ukn::SpriteBatch::DefaultObject().draw(texture, ukn::Vector2(0, 0), 0);
-            ukn::SpriteBatch::DefaultObject().end();
-
-            font->draw(mist::Convert::ToString(mist::Random::RandomFloat(0, 99)).c_str(), 100, 100, ukn::FA_Left);
+            font->draw(L"hello world!", 100, 100, ukn::FA_Left);
             font->render();
 
-            gd.end2DRendering();
 
             for(int i=0; i <1 ; ++i) {
                 gd.setWorldMatrix(worldMat);
@@ -158,7 +152,7 @@ int CALLBACK WinMain(
 
        //     camController->attachCamera(vp.camera);
 
-            font = ukn::AssetManager::Instance().load<ukn::Font>(L"Arial.ttf");
+            font = ukn::AssetManager::Instance().load<ukn::Font>(L"consola.ttf");
             font->setStyleProperty(ukn::FSP_Size, 20);
         })
         .run();

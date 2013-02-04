@@ -10,116 +10,88 @@
 #define Project_Unknown_Vertex_h
 
 #include "mist/Platform.h"
+#include "mist/Logger.h"
+#include "mist/Util.h"
+#include "ukn/GraphicSettings.h"
 
 namespace ukn {
 
     using namespace mist;
     
-    enum VertexFormatFlag {
-        VF_XYZ       = 1UL, 
-        VF_UV        = 1UL << 1,
-        VF_Color0    = 1UL << 2, /* Ambient */
-        VF_Color1    = 1UL << 3, /* Specular */
-        VF_Normal    = 1UL << 4,
+    enum VertexUsage {
+        VU_Position  = 1UL, 
+        VU_UV        = 1UL << 1,
+        VU_Diffuse   = 1UL << 2, /* Diffuse */
+        VU_Specular  = 1UL << 3, /* Specular */
+        VU_Normal    = 1UL << 4,
+        VU_Tangent   = 1UL << 5,
+        VU_Binormal  = 1UL << 6,
+        VU_BlendWeight = 1UL << 7,
+        VU_BlendIndices = 1UL << 8,
+        VU_PSize     = 1UL << 9,
     };
-    
-    enum VertexElementType {
-        VE_Float          = 1,
-        VE_UnsignedByte,
-        VE_Int,
-        VE_UnsignedInt,
-    };
-    
-    struct VertexFormat {
-        VertexFormat():
-        mFlag(0),
-        mOffsetXYZ(0),
-        mOffsetUV(0),
-        mOffsetColor0(0),
-        mOffsetColor1(0),
-        mOffsetNormal(0) { }
-        
-        VertexFormat(uint32 flag, uint32 xyz, uint32 uv, uint32 c0, uint32 c1, uint32 nor):
-        mFlag(flag),
-        mOffsetXYZ(xyz),
-        mOffsetUV(uv),
-        mOffsetColor0(c0),
-        mOffsetColor1(c1),
-        mOffsetNormal(nor) { }
-        
-        VertexFormat& xyz(uint32 offset) {
-            this->mFlag |= VF_XYZ;
-            this->mOffsetXYZ = offset;
-            return *this;
+
+    struct VertexElement {
+        VertexUsage usage;
+        ElementFormat format;
+        uint8 usage_index;
+
+        VertexElement(VertexUsage _usage, ElementFormat _type, uint32 _usage_index):
+            usage(_usage),
+            format(_type),
+            usage_index(_usage_index) {
+
         }
-        
-        VertexFormat& uv(uint32 uv) {
-            this->mFlag |= VF_UV;
-            this->mOffsetUV = uv;
-            return *this;
+
+        uint32 size() const {
+            return GetElementSize(format);
         }
-        
-        VertexFormat& color0(uint32 color0) {
-            this->mFlag |= VF_Color0;
-            this->mOffsetColor0 = color0;
-            return *this;
-        }
-        
-        VertexFormat& color1(uint32 color1) {
-            this->mFlag |= VF_Color1;
-            this->mOffsetColor1 = color1;
-            return *this;
-        }
-        
-        VertexFormat& normal(uint32 normal) {
-            this->mFlag |= VF_Normal;
-            this->mOffsetNormal = normal;
-            return *this;
-        }
-        
-        uint32 totalSize() const {
-            uint32 size = 0;
-            size += (mFlag & VF_XYZ) ? sizeof(float) * 3 : 0;
-            size += (mFlag & VF_UV) ? sizeof(float) * 2 : 0;
-            size += (mFlag & VF_Color0) ? sizeof(uint32) : 0;
-            size += (mFlag & VF_Color1) ? sizeof(uint32) : 0;
-            size += (mFlag & VF_Normal) ? sizeof(float) * 3 : 0;
-            return size;
-        }
-        
-        static uint32 TotalSizeOf(uint32 flag) {
-            uint32 size = 0;
-            size += (flag & VF_XYZ) ? sizeof(float) * 3 : 0;
-            size += (flag & VF_UV) ? sizeof(float) * 2 : 0;
-            size += (flag & VF_Color0) ? sizeof(uint32) : 0;
-            size += (flag & VF_Color1) ? sizeof(uint32) : 0;
-            size += (flag & VF_Normal) ? sizeof(float) * 3 : 0;
-            return size;
-        }
-        
-        bool checkFormat(uint32 flag) const {
-            return (mFlag & flag) != 0 ? true : false;
-        }
-        
-        uint32 offsetXYZ()    const { return mOffsetXYZ; }
-        uint32 offsetUV()     const { return mOffsetUV; }
-        uint32 offsetColor0() const { return mOffsetColor0; }
-        uint32 offsetColor1() const { return mOffsetColor1; }
-        uint32 offsetNormal() const { return mOffsetNormal; }
-        
-        uint32 mFlag;
-        uint32 mOffsetXYZ, mOffsetUV, mOffsetColor0, mOffsetColor1, mOffsetNormal;
-        
-        friend bool operator==(const VertexFormat& lhs, const VertexFormat& rhs) {
-            return (lhs.mFlag == rhs.mFlag) &&
-                    (lhs.mOffsetXYZ     == rhs.mOffsetXYZ)      &&
-                    (lhs.mOffsetUV      == rhs.mOffsetUV)       &&
-                    (lhs.mOffsetColor0  == rhs.mOffsetColor0)   &&
-                    (lhs.mOffsetColor1  == rhs.mOffsetColor1)   &&
-                    (lhs.mOffsetNormal  == rhs.mOffsetNormal);
+
+        friend bool operator==(const VertexElement& lhs, const VertexElement& rhs) {
+            return lhs.usage == rhs.usage && 
+                   lhs.format == rhs.format &&
+                   lhs.usage_index == rhs.usage_index;
         }
     };
     
+    typedef std::vector<VertexElement> vertex_elements_type;
+
+    inline uint32 GetVertexElementsTotalSize(const vertex_elements_type& elements) {
+        uint32 ret = 0;
+        for(vertex_elements_type::const_iterator it = elements.begin(),
+            end = elements.end();
+            it != end;
+            ++it) {
+                ret += it->size();
+        }
+        return ret;
+    }
+
+    template<typename _Tuple>
+    vertex_elements_type TupleToVertexElements(const _Tuple& t) {
+        if(t.empty()) return vertex_elements_type();
+
+        vertex_elements_type ret;
+        ret.push_back(t.get0());
+
+        vertex_elements_type ret2(TupleToVertexElements(t.tail()));
+        ret.insert(ret.end(), ret2.begin(), ret2.end());
+        return ret;
+    }
+
+    struct VertexElementsBuilder {
+        VertexElementsBuilder& add(const VertexElement& element) {
+            elements.push_back(element);
+            return *this;
+        }
+
+        const vertex_elements_type& to_vector() const {
+            return elements;
+        }
+
+        vertex_elements_type elements;
+    };
+  
     /**
      * vertex format for 2d textures
      **/
@@ -136,18 +108,13 @@ namespace ukn {
         x(0.f), y(0.f), z(0.f)
         { }
         
-        static VertexFormat& Format() {
-            static VertexFormat static_vertex2d_format(VF_XYZ | VF_UV | VF_Color0,
-                                                       sizeof(float) * 2 + sizeof(uint32),
-                                                       0,
-                                                       sizeof(float) * 2,
-                                                       0,
-                                                       0);
-            return static_vertex2d_format;
-        }
-        
-        static uint32 FormatFlag() {
-            return VF_XYZ | VF_UV | VF_Color0;
+        static vertex_elements_type& Format() {
+            static vertex_elements_type static_format = VertexElementsBuilder()
+                                                        .add(VertexElement(VU_UV, EF_Float2, 0))
+                                                        .add(VertexElement(VU_Diffuse, EF_RGBA8, 0))
+                                                        .add(VertexElement(VU_Position, EF_Float3, 0))
+                                                        .to_vector();
+            return static_format;
         }
     };
 
@@ -170,18 +137,13 @@ namespace ukn {
             x = _x; y = _y; z = _z;
         }
 
-        static VertexFormat& Format() {
-            static VertexFormat static_vertexuvnormal_format(VF_XYZ | VF_UV | VF_Normal,
-                                                       sizeof(float) * 2,
-                                                       0,
-                                                       0,
-                                                       0,
-                                                       sizeof(float) * 5);
-            return static_vertexuvnormal_format;
-        }
-        
-        static uint32 FormatFlag() {
-            return VF_XYZ | VF_UV | VF_Normal;
+        static vertex_elements_type& Format() {
+            static vertex_elements_type static_format = VertexElementsBuilder()
+                                                        .add(VertexElement(VU_UV, EF_Float2, 0))
+                                                        .add(VertexElement(VU_Position, EF_Float3, 0))
+                                                        .add(VertexElement(VU_Normal, EF_Float3, 0))
+                                                        .to_vector();
+            return static_format;
         }
     };
     

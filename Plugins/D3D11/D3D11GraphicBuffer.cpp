@@ -47,7 +47,7 @@ namespace ukn {
 				GraphicBuffer::Usage usage,
 				uint32 desired_count,
 				const void* initData,
-				const VertexFormat& format,
+				const vertex_elements_type& format,
 				D3D11GraphicDevice* device):
 	GraphicBuffer(access, usage),
 	mFormat(format),
@@ -59,7 +59,7 @@ namespace ukn {
 
 		ZeroMemory(&vertexBufferDesc, sizeof(vertexBufferDesc));
 		vertexBufferDesc.Usage = GraphicBufferUsageToD3D11Usage(usage);
-		vertexBufferDesc.ByteWidth = format.totalSize() * desired_count;
+		vertexBufferDesc.ByteWidth = GetVertexElementsTotalSize(format) * desired_count;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = GraphicBufferAccessToD3D11Access(access);
 		vertexBufferDesc.MiscFlags = 0;
@@ -120,7 +120,7 @@ namespace ukn {
 
 	void D3D11VertexBuffer::activate() {
 		if(mBuffer && mDevice) {
-			UINT stride = this->format().totalSize();
+			UINT stride = GetVertexElementsTotalSize(this->format());
 			mDevice->getD3DDeviceContext()->IASetVertexBuffers(0, 
 													           1, 
 														       &mBuffer, 
@@ -153,11 +153,11 @@ namespace ukn {
 		return false;
 	}
 
-	VertexFormat& D3D11VertexBuffer::format() {
+	vertex_elements_type& D3D11VertexBuffer::format() {
 		return mFormat;
 	}
 
-	const VertexFormat& D3D11VertexBuffer::format() const {
+	const vertex_elements_type& D3D11VertexBuffer::format() const {
 		return mFormat;
 	}
 
@@ -171,7 +171,7 @@ namespace ukn {
 		D3D11_BUFFER_DESC vertexBufferDesc;
 
 		vertexBufferDesc.Usage = GraphicBufferUsageToD3D11Usage(usage());
-		vertexBufferDesc.ByteWidth = format().totalSize() * desired_count;
+		vertexBufferDesc.ByteWidth = GetVertexElementsTotalSize(format()) * desired_count;
 		vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 		vertexBufferDesc.CPUAccessFlags = GraphicBufferAccessToD3D11Access(access());
 		vertexBufferDesc.MiscFlags = 0;

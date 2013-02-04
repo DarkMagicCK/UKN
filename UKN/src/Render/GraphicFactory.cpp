@@ -36,7 +36,7 @@ namespace ukn {
                                             GraphicBuffer::Usage, 
                                             uint32 count, 
                                             const void* initialData, 
-                                            const VertexFormat& format) const {
+                                            const vertex_elements_type& format) const {
             return GraphicBuffer::NullObject();
         }
         

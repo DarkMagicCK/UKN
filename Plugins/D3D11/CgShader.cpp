@@ -78,7 +78,7 @@ namespace ukn {
         }
     }
 
-    void CgDxEffect::setVertexFormat(const VertexFormat& format) {
+    void CgDxEffect::setVertexFormat(const vertex_elements_type& format) {
         if(mVertexShader) {
             CgDxShader* vertexShader = checked_cast<CgDxShader*>(mVertexShader.get());
             if(vertexShader) {

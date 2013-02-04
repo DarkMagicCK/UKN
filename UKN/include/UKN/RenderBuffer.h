@@ -33,10 +33,10 @@ namespace ukn {
         void                setRenderMode(RenderMode mode);
         
         GraphicBufferPtr    getVertexStream() const;
-        void                bindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format);
+        void                bindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format);
         
-        const VertexFormat& getVertexFormat() const;
-        void                setVertexFormat(const VertexFormat& format);
+        const vertex_elements_type& getVertexFormat() const;
+        void                setVertexFormat(const vertex_elements_type& format);
         
         uint32              getVertexCount() const;
         void                setVertexCount(uint32 count);
@@ -60,8 +60,8 @@ namespace ukn {
         EffectPtr           getEffect() const;
 
 	protected:
-		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format);
-		virtual void onSetVertexFormat(const VertexFormat& format);
+		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format);
+		virtual void onSetVertexFormat(const vertex_elements_type& format);
 		virtual void onBindIndexStream(GraphicBufferPtr indexStream);
 		virtual void onSetIndexCount(uint32 count);
 		virtual void onSetVertexCount(uint32 count);
@@ -73,7 +73,7 @@ namespace ukn {
         RenderMode mRenderMode;
         
         GraphicBufferPtr mVertexStream;
-        VertexFormat mVertexFormat;
+        vertex_elements_type mVertexFormat;
         
         EffectPtr mEffect;
 

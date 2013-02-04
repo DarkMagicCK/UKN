@@ -16,7 +16,7 @@ namespace ukn {
                                    GraphicBuffer::Usage usage,
                                    uint32 desired_count,
                                    const void* initData,
-                                   const VertexFormat& format):
+                                   const vertex_elements_type& format):
     GraphicBuffer(access, usage),
     mFormat(format),
     mMaped(false) {
@@ -26,13 +26,13 @@ namespace ukn {
 
         if(initData) {
             glBufferData(GL_ARRAY_BUFFER,
-                         static_cast<GLsizeiptr>(desired_count * format.totalSize()),
+                         static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(format)),
                          static_cast<const GLvoid*>(initData),
                          usage == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
 
         } else {
             glBufferData(GL_ARRAY_BUFFER,
-                         static_cast<GLsizeiptr>(desired_count * format.totalSize()),
+                         static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(format)),
                          0,
                          usage == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
         }
@@ -92,18 +92,18 @@ namespace ukn {
         glBindBuffer(GL_ARRAY_BUFFER, mId);
 
         glBufferData(GL_ARRAY_BUFFER,
-                     static_cast<GLsizeiptr>(desired_count * mFormat.totalSize()),
+                     static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(mFormat)),
                      0,
                      usage() == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
         mCount = desired_count;
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
-    VertexFormat& GLVertexBuffer::format() {
+    vertex_elements_type& GLVertexBuffer::format() {
         return mFormat;
     }
 
-    const VertexFormat& GLVertexBuffer::format() const {
+    const vertex_elements_type& GLVertexBuffer::format() const {
         return mFormat;
     }
 

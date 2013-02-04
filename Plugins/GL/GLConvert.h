@@ -12,6 +12,7 @@
 #include "glfw/glfw3.h"
 
 #include "UKN/GraphicSettings.h"
+#include "UKN/Vertex.h"
 
 namespace ukn {
 
@@ -49,8 +50,25 @@ namespace ukn {
             case EF_D32: return GL_UNSIGNED_INT;
             case EF_D16: return GL_UNSIGNED_SHORT;
             case EF_D24S8: return GL_UNSIGNED_INT_24_8;
+            case EF_Float:
+            case EF_Float2:
+            case EF_Float3:
+            case EF_Float4:
+                return GL_FLOAT;
         }
 		return GL_UNSIGNED_BYTE;
+    }
+
+    inline GLenum vertex_usage_to_gl_array(VertexUsage usage) {
+        switch(usage) {
+        case VU_Position: return GL_VERTEX_ARRAY;
+        case VU_UV: return GL_TEXTURE_COORD_ARRAY;
+        case VU_Diffuse: return GL_COLOR_ARRAY;
+        case VU_Specular: return GL_SECONDARY_COLOR_ARRAY;
+        case VU_Normal: return GL_NORMAL_ARRAY;
+        case VU_Tangent: return GL_TANGENT_ARRAY_EXT;
+        case VU_Binormal: return GL_BINORMAL_ARRAY_EXT;
+        }
     }
     
     inline GLenum render_state_to_gl_state(RenderStateType type) {
@@ -181,6 +199,47 @@ namespace ukn {
             case RSP_Enable:
             case RSP_Disable: 
                 return param;
+        }
+    }
+
+    
+    // cg generic attribute binding fpr vp40?
+    // and it does not work for ATI & OSX GPU according to nvidia's document
+    // ....
+    enum AttributeLocations {
+        AL_Position = 0,
+        AL_BlendWeight,
+        AL_Normal,
+        AL_Diffuse,
+        AL_Specular,
+        AL_Tessfactor,
+        AL_PSize,
+        AL_BlendIndices,
+        AL_TexCoord0,
+        AL_TexCoord1,
+        AL_TexCoord2,
+        AL_TexCoord3,
+        AL_TexCoord4,
+        AL_TexCoord5,
+        AL_TexCoord6,
+        AL_TexCoord7,
+        AL_Tangent,
+        AL_Binormal,
+        AL_NumLocations, // 16
+    };
+
+    inline int32 vertex_usage_to_attribute_location(VertexUsage usage) {
+        switch(usage) {
+        case VU_Binormal:       return AL_Binormal;
+        case VU_BlendWeight:    return AL_BlendWeight;
+        case VU_Diffuse:        return AL_Diffuse;
+        case VU_Normal:         return AL_Normal;
+        case VU_Position:       return AL_Position;
+        case VU_Specular:       return AL_Specular;
+        case VU_Tangent:        return AL_Tangent;
+        case VU_UV:             return AL_TexCoord0;
+        case VU_BlendIndices:   return AL_BlendIndices;
+        case VU_PSize:          return AL_PSize;
         }
     }
     

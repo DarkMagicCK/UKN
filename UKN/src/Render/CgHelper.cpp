@@ -16,9 +16,9 @@ namespace ukn {
                                               float2 texCoord: TEXCOORD0;\
                                               float4 color: COLOR;\
                                               };\
-                                              VertexOutputType VertexProgram(in float2 texCoord: TEXCOORD0,\
-                                              in float3 position: POSITION,\
-                                              in float4 color: COLOR) {\
+                                              VertexOutputType VertexProgram(in float2 texCoord: TEXCOORD0: ATTR8,\
+                                              in float3 position: POSITION: ATTR0,\
+                                              in float4 color: COLOR: ATTR3) {\
                                               VertexOutputType output;\
                                               output.position = float4(position, 1);\
                                               output.position = mul(output.position, viewMatrix);\
@@ -36,7 +36,7 @@ namespace ukn {
                                               float4 FragmentProgram(VertexOutputType input,\
                                               uniform sampler2D tex: TEX): COLOR {\
                                               float4 texColor = tex2D(tex, input.texCoord);\
-                                              return texColor;\
+                                              return texColor * input.color;\
                                               }\0";
 
     }

@@ -62,8 +62,6 @@ namespace ukn {
     typedef mist::PointTemplate<3, bool> bool3;
     typedef mist::PointTemplate<4, bool> bool4;
 
-    struct VertexFormat;
-    
     struct ContextCfg;
     
     typedef SharedPtr<mist::Resource> ResourcePtr;

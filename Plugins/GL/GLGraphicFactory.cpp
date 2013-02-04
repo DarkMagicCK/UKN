@@ -40,7 +40,7 @@ namespace ukn {
                                             GraphicBuffer::Usage, 
                                             uint32 count, 
                                             const void* initialData, 
-                                            const VertexFormat& format) const;
+                                            const vertex_elements_type& format) const;
         
         GraphicBufferPtr createIndexBuffer(GraphicBuffer::Access, 
                                            GraphicBuffer::Usage, 
@@ -92,7 +92,7 @@ namespace ukn {
                                                           GraphicBuffer::Usage usage,
                                                           uint32 count, 
                                                           const void* initialData, 
-                                                          const VertexFormat& format) const {
+                                                          const vertex_elements_type& format) const {
         return GraphicBufferPtr(new GLVertexBuffer(access,
                                                    usage,
                                                    count,

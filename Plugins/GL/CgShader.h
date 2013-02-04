@@ -20,7 +20,7 @@ namespace ukn {
         CgGLEffect(GLGraphicDevice* device);
         virtual ~CgGLEffect();
 
-        void setVertexFormat(const VertexFormat& format) override;
+        void setVertexFormat(const vertex_elements_type& format) override;
 
         void bind(uint32 pass) override;
         void unbind() override;

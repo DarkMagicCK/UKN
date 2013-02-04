@@ -499,12 +499,28 @@ namespace mist {
 
     namespace tuple {
 
-        struct null_type;
+        struct null_type {};
 
     } // namespace tuple
 
     template<typename T1, typename T2, typename T3, typename T4, typename T5>
     struct Tuple;
+    
+     typedef Tuple<tuple::null_type,
+              tuple::null_type,
+              tuple::null_type,
+              tuple::null_type,
+              tuple::null_type> EmptyTuple;
+
+
+    template<>
+     struct Tuple<tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type> {
+        Tuple() { }
+
+        bool empty() const { return true; }
+        tuple::null_type get0() const { return tuple::null_type(); };
+        EmptyTuple tail() const { return EmptyTuple(); }
+     };
 
     template<typename T>
     struct Tuple<T, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type> {
@@ -514,10 +530,12 @@ namespace mist {
         mA0(a0) {
 
         }
+        bool empty() const { return false; }
+        EmptyTuple tail() const { return EmptyTuple(); }
 
         typedef Tuple<T, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type> SelfType;
 
-        T get0() { return this->mA0; }
+        T get0() const { return this->mA0; }
 
         template<typename AT>
         Tuple& operator=(const Tuple<AT, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type>& rhs) {
@@ -538,10 +556,18 @@ namespace mist {
 
         }
 
+        bool empty() const { return false; }
+        typedef Tuple<T1,
+              tuple::null_type,
+              tuple::null_type,
+              tuple::null_type,
+              tuple::null_type> TailType;
+        TailType tail() const { return TailType(mA1); }
+
         typedef Tuple<T, T1, tuple::null_type, tuple::null_type, tuple::null_type> SelfType;
 
-        T get0() { return this->mA0; }
-        T1 get1() { return this->mA1; }
+        T get0() const { return this->mA0; }
+        T1 get1() const { return this->mA1; }
 
         template<typename AT, typename AT1>
         Tuple& operator=(const Tuple<AT, AT1, tuple::null_type, tuple::null_type, tuple::null_type>& rhs) {
@@ -565,11 +591,19 @@ namespace mist {
 
         }
 
+        bool empty() const { return false; }
+        typedef Tuple<T1,
+                      T2,
+              tuple::null_type,
+              tuple::null_type,
+              tuple::null_type> TailType;
+        TailType tail() const { return TailType(mA1, mA2); }
+
         typedef Tuple<T, T1, T2, tuple::null_type, tuple::null_type> SelfType;
 
-        T get0() { return this->mA0; }
-        T1 get1() { return this->mA1; }
-        T2 get2() { return this->mA2; }
+        T get0() const { return this->mA0; }
+        T1 get1() const { return this->mA1; }
+        T2 get2() const { return this->mA2; }
 
         template<typename AT, typename AT1, typename AT2>
         Tuple& operator=(const Tuple<AT, AT1, AT2, tuple::null_type, tuple::null_type>& rhs) {
@@ -596,12 +630,20 @@ namespace mist {
 
         }
 
+        bool empty() const { return false; }
+        typedef Tuple<T1,
+                      T2,
+                      T3,
+              tuple::null_type,
+              tuple::null_type> TailType;
+        TailType tail() const { return TailType(mA1, mA2, mA3); }
+
         typedef Tuple<T, T1, T2, T3, tuple::null_type> SelfType;
 
-        T get0() { return this->mA0; }
-        T1 get1() { return this->mA1; }
-        T2 get2() { return this->mA2; }
-        T3 get3() { return this->mA3; }
+        T get0() const { return this->mA0; }
+        T1 get1() const { return this->mA1; }
+        T2 get2() const { return this->mA2; }
+        T3 get3() const { return this->mA3; }
 
         template<typename AT, typename AT1, typename AT2, typename AT3>
         Tuple& operator=(const Tuple<AT, AT1, AT2, AT3, tuple::null_type>& rhs) {
@@ -631,13 +673,21 @@ namespace mist {
 
         }
 
+        bool empty() const { return false; }
+        typedef Tuple<T1,
+                      T2,
+                      T3,
+                      T4,
+              tuple::null_type> TailType;
+        TailType tail() const { return TailType(mA1, mA2, mA3, mA4); }
+
         typedef Tuple<T, T1, T2, T3, T4> SelfType;
 
-        T get0() { return this->mA0; }
-        T1 get1() { return this->mA1; }
-        T2 get2() { return this->mA2; }
-        T3 get3() { return this->mA3; }
-        T4 get4() { return this->mA4; }
+        T get0() const { return this->mA0; }
+        T1 get1() const { return this->mA1; }
+        T2 get2() const { return this->mA2; }
+        T3 get3() const { return this->mA3; }
+        T4 get4() const { return this->mA4; }
 
         template<typename AT, typename AT1, typename AT2, typename AT3, typename AT4>
         Tuple& operator=(const Tuple<AT, AT1, AT2, AT3, AT4>& rhs) {
@@ -655,6 +705,36 @@ namespace mist {
         T3 mA3;
         T4 mA4;
     };
+
+    template<typename T>
+    Tuple<T, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type>
+        MakeTuple(const T& t) {
+            return Tuple<T, tuple::null_type, tuple::null_type, tuple::null_type, tuple::null_type>(t);
+    }
+
+    template<typename T, typename T1>
+    Tuple<T, T1, tuple::null_type, tuple::null_type, tuple::null_type>
+        MakeTuple(const T& t, const T1& t1) {
+            return Tuple<T, T1, tuple::null_type, tuple::null_type, tuple::null_type>(t, t1);
+    }
+
+    template<typename T, typename T1, typename T2>
+    Tuple<T, T1, T2, tuple::null_type, tuple::null_type>
+        MakeTuple(const T& t, const T1& t1, const T2& t2) {
+            return Tuple<T, T1, T2, tuple::null_type, tuple::null_type>(t, t1, t2);
+    }
+
+    template<typename T, typename T1, typename T2, typename T3>
+    Tuple<T, T1, T2, T3, tuple::null_type>
+        MakeTuple(const T& t, const T1& t1, const T2& t2, const T3& t3) {
+            return Tuple<T, T1, T2, T3, tuple::null_type>(t, t1, t2, t3);
+    }
+
+    template<typename T, typename T1, typename T2, typename T3, typename T4>
+    Tuple<T, T1, T2, T3, T4>
+        MakeTuple(const T& t, const T1& t1, const T2& t2, const T3& t3, const T4& t4) {
+            return Tuple<T, T1, T2, T3, tuple::null_type>(t, t1, t2, t3, t4);
+    }
 
     class FourCC {
     public:

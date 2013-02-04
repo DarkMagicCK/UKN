@@ -33,7 +33,6 @@ namespace ukn {
     mVertexStream(GraphicBufferPtr()),
     mVertexStartIndex(0),
     mVertexCount(0),
-    mVertexFormat(VertexFormat()),
     mUseIndexStream(false),
     mIndexStream(GraphicBufferPtr()),
     mIndexStartIndex(0),
@@ -58,18 +57,18 @@ namespace ukn {
         return mVertexStream;
     }
     
-    void RenderBuffer::bindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format) {
+    void RenderBuffer::bindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format) {
         mVertexStream = vertexStream;
         mVertexFormat = format;
 
 		this->onBindVertexStream(vertexStream, format);
     }
     
-    const VertexFormat& RenderBuffer::getVertexFormat() const {
+    const vertex_elements_type& RenderBuffer::getVertexFormat() const {
         return mVertexFormat;
     }
     
-    void RenderBuffer::setVertexFormat(const VertexFormat& format) {
+    void RenderBuffer::setVertexFormat(const vertex_elements_type& format) {
         mVertexFormat = format;
 
 		this->onSetVertexFormat(format);
@@ -141,11 +140,11 @@ namespace ukn {
         return mUseIndexStream;
     }
     
-	void RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format) {
+	void RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format) {
 
 	}
 
-	void RenderBuffer::onSetVertexFormat(const VertexFormat& format) {
+	void RenderBuffer::onSetVertexFormat(const vertex_elements_type& format) {
 
 	}
 

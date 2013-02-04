@@ -1,6 +1,9 @@
 #include "D3D11Convert.h"
 #include <D3DX10math.h>
 
+#include "mist/Convert.h"
+#include "ukn/Vertex.h"
+
 namespace ukn {
 
     void D3DXMatrixToMatrix4(const D3DXMATRIX& d3dmat, Matrix4& mat) {
@@ -35,8 +38,33 @@ namespace ukn {
 			return DXGI_FORMAT_D24_UNORM_S8_UINT;
 		case ElementFormat::EF_D32:
 			return DXGI_FORMAT_D32_FLOAT;
+        case ElementFormat::EF_Float4:
+            return DXGI_FORMAT_R32G32B32A32_FLOAT;
+        case ElementFormat::EF_Float3:
+            return DXGI_FORMAT_R32G32B32_FLOAT;
+        case ElementFormat::EF_Float2:
+            return DXGI_FORMAT_R32G32_FLOAT;
+        case ElementFormat::EF_Float:
+            return DXGI_FORMAT_R32_FLOAT;
+        case ElementFormat::EF_UInt32:
+            return DXGI_FORMAT_R8G8B8A8_UNORM;
 		}
 	}
+
+    const char* VertexUsageToSemanticName(ukn::VertexUsage usage) {
+        switch(usage) {
+        case VU_Binormal: return "BINORMAL";
+        case VU_Tangent: return "TANGENT";
+        case VU_UV: return "TEXCOORD";
+        case VU_Position: return "POSITION";
+        case VU_Diffuse: return "COLOR";
+        case VU_Specular: return "COLOR1";
+        case VU_Normal: return "NORMAL";
+        case VU_BlendWeight: return "BLENDWEIGHT";
+        case VU_BlendIndices: return "BLENDINDICIES";
+        case VU_PSize: return "PSIZE";
+        }
+    }
 
     D3D11_PRIMITIVE_TOPOLOGY RenderModeToPrimitiveTopology(ukn::RenderMode mode) {
 		switch(mode) {

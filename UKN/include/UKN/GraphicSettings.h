@@ -23,7 +23,13 @@ namespace ukn {
         
         EF_D24S8,
         EF_D32,
-        EF_D16
+        EF_D16,
+        
+        EF_Float4,
+        EF_Float3,
+        EF_Float2,
+        EF_Float,
+        EF_UInt32
     };
     
     template<int T>
@@ -60,9 +66,31 @@ namespace ukn {
             case EF_D24S8: return 4;
             case EF_D32: return 4;
             case EF_D16: return 2;
+            case EF_Float: return sizeof(float);
+            case EF_Float2: return sizeof(float) * 2;
+            case EF_Float3: return sizeof(float) * 3;
+            case EF_Float4: return sizeof(float) * 4;
+            case EF_UInt32: return sizeof(uint32);
         };
 		return 0;
     };
+
+    static uint8 GetElementComponentSize(ElementFormat format) {
+        switch(format) {
+            case EF_RGBA8: return 4;
+            case EF_RGB565: return 3;
+            case EF_RGBA4444: return 4;
+            case EF_RGB5A1: return 3;
+            case EF_D24S8: return 2;
+            case EF_D32: return 1;
+            case EF_D16: return 1;
+            case EF_Float: return 1;
+            case EF_Float2: return 2;
+            case EF_Float3: return 3;
+            case EF_Float4: return 4;
+            case EF_UInt32: return 1;
+        };
+    }
         
     struct RenderSettings {
         RenderSettings():

@@ -66,6 +66,7 @@ int CALLBACK WinMain(
 
     ukn::RenderBufferPtr renderBuffer;
     ukn::TexturePtr texture;
+    ukn::TexturePtr texture2;
     ukn::Matrix4 worldMat;
     ukn::EffectPtr effect;
     ukn::CameraController* camController;
@@ -111,7 +112,7 @@ int CALLBACK WinMain(
             ukn::SpriteBatch::DefaultObject().draw(texture, ukn::Vector2(0, 0), 0);
             ukn::SpriteBatch::DefaultObject().end();
 
-            font->draw(mist::Convert::ToString(mist::Random::RandomFloat(0, 100)).c_str(), 100, 100, ukn::FA_Left);
+            font->draw(mist::Convert::ToString(mist::Random::RandomFloat(0, 99)).c_str(), 100, 100, ukn::FA_Left);
             font->render();
 
             gd.end2DRendering();
@@ -144,6 +145,9 @@ int CALLBACK WinMain(
 
             texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
           //  texture = gf.create2DTexture(800, 600, 1, ukn::EF_RGBA8, 0);
+            texture2 = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"pic0053.png"));
+
+            effect->getFragmentShader()->setTextureVariable("lightmap", texture2);
 
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();

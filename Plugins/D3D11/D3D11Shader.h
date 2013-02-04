@@ -19,7 +19,7 @@ namespace ukn {
 		virtual ~D3D11Effect();
 
 		bool initialize(mist::ResourcePtr& content);
-		void setVertexFormat(const ukn::VertexFormat& format) override;
+		void setVertexFormat(const ukn::vertex_elements_type& format) override;
         
         ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc) override;
 

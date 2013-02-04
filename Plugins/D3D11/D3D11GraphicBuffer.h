@@ -13,7 +13,7 @@ namespace ukn {
 						  GraphicBuffer::Usage usage,
 						  uint32 desired_count,
 						  const void* initData,
-                          const VertexFormat& format,
+                          const vertex_elements_type& format,
 					      D3D11GraphicDevice* device);
 
         virtual ~D3D11VertexBuffer();
@@ -25,8 +25,8 @@ namespace ukn {
         virtual void deactivate();
         virtual bool isInMemory() const;
 
-        VertexFormat& format();
-        const VertexFormat& format() const;
+        vertex_elements_type& format();
+        const vertex_elements_type& format() const;
 
         uint32 count() const;
         void resize(uint32 desired_count);
@@ -37,7 +37,7 @@ namespace ukn {
     private:
         bool mMaped;
         uint32 mCount;
-        VertexFormat mFormat;
+        vertex_elements_type mFormat;
 
 		ID3D11Buffer* mBuffer;
 		D3D11GraphicDevice* mDevice;

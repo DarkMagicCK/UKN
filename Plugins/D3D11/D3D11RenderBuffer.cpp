@@ -16,13 +16,13 @@ namespace ukn {
 
 	}
 
-	void D3D11RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format) {
+	void D3D11RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format) {
 		if(mEffect) {
             mEffect->setVertexFormat(format);
 		}
 	}
 
-	void D3D11RenderBuffer::onSetVertexFormat(const VertexFormat& format) {
+	void D3D11RenderBuffer::onSetVertexFormat(const vertex_elements_type& format) {
 		if(mEffect) {
 			mEffect->setVertexFormat(format);
 		}

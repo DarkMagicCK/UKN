@@ -13,8 +13,8 @@ namespace ukn {
 		virtual ~D3D11RenderBuffer();
 		
 	protected:
-		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const VertexFormat& format);
-		virtual void onSetVertexFormat(const VertexFormat& format);
+		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format);
+		virtual void onSetVertexFormat(const vertex_elements_type& format);
 		virtual void onBindIndexStream(GraphicBufferPtr indexStream);
 		virtual void onSetIndexCount(uint32 count);
 		virtual void onSetVertexCount(uint32 count);

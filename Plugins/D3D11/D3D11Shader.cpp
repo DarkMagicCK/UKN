@@ -69,7 +69,7 @@ namespace ukn {
 		return true;
 	}
 
-	void D3D11Effect::setVertexFormat(const ukn::VertexFormat& format) {
+	void D3D11Effect::setVertexFormat(const ukn::vertex_elements_type& format) {
 		if(!mEffect)
 			return ;
 

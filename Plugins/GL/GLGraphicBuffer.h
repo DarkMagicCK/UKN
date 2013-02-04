@@ -22,7 +22,7 @@ namespace ukn {
                        GraphicBuffer::Usage usage,
                        uint32 desired_count,
                        const void* initData,
-                       const VertexFormat& format);
+                       const vertex_elements_type& format);
 
         virtual ~GLVertexBuffer();
 
@@ -33,8 +33,8 @@ namespace ukn {
         virtual void deactivate();
         virtual bool isInMemory() const;
 
-        VertexFormat& format();
-        const VertexFormat& format() const;
+        vertex_elements_type& format();
+        const vertex_elements_type& format() const;
 
         uint32 count() const;
         void resize(uint32 desired_count);
@@ -44,7 +44,7 @@ namespace ukn {
 
         bool mMaped;
         uint32 mCount;
-        VertexFormat mFormat;
+        vertex_elements_type mFormat;
     };
 
     class GLIndexBuffer: public GraphicBuffer {

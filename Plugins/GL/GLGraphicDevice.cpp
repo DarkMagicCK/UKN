@@ -155,7 +155,7 @@ namespace ukn {
                     log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid vertex buffer stream");
                     return;
                 }
-
+/*
                 const VertexFormat& format = buffer->getVertexFormat();
                 if(format == Vertex2D::Format() &&
                     !buffer->isUseIndexStream()) {
@@ -174,48 +174,31 @@ namespace ukn {
                             return;
                         }
                 }
-
+*/
                 vertexBuffer->activate();
 
-                if(format.checkFormat(VF_XYZ)) {
-                    glEnableClientState(GL_VERTEX_ARRAY);
-                    glVertexPointer(3,
-                        GL_FLOAT,
-                        format.totalSize(),
-                        BUFFER_OFFSET(vertexBuffer, format.offsetXYZ()));
-                }
+                /* this need to be changed?
+                */
+                const vertex_elements_type& format = buffer->getVertexFormat();
+                uint32 total_size = GetVertexElementsTotalSize(format);
+                uint32 offset = 0;
+                for(vertex_elements_type::const_iterator it = format.begin(),
+                    end = format.end();
+                    it != end;
+                    ++it) {
+                        int attribLoc = vertex_usage_to_attribute_location(it->usage);
+                        glVertexAttribPointer(attribLoc,
+                                                GetElementComponentSize(it->format),
+                                                element_format_to_gl_element_type(it->format),
+                                                (it->usage == VU_Specular || it->usage == VU_Diffuse) ? GL_TRUE : GL_FALSE,
+                                                total_size,
+                                                BUFFER_OFFSET(vertexBuffer, offset));
+                        glEnableVertexAttribArray(attribLoc);
+                        
+                        offset += it->size();
 
-                if(format.checkFormat(VF_Normal)) {
-                    glEnableClientState(GL_NORMAL_ARRAY);
-                    glNormalPointer(GL_FLOAT,
-                        format.totalSize(),
-                        BUFFER_OFFSET(vertexBuffer, format.offsetNormal()));
                 }
-
-                if(format.checkFormat(VF_Color0)) {
-                    glEnableClientState(GL_COLOR_ARRAY);
-                    glColorPointer(4,
-                        GL_UNSIGNED_BYTE,
-                        format.totalSize(),
-                        BUFFER_OFFSET(vertexBuffer, format.offsetColor0()));
-                }
-
-                if(format.checkFormat(VF_Color1)) {
-                    glEnableClientState(GL_SECONDARY_COLOR_ARRAY);
-                    glSecondaryColorPointer(4,
-                        GL_UNSIGNED_BYTE,
-                        format.totalSize(),
-                        BUFFER_OFFSET(vertexBuffer, format.offsetColor1()));
-                }
-
-                if(format.checkFormat(VF_UV)) {
-                    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-                    glTexCoordPointer(2,
-                        GL_FLOAT,
-                        format.totalSize(),
-                        BUFFER_OFFSET(vertexBuffer, format.offsetUV()));
-                }
-
+                
                 GraphicBufferPtr indexBuffer = buffer->getIndexStream();
                 if(buffer->isUseIndexStream() &&
                     indexBuffer.isValid()) {
@@ -241,10 +224,17 @@ namespace ukn {
                     } else {
                         glDrawArrays(
                             render_mode_to_gl_mode(buffer->getRenderMode()),
-                            buffer->getVertexStartIndex(),
-                            buffer->getVertexCount());
+                                                    buffer->getVertexStartIndex(),
+                                                    buffer->getVertexCount());
                     }
                 }
+
+                for(vertex_elements_type::const_iterator it = format.begin(),
+                    end = format.end();
+                    it != end;
+                    ++it) {
+                    glDisableVertexAttribArray(vertex_usage_to_attribute_location(it->usage) );
+                 }
             }
         }
 

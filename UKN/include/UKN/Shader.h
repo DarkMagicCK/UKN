@@ -23,10 +23,10 @@ namespace ukn {
     struct ShaderDesc {
         std::string entry;
 		ShaderType type;
-		VertexFormat format; /* used by vertex shaders */
+		vertex_elements_type format; /* used by vertex shaders */
 
 		ShaderDesc() { }
-		ShaderDesc(ShaderType type, const std::string& entry, const VertexFormat& format):
+		ShaderDesc(ShaderType type, const std::string& entry, const vertex_elements_type& format):
 		type(type),
 		entry(entry),
 		format(format) { }
@@ -51,7 +51,7 @@ namespace ukn {
 
         /* to do in custom shader compiler, no use now */		
        // virtual bool initialize(const ResourcePtr& content, const VertexFormat& format) = 0;
-        virtual void setVertexFormat(const VertexFormat& format) = 0;
+        virtual void setVertexFormat(const vertex_elements_type& format) = 0;
         virtual uint32 getPasses() const = 0;
 
         /* begin */

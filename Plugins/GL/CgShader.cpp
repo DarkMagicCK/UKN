@@ -35,7 +35,7 @@ namespace ukn {
         }
     }
 
-    void CgGLEffect::setVertexFormat(const VertexFormat& format) {
+    void CgGLEffect::setVertexFormat(const vertex_elements_type& format) {
         if(mVertexShader) {
             CgGLShader* vertexShader = checked_cast<CgGLShader*>(mVertexShader.get());
             if(vertexShader) {

@@ -32,7 +32,7 @@ namespace ukn {
                                                     GraphicBuffer::Usage, 
                                                     uint32 count, 
                                                     const void* initialData, 
-                                                    const VertexFormat& format) const = 0;
+                                                    const vertex_elements_type& format) const = 0;
         
         virtual GraphicBufferPtr createIndexBuffer(GraphicBuffer::Access, 
                                                    GraphicBuffer::Usage, 

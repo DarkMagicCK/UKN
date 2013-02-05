@@ -50,7 +50,7 @@ namespace ukn {
 
 	class D3D11DepthStencilRenderView: Uncopyable, public D3D11RenderView {
 	public:
-		D3D11DepthStencilRenderView(uint32 width, uint32 height, ElementFormat ef, D3D11GraphicDevice* device);
+		D3D11DepthStencilRenderView(uint32 width, uint32 height, ElementFormat ef, uint32 sampleCount, uint32 sampleQuality, D3D11GraphicDevice* device);
 		virtual ~D3D11DepthStencilRenderView();
 
 		void clearColor(const Color& clr);

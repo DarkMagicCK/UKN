@@ -75,12 +75,6 @@
     <ClInclude Include="..\..\UKN\include\UKN\ListenerManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTableLoader.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\UKN\include\UKN\Material.h">
       <Filter>Header Files</Filter>
     </ClInclude>

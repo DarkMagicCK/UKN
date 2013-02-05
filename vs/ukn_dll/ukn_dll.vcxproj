@@ -101,8 +101,6 @@
     <ClInclude Include="..\..\UKN\include\UKN\GraphicSettings.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Input.h" />
     <ClInclude Include="..\..\UKN\include\UKN\ListenerManager.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTable.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTableLoader.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Material.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Mesh.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Model.h" />

@@ -83,7 +83,7 @@ namespace ukn {
 
 	}
 
-	D3D11DepthStencilRenderView::D3D11DepthStencilRenderView(uint32 width, uint32 height, ElementFormat ef, D3D11GraphicDevice* device):
+	D3D11DepthStencilRenderView::D3D11DepthStencilRenderView(uint32 width, uint32 height, ElementFormat ef, uint32 sampleCount, uint32 sampleQuality, D3D11GraphicDevice* device):
 	D3D11RenderView(device) {
 		mWidth = width;
 		mHeight = height;
@@ -98,8 +98,8 @@ namespace ukn {
 		depthBufferDesc.MipLevels = 1;
 		depthBufferDesc.ArraySize = 1;
 		depthBufferDesc.Format = ElementFormatToDxGIFormat(ef);
-		depthBufferDesc.SampleDesc.Count = 1;
-		depthBufferDesc.SampleDesc.Quality = 0;
+		depthBufferDesc.SampleDesc.Count = sampleCount;
+		depthBufferDesc.SampleDesc.Quality = sampleQuality;
 		depthBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 		depthBufferDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 		depthBufferDesc.CPUAccessFlags = 0;
@@ -141,7 +141,7 @@ namespace ukn {
 		D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
 		ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
 		depthStencilViewDesc.Format = ElementFormatToDxGIFormat(ef);
-		depthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+		depthStencilViewDesc.ViewDimension = sampleCount > 1 ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
 		depthStencilViewDesc.Texture2D.MipSlice = 0;
 
 		result = idevice->CreateDepthStencilView(mDepthStencilBuffer, &depthStencilViewDesc, &mDepthStencilView);

@@ -149,7 +149,7 @@ namespace ukn {
         ID3D11DeviceContext* deviceContext;
         for(int i=0; i < sizeof(driverTypes) / sizeof(D3D_DRIVER_TYPE); ++i) {
             result = D3D11CreateDeviceAndSwapChain(NULL,
-                D3D_DRIVER_TYPE_HARDWARE,
+                driverTypes[i],
                 NULL,
                 creationFlags,
                 &mFeatureLevel,
@@ -171,35 +171,7 @@ namespace ukn {
         mDebug.reset(new D3D11Debug(mDevice));
 #endif
 
-        mScreenFrameBuffer = MakeSharedPtr<D3D11FrameBuffer>(false, this);
-        mScreenFrameBuffer->attach(ATT_Color0,
-            MakeSharedPtr<D3D11ScreenColorRenderView>(settings.width,
-            settings.height,
-            settings.color_fmt,
-            this));
-        mScreenFrameBuffer->attach(ATT_DepthStencil,
-            MakeSharedPtr<D3D11DepthStencilRenderView>(settings.width,
-            settings.height,
-            settings.depth_stencil_fmt,
-            this));
-
-        ((WindowsWindow*)mWindow.get())->setFrameBuffer(mScreenFrameBuffer);
-        ((WindowsWindow*)mWindow.get())->updateWindowProperties(0, 0, settings.width, settings.height);
-        this->bindFrameBuffer(mScreenFrameBuffer);
-
-        try {
-            ID3D11RenderTargetView* screenRenderView = ((D3D11ScreenColorRenderView*)mScreenFrameBuffer->attached(ATT_Color0).get())->getD3D11RenderTargetView();
-            mDeviceContext->OMSetRenderTargets(1, 
-                &screenRenderView, 
-                ((D3D11DepthStencilRenderView*)mScreenFrameBuffer->attached(ATT_DepthStencil).get())->getD3D11DepthStencilView());
-        } catch(mist::Exception& exp) {
-            MessageBoxW(mWindow->getHWnd(),
-                L"Error setting screen render view",
-                L"Error",
-                MB_OK | MB_ICONERROR);
-            return false;
-        }
-
+      
         // rasterizer state
         {
             D3D11_RASTERIZER_DESC rasterDesc;
@@ -211,7 +183,7 @@ namespace ukn {
             rasterDesc.DepthClipEnable = true;
             rasterDesc.FillMode = D3D11_FILL_SOLID;
             rasterDesc.FrontCounterClockwise = false;
-            rasterDesc.MultisampleEnable = settings.sample_quality > 0;
+            rasterDesc.MultisampleEnable = settings.sample_count > 1;
             rasterDesc.ScissorEnable = false;
             rasterDesc.SlopeScaledDepthBias = 0.f;
 
@@ -282,6 +254,37 @@ namespace ukn {
                 L"ID3D11Device->CreateSamplerState");
 
             mSamplerState = MakeCOMPtr(samplerState);
+        }
+         
+        mScreenFrameBuffer = MakeSharedPtr<D3D11FrameBuffer>(false, this);
+        mScreenFrameBuffer->attach(ATT_Color0,
+            MakeSharedPtr<D3D11ScreenColorRenderView>(settings.width,
+            settings.height,
+            settings.color_fmt,
+            this));
+        mScreenFrameBuffer->attach(ATT_DepthStencil,
+            MakeSharedPtr<D3D11DepthStencilRenderView>(settings.width,
+            settings.height,
+            settings.depth_stencil_fmt,
+            settings.sample_count,
+            settings.sample_quality,
+            this));
+
+        ((WindowsWindow*)mWindow.get())->setFrameBuffer(mScreenFrameBuffer);
+        ((WindowsWindow*)mWindow.get())->updateWindowProperties(0, 0, settings.width, settings.height);
+        this->bindFrameBuffer(mScreenFrameBuffer);
+
+        try {
+            ID3D11RenderTargetView* screenRenderView = ((D3D11ScreenColorRenderView*)mScreenFrameBuffer->attached(ATT_Color0).get())->getD3D11RenderTargetView();
+            mDeviceContext->OMSetRenderTargets(1, 
+                &screenRenderView, 
+                ((D3D11DepthStencilRenderView*)mScreenFrameBuffer->attached(ATT_DepthStencil).get())->getD3D11DepthStencilView());
+        } catch(mist::Exception& exp) {
+            MessageBoxW(mWindow->getHWnd(),
+                L"Error setting screen render view",
+                L"Error",
+                MB_OK | MB_ICONERROR);
+            return false;
         }
 
         return true;

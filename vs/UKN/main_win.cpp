@@ -86,11 +86,13 @@ int CALLBACK WinMain(
     ukn::Context::Instance().registerGraphicFactory(factory);
 #endif
 
+    float r = 0;
      ukn::AppLauncher(L"Windows Test")
         .create(
                 ukn::ContextCfg::Default()
                   .width(800)
                   .height(600)
+                  .sampleCount(4)
                   .graphicFactoryName(L"D3D11Plugin.dll")
                   .fps(60)
                )
@@ -110,6 +112,9 @@ int CALLBACK WinMain(
             font->draw(L"hello world!", 100, 100, ukn::FA_Left);
             font->render();
 
+            effect->getFragmentShader()->setFloatVectorVariable("lightDirection", 
+                ukn::float4(sinf(r), cosf(r), 0.5f, 1.0));
+            r += 0.01f;
 
             for(int i=0; i <1 ; ++i) {
                 gd.setWorldMatrix(worldMat);
@@ -133,15 +138,15 @@ int CALLBACK WinMain(
             effect->setVertexShader(vertexShader);
             
             fragmentShader->setFloatVectorVariable("diffuseColor", ukn::float4(1.f, 1.f, 1.f, 1.f));
-            fragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(0.5f, 1.f, 0.5f, 1.f));
+            fragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(-0.6f, 0.6f, 0.5f, 1.0));
             fragmentShader->setFloatVectorVariable("ambientColor", ukn::float4(0.15f, 0.15f, 0.15f, 1.f));
             fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(0.f, 0.f, 0.f, 0.f));
 
-            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
+         //   texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
           //  texture = gf.create2DTexture(800, 600, 1, ukn::EF_RGBA8, 0);
-            texture2 = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"pic0053.png"));
+         //   texture2 = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"pic0053.png"));
 
-            effect->getFragmentShader()->setTextureVariable("lightmap", texture2);
+         //   effect->getFragmentShader()->setTextureVariable("lightmap", texture2);
 
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
@@ -150,7 +155,7 @@ int CALLBACK WinMain(
             vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
             renderBuffer->setEffect(effect);
 
-       //     camController->attachCamera(vp.camera);
+            camController->attachCamera(vp.camera);
 
             font = ukn::AssetManager::Instance().load<ukn::Font>(L"consola.ttf");
             font->setStyleProperty(ukn::FSP_Size, 20);

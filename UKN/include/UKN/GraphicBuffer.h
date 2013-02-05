@@ -12,8 +12,6 @@
 #include "mist/Platform.h"
 #include "UKN/PreDeclare.h"
 
-#include "UKN/Vertex.h"
-
 namespace ukn {
     
     /**

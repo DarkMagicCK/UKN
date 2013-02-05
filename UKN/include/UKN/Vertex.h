@@ -13,6 +13,7 @@
 #include "mist/Logger.h"
 #include "mist/Util.h"
 #include "ukn/GraphicSettings.h"
+#include "ukn/PreDeclare.h"
 
 namespace ukn {
 
@@ -29,6 +30,8 @@ namespace ukn {
         VU_BlendWeight = 1UL << 7,
         VU_BlendIndices = 1UL << 8,
         VU_PSize     = 1UL << 9,
+
+        VU_Unknown = -1,
     };
 
     struct VertexElement {
@@ -90,6 +93,57 @@ namespace ukn {
         }
 
         vertex_elements_type elements;
+    };
+
+    /* a helper class that maps a vertex buffer in constructor
+        and unmap it in destrcutor
+        
+     */
+    struct VertexMapper {
+        VertexMapper(const GraphicBufferPtr& _buffer, const vertex_elements_type& _elements);
+        ~VertexMapper();
+
+        friend struct VertexIterator;
+        struct VertexIterator {
+            VertexIterator();
+            VertexIterator(const VertexIterator& rhs);
+            VertexIterator(void* ptr, VertexMapper* parent);
+
+            VertexIterator& operator++();
+            VertexIterator operator=(const VertexIterator& rhs);
+
+            bool operator!=(const VertexIterator& rhs) const;
+            bool operator==(const VertexIterator& rhs) const;
+
+            void* operator*() const;
+            void* curr() const;
+
+            VertexUsage currUsage() const;
+
+            // advance to next element in the vertex
+            void nextElement();
+
+            void* getElement(VertexUsage usage, uint32 index = 0);
+           
+            void* base_ptr;
+            void* curr_ptr;
+            uint32 index;
+            VertexMapper* parent;
+        };
+        
+        typedef VertexIterator iterator;
+
+        iterator begin();
+        iterator end();
+
+        // total size of vertex elements
+        // = vertex_elements_type.size()
+        uint32 element_count();
+
+        void* data;
+        GraphicBufferPtr buffer;
+        const vertex_elements_type& elements;
+        uint32 element_size;
     };
   
     /**

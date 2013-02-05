@@ -27,7 +27,17 @@ namespace ukn {
 
 	typedef SharedPtr<D3D11RenderView> D3D11RenderViewPtr;
 
-	class D3D11ScreenColorRenderView: Uncopyable, public D3D11RenderView {
+    class D3D11RenderTargetView: public D3D11RenderView {
+    public:
+        D3D11RenderTargetView(D3D11GraphicDevice* device);
+
+        ID3D11RenderTargetView* getD3D11RenderTargetView() const;
+
+    protected:
+        COM<ID3D11RenderTargetView>::Ptr mRenderTargetView;
+    };
+
+	class D3D11ScreenColorRenderView: Uncopyable, public D3D11RenderTargetView {
 	public:
 		D3D11ScreenColorRenderView(uint32 width, uint32 height, ElementFormat ef, D3D11GraphicDevice* device);
 		virtual ~D3D11ScreenColorRenderView();
@@ -39,11 +49,6 @@ namespace ukn {
 
 		void onAttached(FrameBuffer& fb, uint32 att);
 		void onDetached(FrameBuffer& fb, uint32 att);
-
-		ID3D11RenderTargetView* getD3D11RenderTargetView() const;
-
-	private:
-		ID3D11RenderTargetView* mRenderView;
 	};
 
 	typedef SharedPtr<D3D11ScreenColorRenderView> D3D11ScreenColorRenderViewPtr;
@@ -66,6 +71,8 @@ namespace ukn {
 		ID3D11DepthStencilView* getD3D11DepthStencilView() const;
 
 	private:
+        void createDSView(ElementFormat ef, int32 sampleCount);
+
 		ID3D11Texture2D* mDepthStencilBuffer;
 		ID3D11DepthStencilView* mDepthStencilView;
 		ID3D11DepthStencilState* mDepthStencilState;
@@ -76,9 +83,9 @@ namespace ukn {
 	typedef SharedPtr<D3D11DepthStencilRenderView> D3D11DepthStencilRenderViewPtr;
 
 	
-	class D3D11Texture2DRenderView: Uncopyable, public D3D11RenderView {
+	class D3D11Texture2DRenderView: Uncopyable, public D3D11RenderTargetView {
 	public:
-		D3D11Texture2DRenderView(Texture& texture, int32 index, int32 level);
+		D3D11Texture2DRenderView(const TexturePtr& texture, D3D11GraphicDevice* device);
 		virtual ~D3D11Texture2DRenderView();
 
 		void clearColor(const Color& clr);
@@ -87,9 +94,7 @@ namespace ukn {
 		void onDetached(FrameBuffer& fb, uint32 att);
 
 	private:
-		D3D11Texture2D& mTexture;
-		int32 mIndex;
-		int32 mLevel;
+		TexturePtr mTexture;
 	};
 
 	typedef SharedPtr<D3D11Texture2DRenderView> D3D11Texture2DRenderViewPtr;

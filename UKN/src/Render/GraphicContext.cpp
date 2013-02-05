@@ -182,7 +182,6 @@ namespace ukn {
         vertex.y = rect.bottom();
         mVertexBuffer->push(vertex);
         
-        
         mVertexBuffer->push(vertex);
 
         vertex.x = rect.left();

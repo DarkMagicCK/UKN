@@ -132,9 +132,6 @@
     <ClInclude Include="..\..\External\mist\Port.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\External\mist\PreDeclare.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\External\mist\Preprocessor.h">
       <Filter>Source Files</Filter>
     </ClInclude>
@@ -275,6 +272,9 @@
     </ClInclude>
     <ClInclude Include="..\..\External\zlib\zutil.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\mist\PreDeclare.h">
+      <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

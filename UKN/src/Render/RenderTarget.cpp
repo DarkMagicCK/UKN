@@ -30,7 +30,7 @@ namespace ukn {
             return;
         }
         
-        mTarget = gf.create2DRenderView(mTargetTexture);
+        mTarget = gf.createRenderView(mTargetTexture);
         if(!mTarget) {
             log_error("ukn::RenderTarget2D: error creating 2d render target");
             return;
@@ -50,7 +50,7 @@ namespace ukn {
             return;
         }
         
-        mTarget = gf.create2DRenderView(mTargetTexture);
+        mTarget = gf.createRenderView(mTargetTexture);
         if(!mTarget) {
             log_error("ukn::RenderTarget2D: error creating 2d render target");
             return;
@@ -62,7 +62,7 @@ namespace ukn {
             return;
         }
         
-        mDepthStencil = gf.create2DDepthStencilView(mDepthStencilTexture);
+        mDepthStencil = gf.createDepthStencilView(mDepthStencilTexture);
         if(!mDepthStencil) {
             log_error("ukn::RenderTarget2D: error creating 2d depth stencil target");
             return;

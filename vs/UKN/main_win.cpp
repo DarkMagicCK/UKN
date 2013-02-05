@@ -15,6 +15,7 @@
 #include "UKN/Input.h"
 #include "UKN/Shader.h"
 #include "UKN/Model.h"
+#include "UKN/RenderTarget.h"
 #include "UKN/CameraController.h"
 
 #include "UKN/tmx/TMXTiledMap.h"
@@ -71,6 +72,8 @@ int CALLBACK WinMain(
     ukn::EffectPtr effect;
     ukn::CameraController* camController;
     ukn::FontPtr font;
+    ukn::RenderTarget2D* renderTarget;
+    ukn::FrameBufferPtr frameBuffer;
 
     ukn::Vector3 positions[5];
     for(int i=0; i<5; ++i) {
@@ -107,7 +110,10 @@ int CALLBACK WinMain(
         })
         .connectRender([&](ukn::Window*) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
+            
+            gd.bindFrameBuffer(frameBuffer);
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+            
             
             font->draw(L"hello world!", 100, 100, ukn::FA_Left);
             font->render();
@@ -122,6 +128,9 @@ int CALLBACK WinMain(
                 if(renderBuffer)
                     gd.renderBuffer(renderBuffer);
             }
+            gd.bindFrameBuffer(gd.getScreenFrameBuffer());
+
+            
         })
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
@@ -159,6 +168,16 @@ int CALLBACK WinMain(
 
             font = ukn::AssetManager::Instance().load<ukn::Font>(L"consola.ttf");
             font->setStyleProperty(ukn::FSP_Size, 20);
+
+            frameBuffer = gf.createFrameBuffer();
+            renderTarget = new ukn::RenderTarget2D(800,
+                                                   600,
+                                                   1,
+                                                   ukn::EF_RGBA8,
+                                                   ukn::EF_D16);
+            frameBuffer->attach(ukn::ATT_Color0, renderTarget->getTargetView());
+            frameBuffer->attach(ukn::ATT_DepthStencil, renderTarget->getDepthStencilView());
+
         })
         .run();
     

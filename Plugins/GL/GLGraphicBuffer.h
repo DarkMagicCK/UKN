@@ -11,7 +11,7 @@
 
 #include "mist/Platform.h"
 #include "UKN/GraphicBuffer.h"
-
+#include "UKN/Vertex.h"
 #include "GLPreq.h"
 
 namespace ukn {

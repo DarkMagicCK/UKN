@@ -39,8 +39,8 @@ namespace ukn {
 
         RenderBufferPtr createRenderBuffer() const;
 
-        RenderViewPtr create2DRenderView(TexturePtr texture) const;
-        RenderViewPtr create2DDepthStencilView(TexturePtr texture) const;
+        RenderViewPtr createRenderView(const TexturePtr& texture) const;
+        RenderViewPtr createDepthStencilView(const TexturePtr& texture) const;
 
         FrameBufferPtr createFrameBuffer() const;
 
@@ -102,13 +102,17 @@ namespace ukn {
         return MakeSharedPtr<D3D11RenderBuffer>((D3D11GraphicDevice*)mGraphicDevice.get());
     }
 
-    RenderViewPtr D3D11GraphicFactory::create2DRenderView(TexturePtr texture) const {
-        // return new GLTexture2DRenderView(*texture.get(), 0, 0);
-        return RenderView::NullObject();
+    RenderViewPtr D3D11GraphicFactory::createRenderView(const TexturePtr& texture) const {
+        if(texture->getType() == TT_Texture2D)
+            return MakeSharedPtr<D3D11Texture2DRenderView>(texture, (D3D11GraphicDevice*)mGraphicDevice.get());
+        return 0;
     }
 
-    RenderViewPtr D3D11GraphicFactory::create2DDepthStencilView(TexturePtr texture) const {
-        return RenderView::NullObject();
+    RenderViewPtr D3D11GraphicFactory::createDepthStencilView(const TexturePtr& texture) const {
+        uint32 w = texture->getWidth();
+        uint32 h = texture->getHeight();
+        ElementFormat format = texture->getFormat();
+        return MakeSharedPtr<D3D11DepthStencilRenderView>(w, h, format, 1, 0, (D3D11GraphicDevice*)mGraphicDevice.get());
     }
 
     FrameBufferPtr D3D11GraphicFactory::createFrameBuffer() const {

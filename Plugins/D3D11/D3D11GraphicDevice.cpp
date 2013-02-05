@@ -274,19 +274,6 @@ namespace ukn {
         ((WindowsWindow*)mWindow.get())->updateWindowProperties(0, 0, settings.width, settings.height);
         this->bindFrameBuffer(mScreenFrameBuffer);
 
-        try {
-            ID3D11RenderTargetView* screenRenderView = ((D3D11ScreenColorRenderView*)mScreenFrameBuffer->attached(ATT_Color0).get())->getD3D11RenderTargetView();
-            mDeviceContext->OMSetRenderTargets(1, 
-                &screenRenderView, 
-                ((D3D11DepthStencilRenderView*)mScreenFrameBuffer->attached(ATT_DepthStencil).get())->getD3D11DepthStencilView());
-        } catch(mist::Exception& exp) {
-            MessageBoxW(mWindow->getHWnd(),
-                L"Error setting screen render view",
-                L"Error",
-                MB_OK | MB_ICONERROR);
-            return false;
-        }
-
         return true;
     }
 

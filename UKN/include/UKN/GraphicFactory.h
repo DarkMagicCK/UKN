@@ -13,6 +13,7 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicBuffer.h"
 #include "UKN/GraphicSettings.h"
+#include "UKN/Vertex.h"
 
 namespace ukn {
     
@@ -43,8 +44,8 @@ namespace ukn {
         virtual RenderBufferPtr createRenderBuffer() const = 0;
         
         // FBOs
-        virtual RenderViewPtr create2DRenderView(TexturePtr texture) const = 0;
-        virtual RenderViewPtr create2DDepthStencilView(TexturePtr texture) const = 0;
+        virtual RenderViewPtr createRenderView(const TexturePtr& texture) const = 0;
+        virtual RenderViewPtr createDepthStencilView(const TexturePtr& texture) const = 0;
         
         // FrameBuffer
         virtual FrameBufferPtr createFrameBuffer() const = 0;

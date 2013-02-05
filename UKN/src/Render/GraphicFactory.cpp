@@ -52,11 +52,11 @@ namespace ukn {
             return RenderBuffer::NullObject();
         }
         
-        RenderViewPtr create2DRenderView(TexturePtr texture) const {
+        RenderViewPtr createRenderView(const TexturePtr& texture) const {
             return RenderView::NullObject();
         }
         
-        RenderViewPtr create2DDepthStencilView(TexturePtr texture) const {
+        RenderViewPtr createDepthStencilView(const TexturePtr& texture) const {
             return RenderView::NullObject();
         }
         

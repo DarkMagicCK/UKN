@@ -157,6 +157,7 @@
     <ClCompile Include="..\..\UKN\src\Render\Shader.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Texture.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Vertex.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Window.cpp" />
     <ClCompile Include="..\..\UKN\src\TMX\TMXTiledMap.cpp" />
     <ClCompile Include="dllmain.cpp">

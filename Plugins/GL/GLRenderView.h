@@ -70,7 +70,7 @@ namespace ukn {
     
     class GLTexture2DRenderView: Uncopyable, public GLRenderView {
     public:
-        GLTexture2DRenderView(Texture& texture, int32 index, int32 level);
+        GLTexture2DRenderView(const TexturePtr& texture, int32 index, int32 level);
         
         void clearColor(const Color& clr);
         
@@ -78,7 +78,7 @@ namespace ukn {
         void onDetached(FrameBuffer& fb, uint32 att);
         
     private:
-        GLTexture2D& mTexture;
+        TexturePtr mTexture;
         int32 mIndex;
         int32 mLevel;
     };

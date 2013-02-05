@@ -50,8 +50,8 @@ namespace ukn {
         
         RenderBufferPtr createRenderBuffer() const;
         
-        RenderViewPtr create2DRenderView(TexturePtr texture) const;
-        RenderViewPtr create2DDepthStencilView(TexturePtr texture) const;
+        RenderViewPtr createRenderView(const TexturePtr& texture) const;
+        RenderViewPtr createDepthStencilView(const TexturePtr& texture) const;
         
         FrameBufferPtr createFrameBuffer() const;
         
@@ -115,11 +115,13 @@ namespace ukn {
         return RenderBufferPtr(new GLRenderBuffer());
     }
     
-    RenderViewPtr GLGraphicFactory::create2DRenderView(TexturePtr texture) const {
-        return new GLTexture2DRenderView(*texture.get(), 0, 0);
+    RenderViewPtr GLGraphicFactory::createRenderView(const TexturePtr& texture) const {
+        if(texture->getType() == TT_Texture2D)
+            return new GLTexture2DRenderView(texture, 0, 0);
+        return RenderViewPtr();
     }
     
-    RenderViewPtr GLGraphicFactory::create2DDepthStencilView(TexturePtr texture) const {
+    RenderViewPtr GLGraphicFactory::createDepthStencilView(const TexturePtr& texture) const {
         return RenderView::NullObject();
     }
     

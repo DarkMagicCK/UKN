@@ -19,6 +19,9 @@ namespace ukn {
         if(mTexture) {
             mTexture->Release();
         }
+        if(mTextureResourceView) {
+            mTextureResourceView->Release();
+        }
     }
 
     bool D3D11Texture2D::load(const ResourcePtr& resource, bool createMipmap) {
@@ -83,7 +86,7 @@ namespace ukn {
         desc.SampleDesc.Count = 1;
         desc.Usage = D3D11_USAGE_DYNAMIC;
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+        desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
 
         if(mTexture) {
             mTexture->Release();

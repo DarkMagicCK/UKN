@@ -134,14 +134,15 @@ namespace ukn {
         gd.bindGLFrameBuffer(0);
     }
 
-    GLTexture2DRenderView::GLTexture2DRenderView(Texture& texture, int32 index, int32 level):
-    mTexture(*checked_cast<GLTexture2D*>(&texture)),
+    GLTexture2DRenderView::GLTexture2DRenderView(const TexturePtr& texture, int32 index, int32 level):
+    mTexture(texture),
     mIndex(index),
     mLevel(level) {
-        mTex = (GLuint)mTexture.getTextureId();
-        mWidth = mTexture.getWidth();
-        mHeight = mTexture.getHeight();
-        mElementFormat = mTexture.getFormat();
+        GLTexture2D* glTexture = (GLTexture2D*)mTexture.get();
+        mTex = (GLuint)glTexture->getTextureId();
+        mWidth = glTexture->getWidth();
+        mHeight = glTexture->getHeight();
+        mElementFormat = glTexture->getFormat();
     }
 
     void GLTexture2DRenderView::clearColor(const Color& clr) {

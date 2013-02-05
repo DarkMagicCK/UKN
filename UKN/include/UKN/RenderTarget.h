@@ -20,7 +20,7 @@ namespace ukn {
     /**
      * A render target is a composit of a texture render view and a depth stencil render view(optional)
      **/
-    class RenderTarget2D: Uncopyable {
+    class UKN_API RenderTarget2D: Uncopyable {
     public:
         RenderTarget2D(uint32 width,
                        uint32 height,

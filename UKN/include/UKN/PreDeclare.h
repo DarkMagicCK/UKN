@@ -73,7 +73,6 @@ namespace ukn {
     typedef SharedPtr<mist::ComponentHolder> ComponentHolderPtr;
     typedef SharedPtr<mist::ConfigParser> ConfigParserPtr;
     
-    
     class GraphicDevice;
     typedef SharedPtr<GraphicDevice> GraphicDevicePtr;
     

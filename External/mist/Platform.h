@@ -81,10 +81,14 @@
 #include <Availability.h>
 
 #if defined(TARGET_OS_MAC) && TARGET_OS_MAC == 1 && TARGET_IPHONE_SIMULATOR == 0
+
 #define MIST_OS_OSX
+
 #endif
+
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE == 1 || TARGET_IPHONE_SIMULATOR == 1
 #define MIST_OS_IOS
+
 #endif
 
     #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7

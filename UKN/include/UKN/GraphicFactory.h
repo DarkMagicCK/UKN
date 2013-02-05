@@ -13,6 +13,8 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicBuffer.h"
 #include "UKN/GraphicSettings.h"
+#include "UKN/BlendStateObject.h"
+#include "UKN/SamplerStateObject.h"
 #include "UKN/Vertex.h"
 
 namespace ukn {
@@ -56,6 +58,10 @@ namespace ukn {
         
         // shaders & effects
         virtual EffectPtr createEffect() const = 0;
+        
+        // blend & sampler objects
+        virtual BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const = 0;
+        virtual SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const = 0;
         
         template<typename T>
         SharedPtr<MemoryGraphicBuffer<T> > createMemoryVertexBuffer(uint32 count,

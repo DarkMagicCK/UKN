@@ -36,6 +36,7 @@
 
 #include "CgShader.h"
 
+
 namespace ukn {
 
     GLGraphicDevice::GLGraphicDevice():
@@ -348,11 +349,52 @@ namespace ukn {
             break;
 
 
-        case RS_MinFilter:
-        case RS_MagFilter:
-            glTexParameteri(GL_TEXTURE_2D, 
-                render_state_to_gl_state(type), 
-                render_state_param_to_gl_state_param((RenderStateParam)func));
+        case RS_Filter: {
+            GLenum target = GL_TEXTURE_2D;
+            switch(func) {
+                case RSP_FilterMinLinearMagMipPoint:
+                    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+                    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                    break;
+                    
+                case RSP_FilterMinLinearMagPointMipLinear:
+                    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                    break;
+                    
+                case RSP_FilterMinMagLinearMipPoint:
+                    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_NEAREST);
+                    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    break;
+                    
+                case RSP_FilterMinMagMipLinear:
+                    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+                    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    break;
+                    
+                case RSP_FilterMinMagPointMipLinear:
+                    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+                    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                    break;
+                    
+                case RSP_FilterMinMapMipPoint:
+                    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+                    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                    break;
+                    
+                case RSP_FilterMinPointMagLinearMipPoint:
+                    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+                    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    break;
+                    
+                case RSP_FilterMinPointMagMipLinear:
+                    glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+                    glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                    break;
+                    
+                    break;
+            }
+        }
             break;
 
         case RS_StencilOp:
@@ -386,6 +428,10 @@ namespace ukn {
                 glEnable(GL_DEPTH_TEST);
             else
                 glDisable(GL_DEPTH_TEST);
+            break;
+                
+        case RS_BlendOp:
+            glBlendEquation(render_state_param_to_blend_equation((RenderStateParam)func));
             break;
 
         case RS_PointSize:
@@ -445,6 +491,31 @@ namespace ukn {
             RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
             if(dsView) dsView->enableDepth(true);
         }
+    }
+    
+    void GLGraphicDevice::setBlendState(const BlendStatePtr& blendState) {
+        const BlendStateDesc& desc = blendState->getDesc();
+        
+        this->setRenderState(RS_Blend, desc.blend_state.enabled ? RSP_Enable : RSP_Disable);
+        this->setRenderState(RS_SrcBlend, desc.blend_state.src);
+        this->setRenderState(RS_DstBlend, desc.blend_state.dst);
+        this->setRenderState(RS_SrcAlpha, desc.blend_state.src_alpha);
+        this->setRenderState(RS_DstAlpha, desc.blend_state.dst_alpha);
+        this->setRenderState(RS_BlendOp, desc.blend_state.op);
+        
+        /* rgba blend factor */
+        glBlendColor(desc.blend_factor.value[0],
+                     desc.blend_factor.value[1],
+                     desc.blend_factor.value[2],
+                     desc.blend_factor.value[3]);
+    }
+    
+    void GLGraphicDevice::setSamplerState(const SamplerStatePtr& samplerState) {
+        const SamplerStateDesc& desc = samplerState->getDesc();
+        this->setRenderState(RS_Filter, desc.filter);
+        this->setRenderState(RS_TextureWrap0, desc.address_u);
+        this->setRenderState(RS_TextureWrap1, desc.address_v);
+        this->setRenderState(RS_TextureWrap2, desc.address_w);
     }
 
 } // namespace ukn

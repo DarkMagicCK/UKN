@@ -187,24 +187,6 @@ namespace mist {
             return int32(flip_bytes(uint32(value)));
         }
 
-        Vector3 float3_to_vector3(const float3& f3) {
-            return Vector3(f3[0],
-                f3[1],
-                f3[2]);
-        }
-
-        Vector2 float2_to_vector2(const float2& f2) {
-            return Vector2(f2[0],
-                f2[1]);
-        }
-
-        Vector4 float4_to_vector4(const float4& f4) {
-            return Vector4(f4[0],
-                f4[1],
-                f4[2],
-                f4[3]);
-        }
-
         Vector4 get_matrix_col(const Matrix4& mat, uint32 index) {
             return Vector4(mat.c[index][0],
                 mat.c[index][1],

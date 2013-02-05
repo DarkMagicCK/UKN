@@ -22,6 +22,9 @@
 #include "GLGraphicBuffer.h"
 #include "GLSpriteBatch.h"
 #include "GLRenderView.h"
+#include "GLBlendStateObject.h"
+#include "GLSamplerStateObject.h"
+
 
 #include "CgShader.h"
 
@@ -59,6 +62,9 @@ namespace ukn {
         
         TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const;
         EffectPtr createEffect() const;
+        
+        BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const;
+        SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const;
 
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -149,6 +155,14 @@ namespace ukn {
 
     EffectPtr GLGraphicFactory::createEffect() const {
         return new CgGLEffect((GLGraphicDevice*)mGraphicDevice.get());
+    }
+    
+    BlendStatePtr GLGraphicFactory::createBlendStateObject(const BlendStateDesc& desc) const {
+        return MakeSharedPtr<GLBlendStateObject>(desc);
+    }
+    
+    SamplerStatePtr GLGraphicFactory::createSamplerStateObject(const SamplerStateDesc& desc) const {
+        return MakeSharedPtr<GLSamplerStateObject>(desc);
     }
     
 } // namespace ukn

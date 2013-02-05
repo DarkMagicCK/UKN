@@ -9,7 +9,7 @@
 #ifndef Project_Unknown_GLConvert_h
 #define Project_Unknown_GLConvert_h
 
-#include "glfw/glfw3.h"
+#include "GLPreq.h"
 
 #include "UKN/GraphicSettings.h"
 #include "UKN/Vertex.h"
@@ -37,6 +37,13 @@ namespace ukn {
 			case EF_D32: return GL_DEPTH_COMPONENT32;
 			case EF_D16: return GL_DEPTH_COMPONENT16;
             case EF_D24S8: return GL_DEPTH24_STENCIL8;
+                // not used in GL, total_size / component_size
+            case EF_Float4:
+            case EF_Float3:
+            case EF_Float2:
+            case EF_Float:
+                return GL_FLOAT;
+            case EF_UInt32: return GL_RGBA8;
         }
 		return GL_UNSIGNED_BYTE;
     }
@@ -50,6 +57,7 @@ namespace ukn {
             case EF_D32: return GL_UNSIGNED_INT;
             case EF_D16: return GL_UNSIGNED_SHORT;
             case EF_D24S8: return GL_UNSIGNED_INT_24_8;
+            case EF_UInt32: return GL_UNSIGNED_INT;
             case EF_Float:
             case EF_Float2:
             case EF_Float3:
@@ -68,6 +76,9 @@ namespace ukn {
         case VU_Normal: return GL_NORMAL_ARRAY;
         case VU_Tangent: return GL_TANGENT_ARRAY_EXT;
         case VU_Binormal: return GL_BINORMAL_ARRAY_EXT;
+            default:
+                // not in gl, in cg instead, see vertex_usage_to_attribute_location
+                return GL_VERTEX_ARRAY;
         }
     }
     
@@ -78,10 +89,8 @@ namespace ukn {
             case RS_TextureWrap1:
                 return GL_TEXTURE_WRAP_T;
                 
-            case RS_MinFilter:
-                return GL_TEXTURE_MIN_FILTER;
-            case RS_MagFilter:      
-                return GL_TEXTURE_MAG_FILTER;
+            case RS_Filter:
+                return type;
                 
             case RS_StencilOp:
                 return type;
@@ -120,17 +129,6 @@ namespace ukn {
             case RSP_TextureWrapMirror:
                 return GL_MIRRORED_REPEAT;
                 
-            case RSP_FilterNearest:
-                return GL_NEAREST;
-            case RSP_FilterLinear:
-                return GL_LINEAR;
-            case RSP_FilterNearestMipmapNearest:
-                return GL_NEAREST_MIPMAP_NEAREST;
-            case RSP_FilterNearestMipmapLinear:
-                return GL_NEAREST_MIPMAP_LINEAR;
-            case RSP_FilterLinearMipmapNearest:
-                return GL_LINEAR_MIPMAP_NEAREST;
-                
             case RSP_StencilOpZero:
                 return GL_ZERO;
             case RSP_StencilOpKeep:
@@ -149,9 +147,15 @@ namespace ukn {
                 return GL_DECR_WRAP;
                 
             case RSP_BlendOpAdd:
-                return GL_ADD;
-            case RSP_BlendOpSubstract:
-                return GL_SUBTRACT;
+                return GL_FUNC_ADD;
+            case RSP_BlendOpSubtract:
+                return GL_FUNC_SUBTRACT;
+            case RSP_BlendOpRevSubtract:
+                return GL_FUNC_REVERSE_SUBTRACT;
+            case RSP_BlendOpMax:
+                return GL_MAX;
+            case RSP_BlendOpMin:
+                return GL_MIN;
                 
             case RSP_BlendFuncZero:
                 return GL_ZERO;
@@ -199,7 +203,11 @@ namespace ukn {
             case RSP_Enable:
             case RSP_Disable: 
                 return param;
+                
+            default:
+                return 0;
         }
+        return 0;
     }
 
     
@@ -240,6 +248,20 @@ namespace ukn {
         case VU_UV:             return AL_TexCoord0;
         case VU_BlendIndices:   return AL_BlendIndices;
         case VU_PSize:          return AL_PSize;
+            default:
+                return -1;
+        }
+    }
+    
+    inline GLenum render_state_param_to_blend_equation(RenderStateParam param) {
+        switch(param) {
+            case RSP_BlendOpAdd: return GL_FUNC_ADD;
+            case RSP_BlendOpSubtract: return GL_FUNC_SUBTRACT;
+            case RSP_BlendOpRevSubtract: return GL_FUNC_REVERSE_SUBTRACT;
+            case RSP_BlendOpMax: return GL_MAX;
+            case RSP_BlendOpMin: return GL_MIN;
+            default:
+                return 0;
         }
     }
     

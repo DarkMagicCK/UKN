@@ -78,9 +78,13 @@ namespace ukn {
         
         void beginFrame() { }
         void endFrame() { }
-        void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {  }
+        void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) { }
+        
         void begin2DRendering(const OrthogonalParams& params) { }
         void end2DRendering() { }
+        
+        void setBlendState(const BlendStatePtr& blendState) { }
+        void setSamplerState(const SamplerStatePtr& samplerState) { }
     };
     
     GraphicDevicePtr GraphicDevice::NullObject() {

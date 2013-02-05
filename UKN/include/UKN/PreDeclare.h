@@ -142,6 +142,13 @@ namespace ukn {
     class RenderTarget2D;
     typedef SharedPtr<RenderTarget2D> RenderTargetPtr;
     
+    class SamplerStateObject;
+    typedef SharedPtr<SamplerStateObject> SamplerStatePtr;
+    
+    class BlendStateObject;
+    typedef SharedPtr<BlendStateObject> BlendStatePtr;
+    
+    
 } // namespace ukn
 
 

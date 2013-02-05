@@ -158,9 +158,9 @@ namespace ukn {
     enum RenderStateType {
         RS_TextureWrap0 = 0,   // u
         RS_TextureWrap1,       // v
+        RS_TextureWrap2,       // w
         
-        RS_MinFilter,      // GL_TEXTURE_MIN_FILTER, D3DSAMP_MINFILTER
-        RS_MagFilter,      
+        RS_Filter,      // GL_TEXTURE_MIN_FILTER, D3DSAMP_MINFILTER
         
         RS_StencilOp,      // glStencilOp
         RS_StencilFunc,
@@ -170,6 +170,7 @@ namespace ukn {
         
         RS_ColorOp,        // GL_TEXTURE_ENV_MODE, D3DTTS_COLOROP
         
+        RS_BlendOp,
         RS_SrcBlend,       // GL_SRC_BLEND, D3DRS_SRC_BLEND
         RS_DstBlend,
         RS_SrcAlpha,
@@ -187,11 +188,15 @@ namespace ukn {
         RSP_TextureWrapClampToBorder,  // D3DTADDRESS_BORDER, GL_CLAMP_TO_BORDER
         RSP_TextureWrapMirror,          // D3DTADDRESS_MIRROR, GL_MIRRORED_REPEAT
         
-        RSP_FilterNearest,              // GL_NEAREST, (D3DTEXF_POINT, NONE)
-        RSP_FilterLinear,               // GL_LINEAR, (D3DTEXF_LINEAR, NONE)
-        RSP_FilterNearestMipmapNearest, // GL_NEAREST_MIPMAP_NEAREST, (D3DTXEFT_POINT, POINT)
-        RSP_FilterNearestMipmapLinear,  // GL_NEAREST_MIPMAP_LINEAR, (D3DTXEFT_POINT, LINEAR)
-        RSP_FilterLinearMipmapNearest,  // GL_LINEAR_MIPMAP_NEAREST, (D3DTXEFT_LINEAR, POINT)
+        RSP_FilterMinMapMipPoint,       // GL_NEAREST * al
+        RSP_FilterMinMagPointMipLinear,
+        RSP_FilterMinPointMagLinearMipPoint,
+        RSP_FilterMinPointMagMipLinear,
+        RSP_FilterMinLinearMagMipPoint,
+        RSP_FilterMinLinearMagPointMipLinear,
+        RSP_FilterMinMagLinearMipPoint,
+        RSP_FilterMinMagMipLinear,
+        RSP_FilterAnisotropic,
         
         RSP_StencilOpZero,          // GL_ZERO, D3DSTENCILOP_ZERO
         RSP_StencilOpKeep,          
@@ -203,7 +208,10 @@ namespace ukn {
         RSP_StencilOpDecrWrap,
         
         RSP_BlendOpAdd,             // GL_FUNC_ADD, D3DBLENDOP_ADD
-        RSP_BlendOpSubstract,
+        RSP_BlendOpSubtract,
+        RSP_BlendOpRevSubtract,
+        RSP_BlendOpMax,
+        RSP_BlendOpMin,
         
         RSP_BlendFuncZero,              // GL_ZERO, D3DBLEND_ZERO
         RSP_BlendFuncOne,

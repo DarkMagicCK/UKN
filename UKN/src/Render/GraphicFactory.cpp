@@ -76,6 +76,14 @@ namespace ukn {
             return EffectPtr();
         }
         
+        BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const {
+            return BlendStatePtr();
+        }
+        
+        SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const {
+            return SamplerStatePtr();
+        }
+        
     };
     
     GraphicFactoryPtr GraphicFactory::NullObject() {

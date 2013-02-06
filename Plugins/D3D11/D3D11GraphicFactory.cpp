@@ -7,6 +7,8 @@
 #include "D3D11Shader.h"
 #include "D3D11Texture.h"
 #include "D3D11RenderView.h"
+#include "D3D11BlendStateObject.h"
+#include "D3D11SamplerStateObject.h"
 
 #include "CgShader.h"
 
@@ -44,10 +46,18 @@ namespace ukn {
 
         FrameBufferPtr createFrameBuffer() const;
 
-        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const;
+        TexturePtr create2DTexture(uint32 width, 
+                                   uint32 height, 
+                                   uint32 numMipmaps, 
+                                   ElementFormat format, 
+                                   const uint8* initialData,
+                                   uint32 flag) const;
         TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const;
 
         EffectPtr createEffect() const;
+        
+        BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const;
+        SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const;
 
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -109,20 +119,22 @@ namespace ukn {
     }
 
     RenderViewPtr D3D11GraphicFactory::createDepthStencilView(const TexturePtr& texture) const {
-        uint32 w = texture->getWidth();
-        uint32 h = texture->getHeight();
-        ElementFormat format = texture->getFormat();
-        return MakeSharedPtr<D3D11DepthStencilRenderView>(w, h, format, 1, 0, (D3D11GraphicDevice*)mGraphicDevice.get());
+        return MakeSharedPtr<D3D11DepthStencilRenderView>(texture, (D3D11GraphicDevice*)mGraphicDevice.get());
     }
 
     FrameBufferPtr D3D11GraphicFactory::createFrameBuffer() const {
         return FrameBufferPtr(new D3D11FrameBuffer(true, (D3D11GraphicDevice*)mGraphicDevice.get()));
     }
 
-    TexturePtr D3D11GraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const {
+    TexturePtr D3D11GraphicFactory::create2DTexture(uint32 width, 
+                                                    uint32 height, 
+                                                    uint32 numMipmaps, 
+                                                    ElementFormat format, 
+                                                    const uint8* initialData,
+                                                    uint32 flag) const {
         SharedPtr<D3D11Texture2D> texture = MakeSharedPtr<D3D11Texture2D>((D3D11GraphicDevice*)mGraphicDevice.get());
         if(texture &&
-            texture->create(width, height, numMipmaps, format, initialData)) {
+            texture->create(width, height, numMipmaps, format, initialData, flag)) {
                 return texture;
         }
         return SharedPtr<D3D11Texture2D>();
@@ -143,6 +155,14 @@ namespace ukn {
             return EffectPtr(effect);
         }
         return EffectPtr();
+    }
+
+    BlendStatePtr D3D11GraphicFactory::createBlendStateObject(const BlendStateDesc& desc) const {
+        return MakeSharedPtr<D3D11BlendStateObject>(desc, ((D3D11GraphicDevice*)mGraphicDevice.get()));
+    }
+
+    SamplerStatePtr D3D11GraphicFactory::createSamplerStateObject(const SamplerStateDesc& desc) const {
+        return MakeSharedPtr<D3D11SamplerStateObject>(desc, ((D3D11GraphicDevice*)mGraphicDevice.get()));
     }
 
 } // namespace ukn

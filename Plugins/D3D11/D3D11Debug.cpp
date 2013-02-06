@@ -59,6 +59,8 @@ namespace ukn {
 			break;
 
 		}
+        assert(0);
+
 		return false;
 	}
 
@@ -66,7 +68,7 @@ namespace ukn {
 		if(mInfoQueue &&
 			mInfoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() > 0) {
 				/* log from back to front */
-			for(mist::int64 i = mInfoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() - 1; i >= mLastLoggesIndex ; --i) {
+			for(mist::int64 i = mInfoQueue->GetNumStoredMessagesAllowedByRetrievalFilter() - 1; i > mLastLoggesIndex ; --i) {
 				SIZE_T messageLength = 0;
 				if(SUCCEEDED(mInfoQueue->GetMessage(i, NULL, &messageLength))) {
 					D3D11_MESSAGE* message = mist_malloc_t(D3D11_MESSAGE, messageLength);

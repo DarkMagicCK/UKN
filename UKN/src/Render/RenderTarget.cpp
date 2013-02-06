@@ -13,82 +13,121 @@
 #include "UKN/Context.h"
 #include "UKN/Texture.h"
 #include "UKN/RenderBuffer.h"
+#include "UKN/FrameBuffer.h"
 
 #include "mist/Logger.h"
 
 namespace ukn {
-    
-    RenderTarget2D::RenderTarget2D(uint32 width,
-                                   uint32 height,
-                                   int32 num_of_levels,
-                                   ElementFormat color_format) {
-        GraphicFactory& gf = Context::Instance().getGraphicFactory();
-        
-        mTargetTexture = gf.create2DTexture(width, height, num_of_levels, color_format, 0);
-        if(!mTargetTexture) {
-            log_error("ukn::RenderTarget2D: error creating target texture");
-            return;
-        }
-        
-        mTarget = gf.createRenderView(mTargetTexture);
-        if(!mTarget) {
-            log_error("ukn::RenderTarget2D: error creating 2d render target");
-            return;
-        }
+
+    RenderTarget2D::RenderTarget2D() {
+
+    }
+
+    RenderTarget2D::~RenderTarget2D() {
+
     }
     
-    RenderTarget2D::RenderTarget2D(uint32 width,
-                                   uint32 height,
-                                   int32 num_of_levels,
-                                   ElementFormat color_format,
-                                   ElementFormat depth_stencil_format) {
+    bool RenderTarget2D::create(uint32 width,
+                                uint32 height,
+                                int32 num_of_levels,
+                                ElementFormat color_format) {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         
-        mTargetTexture = gf.create2DTexture(width, height, num_of_levels, color_format, 0);
+        mTargetTexture = gf.create2DTexture(width, 
+                                            height, 
+                                            num_of_levels, 
+                                            color_format, 
+                                            0,
+                                            TB_RenderTarget | TB_Texture);
         if(!mTargetTexture) {
-            log_error("ukn::RenderTarget2D: error creating target texture");
-            return;
+            log_error(L"ukn::RenderTarget2D: error creating target texture");
+            return false;
         }
         
         mTarget = gf.createRenderView(mTargetTexture);
         if(!mTarget) {
-            log_error("ukn::RenderTarget2D: error creating 2d render target");
-            return;
+            log_error(L"ukn::RenderTarget2D: error creating 2d render target");
+            return false;
+        }
+
+        this->createFrameBuffer(gf);
+    }
+    
+    bool RenderTarget2D::create(uint32 width,
+                                uint32 height,
+                                int32 num_of_levels,
+                                ElementFormat color_format,
+                                ElementFormat depth_stencil_format) {
+        GraphicFactory& gf = Context::Instance().getGraphicFactory();
+        
+        mTargetTexture = gf.create2DTexture(width, 
+                                            height, 
+                                            num_of_levels, 
+                                            color_format, 
+                                            0,
+                                            TB_RenderTarget | TB_Texture);
+        if(!mTargetTexture) {
+            log_error(L"ukn::RenderTarget2D: error creating target texture");
+            return false;
         }
         
-        mDepthStencilTexture = gf.create2DTexture(width, height, 0, depth_stencil_format, 0);
+        mTarget = gf.createRenderView(mTargetTexture);
+        if(!mTarget) {
+            log_error(L"ukn::RenderTarget2D: error creating 2d render target");
+            return false;
+        }
+        
+        mDepthStencilTexture = gf.create2DTexture(width, 
+                                                  height, 
+                                                  0, 
+                                                  depth_stencil_format, 
+                                                  0,
+                                                  TB_DepthStencil);
         if(!mDepthStencilTexture) {
-            log_error("ukn::RenderTarget2D: error creating target texture");
-            return;
+            log_error(L"ukn::RenderTarget2D: error creating target texture");
+            return false;
         }
         
         mDepthStencil = gf.createDepthStencilView(mDepthStencilTexture);
         if(!mDepthStencil) {
-            log_error("ukn::RenderTarget2D: error creating 2d depth stencil target");
-            return;
+            log_error(L"ukn::RenderTarget2D: error creating 2d depth stencil target");
+            return false;
+        }
+
+        return this->createFrameBuffer(gf);
+    }
+
+    bool RenderTarget2D::createFrameBuffer(GraphicFactory& gf) {
+        mFrameBuffer = gf.createFrameBuffer();
+        if(!mFrameBuffer)
+            return false;
+
+        if(mTarget)
+            mFrameBuffer->attach(ATT_Color0, mTarget);
+        if(mDepthStencil)
+            mFrameBuffer->attach(ATT_DepthStencil, mDepthStencil);
+
+        mFrameBuffer->updateScreenSize(0, 0, mTarget->width(), mTarget->height());
+        return true;
+    }
+    
+    void RenderTarget2D::attach() {
+        if(mFrameBuffer) {
+            GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+            
+            mPrevFrameBuffer = gd.getCurrFrameBuffer();
+            gd.bindFrameBuffer(mFrameBuffer);
+
+        } else {
+            log_error(L"RenderTarget2D::attach: framebuffer not valid");
         }
     }
-    
-    RenderTarget2D::~RenderTarget2D() {
-        
+
+    void RenderTarget2D::detach() {
+        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+        gd.bindFrameBuffer(mPrevFrameBuffer);
     }
-    
-    const TexturePtr& RenderTarget2D::getTargetTexture() const {
-        return mTargetTexture;
-    }
-    
-    const TexturePtr& RenderTarget2D::getDepthStencilTexture() const {
-        return mDepthStencilTexture;
-    }
-    
-    const RenderViewPtr& RenderTarget2D::getTargetView() const {
-        return mTarget;
-    }
-    
-    const RenderViewPtr& RenderTarget2D::getDepthStencilView() const {
-        return mDepthStencil;
-    }
-    
+
     uint32 RenderTarget2D::width() const {
         if(mTarget)
             return mTarget->width();
@@ -105,6 +144,14 @@ namespace ukn {
         if(mTargetTexture)
             return mTargetTexture->getFormat();
         return EF_RGBA8;
+    }
+
+    const TexturePtr& RenderTarget2D::getTargetTexture() const {
+        return mTargetTexture;
+    }
+    
+    const TexturePtr& RenderTarget2D::getDepthStencilTexture() const {
+        return mDepthStencilTexture;
     }
     
 } // namespace ukn

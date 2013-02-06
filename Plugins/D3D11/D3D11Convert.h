@@ -18,6 +18,9 @@ namespace ukn {
     void D3DXMatrixToMatrix4(const D3DXMATRIX& d3dmat, Matrix4& mat);
     void Matrix4ToD3DMatrix(const Matrix4& mat, D3DXMATRIX& d3dmat);
 	DXGI_FORMAT ElementFormatToDxGIFormat(ukn::ElementFormat format);
+    ElementFormat DxGIFormatToElementFormat(DXGI_FORMAT format);
+    
+    D3D11_BIND_FLAG TextureBindFlagToD3D11Flag(ukn::TextureBindFlag flag);
     const char* VertexUsageToSemanticName(ukn::VertexUsage usage);
     D3D11_PRIMITIVE_TOPOLOGY RenderModeToPrimitiveTopology(ukn::RenderMode mode);
 

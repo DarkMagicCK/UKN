@@ -154,6 +154,12 @@ namespace ukn {
         RM_TriangleFan,        // GL_TRIANGLE_FAN, D3DPT_TRIANGLEFSN
         RM_TriangleStrip,      // GL_TRIANGLE_STRIP, D3DPT_TRIANGLESTRIP
     };
+
+    enum TextureBindFlag {
+        TB_Texture          = 1,     // D3D*_SHADERRESOURCE_
+        TB_DepthStencil     = 1U << 1, // D3D*_DEPTHSTENCIL
+        TB_RenderTarget     = 1U << 2, // D3D*_RenderTarget
+    };
     
     enum RenderStateType {
         RS_TextureWrap0 = 0,   // u

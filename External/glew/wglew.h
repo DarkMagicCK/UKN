@@ -69,7 +69,6 @@
 #include <windows.h>
 #  undef WIN32_LEAN_AND_MEAN
 #endif
-
 /*
  * GLEW_STATIC needs to be set when using the static version.
  * GLEW_BUILD is set when building the DLL version.

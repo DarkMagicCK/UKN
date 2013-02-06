@@ -11,6 +11,7 @@
 
 #include "UKN/GraphicFactory.h"
 #include "UKN/RenderBuffer.h"
+#include "UKN/GraphicSettings.h"
 #include "UKN/RenderView.h"
 #include "UKN/FrameBuffer.h"
 #include "UKN/Texture.h"
@@ -58,7 +59,12 @@ namespace ukn {
         
         FrameBufferPtr createFrameBuffer() const;
         
-        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const;
+        TexturePtr create2DTexture(uint32 width, 
+                                   uint32 height, 
+                                   uint32 numMipmaps, 
+                                   ElementFormat format, 
+                                   const uint8* initialData,
+                                   uint32 bindFlag) const;
         
         TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const;
         EffectPtr createEffect() const;
@@ -135,7 +141,12 @@ namespace ukn {
         return FrameBufferPtr(new GLFrameBuffer(true));
     }
     
-    TexturePtr GLGraphicFactory::create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const {
+    TexturePtr GLGraphicFactory::create2DTexture(uint32 width, 
+                                                 uint32 height, 
+                                                 uint32 numMipmaps, 
+                                                 ElementFormat format, 
+                                                 const uint8* initialData,
+                                                 uint32 flag) const {
         GLTexture2D* texture = new GLTexture2D();
         if(texture->create(width, height, numMipmaps, format, initialData)) {
             return TexturePtr(texture);

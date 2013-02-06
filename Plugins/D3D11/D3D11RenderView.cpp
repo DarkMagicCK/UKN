@@ -119,10 +119,18 @@ namespace ukn {
             this->createDSView(ef, sampleCount);
     }
 
+    D3D11DepthStencilRenderView::D3D11DepthStencilRenderView(const TexturePtr& texture, D3D11GraphicDevice* device):
+    D3D11RenderView(device) {
+        mTexture = texture;
+        mDepthStencilBuffer = (ID3D11Texture2D*)mTexture->getTextureId();
+        // temp
+        this->createDSView(texture->getFormat(), 1);
+    }
+
     D3D11DepthStencilRenderView::~D3D11DepthStencilRenderView() {
         mDepthStencilView->Release();
-        mDepthStencilBuffer->Release();
         mDepthStencilState->Release();
+        mDepthStencilDisabledState->Release();
     }
 
     void D3D11DepthStencilRenderView::createDSView(ElementFormat ef, int32 sampleCount) {
@@ -218,7 +226,8 @@ namespace ukn {
             renderTargetDesc.Texture2D.MipSlice = 0;
 
             ID3D11RenderTargetView* renderTargetView;
-            if(!D3D11Debug::CHECK_RESULT(device->getD3DDevice()->CreateRenderTargetView(d3d11Texture->getTexture(),
+            if(!D3D11Debug::CHECK_RESULT(device->getD3DDevice()->CreateRenderTargetView(
+                d3d11Texture->getTexture(),
                 &renderTargetDesc,
                 &renderTargetView))) {
                     MIST_THROW_EXCEPTION(L"Error creating render target view");

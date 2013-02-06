@@ -64,6 +64,11 @@ namespace ukn {
 
                     mWidth = w;
                     mHeight = h;
+                    mNumMipmaps = 1;
+                    // temp
+                    if(channels == 4) {
+                        mFormat = EF_RGBA8;
+                    }
 
                     return true;
                 }
@@ -122,6 +127,8 @@ namespace ukn {
             mTextureId = (uintPtr)texId;
             mWidth = mOrigWidth = w;
             mHeight = mOrigHeight = h;
+            mFormat = format;
+            mNumMipmaps = mipmaps;
             
             glBindTexture(GL_TEXTURE_2D, prevTexture);
 

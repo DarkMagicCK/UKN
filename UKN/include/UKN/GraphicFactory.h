@@ -13,8 +13,6 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicBuffer.h"
 #include "UKN/GraphicSettings.h"
-#include "UKN/BlendStateObject.h"
-#include "UKN/SamplerStateObject.h"
 #include "UKN/Vertex.h"
 
 namespace ukn {
@@ -53,13 +51,17 @@ namespace ukn {
         virtual FrameBufferPtr createFrameBuffer() const = 0;
         
         // textures
-        virtual TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const = 0;
+        virtual TexturePtr create2DTexture(uint32 width, 
+                                           uint32 height, 
+                                           uint32 numMipmaps, 
+                                           ElementFormat format, 
+                                           const uint8* initialData = 0,
+                                           uint32 bindFlag = TB_Texture /* used by d3d */) const = 0;
         virtual TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const = 0;
         
         // shaders & effects
         virtual EffectPtr createEffect() const = 0;
-        
-        // blend & sampler objects
+
         virtual BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const = 0;
         virtual SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const = 0;
         

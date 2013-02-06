@@ -323,19 +323,9 @@ namespace ukn {
         
 		if(mFrameBuffer) {
 			mFrameBuffer->updateScreenSize(0, 0, w, h);
-
-			Viewport& vp = mFrameBuffer->getViewport();
         
-		    vp.left = 0;
-		    vp.top = 0;
-		    vp.width = w;
-		    vp.height = h;
-        
-			vp.camera = MakeSharedPtr<Camera>();
-		    vp.camera->setProjParams(d_pi / 2,  (float)mFrameBuffer->width() / (float)mFrameBuffer->height(), 0.1, 1000.f);
-			vp.camera->setViewParams(Vector3(0, 0, -5), Vector3(0, 0, 1));
-		}
-	}
+        }
+    }
 
 
 } // namespace ukn

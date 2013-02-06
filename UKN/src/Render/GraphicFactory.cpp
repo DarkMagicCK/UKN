@@ -15,6 +15,8 @@
 #include "UKN/GraphicDevice.h"
 #include "UKN/SpriteBatch.h"
 #include "UKN/Shader.h"
+#include "UKN/BlendStateObject.h"
+#include "UKN/SamplerStateObject.h"
 
 namespace ukn {
     
@@ -64,7 +66,12 @@ namespace ukn {
             return FrameBuffer::NullObject();
         }
         
-        TexturePtr create2DTexture(uint32 width, uint32 height, uint32 numMipmaps, ElementFormat format, const uint8* initialData) const {
+        TexturePtr create2DTexture(uint32 width, 
+                                   uint32 height, 
+                                   uint32 numMipmaps, 
+                                   ElementFormat format, 
+                                   const uint8* initialData, 
+                                   uint32 flag) const {
             return Texture::NullObject();
         }
         

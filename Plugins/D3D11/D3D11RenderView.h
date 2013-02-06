@@ -55,6 +55,7 @@ namespace ukn {
 
 	class D3D11DepthStencilRenderView: Uncopyable, public D3D11RenderView {
 	public:
+        D3D11DepthStencilRenderView(const TexturePtr& texture, D3D11GraphicDevice* device);
 		D3D11DepthStencilRenderView(uint32 width, uint32 height, ElementFormat ef, uint32 sampleCount, uint32 sampleQuality, D3D11GraphicDevice* device);
 		virtual ~D3D11DepthStencilRenderView();
 
@@ -73,6 +74,7 @@ namespace ukn {
 	private:
         void createDSView(ElementFormat ef, int32 sampleCount);
 
+        TexturePtr mTexture;
 		ID3D11Texture2D* mDepthStencilBuffer;
 		ID3D11DepthStencilView* mDepthStencilView;
 		ID3D11DepthStencilState* mDepthStencilState;

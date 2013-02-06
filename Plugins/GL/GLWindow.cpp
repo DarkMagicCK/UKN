@@ -258,16 +258,6 @@ namespace ukn {
         Window::mTop = y;
         Window::mWidth = w;
         Window::mHeight = h;
-
-        Viewport& vp = mFrameBuffer->getViewport();
-
-        vp.left = 0;
-        vp.top = 0;
-        vp.width = w;
-        vp.height = h;
-
-        vp.camera = MakeSharedPtr<Camera>();
-        vp.camera->setProjParams(d_pi / 2,  (float)mFrameBuffer->width() / (float)mFrameBuffer->height(), 0.1f, 1000.f);
     }
 
     void GLWindow::onWindowResize(void* wnd, WindowResizeEventArgs& args) {

@@ -70,9 +70,7 @@ namespace ukn {
     }
 
     void D3D11FrameBuffer::onUnbind() {
-        mGraphicDevice->getD3DDeviceContext()->OMSetRenderTargets(1, 
-            0, 
-            0);
+
     }
 
 

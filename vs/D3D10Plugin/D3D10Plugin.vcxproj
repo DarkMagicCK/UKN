@@ -80,6 +80,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Plugins\D3D11\CgShader.h" />
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11BlendStateObject.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Convert.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Debug.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11FrameBuffer.h" />
@@ -91,6 +92,7 @@
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Preq.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11RenderBuffer.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11RenderView.h" />
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11SamplerStateObject.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Shader.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Texture.h" />
     <ClInclude Include="..\..\Plugins\D3D11\MetroWindows.h" />
@@ -100,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Plugins\D3D11\CgShader.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11BlendStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Convert.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Debug.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11FrameBuffer.cpp" />
@@ -110,6 +113,7 @@
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Plugin.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11RenderBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11RenderView.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11SamplerStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Shader.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\MetroWindow.cpp" />

@@ -29,14 +29,12 @@ namespace ukn {
     
     class UKN_API SamplerStateObject {
     public:
-        SamplerStateObject(const SamplerStateDesc& desc):
-        mDesc(desc) {
-        }
-        
+        SamplerStateObject(const SamplerStateDesc& desc);
+      
         // force base
         virtual ~SamplerStateObject() = 0;
         
-        const SamplerStateDesc& getDesc() const { return mDesc; }
+        const SamplerStateDesc& getDesc() const;
         
     private:
         SamplerStateDesc mDesc;

@@ -40,14 +40,12 @@ namespace ukn {
     
     class UKN_API BlendStateObject {
     public:
-        BlendStateObject(const BlendStateDesc& desc):
-        mDesc(desc) {
-        }
+        BlendStateObject(const BlendStateDesc& desc);
         
         // force base
         virtual ~BlendStateObject() = 0;
       
-        const BlendStateDesc& getDesc() const { return mDesc; }
+        const BlendStateDesc& getDesc() const;
         
     private:
         BlendStateDesc mDesc;

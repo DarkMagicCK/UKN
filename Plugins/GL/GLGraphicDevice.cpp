@@ -27,6 +27,8 @@
 #include "UKN/Context.h"
 #include "UKN/App.h"
 #include "UKN/CgHelper.h"
+#include "UKN/BlendStateObject.h"
+#include "UKN/SamplerStateObject.h"
 
 #include "GLFrameBuffer.h"
 #include "GLRenderView.h"
@@ -300,14 +302,6 @@ namespace ukn {
 
     GLuint GLGraphicDevice::getBindedGLFrameBuffer() const {
         return mCurrGLFrameBuffer;
-    }
-
-    SharedPtr<uint8> GLGraphicDevice::readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format) {
-        return ((GLFrameBuffer*)(buffer.get()))->readFrameBufferData(x,
-            y,
-            width,
-            height,
-            format);
     }
 
     void GLGraphicDevice::setViewMatrix(const Matrix4& matx) {

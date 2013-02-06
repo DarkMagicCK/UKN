@@ -9,19 +9,13 @@ namespace ukn {
 
     D3D11Texture2D::D3D11Texture2D(D3D11GraphicDevice* device):
         Texture(TT_Texture2D),
-        mTextureResourceView(0),
         mTexture(0),
         mDevice(device) {
 
     }
 
     D3D11Texture2D::~D3D11Texture2D() {
-        if(mTexture) {
-            mTexture->Release();
-        }
-        if(mTextureResourceView) {
-            mTextureResourceView->Release();
-        }
+
     }
 
     bool D3D11Texture2D::load(const ResourcePtr& resource, bool createMipmap) {
@@ -33,21 +27,16 @@ namespace ukn {
         if(memStream) {
             MemoryStream* memData = static_cast<MemoryStream*>(memStream.get());
 
-            if(mTexture) {
-                mTexture->Release();
-                mTexture = 0;
-            }
-            if(mTextureResourceView) {
-                mTextureResourceView->Release();
-            }
-
+            ID3D11Texture2D* texture;
             if(D3D11Debug::CHECK_RESULT(D3DX11CreateTextureFromMemory(mDevice->getD3DDevice(),
                 memData->data(),
                 memData->size(),
                 0,
                 0,
-                (ID3D11Resource**)&mTexture,
+                (ID3D11Resource**)&texture,
                 0))) {
+                    mTexture = MakeCOMPtr(texture);
+
                     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 
                     D3D11_TEXTURE2D_DESC desc;
@@ -59,22 +48,26 @@ namespace ukn {
                     srvDesc.Texture2D.MipLevels = desc.MipLevels;
                     srvDesc.Texture1D.MostDetailedMip = 0;
 
-                    if(!D3D11Debug::CHECK_RESULT(mDevice->getD3DDevice()->CreateShaderResourceView(mTexture, &srvDesc, &mTextureResourceView))) {
-                        mTexture->Release();
-                        mTexture = 0;
+                    mFormat = DxGIFormatToElementFormat( desc.Format );
+                    mNumMipmaps = 1;
 
-                        log_error("error creating shader source view for texture");
+                    ID3D11ShaderResourceView* shaderResourceView;
+                    if(!D3D11Debug::CHECK_RESULT(mDevice->getD3DDevice()->CreateShaderResourceView(mTexture.get(), &srvDesc, &shaderResourceView))) {
+                        mTexture.assign(0);
+
+                        log_error(L"D3D11Texture2D::load: error creating shader source view for texture");
 
                         return false;
                     }
+                    mShaderResourceView = MakeCOMPtr(shaderResourceView);
                     return true;
             }
         }
-        
+
         return false;
     }
 
-    bool D3D11Texture2D::create(uint32 w, uint32 h, uint32 mipmaps, ElementFormat format, const uint8* initialData) {
+    bool D3D11Texture2D::create(uint32 w, uint32 h, uint32 mipmaps, ElementFormat format, const uint8* initialData, uint32 flag) {
         D3D11_TEXTURE2D_DESC desc;
 
         ZeroMemory(&desc, sizeof(desc));
@@ -84,52 +77,71 @@ namespace ukn {
         desc.ArraySize = 1;
         desc.Format = ElementFormatToDxGIFormat(format);
         desc.SampleDesc.Count = 1;
-        desc.Usage = D3D11_USAGE_DYNAMIC;
-        desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-        desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
-
-        if(mTexture) {
-            mTexture->Release();
-            mTexture = 0;
+        desc.Usage = D3D11_USAGE_DEFAULT;
+        desc.CPUAccessFlags = 0;
+        
+        DWORD bindFlags = 0;
+        if(flag & TB_DepthStencil) {
+            bindFlags |= D3D11_BIND_DEPTH_STENCIL;
         }
-        if(mTextureResourceView) {
-            mTextureResourceView->Release();
-            mTextureResourceView = 0;
+        if(flag & TB_RenderTarget) {
+            bindFlags |= D3D11_BIND_RENDER_TARGET;
         }
+        if(flag & TB_Texture) {
+            bindFlags |= D3D11_BIND_SHADER_RESOURCE;
+            // temporarys
+            if(!(flag & TB_RenderTarget)) {
+                desc.Usage = D3D11_USAGE_DYNAMIC;
+                desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+            }
+        }
+        desc.BindFlags = bindFlags;
 
-        uint8* texData;
+        ID3D11Texture2D* texture;
         if(initialData == 0) {
-            texData = mist_malloc_t(uint8, w*h*GetElementSize(format));
-            memset(texData, 0xFF, w*h*GetElementSize(format));
+            if(!D3D11Debug::CHECK_RESULT(mDevice->getD3DDevice()->CreateTexture2D(&desc, 0, &texture))) {
+                return false;
+            }
         } else {
-            texData = const_cast<uint8*>(initialData);
+            D3D11_SUBRESOURCE_DATA textureData;
+
+            textureData.pSysMem = initialData;
+            textureData.SysMemPitch = w * GetElementSize(format);
+
+            if(!D3D11Debug::CHECK_RESULT(mDevice->getD3DDevice()->CreateTexture2D(&desc, &textureData, &texture))) {
+                return false;
+            }
+        }
+        mTexture = MakeCOMPtr(texture);
+
+        if(bindFlags & D3D11_BIND_SHADER_RESOURCE) {
+            D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
+
+            ZeroMemory(&srvDesc, sizeof(srvDesc));
+            srvDesc.Format = desc.Format;
+            srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+            srvDesc.Texture2D.MipLevels = desc.MipLevels;
+            srvDesc.Texture1D.MostDetailedMip = desc.MipLevels - 1;
+
+            ID3D11ShaderResourceView* shaderResourceView;
+
+            if(!D3D11Debug::CHECK_RESULT(
+                mDevice->getD3DDevice()->CreateShaderResourceView(mTexture, 
+                                                                  &srvDesc, 
+                                                                  &shaderResourceView))) {
+                
+                mTexture.reset(0);
+                log_error("error creating shader source view for texture");
+
+                return false;
+            }
+            mShaderResourceView = MakeCOMPtr(shaderResourceView);
         }
 
-        D3D11_SUBRESOURCE_DATA textureData;
-        textureData.pSysMem = texData;
-        textureData.SysMemPitch = w * GetElementSize(format);
-
-        if(!D3D11Debug::CHECK_RESULT(mDevice->getD3DDevice()->CreateTexture2D(&desc, &textureData, &mTexture))) {
-            return false;
-        }
-
-        D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
-
-        ZeroMemory(&srvDesc, sizeof(srvDesc));
-        srvDesc.Format = desc.Format;
-        srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-        srvDesc.Texture2D.MipLevels = desc.MipLevels;
-        srvDesc.Texture1D.MostDetailedMip = desc.MipLevels - 1;
-
-        if(!D3D11Debug::CHECK_RESULT(mDevice->getD3DDevice()->CreateShaderResourceView(mTexture, &srvDesc, &mTextureResourceView))) {
-            mTexture->Release();
-            mTexture = 0;
-
-            log_error("error creating shader source view for texture");
-
-            return false;
-        }
+        mFormat = format;
+        mNumMipmaps = mipmaps;
         return true;
+
     }
 
     void* D3D11Texture2D::map(uint32 level) {
@@ -200,15 +212,15 @@ namespace ukn {
     }
 
     uintPtr D3D11Texture2D::getTextureId() const {
-        return (uintPtr)mTexture;
+        return (uintPtr)mTexture.get();
     }
 
     ID3D11Texture2D* D3D11Texture2D::getTexture() const {
-        return mTexture;
+        return mTexture.get();
     }
 
-    ID3D11ShaderResourceView* D3D11Texture2D::getTextureResourceView() const {
-        return mTextureResourceView;
+    ID3D11ShaderResourceView* D3D11Texture2D::getShaderResourceView() const {
+        return mShaderResourceView.get();
     }
 
 } // namespace ukn

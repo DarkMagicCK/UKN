@@ -59,7 +59,10 @@ namespace ukn {
 
         void enableAlphaBlending();
         void disableAlphaBlending();
-
+        
+        void setBlendState(const BlendStatePtr& blendState) override;
+        void setSamplerState(const SamplerStatePtr& samplerState) override;
+        
     private:
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
 		void onWindowResize();

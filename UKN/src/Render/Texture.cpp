@@ -56,7 +56,7 @@ namespace ukn {
         // return mFormat;
         // currently RGBA8(32bit) textures only
         // todo with element formats
-        return EF_RGBA8;
+        return mFormat;
     }
     
 } // namespace ukn

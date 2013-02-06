@@ -41,10 +41,6 @@ namespace ukn {
         void bindTexture(const TexturePtr& texture);
         void bindEffect(const EffectPtr& effect);
         
-        SharedPtr<uint8> readFrameBufferData(const FrameBufferPtr& buffer, int32 x, int32 y, uint32 width, uint32 height, ElementFormat format);
-        SharedPtr<uint8> readTextureData(const TexturePtr& texture, uint8 level);
-        void  updateTextureData(const TexturePtr& texture, void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level);
-        
         void fillGraphicCaps(GraphicDeviceCaps& caps);
         
         void setRenderState(RenderStateType type, uint32 func);

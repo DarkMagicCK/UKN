@@ -2,6 +2,8 @@
 #include "D3D11FrameBuffer.h"
 #include "D3D11RenderView.h"
 #include "D3D11GraphicFactory.h"
+#include "D3D11BlendStateObject.h"
+#include "D3D11SamplerStateObject.h"
 
 #include "WindowsWindow.h"
 
@@ -521,6 +523,27 @@ namespace ukn {
 
     D3D_FEATURE_LEVEL D3D11GraphicDevice::getDeviceFeatureLevel() const {
         return mFeatureLevel;
+    }
+
+    void D3D11GraphicDevice::setBlendState(const BlendStatePtr& blendState) {
+        if(blendState) {
+            D3D11BlendStateObject* blendObj = checked_cast<D3D11BlendStateObject*>(blendState.get());
+            if(blendObj) {
+                mDeviceContext->OMSetBlendState(blendObj->getD3DBlendState(),
+                                                blendObj->getDesc().blend_factor.value,
+                                                0xffffffff);
+            }
+        }
+    }
+
+    void D3D11GraphicDevice::setSamplerState(const SamplerStatePtr& samplerState) {
+        if(samplerState) {
+            D3D11SamplerStateObject* samplerObj = checked_cast<D3D11SamplerStateObject*>(samplerState.get());
+            if(samplerObj) {
+                ID3D11SamplerState* samplerState = samplerObj->getD3DSamplerState();
+                mDeviceContext->PSSetSamplers(0, 1, &samplerState);
+            }
+        }
     }
 
 } // namespace ukn

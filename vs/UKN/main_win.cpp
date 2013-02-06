@@ -73,7 +73,6 @@ int CALLBACK WinMain(
     ukn::CameraController* camController;
     ukn::FontPtr font;
     ukn::RenderTarget2D* renderTarget;
-    ukn::FrameBufferPtr frameBuffer;
 
     ukn::Vector3 positions[5];
     for(int i=0; i<5; ++i) {
@@ -95,7 +94,7 @@ int CALLBACK WinMain(
                 ukn::ContextCfg::Default()
                   .width(800)
                   .height(600)
-                  .sampleCount(4)
+                  .sampleCount(1)
                   .graphicFactoryName(L"D3D11Plugin.dll")
                   .fps(60)
                )
@@ -110,9 +109,9 @@ int CALLBACK WinMain(
         })
         .connectRender([&](ukn::Window*) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
-            
-            gd.bindFrameBuffer(frameBuffer);
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+            renderTarget->attach();
+
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Transparent, 1.f, 0);
             
             
             font->draw(L"hello world!", 100, 100, ukn::FA_Left);
@@ -128,8 +127,14 @@ int CALLBACK WinMain(
                 if(renderBuffer)
                     gd.renderBuffer(renderBuffer);
             }
-            gd.bindFrameBuffer(gd.getScreenFrameBuffer());
+            renderTarget->detach();
 
+     //       gd.bindFrameBuffer(gd.getScreenFrameBuffer());
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+            ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
+            sb.begin();
+            sb.draw(renderTarget->getTargetTexture(), ukn::float2(0, 0), 0);
+            sb.end();
             
         })
         .connectInit([&](ukn::Window*) {
@@ -169,15 +174,13 @@ int CALLBACK WinMain(
             font = ukn::AssetManager::Instance().load<ukn::Font>(L"consola.ttf");
             font->setStyleProperty(ukn::FSP_Size, 20);
 
-            frameBuffer = gf.createFrameBuffer();
-            renderTarget = new ukn::RenderTarget2D(800,
-                                                   600,
-                                                   1,
-                                                   ukn::EF_RGBA8,
-                                                   ukn::EF_D16);
-            frameBuffer->attach(ukn::ATT_Color0, renderTarget->getTargetView());
-            frameBuffer->attach(ukn::ATT_DepthStencil, renderTarget->getDepthStencilView());
-
+            renderTarget = new ukn::RenderTarget2D();
+            if(renderTarget->create(800,
+                                    600,
+                                    1,
+                                    ukn::EF_RGBA8,
+                                    ukn::EF_D16)) {
+            }
         })
         .run();
     

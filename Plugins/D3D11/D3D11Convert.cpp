@@ -23,21 +23,21 @@ namespace ukn {
     }
 
     DXGI_FORMAT ElementFormatToDxGIFormat(ukn::ElementFormat format) {
-		switch(format) {
-		case ElementFormat::EF_RGBA8:
-			return DXGI_FORMAT_R8G8B8A8_UNORM;
-		case ElementFormat::EF_RGB565:
-			return DXGI_FORMAT_B5G6R5_UNORM;
-		case ElementFormat::EF_RGB5A1:
-			return DXGI_FORMAT_B5G5R5A1_UNORM;
-		case ElementFormat::EF_RGBA4444:
-			return DXGI_FORMAT_UNKNOWN; /* rgba4444? */
-		case ElementFormat::EF_D16:
-			return DXGI_FORMAT_D16_UNORM;
-		case ElementFormat::EF_D24S8:
-			return DXGI_FORMAT_D24_UNORM_S8_UINT;
-		case ElementFormat::EF_D32:
-			return DXGI_FORMAT_D32_FLOAT;
+        switch(format) {
+        case ElementFormat::EF_RGBA8:
+            return DXGI_FORMAT_R8G8B8A8_UNORM;
+        case ElementFormat::EF_RGB565:
+            return DXGI_FORMAT_B5G6R5_UNORM;
+        case ElementFormat::EF_RGB5A1:
+            return DXGI_FORMAT_B5G5R5A1_UNORM;
+        case ElementFormat::EF_RGBA4444:
+            return DXGI_FORMAT_UNKNOWN; /* rgba4444? */
+        case ElementFormat::EF_D16:
+            return DXGI_FORMAT_D16_UNORM;
+        case ElementFormat::EF_D24S8:
+            return DXGI_FORMAT_D24_UNORM_S8_UINT;
+        case ElementFormat::EF_D32:
+            return DXGI_FORMAT_D32_FLOAT;
         case ElementFormat::EF_Float4:
             return DXGI_FORMAT_R32G32B32A32_FLOAT;
         case ElementFormat::EF_Float3:
@@ -48,8 +48,35 @@ namespace ukn {
             return DXGI_FORMAT_R32_FLOAT;
         case ElementFormat::EF_UInt32:
             return DXGI_FORMAT_R8G8B8A8_UNORM;
-		}
-	}
+        }
+    }
+
+    ElementFormat DxGIFormatToElementFormat(DXGI_FORMAT format) {
+        switch(format) {
+        case DXGI_FORMAT_R8G8B8A8_UNORM:
+            return ElementFormat::EF_RGBA8;
+        case DXGI_FORMAT_B5G6R5_UNORM:
+            return ElementFormat::EF_RGB565;
+        case DXGI_FORMAT_B5G5R5A1_UNORM:
+            return ElementFormat::EF_RGB5A1;
+        case DXGI_FORMAT_UNKNOWN:
+            return ElementFormat::EF_RGBA4444; /* rgba4444? */
+        case DXGI_FORMAT_D16_UNORM:
+            return ElementFormat::EF_D16;
+        case DXGI_FORMAT_D24_UNORM_S8_UINT:
+            return ElementFormat::EF_D24S8;
+        case DXGI_FORMAT_D32_FLOAT:
+            return ElementFormat::EF_D32;
+        case DXGI_FORMAT_R32G32B32A32_FLOAT:
+            return ElementFormat::EF_Float4;
+        case DXGI_FORMAT_R32G32B32_FLOAT:
+            return ElementFormat::EF_Float3;
+        case DXGI_FORMAT_R32G32_FLOAT:
+            return ElementFormat::EF_Float2;
+        case DXGI_FORMAT_R32_FLOAT:
+            return ElementFormat::EF_Float;
+        }
+    }
 
     const char* VertexUsageToSemanticName(ukn::VertexUsage usage) {
         switch(usage) {
@@ -67,14 +94,14 @@ namespace ukn {
     }
 
     D3D11_PRIMITIVE_TOPOLOGY RenderModeToPrimitiveTopology(ukn::RenderMode mode) {
-		switch(mode) {
-		case ukn::RenderMode::RM_Line: return D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
-		case ukn::RenderMode::RM_LineLoop: return D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ;
-		case ukn::RenderMode::RM_Point: return D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
-		case ukn::RenderMode::RM_Triangle: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
-		case ukn::RenderMode::RM_TriangleFan: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST; /* to fix */
-		case ukn::RenderMode::RM_TriangleStrip: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
-		}
-	}
+        switch(mode) {
+        case ukn::RenderMode::RM_Line: return D3D11_PRIMITIVE_TOPOLOGY_LINELIST;
+        case ukn::RenderMode::RM_LineLoop: return D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ;
+        case ukn::RenderMode::RM_Point: return D3D11_PRIMITIVE_TOPOLOGY_POINTLIST;
+        case ukn::RenderMode::RM_Triangle: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+        case ukn::RenderMode::RM_TriangleFan: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST; /* to fix */
+        case ukn::RenderMode::RM_TriangleStrip: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+        }
+    }
 
 }

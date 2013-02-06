@@ -87,6 +87,7 @@
     <ClInclude Include="..\..\UKN\include\UKN\Audio.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Basic.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Binding.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\BlendStateObject.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Camera.h" />
     <ClInclude Include="..\..\UKN\include\UKN\CameraController.h" />
     <ClInclude Include="..\..\UKN\include\UKN\CgHelper.h" />
@@ -112,6 +113,7 @@
     <ClInclude Include="..\..\UKN\include\UKN\RenderState.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderTarget.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderView.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\SamplerStateObject.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Scene.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Scripting.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SequencialAnimation.h" />
@@ -138,6 +140,7 @@
     <ClCompile Include="..\..\UKN\src\Core\Input.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTable.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTableLoader.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\BlendStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\CameraController.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\CgHelper.cpp" />
@@ -153,6 +156,7 @@
     <ClCompile Include="..\..\UKN\src\Render\RenderState.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderTarget.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderView.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\SamplerStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Scene.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Shader.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />

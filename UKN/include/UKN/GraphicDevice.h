@@ -16,9 +16,6 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
 
-#include "UKN/BlendStateObject.h"
-#include "UKN/SamplerStateObject.h"
-
 #include <stack>
 
 namespace ukn {
@@ -130,13 +127,10 @@ namespace ukn {
             */
         virtual void begin2DRendering(const OrthogonalParams& params = OrthogonalParams()) = 0;
         virtual void end2DRendering() = 0;
-        
-        /*
-         blend & sampler objects
-         */
+
         virtual void setBlendState(const BlendStatePtr& blendState) = 0;
         virtual void setSamplerState(const SamplerStatePtr& samplerState) = 0;
-
+       
     public:
         virtual void bindTexture(const TexturePtr& texture) = 0;
         virtual void bindEffect(const EffectPtr& effect) = 0;
@@ -153,9 +147,6 @@ namespace ukn {
         void clearStencil(int32 stencil);
         
         void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
-        
-    public:
-        void setRenderTarget(const RenderTargetPtr& target);
         
     protected:
         FrameBufferPtr mCurrFrameBuffer;

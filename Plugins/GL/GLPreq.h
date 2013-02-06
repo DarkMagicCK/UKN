@@ -6,8 +6,13 @@
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
 
+#include "mist/Platform.h"
 // use gl3.2 profile means there's no fixed pipeline functions unless use compability context
 // #define UKN_REQUEST_OPENGL_3_2_PROFILE
+
+
+// static link
+#define GLEW_STATIC
 
 #include "glew/glew.h"
 	
@@ -50,8 +55,6 @@
 #ifdef MIST_OS_WINDOWS
 // glew for higher opengl profile extensions
 
-// static link
-#define GLEW_STATIC
 
 #include <GL/GL.h>
 #include <GL/GLU.h>
@@ -62,6 +65,7 @@
 #pragma comment(lib, "glu32.lib")
 
 #elif defined(MIST_OS_OSX)
+    #include <OpenGl/gl.h>
 	#include <OpenGL/OpenGL.h>
 	#include <OpenGL/glext.h>
 

@@ -56,7 +56,9 @@ namespace ukn {
 
         void begin2DRendering(const OrthogonalParams& params) override;
         void end2DRendering() override;
-
+        
+        void setBlendState(const BlendStatePtr& blendState) override;
+        void setSamplerState(const SamplerStatePtr& samplerState) override;
         
     private:
         WindowPtr mWindow;

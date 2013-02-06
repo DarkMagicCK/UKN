@@ -9,7 +9,7 @@
 
 namespace ukn {
 
-    bool _check_error(CGcontext context) {
+    inline bool _check_error(CGcontext context) {
         CGerror error;
         const char* str = cgGetLastErrorString(&error);
         if(error != CG_NO_ERROR) {
@@ -98,8 +98,7 @@ namespace ukn {
     bool CgGLShader::initialize(const ResourcePtr& resource, const ShaderDesc& desc) {
         CGprofile profile;
         mDesc = desc;
-        switch (desc.type)
-        {
+        switch (desc.type) {
         case ukn::ST_FragmentShader:
             profile = cgGLGetLatestProfile(CG_GL_FRAGMENT);
             break;
@@ -111,6 +110,9 @@ namespace ukn {
             break;
         }
         StreamPtr stream = resource->readIntoMemory();
+        if(!stream)
+            return false;
+        
         MemoryStream* memStream = ((MemoryStream*)stream.get());
         std::string content(memStream->data(), memStream->data() + memStream->size());
         mProgram = cgCreateProgram(mContext, 

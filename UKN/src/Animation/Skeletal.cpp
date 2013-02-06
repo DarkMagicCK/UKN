@@ -169,6 +169,7 @@ namespace ukn {
                 BoneAnimationCompleteArgs args(mTotalPlayedTime);
                 complete_event.raise(this, args);
                 break;
+                
         }
     }
     

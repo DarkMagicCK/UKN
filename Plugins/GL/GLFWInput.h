@@ -238,6 +238,8 @@ namespace ukn {
             case input::Release:
                 return GLFW_RELEASE;
         }
+        mist_assert(0);
+        return 0;
     }
     
     inline input::InputState glfw_to_ukn_joystick_state(int state) {
@@ -248,6 +250,7 @@ namespace ukn {
                 return input::InputState::Release;
         }
         mist_assert(0);
+        
     }
     
     inline int ukn_joystick_state_to_glfw(input::InputState state) {
@@ -256,7 +259,10 @@ namespace ukn {
                 return GLFW_PRESS;
             case input::Release:
                 return GLFW_RELEASE;
+            default:
+                return 0;
         }
+        mist_assert(0);
     }
     
 } // namespace ukn

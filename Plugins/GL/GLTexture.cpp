@@ -162,6 +162,8 @@ namespace ukn {
         glBindTexture(GL_TEXTURE_2D, prevTexture);
         mTextureData = texData;
         mMappedLevel = level;
+        
+        return texData;
     }
     
     void GLTexture2D::unmap() {

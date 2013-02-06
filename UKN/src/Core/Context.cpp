@@ -187,6 +187,16 @@ namespace ukn {
                 return L"EF_RGB5A1";
             case EF_RGBA4444:
                 return L"EF_RGBA4444";
+            case EF_Float4:
+                return L"EF_Float4";
+            case EF_Float:
+                return L"EF_Float";
+            case EF_Float2:
+                return L"EF_Float2";
+            case EF_Float3:
+                return L"EF_Float3";
+            case EF_UInt32:
+                return L"EF_UInt32";
         }
         return L"unknown_fmt";
     }

@@ -14,10 +14,13 @@
 namespace mist {
     
     StreamPtr Resource::readIntoMemory() {
-        if(mResourceStream->getStreamType() == ST_File) {
-            mResourceStream = static_cast<FileStream*>(mResourceStream.get())->readIntoMemory();
+        if(mResourceStream) {
+            if(mResourceStream->getStreamType() == ST_File) {
+                mResourceStream = static_cast<FileStream*>(mResourceStream.get())->readIntoMemory();
+            }
+            return this->mResourceStream;
         }
-        return this->mResourceStream;
+        return StreamPtr();
     }
     
     Resource::operator bool() {

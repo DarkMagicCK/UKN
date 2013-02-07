@@ -25,14 +25,17 @@ namespace ukn {
         SharedPtr<uint8> readTextureData(uint8 level);
         void updateTextureData(void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level);
 		
-        uint32 getWidth(uint32 level = 0) const override;
-        uint32 getHeight(uint32 level = 0) const override;
+        uint32 width(uint32 level = 0) const override;
+        uint32 height(uint32 level = 0) const override;
+        uint32 depth(uint32 level = 0) const override;
         
+        void generateMipmaps() override;
+
 		/* uintPtr of ID3D11Texture2D */
         uintPtr getTextureId() const override;
 
-        void* map(uint32 level = 0) override;
-        void unmap() override;
+        void* map(uint32 level = 0);
+        void unmap();
         
 		ID3D11Texture2D* getTexture() const;
         /* may be null if bindFlag & TB_Texture = 0 */

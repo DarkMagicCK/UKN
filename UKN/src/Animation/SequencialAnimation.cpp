@@ -126,8 +126,8 @@ namespace ukn {
                                     info.texture_pos_x = 0;
                                     info.texture_pos_y = 0;
                                     if(info.texture) {
-                                        info.grid_width = info.texture->getWidth();
-                                        info.grid_height = info.texture->getHeight();
+                                        info.grid_width = info.texture->width();
+                                        info.grid_height = info.texture->height();
                                     }
                                 }
                                 
@@ -243,7 +243,7 @@ namespace ukn {
                 switch(mGrids[0].mode) {
                     case SA_Grid: {
                         GridInfo& root = mGrids[0];
-                        int32 wcount = root.texture->getWidth() / root.grid_width;
+                        int32 wcount = root.texture->width() / root.grid_width;
                         
                         mCurrentGridInfo.texture_pos_x = (int32)(mCurrentGridIndex % wcount) * root.grid_width;
                         mCurrentGridInfo.texture_pos_y = (int32)(mCurrentGridIndex / wcount) * root.grid_height;

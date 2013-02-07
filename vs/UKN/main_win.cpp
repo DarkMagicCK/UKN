@@ -111,11 +111,8 @@ int CALLBACK WinMain(
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             renderTarget->attach();
 
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Transparent, 1.f, 0);
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Blue, 1.f, 0);
             
-            
-            font->draw(L"hello world!", 100, 100, ukn::FA_Left);
-            font->render();
 
             effect->getFragmentShader()->setFloatVectorVariable("lightDirection", 
                 ukn::float4(sinf(r), cosf(r), 0.5f, 1.0));
@@ -133,8 +130,15 @@ int CALLBACK WinMain(
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
             ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
             sb.begin();
-            sb.draw(renderTarget->getTargetTexture(), ukn::float2(0, 0), 0);
+            sb.draw(renderTarget->getTargetTexture(), ukn::Rectangle(0, 0, 240, 180));
             sb.end();
+            
+            
+            font->draw(L"hello world!", 600, 500, ukn::FA_Left);
+            font->render();
+
+            if(renderBuffer)
+                    gd.renderBuffer(renderBuffer);
             
         })
         .connectInit([&](ukn::Window*) {

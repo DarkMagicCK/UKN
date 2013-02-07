@@ -8,7 +8,7 @@
 namespace ukn {
 
     D3D11Texture2D::D3D11Texture2D(D3D11GraphicDevice* device):
-        Texture(TT_Texture2D),
+        Texture(TT_Texture2D, 1, 0, 0),
         mTexture(0),
         mDevice(device) {
 
@@ -195,20 +195,33 @@ namespace ukn {
         }
     }
 
-    uint32 D3D11Texture2D::getWidth(uint32 level) const {
+    uint32 D3D11Texture2D::width(uint32 level) const {
         D3D11_TEXTURE2D_DESC desc;
         if(mTexture) {
             mTexture->GetDesc(&desc);
-            return desc.Width / (1U << (level));
+            if(level == 0 || level == 1)
+                return desc.Width;
+            return desc.Width / (1U << (level-1));
         }
     }
 
-    uint32 D3D11Texture2D::getHeight(uint32 level) const {
+    uint32 D3D11Texture2D::height(uint32 level) const {
         D3D11_TEXTURE2D_DESC desc;
         if(mTexture) {
             mTexture->GetDesc(&desc);
-            return desc.Height / (1U << (level));
+            if(level == 0 || level == 1)
+                return desc.Height;
+           
+            return desc.Height / (1U << (level-1));
         }
+    }
+
+    uint32 D3D11Texture2D::depth(uint32 level) const {
+        return 0;
+    }
+
+    void D3D11Texture2D::generateMipmaps() {
+
     }
 
     uintPtr D3D11Texture2D::getTextureId() const {

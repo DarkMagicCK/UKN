@@ -128,7 +128,7 @@ namespace ukn {
     }
     
     RenderViewPtr GLGraphicFactory::createRenderView(const TexturePtr& texture) const {
-        if(texture->getType() == TT_Texture2D)
+        if(texture->type() == TT_Texture2D)
             return new GLTexture2DRenderView(texture, 0, 0);
         return RenderViewPtr();
     }

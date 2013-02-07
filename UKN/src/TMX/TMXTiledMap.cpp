@@ -126,8 +126,8 @@ namespace ukn {
         
         static void build_tileset_tiles(TileSet& tileset, uint32 tileset_id) {
             if(tileset.image) {
-                int32 wcount = tileset.image->getWidth() / tileset.tile_width;
-                int32 hcount = tileset.image->getHeight() / tileset.tile_height;
+                int32 wcount = tileset.image->width() / tileset.tile_width;
+                int32 hcount = tileset.image->height() / tileset.tile_height;
                 
                 tileset.tiles.resize(wcount * hcount);
                 //ukn_logged_assert(tileset.tiles, "error allocing tileset tiles");

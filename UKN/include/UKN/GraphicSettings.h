@@ -16,6 +16,8 @@ namespace ukn {
     using namespace mist;
     
     enum ElementFormat {
+        EF_Unknown = -1,
+
         EF_RGBA8,   // GL_RGBA8, D3DFMT_A8R8G8B8
         EF_RGB565,   // GL_RGB565, D3DFMT_RGB6B5
         EF_RGBA4444,  // GL_RGBA4,

@@ -140,9 +140,9 @@ namespace ukn {
     mLevel(level) {
         GLTexture2D* glTexture = (GLTexture2D*)mTexture.get();
         mTex = (GLuint)glTexture->getTextureId();
-        mWidth = glTexture->getWidth();
-        mHeight = glTexture->getHeight();
-        mElementFormat = glTexture->getFormat();
+        mWidth = glTexture->width(0);
+        mHeight = glTexture->height(0);
+        mElementFormat = glTexture->format();
     }
 
     void GLTexture2DRenderView::clearColor(const Color& clr) {

@@ -21,13 +21,16 @@ namespace ukn {
         bool load(const ResourcePtr& rsrc, bool createMipmap);
         bool create(uint32 w, uint32 h, uint32 mipmas, ElementFormat format, const uint8* initialData);
         
-        uint32 getWidth(uint32 level = 0) const override;
-        uint32 getHeight(uint32 level = 0) const override;
-        
+        uint32 width(uint32 level) const override;
+        uint32 height(uint32 level) const override;
+        uint32 depth(uint32 level) const override;
+
+        void generateMipmaps() override;
+
         uintPtr getTextureId() const override;
         
-        void* map(uint32 level = 0) override;
-        void unmap() override;
+        void* map(uint32 level = 0);
+        void unmap();
 
     private:
         uintPtr mTextureId;

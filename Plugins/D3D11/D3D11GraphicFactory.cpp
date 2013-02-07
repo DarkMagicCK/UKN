@@ -113,7 +113,7 @@ namespace ukn {
     }
 
     RenderViewPtr D3D11GraphicFactory::createRenderView(const TexturePtr& texture) const {
-        if(texture->getType() == TT_Texture2D)
+        if(texture->type() == TT_Texture2D)
             return MakeSharedPtr<D3D11Texture2DRenderView>(texture, (D3D11GraphicDevice*)mGraphicDevice.get());
         return 0;
     }

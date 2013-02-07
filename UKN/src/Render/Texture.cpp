@@ -13,20 +13,30 @@ namespace ukn {
     class NullTexture: public Texture {
     public:
         NullTexture():
-        Texture(TT_Null) {
+        Texture(TT_Null, 1, 0, 0) {
             
         }
+
+        virtual ~NullTexture() { }
         
-        uint32 getWidth(uint32 level) const {
+        uint32 width(uint32 level) const {
             return 0;
         }
         
-        uint32 getHeight(uint32 level) const {
+        uint32 height(uint32 level) const {
+            return 0;
+        }
+
+        uint32 depth(uint32 level) const {
             return 0;
         }
         
         uintPtr getTextureId() const {
             return 0;
+        }
+
+        void generateMipmaps() {
+
         }
 
         void* map(uint32 pass) { return 0; }
@@ -39,24 +49,40 @@ namespace ukn {
         return static_ptr;
     }
     
-    Texture::Texture(TextureType type):
-    mType(type) {
+    Texture::Texture(TextureType type, uint32 sample_count, uint32 sample_quality, uint32 _reserved):
+    mType(type),
+    mFormat(EF_Unknown),
+    mNumMipmaps(1),
+    mSampleCount(sample_count),
+    mSampleQuality(sample_quality),
+    mArraySize(1),
+    mReserverd(_reserved) {
         
-    }
-    
-    TextureType Texture::getType() const {
-        return mType;
     }
     
     Texture::~Texture() {
         
     }
     
-    ElementFormat Texture::getFormat() const {
-        // return mFormat;
-        // currently RGBA8(32bit) textures only
-        // todo with element formats
+    TextureType Texture::type() const {
+        return mType;
+    }
+
+    ElementFormat Texture::format() const {
         return mFormat;
     }
+
+    uint32 Texture::numMipmaps() const {
+        return mNumMipmaps;
+    }
+
+    uint32 Texture::sampleQuality() const {
+        return mSampleQuality;
+    }
+
+    uint32 Texture::sampleCount() const {
+        return mSampleCount;
+    }
+    
     
 } // namespace ukn

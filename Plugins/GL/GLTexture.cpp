@@ -20,7 +20,7 @@
 namespace ukn {
 
     GLTexture2D::GLTexture2D():
-    Texture(TT_Texture2D),
+    Texture(TT_Texture2D, 1, 0, 0),
     mMappedLevel(0),
     mTextureData(0) {
 
@@ -137,12 +137,20 @@ namespace ukn {
         return false;
     }
 
-    uint32 GLTexture2D::getWidth(uint32 level) const {
+    uint32 GLTexture2D::width(uint32 level) const {
         return mOrigWidth;
     }
 
-    uint32 GLTexture2D::getHeight(uint32 level) const {
+    uint32 GLTexture2D::height(uint32 level) const {
         return mOrigHeight;
+    }
+
+    uint32 GLTexture2D::depth(uint32 level) const {
+        return 0;
+    }
+
+    void GLTexture2D::generateMipmaps() {
+
     }
     
     void* GLTexture2D::map(uint32 level) {
@@ -154,13 +162,13 @@ namespace ukn {
         GLint prevTexture;
         glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
         
-        uint8* texData = mist_malloc_t(uint8, mOrigWidth * mOrigHeight * GetElementSize(this->getFormat()));
+        uint8* texData = mist_malloc_t(uint8, mOrigWidth * mOrigHeight * GetElementSize(this->format()));
         
         glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
         glGetTexImage(GL_TEXTURE_2D,
                       level,
-                      element_format_to_gl_format(this->getFormat()),
-                      element_format_to_gl_element_type(this->getFormat()),
+                      element_format_to_gl_format(this->format()),
+                      element_format_to_gl_element_type(this->format()),
                       texData);
         if(glGetError() != GL_NO_ERROR) {
             log_error("GLGraphicDevice: error when locking texture");
@@ -189,8 +197,8 @@ namespace ukn {
                         0,
                         mWidth,
                         mHeight,
-                        element_format_to_gl_format(this->getFormat()),
-                        element_format_to_gl_element_type(this->getFormat()),
+                        element_format_to_gl_format(this->format()),
+                        element_format_to_gl_element_type(this->format()),
                         mTextureData);
         
         if(glGetError() != GL_NO_ERROR) {

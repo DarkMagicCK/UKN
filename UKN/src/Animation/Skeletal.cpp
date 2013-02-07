@@ -489,8 +489,8 @@ namespace ukn {
                             if(texture) {
                                 if(config->getString(L"mode", L"texture") == L"texture") {
                                     bone->mTexture = new SequencialAnimation(texture,
-                                                                            texture->getWidth(),
-                                                                            texture->getHeight(),
+                                                                            texture->width(),
+                                                                            texture->height(),
                                                                             1,
                                                                             0);
                                 } else {

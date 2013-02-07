@@ -65,10 +65,10 @@ namespace ukn {
         float u1 = 0, u2 = 1, v1 = 0, v2 = 1;
         if(texture) {
             if(!descriptor.source_rect.isEmpty()) {
-                u1 = descriptor.source_rect.x() / texture->getWidth();
-                u2 = descriptor.source_rect.right() / texture->getWidth();
-                v1 = descriptor.source_rect.y() / texture->getHeight();
-                v2 = descriptor.source_rect.bottom() / texture->getHeight();
+                u1 = descriptor.source_rect.x() / texture->width();
+                u2 = descriptor.source_rect.right() / texture->width();
+                v1 = descriptor.source_rect.y() / texture->height();
+                v2 = descriptor.source_rect.bottom() / texture->height();
                 
                 if(descriptor.hflip)
                     std::swap(v1, v2);
@@ -89,8 +89,8 @@ namespace ukn {
             float tx2, ty2;
             
             if(descriptor.source_rect.isEmpty() && texture) {
-                tx2 = (texture->getWidth() - descriptor.center.x()) * descriptor.scale.x();
-                ty2 = (texture->getHeight() - descriptor.center.y()) * descriptor.scale.y();
+                tx2 = (texture->width() - descriptor.center.x()) * descriptor.scale.x();
+                ty2 = (texture->height() - descriptor.center.y()) * descriptor.scale.y();
             } else {
                 tx2 = (descriptor.source_rect.width() - descriptor.center.x()) * descriptor.scale.x();
                 ty2 = (descriptor.source_rect.height() - descriptor.center.y()) * descriptor.scale.y();

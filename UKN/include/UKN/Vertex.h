@@ -152,14 +152,14 @@ namespace ukn {
     
     struct Vertex2D {
         // GL_T2F_C4UB_V3F
-        float u, v;
+        Vector2 uv;
         uint32 color;
-        float x, y, z;
+        Vector3 xyz;
         
         Vertex2D():
-        u(0.f), v(0.f),
+        uv(float2(0, 0)),
         color(0xffffffff),        
-        x(0.f), y(0.f), z(0.f)
+        xyz(float3(0, 0, 0))
         { }
         
         static vertex_elements_type& Format() {

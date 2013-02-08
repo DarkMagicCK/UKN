@@ -46,6 +46,10 @@ namespace ukn {
     }
 
     void* GLVertexBuffer::map() {
+        if(access() == None) {
+            log_error("GLVertexBuffer: trying to map buffer with access = None");
+            return 0;
+        }
         if(mMaped)
             unmap();
         
@@ -73,11 +77,13 @@ namespace ukn {
     }
 
     void GLVertexBuffer::unmap() {
-        glBindBuffer(GL_ARRAY_BUFFER, mId);
-        glUnmapBuffer(GL_ARRAY_BUFFER);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        if(mMaped) {
+            glBindBuffer(GL_ARRAY_BUFFER, mId);
+            glUnmapBuffer(GL_ARRAY_BUFFER);
+            glBindBuffer(GL_ARRAY_BUFFER, 0);
         
-        mMaped = false;
+            mMaped = false;
+        }
     }
 
     void GLVertexBuffer::activate() {
@@ -150,6 +156,10 @@ namespace ukn {
     }
 
     void* GLIndexBuffer::map() {
+        if(access() == None) {
+            log_error("GLIndexBuffer: trying to map buffer with access = None");
+            return 0;
+        }
         if(mMaped)
             unmap();
         
@@ -192,9 +202,11 @@ namespace ukn {
     }
     
     void GLIndexBuffer::unmap() {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
-        glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        if(mMaped) {
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
+            glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+        }
     }
 
     void GLIndexBuffer::activate() {

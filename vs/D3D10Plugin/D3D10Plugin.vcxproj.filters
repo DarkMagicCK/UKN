@@ -113,9 +113,6 @@
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Plugins\D3D11\MetroWindow.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -132,6 +129,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Plugins\D3D11\D3D11SamplerStateObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11TextureCube.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

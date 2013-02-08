@@ -928,9 +928,9 @@ namespace mist {
         static Matrix4 TransMat( real x, real y, real z ) {
             Matrix4 m;
 
-            m.c[3][0] = x;
-            m.c[3][1] = y;
-            m.c[3][2] = z;
+            m.c[0][3] = x;
+            m.c[1][3] = y;
+            m.c[2][3] = z;
 
             return m;
         }

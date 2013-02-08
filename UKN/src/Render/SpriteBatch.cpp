@@ -78,10 +78,10 @@ namespace ukn {
             }
         }
         
-        tmpVert[0].u = u1; tmpVert[0].v = v1; tmpVert[0].z = descriptor.layer_depth;
-        tmpVert[1].u = u2; tmpVert[1].v = v1; tmpVert[0].z = descriptor.layer_depth;
-        tmpVert[2].u = u2; tmpVert[2].v = v2; tmpVert[0].z = descriptor.layer_depth;
-        tmpVert[3].u = u1; tmpVert[3].v = v2; tmpVert[0].z = descriptor.layer_depth;
+        tmpVert[0].uv.set(u1, v1);
+        tmpVert[1].uv.set(u2, v1);
+        tmpVert[2].uv.set(u2, v2);
+        tmpVert[3].uv.set(u1, v2);
         
         if(descriptor.dest_rect.isEmpty()) {
             float tx1 = -descriptor.center.x() * descriptor.scale.x();
@@ -100,40 +100,48 @@ namespace ukn {
                 float cost = cosf(descriptor.rotation);
                 float sint = sinf(descriptor.rotation);
                 
-                tmpVert[0].x  = tx1*cost - ty1*sint + descriptor.position.x();
-                tmpVert[1].x  = tx2*cost - ty1*sint + descriptor.position.x();
-                tmpVert[2].x  = tx2*cost - ty2*sint + descriptor.position.x();
-                tmpVert[3].x  = tx1*cost - ty2*sint + descriptor.position.x();
-                
-                tmpVert[0].y  = tx1*sint + ty1*cost + descriptor.position.y();	
-                tmpVert[1].y  = tx2*sint + ty1*cost + descriptor.position.y();	
-                tmpVert[2].y  = tx2*sint + ty2*cost + descriptor.position.y();	
-                tmpVert[3].y  = tx1*sint + ty2*cost + descriptor.position.y();
+                tmpVert[0].xyz.set(tx1*cost - ty1*sint + descriptor.position.x(),
+                                   tx1*sint + ty1*cost + descriptor.position.y(),
+                                   descriptor.layer_depth);
+                tmpVert[1].xyz.set(tx2*cost - ty1*sint + descriptor.position.x(),
+                                   tx2*sint + ty1*cost + descriptor.position.y(),
+                                   descriptor.layer_depth);
+                tmpVert[2].xyz.set(tx2*cost - ty2*sint + descriptor.position.x(),
+                                   tx2*sint + ty2*cost + descriptor.position.y(),
+                                   descriptor.layer_depth);
+                tmpVert[3].xyz.set(tx1*cost - ty2*sint + descriptor.position.x(),
+                                   tx1*sint + ty2*cost + descriptor.position.y(),
+                                   descriptor.layer_depth);
+   
             }
             else {
-                tmpVert[0].x = tx1 + descriptor.position.x(); 
-                tmpVert[1].x = tx2 + descriptor.position.x(); 
-                tmpVert[2].x = tmpVert[1].x; 
-                tmpVert[3].x = tmpVert[0].x; 
-                
-                tmpVert[0].y = ty1 + descriptor.position.y();
-                tmpVert[1].y = tmpVert[0].y;
-                tmpVert[2].y = ty2 + descriptor.position.y();
-                tmpVert[3].y = tmpVert[2].y;
+                tmpVert[0].xyz.set(tx1 + descriptor.position.x(),
+                                   ty1 + descriptor.position.y(),
+                                   descriptor.layer_depth);
+                tmpVert[1].xyz.set(tx2 + descriptor.position.x(),
+                                   tmpVert[0].xyz.y(),
+                                   descriptor.layer_depth);
+                tmpVert[2].xyz.set(tmpVert[1].xyz.x(),
+                                   ty2 + descriptor.position.y(),
+                                   descriptor.layer_depth);
+                tmpVert[3].xyz.set(tmpVert[0].xyz.x(),
+                                   tmpVert[2].xyz.y(),
+                                   descriptor.layer_depth);
             }
             
         } else {
-            tmpVert[0].x = descriptor.dest_rect.x1; 
-            tmpVert[0].y = descriptor.dest_rect.y1; 
-            
-            tmpVert[1].x = descriptor.dest_rect.x2; 
-            tmpVert[1].y = descriptor.dest_rect.y1; 
-            
-            tmpVert[2].x = descriptor.dest_rect.x2; 
-            tmpVert[2].y = descriptor.dest_rect.y2; 
-            
-            tmpVert[3].x = descriptor.dest_rect.x1; 
-            tmpVert[3].y = descriptor.dest_rect.y2; 
+            tmpVert[0].xyz.set(descriptor.dest_rect.x1,
+                               descriptor.dest_rect.y1,
+                               descriptor.layer_depth);
+            tmpVert[1].xyz.set(descriptor.dest_rect.x2,
+                               descriptor.dest_rect.y1,
+                               descriptor.layer_depth);
+            tmpVert[2].xyz.set(descriptor.dest_rect.x2,
+                               descriptor.dest_rect.y2,
+                               descriptor.layer_depth);
+            tmpVert[3].xyz.set(descriptor.dest_rect.x1,
+                               descriptor.dest_rect.y2,
+                               descriptor.layer_depth);
         }
         
         for(int i=0; i<4; ++i) {

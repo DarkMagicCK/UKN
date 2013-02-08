@@ -85,12 +85,12 @@ namespace ukn {
     
     void GraphicContext::lineTo(float x, float y, float z) {
         Vertex2D vertex;
-        vertex.x = mCurrX; vertex.y = mCurrY; vertex.z = mCurrZ;
+        vertex.xyz.set(mCurrX, mCurrY, mCurrZ);
         vertex.color = mDrawColor.toRGBA();
         
         mVertexBuffer->push(vertex);
         
-        vertex.x = x; vertex.y = y; vertex.z = z;
+        vertex.xyz.set(x, y, z);
         mVertexBuffer->push(vertex);
         
         mCurrX = x;
@@ -107,9 +107,9 @@ namespace ukn {
         double step = mist::math::degree_to_radius(360.f / seg_size);
         for(uint32 i = 0; i < seg_size; ++i) {
             Vertex2D vertex;
-            vertex.x = x + r * cosf(i * step);
-            vertex.y = y + r * sinf(i * step);
-            vertex.z = z;
+            vertex.xyz.set(x + r * cosf(i * step),
+                           y + r * sinf(i * step),
+                           z);
             vertex.color = mDrawColor.toRGBA();
             
             mVertexBuffer->push(vertex);
@@ -122,18 +122,16 @@ namespace ukn {
         addSeg(mCurrRenderMode);
 
         Vertex2D vertex;
-        vertex.x = x;
-        vertex.y = y;
-        vertex.z = z;
+        vertex.xyz.set(x, y, z);
         vertex.color = mFillColor.toRGBA();
         
         uint32 seg_size = uint32(ceil(r / 100.f) * 100);
         double step = mist::math::degree_to_radius(360.f / seg_size);
         for(uint32 i = 0; i <= seg_size; ++i) {
             Vertex2D vertex;
-            vertex.x = x + r * cosf(i * step);
-            vertex.y = y + r * sinf(i * step);
-            vertex.z = z;
+            vertex.xyz.set(x + r * cosf(i * step),
+                           y + r * sinf(i * step),
+                           z);
             vertex.color = mFillColor.toRGBA();
             
             mVertexBuffer->push(vertex);
@@ -146,20 +144,20 @@ namespace ukn {
         addSeg(mCurrRenderMode);
 
         Vertex2D vertex;
-        vertex.x = rect.left();
-        vertex.y = rect.top();
-        vertex.z = z;
+        vertex.xyz.set(rect.left(),
+                       rect.top(),
+                       z);
         vertex.color = mDrawColor.toRGBA();
         
         mVertexBuffer->push(vertex);
         
-        vertex.x = rect.right();
+        vertex.xyz.x() = rect.right();
         mVertexBuffer->push(vertex);
         
-        vertex.y = rect.bottom();
+        vertex.xyz.y() = rect.bottom();
         mVertexBuffer->push(vertex);
         
-        vertex.x = rect.left();
+        vertex.xyz.x() = rect.left();
         mVertexBuffer->push(vertex);
         
         addSeg(RM_LineLoop);
@@ -169,25 +167,25 @@ namespace ukn {
         addSeg(mCurrRenderMode);
 
         Vertex2D vertex;
-        vertex.x = rect.left();
-        vertex.y = rect.top();
-        vertex.z = z;
+        vertex.xyz.set(rect.left(),
+                       rect.top(),
+                       z);
         vertex.color = mFillColor.toRGBA();
         
         mVertexBuffer->push(vertex);
         
-        vertex.x = rect.right();
+        vertex.xyz.x() = rect.right();
         mVertexBuffer->push(vertex);
         
-        vertex.y = rect.bottom();
+        vertex.xyz.y() = rect.bottom();
         mVertexBuffer->push(vertex);
         
         mVertexBuffer->push(vertex);
 
-        vertex.x = rect.left();
+        vertex.xyz.x() = rect.left();
         mVertexBuffer->push(vertex);
 
-        vertex.y = rect.top();
+        vertex.xyz.y() = rect.top();
         mVertexBuffer->push(vertex);
         
         addSeg(RM_Triangle);

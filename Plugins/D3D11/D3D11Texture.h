@@ -12,7 +12,27 @@ namespace ukn {
 
 	class D3D11GraphicDevice;
 
-	class D3D11Texture2D: public Texture {
+    class D3D11Texture: public Texture {
+    public:
+        D3D11Texture(TextureType type, uint32 sample_count, uint32 sample_quality, uint32 access_hint, D3D11GraphicDevice* device);
+        virtual ~D3D11Texture();
+
+        virtual uint32 width(uint32 level = 0) const override;
+        virtual uint32 height(uint32 level = 0) const override;
+        virtual uint32 depth(uint32 level = 0) const override;
+
+        virtual void generateMipmaps() override;
+        virtual uintPtr getTextureId() const override;
+        
+        /* may be null if bindFlag & TB_Texture = 0 */
+        ID3D11ShaderResourceView* getShaderResourceView() const;
+
+    protected:
+        COM<ID3D11ShaderResourceView>::Ptr mShaderResourceView;
+        D3D11GraphicDevice* mDevice;
+    };
+
+	class D3D11Texture2D: public D3D11Texture {
 	public:
 		D3D11Texture2D(D3D11GraphicDevice* device);
 		virtual ~D3D11Texture2D();
@@ -22,9 +42,6 @@ namespace ukn {
 		/* loaded into texture first, then create resource view */
         bool create(uint32 w, uint32 h, uint32 mipmas, ElementFormat format, const uint8* initialData, uint32 bindFlag);
         
-        SharedPtr<uint8> readTextureData(uint8 level);
-        void updateTextureData(void* data, int32 x, int32 y, uint32 width, uint32 height, uint8 level);
-		
         uint32 width(uint32 level = 0) const override;
         uint32 height(uint32 level = 0) const override;
         uint32 depth(uint32 level = 0) const override;
@@ -38,14 +55,21 @@ namespace ukn {
         void unmap();
         
 		ID3D11Texture2D* getTexture() const;
-        /* may be null if bindFlag & TB_Texture = 0 */
-		ID3D11ShaderResourceView* getShaderResourceView() const;
 
 	private:
-		COM<ID3D11ShaderResourceView>::Ptr mShaderResourceView;
 		COM<ID3D11Texture2D>::Ptr mTexture;
-		D3D11GraphicDevice* mDevice;
 	};
+
+    class D3D11TextureCube: public D3D11Texture {
+    public:
+        D3D11TextureCube(D3D11GraphicDevice* device);
+        virtual ~D3D11TextureCube();
+
+        bool load(const ResourcePtr& rsrc, bool createMipmap);
+        // 6 faces
+        bool create(uint32 w, uint32 h, uint32 mipmaps, ElementFormat format, const uint8* initialData[6], uint32 bindFlag);
+
+    };
 
 } // namespace ukn
 

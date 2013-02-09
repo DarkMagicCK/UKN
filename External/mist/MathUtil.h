@@ -647,8 +647,9 @@ namespace mist {
         void set(const Quaternion& quad);
         float length() const;
 
-        inline Quaternion& operator=(const Quaternion& rhs);
-        inline Quaternion operator*(const Quaternion& rhs);
+        Quaternion& operator=(const Quaternion& rhs);
+        Quaternion operator*(const Quaternion& rhs) const;
+        Quaternion& operator*=(const Quaternion& rhs);
 
         void makeRotate(real angle, real _x, real _y, real _z);
         void makeRotate(real angle, const Vector3& vec);

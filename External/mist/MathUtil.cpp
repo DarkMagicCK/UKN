@@ -195,9 +195,10 @@ namespace mist {
         }
 
         Vector3 transform_quaternion(const Vector3& v, const Quaternion& q) {
-            float a(q.w() * q.w() - q.vec.length());
+            
             Vector3 qv = Vector3(q.vec.x(), q.vec.y(), q.vec.z());
-            float b(2 * v.dot(qv));
+            float a(q.w() * q.w() - qv.sqrLength());
+            float b(2 * qv.dot(v));
             float c(q.w() + q.w());
 
             Vector3 cross_v(qv.cross(v));
@@ -344,40 +345,21 @@ namespace mist {
         return vec.length();
     }
 
-    inline Quaternion& Quaternion::operator=(const Quaternion& rhs) {
+    Quaternion& Quaternion::operator=(const Quaternion& rhs) {
         this->set(rhs);
         return *this;
     }
 
-    inline Quaternion Quaternion::operator*(const Quaternion& rhs) {
-        Quaternion ans;
-        real d1, d2, d3, d4;
-        d1 = this->w()*rhs.w();
-        d2 = -this->x()*rhs.x();
-        d3 = -this->y()*rhs.y();
-        d4 = -this->z()*rhs.z();
-        real w = d1+d2+d3+d4;
+    Quaternion Quaternion::operator*(const Quaternion& rhs) const {
+        return Quaternion(
+            this->x() * rhs.w() - this->y() * rhs.z() + this->z() * rhs.y() + this->w() * rhs.x(),
+            this->x() * rhs.z() + this->y() * rhs.w() - this->z() * rhs.x() + this->w() * rhs.y(),
+            this->y() * rhs.x() - this->x() * rhs.y() + this->z() * rhs.w() + this->w() * rhs.z(),
+            this->w() * rhs.w() - this->x() * rhs.x() - this->y() * rhs.y() - this->z() * rhs.z());
+    }
 
-        d1 = this->w()*rhs.x();
-        d2 = this->x()*rhs.w();
-        d3 = this->y()*rhs.z();
-        d4 = -this->z()*rhs.y();
-        real x = d1+d2+d3+d4;
-
-        d1 = this->w()*rhs.y();
-        d2 = this->y()*rhs.w();
-        d3 = this->z()*rhs.x();
-        d4 = -this->x()*rhs.z();
-        real y = d1+d2+d3+d4;
-
-        d1 = this->w()*rhs.z();
-        d2 = this->z()*rhs.w();
-        d3 = this->x()*rhs.y();
-        d4 = -this->y()*rhs.x();
-        real z = d1+d2+d3+d4;
-
-        ans.vec.set(x, y, z, w);
-        *this = ans;
+    Quaternion& Quaternion::operator*=(const Quaternion& rhs) {
+        *this = *this * rhs;
         return *this;
     }
 

@@ -160,6 +160,7 @@ namespace ukn {
         D3D11_DEPTH_STENCIL_DESC depthStencilDisabledDesc;
         memcpy(&depthStencilDisabledDesc, &depthStencilDesc, sizeof(depthStencilDesc));
         depthStencilDisabledDesc.DepthEnable = false;
+        depthStencilDisabledDesc.StencilEnable = false;
 
         result = idevice->CreateDepthStencilState(&depthStencilDisabledDesc, &mDepthStencilDisabledState);
         if(FAILED(result))

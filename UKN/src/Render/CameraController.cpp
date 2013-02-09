@@ -143,8 +143,8 @@ namespace ukn {
             mPrevX = e.x;
             mPrevY = e.y;
            
-            float dx = delta_x / 25;
-            float dy = delta_y / 25;
+            float dx = delta_x / 5;
+            float dy = delta_y / 5;
             if(this->isInvertUpdown())
                 dy = -dy;
 

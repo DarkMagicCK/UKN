@@ -21,6 +21,7 @@ namespace ukn {
     class UKN_API GraphicBuffer {
     public:        
         enum Access {
+            None,
             ReadOnly,
             WriteOnly,
             ReadWrite,

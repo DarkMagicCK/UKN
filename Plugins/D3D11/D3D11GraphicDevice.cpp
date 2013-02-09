@@ -173,7 +173,7 @@ namespace ukn {
         mDebug.reset(new D3D11Debug(mDevice));
 #endif
 
-      
+
         // rasterizer state
         {
             D3D11_RASTERIZER_DESC rasterDesc;
@@ -239,9 +239,9 @@ namespace ukn {
             D3D11_SAMPLER_DESC samplerDesc;
 
             samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-            samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-            samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-            samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+            samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+            samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+            samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
             samplerDesc.MipLODBias = 0.f;
             samplerDesc.MaxAnisotropy = 1;
             samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
@@ -257,7 +257,7 @@ namespace ukn {
 
             mSamplerState = MakeCOMPtr(samplerState);
         }
-         
+
         mScreenFrameBuffer = MakeSharedPtr<D3D11FrameBuffer>(false, this);
         mScreenFrameBuffer->attach(ATT_Color0,
             MakeSharedPtr<D3D11ScreenColorRenderView>(settings.width,
@@ -362,13 +362,16 @@ namespace ukn {
             EffectPtr effect = mIs2D ? m2DEffect: buffer->getEffect();
             if(effect) {
                 /* temporary */
-                if(effect->getVertexShader()) {
-                    if(!effect->getVertexShader()->setMatrixVariable("worldMatrix", mWorldMatrix))
-                        log_error("error setting world matrix in effect");
-                    if(!effect->getVertexShader()->setMatrixVariable("projectionMatrix", mProjectionMatrix))
-                        log_error("error setting projection matrix in effect");
-                    if(!effect->getVertexShader()->setMatrixVariable("viewMatrix", mViewMatrix))
-                        log_error("error setting view matrix in effect");
+                if(!mIs2D) {
+
+                    if(effect->getVertexShader()) {
+                        if(!effect->getVertexShader()->setMatrixVariable("worldMatrix", mWorldMatrix))
+                            log_error("error setting world matrix in effect");
+                        if(!effect->getVertexShader()->setMatrixVariable("projectionMatrix", mProjectionMatrix))
+                            log_error("error setting projection matrix in effect");
+                        if(!effect->getVertexShader()->setMatrixVariable("viewMatrix", mViewMatrix))
+                            log_error("error setting view matrix in effect");
+                    }
                 }
                 if(effect->getFragmentShader()) {
                     if(mCurrTexture) {
@@ -495,6 +498,18 @@ namespace ukn {
             RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
             if(dsView) dsView->enableDepth(false);
         }
+
+        if(mIs2D && m2DEffect) {
+
+            if(m2DEffect->getVertexShader()) {
+                if(!m2DEffect->getVertexShader()->setMatrixVariable("worldMatrix", mWorldMatrix))
+                    log_error("error setting world matrix in effect");
+                if(!m2DEffect->getVertexShader()->setMatrixVariable("projectionMatrix", mProjectionMatrix))
+                    log_error("error setting projection matrix in effect");
+                if(!m2DEffect->getVertexShader()->setMatrixVariable("viewMatrix", mViewMatrix))
+                    log_error("error setting view matrix in effect");
+            }
+        }
     }
 
     void D3D11GraphicDevice::end2DRendering() {
@@ -530,8 +545,8 @@ namespace ukn {
             D3D11BlendStateObject* blendObj = checked_cast<D3D11BlendStateObject*>(blendState.get());
             if(blendObj) {
                 mDeviceContext->OMSetBlendState(blendObj->getD3DBlendState(),
-                                                blendObj->getDesc().blend_factor.value,
-                                                0xffffffff);
+                    blendObj->getDesc().blend_factor.value,
+                    0xffffffff);
             }
         }
     }

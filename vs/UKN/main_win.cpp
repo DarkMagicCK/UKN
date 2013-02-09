@@ -17,6 +17,7 @@
 #include "UKN/Model.h"
 #include "UKN/RenderTarget.h"
 #include "UKN/CameraController.h"
+#include "UKN/Skybox.h"
 
 #include "UKN/tmx/TMXTiledMap.h"
 
@@ -73,14 +74,21 @@ int CALLBACK WinMain(
     ukn::CameraController* camController;
     ukn::FontPtr font;
     ukn::RenderTarget2D* renderTarget;
+    ukn::SkyboxPtr skybox;
 
     ukn::Vector3 positions[5];
+    
+    ukn::float4 colors[5];
     for(int i=0; i<5; ++i) {
-        positions[i] =  ukn::Vector3(mist::Random::RandomFloat(-1, 1),
-                                   mist::Random::RandomFloat(-1, 1),
-                                   0);
+        positions[i] =  ukn::Vector3(mist::Random::RandomFloat(-10, 10),
+                                   mist::Random::RandomFloat(-10, 10),
+                                   mist::Random::RandomFloat(-2, 2));
                
+        colors[i] =ukn::float4(ukn::Random::RandomFloat(0, 1), 
+                                ukn::Random::RandomFloat(0, 1), 
+                                ukn::Random::RandomFloat(0, 1), 1.f);
     }
+
     
 #ifndef MIST_OS_WINDOWS
     ukn::GraphicFactoryPtr factory;
@@ -94,7 +102,9 @@ int CALLBACK WinMain(
                 ukn::ContextCfg::Default()
                   .width(800)
                   .height(600)
-                  .sampleCount(1)
+                  .sampleCount(8)
+                  .showMouse(false)
+                  .isFullScreen(false)
                   .graphicFactoryName(L"D3D11Plugin.dll")
                   .fps(60)
                )
@@ -102,24 +112,19 @@ int CALLBACK WinMain(
 
         })
         .connectKey([&](ukn::Window* window, ukn::input::KeyEventArgs& e) {
-            if(e.key == ukn::input::W) 
-                worldMat.translate(0, 0, -0.1f);
-            else if(e.key == ukn::input::S)
-                worldMat.translate(0, 0, 0.1f);
+            if(e.key == ukn::input::Escape)
+                ukn::Context::Instance().getApp().terminate();
         })
         .connectRender([&](ukn::Window*) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             renderTarget->attach();
 
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Transparent, 1.f, 0);
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Blue, 1.f, 0);
             
-            
-            font->draw(L"hello world!", 100, 100, ukn::FA_Left);
-            font->render();
 
             effect->getFragmentShader()->setFloatVectorVariable("lightDirection", 
-                ukn::float4(sinf(r), cosf(r), 0.5f, 1.0));
-            r += 0.01f;
+                ukn::float4(sinf(r) * 3, cosf(r) * 3, 0.f, 1.0));
+            r += 0.05f;
 
             for(int i=0; i <1 ; ++i) {
                 gd.setWorldMatrix(worldMat);
@@ -131,16 +136,33 @@ int CALLBACK WinMain(
 
      //       gd.bindFrameBuffer(gd.getScreenFrameBuffer());
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+
+            if(skybox) {
+                skybox->render();
+            }
+            gd.setWorldMatrix(ukn::Matrix4());
+
             ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
             sb.begin();
-            sb.draw(renderTarget->getTargetTexture(), ukn::float2(0, 0), 0);
+        //    sb.draw(renderTarget->getTargetTexture(), ukn::Rectangle(0, 0, 240, 180));
             sb.end();
             
+            font->draw(L"hello world!", 600, 500, ukn::FA_Left);
+            font->render();
+
+            for(int i=0; i<5; ++i) {
+                gd.setWorldMatrix(ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
+                effect->getFragmentShader()->setFloatVectorVariable("specularColor", 
+                    colors[i]);
+
+                if(renderBuffer)
+                        gd.renderBuffer(renderBuffer);
+            }    
         })
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
      
-            renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 1.5), 20);
+            renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 2.5), 20);
 
             effect = gf.createEffect();
             ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex.cg"), 
@@ -153,8 +175,8 @@ int CALLBACK WinMain(
             
             fragmentShader->setFloatVectorVariable("diffuseColor", ukn::float4(1.f, 1.f, 1.f, 1.f));
             fragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(-0.6f, 0.6f, 0.5f, 1.0));
-            fragmentShader->setFloatVectorVariable("ambientColor", ukn::float4(0.15f, 0.15f, 0.15f, 1.f));
-            fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(0.f, 0.f, 0.f, 0.f));
+            fragmentShader->setFloatVectorVariable("ambientColor", ukn::float4(1.0f, 1.0f, 1.f, 1.f));
+            fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(1.f, 0.0f, 0.f, 0.f));
 
          //   texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
           //  texture = gf.create2DTexture(800, 600, 1, ukn::EF_RGBA8, 0);
@@ -180,6 +202,11 @@ int CALLBACK WinMain(
                                     1,
                                     ukn::EF_RGBA8,
                                     ukn::EF_D16)) {
+            }
+
+            skybox = new ukn::Skybox();
+            if(!skybox->load(mist::ResourceLoader::Instance().loadResource(L"skyboxsun25degtest.png"))) {
+                mist::log_error(L"unable to load skybox");
             }
         })
         .run();

@@ -6,7 +6,8 @@ namespace ukn {
 
     CameraController::CameraController():
     mMoveScaler(1.f),
-    mRotScaler(1.f) {
+    mRotScaler(0.05f),
+    mInvertUpdown(false) {
         
     }
 
@@ -39,6 +40,14 @@ namespace ukn {
         return mMoveScaler;
     }
 
+    void CameraController::setInvertUpdown(bool flag) {
+        mInvertUpdown = flag;
+    }
+
+    bool CameraController::isInvertUpdown() const {
+        return mInvertUpdown;
+    }
+
     FpsCameraController::FpsCameraController() {
         Window& wnd = ukn::Context::Instance().getApp().getWindow();
         wnd.connectMouse(Bind(this, &FpsCameraController::onMouseMove));
@@ -62,7 +71,7 @@ namespace ukn {
         float sqz = rotQ.z * rotQ.z;
         float sqw = rotQ.w * rotQ.w;
         float unit = sqx + sqy + sqz + sqw;
-        float test = rot.x() * rot.y() * rot.z();
+        float test = rotQ.x * rotQ.y * rotQ.z * rotQ.w;
         float yaw, pitch, roll;
         if(test > 0.499f * unit) {
             yaw = 2 * atan2(rotQ.z, rotQ.w);
@@ -110,9 +119,9 @@ namespace ukn {
             delta_y[0] = sin(yaw); delta_y[1] = cos(yaw);
             delta_z[0] = sin(roll); delta_z[1] = cos(roll);
 
-            Quaternion quat_x(mRotX[0] * delta_x[1] + mRotX[1] * delta_x[0], 0, 0, mRotX[1] * delta_x[1] - mRotX[1] * delta_x[0]);
-            Quaternion quat_y(0, mRotY[0] * delta_y[1] + mRotY[1] * delta_y[0], 0, mRotY[1] * delta_y[1] - mRotY[1] * delta_y[0]);
-            Quaternion quat_z(0, 0, mRotZ[0] * delta_z[1] + mRotZ[1] * delta_z[0], mRotZ[1] * delta_z[1] - mRotZ[1] * delta_z[0]);
+            Quaternion quat_x(mRotX[0] * delta_x[1] + mRotX[1] * delta_x[0], 0, 0, mRotX[1] * delta_x[1] - mRotX[0] * delta_x[0]);
+            Quaternion quat_y(0, mRotY[0] * delta_y[1] + mRotY[1] * delta_y[0], 0, mRotY[1] * delta_y[1] - mRotY[0] * delta_y[0]);
+            Quaternion quat_z(0, 0, mRotZ[0] * delta_z[1] + mRotZ[1] * delta_z[0], mRotZ[1] * delta_z[1] - mRotZ[0] * delta_z[0]);
 
             mRotX = float2(quat_x.x, quat_x.w);
             mRotY = float2(quat_y.y, quat_y.w);
@@ -133,9 +142,14 @@ namespace ukn {
 
             mPrevX = e.x;
             mPrevY = e.y;
+           
+            float dx = delta_x / 25;
+            float dy = delta_y / 25;
+            if(this->isInvertUpdown())
+                dy = -dy;
 
-       //     this->rotate(delta_x < 0 ? -0.1 : 0.1, 0, 0);
-       //     this->rotate(0, delta_y < 0 ? -0.1 : 0.1, 0);
+            this->rotate(dx, 0, 0);
+            this->rotate(0, dy, 0);
         }
     }
 

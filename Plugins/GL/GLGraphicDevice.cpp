@@ -118,10 +118,10 @@ namespace ukn {
         mCurrTexture = texture;
 
         if(mCurrTexture) {
-            if(mCurrTexture->getType() == TT_Texture2D) {
+            if(mCurrTexture->type() == TT_Texture2D) {
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, (GLuint)mCurrTexture->getTextureId());
-            } else if(mCurrTexture->getType() == TT_Texture3D) {
+            } else if(mCurrTexture->type() == TT_Texture3D) {
                 glEnable(GL_TEXTURE_3D);
                 glBindTexture(GL_TEXTURE_3D, (GLuint)mCurrTexture->getTextureId());
             }

@@ -119,6 +119,7 @@
     <ClInclude Include="..\..\UKN\include\UKN\SequencialAnimation.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Shader.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Skeletal.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Skybox.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Sprite.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SpriteBatch.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Texture.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="..\..\UKN\src\Render\SamplerStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Scene.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Shader.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Skybox.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Texture.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Vertex.cpp" />

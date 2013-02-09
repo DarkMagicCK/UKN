@@ -26,41 +26,75 @@ namespace ukn {
         TT_Texture1D,
         // 3d texture
         TT_Texture3D,
-        // cubemap
-        TT_TextureCubeMap,
+        // Cubemap
+        TT_TextureCube,
     };
     
-    enum MapperAccess {
-        MA_ReadOnly,
-        MA_WriteOnly,
-        MA_ReadWrite,
+    /* 
+        notice the restrictions 
+    */
+    enum TextureMapAccess {
+        TMA_ReadOnly,
+        TMA_WriteOnly,
+        TMA_ReadWrite,
+    };
+
+    enum TextureCubeFace {
+        TCF_PositionX, // <1, 0, 0>
+        TCF_NegativeX, // <-1, 0, 0>
+        TCF_PositionY, // <0, 1, 0>
+        TCF_NegativeY, // <0, -1, 0>
+        TCP_PositionZ, // <0, 0, 1>
+        TCP_NegativeZ, // <0, 0, -1>
     };
     
-    /**
-     * Abstract texture class
-     **/
+    /*
+    new texture 
+    */
     class UKN_API Texture {
     public:
         static TexturePtr NullObject();
-        
-        explicit Texture(TextureType type);
+
+        /* 
+        default:
+         sample_count = 1,
+         sample_quality = 0,
+         format = EF_Unknown,
+         array_size = 1,
+         num_mipmaps = 1
+         */
+        Texture(TextureType type, uint32 sample_count, uint32 sample_quality, uint32 _reserved);
         virtual ~Texture();
+
+        virtual uint32 width(uint32 level = 0) const = 0;
+        virtual uint32 height(uint32 level = 0) const = 0;
+        /* 3d texture only */
+        virtual uint32 depth(uint32 level = 0) const = 0;
         
-        ElementFormat getFormat() const;
-        TextureType   getType() const;
-        
-        virtual uint32 getWidth(uint32 level = 0) const = 0;
-        virtual uint32 getHeight(uint32 level = 0) const = 0;
-        
+        virtual void generateMipmaps() = 0;
+
+        /* native handle */
         virtual uintPtr getTextureId() const = 0;
 
-        virtual void* map(uint32 level = 0) = 0;
-        virtual void unmap() = 0;
-                
+        ElementFormat   format() const;
+        TextureType     type() const;
+        uint32          numMipmaps() const;
+        uint32          sampleQuality() const;
+        uint32          sampleCount() const;
+
+        /* texture mapping todo */
+
     protected:
         TextureType mType;
-        uint32 mNumMipmaps;
         ElementFormat mFormat;
+        
+        uint32 mNumMipmaps;
+        /* glGenBuffer instead texture to support multisampling? */
+        uint32 mSampleCount;
+        uint32 mSampleQuality;
+        /* to do, not used now, GL_TEXTURE2D_ARRAY in 3.x */
+        uint32 mArraySize; 
+        uint32 mReserverd;
     };
     
 } // namespace ukn

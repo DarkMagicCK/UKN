@@ -116,6 +116,8 @@
     <ClCompile Include="..\..\Plugins\D3D11\D3D11SamplerStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Shader.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture2D.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11TextureCube.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\MetroWindow.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\WindowsWindow.cpp" />
     <ClCompile Include="dllmain.cpp">

@@ -18,11 +18,15 @@ namespace ukn {
         float getRotationScaler() const;
         float getMoveScaler() const;
 
+        void setInvertUpdown(bool flag);
+        bool isInvertUpdown() const;
+
     protected:
         CameraPtr mCamera;
 
         float mRotScaler;
         float mMoveScaler;
+        bool mInvertUpdown;;
     };
 
     class UKN_API FpsCameraController: public CameraController {

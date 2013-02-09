@@ -124,7 +124,7 @@ namespace ukn {
         mTexture = texture;
         mDepthStencilBuffer = (ID3D11Texture2D*)mTexture->getTextureId();
         // temp
-        this->createDSView(texture->getFormat(), 1);
+        this->createDSView(texture->format(), 1);
     }
 
     D3D11DepthStencilRenderView::~D3D11DepthStencilRenderView() {

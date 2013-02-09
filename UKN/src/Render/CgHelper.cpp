@@ -21,6 +21,7 @@ namespace ukn {
                                               in float4 color: ATTR3: COLOR) {\
                                               VertexOutputType output;\
                                               output.position = float4(position, 1);\
+                                              output.position = mul(output.position, worldMatrix);\
                                               output.position = mul(output.position, viewMatrix);\
                                               output.position = mul(output.position, projectionMatrix);\
                                               output.texCoord = texCoord;\

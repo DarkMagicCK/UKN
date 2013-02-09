@@ -19,6 +19,9 @@ namespace ukn {
 
 	inline UINT GraphicBufferAccessToD3D11Access(ukn::GraphicBuffer::Access access) {
 		switch (access) {
+        case ukn::GraphicBuffer::None:
+            return 0;
+
 		case ukn::GraphicBuffer::ReadOnly:
 			return D3D11_CPU_ACCESS_READ;
 
@@ -93,6 +96,10 @@ namespace ukn {
 	}
 
 	void* D3D11VertexBuffer::map() {
+        if(access() == None) {
+            log_error("D3D11VertexBuffer: trying to map buffer with access = None");
+            return 0;
+        }
 		if(!mBuffer || mMaped)
 			return 0;
 
@@ -113,8 +120,8 @@ namespace ukn {
 
 	void D3D11VertexBuffer::unmap() {
 		if(mBuffer && mMaped) {
-               mDevice->getD3DDeviceContext()->Unmap(mBuffer, 0);
-               mMaped = false;
+            mDevice->getD3DDeviceContext()->Unmap(mBuffer, 0);
+            mMaped = false;
         }
 	}
 
@@ -233,6 +240,10 @@ namespace ukn {
 	}
 
 	void* D3D11IndexBuffer::map() {
+        if(access() == None) {
+            log_error("D3D11IndexBuffer: trying to map buffer with access = None");
+            return 0;
+        }
 		if(!mBuffer || mMaped)
 			return 0;
 

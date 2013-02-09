@@ -142,7 +142,7 @@ namespace ukn {
     
     ElementFormat RenderTarget2D::format() const {
         if(mTargetTexture)
-            return mTargetTexture->getFormat();
+            return mTargetTexture->format();
         return EF_RGBA8;
     }
 

@@ -66,26 +66,26 @@ namespace ukn {
         camera->getViewMatrix().decompose(trans, rot, scale);
 
         Quaternion rotQ = Quaternion(rot.x(), rot.y(), rot.z());
-        float sqx = rotQ.x * rotQ.x;
-        float sqy = rotQ.y * rotQ.y;
-        float sqz = rotQ.z * rotQ.z;
-        float sqw = rotQ.w * rotQ.w;
+        float sqx = rotQ.x() * rotQ.x();
+        float sqy = rotQ.y() * rotQ.y();
+        float sqz = rotQ.z() * rotQ.z();
+        float sqw = rotQ.w() * rotQ.w();
         float unit = sqx + sqy + sqz + sqw;
-        float test = rotQ.x * rotQ.y * rotQ.z * rotQ.w;
+        float test = rotQ.x() * rotQ.y() * rotQ.z() * rotQ.w();
         float yaw, pitch, roll;
         if(test > 0.499f * unit) {
-            yaw = 2 * atan2(rotQ.z, rotQ.w);
+            yaw = 2 * atan2(rotQ.z(), rotQ.w());
             pitch = d_pi / 2;
             roll = 0;
         } else {
             if(test < -0.499f * unit) {
-                yaw = -2 * atan2(rotQ.z, rotQ.w);
+                yaw = -2 * atan2(rotQ.z(), rotQ.w());
                 pitch = -d_pi / 2;
                 roll = 0;
             } else {
-                yaw = atan2(2 * (rotQ.y - rotQ.x * rotQ.z), -sqx - sqy + sqz + sqw);
+                yaw = atan2(2 * (rotQ.y() - rotQ.x() * rotQ.z()), -sqx - sqy + sqz + sqw);
                 pitch = asin(2 * test / unit);
-                roll = atan2(2 * (rotQ.z - rotQ.x * rotQ.y), -sqx + sqy - sqz + sqw);
+                roll = atan2(2 * (rotQ.z() - rotQ.x() * rotQ.y()), -sqx + sqy - sqz + sqw);
             }
         }
 
@@ -123,9 +123,9 @@ namespace ukn {
             Quaternion quat_y(0, mRotY[0] * delta_y[1] + mRotY[1] * delta_y[0], 0, mRotY[1] * delta_y[1] - mRotY[0] * delta_y[0]);
             Quaternion quat_z(0, 0, mRotZ[0] * delta_z[1] + mRotZ[1] * delta_z[0], mRotZ[1] * delta_z[1] - mRotZ[0] * delta_z[0]);
 
-            mRotX = float2(quat_x.x, quat_x.w);
-            mRotY = float2(quat_y.y, quat_y.w);
-            mRotZ = float2(quat_z.z, quat_z.w);
+            mRotX = float2(quat_x.x(), quat_x.w());
+            mRotY = float2(quat_y.y(), quat_y.w());
+            mRotZ = float2(quat_z.z(), quat_z.w());
 
             mInvRot = mist::math::inverse_quaternion(quat_y * quat_x * quat_z);
             Vector3 view_vec = mist::math::transform_quaternion(Vector3(0, 0, 1), mInvRot);

@@ -103,6 +103,8 @@ int CALLBACK WinMain(
                   .width(800)
                   .height(600)
                   .sampleCount(8)
+                  .showMouse(false)
+                  .isFullScreen(false)
                   .graphicFactoryName(L"D3D11Plugin.dll")
                   .fps(60)
                )
@@ -110,10 +112,8 @@ int CALLBACK WinMain(
 
         })
         .connectKey([&](ukn::Window* window, ukn::input::KeyEventArgs& e) {
-            if(e.key == ukn::input::W) 
-                worldMat.translate(0, 0, -0.1f);
-            else if(e.key == ukn::input::S)
-                worldMat.translate(0, 0, 0.1f);
+            if(e.key == ukn::input::Escape)
+                ukn::Context::Instance().getApp().terminate();
         })
         .connectRender([&](ukn::Window*) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();

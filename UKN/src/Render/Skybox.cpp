@@ -59,8 +59,8 @@ namespace ukn {
         double half4 = 0.25;
         double half2 = 0.5;
         double half43 = 0.75;
-        double half3 = 1024.0 / 3072.0;
-        double half32 = 2048.0 / 3072.0;
+        double half3 = 1.0 / 3;
+        double half32 = 2.0 / 3;
 
         float d = 1;
         

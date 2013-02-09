@@ -218,9 +218,9 @@ namespace mist {
     
     typedef std::wstring MistString;
     
-#define UKN_SINGLE_PRECISION
+#define MIST_SINGLE_PRECISION
     
-#ifdef UKN_SINGLE_PRECISION
+#ifdef MIST_SINGLE_PRECISION
     typedef		float			real;
 #else
     typedef     double          real;

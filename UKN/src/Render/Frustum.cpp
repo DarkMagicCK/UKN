@@ -26,7 +26,7 @@ namespace ukn {
         this->mPlanes[5] = col4 + col3;
         
         MIST_FOR_EACH(Plane& plane, this->mPlanes) {
-            plane = static_cast<Vector4>(plane).normalize();
+            plane.set(plane.get().normalize());
         }
         
         for(int i=0; i<6; ++i) {
@@ -36,7 +36,7 @@ namespace ukn {
         }
     }
     
-    Frustum::Visiabilty Frustum::isVisiable(const Box& box) const {
+    Frustum::Visibility Frustum::isBoxVisible(const Box& box) const {
         bool intersect = false;
         for(int i=0; i<6; ++i) {
             const int n = mLookupTable[i];
@@ -48,13 +48,23 @@ namespace ukn {
                        (n & 2) ? box.getMax().y() : box.getMin().y(),
                        (n & 4) ? box.getMax().z() : box.getMin().z());
             
-            if(this->mPlanes[i].normal().dot(v1) < 0)
+            if(this->mPlanes[i].dot(v1) < 0)
                 return No;
-            if(this->mPlanes[i].normal().dot(v1) < 0)
+            if(this->mPlanes[i].dot(v1) < 0)
                 intersect = true;
         }
         
         return intersect ? Part : Yes;
+    }
+
+    Frustum::Visibility Frustum::isSphereVisible(const Sphere& sphere) const {
+        for(int i=0; i<6; ++i) {
+            if((mPlanes[i]).dot(sphere.center()) < sphere.radius()) {
+                return Visibility::No;
+            }
+        }
+        return Visibility::Yes;
+
     }
     
 } // namespace ukn

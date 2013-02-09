@@ -15,7 +15,7 @@ namespace ukn {
     
     class UKN_API Frustum {
     public:
-        enum Visiabilty {
+        enum Visibility {
             Yes,
             No,
             Part,
@@ -23,7 +23,9 @@ namespace ukn {
         
     public:
         void clipMatrix(const Matrix4& clip);
-        Visiabilty isVisiable(const Box& box) const;
+
+        Visibility isBoxVisible(const Box& box) const;
+        Visibility isSphereVisible(const Sphere& sphere) const;
         
     private:
         FixedArray<Plane, 6> mPlanes;

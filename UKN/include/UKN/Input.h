@@ -135,25 +135,27 @@ namespace ukn {
         };
             
         enum KeyFlag {
-            FlagShift		= 1,
-            FlagCtrl		= 2,
-            FlagAlt			= 4,
-            FlagCapslock	= 8,
-            FlagScrolllock	= 16,
-            FlagNumlock		= 32,
-            FlagRepeat		= 64,
+            FlagShift		= 1U,
+            FlagCtrl		= 1U<<1,
+            FlagAlt			= 1U<<2,
+            FlagCapslock	= 1U<<3,
+            FlagScrolllock	= 1U<<4,
+            FlagNumlock		= 1U<<5,
+            FlagRepeat		= 1U<<6,
         };
         
         // mouse
         enum MouseButton {
-            LeftButton = 0x01,
-            RightButton = 0x02,
-            MiddleButton = 0x04,
+            LeftButton = 256,
+            RightButton,
+            MiddleButton,
+
+            LastButton = LeftButton + 8,
         };
          
         // joystick
         enum JoyStickButton {
-            Joystick1 = 0,
+            Joystick1 = MouseButton::LastButton + 1,
             Joystick2,
             Joystick3,
             Joystick4,

@@ -101,6 +101,8 @@
     <ClInclude Include="..\..\UKN\include\UKN\GraphicFactory.h" />
     <ClInclude Include="..\..\UKN\include\UKN\GraphicSettings.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Input.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\InputDevice.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\InputEngine.h" />
     <ClInclude Include="..\..\UKN\include\UKN\ListenerManager.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Material.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Mesh.h" />
@@ -139,6 +141,7 @@
     <ClCompile Include="..\..\UKN\src\Core\Asset.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\Context.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\Input.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\InputEngine.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTable.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTableLoader.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\BlendStateObject.cpp" />

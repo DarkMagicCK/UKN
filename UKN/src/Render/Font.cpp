@@ -341,7 +341,7 @@ namespace ukn {
         while(it != data.string_to_render.end() && *it != 0) {
             if(*it != L'\n') {
                 if(*it == L' ') {
-                    x += mFontSize;
+                    x += mFontSize / 2 + data.kerning_width;
                     
                 } else {
                     uint32 gidx = getGlyphByChar(*it);

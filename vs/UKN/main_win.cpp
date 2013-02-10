@@ -78,6 +78,7 @@ int CALLBACK WinMain(
     ukn::RenderTarget2D* renderTarget;
     ukn::SkyboxPtr skybox;
     ukn::TerrianPtr terrian;
+    ukn::Frustum frustum;
 
     ukn::Vector3 positions[5];
     
@@ -117,6 +118,19 @@ int CALLBACK WinMain(
         .connectKey([&](ukn::Window* window, ukn::input::KeyEventArgs& e) {
             if(e.key == ukn::input::Escape)
                 ukn::Context::Instance().getApp().terminate();
+
+            if(e.key == ukn::input::F1 &&
+                e.state == ukn::input::Release) {
+                if(camController->getAttachedCamera()) {
+                    camController->detachCamera();
+                } else {
+                    ukn::Viewport& vp = ukn::Context::Instance()
+                                            .getGraphicFactory()
+                                            .getGraphicDevice()
+                                            .getCurrFrameBuffer()->getViewport();
+                    camController->attachCamera(vp.camera);
+                }
+            }
         })
         .connectRender([&](ukn::Window*) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
@@ -124,7 +138,6 @@ int CALLBACK WinMain(
 
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Blue, 1.f, 0);
             
-
             effect->getFragmentShader()->setFloatVectorVariable("lightDirection", 
                 ukn::float4(sinf(r) * 3, cosf(r) * 3, 0.f, 1.0));
             r += 0.05f;
@@ -137,7 +150,6 @@ int CALLBACK WinMain(
             }
             renderTarget->detach();
 
-     //       gd.bindFrameBuffer(gd.getScreenFrameBuffer());
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
 
             if(skybox) {
@@ -154,21 +166,33 @@ int CALLBACK WinMain(
         //    sb.draw(renderTarget->getTargetTexture(), ukn::Rectangle(0, 0, 240, 180));
             sb.end();
             
-            font->draw(mist::Convert::ToString(mist::FrameCounter::Instance().getCurrentFps()).c_str(), 
+            font->draw(gd.description().c_str(), 0, 30, ukn::FA_Left, ukn::color::Lightgreen);
+            font->draw(ukn::SystemInformation::GetOSVersion().c_str(), 0, 60, ukn::FA_Left, ukn::color::Lightgreen);
+            font->draw((L"Fps: " + mist::Convert::ToString(mist::FrameCounter::Instance().getCurrentFps())).c_str(), 
                         0, 
                         0, 
                         ukn::FA_Left,
                         ukn::color::Black);
-            font->render();
 
+            ukn::Viewport& vp = gd.getCurrFrameBuffer()->getViewport();
+            frustum.clipMatrix(vp.camera->getViewMatrix() * vp.camera->getProjMatrix());
+
+            int renderCount = 0;
             for(int i=0; i<5; ++i) {
-                gd.setWorldMatrix(ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
-                effect->getFragmentShader()->setFloatVectorVariable("specularColor", 
-                    colors[i]);
+                if(frustum.isSphereVisible(mist::Sphere(positions[i], 2.5)) != ukn::Frustum::No) {
+                    gd.setWorldMatrix(ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
+                    effect->getFragmentShader()->setFloatVectorVariable("specularColor", 
+                        colors[i]);
 
-                if(renderBuffer)
+                    if(renderBuffer)
                         gd.renderBuffer(renderBuffer);
+
+                    renderCount++;
+                }
             }    
+
+            font->draw(ukn::Convert::ToString(renderCount).c_str(), 0, 90, ukn::FA_Left, ukn::color::Red);
+            font->render();
         })
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
@@ -204,7 +228,7 @@ int CALLBACK WinMain(
 
             camController->attachCamera(vp.camera);
 
-            font = ukn::AssetManager::Instance().load<ukn::Font>(L"consola.ttf");
+            font = ukn::AssetManager::Instance().load<ukn::Font>(L"segoeui.ttf");
             font->setStyleProperty(ukn::FSP_Size, 20);
 
             renderTarget = new ukn::RenderTarget2D();
@@ -220,11 +244,15 @@ int CALLBACK WinMain(
                 mist::log_error(L"unable to load skybox");
             }
 
-
-            ukn::GridTerrian* t = new ukn::GridTerrian();
-            if(t->build(0)) {
+            ukn::GridTerrianLightening* t = new ukn::GridTerrianLightening();
+            (*t).y(0)
+                .noise(10)
+                .noiseWeight(5);
+            if(t->build()) {
+                t->texture(gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"dirt01.dds")));
+              
                 terrian = t;
-
+                
             } else {
                 ukn::log_error(L"unable to build terrian");
             }

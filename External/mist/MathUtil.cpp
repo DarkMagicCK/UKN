@@ -189,9 +189,9 @@ namespace mist {
 
         Vector4 get_matrix_col(const Matrix4& mat, uint32 index) {
             return Vector4(mat.c[index][0],
-                mat.c[index][1],
-                mat.c[index][2],
-                mat.c[index][3]);
+                           mat.c[index][1],
+                           mat.c[index][2],
+                           mat.c[index][3]);
         }
 
         Vector3 transform_quaternion(const Vector3& v, const Quaternion& q) {

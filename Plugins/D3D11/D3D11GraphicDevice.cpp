@@ -47,7 +47,7 @@ namespace ukn {
     }
 
     UknString D3D11GraphicDevice::description() const {
-        return L"D3D11 Device";
+        return UknString(L"D3D11 Device, ") + (mFeatureLevel == D3D_FEATURE_LEVEL_10_1 ? L"Feature Level 10.1" : L"Feature Level 11");
     }
 
     WindowPtr D3D11GraphicDevice::doCreateRenderWindow(const UknString& name, const RenderSettings& settings) {
@@ -239,9 +239,9 @@ namespace ukn {
             D3D11_SAMPLER_DESC samplerDesc;
 
             samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-            samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
-            samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
-            samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+            samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+            samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+            samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
             samplerDesc.MipLODBias = 0.f;
             samplerDesc.MaxAnisotropy = 1;
             samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;

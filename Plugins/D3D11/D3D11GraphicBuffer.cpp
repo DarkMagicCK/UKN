@@ -68,31 +68,30 @@ namespace ukn {
 		vertexBufferDesc.MiscFlags = 0;
 
 		HRESULT result;
+        ID3D11Buffer* buffer;
 		if(initData) {
 			D3D11_SUBRESOURCE_DATA vertexData;
 			ZeroMemory(&vertexData, sizeof(vertexData));
 			vertexData.pSysMem = initData;
 
-			result = mDevice->getD3DDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &mBuffer);
+			result = mDevice->getD3DDevice()->CreateBuffer(&vertexBufferDesc, &vertexData, &buffer);
 			if(!D3D11Debug::CHECK_RESULT(result, L"CreateVertexBuffer")) {
 				log_error(L"error creating vertex buffer");
-				mBuffer = 0;
-			}
+			} else 
+                mBuffer = MakeCOMPtr(buffer);
 		} else {
-			result = mDevice->getD3DDevice()->CreateBuffer(&vertexBufferDesc, 0, &mBuffer);
+			result = mDevice->getD3DDevice()->CreateBuffer(&vertexBufferDesc, 0, &buffer);
 			if(!D3D11Debug::CHECK_RESULT(result, L"CreateVertexBuffer")) {
 				log_error(L"error creating vertex buffer");
-				mBuffer = 0;
-			}
+			} else 
+                mBuffer = MakeCOMPtr(buffer);
 		}
 
 		mCount = desired_count;
 	}
 
 	D3D11VertexBuffer::~D3D11VertexBuffer() {
-		if(mBuffer) {
-			mBuffer->Release();
-		}
+
 	}
 
 	void* D3D11VertexBuffer::map() {
@@ -106,7 +105,7 @@ namespace ukn {
         D3D11_MAPPED_SUBRESOURCE mappedDtata;
 		
 		if(FAILED(mDevice->getD3DDeviceContext()->Map(
-            mBuffer,
+            mBuffer.get(),
             0,
             GraphicBufferAccessToD3D11Map(this->access()), 
             0, 
@@ -120,7 +119,7 @@ namespace ukn {
 
 	void D3D11VertexBuffer::unmap() {
 		if(mBuffer && mMaped) {
-            mDevice->getD3DDeviceContext()->Unmap(mBuffer, 0);
+            mDevice->getD3DDeviceContext()->Unmap(mBuffer.get(), 0);
             mMaped = false;
         }
 	}
@@ -128,9 +127,10 @@ namespace ukn {
 	void D3D11VertexBuffer::activate() {
 		if(mBuffer && mDevice) {
 			UINT stride = GetVertexElementsTotalSize(this->format());
+            ID3D11Buffer* buffer = mBuffer.get();
 			mDevice->getD3DDeviceContext()->IASetVertexBuffers(0, 
 													           1, 
-														       &mBuffer, 
+														       &buffer, 
 														       &stride, 
 														       &mOffset);
 		}
@@ -188,11 +188,7 @@ namespace ukn {
 			log_error(L"error resizing vertex buffer");
 		} else {
 			mCount = desired_count;
-			
-			if(mBuffer) {
-				mBuffer->Release();
-			}
-			mBuffer = buffer;
+            mBuffer = MakeCOMPtr(buffer);
 		}
 	}
 
@@ -214,21 +210,22 @@ namespace ukn {
 		indexBufferDesc.MiscFlags = 0;
 
 		HRESULT result;
+        ID3D11Buffer* buffer;
 		if(initData) {
 			D3D11_SUBRESOURCE_DATA indexData;
 			indexData.pSysMem = initData;
 
-			result = mDevice->getD3DDevice()->CreateBuffer(&indexBufferDesc, &indexData, &mBuffer);
+			result = mDevice->getD3DDevice()->CreateBuffer(&indexBufferDesc, &indexData, &buffer);
 			if(!D3D11Debug::CHECK_RESULT(result, L"CreateIndexBuffer")) {
 				log_error(L"error creating index buffer");
-				mBuffer = 0;
-			}
+			} else
+                mBuffer = MakeCOMPtr(buffer);
 		} else {
-			result = mDevice->getD3DDevice()->CreateBuffer(&indexBufferDesc, 0, &mBuffer);
+			result = mDevice->getD3DDevice()->CreateBuffer(&indexBufferDesc, 0, &buffer);
 			if(!D3D11Debug::CHECK_RESULT(result, L"CreateIndexBuffer")) {
 				log_error(L"error creating index buffer");
-				mBuffer = 0;
-			}
+			} else
+                mBuffer = MakeCOMPtr(buffer);
 		}
 
 		mCount = desired_count;
@@ -250,7 +247,7 @@ namespace ukn {
 		D3D11_MAPPED_SUBRESOURCE mappedDtata;
 		
 		if(FAILED(mDevice->getD3DDeviceContext()->Map(
-            mBuffer,
+            mBuffer.get(),
             0,
             GraphicBufferAccessToD3D11Map(this->access()), 
             0, 
@@ -264,14 +261,14 @@ namespace ukn {
 
 	void D3D11IndexBuffer::unmap() {
 		if(mBuffer && mMaped) {
-               mDevice->getD3DDeviceContext()->Unmap(mBuffer, 0);
+               mDevice->getD3DDeviceContext()->Unmap(mBuffer.get(), 0);
                mMaped = false;
         }
 	}
 
 	void D3D11IndexBuffer::activate() {
 		if(mBuffer && mDevice) {
-			mDevice->getD3DDeviceContext()->IASetIndexBuffer(mBuffer,
+			mDevice->getD3DDeviceContext()->IASetIndexBuffer(mBuffer.get(),
 													         DXGI_FORMAT_R32_UINT,
 													         0);
 		}
@@ -320,10 +317,7 @@ namespace ukn {
 
 		} else {
 			mCount = desired_count;
-	
-			if(mBuffer)
-				mBuffer->Release();
-			mBuffer = buffer;
+	        mBuffer = MakeCOMPtr(buffer);
 		}
 	}
 

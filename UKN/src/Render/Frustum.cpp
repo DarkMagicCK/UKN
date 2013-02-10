@@ -59,7 +59,7 @@ namespace ukn {
 
     Frustum::Visibility Frustum::isSphereVisible(const Sphere& sphere) const {
         for(int i=0; i<6; ++i) {
-            if((mPlanes[i]).dot(sphere.center()) < sphere.radius()) {
+            if((mPlanes[i]).dot(sphere.center()) < -sphere.radius()) {
                 return Visibility::No;
             }
         }

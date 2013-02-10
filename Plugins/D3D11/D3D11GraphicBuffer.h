@@ -39,7 +39,7 @@ namespace ukn {
         uint32 mCount;
         vertex_elements_type mFormat;
 
-		ID3D11Buffer* mBuffer;
+		COM<ID3D11Buffer>::Ptr mBuffer;
 		D3D11GraphicDevice* mDevice;
 
 		uint32 mOffset;
@@ -72,7 +72,7 @@ namespace ukn {
         bool mMaped;
         uint32 mCount;
 
-		ID3D11Buffer* mBuffer;
+		COM<ID3D11Buffer>::Ptr mBuffer;
 		D3D11GraphicDevice* mDevice;
 
 		uint32 mOffset;

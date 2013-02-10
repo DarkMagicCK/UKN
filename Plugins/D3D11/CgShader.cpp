@@ -193,6 +193,7 @@ namespace ukn {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
                 cgSetParameter4fv(param, (const float*)vec.value);
+                
                 return _check_error(mContext);
             }
         }

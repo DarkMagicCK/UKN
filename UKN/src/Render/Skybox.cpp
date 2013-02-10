@@ -38,6 +38,8 @@ namespace ukn {
             FrameBufferPtr fb = gd.getCurrFrameBuffer();
             CameraPtr cam = fb->getViewport().camera;
             
+            Matrix4 worldMat;
+            gd.getWorldMatrix(worldMat);
             Matrix4 mat = Matrix4::ScaleMat(100, 100, 100);
             if(cam) {
                 Vector3 eye = cam->getEyePos();
@@ -46,8 +48,8 @@ namespace ukn {
             gd.setWorldMatrix(mat);
             gd.bindTexture(mTexture);
             gd.renderBuffer(mRenderBuffer);
-            gd.setWorldMatrix(Matrix4());
-
+            gd.setWorldMatrix(worldMat);
+            
         } else {
             log_error(L"Skybox::render: invalid render buffer");
         }

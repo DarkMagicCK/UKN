@@ -67,10 +67,10 @@ namespace mist {
     }
     
     Color Randomizer<Color>::Randomize(const Color& min, const Color& max) {
-        return Color(Random::RandomFloat(min.r, max.r),
-                     Random::RandomFloat(min.g, max.g),
-                     Random::RandomFloat(min.b, max.b),
-                     Random::RandomFloat(min.a, max.a));
+        return Color(Random::RandomFloat(min.r(), max.r()),
+                     Random::RandomFloat(min.g(), max.g()),
+                     Random::RandomFloat(min.b(), max.b()),
+                     Random::RandomFloat(min.a(), max.a()));
     }
         
 } // namespace mist

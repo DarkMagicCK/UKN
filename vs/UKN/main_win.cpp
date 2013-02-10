@@ -18,6 +18,7 @@
 #include "UKN/RenderTarget.h"
 #include "UKN/CameraController.h"
 #include "UKN/Skybox.h"
+#include "UKN/Terrian.h"
 
 #include "UKN/tmx/TMXTiledMap.h"
 
@@ -25,6 +26,7 @@
 #include "mist/TimeUtil.h"
 #include "mist/RandomUtil.h"
 #include "mist/Convert.h"
+#include "mist/TimeUtil.h"
 
 #include <vector>
 #include <map>
@@ -75,14 +77,15 @@ int CALLBACK WinMain(
     ukn::FontPtr font;
     ukn::RenderTarget2D* renderTarget;
     ukn::SkyboxPtr skybox;
+    ukn::TerrianPtr terrian;
 
     ukn::Vector3 positions[5];
     
     ukn::float4 colors[5];
     for(int i=0; i<5; ++i) {
         positions[i] =  ukn::Vector3(mist::Random::RandomFloat(-10, 10),
-                                   mist::Random::RandomFloat(-10, 10),
-                                   mist::Random::RandomFloat(-2, 2));
+                                   mist::Random::RandomFloat(5, 20),
+                                   mist::Random::RandomFloat(-5, 5));
                
         colors[i] =ukn::float4(ukn::Random::RandomFloat(0, 1), 
                                 ukn::Random::RandomFloat(0, 1), 
@@ -102,8 +105,8 @@ int CALLBACK WinMain(
                 ukn::ContextCfg::Default()
                   .width(800)
                   .height(600)
-                  .sampleCount(8)
-                  .showMouse(false)
+                  .sampleCount(1)
+                  .showMouse(true)
                   .isFullScreen(false)
                   .graphicFactoryName(L"D3D11Plugin.dll")
                   .fps(60)
@@ -140,14 +143,22 @@ int CALLBACK WinMain(
             if(skybox) {
                 skybox->render();
             }
-            gd.setWorldMatrix(ukn::Matrix4());
+
+            gd.setWorldMatrix(ukn::Matrix4::TransMat(-50, 0, -50));
+            if(terrian) {
+                terrian->render();
+            }
 
             ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
             sb.begin();
         //    sb.draw(renderTarget->getTargetTexture(), ukn::Rectangle(0, 0, 240, 180));
             sb.end();
             
-            font->draw(L"hello world!", 600, 500, ukn::FA_Left);
+            font->draw(mist::Convert::ToString(mist::FrameCounter::Instance().getCurrentFps()).c_str(), 
+                        0, 
+                        0, 
+                        ukn::FA_Left,
+                        ukn::color::Black);
             font->render();
 
             for(int i=0; i<5; ++i) {
@@ -186,7 +197,7 @@ int CALLBACK WinMain(
 
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
-            vp.camera->setViewParams(ukn::Vector3(0, 0, -3), ukn::Vector3(0, 0, 1));
+            vp.camera->setViewParams(ukn::Vector3(0, 5, -10), ukn::Vector3(0, 0, 1));
 
             vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
             renderBuffer->setEffect(effect);
@@ -207,6 +218,15 @@ int CALLBACK WinMain(
             skybox = new ukn::Skybox();
             if(!skybox->load(mist::ResourceLoader::Instance().loadResource(L"skyboxsun25degtest.png"))) {
                 mist::log_error(L"unable to load skybox");
+            }
+
+
+            ukn::GridTerrian* t = new ukn::GridTerrian();
+            if(t->build(0)) {
+                terrian = t;
+
+            } else {
+                ukn::log_error(L"unable to build terrian");
             }
         })
         .run();

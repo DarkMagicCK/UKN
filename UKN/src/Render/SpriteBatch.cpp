@@ -145,7 +145,7 @@ namespace ukn {
         }
         
         for(int i=0; i<4; ++i) {
-            tmpVert[i].color = descriptor.color.toRGBA();
+            tmpVert[i].color = descriptor.color.toARGB();
         }
         
         vertices[0] = tmpVert[0];
@@ -310,7 +310,20 @@ namespace ukn {
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const mist::Rectangle& srcRect, const mist::Rectangle& dstRect, const Color& color) {
-        draw(texture, srcRect, dstRect, 0.f);
+        if(!mBegan) {
+            MIST_THROW_EXCEPTION(L"ukn::SpriteBatch::draw: begin must be called before any draw function");
+        }
+        
+        TextureObject obj(texture);
+               
+        SpriteDescriptor descriptor;
+        descriptor.source_rect = srcRect;
+        descriptor.dest_rect = dstRect;
+        descriptor.layer_depth = 0.0;
+        descriptor.color = color;
+        obj.buildVertices(descriptor);
+                          
+        mRenderQueue.push_back(obj);
     }
     
     void SpriteBatch::draw(const TexturePtr& texture, const Vector2& pos, const Vector2& center, float rot, const Vector2& scale, const Color& color) {

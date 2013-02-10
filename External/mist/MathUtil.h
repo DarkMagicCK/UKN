@@ -350,6 +350,20 @@ namespace mist {
     }\
     return *this;\
     }\
+    SelfType operator+(real r) const {\
+    SelfType tmp = *this;\
+    for(int i=0; i<Size; ++i) {\
+    tmp.value[i] = Type(tmp.value[i] + r);\
+    }\
+    return tmp;\
+    }\
+    SelfType operator-(real r) const {\
+    SelfType tmp = *this;\
+    for(int i=0; i<Size; ++i) {\
+    tmp.value[i] = Type(tmp.value[i] - r);\
+    }\
+    return tmp;\
+    }\
     Type& operator[](int index) {\
     mist_assert(index >= 0 && index < Size);\
     return this->value[index];\

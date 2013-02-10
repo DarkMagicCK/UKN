@@ -473,6 +473,9 @@ namespace ukn {
             }
         }
 
+        this->pushProjectionMatrix();
+        this->pushViewMatrix();
+
         float width = params.width;
         if(width == 0.f) width = mWindow->width();
         float height = params.height;
@@ -493,6 +496,7 @@ namespace ukn {
         viewMat.scale(params.scalex, params.scaley, 1.f);
         viewMat.translate(-params.dx, -params.dy, 0.f);
         this->setViewMatrix(viewMat);
+        this->setWorldMatrix(Matrix4());
 
         if(mCurrFrameBuffer) {
             RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
@@ -515,6 +519,9 @@ namespace ukn {
     void D3D11GraphicDevice::end2DRendering() {
         mIs2D = false;
         disableAlphaBlending();
+
+        this->popProjectionMatrix();
+        this->popViewMatrix();
 
         if(mCurrFrameBuffer) {
             CameraPtr cam = mCurrFrameBuffer->getViewport().camera;

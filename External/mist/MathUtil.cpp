@@ -58,13 +58,13 @@ namespace mist {
         int BB = _ukn_perlin_noise_perm[B+1] + Z;
 
         return lerp(w,  lerp(v, lerp(u, grad(_ukn_perlin_noise_perm[AA], x, y, z),
-            grad(_ukn_perlin_noise_perm[BA], x-1, y, z)),
-            lerp(u, grad(_ukn_perlin_noise_perm[AB], x, y-1, z),
-            grad(_ukn_perlin_noise_perm[BB], x-1, y-1, z))),
-            lerp(v, lerp(u, grad(_ukn_perlin_noise_perm[AA+1], x, y, z-1),
-            grad(_ukn_perlin_noise_perm[BA+1], x-1, y, z-1)),
-            lerp(u, grad(_ukn_perlin_noise_perm[AB+1], x, y-1, z-1),
-            grad(_ukn_perlin_noise_perm[BB+1], x-1, y-1, z-1))));    
+                                        grad(_ukn_perlin_noise_perm[BA], x-1, y, z)),
+                                lerp(u, grad(_ukn_perlin_noise_perm[AB], x, y-1, z),
+                                        grad(_ukn_perlin_noise_perm[BB], x-1, y-1, z))),
+                        lerp(v, lerp(u, grad(_ukn_perlin_noise_perm[AA+1], x, y, z-1),
+                                        grad(_ukn_perlin_noise_perm[BA+1], x-1, y, z-1)),
+                                lerp(u, grad(_ukn_perlin_noise_perm[AB+1], x, y-1, z-1),
+                                        grad(_ukn_perlin_noise_perm[BB+1], x-1, y-1, z-1))));    
     }
 
 

@@ -122,8 +122,10 @@
     <ClInclude Include="..\..\UKN\include\UKN\Shader.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Skeletal.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Skybox.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\SkyDome.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Sprite.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SpriteBatch.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Terrian.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Texture.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Transform.h" />
     <ClInclude Include="..\..\UKN\include\UKN\UKN.h" />
@@ -144,6 +146,8 @@
     <ClCompile Include="..\..\UKN\src\Core\InputEngine.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTable.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTableLoader.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\SkyDome.cpp" />
+    <ClCompile Include="..\..\UKN\src\Core\Terrian.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\BlendStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\CameraController.cpp" />

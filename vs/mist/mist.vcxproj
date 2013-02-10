@@ -169,6 +169,7 @@
     <ClCompile Include="..\..\External\mist\Animation.cpp" />
     <ClCompile Include="..\..\External\mist\AutoUpdate.cpp" />
     <ClCompile Include="..\..\External\mist\Base64.cpp" />
+    <ClCompile Include="..\..\External\mist\Color.cpp" />
     <ClCompile Include="..\..\External\mist\Component.cpp" />
     <ClCompile Include="..\..\External\mist\ConfigParser.cpp" />
     <ClCompile Include="..\..\External\mist\ConfigParserXml.cpp" />

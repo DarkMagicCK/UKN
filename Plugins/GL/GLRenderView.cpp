@@ -55,7 +55,7 @@ namespace ukn {
         //if(flags & GL_STENCIL_BUFFER_BIT)
 
         if(flags & GL_COLOR_BUFFER_BIT)
-            glClearColor(clr.r, clr.g, clr.b, clr.a);
+            glClearColor(clr.r(), clr.g(), clr.b(), clr.a());
 
         if(flags & GL_DEPTH_BUFFER_BIT)
             glClearDepth(depth);

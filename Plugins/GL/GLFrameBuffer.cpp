@@ -68,7 +68,7 @@ namespace ukn {
         GLbitfield glflags = 0;
         
         if(flags & CM_Color) {
-            glClearColor(clr.r, clr.g, clr.b, clr.a);
+            glClearColor(clr.r(), clr.g(), clr.b(), clr.a());
             
             glflags |= GL_COLOR_BUFFER_BIT;
         }

@@ -13,7 +13,7 @@
 #include "mist/MathUtil.h"
 
 namespace mist {
-    
+
 #define COLOR_ARGB(a,r,g,b)         ((uint32(a)<<24) + (uint32(r)<<16) + (uint32(g)<<8) + uint32(b))
 #define COLOR_ARGB_GETA(col)        (((col)>>24) & 0xFF)
 #define COLOR_ARGB_GETR(col)        (((col)>>16) & 0xFF)
@@ -23,7 +23,7 @@ namespace mist {
 #define COLOR_ARGB_SETR(col,r)	  	 (((col) & 0xFF00FFFF) + (uint32(r)<<16))
 #define COLOR_ARGB_SETG(col,g)		 (((col) & 0xFFFF00FF) + (uint32(g)<<8))
 #define COLOR_ARGB_SETB(col,b)		 (((col) & 0xFFFFFF00) + uint32(b))
-    
+
 #define COLOR_RGBA(r,g,b,a)         ((uint32(a)) + (uint32(r)<<24) + (uint32(g)<<16) + uint32(b)<<8)
 #define COLOR_RGBA_GETA(col)        ((col) & 0xFF)
 #define COLOR_RGBA_GETR(col)        (((col)>>24) & 0xFF)
@@ -33,200 +33,57 @@ namespace mist {
 #define COLOR_RGBA_SETR(col,r)	  	 (((col) & 0x00FFFFFF) + (uint32(r)<<24))
 #define COLOR_RGBA_SETG(col,g)		 (((col) & 0xFF00FFFF) + (uint32(g)<<16))
 #define COLOR_RGBA_SETB(col,b)		 (((col) & 0xFFFF00FF) + (uint32(b)<<8))
-    
-    class Color {
-    public:
-        Color():
-        r(1.f),
-        g(1.f),
-        b(1.f),
-        a(1.f) {}
-        
-        Color(int32 _r, int32 _g, int32 _b):
-        r(_r / 255.0f),
-        g(_g / 255.0f),
-        b(_b / 255.0f),
-        a(1.0f) {
-            normalize();
-        }
-        
-        Color(float _r, float _g, float _b, float _a):
-        r(_r), 
-        g(_g), 
-        b(_b), 
-        a(_a) {
-            normalize();
-        }
-        
-        Color(uint32 col) { 
-            *this = col;
-        }
-        
-        void set(float _r, float _g, float _b, float _a) { 
-            this->r = _r; 
-            this->g = _g; 
-            this->b = _b; 
-            this->a = _a;
-        }
-        
-        Color& A(float a) {
-            this->a = a;
-            return *this;
-        }
-        Color& R(float r) {
-            this->r = r;
-            return *this;
-        }
-        Color& G(float g) {
-            this->g = g;
-            return *this;
-        }
-        Color& B(float b) {
-            this->b = b;
-            return *this;
-        }
-        
-        Color operator = (const Color& rhs) {
-            this->r = rhs.r; 
-            this->g = rhs.g; 
-            this->b = rhs.b; 
-            this->a = rhs.a; 
-            return *this;
-        }
-        
-        Color operator = (uint32 col) {
-            this->b = ((col & 0xFF))/255.0f;
-            this->g = ((col>>8) & 0xFF)/255.0f;
-            this->r = ((col>>16) & 0xFF)/255.0f;
-            this->a = ((col>>24) & 0xFF)/255.0f;
-            return *this;
-        }
-        
-        Color& operator += (const Color& rhs) {
-            this->r += rhs.r; 
-            this->g += rhs.g; 
-            this->b += rhs.b; 
-            this->a += rhs.a; 
-            return *this;
-        }
-        
-        Color& operator -= (const Color& rhs) {
-            this->r -= rhs.r; 
-            this->g -= rhs.g; 
-            this->b -= rhs.b; 
-            this->a -= rhs.a; 
-            return *this;
-        }
-        Color& operator *= (const Color& rhs) {
-            this->r *= rhs.r; 
-            this->g *= rhs.g; 
-            this->b *= rhs.b; 
-            this->a *= rhs.a; 
-            return *this;
-        }
-        Color& operator /= (float s) {
-            this->r /= s; 
-            this->g /= s; 
-            this->b /= s; 
-            this->a /= s; 
-            return *this;
-        }
-        Color& operator *= (float s) {
-            this->r *= s; 
-            this->g *= s; 
-            this->b *= s; 
-            this->a *= s; 
-            return *this; 
-        }
-        
-        Color operator - (const Color& rhs)	const {
-            return Color(this->r-rhs.r, this->g-rhs.g, this->b-rhs.b, this->a-rhs.a);
-        }
-        
-        Color operator + (float s)	const {
-            return Color(this->r+s, this->g+s, this->b+s, this->a+s);
-        }
-        Color operator - (float s)	const {
-            return Color(this->r-s, this->g-s, this->b-s, this->a-s);
-        }
-        Color operator * (float s)	const {
-            return Color(this->r*s, this->g*s, this->b*s, this->a*s);
-        }
-        Color operator / (float s)	const {
-            mist_assert(s != 0.f);
-            return Color(this->r/s, this->g/s, this->b/s, this->a/s);
-        }
-        Color operator * (const Color& rhs) const {
-            return Color(this->r * rhs.r, 
-                                 this->g * rhs.g, 
-                                 this->b * rhs.b, 
-                                 this->a * rhs.a);
-        }
-        
-        
-        Color operator + (const Color& rhs) const {
-            return Color(this->r+rhs.r, 
-                                 this->g+rhs.g, 
-                                 this->b+rhs.b, 
-                                 this->a+rhs.a);
-        }
-        
-        bool operator == (const Color& rhs)	const {
-            return (this->r==rhs.r && this->g==rhs.g && this->b==rhs.b && this->a==rhs.a);
-        }
-        bool operator != (const Color& rhs) const {
-            return !(*this == rhs);
-        }
-        
-        uint32 toRGBA() const {
-            return ((unsigned int)(this->a*255.0f)<<24) +
-                    ((unsigned int)(this->b*255.0f)<<16) +
-                    ((unsigned int)(this->g*255.0f)<<8) +
-                    ((unsigned int)(this->r*255.0f));
-        }
-        
-        static uint32 FromRGBA(float oR, float og, float ob, float oa)  {
-            return ((unsigned int)(oa*255.0f)<<24) +
-                    ((unsigned int)(ob*255.0f)<<16) +
-                    ((unsigned int)(og*255.0f)<<8) +
-                    ((unsigned int)(oR*255.0f));
-        }
-        
-        uint32 toARGB() const {
-            return ((unsigned int)(this->a*255.0f)<<24) +
-                    ((unsigned int)(this->r*255.0f)<<16) +
-                    ((unsigned int)(this->g*255.0f)<<8) +
-                    ((unsigned int)(this->b*255.0f));
-        }
-        
-        static uint32 FromARGB(float oR, float og, float ob, float oa)  {
-            return ((unsigned int)(oa*255.0f)<<24) +
-                    ((unsigned int)(oR*255.0f)<<16) +
-                    ((unsigned int)(og*255.0f)<<8) +
-                    ((unsigned int)(ob*255.0f));
-        }
-        
-        static Color FromHWColor(uint32 col) {
-            return Color(col);
-        }
-        
-        operator uint32() const {
-            return toARGB();
-        }
-        
-        Color& normalize() {
-            this->r = math::clamp(0.f, 1.f, r);
-            this->g = math::clamp(0.f, 1.f, g);
-            this->b = math::clamp(0.f, 1.f, b);
-            this->a = math::clamp(0.f, 1.f, a);
-            return *this;
-        }
-        
-        float r;
-        float g;
-        float b;
-        float a;
 
+    /* color argb */
+    class MIST_API Color {
+    public:
+        Color();
+        Color(int32 _r, int32 _g, int32 _b);
+        Color(float _r, float _g, float _b, float _a);
+        Color(const float4& _c);
+
+        explicit Color(uint32 col);
+
+        void set(float _r, float _g, float _b, float _a);
+
+
+        const float& a() const { return this->c[3]; }
+        const float& r() const { return this->c[0]; }
+        const float& g() const { return this->c[1]; }
+        const float& b() const { return this->c[2]; }
+
+        float& a() { return this->c[3]; }
+        float& r() { return this->c[0]; }
+        float& g() { return this->c[1]; }
+        float& b() { return this->c[2]; }
+
+        Color operator = (const Color& rhs);
+        Color operator = (uint32 col);
+        Color& operator += (const Color& rhs);
+        Color& operator -= (const Color& rhs);
+        Color& operator *= (const Color& rhs);
+        Color& operator /= (float s);
+        Color& operator *= (float s);
+        Color operator - (const Color& rhs)	const;
+        Color operator + (float s)	const;
+        Color operator - (float s)	const;
+        Color operator * (float s)	const;
+        Color operator / (float s)	const;
+        Color operator * (const Color& rhs) const;
+        Color operator + (const Color& rhs) const;
+        bool operator == (const Color& rhs)	const;
+        bool operator != (const Color& rhs) const;
+        uint32 toRGBA() const;
+
+        static uint32 FromRGBA(float oR, float og, float ob, float oa);
+        uint32 toARGB() const;
+
+        static uint32 FromARGB(float oR, float og, float ob, float oa);
+        static Color FromHWColor(uint32 col);
+
+        Color& normalize();
+
+        float4 c;
     };
 
     namespace color {
@@ -349,91 +206,35 @@ namespace mist {
         static Color Whitesmoke     = Color(0xFFF5F5F5); 
     } // namespace color
 
-    class ColorHSV {
+    class MIST_API ColorHSV {
     public:
-        float h, s, v, a;
-        
+        float4 c;
+
         ColorHSV(float _h, float _s, float _v, float _a):
-        h(_h), 
-        s(_s), 
-        v(_v), 
-        a(_a) {}
-        
+            c(_h, _s, _v, _a) {}
+
         ColorHSV(uint32 col) {
             this->fromRGBA(col);
         }
-        
+
+        const float& h() const { return this->c[0]; }
+        const float& s() const { return this->c[1]; }
+        const float& v() const { return this->c[2]; }
+        const float& a() const { return this->c[3]; }
+
+        float& h() { return this->c[0]; }
+        float& s() { return this->c[1]; }
+        float& v() { return this->c[2]; }
+        float& a() { return this->c[3]; }
+
         bool operator ==(const ColorHSV& c) const;
         bool operator !=(const ColorHSV& c) const;
-        
+
         void fromRGBA(uint32 col);
         uint32 toRGBA() const;
     };
-    
-    inline void ColorHSV::fromRGBA(uint32 col) {
-        float r, g, b;
-        float minv, maxv, delta;
-        float del_R, del_G, del_B;
-        
-        this->a = (col & 0xFF) / 255.0f;
-        r = ((col>>24) & 0xFF) / 255.0f;
-        g = ((col>>16) & 0xFF) / 255.0f;
-        b = ((col>>8)  & 0xFF) / 255.0f;
-        
-        minv = std::min(std::min(r, g), b);
-        maxv = std::max(std::max(r, g), b);
-        delta = maxv - minv;
-        
-        this->v = maxv;
-        
-        if (delta == 0) {
-            this->h = 0;
-            this->s = 0;
-        }
-        else {
-            this->s = delta / maxv;
-            del_R = (((maxv - r) / 6) + (delta / 2)) / delta;
-            del_G = (((maxv - g) / 6) + (delta / 2)) / delta;
-            del_B = (((maxv - b) / 6) + (delta / 2)) / delta;
-            
-            if      (r == maxv) {this->h = del_B - del_G;}
-            else if (g == maxv) {this->h = (1 / 3) + del_R - del_B;}
-            else if (b == maxv) {this->h = (2 / 3) + del_G - del_R;}
-            
-            if (this->h < 0) this->h += 1;
-            if (this->h > 1) this->h -= 1;
-        }
-    }
-    
-    inline uint32 ColorHSV::toRGBA() const {
-        float r, g, b;
-        float xh, i, p1, p2, p3;
-        
-        if (this->s == 0) {
-            r = v;
-            g = v;
-            b = v;
-        }
-        else {
-            xh = h * 6;
-            if(xh == 6) xh=0;
-            i = floorf(xh);
-            p1 = this->v * (1 - this->s);
-            p2 = this->v * (1 - this->s * (xh - i));
-            p3 = this->v * (1 - this->s * (1 - (xh - i)));
-            
-            if      (i == 0) {r = v;  g = p3; b = p1;}
-            else if (i == 1) {r = p2; g = v;  b = p1;}
-            else if (i == 2) {r = p1; g = v;  b = p3;}
-            else if (i == 3) {r = p1; g = p2; b = v; }
-            else if (i == 4) {r = p3; g = p1; b = v; }
-            else			 {r = v;  g = p1; b = p2;}
-        }
-        
-        return (uint32(a*255.0f)) + (uint32(r*255.0f)<<24) + (uint32(g*255.0f)<<16) + (uint32(b*255.0f)<<8);
-    }
-    
-    
+
+
 } // namespace mist
 
 

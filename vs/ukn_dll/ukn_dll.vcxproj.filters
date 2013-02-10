@@ -168,6 +168,12 @@
     <ClInclude Include="..\..\UKN\include\UKN\InputDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Terrian.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\SkyDome.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -263,9 +269,6 @@
     <ClCompile Include="..\..\UKN\src\Render\CameraController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\UKN\src\Render\CgHelper.cpp">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\UKN\src\Render\Vertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -279,6 +282,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\UKN\src\Core\InputEngine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Core\Terrian.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Core\SkyDome.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\CgHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -18,7 +18,6 @@
 #include "UKN/GraphicFactory.h"
 #include "UKN/Window.h"
 #include "UKN/App.h"
-#include "UKN/Scene.h"
 #include "UKN/Asset.h"
 
 namespace ukn {

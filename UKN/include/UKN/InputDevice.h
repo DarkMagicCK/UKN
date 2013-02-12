@@ -1,5 +1,7 @@
-#include "UKN/PreDeclare.h"
+#ifndef PROJECT_UNKNOWN_INPUTDEVICE_H_
+#define PROJECT_UNKNOWN_INPUTDEVICE_H_
 
+#include "UKN/PreDeclare.h"
 
 namespace ukn {
 

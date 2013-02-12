@@ -13,13 +13,13 @@ namespace ukn {
 
     inline void _get_sphere_vertex(double r, double a, double b, VertexUVNormal& vertex) {
         double sina = sin(a);
-        vertex.x = r * sina * cos(b);
-        vertex.y = r * sina * sin(b);
-        vertex.z = r * cos(a);
+        vertex.position = Vector3(r * sina * cos(b),
+                                  r * sina * sin(b),
+                                  r * cos(a));
 
-        Vector3 normal = Vector3(vertex.x, vertex.y, vertex.z).normalize();
-        vertex.setNormal(normal.x(), normal.y(), normal.z());
+        vertex.normal = vertex.position.normalize();
 
+        /*
         double phi = acos(vertex.nz);
         vertex.v = phi / d_pi;
         if(vertex.nz == 1.0f || vertex.nz == -1.0f) {
@@ -27,7 +27,9 @@ namespace ukn {
         } else {
             float u = acosf(MAX(MIN(vertex.ny / phi, 1.0), -1.0)) / (2.0 * d_pi);
             vertex.u = vertex.nx > 0.f ? u : 1 - u;
-        }
+        }*/
+        vertex.uv = Vector2(0.5 + asin(vertex.normal.x()) / d_pi,
+                            0.5 + asin(vertex.normal.y()) / (d_pi));
     }
 
     ukn::RenderBufferPtr ModelLoader::BuildFromSphere(const mist::Sphere& sphere, uint32 slices) {
@@ -40,65 +42,60 @@ namespace ukn {
             double wStep = 360.0 / w;
             int length = w * h;
 
-            ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(GraphicBuffer::WriteOnly,
-                GraphicBuffer::Dynamic,
-                length,
-                0,
-                VertexUVNormal::Format());
-            VertexUVNormal* vertices = (VertexUVNormal*)vertexBuffer->map();
-
-            if(vertices) {
+            std::vector<VertexUVNormal> vertices;
+            {
                 double a, b;
                 int i, j;
                 for(a = 0.0, i = 0; i < h; i++, a += hStep)
                     for(b = 0.0, j = 0; j < w; j++, b += wStep) {
+                        VertexUVNormal vertex;
                         _get_sphere_vertex(sphere.radius(),
                             math::degree_to_radius(a),
                             math::degree_to_radius(b),
-                            vertices[i * w + j]);
+                            vertex);
+                        vertices.push_back(vertex);
                     }
-                    
-                vertexBuffer->unmap();
-                renderBuffer->bindVertexStream(vertexBuffer, VertexUVNormal::Format());
-            } else {
-                return RenderBufferPtr();
             }
+            
+            ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(
+                GraphicBuffer::None,
+                GraphicBuffer::Static,
+                vertices.size(),
+                &vertices[0],
+                VertexUVNormal::Format());
+            renderBuffer->bindVertexStream(vertexBuffer, VertexUVNormal::Format());
 
-            GraphicBufferPtr indexBuffer = gf.createIndexBuffer(GraphicBuffer::WriteOnly,
-                GraphicBuffer::Dynamic,
-                (h-1)*6 + (h-1)*(w-1)*6,
-                0);
-
-            uint32* indexes = (uint32*)indexBuffer->map();
-            if(indexes) {
+            std::vector<uint32> indices;
+            {
                 uint32 index = 0;
                 int i, j;
                 for(i = 0; i < h-1; ++i) {
                     for(j = 0; j < w-1; ++j) {
-                        indexes[index++] = i*w+j;
-                        indexes[index++] = i*w+j+1;
-                        indexes[index++] = (i+1)*w+j+1;
+                        indices.push_back(i*w+j);
+                        indices.push_back(i*w+j+1);
+                        indices.push_back((i+1)*w+j+1);
 
-                        indexes[index++] = (i+1)*w+j+1;
-                        indexes[index++] = (i+1)*w+j;
-                        indexes[index++] = i*w+j;
+                        indices.push_back((i+1)*w+j+1);
+                        indices.push_back((i+1)*w+j);
+                        indices.push_back(i*w+j);
                     }
-                    indexes[index++] = i*w+j;
-                    indexes[index++] = i*w;
-                    indexes[index++] = (i+1)*w;
+                    indices.push_back(i*w+j);
+                    indices.push_back(i*w);
+                    indices.push_back((i+1)*w);
 
-                    indexes[index++] = (i+1)*w;
-                    indexes[index++] = (i+1)*w+j;
-                    indexes[index++] = i*w+j;
+                    indices.push_back((i+1)*w);
+                    indices.push_back((i+1)*w+j);
+                    indices.push_back(i*w+j);
                 }
-                indexBuffer->unmap();
-
-                renderBuffer->bindIndexStream(indexBuffer);
-                renderBuffer->useIndexStream(true);
-            } else {
-                return RenderBufferPtr();
-            }
-
+            } 
+            GraphicBufferPtr indexBuffer = gf.createIndexBuffer(
+                GraphicBuffer::None,
+                GraphicBuffer::Static,
+                indices.size(),
+                &indices[0]);
+            
+            renderBuffer->bindIndexStream(indexBuffer);
+            renderBuffer->useIndexStream(true);
             renderBuffer->setRenderMode(RM_Triangle);
             return renderBuffer;
         }
@@ -106,4 +103,40 @@ namespace ukn {
         return RenderBufferPtr();
     }
 
+    ukn::RenderBufferPtr ModelLoader::BuildFromBox(const mist::Box& box) {
+        ukn::GraphicFactory& gf = Context::Instance().getGraphicFactory();
+        ukn::RenderBufferPtr renderBuffer = gf.createRenderBuffer();
+        if(renderBuffer) {
+            Vector3 min = box.getMin();
+            Vector3 max = box.getMax();
+            float3 v[8] = {
+                float3(min.x(), min.y(), min.z()), // 0
+                float3(min.x(), max.y(), min.z()), // 1
+                float3(max.x(), max.y(), min.z()), // 2
+                float3(max.x(), min.y(), min.z()), // 3
+            
+                float3(max.x(), min.y(), max.z()), // 4
+                float3(min.x(), min.y(), max.z()), // 5
+                float3(min.x(), max.y(), max.z()), // 6
+                float3(max.x(), max.y(), max.z()) // 7
+            };
+        }
+        return renderBuffer;
+    }
+
+    ukn::RenderBufferPtr ModelLoader::LoadFromCSV(const mist::ResourcePtr& file, const vertex_elements_type& elements) {
+        mist::TextStreamReader reader(file->getResourceStream());
+        while(!reader.peek() != -1) {
+            MistString line = reader.readLine();
+            StringTokenlizer tokens(line, L",");
+            for(vertex_elements_type::const_iterator it = elements.begin(), end = elements.end();
+                it != end;
+                ++it) {
+                if(it-> format == EF_Float) {
+
+                }
+            }
+        }
+        return RenderBufferPtr();
+    }
 }

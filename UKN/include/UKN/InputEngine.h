@@ -1,3 +1,7 @@
+#ifndef PROJECT_UNKNOWN_INPUTENGINE_H_
+#define PROJECT_UNKNOWN_INPUTENGINE_H_
+
+
 #include "UKN/PreDeclare.h"
 #include "UKN/Input.h"
 
@@ -43,3 +47,5 @@ namespace ukn {
     };
 
 }
+
+#endif

@@ -31,9 +31,32 @@ namespace ukn {
         
         for(int i=0; i<6; ++i) {
             this->mLookupTable[i] = ((this->mPlanes[i].a() < 0) ? 1 : 0) | 
-                                    ((this->mPlanes[i].a() < 0) ? 2 : 0) |
-                                    ((this->mPlanes[i].a() < 0) ? 4 : 0);
+                                    ((this->mPlanes[i].b() < 0) ? 2 : 0) |
+                                    ((this->mPlanes[i].c() < 0) ? 4 : 0);
         }
+    }
+
+    Frustum::Visibility Frustum::isCubeVisible(const Vector3& pos, float r) const {
+        for(int i=0; i<6; ++i) {
+            if(mPlanes[i].dot(Vector3(pos - r)) >= 0)
+                continue;
+            if(mPlanes[i].dot(Vector3(pos + r)) >= 0)
+                continue;
+            if(mPlanes[i].dot(Vector3(pos.x() + r, pos.y() - r, pos.z() - r)) >= 0)
+                continue;
+            if(mPlanes[i].dot(Vector3(pos.x() - r, pos.y() + r, pos.z() - r)) >= 0)
+                continue;
+            if(mPlanes[i].dot(Vector3(pos.x() + r, pos.y() + r, pos.z() - r)) >= 0)
+                continue;
+            if(mPlanes[i].dot(Vector3(pos.x() - r, pos.y() - r, pos.z() + r)) >= 0)
+                continue;
+            if(mPlanes[i].dot(Vector3(pos.x() - r, pos.y() + r, pos.z() + r)) >= 0)
+                continue;
+            if(mPlanes[i].dot(Vector3(pos.x() + r, pos.y() - r, pos.z() + r)) >= 0)
+                continue;
+            return Visibility::No;
+        }
+        return Visibility::Yes;
     }
     
     Frustum::Visibility Frustum::isBoxVisible(const Box& box) const {
@@ -48,7 +71,7 @@ namespace ukn {
                        (n & 2) ? box.getMax().y() : box.getMin().y(),
                        (n & 4) ? box.getMax().z() : box.getMin().z());
             
-            if(this->mPlanes[i].dot(v1) < 0)
+            if(this->mPlanes[i].dot(v0) < 0)
                 return No;
             if(this->mPlanes[i].dot(v1) < 0)
                 intersect = true;

@@ -1,3 +1,7 @@
+#ifndef PROJECT_UNKNOWN_SKYBOX_H_
+#define PROJECT_UNKNOWN_SKYBOX_H_
+
+
 #include "UKN/PreDeclare.h"
 
 namespace ukn {
@@ -29,3 +33,5 @@ namespace ukn {
     typedef SharedPtr<Skybox> SkyboxPtr;
 
 } // namespace ukn
+
+#endif

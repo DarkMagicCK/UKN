@@ -87,11 +87,13 @@
     <ClInclude Include="..\..\UKN\include\UKN\Audio.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Basic.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Binding.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\BitmapFont.h" />
     <ClInclude Include="..\..\UKN\include\UKN\BlendStateObject.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Camera.h" />
     <ClInclude Include="..\..\UKN\include\UKN\CameraController.h" />
     <ClInclude Include="..\..\UKN\include\UKN\CgHelper.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Context.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Fog.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Font.h" />
     <ClInclude Include="..\..\UKN\include\UKN\FrameBuffer.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Frustum.h" />
@@ -116,7 +118,8 @@
     <ClInclude Include="..\..\UKN\include\UKN\RenderTarget.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderView.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SamplerStateObject.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Scene.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\SceneManager.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\SceneObject.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Scripting.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SequencialAnimation.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Shader.h" />
@@ -132,8 +135,6 @@
     <ClInclude Include="..\..\UKN\include\UKN\Vertex.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Viewport.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Window.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
     <ClInclude Include="ukn_dll.h" />
   </ItemGroup>
   <ItemGroup>
@@ -146,12 +147,12 @@
     <ClCompile Include="..\..\UKN\src\Core\InputEngine.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTable.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTableLoader.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\SkyDome.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Terrian.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\BitmapFont.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\BlendStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\CameraController.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\CgHelper.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Fog.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Font.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\FrameBuffer.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Frustum.cpp" />
@@ -165,10 +166,13 @@
     <ClCompile Include="..\..\UKN\src\Render\RenderTarget.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderView.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SamplerStateObject.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\Scene.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\SceneManager.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\SceneObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Shader.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Skybox.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\SkyDome.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Terrian.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Texture.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Vertex.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Window.cpp" />

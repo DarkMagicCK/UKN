@@ -16,14 +16,15 @@ namespace ukn {
     class UKN_API Frustum {
     public:
         enum Visibility {
+            No = 0,
             Yes,
-            No,
             Part,
         };
         
     public:
         void clipMatrix(const Matrix4& clip);
 
+        Visibility isCubeVisible(const Vector3& pos, float r) const;
         Visibility isBoxVisible(const Box& box) const;
         Visibility isSphereVisible(const Sphere& sphere) const;
         

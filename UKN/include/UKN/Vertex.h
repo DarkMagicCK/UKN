@@ -59,6 +59,14 @@ namespace ukn {
     
     typedef std::vector<VertexElement> vertex_elements_type;
 
+    inline bool is_vertex_elements_equal(const vertex_elements_type& lhs, const vertex_elements_type& rhs) {
+        if(lhs.size() != rhs.size()) return false;
+        for(uint32 i=0; i<lhs.size(); ++i)
+            if(!(lhs[i] == rhs[i]))
+                return false;
+        return true;
+    }
+
     inline uint32 GetVertexElementsTotalSize(const vertex_elements_type& elements) {
         uint32 ret = 0;
         for(vertex_elements_type::const_iterator it = elements.begin(),
@@ -173,23 +181,9 @@ namespace ukn {
     };
 
     struct VertexUVNormal {
-        float u, v;
-        float x, y, z;
-        float nx, ny, nz;
-
-        VertexUVNormal():
-        u(0.f), v(0.f),
-        x(0.f), y(0.f), z(0.f),
-        nx(0.f), ny(0.f), nz(0.f) {
-
-        }
-
-        void setNormal(float _x, float _y, float _z) {
-            nx = _x; ny = _y; nz = _z;
-        }
-        void setPosition(float _x, float _y, float _z) {
-            x = _x; y = _y; z = _z;
-        }
+        Vector2 uv;
+        Vector3 position;
+        Vector3 normal;
 
         static vertex_elements_type& Format() {
             static vertex_elements_type static_format = VertexElementsBuilder()

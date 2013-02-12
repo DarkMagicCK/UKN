@@ -16,7 +16,7 @@
 namespace mist {
     
     /** virtual base class for stream writers */
-    class StreamWriter: public Object {
+    class MIST_API StreamWriter: public Object {
     public:
         virtual ~StreamWriter();
         
@@ -70,7 +70,7 @@ namespace mist {
     /**
      * Binary writer wrapper which writes binar data into the stream
      **/
-    class BinaryStreamWriter: public StreamWriter {
+    class MIST_API BinaryStreamWriter: public StreamWriter {
     public:
         BinaryStreamWriter(const StreamPtr& stream);
         virtual ~BinaryStreamWriter();
@@ -127,7 +127,7 @@ namespace mist {
         write(&data, sizeof(T));
     }
     
-    class TextStreamWriter: public StreamWriter {
+    class MIST_API TextStreamWriter: public StreamWriter {
     public:
         TextStreamWriter(const StreamPtr& stream);
         virtual ~TextStreamWriter();
@@ -190,7 +190,7 @@ namespace mist {
         virtual MistString  readString() = 0;
     };
     
-    class BinaryStreamReader: public StreamReader {
+    class MIST_API BinaryStreamReader: public StreamReader {
     public:
         BinaryStreamReader(const StreamPtr& stream);
         virtual ~BinaryStreamReader();
@@ -235,7 +235,7 @@ namespace mist {
         return buffer;
     }
     
-    class TextStreamReader: public StreamReader {
+    class MIST_API TextStreamReader: public StreamReader {
     public:
         TextStreamReader(const StreamPtr& stream);
         virtual ~TextStreamReader();

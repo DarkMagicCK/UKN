@@ -81,6 +81,10 @@ namespace ukn {
     void CgDxEffect::setVertexFormat(const vertex_elements_type& format) {
         if(mVertexShader) {
             CgDxShader* vertexShader = checked_cast<CgDxShader*>(mVertexShader.get());
+            if(mLayout != 0 &&
+                is_vertex_elements_equal(format, vertexShader->getDesc().format))
+                return;
+
             if(vertexShader) {
                 ID3DBlob* vsBlob = cgD3D11GetCompiledProgram(vertexShader->getProgram());
                 if(vsBlob)

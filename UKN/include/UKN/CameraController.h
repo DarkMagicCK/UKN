@@ -1,3 +1,6 @@
+#ifndef PROJECT_UNKNOWN_CAMERACONTROLLER_H_
+#define PROJECT_UNKNOWN_CAMERACONTROLLER_H_
+
 #include "UKN/PreDeclare.h"
 #include "UKN/Camera.h"
 #include "UKN/Input.h"
@@ -53,3 +56,5 @@ namespace ukn {
     };
 
 }
+
+#endif

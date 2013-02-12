@@ -1,0 +1,5 @@
+#ifndef PROJECT_UNKNOWN_SKYDOME_H_
+#define PROJECT_UNKNOWN_SKYDOME_H_
+
+
+#endif

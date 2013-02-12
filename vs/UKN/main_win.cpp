@@ -78,7 +78,6 @@ int CALLBACK WinMain(
     ukn::RenderTarget2D* renderTarget;
     ukn::SkyboxPtr skybox;
     ukn::TerrianPtr terrian;
-    ukn::Frustum frustum;
 
     ukn::Vector3 positions[5];
     
@@ -156,7 +155,6 @@ int CALLBACK WinMain(
                 skybox->render();
             }
 
-            gd.setWorldMatrix(ukn::Matrix4::TransMat(-50, 0, -50));
             if(terrian) {
                 terrian->render();
             }
@@ -175,9 +173,9 @@ int CALLBACK WinMain(
                         ukn::color::Black);
 
             ukn::Viewport& vp = gd.getCurrFrameBuffer()->getViewport();
-            frustum.clipMatrix(vp.camera->getViewMatrix() * vp.camera->getProjMatrix());
-
+            const ukn::Frustum& frustum = vp.camera->getViewFrustum();
             int renderCount = 0;
+
             for(int i=0; i<5; ++i) {
                 if(frustum.isSphereVisible(mist::Sphere(positions[i], 2.5)) != ukn::Frustum::No) {
                     gd.setWorldMatrix(ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
@@ -192,6 +190,8 @@ int CALLBACK WinMain(
             }    
 
             font->draw(ukn::Convert::ToString(renderCount).c_str(), 0, 90, ukn::FA_Left, ukn::color::Red);
+            font->draw(ukn::Convert::ToString(terrian->getDrawCount()).c_str(), 0, 120, ukn::FA_Left, ukn::color::Red);
+            
             font->render();
         })
         .connectInit([&](ukn::Window*) {
@@ -213,11 +213,11 @@ int CALLBACK WinMain(
             fragmentShader->setFloatVectorVariable("ambientColor", ukn::float4(1.0f, 1.0f, 1.f, 1.f));
             fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(1.f, 0.0f, 0.f, 0.f));
 
-         //   texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
+            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
           //  texture = gf.create2DTexture(800, 600, 1, ukn::EF_RGBA8, 0);
          //   texture2 = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"pic0053.png"));
 
-         //   effect->getFragmentShader()->setTextureVariable("lightmap", texture2);
+            effect->getFragmentShader()->setTextureVariable("tex", texture);
 
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
@@ -245,9 +245,10 @@ int CALLBACK WinMain(
             }
 
             ukn::GridTerrianLightening* t = new ukn::GridTerrianLightening();
-            (*t).y(0)
+            (*t).position(ukn::float3(-250, 0, -250))
                 .noise(10)
-                .noiseWeight(5);
+                .noiseWeight(5)
+                .size(ukn::float2(500, 500));
             if(t->build()) {
                 t->texture(gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"dirt01.dds")));
               

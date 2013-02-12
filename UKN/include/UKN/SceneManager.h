@@ -1,68 +1,12 @@
-//
-//  Scene.h
-//  Project Unknown
-//
-//  Created by Robert Bu on 11/23/11.
-//  Copyright (c) 2011 heizi. All rights reserved.
-//
-
-#ifndef Project_Unknown_Scene_h
-#define Project_Unknown_Scene_h
-
-#include "mist/Platform.h"
-#include "mist/MathUtil.h"
-#include "mist/Uncopyable.h"
+#ifndef Project_Unknown_SceneManager_h
+#define Project_Unknown_SceneManager_h
 
 #include "UKN/PreDeclare.h"
 #include "UKN/Frustum.h"
 #include "UKN/Renderable.h"
 
-#include <vector>
-
 namespace ukn {
-    
-    class UKN_API SceneNode {
-    public:
-        virtual ~SceneNode() { }
-        
-        virtual void addRenderable(const RenderablePtr& renderable) {
-            mRenderables.push_back(renderable);
-        }
-        
-    protected:
-        typedef std::vector<RenderablePtr> RenderableList;
-        RenderableList mRenderables;
-    };
-    
-    enum SceneObjectAttribute {
-        SOA_Cullable    = 1UL << 0,
-        SOA_Overlay     = 1UL << 1,
-        SOA_Moveable    = 1UL << 2,
-        SOA_Unvisible   = 1UL << 3
-    };
-    
-    class UKN_API SceneObject {
-    public:
-        explicit SceneObject(uint32 attribute);
-        virtual ~SceneObject();
-        
-        const RenderablePtr& getRenderable() const;
-        
-        virtual const Matrix4& getModelMatrix() const;
-        virtual Box getBound() const;
-        
-        virtual void addToSceneManager();
-        virtual void update();
-        
-        uint32 getAttribute() const;
-        bool isVisible() const;
-        void setVisible(bool flag);
-        
-    protected:
-        uint32 mAttribute;
-        RenderablePtr mRenderable;
-    };
-    
+
     class UKN_API SceneManager: Uncopyable {
     public:
         typedef std::vector<SceneObjectPtr> SceneObjectList;
@@ -117,7 +61,7 @@ namespace ukn {
         uint32 mNumVerticesRendered;
     };
     
-} // namespace ukn
+}
 
 
 #endif

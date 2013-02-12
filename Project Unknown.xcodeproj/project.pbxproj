@@ -34,6 +34,8 @@
 		881B520415BBC63C009B9482 /* LocalizedStringTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B520315BBC63C009B9482 /* LocalizedStringTable.cpp */; };
 		881B522015BBCD8C009B9482 /* LocalizedStringTableLoader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */; };
 		88260E651488541E00142365 /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88260E641488541E00142365 /* Window.cpp */; };
+		882B396B16CABDD300A4FD03 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 882B396A16CABDD300A4FD03 /* IOKit.framework */; };
+		882B396E16CAD0AB00A4FD03 /* InputEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 882B396D16CAD0AB00A4FD03 /* InputEngine.cpp */; };
 		8832D1461488C9F700D08C15 /* GLTexture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1451488C9F700D08C15 /* GLTexture.cpp */; };
 		8832D14A1488CFDC00D08C15 /* GLFrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */; };
 		8832D1531489A47E00D08C15 /* GLRenderView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1521489A47E00D08C15 /* GLRenderView.cpp */; };
@@ -215,6 +217,8 @@
 		881B521C15BBCD67009B9482 /* LocalizedStringTableLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalizedStringTableLoader.h; sourceTree = "<group>"; };
 		881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LocalizedStringTableLoader.cpp; sourceTree = "<group>"; };
 		88260E641488541E00142365 /* Window.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Window.cpp; sourceTree = "<group>"; };
+		882B396A16CABDD300A4FD03 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		882B396D16CAD0AB00A4FD03 /* InputEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputEngine.cpp; sourceTree = "<group>"; };
 		8832D1431488C87C00D08C15 /* GLConvert.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLConvert.h; sourceTree = "<group>"; };
 		8832D1441488C9F200D08C15 /* GLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLTexture.h; sourceTree = "<group>"; };
 		8832D1451488C9F700D08C15 /* GLTexture.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLTexture.cpp; sourceTree = "<group>"; };
@@ -540,6 +544,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				882B396B16CABDD300A4FD03 /* IOKit.framework in Frameworks */,
 				88E3C435147F2F1F00E8754D /* OpenGL.framework in Frameworks */,
 				88E3C433147F2F1600E8754D /* Cocoa.framework in Frameworks */,
 				88871FE2148CB1800026B2B8 /* libglfw.a in Frameworks */,
@@ -825,6 +830,7 @@
 				88AAC14A14868751007A80A4 /* Context.cpp */,
 				88029B0C1491DF9F00AB1490 /* Asset.cpp */,
 				88D1301014CF9677001BB071 /* Input.cpp */,
+				882B396D16CAD0AB00A4FD03 /* InputEngine.cpp */,
 				881B521E15BBCD8C009B9482 /* LocalizedStringTableLoader.cpp */,
 			);
 			path = Core;
@@ -918,6 +924,7 @@
 		88CC310E1477915700558EA1 = {
 			isa = PBXGroup;
 			children = (
+				882B396A16CABDD300A4FD03 /* IOKit.framework */,
 				88180F1E16C17503006AAA11 /* Cg.framework */,
 				88563D4A16BCD492008D0F1C /* Cg.framework */,
 				88CC311C1477915700558EA1 /* Project Unknown */,
@@ -1363,6 +1370,7 @@
 				8833AA0816C937E90051E378 /* Terrian.cpp in Sources */,
 				8833AA0916C937E90051E378 /* Vertex.cpp in Sources */,
 				8833AA0C16C939AB0051E378 /* Color.cpp in Sources */,
+				882B396E16CAD0AB00A4FD03 /* InputEngine.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

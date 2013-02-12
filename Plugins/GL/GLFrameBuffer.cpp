@@ -10,6 +10,7 @@
 #include "GLPreq.h"
 #include "GLConvert.h"
 #include "GLGraphicDevice.h"
+#include "GLWindow.h"
 #include "GLGraphicFactory.h"
 #include "ukn/Context.h"
 
@@ -32,14 +33,22 @@ namespace ukn {
     }
     
     void GLFrameBuffer::swapBuffers() {
-        glfwSwapBuffers();
+        if(!mOffscreen) {
+            GLWindow* window = checked_cast<GLWindow*>(Context::Instance().getApp().getWindowPtr().get());
+            if(window)
+                window->swapBuffers();
+        }
     }
     
     SharedPtr<uint8> GLFrameBuffer::readFrameBufferData(int32 x, int32 y, uint32 width, uint32 height, ElementFormat format) {
         GLint prevBuffer;
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevBuffer);
         
-        glBindBuffer(GL_FRAMEBUFFER_EXT, mFBO);
+#if defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE)
+        glBindBuffer(GL_FRAMEBUFFER, mFBO);
+#else
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, mFBO);
+#endif
         
         if(width == 0)
             width = this->getViewport().width;
@@ -59,7 +68,11 @@ namespace ukn {
             log_error("GLGraphicDevice: error when read pixels");
         }
         
-        glBindBuffer(GL_FRAMEBUFFER_EXT, prevBuffer);
+#if defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE)
+        glBindBuffer(GL_FRAMEBUFFER, prevBuffer);
+#else
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, prevBuffer);
+#endif
         
         return SharedPtr<uint8>(texData);
     }

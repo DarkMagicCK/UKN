@@ -9,6 +9,7 @@
 #include "GLWindow.h"
 #include "GLRenderView.h"
 
+#include "mist/Logger.h"
 #include "mist/SysUtil.h"
 
 #include "UKN/Context.h"
@@ -28,7 +29,7 @@ namespace ukn {
 
     static int g_key_flag;
 
-    static void update_key_flag(GLFWwindow window) {
+    static void update_key_flag(GLFWwindow* window) {
         g_key_flag = 0;
         if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) || glfwGetKey(window, GLFW_KEY_RIGHT_SHIFT))
             g_key_flag |= input::FlagShift;
@@ -42,44 +43,42 @@ namespace ukn {
             g_key_flag |= input::FlagScrolllock;
         if(glfwGetKey(window, GLFW_KEY_NUM_LOCK))
             g_key_flag |= input::FlagNumlock;
-        if(glfwGetKey(window, GLFW_KEY_REPEAT))
-            g_key_flag |= input::FlagRepeat;
     }
 
-    static void WindowSizeFunc(GLFWwindow window, int w, int h) {
+    static void WindowSizeFunc(GLFWwindow* window, int w, int h) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
         WindowResizeEventArgs args(w, h);
         glwnd->onResize().raise(glwnd, args);
     }
 
-    static int WindowCloseFunc(GLFWwindow window) {
+    static int WindowCloseFunc(GLFWwindow* window) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
         glwnd->onClose().raise(glwnd, _NullEventArgs);
         return 1;
     }
 
-    static void WindowRefreshFunc(GLFWwindow window) {
+    static void WindowRefreshFunc(GLFWwindow* window) {
         //    GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
     }
 
-    static void WindowFocusFunc(GLFWwindow window, int f) {
+    static void WindowFocusFunc(GLFWwindow* window, int f) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
         WindowBoolEventArgs args(f > 0 ? true: false);
         glwnd->onActive().raise(glwnd, args);
     }
 
-    static void WindowIconifyFunc(GLFWwindow window, int f) {
+    static void WindowIconifyFunc(GLFWwindow* window, int f) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
         WindowBoolEventArgs args(f > 0 ? true: false);
         glwnd->onIconify().raise(glwnd, args);
     }
 
-    static void MouseButtonFunc(GLFWwindow window, int btn, int state) {
+    static void MouseButtonFunc(GLFWwindow* window, int btn, int state) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
         input::MouseEventArgs args;
@@ -88,12 +87,12 @@ namespace ukn {
         args.flag   = g_key_flag;
 
         // retrieve mouse pos
-        glfwGetMousePos(window, &args.x, &args.y);
+        glfwGetCursorPos(window, &args.x, &args.y);
 
         glwnd->onMouseEvent().raise(glwnd, args);
     }
 
-    static void MousePosFunc(GLFWwindow window, int x, int y) {
+    static void MousePosFunc(GLFWwindow* window, int x, int y) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
 
         input::MouseEventArgs args;
@@ -106,39 +105,53 @@ namespace ukn {
         glwnd->onMouseEvent().raise(glwnd, args);
     }
 
-    static void ScrollFunc(GLFWwindow window, int a, int b) {
-        //    GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
+    static void ScrollFunc(GLFWwindow* window, double a, double b) {
+        GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
+        
+        input::MouseEventArgs args;
+        args.button = input::Nothing;
+        args.state  = input::Wheel;
+        args.flag   = g_key_flag;
+        args.x      = a;
+        args.y      = b;
+        args.wheel  = 0;
 
-        //      glwnd->onScroll().getSignal()(*glwnd, a, b);
+        glwnd->onMouseEvent().raise(glwnd, args);
     }
 
-    static void KeyFunc(GLFWwindow window, int key, int state) {
+    static void KeyFunc(GLFWwindow* window, int key, int state) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
+        glwnd->onKeyDown(glfw_to_ukn_key(key), state);
+    }
 
+    static void CharFunc(GLFWwindow* window, int c) {
+        GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
+        
         input::KeyEventArgs args;
-        args.key    = glfw_to_ukn_key(key);
-        args.state  = glfw_to_ukn_key_state(state);
+        args.key    = c;
+        args.state  = input::Press;
+        args.isIME  = true;
         args.flag   = g_key_flag;
-
+        
         glwnd->onKeyEvent().raise(glwnd, args);
     }
-
-    static void CharFunc(GLFWwindow window, int c) {
-        //     GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
-
+    
+    static void ErrorCallback(int,const char* error) {
+        log_error(L"GLFW Error: " + string::StringToWString(error));
     }
 
     GLWindow::GLWindow(const UknString& name, const RenderSettings& settings):
         mFrameBuffer(new GLFrameBuffer(false)),
         Window(name) {
+            glfwSetErrorCallback(ErrorCallback);
             glfwInit();
 
             switch(settings.color_fmt) {
             case EF_RGBA8:
-                glfwOpenWindowHint(GLFW_RED_BITS, 8);
-                glfwOpenWindowHint(GLFW_BLUE_BITS, 8);
-                glfwOpenWindowHint(GLFW_GREEN_BITS, 8);
-                glfwOpenWindowHint(GLFW_ALPHA_BITS, 8);
+                glfwWindowHint(GLFW_RED_BITS, 8);
+                glfwWindowHint(GLFW_BLUE_BITS, 8);
+                glfwWindowHint(GLFW_GREEN_BITS, 8);
+                glfwWindowHint(GLFW_ALPHA_BITS, 8);
                 break;
 
             default:
@@ -148,8 +161,8 @@ namespace ukn {
 
             switch(settings.depth_stencil_fmt) {
             case EF_D16:
-                glfwOpenWindowHint(GLFW_DEPTH_BITS, 16);
-                glfwOpenWindowHint(GLFW_STENCIL_BITS, 0);
+                glfwWindowHint(GLFW_DEPTH_BITS, 16);
+                glfwWindowHint(GLFW_STENCIL_BITS, 0);
 
                 mFrameBuffer->mIsDepthBuffered = true;
                 mFrameBuffer->mDepthBits = 16;
@@ -157,8 +170,8 @@ namespace ukn {
                 break;
 
             case EF_D24S8:
-                glfwOpenWindowHint(GLFW_DEPTH_BITS, 24);
-                glfwOpenWindowHint(GLFW_STENCIL_BITS, 8);
+                glfwWindowHint(GLFW_DEPTH_BITS, 24);
+                glfwWindowHint(GLFW_STENCIL_BITS, 8);
 
                 mFrameBuffer->mIsDepthBuffered = true;
                 mFrameBuffer->mDepthBits = 24;
@@ -166,8 +179,8 @@ namespace ukn {
                 break;
 
             default:
-                glfwOpenWindowHint(GLFW_DEPTH_BITS, 0);
-                glfwOpenWindowHint(GLFW_STENCIL_BITS, 0);
+                glfwWindowHint(GLFW_DEPTH_BITS, 0);
+                glfwWindowHint(GLFW_STENCIL_BITS, 0);
 
                 mFrameBuffer->mIsDepthBuffered = false;
                 mFrameBuffer->mDepthBits = 0;
@@ -176,32 +189,36 @@ namespace ukn {
             }
 
             if(settings.sample_quality > 0) {
-                glfwOpenWindowHint(GLFW_FSAA_SAMPLES, settings.sample_quality);
+                glfwWindowHint(GLFW_SAMPLES, settings.sample_quality);
             }
 
-            glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, settings.resizable);
+            glfwWindowHint(GLFW_RESIZABLE, settings.resizable);
 
-            glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, UKN_OPENGL_VERSION_MAJOR);
-            glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, UKN_OPENGL_VERSION_MINOR);
-            glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-            glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-            if((mGlfwWindow = glfwOpenWindow(settings.width,
-                settings.height,
-                settings.full_screen ? GLFW_FULLSCREEN : GLFW_WINDOWED, 
-                string::WStringToString(name).c_str(),
-                0)) == 0) {
-                    // no window = app exit
-                    // so exception is acceptable here
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, UKN_OPENGL_VERSION_MAJOR);
+            glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, UKN_OPENGL_VERSION_MINOR);
+            if(UKN_OPENGL_VERSION_MAJOR >= 3) {
+                glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#if defined(MIST_OS_OSX)
+                glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#else
+                glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+#endif
+            }
+            if((mGlfwWindow = glfwCreateWindow(settings.width,
+                                               settings.height,
+                                               string::WStringToString(name).c_str(),
+                                               settings.full_screen ? glfwGetPrimaryMonitor() : 0,
+                                               0)) == 0) {
                     MIST_THROW_EXCEPTION(L"GLWindow::GLWindow: Error opening window");
-            } 
+            }
+            glfwMakeContextCurrent(mGlfwWindow);
 
-            
+#if !defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE)
             GLenum err = glewInit();
             if (GLEW_OK != err) {
-                MIST_THROW_EXCEPTION(mist::string::StringToWString(format_string("GLWindow::GLWindow: error initializing OpenGL profilem, error; %s", glewGetErrorString(err))));
+                    MIST_THROW_EXCEPTION(mist::string::StringToWString(format_string("GLWindow::GLWindow: error initializing glew profilem, error; %s", glewGetErrorString(err))));
             }
-
+#endif
 
             // if wnd pos is (0, 0), then put it in the center of current screen
             int32 wndPosX = settings.left, wndPosY = settings.top;
@@ -214,21 +231,23 @@ namespace ukn {
 
 
             glfwSetWindowPos(mGlfwWindow, wndPosX, wndPosY);
-
             glfwSetWindowUserPointer(mGlfwWindow, this);
-
+            
+            
             glfwSetErrorCallback(ErrorFunc);
-            glfwSetWindowSizeCallback(WindowSizeFunc);
-            glfwSetWindowCloseCallback(WindowCloseFunc);
-            glfwSetWindowRefreshCallback(WindowRefreshFunc);
-            glfwSetWindowFocusCallback(WindowFocusFunc);
-            glfwSetWindowIconifyCallback(WindowIconifyFunc);
+            glfwSetWindowSizeCallback(mGlfwWindow, WindowSizeFunc);
+            glfwSetWindowCloseCallback(mGlfwWindow, WindowCloseFunc);
+            glfwSetWindowRefreshCallback(mGlfwWindow, WindowRefreshFunc);
+            glfwSetWindowFocusCallback(mGlfwWindow, WindowFocusFunc);
+            glfwSetWindowIconifyCallback(mGlfwWindow, WindowIconifyFunc);
 
-            glfwSetKeyCallback(KeyFunc);
-            glfwSetMousePosCallback(MousePosFunc);
-            glfwSetMouseButtonCallback(MouseButtonFunc);
-            glfwSetScrollCallback(ScrollFunc);
-            glfwSetCharCallback(CharFunc);
+            glfwSetKeyCallback(mGlfwWindow, KeyFunc);
+            glfwSetCursorPosCallback(mGlfwWindow, MousePosFunc);
+            glfwSetMouseButtonCallback(mGlfwWindow, MouseButtonFunc);
+            glfwSetScrollCallback(mGlfwWindow, ScrollFunc);
+            glfwSetCharCallback(mGlfwWindow, CharFunc);
+            
+            // to do with joysticks
 
             glfwSwapInterval(0);
 
@@ -273,7 +292,7 @@ namespace ukn {
 
     int2 GLWindow::getMousePos() {
         int2 pos;
-        glfwGetMousePos(mGlfwWindow, &pos[0], &pos[1]);
+        glfwGetCursorPos(mGlfwWindow, &pos[0], &pos[1]);
 
         return pos;
     }
@@ -291,7 +310,7 @@ namespace ukn {
     }
 
     void GLWindow::setMousePos(int32 x, int32 y) {
-        glfwSetMousePos(mGlfwWindow, x, y);
+        glfwSetCursorPos(mGlfwWindow, x, y);
     }
 
     bool GLWindow::pullEvents() { 
@@ -316,6 +335,18 @@ namespace ukn {
 
         update_key_flag(mGlfwWindow);
         glfwPollEvents();
+        
+        for(int i=0; i<256; ++i) {
+            std::pair<int, bool>& keyStatus = mKeyStatus[i];
+            if(keyStatus.second) {
+                input::KeyEventArgs args;
+                args.key    = mKeyStatus[i].first;
+                args.state  = input::Press;
+                args.flag   = g_key_flag;
+                
+                this->onKeyEvent().raise(this, args);
+            }
+        }
 
         return false;
     }
@@ -327,13 +358,33 @@ namespace ukn {
 #endif
 
     GLWindow::~GLWindow() {
-        glfwCloseWindow(mGlfwWindow);
         glfwTerminate();
     }
 
     UknString GLWindow::description() const {
-        static UknString des(L"OpenGL Window based on GLFW");
+        static UknString des(string::StringToWString(format_string("OpenGL Window based on GLFW %s",
+                                                                   glfwGetVersionString())));
         return des;
     }
+    
+    GLFWwindow* GLWindow::getGLFWWindow() const {
+        return mGlfwWindow;
+    }
 
+    void GLWindow::swapBuffers() {
+        glfwSwapBuffers(mGlfwWindow);
+    }
+    
+    void GLWindow::onKeyDown(int key, int state) {
+        if(state == GLFW_PRESS)
+            mKeyStatus[key].second = true;
+        else
+            mKeyStatus[key].second = false;;
+    }
+    
+    void GLWindow::onMouseDown(int btn, int state) {
+        
+        
+    }
+    
 } // namespce ukn

@@ -17,6 +17,8 @@
 
 #include "GLFrameBuffer.h"
 
+struct GLFWwindow;
+
 namespace ukn {
     
     class GLWindow: public Window  {
@@ -46,13 +48,20 @@ namespace ukn {
         void setName(const UknString& name);
         
         GLFrameBufferPtr getFrameBuffer() const;
+        GLFWwindow* getGLFWWindow() const;
+        
+        void swapBuffers();
+        
+        void onKeyDown(int key, int state);
+        void onMouseDown(int btn, int state);
         
     private:
         void updateWindowProperties(int32 x, int32 y, uint32 w, uint32 h);
         
-        void* mGlfwWindow;
-        
+        GLFWwindow* mGlfwWindow;
         GLFrameBufferPtr mFrameBuffer;
+        
+        FixedArray<std::pair<int, bool>, 256> mKeyStatus;;
     };
     
 } // namespace ukn

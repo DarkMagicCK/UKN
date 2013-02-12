@@ -8929,11 +8929,6 @@ GLenum GLEWAPIENTRY glewContextInit (GLEW_CONTEXT_ARG_DEF_LIST)
     CONST_CAST(GLEW_VERSION_1_1)   = GLEW_VERSION_1_2   == GL_TRUE || ( major == 1 && minor >= 1 ) ? GL_TRUE : GL_FALSE;
   }
 
-  /* query opengl extensions string */
-  extStart = glGetString(GL_EXTENSIONS);
-  if (extStart == 0)
-    extStart = (const GLubyte*)"";
-  extEnd = extStart + _glewStrLen(extStart);
 
   /* initialize extensions */
 #ifdef GL_VERSION_1_2
@@ -8977,6 +8972,49 @@ GLenum GLEWAPIENTRY glewContextInit (GLEW_CONTEXT_ARG_DEF_LIST)
 #endif /* GL_VERSION_4_2 */
 #ifdef GL_VERSION_4_3
 #endif /* GL_VERSION_4_3 */
+    
+    
+    /* query opengl extensions string */
+    
+    
+    extStart = glGetString(GL_EXTENSIONS);
+    
+    char* buffer = (char*)extStart;
+    if (extStart == 0) {
+        // fix, try glGetStringi in case we are in core profile
+        
+        GLint numExts;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &numExts);
+        
+        if(numExts > 0) {
+            int buffersize = 1024, currentlen = 0;
+            buffer = (char*)malloc(buffersize);
+            
+            for(int i=0; i<numExts; i++) {
+                const char* ext = (const char*)glGetStringi(GL_EXTENSIONS, i);
+                if(ext) {
+                    size_t len = strlen(ext);
+                    
+                    if(currentlen + len >= buffersize) {
+                        buffersize *= 2;
+                        free(buffer);
+                        char* newbuffer = (char*)malloc(buffersize);
+                        memcpy(newbuffer, buffer, currentlen);
+                        free(buffer);
+                        buffer = newbuffer;
+                    }
+                    
+                    strcat(buffer, ext);
+                    strcat(buffer, " ");
+                    currentlen += len;
+                }
+            }
+            extStart = (const GLubyte*)buffer;
+        } else
+            extStart = (GLubyte*)"";
+    }
+    extEnd = extStart + _glewStrLen(extStart);
+    
 #ifdef GL_3DFX_multisample
   CONST_CAST(GLEW_3DFX_multisample) = _glewSearchExtension("GL_3DFX_multisample", extStart, extEnd);
 #endif /* GL_3DFX_multisample */

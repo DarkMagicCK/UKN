@@ -52,7 +52,8 @@ namespace ukn {
     }
 
     UknString GLGraphicDevice::description() const {
-        static UknString des = string::StringToWString(format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s",
+        static UknString des = string::StringToWString(
+            format_string("OpenGL Graphic Device\nOpenGL Version: %s Vender: %s GLSL Version: %s",
             (char*)glGetString(GL_VERSION),
             (char*)glGetString(GL_VENDOR),
             (char*)glGetString(GL_SHADING_LANGUAGE_VERSION)));
@@ -82,8 +83,7 @@ namespace ukn {
         try {
             mWindow = MakeSharedPtr<GLWindow>(name, settings);
         } catch(Exception& e) {
-            MessageBox::Show(string::StringToWString(format_string("GLGraphic Device: Error creating opengl window, error %s",
-                e.what())),
+            MessageBox::Show(UknString(L"GLGraphic Device: Error creating opengl window and context.\n") + e.what(),
                 L"Fatal Error",
                 MBO_OK | MBO_IconError);
             Context::Instance().getApp().terminate();
@@ -198,6 +198,7 @@ namespace ukn {
                     // deprecated way of transmission vertex arrays
                     // though backward compatible and avoid generic attrib locations in shaders that causes different versions of shaders
                     // but also lack of some vertex usage support
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
                     switch(it->usage) {
                         case VU_Position:
                             glVertexPointer(GetElementComponentSize(it->format),
@@ -241,8 +242,9 @@ namespace ukn {
                         default:
                             break;
                     }
+#else
                     // ogl 3.x+
-                     /*   int attribLoc = vertex_usage_to_attribute_location(it->usage);
+                        int attribLoc = vertex_usage_to_attribute_location(it->usage);
                         glVertexAttribPointer(attribLoc,
                                               GetElementComponentSize(it->format),
                                               element_format_to_gl_element_type(it->format),
@@ -250,10 +252,11 @@ namespace ukn {
                                               total_size,
                                               BUFFER_OFFSET(vertexBuffer, offset));
                         glEnableVertexAttribArray(attribLoc);
-                        */
+                        
                         offset += it->size();
-
+#endif
                 }
+
                 
                 GraphicBufferPtr indexBuffer = buffer->getIndexStream();
                 if(buffer->isUseIndexStream() &&
@@ -289,6 +292,7 @@ namespace ukn {
                     end = format.end();
                     it != end;
                     ++it) {
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
                     switch(it->usage) {
                         case VU_Position:
                             glDisableClientState(GL_VERTEX_ARRAY);
@@ -313,8 +317,10 @@ namespace ukn {
                         default:
                             break;
                     }
+#else
                     // ogl 3.x+
-               //     glDisableVertexAttribArray(vertex_usage_to_attribute_location(it->usage) );
+                   glDisableVertexAttribArray(vertex_usage_to_attribute_location(it->usage) );
+#endif
                  }
             }
         }
@@ -324,7 +330,11 @@ namespace ukn {
 
     void GLGraphicDevice::bindGLFrameBuffer(GLuint fbo) {
         if(mCurrGLFrameBuffer != fbo) {
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
             glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+#else
+            glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+#endif
             mCurrGLFrameBuffer = fbo;
         }
     }
@@ -412,6 +422,7 @@ namespace ukn {
 
     void GLGraphicDevice::setRenderState(RenderStateType type, uint32 func) {
         switch(type) {
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
         case RS_TextureWrap0:
         case RS_TextureWrap1:
         case RS_TextureWrap2:
@@ -420,7 +431,7 @@ namespace ukn {
                 render_state_to_gl_state(type), 
                 render_state_param_to_gl_state_param((RenderStateParam)func));
             break;
-
+#endif
 
         case RS_Filter: {
             GLenum target = GL_TEXTURE_2D;

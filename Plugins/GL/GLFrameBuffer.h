@@ -14,6 +14,8 @@
 
 namespace ukn {
     
+    class GLWindow;
+    
     class GLFrameBuffer: public FrameBuffer {
     public:
         GLFrameBuffer(bool offscreen);
@@ -32,7 +34,6 @@ namespace ukn {
         
     private:
         GLuint mFBO;
-        
         bool mOffscreen;
         
         friend class GLWindow;

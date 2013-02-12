@@ -17,6 +17,10 @@
 #include "GLPreq.h"
 #include "GLConvert.h"
 
+#if defined(MIST_OS_OSX)
+#include <OpenGL/glu.h>
+#endif
+
 namespace ukn {
 
     GLTexture2D::GLTexture2D():

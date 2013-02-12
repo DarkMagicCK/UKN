@@ -30,7 +30,7 @@ namespace mist {
         mFunction(function),
         mFile(file),
         mLine(line) {
-
+            this->format();
         }
 
         Exception(const std::wstring& mssg):
@@ -38,20 +38,24 @@ namespace mist {
         mFunction(0),
         mFile(0),
         mLine(-1) {
-
+            this->format();
+        }
+        
+        void format() {
+            std::wostringstream mssg;
+            mssg << "mist::Exception: class=" << name() << "\nMessage=" << mMssg;
+            if(mFunction != 0) mssg << "\nFunction=" << mFunction;
+            if(mFile != 0) mssg << "\nFile=" << mFile;
+            if(mLine != -1) mssg << "\nLine=" << mLine;
+            
+            mWhat = mssg.str();
         }
 
         virtual ~Exception() throw() {}
 
 		// get a formatted exception mssg
 		virtual const wchar_t* what() const throw() {
-            std::wostringstream mssg;
-            mssg << "mist::Exception: class=" << name() << "\nMessage=" << mMssg;
-            if(mFunction != 0) mssg << "\nFunction=" << mFunction;
-            if(mFile != 0) mssg << "\nFile=" << mFile;
-            if(mLine != -1) mssg << "\nLine=" << mLine;
-
-            return mssg.str().c_str();
+            return mWhat.c_str();
         }
 
         // the name of the exception
@@ -88,6 +92,7 @@ namespace mist {
 
 	private:
         std::wstring mMssg;
+        std::wstring mWhat;
         const char* mFunction;
         const char* mFile;
         int32 mLine;

@@ -70,7 +70,8 @@ namespace ukn {
         }
 		return GL_UNSIGNED_BYTE;
     }
-
+    
+#if !defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE)
     inline GLenum vertex_usage_to_gl_array(VertexUsage usage) {
         switch(usage) {
         case VU_Position: return GL_VERTEX_ARRAY;
@@ -85,6 +86,7 @@ namespace ukn {
                 return GL_VERTEX_ARRAY;
         }
     }
+#endif
     
     inline GLenum render_state_to_gl_state(RenderStateType type) {
         switch(type) {
@@ -98,6 +100,11 @@ namespace ukn {
             case RS_Filter:
                 return type;
                 
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
+            case RS_ColorOp:
+                return GL_TEXTURE_ENV;
+#endif
+                
             case RS_StencilOp:
                 return type;
             case RS_StencilFunc:
@@ -106,9 +113,6 @@ namespace ukn {
             case RS_DepthOp:
             case RS_DepthMask:
                 return type;
-                
-            case RS_ColorOp:
-                return GL_TEXTURE_ENV_MODE;
                 
             case RS_SrcBlend:
                 return GL_SRC_COLOR;
@@ -127,7 +131,7 @@ namespace ukn {
     inline GLenum render_state_param_to_gl_state_param(RenderStateParam param) {
         switch(param) {
             case RSP_TextureWrapClamp:
-                return GL_CLAMP;
+                return GL_CLAMP_TO_EDGE;
             case RSP_TextureWrapRepeat:
                 return GL_REPEAT;
             case RSP_TextureWrapClampToBorder:
@@ -183,12 +187,12 @@ namespace ukn {
                 return GL_DST_ALPHA;
             case RSP_BlendFuncOneMinusDstAlpha:
                 return GL_ONE_MINUS_DST_ALPHA;
-                
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
             case RSP_ColorOpAdd:
                 return GL_ADD;
             case RSP_ColorOpModulate:
                 return GL_MODULATE;
-                
+#endif
             case RSP_CompNever:
                 return GL_NEVER;
             case RSP_CompAlways:
@@ -239,9 +243,33 @@ namespace ukn {
         AL_TexCoord7,
         AL_Tangent,
         AL_Binormal,
-        AL_NumLocations, // 16
+        AL_NumLocations, // 18
     };
-
+    
+    
+    static struct {
+        const char* semantic;
+        const char* attrib;
+    } semantic_name_attribute_name_map[17] {
+        { "POSITION",       "ATTR0" },
+        { "BLENDWEIGHT",    "ATTR1" },
+        { "NORMAL",         "ATTR2" },
+        { "COLOR0",         "ATTR3" },
+        { "COLOR1",         "ATTR4" },
+        { "PSIZE",          "ATTR6" },
+        { "BLENDINDICIES",  "ATTR7" },
+        { "TEXCOORD0",      "ATTR8" },
+        { "TEXCOORD1",      "ATTR9" },
+        { "TEXCOORD2",      "ATTR10" },
+        { "TEXCOORD3",      "ATTR11" },
+        { "TEXCOORD4",      "ATTR12" },
+        { "TEXCOORD5",      "ATTR13" },
+        { "TEXCOORD6",      "ATTR14" },
+        { "TEXCOORD7",      "ATTR15" },
+        { "BINORMAL",       "ATTR16" },
+        { "TANGENT",        "ATTR17" }
+    };
+    
     inline int32 vertex_usage_to_attribute_location(VertexUsage usage) {
         switch(usage) {
         case VU_Binormal:       return AL_Binormal;
@@ -258,7 +286,6 @@ namespace ukn {
                 return -1;
         }
     }
-    
     inline GLenum render_state_param_to_blend_equation(RenderStateParam param) {
         switch(param) {
             case RSP_BlendOpAdd: return GL_FUNC_ADD;
@@ -267,7 +294,7 @@ namespace ukn {
             case RSP_BlendOpMax: return GL_MAX;
             case RSP_BlendOpMin: return GL_MIN;
             default:
-                return 0;
+                return GL_FUNC_ADD;
         }
     }
     

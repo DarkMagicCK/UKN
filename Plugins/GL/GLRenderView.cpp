@@ -170,7 +170,11 @@ namespace ukn {
         GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
 
         gd.bindGLFrameBuffer(mFBO);
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + att - ATT_Color0, GL_TEXTURE_2D, mTex, mLevel);
+#else
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + att - ATT_Color0, GL_TEXTURE_2D, mTex, mLevel);
+#endif
         gd.bindGLFrameBuffer(0);
     }
 
@@ -181,8 +185,13 @@ namespace ukn {
         GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
 
         gd.bindGLFrameBuffer(mFBO);
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
         glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + att - ATT_Color0, GL_TEXTURE_2D, mTex, 0);
+#else
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + att - ATT_Color0, GL_TEXTURE_2D, mTex, 0);
+#endif
         gd.bindGLFrameBuffer(0);
+
     }
 
 } // namespace ukn

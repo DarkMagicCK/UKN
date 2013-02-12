@@ -7,21 +7,25 @@
 //
 
 #include "mist/Platform.h"
+
 // use gl3.2 profile means there's no fixed pipeline functions unless use compability context
-// #define UKN_REQUEST_OPENGL_3_2_PROFILE
+// and since glew will not work for core profile
+// ***** THIS WILL NOT WORK, just a flag to test the code is core compatile or not ******
+// #define UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
 
-
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
 // static link
 #define GLEW_STATIC
 
+#if defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE) && defined(MIST_OS_OSX)
+    // glew includes glu which includes <OpenGL/gl.h> in osx
+    // that causes problem
+    #define GLEW_NO_GLU
+#endif
+
 #include "glew/glew.h"
-	
-// check opengl profile availability
-	#if !defined(GLEW_VERSION_2_1)
-		#error ukn need at least opengl 2.1 profile support to run
-	#endif
 
-
+#endif
 
 #ifndef MIST_OS_OSX
 
@@ -65,26 +69,32 @@
 #pragma comment(lib, "OpenGL32.lib")
 #pragma comment(lib, "glu32.lib")
 
+
 #elif defined(MIST_OS_OSX)
 
 	#include <Availability.h>
 
-	#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
-        #include <OpenGL/gl3.h>
-        #include <OpenGL/OpenGL.h>
-        #include <OpenGL/glext.h>
+    #if defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE)
+        #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
+            #include <OpenGL/gl3.h>
+            #include <OpenGL/gl3ext.h>
 
-		#define UKN_APPLE_OSX_LION
-		#define UKN_OPENGL_3_2
-		#define UKN_OPENGL_VERSION 32
+            #define UKN_OPENGL_3_2
+            #define UKN_OPENGL_VERSION 32
 
-        #define UKN_OPENGL_VERSION_MAJOR 3
-        #define UKN_OPENGL_VERSION_MINOR 2
+            #define UKN_OPENGL_VERSION_MAJOR 3
+            #define UKN_OPENGL_VERSION_MINOR 2
+
+            // opengl 3.2 core profile
+            #define GLFW_INCLUDE_GLCOREARB
+            
+        #else
+            #error opengl 3.2 core profile requires osx lion 10.7+
+        #endif
 	#else
 		#define UKN_OPENGL_VERSION 21
 
         #include <OpenGL/gl.h>
-        #include <OpenGL/OpenGL.h>
         #include <OpenGL/glext.h>
 
         #define UKN_OPENGL_VERSION_MAJOR 2
@@ -96,6 +106,14 @@
 	#include <GL/glu.h>
 	#include <GL/glext.h>
 #endif
+
+
+// check opengl profile availability
+#if UKN_OPENGL_VERSION_MAJOR < 2
+#error ukn need at least opengl 2.1 profile support to run
+#endif
+
+
 
 #include "glfw/glfw3.h"
 

@@ -132,6 +132,8 @@ namespace ukn {
             LeftWin     = 0x5B,
             RightWin    = 0x5C,
             Apps        = 0x5D,
+            
+            KeyCodeMax  = 256, // reserved
         };
             
         enum KeyFlag {

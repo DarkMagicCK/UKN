@@ -152,6 +152,8 @@ namespace mist {
          @retval, current line of the source file
          */
         const MistString& getCurrLine() const;
+        
+        
         /*
          get invalid char, use when LEX_INVALID_INPUT happens to get the invalid char, returns 0 if there's no LEX_INVALID_INPUT error happened
          @retval, invalid char

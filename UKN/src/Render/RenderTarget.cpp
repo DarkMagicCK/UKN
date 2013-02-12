@@ -51,6 +51,7 @@ namespace ukn {
         }
 
         this->createFrameBuffer(gf);
+        return true;
     }
     
     bool RenderTarget2D::create(uint32 width,

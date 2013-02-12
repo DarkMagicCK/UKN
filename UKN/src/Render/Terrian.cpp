@@ -10,6 +10,9 @@
 #include "mist/MemoryUtil.h"
 #include "mist/Profiler.h"
 
+// FLT_MAX FLT_MIN
+#include <cfloat>
+
 namespace ukn {
 
     void HeightMap::Generate(float startx, float starty,
@@ -65,8 +68,8 @@ namespace ukn {
                                                 float4 position: POSITION;\
                                                 float4 color: COLOR;\
                                              };\
-                                             VertexOutputType VertexProgram(in float3 position: ATTR0: POSITION,  \
-                                                                            in float4 color: ATTR3: COLOR) {      \
+                                             VertexOutputType VertexProgram(in float3 position POSITION: ATTR0:,  \
+                                                                            in float4 color: COLOR: ATTR3) {      \
                                              VertexOutputType output;\
                                              output.position = float4(position, 1);\
                                              output.position = mul(output.position, worldMatrix);\
@@ -268,9 +271,9 @@ namespace ukn {
                                                 float3 normal: TEXCOORD1;\
                                                 float2 texCoord: TEXCOORD0; \
                                              };\
-                                             VertexOutputType VertexProgram(in float3 position: ATTR0: POSITION,  \
-                                                                            in float3 normal: ATTR2: NORMAL, \
-                                                                            in float2 texCoord: ATTR8: TEXCOORD0) {      \
+                                             VertexOutputType VertexProgram(in float3 position: POSITION,  \
+                                                                            in float3 normal: NORMAL, \
+                                                                            in float2 texCoord: TEXCOORD0) {      \
                                              VertexOutputType output;\
                                              output.position = float4(position, 1);\
                                              output.position = mul(output.position, worldMatrix);\
@@ -302,7 +305,7 @@ namespace ukn {
                                              if(lightIntensity > 0.0f) { \
                                                 color += (diffuseColor * lightIntensity); \
                                              } \
-                                             return saturate(color) * tex2D(tex, input.texCoord); \
+                                             return saturate(color); \
                                              }\0";
 
     GridTerrianLightening::GridTerrianLightening():
@@ -519,7 +522,7 @@ namespace ukn {
         mIndexBuffer = gf.createIndexBuffer(
             GraphicBuffer::None,
             GraphicBuffer::Static,
-            indices.size(),
+            (uint32)indices.size(),
             &indices[0]);
 
         bool error = false;
@@ -590,8 +593,8 @@ namespace ukn {
                                 w,
                                 node->max_h,
                                 node->min_h));
-        node->index_start = indices.size();
-        node->index_count = triangles.size();
+        node->index_start = (uint32)indices.size();
+        node->index_count = (uint32)triangles.size();
         indices.insert(indices.end(), triangles.begin(), triangles.end());
 
         return node;

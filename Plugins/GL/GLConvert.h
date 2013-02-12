@@ -44,6 +44,8 @@ namespace ukn {
             case EF_Float:
                 return GL_FLOAT;
             case EF_UInt32: return GL_RGBA8;
+            default:
+                return GL_UNSIGNED_BYTE;
         }
 		return GL_UNSIGNED_BYTE;
     }
@@ -63,6 +65,8 @@ namespace ukn {
             case EF_Float3:
             case EF_Float4:
                 return GL_FLOAT;
+            default:
+                return GL_UNSIGNED_BYTE;
         }
 		return GL_UNSIGNED_BYTE;
     }
@@ -88,6 +92,8 @@ namespace ukn {
                 return GL_TEXTURE_WRAP_S;
             case RS_TextureWrap1:
                 return GL_TEXTURE_WRAP_T;
+            case RS_TextureWrap2:
+                return GL_TEXTURE_WRAP_R;
                 
             case RS_Filter:
                 return type;

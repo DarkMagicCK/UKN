@@ -9,36 +9,36 @@ namespace ukn {
 
     namespace {
         static const char* _2d_vert_program = "const uniform float4x4 viewMatrix;\
-                                              const uniform float4x4 projectionMatrix;\
-                                              const uniform float4x4 worldMatrix;\
-                                              struct VertexOutputType {\
-                                              float4 position: POSITION;\
-                                              float2 texCoord: TEXCOORD0;\
-                                              float4 color: COLOR;\
-                                              };\
-                                              VertexOutputType VertexProgram(in float2 texCoord: ATTR8: TEXCOORD0,\
-                                              in float3 position: ATTR0: POSITION,\
-                                              in float4 color: ATTR3: COLOR) {\
-                                              VertexOutputType output;\
-                                              output.position = float4(position, 1);\
-                                              output.position = mul(output.position, worldMatrix);\
-                                              output.position = mul(output.position, viewMatrix);\
-                                              output.position = mul(output.position, projectionMatrix);\
-                                              output.texCoord = texCoord;\
-                                              output.color = color;\
-                                              return output;\
-                                              }\0";
+                                               const uniform float4x4 projectionMatrix;\
+                                               const uniform float4x4 worldMatrix;\
+                                               struct VertexOutputType {\
+                                               float4 position: POSITION;\
+                                               float2 texCoord: TEXCOORD0;\
+                                               float4 color: COLOR;\
+                                               };\
+                                               VertexOutputType VertexProgram(in float2 texCoord: TEXCOORD0: ATTR8,\
+                                                                              in float3 position: POSITION: ATTR0,\
+                                                                              in float4 color: COLOR: ATTR3) {\
+                                                VertexOutputType output;\
+                                                output.position = float4(position, 1);\
+                                                output.position = mul(output.position, worldMatrix);\
+                                                output.position = mul(output.position, viewMatrix);\
+                                                output.position = mul(output.position, projectionMatrix);\
+                                                output.texCoord = texCoord;\
+                                                output.color = color;\
+                                                return output;\
+                                               }\0";
 
         static const char* _2d_frag_program = "struct VertexOutputType {\
-                                              float4 position: POSITION;\
-                                              float2 texCoord: TEXCOORD0;\
-                                              float4 color: COLOR;\
-                                              };\
-                                              float4 FragmentProgram(VertexOutputType input,\
-                                              uniform sampler2D tex: TEX): COLOR {\
-                                              float4 texColor = tex2D(tex, input.texCoord);\
-                                              return texColor * input.color;\
-                                              }\0";
+                                               float4 position: POSITION;\
+                                               float2 texCoord: TEXCOORD0;\
+                                               float4 color: COLOR;\
+                                               };\
+                                               float4 FragmentProgram(VertexOutputType input,\
+                                                uniform sampler2D tex: TEX): COLOR {\
+                                                float4 texColor = tex2D(tex, input.texCoord);\
+                                                return texColor * input.color;\
+                                               }\0";
 
     }
 

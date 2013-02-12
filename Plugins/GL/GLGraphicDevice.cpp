@@ -181,6 +181,12 @@ namespace ukn {
                 vertexBuffer->activate();
 
                 /* this need to be changed?
+                   since glVertexAttribPointer is introduced in 3.0 and 
+                   things like glVertexPointer is removed in 3.1
+                   but if we want backward-campability, it's better to stick with glVertexPointer ... ?
+                   and osx only have ogl 3.x after 10.7 lion...
+                   also attribute locations is causing problems in Cg shader, semantic names no longer working
+                    we have to write different shaders for gl and directx,
                 */
                 const vertex_elements_type& format = buffer->getVertexFormat();
                 uint32 total_size = GetVertexElementsTotalSize(format);
@@ -189,15 +195,62 @@ namespace ukn {
                     end = format.end();
                     it != end;
                     ++it) {
-                        int attribLoc = vertex_usage_to_attribute_location(it->usage);
+                    // deprecated way of transmission vertex arrays
+                    // though backward compatible and avoid generic attrib locations in shaders that causes different versions of shaders
+                    // but also lack of some vertex usage support
+                    switch(it->usage) {
+                        case VU_Position:
+                            glVertexPointer(GetElementComponentSize(it->format),
+                                            element_format_to_gl_element_type(it->format),
+                                            total_size,
+                                            BUFFER_OFFSET(vertexBuffer, offset));
+                            glEnableClientState(GL_VERTEX_ARRAY);
+                            break;
+                            
+                        case VU_Diffuse:
+                            glColorPointer(GetElementComponentSize(it->format),
+                                            element_format_to_gl_element_type(it->format),
+                                            total_size,
+                                            BUFFER_OFFSET(vertexBuffer, offset));
+                            glEnableClientState(GL_COLOR_ARRAY);
+                            break;
+                            
+                        case VU_Specular:
+                            glColorPointer(GetElementComponentSize(it->format),
+                                            element_format_to_gl_element_type(it->format),
+                                            total_size,
+                                            BUFFER_OFFSET(vertexBuffer, offset));
+                            glEnableClientState(GL_COLOR_ARRAY);
+                            break;
+                            
+                        case VU_Normal:
+                            glNormalPointer(element_format_to_gl_element_type(it->format),
+                                            total_size,
+                                            BUFFER_OFFSET(vertexBuffer, offset));
+                            glEnableClientState(GL_NORMAL_ARRAY);
+                            break;
+                            
+                        case VU_UV:
+                            glTexCoordPointer(GetElementComponentSize(it->format),
+                                              element_format_to_gl_element_type(it->format),
+                                              total_size,
+                                              BUFFER_OFFSET(vertexBuffer, offset));
+                            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                    // ogl 3.x+
+                     /*   int attribLoc = vertex_usage_to_attribute_location(it->usage);
                         glVertexAttribPointer(attribLoc,
-                                                GetElementComponentSize(it->format),
-                                                element_format_to_gl_element_type(it->format),
-                                                (it->usage == VU_Specular || it->usage == VU_Diffuse) ? GL_TRUE : GL_FALSE,
-                                                total_size,
-                                                BUFFER_OFFSET(vertexBuffer, offset));
+                                              GetElementComponentSize(it->format),
+                                              element_format_to_gl_element_type(it->format),
+                                              (it->usage == VU_Specular || it->usage == VU_Diffuse) ? GL_TRUE : GL_FALSE,
+                                              total_size,
+                                              BUFFER_OFFSET(vertexBuffer, offset));
                         glEnableVertexAttribArray(attribLoc);
-                        
+                        */
                         offset += it->size();
 
                 }
@@ -236,7 +289,32 @@ namespace ukn {
                     end = format.end();
                     it != end;
                     ++it) {
-                    glDisableVertexAttribArray(vertex_usage_to_attribute_location(it->usage) );
+                    switch(it->usage) {
+                        case VU_Position:
+                            glDisableClientState(GL_VERTEX_ARRAY);
+                            break;
+                            
+                        case VU_Diffuse:
+                            glDisableClientState(GL_COLOR_ARRAY);
+                            break;
+                            
+                        case VU_Specular:
+                            glDisableClientState(GL_COLOR_ARRAY);
+                            break;
+                            
+                        case VU_Normal:
+                            glDisableClientState(GL_NORMAL_ARRAY);
+                            break;
+                            
+                        case VU_UV:
+                            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                    // ogl 3.x+
+               //     glDisableVertexAttribArray(vertex_usage_to_attribute_location(it->usage) );
                  }
             }
         }
@@ -336,6 +414,7 @@ namespace ukn {
         switch(type) {
         case RS_TextureWrap0:
         case RS_TextureWrap1:
+        case RS_TextureWrap2:
         case RS_ColorOp:
             glTexEnvf(GL_TEXTURE_2D, 
                 render_state_to_gl_state(type), 
@@ -452,6 +531,9 @@ namespace ukn {
         if(width == 0.f) width = mWindow->width();
         float height = params.height;
         if(height == 0.f) height = mWindow->height();
+        
+        this->pushProjectionMatrix();
+        this->pushViewMatrix();
 
         this->setProjectionMatrix(
             mist::Matrix4::OrthoOffCenterMatRH(
@@ -477,6 +559,10 @@ namespace ukn {
 
     void GLGraphicDevice::end2DRendering() {
         mIs2D = false;
+        
+        this->popProjectionMatrix();
+        this->popViewMatrix();
+        
         if(mCurrFrameBuffer) {
             CameraPtr cam = mCurrFrameBuffer->getViewport().camera;
             this->setProjectionMatrix(cam->getProjMatrix());

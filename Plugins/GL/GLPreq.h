@@ -22,6 +22,7 @@
 	#endif
 
 
+
 #ifndef MIST_OS_OSX
 
 #if defined(GLEW_VERSION_4_2)
@@ -65,27 +66,29 @@
 #pragma comment(lib, "glu32.lib")
 
 #elif defined(MIST_OS_OSX)
-    #include <OpenGl/gl.h>
-	#include <OpenGL/OpenGL.h>
-	#include <OpenGL/glext.h>
 
 	#include <Availability.h>
+
 	#if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_7
-        #if defined(UKN_REQUEST_OPENGL_3_2_PROFILE)
-            #include <OpenGL/gl3.h>
-        #endif
+        #include <OpenGL/gl3.h>
+        #include <OpenGL/OpenGL.h>
+        #include <OpenGL/glext.h>
 
 		#define UKN_APPLE_OSX_LION
 		#define UKN_OPENGL_3_2
 		#define UKN_OPENGL_VERSION 32
 
-#define UKN_OPENGL_VERSION_MAJOR 3
-#define UKN_OPENGL_VERSION_MINOR 2
+        #define UKN_OPENGL_VERSION_MAJOR 3
+        #define UKN_OPENGL_VERSION_MINOR 2
 	#else
 		#define UKN_OPENGL_VERSION 21
 
-#define UKN_OPENGL_VERSION_MAJOR 2
-#define UKN_OPENGL_VERSION_MINOR 1
+        #include <OpenGL/gl.h>
+        #include <OpenGL/OpenGL.h>
+        #include <OpenGL/glext.h>
+
+        #define UKN_OPENGL_VERSION_MAJOR 2
+        #define UKN_OPENGL_VERSION_MINOR 1
 	#endif
 
 #elif defined(MIST_OS_LINUX) // linux still need workaround

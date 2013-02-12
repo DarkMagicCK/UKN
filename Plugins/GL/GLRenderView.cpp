@@ -78,6 +78,8 @@ namespace ukn {
         mWidth = width;
         mHeight = height;
         mElementFormat = ef;
+        
+        glDepthFunc(GL_LESS);
     }
 
     void GLScreenColorRenderView::clearColor(const Color& clr) {
@@ -110,6 +112,7 @@ namespace ukn {
         mWidth = width;
         mHeight = height;
         mElementFormat = ef;
+        
     }
 
     void GLScreenDepthStencilRenderView::clearColor(const Color& clr) {
@@ -117,10 +120,14 @@ namespace ukn {
     }
 
     void GLScreenDepthStencilRenderView::enableDepth(bool flag) {
-        if(flag)
+        if(flag) {
             glEnable(GL_DEPTH_TEST);
-        else
+            glDepthMask(GL_TRUE);
+        }
+        else {
             glDisable(GL_DEPTH_TEST);
+            glDepthMask(GL_FALSE);
+        }
     }
 
     void GLScreenDepthStencilRenderView::onAttached(FrameBuffer& fb, uint32 att) {

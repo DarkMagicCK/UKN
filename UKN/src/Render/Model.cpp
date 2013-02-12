@@ -40,8 +40,7 @@ namespace ukn {
             int w = 2 * slices, h = slices;
             double hStep = 180.0 / (h-1);
             double wStep = 360.0 / w;
-            int length = w * h;
-
+           
             std::vector<VertexUVNormal> vertices;
             {
                 double a, b;
@@ -50,9 +49,9 @@ namespace ukn {
                     for(b = 0.0, j = 0; j < w; j++, b += wStep) {
                         VertexUVNormal vertex;
                         _get_sphere_vertex(sphere.radius(),
-                            math::degree_to_radius(a),
-                            math::degree_to_radius(b),
-                            vertex);
+                                           math::degree_to_radius(a),
+                                           math::degree_to_radius(b),
+                                           vertex);
                         vertices.push_back(vertex);
                     }
             }
@@ -60,14 +59,13 @@ namespace ukn {
             ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(
                 GraphicBuffer::None,
                 GraphicBuffer::Static,
-                vertices.size(),
+                (uint32)vertices.size(),
                 &vertices[0],
                 VertexUVNormal::Format());
             renderBuffer->bindVertexStream(vertexBuffer, VertexUVNormal::Format());
 
             std::vector<uint32> indices;
             {
-                uint32 index = 0;
                 int i, j;
                 for(i = 0; i < h-1; ++i) {
                     for(j = 0; j < w-1; ++j) {
@@ -91,7 +89,7 @@ namespace ukn {
             GraphicBufferPtr indexBuffer = gf.createIndexBuffer(
                 GraphicBuffer::None,
                 GraphicBuffer::Static,
-                indices.size(),
+                (uint32)indices.size(),
                 &indices[0]);
             
             renderBuffer->bindIndexStream(indexBuffer);

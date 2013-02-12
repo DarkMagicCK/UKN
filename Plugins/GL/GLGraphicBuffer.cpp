@@ -67,6 +67,9 @@ namespace ukn {
             case GraphicBuffer::WriteOnly:
                 gl_acess = GL_WRITE_ONLY;
                 break;
+                
+            default:
+                break;
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, mId);
@@ -176,6 +179,9 @@ namespace ukn {
 
             case GraphicBuffer::WriteOnly:
                 gl_acess = GL_WRITE_ONLY;
+                break;
+                
+            default:
                 break;
         }
 

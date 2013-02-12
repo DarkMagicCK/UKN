@@ -196,8 +196,10 @@ namespace ukn {
                 return L"EF_Float3";
             case EF_UInt32:
                 return L"EF_UInt32";
+            default:
+                return L"unknown";
         }
-        return L"unknown_fmt";
+        return L"unknown";
     }
     
     void Context::loadCfgFile(const UknString& name) {

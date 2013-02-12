@@ -73,6 +73,8 @@ namespace ukn {
             case EF_Float3: return sizeof(float) * 3;
             case EF_Float4: return sizeof(float) * 4;
             case EF_UInt32: return sizeof(uint32);
+            default:
+                return 0;
         };
 		return 0;
     };
@@ -91,6 +93,8 @@ namespace ukn {
             case EF_Float3: return 3;
             case EF_Float4: return 4;
             case EF_UInt32: return 1;
+            default:
+                return 0;
         };
         return 0;
     }

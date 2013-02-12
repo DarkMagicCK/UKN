@@ -181,8 +181,10 @@ namespace ukn {
 
             glfwOpenWindowHint(GLFW_WINDOW_RESIZABLE, settings.resizable);
 
-        //    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, UKN_OPENGL_VERSION_MAJOR);
-        //    glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, UKN_OPENGL_VERSION_MINOR);
+            glfwOpenWindowHint(GLFW_OPENGL_VERSION_MAJOR, UKN_OPENGL_VERSION_MAJOR);
+            glfwOpenWindowHint(GLFW_OPENGL_VERSION_MINOR, UKN_OPENGL_VERSION_MINOR);
+            glfwOpenWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+            glfwOpenWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
             if((mGlfwWindow = glfwOpenWindow(settings.width,
                 settings.height,

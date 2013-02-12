@@ -201,7 +201,7 @@ namespace ukn {
         if(mProgram) {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
-                cgGLSetTextureParameter(param, tex->getTextureId());
+                cgGLSetTextureParameter(param, (GLuint)tex->getTextureId());
                 cgSetSamplerState(param);
                 return _check_error(mContext);
             }

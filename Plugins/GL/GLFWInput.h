@@ -237,8 +237,9 @@ namespace ukn {
                 return GLFW_PRESS;
             case input::Release:
                 return GLFW_RELEASE;
+            default:
+                return 0;
         }
-        mist_assert(0);
         return 0;
     }
     

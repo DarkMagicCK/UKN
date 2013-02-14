@@ -114,7 +114,8 @@ namespace ukn {
         sample_count(1),
         sample_quality(0),
 		zfar(1.f),
-		znear(0.f) {
+		znear(0.f),
+        native_window_handle(0) {
             
         }
         
@@ -139,6 +140,18 @@ namespace ukn {
 
 		MistString icon;
 		MistString cursor;
+        
+        /* to do
+           if this value is not equal to zero
+           ukn will try to create a device with this window handle and work in slave mode
+           the value of the handle MUST be corresponding window handle of current platform
+           that is
+            Windows: HWND
+            OS X: NSView/NSWindow*
+            X11: XWindow
+           with this, it's easier to intergret ukn into other GUI frameworks, such as qt
+         */
+        uintPtr native_window_handle;
     };
 
     enum BlendMode {

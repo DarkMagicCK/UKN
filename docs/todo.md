@@ -27,5 +27,7 @@ merge multiple texture data into one big texture to accelerate rendering
 
 
 
+### Device Creation
 
+the ability to accept extern native window handle(such as HWND, NSView*) and create render device
 		

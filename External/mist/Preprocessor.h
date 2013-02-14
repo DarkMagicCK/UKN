@@ -90,7 +90,7 @@ typedef ::mist::static_assert_test<\
 // myVar0 = 0; myVar1 = 1; myVar2 = 2; myVar3 = 3;
 // n max = 12
 #define MIST_REPEAT_N(n, m, d) MIST_REPEAT_1_##n(m, d)
-#define MIST_REPEAT_N_2(n, m, d, d2) MIST_REPEAT_2_##n(m, d, d2)
+#define MIST_REPEAT_N_2(n, m, d, d2) MIST_REPEAT_2/Volumes/osx/Users/darkfall/codes/Project Unknown/External/mist/detail/function/FunctionTemplate.h_##n(m, d, d2)
 
 #define MIST_ENUM_N(n, m, d) MIST_REPEAT_N_2(n, MIST_ENUM_M, m, d)
 

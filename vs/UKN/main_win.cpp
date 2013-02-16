@@ -40,6 +40,7 @@ struct NDArray {
     NDArray()  {} 
     NDArray<T, N-1>& operator [](size_t index) { return a[index]; }
     std::vector<NDArray<T, N-1> > a;
+
 };
 
 template<typename T>

@@ -170,7 +170,7 @@ namespace ukn {
         mDeviceContext = MakeCOMPtr(deviceContext);
 
 #if defined(MIST_DEBUG)
-        mDebug.reset(new D3D11Debug(mDevice));
+        mDebug.reset(new D3D11Debug(mDevice.get()));
 #endif
 
 

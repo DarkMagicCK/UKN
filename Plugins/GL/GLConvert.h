@@ -250,7 +250,7 @@ namespace ukn {
     static struct {
         const char* semantic;
         const char* attrib;
-    } semantic_name_attribute_name_map[17] {
+    } semantic_name_attribute_name_map[17] = {
         { "POSITION",       "ATTR0" },
         { "BLENDWEIGHT",    "ATTR1" },
         { "NORMAL",         "ATTR2" },

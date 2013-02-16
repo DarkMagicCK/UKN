@@ -13,8 +13,8 @@
 #include "mist/Platform.h"
 #include "mist/Exception.h"
 #include "mist/MemoryUtil.h"
-#include "mist/Function.h"
 #include "mist/Uncopyable.h"
+#include "mist/safe_bool.h"
 
 namespace mist {
 
@@ -39,7 +39,6 @@ namespace mist {
             MIST_THROW_EXCEPTION(L"checked_cast: failed to cast from parent to child");
         return derived;
     }
-
 
     class MIST_API SharedPtrRefCounter {
     public:
@@ -125,36 +124,18 @@ namespace mist {
     };
 
     template<typename T, class RP=SharedPtrReleasePolicy<T> >
-    class SharedPtr {
+    class SharedPtr: public safe_bool<SharedPtr<T, RP> > {
     public:
         typedef T element_type;
 
         SharedPtr(): 
             mPtr(0), 
-            mCounter(new SharedPtrRefCounter),
-            mAllocator(),
-            mUnallocator() {
+            mCounter(new SharedPtrRefCounter) {
         }
 
         SharedPtr(T* t): 
             mPtr(t), 
-            mCounter(new SharedPtrRefCounter),
-            mAllocator(),
-            mUnallocator() { 
-        }
-
-        SharedPtr(const Function<T*(void)>& allocator, const Function<void(T*)>& unallocator): 
-            mPtr(0), 
-            mCounter(new SharedPtrRefCounter),
-            mAllocator(allocator),
-            mUnallocator(unallocator) {
-        }
-
-        SharedPtr(T* t, const Function<T*(void)>& allocator, const Function<void(T*)>& unallocator): 
-            mPtr(t), 
-            mCounter(new SharedPtrRefCounter),
-            mAllocator(allocator),
-            mUnallocator(unallocator) { 
+            mCounter(new SharedPtrRefCounter){ 
         }
 
         template<class Other, class OtherRP>
@@ -205,11 +186,8 @@ namespace mist {
             this->assign(ptr);
         }
 
-        // must have initialized with allocator
         void alloc() {
-            if(mAllocator) {
-                this->reset(mAllocator());
-            }
+            
         }
 
         SharedPtr& operator=(const SharedPtr& rhs) { 
@@ -244,32 +222,25 @@ namespace mist {
             return SharedPtr<Other, OtherRP>(this->mCounter, other);
         }
 
-        inline T* get() const {
+        T* get() const {
             return this->mPtr;
         }
 
-        inline T* operator->() {
+        T* operator->() {
             return this->deref();
         }
-        inline T* operator->() const {
+        T* operator->() const {
             return this->deref();
         }
 
-        inline T& operator*() {
+        T& operator*() {
             return *this->deref();
         }
-        inline T& operator*() const {
+        T& operator*() const {
             return *this->deref();
         }
 
-        operator T*() {
-            return this->mPtr;
-        }
-        operator const T*() const {
-            return this->mPtr;
-        }
-
-        operator bool() {
+        bool boolean_test() const {
             return this->mPtr != 0;
         }
 
@@ -339,10 +310,6 @@ namespace mist {
             return this->mCounter->getRef();
         }
 
-        bool operator == (const SharedPtr<T>& rhs) {
-            return this->mPtr == rhs.mPtr;
-        }
-
         inline T* deref() const {
             if(!this->mPtr)
                 MIST_THROW_EXCEPTION(L"mist::SharedPtr: invalid ptr to deref");
@@ -355,10 +322,7 @@ namespace mist {
             int i = this->mCounter->decRef();
             if(i == 0) {
                 if(this->mPtr) {
-                    if(mUnallocator)
-                        mUnallocator(this->mPtr);
-                    else
-                        RP::Release(this->mPtr);
+                    RP::Release(this->mPtr);
                     this->mPtr = 0;
                 }
                 this->mCounter->release();
@@ -384,9 +348,6 @@ namespace mist {
                 if(mCounter)
                     mCounter->incRef();
         }
-
-        Function<T*(void)> mAllocator;
-        Function<void(T*)> mUnallocator;
 
         template<class OC, class ORP>
         friend class SharedPtr;
@@ -467,7 +428,7 @@ namespace mist {
 
 
     template<class T>
-    class ScopedPtr: Uncopyable {
+    class ScopedPtr: Uncopyable, public safe_bool<ScopedPtr<T> > {
     public:
         typedef T element_type;
 
@@ -503,7 +464,7 @@ namespace mist {
             return this->ptr;
         }
 
-        operator bool() const {
+        bool boolean_test() const {
             return ptr != 0;
         }
 
@@ -519,7 +480,7 @@ namespace mist {
     }
 
     template<typename T>
-    class WeakPtr {
+    class WeakPtr: public safe_bool<WeakPtr<T> > {
     public:
         typedef T element_type;
 
@@ -598,6 +559,10 @@ namespace mist {
 
         SharedPtr<T> lock() const {
             return SharedPtr<T>(mPtr, mCounter);
+        }
+
+        bool boolean_test() const {
+            return this->expired();
         }
 
         void reset() {

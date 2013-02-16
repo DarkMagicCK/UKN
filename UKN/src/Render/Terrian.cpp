@@ -16,7 +16,7 @@
 namespace ukn {
 
     void HeightMap::Generate(float startx, float starty,
-                             float w, float h,
+                             uint32 w, uint32 h,
                              float grid_size,
                              const Function<float(float, float)>& heightFunc,
                              std::vector<float3>& positions,
@@ -32,7 +32,7 @@ namespace ukn {
         indices.resize(indexSize);
         for(uint32 z = 0; z < h; ++z) {
             for(uint32 x = 0; x < w; ++x) {
-                uint32 current = z * w + x;
+                uint32 current (z * w + x);
 
                 float height = heightFunc((float)x / w, 
                                           (float)z / h);
@@ -577,8 +577,8 @@ namespace ukn {
         uint32 triangle_count = this->triangleCount(x, z, w, vertices, pitch, h, triangles, node->max_h, node->min_h);
         if(triangle_count > 10000) {
             for(int i=0; i<4; ++i) {
-                float offX = (((i % 2) < 1) ? -1.0 : 1.0) * (w / 4);
-                float offZ = (((i % 4) < 2) ? -1.0: 1.0) * (w / 4);
+                float offX ( (((i % 2) < 1) ? -1.0 : 1.0) * (w / 4) );
+                float offZ ( (((i % 4) < 2) ? -1.0: 1.0) * (w / 4) );
 
                 if(w / 2 > 0) {
                     node->childs[i] = createNode(x + offX, z + offZ, w / 2, vertices, pitch, h, indices);

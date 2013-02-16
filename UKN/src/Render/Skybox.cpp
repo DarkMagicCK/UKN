@@ -58,11 +58,11 @@ namespace ukn {
     bool Skybox::buildVertices(const GraphicFactory& factory) {
         Vertex2D vertices[6* 6];
 
-        double half4 = 0.25;
-        double half2 = 0.5;
-        double half43 = 0.75;
-        double half3 = 1.0 / 3;
-        double half32 = 2.0 / 3;
+        float half4 = 0.25f;
+        float half2 = 0.5f;
+        float half43 = 0.75f;
+        float half3 = 1.0f / 3;
+        float half32 = 2.0f / 3;
 
         float d = 1;
         

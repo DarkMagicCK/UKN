@@ -163,7 +163,7 @@ namespace mist {
         StreamPtr mStream;
     };
     
-    class StreamReader: public Object {
+    class MIST_API StreamReader: public Object {
     public:
         virtual ~StreamReader();
         

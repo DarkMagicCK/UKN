@@ -150,12 +150,12 @@ namespace ukn {
     
     void AppLauncher::update() {
         mMainWindow->OnGlobalUpdate().raise(0, _NullEventArgs);
-        mMainWindow->onUpdate().raise(mMainWindow, _NullEventArgs);
+        mMainWindow->onUpdate().raise(mMainWindow.get(), _NullEventArgs);
         mist::thread::ThreadTaskPool::DefaultObject().run();
     }
     
     void AppLauncher::render() {
-        mMainWindow->onRender().raise(mMainWindow, _NullEventArgs);
+        mMainWindow->onRender().raise(mMainWindow.get(), _NullEventArgs);
     }
     
     AppLauncher& AppLauncher::run() {
@@ -165,7 +165,7 @@ namespace ukn {
         }
         
         // on init
-        mMainWindow->onInit().raise(mMainWindow, _NullEventArgs);
+        mMainWindow->onInit().raise(mMainWindow.get(), _NullEventArgs);
         
         Context::Instance().getGraphicFactory().getGraphicDevice().beginRendering();
 

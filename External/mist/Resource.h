@@ -16,6 +16,7 @@
 #include "mist/Logger.h"
 #include "mist/TimeUtil.h"
 #include "mist/Exception.h"
+#include "mist/Function.h"
 
 #include <map>
 #include <vector>

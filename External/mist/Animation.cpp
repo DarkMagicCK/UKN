@@ -122,8 +122,10 @@ namespace mist {
         
         uint64 pass_time = now_time - mStoryBoardStartTime;
         uint64 animation_end_time;
-        AnimationSet::const_iterator it = mAnimationSet.begin();
-        for(; it != mAnimationSet.end(); ++it) {
+         ;
+        for(AnimationSet::iterator it = mAnimationSet.begin(), end = mAnimationSet.end(); 
+            it != end; 
+            ++it) {
             animation_end_time = it->start_time + it->animation_ptr->getDuration();
             if(it->start_time < pass_time) {
                 if(pass_time <= animation_end_time) {
@@ -416,7 +418,7 @@ namespace mist {
                                         create_linear_animation(prop_type,
                                                                 prop,
                                                                 parser,
-                                                                storyboard);
+                                                                storyboard.get());
                                     }
                                     
                                 // keyframe animation
@@ -428,7 +430,7 @@ namespace mist {
                                         create_key_frame_animation(prop_type,
                                                                    prop,
                                                                    parser,
-                                                                   storyboard);
+                                                                   storyboard.get());
                                       
                                         // back to parent node
                                         parser->toParent();

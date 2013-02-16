@@ -17,7 +17,7 @@ namespace ukn {
             Grid, // 4 lines
         };
         static void Generate(float x, float y,
-                             float w, float h, 
+                             uint32 w, uint32 h, 
                              float grid_size,
                              const Function<float(float, float)>& heightFunc,
                              std::vector<float3>& positions,

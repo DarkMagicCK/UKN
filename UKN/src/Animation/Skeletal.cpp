@@ -638,7 +638,7 @@ namespace ukn {
         BonePtr parent = getBone(parent_name.empty() ? L"Root" : parent_name);
         if(parent) {
             parent->getChildren().push_back(bone);
-            bone->mParent = parent;
+            bone->mParent = parent.get();
         } else 
             log_error(UknString(L"ukn::SkeletalAnimation:addBone: no parent bone with name ")+parent_name+L" found");
     }

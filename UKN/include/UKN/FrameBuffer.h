@@ -15,6 +15,7 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/Viewport.h"
 #include "UKN/GraphicSettings.h"
+#include "UKN/RenderView.h"
 
 #include <vector>
 

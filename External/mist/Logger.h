@@ -12,6 +12,7 @@
 #include "mist/Platform.h"
 #include "mist/PreDeclare.h"
 #include "mist/StringUtil.h"
+#include "mist/Stream.h"
 
 #include <deque>
 

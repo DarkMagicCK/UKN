@@ -276,6 +276,9 @@
     <ClInclude Include="..\..\External\mist\PreDeclare.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\External\mist\safe_bool.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -122,6 +122,7 @@
     <ClInclude Include="..\..\External\mist\RefCounted.h" />
     <ClInclude Include="..\..\External\mist\Reflection.h" />
     <ClInclude Include="..\..\External\mist\Resource.h" />
+    <ClInclude Include="..\..\External\mist\safe_bool.h" />
     <ClInclude Include="..\..\External\mist\Serial.h" />
     <ClInclude Include="..\..\External\mist\Serializer.h" />
     <ClInclude Include="..\..\External\mist\Signal.h" />

@@ -274,11 +274,11 @@ namespace mist {
 #define DEF_POINT_TEMPLATE_N(n, Type) \
     template<>                                         \
     struct MIST_API PointTemplate<n, Type> {                             \
-    typedef PointTemplate<n, Type> SelfType;                \
-    typedef Type PointType;                                     \
-    enum {                                                      \
-    Size = n,                                         \
-    };                                                          \
+        typedef PointTemplate<n, Type> SelfType;                \
+        typedef Type PointType;                                     \
+        enum {                                                      \
+            Size = n,                                         \
+        };                                                          \
     \
     Type value[Size];\
     PointTemplate() {                                       \
@@ -299,25 +299,25 @@ namespace mist {
     }\
     template<typename T2>                                           \
     SelfType operator+(const PointTemplate<n, T2>& rhs) const { \
-    SelfType tmp = *this;                                       \
-    for(int i=0; i<Size; ++i) {                           \
-    tmp.value[i] += Type(rhs.value[i]);        \
-    }                                                           \
-    return tmp;                                                 \
+        SelfType tmp = *this;                                       \
+        for(int i=0; i<Size; ++i) {                           \
+            tmp.value[i] += Type(rhs.value[i]);        \
+        }                                                           \
+        return tmp;                                                 \
     }                                                               \
     template<typename T2>                                           \
     SelfType operator-(const PointTemplate<n, T2>& rhs) const { \
-    SelfType tmp = *this;                                       \
-    for(int i=0; i<Size; ++i) {                           \
-    tmp.value[i] -= Type(rhs.value[i]);        \
-    }\
-    return tmp;\
+        SelfType tmp = *this;                                       \
+        for(int i=0; i<Size; ++i) {                           \
+            tmp.value[i] -= Type(rhs.value[i]);        \
+        }\
+        return tmp;\
     }\
     template<typename T2>\
     SelfType& operator=(const PointTemplate<n, T2>& rhs) {\
-    for(int i=0; i<Size; ++i) {\
-    this->value[i] = Type(rhs.value[i]);\
-    }\
+        for(int i=0; i<Size; ++i) {\
+            this->value[i] = Type(rhs.value[i]);\
+        }\
     return *this;\
     }\
     template<typename T2>\
@@ -326,98 +326,98 @@ namespace mist {
     }\
     template<typename T2> \
     bool equals(const PointTemplate<n, T2> &rhs) const {\
-    for(int i=0; i<Size; ++i) {\
-    if(this->value[i] != Type(rhs.value[i]))\
-    return false;\
-    }\
+        for(int i=0; i<Size; ++i) {\
+            if(this->value[i] != Type(rhs.value[i]))\
+                return false;\
+        }\
     return true;\
     }\
     template<typename T2>\
     bool operator!=(const PointTemplate<n, T2>& rhs) {\
-    return !(*this == rhs);\
+        return !(*this == rhs);\
     }\
     template<typename T2>\
     SelfType& operator+=(const PointTemplate<n, T2>& rhs) {\
-    for(int i=0; i<Size; ++i) {\
-    this->value[i] += Type(rhs.value[i]);\
-    }\
-    return *this;\
+        for(int i=0; i<Size; ++i) {\
+            this->value[i] += Type(rhs.value[i]);\
+        }\
+        return *this;\
     }\
     template<typename T2>\
     SelfType& operator-=(const PointTemplate<n, T2>& rhs) {\
-    for(int i=0; i<Size; ++i) {\
-    this->value[i] -= Type(rhs.value[i]);\
-    }\
-    return *this;\
+        for(int i=0; i<Size; ++i) {\
+            this->value[i] -= Type(rhs.value[i]);\
+        }\
+        return *this;\
     }\
     SelfType operator+(real r) const {\
-    SelfType tmp = *this;\
-    for(int i=0; i<Size; ++i) {\
-    tmp.value[i] = Type(tmp.value[i] + r);\
-    }\
-    return tmp;\
+        SelfType tmp = *this;\
+        for(int i=0; i<Size; ++i) {\
+            tmp.value[i] = Type(tmp.value[i] + r);\
+        }\
+        return tmp;\
     }\
     SelfType operator-(real r) const {\
-    SelfType tmp = *this;\
-    for(int i=0; i<Size; ++i) {\
-    tmp.value[i] = Type(tmp.value[i] - r);\
-    }\
-    return tmp;\
+        SelfType tmp = *this;\
+        for(int i=0; i<Size; ++i) {\
+            tmp.value[i] = Type(tmp.value[i] - r);\
+        }\
+        return tmp;\
     }\
     Type& operator[](int index) {\
-    mist_assert(index >= 0 && index < Size);\
-    return this->value[index];\
+        mist_assert(index >= 0 && index < Size);\
+        return this->value[index];\
     }\
     const Type& operator[](int index) const {\
-    mist_assert(index >= 0 && index < Size);\
-    return this->value[index];\
+        mist_assert(index >= 0 && index < Size);\
+        return this->value[index];\
     }\
     SelfType operator*(real r) const {\
-    SelfType tmp = *this;\
-    for(int i=0; i<Size; ++i) {\
-    tmp.value[i] = Type(tmp.value[i] * r);\
-    }\
-    return tmp;\
+        SelfType tmp = *this;\
+        for(int i=0; i<Size; ++i) {\
+            tmp.value[i] = Type(tmp.value[i] * r);\
+        }\
+        return tmp;\
     }\
     SelfType operator/(real r) const {\
-    SelfType tmp = *this;\
-    for(int i=0; i<Size; ++i) {\
-    tmp.value[i] = Type(tmp.value[i] / r);\
-    }\
-    return tmp;\
+        SelfType tmp = *this;\
+        for(int i=0; i<Size; ++i) {\
+            tmp.value[i] = Type(tmp.value[i] / r);\
+        }\
+        return tmp;\
     }\
     SelfType& operator*=(real r) {\
-    for(int i=0; i<Size; ++i) {\
-    this->value[i] = Type(this->value[i] * r);\
-    }\
-    return *this;\
+        for(int i=0; i<Size; ++i) {\
+            this->value[i] = Type(this->value[i] * r);\
+        }\
+        return *this;\
     }\
     SelfType& operator/=(real r) {\
-    for(int i=0; i<Size; ++i) {\
-    this->value[i] = Type(this->value[i] / r);\
-    }\
-    return *this;\
+        for(int i=0; i<Size; ++i) {\
+            this->value[i] = Type(this->value[i] / r);\
+        }\
+        return *this;\
     }\
     \
     Type dot(const SelfType& vec) const {\
-    Type result(0);\
-    for(int i=0; i<Size; ++i)\
-    result += this->value[i] * vec.value[i];\
-    return result;\
+        Type result(0);\
+        for(int i=0; i<Size; ++i)\
+            result += this->value[i] * vec.value[i];\
+        return result;\
     }\
     Type sqrLength() const {\
-    return Type(this->dot(*this));\
+        return Type(this->dot(*this));\
     }\
     \
     Type length() const {\
-    return Type(sqrt(sqrLength()));\
+        return Type(sqrt(sqrLength()));\
     }\
     SelfType normalize() const {\
-    real invLength = 1.f / length();\
-    SelfType result;\
-    for(int i=0; i<Size; ++i)\
-    result.value[i] = Type(this->value[i] * invLength);\
-    return result;\
+        real invLength = 1.f / length();\
+        SelfType result;\
+        for(int i=0; i<Size; ++i)\
+            result.value[i] = Type(this->value[i] * invLength);\
+        return result;\
     }\
     \
     };

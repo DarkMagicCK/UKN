@@ -204,12 +204,19 @@ namespace ukn {
                 glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 #endif
             }
-            if((mGlfwWindow = glfwCreateWindow(settings.width,
-                                               settings.height,
-                                               string::WStringToString(name).c_str(),
-                                               settings.full_screen ? glfwGetPrimaryMonitor() : 0,
-                                               0)) == 0) {
-                    MIST_THROW_EXCEPTION(L"GLWindow::GLWindow: Error opening window");
+            if(!settings.native_window_handle) {
+                if((mGlfwWindow = glfwCreateWindow(settings.width,
+                                                   settings.height,
+                                                   string::WStringToString(name).c_str(),
+                                                   settings.full_screen ? glfwGetPrimaryMonitor() : 0,
+                                                   0)) == 0) {
+                        MIST_THROW_EXCEPTION(L"GLWindow::GLWindow: Error opening window");
+                }
+            } else {
+                if((mGlfwWindow = glfwCreateWindowSlave(settings.native_window_handle,
+                                                        0)) == 0) {
+                    MIST_THROW_EXCEPTION(L"GLWindow::GLWindow: Error creating slave window on native handle");
+                }
             }
             glfwMakeContextCurrent(mGlfwWindow);
 

@@ -94,8 +94,6 @@ namespace ukn {
         mScreenFrameBuffer = mCurrFrameBuffer;
 
         glCullFace(GL_NONE);
-        glDepthMask(GL_FALSE);
-        glDisable(GL_DEPTH_TEST);
         //
 
         return mWindow;

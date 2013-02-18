@@ -174,7 +174,7 @@ namespace ukn {
 
     void RenderBuffer::setEffect(const EffectPtr& effect) {
         mEffect = effect;
-        this->onSetEffect(effect);
+        this->onSetEffect(mEffect);
     }
 
     EffectPtr RenderBuffer::getEffect() const {

@@ -139,8 +139,11 @@ namespace ukn {
     class SequencialAnimation;
     typedef SharedPtr<SequencialAnimation> SequencialAnimationPtr;
     
-    class RenderTarget2D;
-    typedef SharedPtr<RenderTarget2D> RenderTargetPtr;
+    class RenderTarget;
+    typedef SharedPtr<RenderTarget> RenderTargetPtr;
+
+    class CompositeRenderTarget;
+    typedef SharedPtr<CompositeRenderTarget> CompositeRenderTargetPtr;
     
     struct SamplerStateDesc;
     class SamplerStateObject;

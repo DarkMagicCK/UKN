@@ -64,7 +64,7 @@
 #include <GL/GL.h>
 #include <GL/GLU.h>
 
-#pragma comment(lib, "glfw.lib")
+#pragma comment(lib, "glfw3.lib")
 
 #pragma comment(lib, "OpenGL32.lib")
 #pragma comment(lib, "glu32.lib")

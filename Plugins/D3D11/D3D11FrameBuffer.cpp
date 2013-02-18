@@ -41,8 +41,8 @@ namespace ukn {
 
     void D3D11FrameBuffer::clear(uint32 flags, const class Color& clr, float depth, int32 stencil) {
         if(flags & CM_Color) {
-            if(this->attached(ATT_Color0)) {
-                this->attached(ATT_Color0)->clearColor(clr);
+            for(uint32 i = 0; i < mClearViews.size(); ++i) {
+                mClearViews[i]->clearColor(clr);
             }
         }
         RenderViewPtr depthStencilView = this->attached(ATT_DepthStencil);
@@ -55,17 +55,18 @@ namespace ukn {
     }
 
     void D3D11FrameBuffer::onBind() {
-        ID3D11RenderTargetView* rtView = 0;
+        std::vector<ID3D11RenderTargetView*> rtViews;
         ID3D11DepthStencilView* dsView = 0;
 
-        if(this->attached(ATT_Color0)) { 
-            rtView = ((D3D11RenderTargetView*)this->attached(ATT_Color0).get())->getD3D11RenderTargetView();
+        for(uint32 i = 0; i < mClearViews.size(); ++i) {
+            rtViews.push_back(((D3D11RenderTargetView*)this->attached(ATT_Color0 + i).get())->getD3D11RenderTargetView());
         }
         if(this->attached(ATT_DepthStencil)) {
             dsView = ((D3D11DepthStencilRenderView*)this->attached(ATT_DepthStencil).get())->getD3D11DepthStencilView();
         }
-        mGraphicDevice->getD3DDeviceContext()->OMSetRenderTargets(1, 
-            &rtView, 
+        mGraphicDevice->getD3DDeviceContext()->OMSetRenderTargets(
+            mClearViews.size(), 
+            &rtViews[0], 
             dsView);
     }
 

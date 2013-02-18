@@ -22,7 +22,7 @@ namespace ukn {
         EF_RGB565,   // GL_RGB565, D3DFMT_RGB6B5
         EF_RGBA4444,  // GL_RGBA4,
         EF_RGB5A1,  // GL_RGB5A1,
-        
+    
         EF_D24S8,
         EF_D32,
         EF_D16,

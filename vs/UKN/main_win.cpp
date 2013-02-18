@@ -34,22 +34,6 @@
 #include "mist/Query.h"
 
 #include <numeric>
-
-template<typename T, int N>
-struct NDArray {
-    NDArray()  {} 
-    NDArray<T, N-1>& operator [](size_t index) { return a[index]; }
-    std::vector<NDArray<T, N-1> > a;
-
-};
-
-template<typename T>
-struct NDArray<T, 1> {
-    NDArray() {} 
-    T& operator [](size_t index) { return a[index]; }
-    std::vector<T> a;
-};
-
 #ifndef MIST_OS_WINDOWS
 
 #include "../Plugins/gl/GLGraphicFactory.h"
@@ -76,9 +60,13 @@ int CALLBACK WinMain(
     ukn::EffectPtr effect;
     ukn::CameraController* camController;
     ukn::FontPtr font;
-    ukn::RenderTarget2D* renderTarget;
+    ukn::CompositeRenderTarget* renderTarget;
+    ukn::CompositeRenderTarget* renderTargetLightMap;
     ukn::SkyboxPtr skybox;
     ukn::TerrianPtr terrian;
+
+    ukn::RenderBufferPtr renderBufferDeferred;
+    ukn::ShaderPtr deferredFragmentShader;
 
     ukn::Vector3 positions[5];
     
@@ -132,39 +120,40 @@ int CALLBACK WinMain(
                 }
             }
         })
-        .connectRender([&](ukn::Window*) {
+        .connectRender([&](ukn::Window* wnd) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
-            renderTarget->attach();
+            renderTarget->attachToRender();
 
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Blue, 1.f, 0);
-            
- //           effect->getFragmentShader()->setFloatVectorVariable("lightDirection",
- //               ukn::float4(sinf(r) * 3, cosf(r) * 3, 0.f, 1.0));
-            r += 0.05f;
-
-            for(int i=0; i <1 ; ++i) {
-                gd.setWorldMatrix(worldMat);
-
-                if(renderBuffer)
-                    gd.renderBuffer(renderBuffer);
-            }
-            renderTarget->detach();
-
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1000.f, 0);
-
-            if(skybox) {
-                skybox->render();
-            }
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
 
             if(terrian) {
                 terrian->render();
             }
+          
+            ukn::Viewport& vp = gd.getCurrFrameBuffer()->getViewport();
+            const ukn::Frustum& frustum = vp.camera->getViewFrustum();
+            int renderCount = 0;
 
-            ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
-            sb.begin();
-        //    sb.draw(renderTarget->getTargetTexture(), ukn::Rectangle(0, 0, 240, 180));
-            sb.end();
-            
+            gd.bindTexture(texture2);
+            for(int i=0; i<5; ++i) {
+                if(frustum.isSphereVisible(mist::Sphere(positions[i], 2.5)) != ukn::Frustum::No) {
+                    gd.setWorldMatrix(ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
+                  
+                    if(renderBuffer)
+                        gd.renderBuffer(renderBuffer);
+
+                    renderCount++;
+                }
+            }    
+
+            renderTarget->detachFromRender();
+
+       //     if(skybox) {
+       //         skybox->render();
+       //     }
+
+            r += 0.01;
+           
             font->draw(gd.description().c_str(), 0, 30, ukn::FA_Left, ukn::color::Lightgreen);
             font->draw(ukn::SystemInformation::GetOSVersion().c_str(), 0, 60, ukn::FA_Left, ukn::color::Lightgreen);
             font->draw((L"Fps: " + mist::Convert::ToString(mist::FrameCounter::Instance().getCurrentFps())).c_str(), 
@@ -173,27 +162,49 @@ int CALLBACK WinMain(
                         ukn::FA_Left,
                         ukn::color::Black);
 
-            ukn::Viewport& vp = gd.getCurrFrameBuffer()->getViewport();
-            const ukn::Frustum& frustum = vp.camera->getViewFrustum();
-            int renderCount = 0;
-
-            for(int i=0; i<5; ++i) {
-                if(frustum.isSphereVisible(mist::Sphere(positions[i], 2.5)) != ukn::Frustum::No) {
-                    gd.setWorldMatrix(ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
-        //            effect->getFragmentShader()->setFloatVectorVariable("specularColor",
-        //                colors[i]);
-
-                    if(renderBuffer)
-                        gd.renderBuffer(renderBuffer);
-
-                    renderCount++;
-                }
-            }    
-
             font->draw(ukn::Convert::ToString(renderCount).c_str(), 0, 90, ukn::FA_Left, ukn::color::Red);
             font->draw(ukn::Convert::ToString(terrian->getDrawCount()).c_str(), 0, 120, ukn::FA_Left, ukn::color::Red);
+              
+           // font->render();
+            renderTargetLightMap->attachToRender();
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+           
+            gd.bindTexture(ukn::TexturePtr());
+            deferredFragmentShader->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
+            deferredFragmentShader->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
+            deferredFragmentShader->setTextureVariable("colorMap", renderTarget->getTargetTexture(ukn::ATT_Color0));
+            deferredFragmentShader->setTextureVariable("normalMap", renderTarget->getTargetTexture(ukn::ATT_Color1));
+            deferredFragmentShader->setTextureVariable("depthMap", renderTarget->getTargetTexture(ukn::ATT_Color2));
+            deferredFragmentShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
             
-            font->render();
+            deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), cos(r), 0, 1));
+            deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
+            gd.renderBuffer(renderBufferDeferred);
+
+            deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), 0, cos(r), 1));
+            deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
+            gd.renderBuffer(renderBufferDeferred);
+
+            deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(0, cos(r), sin(r), 1));
+            deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
+            gd.renderBuffer(renderBufferDeferred);
+
+            renderTargetLightMap->detachFromRender();
+
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+           
+            ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
+            sb.begin();
+            sb.draw(renderTarget->getTargetTexture(ukn::ATT_Color0), 
+                    ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
+            sb.draw(renderTarget->getTargetTexture(ukn::ATT_Color1), 
+                    ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
+            sb.draw(renderTarget->getTargetTexture(ukn::ATT_Color2), 
+                    ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
+            sb.draw(renderTargetLightMap->getTargetTexture(ukn::ATT_Color0), 
+                    ukn::Rectangle(wnd->width() / 2, 0, wnd->width() / 2, wnd->height() / 2, true));
+            
+            sb.end();
         })
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
@@ -201,44 +212,55 @@ int CALLBACK WinMain(
             renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 2.5), 20);
 
             effect = gf.createEffect();
-            ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex.cg"), 
+            ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex_deferred.cg"), 
                     ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", ukn::VertexUVNormal::Format()));
-            ukn::ShaderPtr fragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment.cg"), 
+            ukn::ShaderPtr fragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment_deferred.cg"), 
                     ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram"));
 
             effect->setFragmentShader(fragmentShader);
             effect->setVertexShader(vertexShader);
             
-        /*    fragmentShader->setFloatVectorVariable("diffuseColor", ukn::float4(1.f, 1.f, 1.f, 1.f));
-            fragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(-0.6f, 0.6f, 0.5f, 1.0));
-            fragmentShader->setFloatVectorVariable("ambientColor", ukn::float4(1.0f, 1.0f, 1.f, 1.f));
-            fragmentShader->setFloatVectorVariable("specularColor", ukn::float4(1.f, 0.0f, 0.f, 0.f));
-
             texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
             texture = gf.create2DTexture(800, 600, 1, ukn::EF_RGBA8, 0);
-            texture2 = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"pic0053.png"));
+            texture2 = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"grass.dds"));
 
-            effect->getFragmentShader()->setTextureVariable("tex", texture);
-*/
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
-            vp.camera->setViewParams(ukn::Vector3(0, 5, -10), ukn::Vector3(0, 0, 1));
+            vp.camera->setViewParams(ukn::Vector3(0, 5, -30), ukn::Vector3(0, 0, 1));
 
- //           vertexShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
-  //          renderBuffer->setEffect(effect);
+            renderBuffer->setEffect(effect);
 
             camController->attachCamera(vp.camera);
 
-            font = ukn::AssetManager::Instance().load<ukn::Font>(L"Thonburi.ttf");
+            font = ukn::AssetManager::Instance().load<ukn::Font>(L"Consola.ttf");
             font->setStyleProperty(ukn::FSP_Size, 20);
 
-            renderTarget = new ukn::RenderTarget2D();
-            if(renderTarget->create(800,
-                                    600,
-                                    1,
-                                    ukn::EF_RGBA8,
-                                    ukn::EF_D16)) {
-            }
+            renderTarget = new ukn::CompositeRenderTarget();
+            renderTarget->attach(ukn::ATT_Color0,
+                                    new ukn::RenderTarget(800,
+                                                          600,
+                                                          1,
+                                                          ukn::EF_RGBA8));
+            renderTarget->attach(ukn::ATT_Color1,
+                                    new ukn::RenderTarget(800,
+                                                          600,
+                                                          1,
+                                                          ukn::EF_RGBA8));
+            renderTarget->attach(ukn::ATT_Color2,
+                                    new ukn::RenderTarget(800,
+                                                          600,
+                                                          1,
+                                                          ukn::EF_Float));
+            renderTarget->attachCamera(vp.camera);
+
+            renderTargetLightMap = new ukn::CompositeRenderTarget();
+            renderTargetLightMap->attach(ukn::ATT_Color0,
+                                    new ukn::RenderTarget(800,
+                                                          600,
+                                                          1,
+                                                          ukn::EF_RGBA8));
+            
+            renderTargetLightMap->attachCamera(vp.camera);
 
             skybox = new ukn::Skybox();
             if(!skybox->load(mist::ResourceLoader::Instance().loadResource(L"skyboxsun25degtest.png"))) {
@@ -252,12 +274,52 @@ int CALLBACK WinMain(
                 .size(ukn::float2(100, 100));
             if(t->build()) {
                 t->texture(gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"dirt01.dds")));
-              
+                t->setEffect(effect);
                 terrian = t;
                 
             } else {
                 ukn::log_error(L"unable to build terrian");
             }
+
+            renderBufferDeferred = gf.createRenderBuffer();
+
+            struct {
+                ukn::float3 position;
+                ukn::float2 uv;
+            } vertices[6];
+
+            vertices[0].position = ukn::float3(-1, 1, 0); vertices[0].uv = ukn::float2(0, 0); 
+            vertices[1].position = ukn::float3(1.0, 1.0, 0); vertices[1].uv = ukn::float2(1, 0);
+            vertices[2].position = ukn::float3(1.0, -1.0, 0); vertices[2].uv = ukn::float2(1, 1);
+            vertices[3].position = ukn::float3(1.0, -1.0, 0); vertices[3].uv = ukn::float2(1, 1);
+            vertices[4].position = ukn::float3(-1, -1.0, 0); vertices[4].uv = ukn::float2(0, 1);
+            vertices[5].position = ukn::float3(-1, 1.0, 0); vertices[5].uv = ukn::float2(0, 0);
+
+            ukn::vertex_elements_type format = ukn::VertexElementsBuilder()
+                                           .add(ukn::VertexElement(ukn::VU_Position,
+                                                                   ukn::EF_Float3,
+                                                                   0))
+                                           .add(ukn::VertexElement(ukn::VU_UV,
+                                                                   ukn::EF_Float2,
+                                                                   0))
+                                           .to_vector();
+            ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::None,
+                                                                       ukn::GraphicBuffer::Static,
+                                                                       6,
+                                                                       vertices,
+                                                                       format);
+            renderBufferDeferred->bindVertexStream(vertexBuffer, format);
+
+            ukn::EffectPtr deferredEffect = gf.createEffect();
+            ukn::ShaderPtr deferredVertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex_deferred_composite.cg"), 
+                    ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", format));
+            deferredFragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment_deferred_composite.cg"), 
+                    ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram"));
+            deferredEffect->setFragmentShader(deferredFragmentShader);
+            deferredEffect->setVertexShader(deferredVertexShader);
+
+
+            renderBufferDeferred->setEffect(deferredEffect);
         })
         .run();
     

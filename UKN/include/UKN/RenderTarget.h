@@ -12,53 +12,72 @@
 #include "mist/Platform.h"
 #include "mist/Uncopyable.h"
 
+#include "UKN/FrameBuffer.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
 
 namespace ukn {
     
-    /**
-     * A render target is a composit of a texture render view and 
-        a depth stencil render view(optional)
-        Also manages a framebuffer
-     **/
-    class UKN_API RenderTarget2D: Uncopyable {
+    class UKN_API RenderTarget: Uncopyable {
     public:
-        RenderTarget2D(); 
-        virtual ~RenderTarget2D();
-        
-        /* without depthstencil */
-        bool create(uint32 width,
-                    uint32 height,
-                    int32 num_of_levels,
-                    ElementFormat color_format = EF_RGBA8);
-        /* with depthstencil */
-        bool create(uint32 width,
-                    uint32 height,
-                    int32 num_of_levels,
-                    ElementFormat color_format,
-                    ElementFormat depth_stencil_format);
-        
-        uint32          width() const;
-        uint32          height() const;
-        ElementFormat   format() const;
-        
-        const FrameBufferPtr& getFrameBuffer() const;
+        /* create a texture render target */
+        RenderTarget(uint32 width,
+                     uint32 height,
+                     int32 num_of_levels,
+                     ElementFormat color_format = EF_RGBA8);
+        /* create a depth stencil render target */
+        RenderTarget(uint32 width,
+                     uint32 height,
+                     ElementFormat depth_stencil_format);
 
-        void attach();
-        void detach();
+        ~RenderTarget();
 
-        const TexturePtr& getTargetTexture() const;
-        const TexturePtr& getDepthStencilTexture() const;
+        uint32  width() const;
+        uint32  height() const;
+
+        RenderViewPtr getRenderView() const;
+        TexturePtr getTexture() const;
+
+        ElementFormat getElementFormat() const;
 
     private:
-        bool createFrameBuffer(GraphicFactory& gf);
+        RenderViewPtr mRenderView;
+        TexturePtr mTexture;
+        ElementFormat mFormat;
+    };
 
-        TexturePtr mTargetTexture;
-        TexturePtr mDepthStencilTexture;
+    /**
+     * A composite render target is a composite of 
+        multiple texture render view and 
+        a optional depth stencil render view
+        Also manages a framebuffer
+     **/
+    class UKN_API CompositeRenderTarget: Uncopyable {
+    public:
+        CompositeRenderTarget(); 
+        ~CompositeRenderTarget();
         
-        RenderViewPtr mTarget;
-        RenderViewPtr mDepthStencil;
+        /* attach a render target */
+        bool attach(Attachment attach, RenderTargetPtr);
+        RenderTargetPtr detach(Attachment attach);
+        
+        uint32  width() const;
+        uint32  height() const;
+
+        const FrameBufferPtr& getFrameBuffer() const;
+
+        void attachToRender();
+        void detachFromRender();
+
+        void attachCamera(const CameraPtr& camera);
+
+        TexturePtr getTargetTexture(Attachment attach) const;
+
+    private:
+        void createFrameBuffer();
+
+        RenderTargetPtr mDepthStencilTarget;
+        std::vector<RenderTargetPtr> mColorTargets;
 
         FrameBufferPtr mFrameBuffer;
         FrameBufferPtr mPrevFrameBuffer;

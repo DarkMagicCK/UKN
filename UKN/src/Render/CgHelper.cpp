@@ -16,9 +16,9 @@ namespace ukn {
                                                float2 texCoord: TEXCOORD0;\
                                                float4 color: COLOR;\
                                                };\
-                                               VertexOutputType VertexProgram(in float2 texCoord: TEXCOORD0: ATTR8,\
-                                                                              in float3 position: POSITION: ATTR0,\
-                                                                              in float4 color: COLOR: ATTR3) {\
+                                               VertexOutputType VertexProgram(in float2 texCoord: TEXCOORD0,\
+                                                                              in float3 position: POSITION,\
+                                                                              in float4 color: COLOR) {\
                                                 VertexOutputType output;\
                                                 output.position = float4(position, 1);\
                                                 output.position = mul(output.position, worldMatrix);\

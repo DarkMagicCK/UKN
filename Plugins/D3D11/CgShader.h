@@ -34,8 +34,8 @@ namespace ukn {
 
     private:
         CGcontext mContext;
-        ID3D11InputLayout* mLayout;
         D3D11GraphicDevice* mDevice;
+        COM<ID3D11InputLayout>::Ptr mLayout;
     };
 
     class CgDxShader: public Shader {

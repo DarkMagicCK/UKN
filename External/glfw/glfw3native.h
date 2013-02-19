@@ -39,6 +39,13 @@ extern "C" {
  * Doxygen documentation
  *************************************************************************/
 
+<<<<<<< HEAD
+/*! @defgroup native Native API
+ *
+ *  By using the native API, you assert that you know what you are doing and how
+ *  to fix problems caused by using it.  If you don't, you shouldn't be using
+ *  it.
+=======
 /*! @defgroup native Native access
  *
  *  <strong>By using the native API, you assert that you know what you are
@@ -64,6 +71,7 @@ extern "C" {
  *  which platform-specific headers to include.  It is then up your (by
  *  definition platform-specific) code to handle which of these should be
  *  defined.
+>>>>>>> 1a71d7c01a7e1a726f4dbb5f23d00e4d21489d28
  */
 
 

@@ -294,6 +294,12 @@ namespace mist {
     bool AABB2::contains(const Vector2& pos) const {
         return contains(pos.x(), pos.y());
     }
+    
+    bool AABB2::contains(const AABB2& r, real margin) const {
+        return (r.x() - margin >= this->x() && r.y() - margin >= this->y() &&
+                (r.x() + r.width() + margin) <= (this->x() + this->width()) &&
+                (r.y() + r.height() + margin) <= (this->y() + this->height()));
+    }
 
     bool AABB2::intersect(const AABB2& rhs) const {
         if(fabs(this->x1 + this->x2 - rhs.x1 - rhs.x2) < (this->x2 - this->x1 + rhs.x2 - rhs.x1)) {
@@ -305,12 +311,11 @@ namespace mist {
     }
 
     bool AABB2::isEmpty() const {
-        return (x1 == x2) && (y1 == y2);
+        return (x1 == x2) || (y1 == y2);
     }
 
     Vector2 AABB2::getPosition() const {
-        return Vector2((this->x1 + this->x2)/2,
-            (this->y1 + this->y2)/2);
+        return Vector2(this->x1, this->y1);
     }
 
     Quaternion::Quaternion(real _x, real _y, real _z, real _w):

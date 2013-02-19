@@ -265,7 +265,8 @@ int CALLBACK WinMain(
             camController->attachCamera(vp.camera);
 
             font = ukn::AssetManager::Instance().load<ukn::Font>(L"Consola.ttf");
-            font->setStyleProperty(ukn::FSP_Size, 20);
+            if(font)
+                font->setStyleProperty(ukn::FSP_Size, 20);
 
             renderTarget = new ukn::CompositeRenderTarget();
             renderTarget->attach(ukn::ATT_Color0,

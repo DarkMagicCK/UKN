@@ -1,7 +1,7 @@
 
 /* pngget.c - retrieval of values from info struct
  *
- * Last changed in libpng 1.5.5 [September 22, 2011]
+ * Last changed in libpng 1.5.14 [January 24, 2013]
  * Copyright (c) 1998-2011 Glenn Randers-Pehrson
  * (Version 0.96 Copyright (c) 1996, 1997 Andreas Dilger)
  * (Version 0.88 Copyright (c) 1995, 1996 Guy Eric Schalnat, Group 42, Inc.)
@@ -175,6 +175,9 @@ png_get_pixel_aspect_ratio(png_const_structp png_ptr, png_const_infop info_ptr)
          return ((float)((float)info_ptr->y_pixels_per_unit
              /(float)info_ptr->x_pixels_per_unit));
    }
+#else
+   PNG_UNUSED(png_ptr)
+   PNG_UNUSED(info_ptr)
 #endif
 
    return ((float)0.0);
@@ -203,6 +206,9 @@ png_get_pixel_aspect_ratio_fixed(png_const_structp png_ptr,
           (png_int_32)info_ptr->x_pixels_per_unit))
          return res;
    }
+#else
+   PNG_UNUSED(png_ptr)
+   PNG_UNUSED(info_ptr)
 #endif
 
    return 0;
@@ -682,15 +688,16 @@ png_get_iCCP(png_const_structp png_ptr, png_const_infop info_ptr,
    png_debug1(1, "in %s retrieval function", "iCCP");
 
    if (png_ptr != NULL && info_ptr != NULL && (info_ptr->valid & PNG_INFO_iCCP)
-       && name != NULL && profile != NULL && proflen != NULL)
+       && name != NULL && compression_type != NULL && profile != NULL &&
+		 proflen != NULL)
    {
       *name = info_ptr->iccp_name;
       *profile = info_ptr->iccp_profile;
       /* Compression_type is a dummy so the API won't have to change
        * if we introduce multiple compression types later.
        */
-      *proflen = (int)info_ptr->iccp_proflen;
-      *compression_type = (int)info_ptr->iccp_compression;
+      *proflen = info_ptr->iccp_proflen;
+      *compression_type = info_ptr->iccp_compression;
       return (PNG_INFO_iCCP);
    }
 
@@ -950,9 +957,8 @@ png_get_text(png_const_structp png_ptr, png_const_infop info_ptr,
 {
    if (png_ptr != NULL && info_ptr != NULL && info_ptr->num_text > 0)
    {
-      png_debug1(1, "in %s retrieval function",
-          (png_ptr->chunk_name[0] == '\0' ? "text" :
-          (png_const_charp)png_ptr->chunk_name));
+      png_debug1(1, "in 0x%lx retrieval function",
+         (unsigned long)png_ptr->chunk_name);
 
       if (text_ptr != NULL)
          *text_ptr = info_ptr->text;
@@ -1069,7 +1075,6 @@ png_get_compression_buffer_size(png_const_structp png_ptr)
    return (png_ptr ? png_ptr->zbuf_size : 0);
 }
 
-
 #ifdef PNG_SET_USER_LIMITS_SUPPORTED
 /* These functions were added to libpng 1.2.6 and were enabled
  * by default in libpng-1.4.0 */
@@ -1111,16 +1116,14 @@ png_get_io_state (png_structp png_ptr)
 png_uint_32 PNGAPI
 png_get_io_chunk_type (png_const_structp png_ptr)
 {
-   return ((png_ptr->chunk_name[0] << 24) +
-           (png_ptr->chunk_name[1] << 16) +
-           (png_ptr->chunk_name[2] <<  8) +
-           (png_ptr->chunk_name[3]));
+   return png_ptr->chunk_name;
 }
 
 png_const_bytep PNGAPI
 png_get_io_chunk_name (png_structp png_ptr)
 {
-   return png_ptr->chunk_name;
+   PNG_CSTRING_FROM_CHUNK(png_ptr->io_chunk_string, png_ptr->chunk_name);
+   return png_ptr->io_chunk_string;
 }
 #endif /* ?PNG_IO_STATE_SUPPORTED */
 

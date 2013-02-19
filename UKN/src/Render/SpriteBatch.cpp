@@ -213,14 +213,10 @@ namespace ukn {
     }
     
     void SpriteBatch::onRenderBegin() {
-        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-    
         Ukn2DHelper::Instance().setupMat(mTransformMatrix);
     }
     
     void SpriteBatch::onRenderEnd() {
-        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-
         if(!mBatchRendering)
             mRenderQueue.clear();
         else  

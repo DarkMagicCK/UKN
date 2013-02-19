@@ -415,7 +415,7 @@ namespace ukn {
         float2 dim(0.f, 0.f);
         
         float tmpw = 0.f;
-        uint32 size = (uint32)wcslen(str);
+     //   uint32 size = (uint32)wcslen(str);
         const wchar_t* ustr = str;
         while(ustr && *ustr) {
             if(*ustr != L'\n') {

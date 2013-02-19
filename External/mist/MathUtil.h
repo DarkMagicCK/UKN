@@ -643,6 +643,7 @@ namespace mist {
         void encapsulate(real x, real y);
         bool contains(real x, real y) const;
         bool contains(const Vector2& pos) const;
+        bool contains(const AABB2& rhs, real margin = 0) const;
         bool intersect(const AABB2& rhs) const;
         bool isEmpty() const;
         Vector2 getPosition() const;

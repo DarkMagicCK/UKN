@@ -19,6 +19,10 @@
 #include "UKN/Window.h"
 #include "UKN/App.h"
 #include "UKN/Asset.h"
+#include "UKN/SceneManager.h"
+#include "UKN/SceneObject.h"
+#include "UKN/Texture.h"
+#include "UKN/Shader.h"
 
 namespace ukn {
     

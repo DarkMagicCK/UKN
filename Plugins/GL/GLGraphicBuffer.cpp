@@ -53,7 +53,7 @@ namespace ukn {
         if(mMaped)
             unmap();
         
-        GLenum gl_acess;
+        GLenum gl_acess = GL_READ_ONLY;
 
         switch (access()) {
             case GraphicBuffer::ReadOnly:

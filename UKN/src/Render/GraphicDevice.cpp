@@ -12,6 +12,7 @@
 #include "UKN/Texture.h"
 #include "UKN/RenderTarget.h"
 #include "UKN/RenderView.h"
+#include "UKN/Shader.h"
 
 namespace ukn {
     

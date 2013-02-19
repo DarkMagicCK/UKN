@@ -86,7 +86,7 @@ namespace ukn {
     }
 
     uint32 Effect::getNumPasses() const {
-        return mPasses.size();
+        return uint32(mPasses.size());
     }
 
     void Effect::appendPass(const EffectPassPtr& pass) {
@@ -103,6 +103,7 @@ namespace ukn {
             return mPasses.at(pass);
         else
             log_error(format_string("Effect::getPass, pass %d overflows", pass));
+        return EffectPassPtr();
     }
 
     EffectPassPtr Effect::appendPass() {

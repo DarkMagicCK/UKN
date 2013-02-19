@@ -20,7 +20,11 @@ namespace ukn {
         const char* str = cgGetLastErrorString(&error);
         if(error != CG_NO_ERROR) {
             if(error == CG_COMPILER_ERROR) {
-                log_error(std::string(str) + cgGetLastListing(context));
+                const char* listing =  cgGetLastListing(context);
+                if(listing)
+                    log_error(std::string(str) + listing);
+                else
+                    log_error(str);
             } else 
                 log_error(str);
             return false;
@@ -81,17 +85,21 @@ namespace ukn {
     void CgDxEffect::setVertexFormat(const vertex_elements_type& format) {
         if(mVertexShader) {
             CgDxShader* vertexShader = checked_cast<CgDxShader*>(mVertexShader.get());
-            if(mLayout != 0 &&
+            if(mLayout &&
                 is_vertex_elements_equal(format, vertexShader->getDesc().format))
                 return;
 
             if(vertexShader) {
                 ID3DBlob* vsBlob = cgD3D11GetCompiledProgram(vertexShader->getProgram());
-                if(vsBlob)
-                    mLayout = D3D11ShaderUtilities::CreateLayout(mDevice->getD3DDevice(),
+                if(vsBlob) {
+                    ID3D11InputLayout* layout = D3D11ShaderUtilities::CreateLayout(
+                        mDevice->getD3DDevice(),
                         vsBlob->GetBufferPointer(),
                         vsBlob->GetBufferSize(),
                         format);
+                    if(layout)
+                        mLayout = MakeCOMPtr(layout);
+                }
                 else
                     log_error("CgDxEffect::setVertexFormat: Error get compiled vertex program");
             }
@@ -100,7 +108,7 @@ namespace ukn {
 
     void CgDxEffect::bind(uint32 pass) {
         if(mLayout) {
-            mDevice->getD3DDeviceContext()->IASetInputLayout(mLayout);
+            mDevice->getD3DDeviceContext()->IASetInputLayout(mLayout.get());
             if(mVertexShader)
                 mVertexShader->bind();
             if(mFragmentShader) {
@@ -144,7 +152,6 @@ namespace ukn {
 
     CgDxShader::~CgDxShader() {
         if(mProgram) {
-            cgD3D11UnloadProgram(mProgram);
             cgDestroyProgram(mProgram);
         }
     }

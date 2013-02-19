@@ -123,6 +123,7 @@
     <ClInclude Include="..\..\UKN\include\UKN\Scripting.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SequencialAnimation.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Shader.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\ShaderManager.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Skeletal.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Skybox.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SkyDome.h" />
@@ -169,6 +170,7 @@
     <ClCompile Include="..\..\UKN\src\Render\SceneManager.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SceneObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Shader.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\ShaderManager.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Skybox.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SkyDome.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />

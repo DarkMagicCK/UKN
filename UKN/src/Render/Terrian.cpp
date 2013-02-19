@@ -305,7 +305,7 @@ namespace ukn {
                                              if(lightIntensity > 0.0f) { \
                                                 color += (diffuseColor * lightIntensity); \
                                              } \
-                                             return saturate(color); \
+                                             return saturate(color) * tex2D(tex, input.texCoord); \
                                              }\0";
 
     GridTerrianLightening::GridTerrianLightening():
@@ -328,9 +328,9 @@ namespace ukn {
 
     vertex_elements_type GridTerrianLightening::VertexFormat::Format() {
         static vertex_elements_type _format = VertexElementsBuilder()
+            .add(VertexElement(VU_UV, EF_Float2, 0))
             .add(VertexElement(VU_Position, EF_Float3, 0))
             .add(VertexElement(VU_Normal, EF_Float3, 0))
-            .add(VertexElement(VU_UV, EF_Float2, 0))
             .to_vector();
         return _format;
     }
@@ -528,7 +528,8 @@ namespace ukn {
         bool error = false;
         if(mRenderBuffer && mVertexBuffer && mIndexBuffer) {
             mRenderBuffer->bindVertexStream(mVertexBuffer, VertexFormat::Format());
-
+            mRenderBuffer->setRenderMode(RM_Triangle);
+/*
             EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
             if(effect) {
                 effect->setFragmentShader(effect->createShader(
@@ -553,9 +554,8 @@ namespace ukn {
                 }
 
                 mRenderBuffer->setEffect(effect);
-                mRenderBuffer->setRenderMode(RM_Triangle);
             } else 
-                error = true;
+                error = true;*/
         } else
             error = true;
 
@@ -682,4 +682,7 @@ namespace ukn {
         renderNode(mRoot, gd, cam->getViewFrustum());
     }
 
+    void GridTerrianLightening::setEffect(const EffectPtr& effect) {
+        mRenderBuffer->setEffect(effect);
+    }
 }

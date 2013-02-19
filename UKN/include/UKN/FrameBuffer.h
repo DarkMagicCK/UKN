@@ -23,7 +23,12 @@ namespace ukn {
     
     enum Attachment {
         ATT_DepthStencil,
+        /* multiple render targets */
         ATT_Color0,
+        ATT_Color1,
+        ATT_Color2,
+
+        ATT_ColorMax = 3,
         // more to do
     };
     

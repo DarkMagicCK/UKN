@@ -213,7 +213,7 @@ namespace ukn {
                         MIST_THROW_EXCEPTION(L"GLWindow::GLWindow: Error opening window");
                 }
             } else {
-                if((mGlfwWindow = glfwCreateWindowSlave(settings.native_window_handle,
+                if((mGlfwWindow = glfwCreateWindowSlave((void*)settings.native_window_handle,
                                                         0)) == 0) {
                     MIST_THROW_EXCEPTION(L"GLWindow::GLWindow: Error creating slave window on native handle");
                 }

@@ -1,5 +1,5 @@
 //
-//  RenderTarget.cpp
+//  CompositeRenderTarget.cpp
 //  Project Unknown
 //
 //  Created by Griffin me on 1/23/12.
@@ -19,100 +19,114 @@
 
 namespace ukn {
 
-    RenderTarget2D::RenderTarget2D() {
-
-    }
-
-    RenderTarget2D::~RenderTarget2D() {
-
-    }
-    
-    bool RenderTarget2D::create(uint32 width,
-                                uint32 height,
-                                int32 num_of_levels,
-                                ElementFormat color_format) {
+    RenderTarget::RenderTarget(uint32 width,
+                               uint32 height,
+                               int32 num_of_levels,
+                               ElementFormat color_format) {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         
-        mTargetTexture = gf.create2DTexture(width, 
-                                            height, 
-                                            num_of_levels, 
-                                            color_format, 
-                                            0,
-                                            TB_RenderTarget | TB_Texture);
-        if(!mTargetTexture) {
-            log_error(L"ukn::RenderTarget2D: error creating target texture");
-            return false;
+        mTexture = gf.create2DTexture(width, 
+                                                      height, 
+                                                      num_of_levels, 
+                                                      color_format, 
+                                                      0,
+                                                      TB_RenderTarget | TB_Texture);
+        if(!mTexture) {
+            MIST_THROW_EXCEPTION(L"ukn::CompositeRenderTarget: error creating target texture");
         }
         
-        mTarget = gf.createRenderView(mTargetTexture);
-        if(!mTarget) {
-            log_error(L"ukn::RenderTarget2D: error creating 2d render target");
-            return false;
+        mRenderView = gf.createRenderView(mTexture);
+        if(!mRenderView) {
+            MIST_THROW_EXCEPTION(L"ukn::CompositeRenderTarget: error creating 2d render target");
         }
-
-        this->createFrameBuffer(gf);
-        return true;
     }
-    
-    bool RenderTarget2D::create(uint32 width,
-                                uint32 height,
-                                int32 num_of_levels,
-                                ElementFormat color_format,
-                                ElementFormat depth_stencil_format) {
+
+    RenderTarget::RenderTarget(uint32 width,
+                    uint32 height,
+                    ElementFormat depth_stencil_format) {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         
-        mTargetTexture = gf.create2DTexture(width, 
-                                            height, 
-                                            num_of_levels, 
-                                            color_format, 
-                                            0,
-                                            TB_RenderTarget | TB_Texture);
-        if(!mTargetTexture) {
-            log_error(L"ukn::RenderTarget2D: error creating target texture");
-            return false;
+        mTexture = gf.create2DTexture(width, 
+                                      height, 
+                                      0, 
+                                      depth_stencil_format, 
+                                      0,
+                                      TB_DepthStencil);
+        if(!mTexture) {
+            MIST_THROW_EXCEPTION(L"ukn::CompositeRenderTarget: error creating target texture");
         }
         
-        mTarget = gf.createRenderView(mTargetTexture);
-        if(!mTarget) {
-            log_error(L"ukn::RenderTarget2D: error creating 2d render target");
-            return false;
+        mRenderView = gf.createDepthStencilView(mTexture);
+        if(!mRenderView) {
+            MIST_THROW_EXCEPTION(L"ukn::CompositeRenderTarget: error creating 2d depth stencil target");
         }
-        
-        mDepthStencilTexture = gf.create2DTexture(width, 
-                                                  height, 
-                                                  0, 
-                                                  depth_stencil_format, 
-                                                  0,
-                                                  TB_DepthStencil);
-        if(!mDepthStencilTexture) {
-            log_error(L"ukn::RenderTarget2D: error creating target texture");
-            return false;
-        }
-        
-        mDepthStencil = gf.createDepthStencilView(mDepthStencilTexture);
-        if(!mDepthStencil) {
-            log_error(L"ukn::RenderTarget2D: error creating 2d depth stencil target");
-            return false;
-        }
-
-        return this->createFrameBuffer(gf);
     }
 
-    bool RenderTarget2D::createFrameBuffer(GraphicFactory& gf) {
-        mFrameBuffer = gf.createFrameBuffer();
-        if(!mFrameBuffer)
-            return false;
+    RenderTarget::~RenderTarget() {
+    
+    }
 
-        if(mTarget)
-            mFrameBuffer->attach(ATT_Color0, mTarget);
-        if(mDepthStencil)
-            mFrameBuffer->attach(ATT_DepthStencil, mDepthStencil);
+    uint32 RenderTarget::width() const {
+        if(mTexture)
+            return mTexture->width();
+        return 0;
+    }
 
-        mFrameBuffer->updateScreenSize(0, 0, mTarget->width(), mTarget->height());
-        return true;
+    uint32 RenderTarget::height() const {
+        if(mTexture)
+            return mTexture->height();
+        return 0;
+    }
+
+    RenderViewPtr RenderTarget::getRenderView() const {
+        return mRenderView;
+    }
+
+    TexturePtr RenderTarget::getTexture() const {
+        return mTexture;
+    }
+
+    ElementFormat RenderTarget::getElementFormat() const {
+        return mFormat;
+    }
+
+    CompositeRenderTarget::CompositeRenderTarget() {
+        this->createFrameBuffer();
+
+        mColorTargets.resize(ATT_ColorMax);
+    }
+
+    CompositeRenderTarget::~CompositeRenderTarget() {
+
     }
     
-    void RenderTarget2D::attach() {
+    bool CompositeRenderTarget::attach(Attachment attach, RenderTargetPtr renderTarget) {
+        if(!renderTarget)
+            return false;
+
+        if(mFrameBuffer)
+            mFrameBuffer->attach(attach, renderTarget->getRenderView());
+      
+        if(attach == ATT_DepthStencil)
+            mDepthStencilTarget = renderTarget;
+        else {
+            mColorTargets[attach - ATT_Color0] = renderTarget;
+        }
+        
+        return true;
+    }
+
+    RenderTargetPtr CompositeRenderTarget::detach(Attachment attach) {
+        if(mFrameBuffer)
+            mFrameBuffer->detach(attach);
+
+        if(attach == ATT_DepthStencil)
+            return mDepthStencilTarget;
+        else 
+            return mColorTargets[attach - ATT_Color0];
+    }
+    
+    void CompositeRenderTarget::attachToRender() {
         if(mFrameBuffer) {
             GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
             
@@ -120,39 +134,46 @@ namespace ukn {
             gd.bindFrameBuffer(mFrameBuffer);
 
         } else {
-            log_error(L"RenderTarget2D::attach: framebuffer not valid");
+            log_error(L"CompositeRenderTarget::attach: framebuffer not valid");
         }
     }
 
-    void RenderTarget2D::detach() {
+    void CompositeRenderTarget::detachFromRender() {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         gd.bindFrameBuffer(mPrevFrameBuffer);
     }
 
-    uint32 RenderTarget2D::width() const {
-        if(mTarget)
-            return mTarget->width();
+    uint32 CompositeRenderTarget::width() const {
+        if(mFrameBuffer)
+            return mFrameBuffer->getViewport().width;
         return 0;
     }
     
-    uint32 RenderTarget2D::height() const {
-        if(mTarget)
-            return mTarget->height();
+    uint32 CompositeRenderTarget::height() const {
+        if(mFrameBuffer)
+            return mFrameBuffer->getViewport().height;
         return 0;
     }
     
-    ElementFormat RenderTarget2D::format() const {
-        if(mTargetTexture)
-            return mTargetTexture->format();
-        return EF_RGBA8;
+    TexturePtr CompositeRenderTarget::getTargetTexture(Attachment attach) const {
+        if(attach == ATT_DepthStencil)
+            return mDepthStencilTarget->getTexture();
+
+        if(mColorTargets[attach - ATT_Color0]) {
+            return mColorTargets[attach - ATT_Color0]->getTexture();
+        }
+
+        return TexturePtr();
     }
 
-    const TexturePtr& RenderTarget2D::getTargetTexture() const {
-        return mTargetTexture;
+    void CompositeRenderTarget::createFrameBuffer() {
+        GraphicFactory& gf = Context::Instance().getGraphicFactory();
+        mFrameBuffer = gf.createFrameBuffer();
     }
-    
-    const TexturePtr& RenderTarget2D::getDepthStencilTexture() const {
-        return mDepthStencilTexture;
+
+    void CompositeRenderTarget::attachCamera(const CameraPtr& camera) {
+        if(mFrameBuffer)
+            mFrameBuffer->getViewport().camera = camera;
     }
-    
+
 } // namespace ukn

@@ -97,9 +97,9 @@ namespace ukn {
 
     public:
         struct VertexFormat {
+            float2 uv;
             float3 position;
             float3 normal;
-            float2 uv;
 
             static vertex_elements_type Format();
         };
@@ -118,13 +118,15 @@ namespace ukn {
 
         /* can be called after build */
         GridTerrianLightening& texture(const TexturePtr& tex);
-
         GridTerrianLightening& textureRepeat(uint32 texRepeat);
 
         virtual bool build();
         virtual void render();
 
         uint32 getDrawCount() const;
+
+        /* temporary for deferred test */
+        void setEffect(const EffectPtr& effect);
        
     protected:
         Node* createNode(float x, float z, float w, VertexFormat* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices);

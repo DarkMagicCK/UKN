@@ -32,15 +32,12 @@ namespace ukn {
         
         void setViewMatrix(const Matrix4& mat);
         void setProjectionMatrix(const Matrix4& mat);
-        void setWorldMatrix(const Matrix4& mat);
         
         void getViewMatrix(Matrix4& mat) const;
         void getProjectionMatrix(Matrix4& mat) const;
-        void getWorldMatrix(Matrix4& mat) const;
         
         void bindTexture(const TexturePtr& texture);
-        void bindEffect(const EffectPtr& effect);
-        
+       
         void fillGraphicCaps(GraphicDeviceCaps& caps);
         
         void setRenderState(RenderStateType type, uint32 func);
@@ -49,25 +46,17 @@ namespace ukn {
         GLuint getBindedGLFrameBuffer() const;
 
         void adjustPerspectiveMat(Matrix4& mat) override;
+        void adjustOrthoMat(Matrix4& mat) override;
 
-        void begin2DRendering(const OrthogonalParams& params) override;
-        void end2DRendering() override;
-        
         void setBlendState(const BlendStatePtr& blendState) override;
         void setSamplerState(const SamplerStatePtr& samplerState) override;
         
     private:
         WindowPtr mWindow;
-        TexturePtr mCurrTexture;
-        EffectPtr mEffect;
-
-        Matrix4 mWorldMat;
+        
         Matrix4 mViewMat;
         Matrix4 mProjectionMat;
 
-        bool mIs2D;
-        EffectPtr m2DEffect;
-        
         GLuint mCurrGLFrameBuffer;
     };
     

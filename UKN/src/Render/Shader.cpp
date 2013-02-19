@@ -11,6 +11,65 @@
 
 namespace ukn {
 
+    EffectPass::EffectPass(Effect* parent):
+        mParent(parent) {
+
+    }
+
+    EffectPass::~EffectPass() {
+    
+    }
+        
+    void EffectPass::setFragmentShader(const ShaderPtr& shader) {
+        mFragmentShader = shader;
+    }
+
+    void EffectPass::setVertexShader(const ShaderPtr& shader) {
+        mVertexShader = shader;
+    }
+
+    void EffectPass::setGeometryShader(const ShaderPtr& shader) {
+        mGeometryShader = shader;
+    }
+
+    ShaderPtr EffectPass::getFragmentShader() const {
+        return mFragmentShader;
+    }
+
+    ShaderPtr EffectPass::getVertexShader() const {
+        return mVertexShader;
+    }
+
+    ShaderPtr EffectPass::getGeometryShader() const {
+        return mGeometryShader;
+    }
+
+    const vertex_elements_type& EffectPass::getVertexFormat() const {
+        return mFormat;
+    }
+    
+    void EffectPass::setVertexFormat(const vertex_elements_type& format) {
+        mFormat = format;
+    }
+
+    void EffectPass::begin() {
+        if(mVertexShader)
+            mVertexShader->bind();
+        if(mFragmentShader)
+            mFragmentShader->bind();
+        if(mGeometryShader)
+            mGeometryShader->bind();
+    }
+
+    void EffectPass::end() {
+        if(mVertexShader)
+            mVertexShader->unbind();
+        if(mFragmentShader)
+            mFragmentShader->unbind();
+        if(mGeometryShader)
+            mGeometryShader->unbind();
+    }
+
     Effect::Effect() {
 
     }
@@ -18,29 +77,38 @@ namespace ukn {
     Effect::~Effect() {
     
     }
-
-    void Effect::setFragmentShader(const ShaderPtr& shader) {
-        mFragmentShader = shader;
+    
+    void Effect::setVertexFormat(uint32 passIndex, const vertex_elements_type& format) {
+        if(passIndex < this->getNumPasses()) {
+            this->mPasses[passIndex]->setVertexFormat(format);
+        } else
+           log_error(L"Effect::setVertexFormat: pass overflow");
     }
 
-    void Effect::setVertexShader(const ShaderPtr& shader) {
-        mVertexShader = shader;
+    uint32 Effect::getNumPasses() const {
+        return mPasses.size();
     }
 
-    void Effect::setGeometryShader(const ShaderPtr& shader) {
-        mGeometryShader = shader;
+    void Effect::appendPass(const EffectPassPtr& pass) {
+        mPasses.push_back(pass);
     }
 
-    ShaderPtr Effect::getFragmentShader() const {
-        return mFragmentShader;
+    EffectPassPtr Effect::createPass() {
+        EffectPass* pass = new EffectPass(this);
+        return EffectPassPtr(pass);
     }
 
-    ShaderPtr Effect::getVertexShader() const {
-        return mVertexShader;
+    EffectPassPtr Effect::getPass(uint32 pass) const {
+        if(pass < mPasses.size())
+            return mPasses.at(pass);
+        else
+            log_error(format_string("Effect::getPass, pass %d overflows", pass));
     }
 
-    ShaderPtr Effect::getGeometryShader() const {
-        return mGeometryShader;
+    EffectPassPtr Effect::appendPass() {
+        EffectPassPtr pass = this->createPass();
+        this->appendPass(pass);
+        return pass;
     }
 
 }

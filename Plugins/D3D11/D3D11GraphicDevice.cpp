@@ -29,9 +29,7 @@ namespace ukn {
 
     D3D11GraphicDevice::D3D11GraphicDevice():
         mDevice(0),
-        mEffect(0),
-        mDebug(0),
-        mIs2D(false) {
+        mDebug(0) {
             /*
             LH to RH and fix z
             www.klayge.org/2011/07/15
@@ -196,7 +194,6 @@ namespace ukn {
             mDeviceContext->RSSetState(rasterState);
             mRasterState = MakeCOMPtr(rasterState);
         }
-        mWorldMatrix = Matrix4();
 
         /* blend states */
         {
@@ -359,55 +356,27 @@ namespace ukn {
 
         D3D11RenderBuffer* D3D11buffer = checked_cast<D3D11RenderBuffer*>(buffer.get());
         if(D3D11buffer) {
-            EffectPtr effect = mIs2D ? m2DEffect: buffer->getEffect();
-            if(effect) {
-                /* temporary */
-                if(!mIs2D) {
+            vertexBuffer->activate();
+            if(indexBuffer.isValid() &&
+                buffer->isUseIndexStream()) {
+                    indexBuffer->activate();
+            } 
 
-                    if(effect->getVertexShader()) {
-                        if(!effect->getVertexShader()->setMatrixVariable("worldMatrix", mWorldMatrix))
-                            log_error("error setting world matrix in effect");
-                        if(!effect->getVertexShader()->setMatrixVariable("projectionMatrix", mProjectionMatrix))
-                            log_error("error setting projection matrix in effect");
-                        if(!effect->getVertexShader()->setMatrixVariable("viewMatrix", mViewMatrix))
-                            log_error("error setting view matrix in effect");
-                    }
-                }
-                if(effect->getFragmentShader()) {
-                    if(mCurrTexture) {
-                        if(!effect->getFragmentShader()->setTextureVariable("tex", mCurrTexture))
-                            log_error("error setting texture in effect");
+            mDeviceContext->IASetPrimitiveTopology(RenderModeToPrimitiveTopology(buffer->getRenderMode()));
 
-                    }
-                }
+            ID3D11SamplerState* samplerState = mSamplerState.get();
+            mDeviceContext->PSSetSamplers(0, 1, &samplerState);
 
-                vertexBuffer->activate();
-                if(indexBuffer.isValid() &&
-                    buffer->isUseIndexStream()) {
-                        indexBuffer->activate();
-                } 
-
-                mDeviceContext->IASetPrimitiveTopology(RenderModeToPrimitiveTopology(buffer->getRenderMode()));
-
-                for(uint32 i=0; i<effect->getPasses(); ++i) {
-                    effect->bind(i);
-
-                    ID3D11SamplerState* samplerState = mSamplerState.get();
-                    mDeviceContext->PSSetSamplers(0, 1, &samplerState);
-
-                    if(indexBuffer.isValid() &&
-                        buffer->isUseIndexStream()) {
-                            mDeviceContext->DrawIndexed(buffer->getIndexCount(),
-                                buffer->getIndexStartIndex(),
-                                buffer->getVertexStartIndex());
-                    } else {
-                        mDeviceContext->Draw(buffer->getVertexCount(),
-                            buffer->getVertexStartIndex());
-                    }
-                }
-
-                vertexBuffer->deactivate();
+            if(indexBuffer.isValid() &&
+                buffer->isUseIndexStream()) {
+                    mDeviceContext->DrawIndexed(buffer->getIndexCount(),
+                        buffer->getIndexStartIndex(),
+                        buffer->getVertexStartIndex());
+            } else {
+                mDeviceContext->Draw(buffer->getVertexCount(),
+                    buffer->getVertexStartIndex());
             }
+            vertexBuffer->deactivate();
         }
     }
 
@@ -423,10 +392,6 @@ namespace ukn {
         mProjectionMatrix = mat;
     }
 
-    void D3D11GraphicDevice::setWorldMatrix(const Matrix4& mat) {
-        mWorldMatrix = mat;
-    }
-
     void D3D11GraphicDevice::getViewMatrix(Matrix4& mat) const {
         mat = mViewMatrix;
     }
@@ -435,12 +400,8 @@ namespace ukn {
         mat = mProjectionMatrix;
     }
 
-    void D3D11GraphicDevice::getWorldMatrix(Matrix4& mat) const {
-        mat = mWorldMatrix;
-    }
-
     void D3D11GraphicDevice::bindTexture(const TexturePtr& texture) {
-        mCurrTexture = texture;
+        
     }
 
     void D3D11GraphicDevice::fillGraphicCaps(GraphicDeviceCaps& caps) {
@@ -450,87 +411,6 @@ namespace ukn {
 
     void D3D11GraphicDevice::setRenderState(RenderStateType type, uint32 func) {
 
-    }
-
-    void D3D11GraphicDevice::bindEffect(const EffectPtr& effect) {
-        mEffect = effect;
-    }
-
-    void D3D11GraphicDevice::begin2DRendering(const OrthogonalParams& params) {
-        if(mIs2D)
-            return;
-
-        mIs2D = true;
-        enableAlphaBlending();
-
-        if(!m2DEffect) {
-            m2DEffect = ukn::CreateCgEffet2D();
-            if(m2DEffect) 
-                this->bindEffect(m2DEffect);
-            else  {
-                log_error("Error creating effect for 2d rendering");
-                mIs2D = false;
-            }
-        }
-
-        this->pushProjectionMatrix();
-        this->pushViewMatrix();
-
-        float width = params.width;
-        if(width == 0.f) width = mWindow->width();
-        float height = params.height;
-        if(height == 0.f) height = mWindow->height();
-
-        this->setProjectionMatrix(
-            mist::Matrix4::OrthoOffCenterMatLH(
-            params.x,
-            params.x + width,
-            params.y + height,
-            params.y,
-            0.0,
-            1.0f));
-
-        Matrix4 viewMat;
-        viewMat.translate(params.x + params.dx, params.y + params.dy, 0.f);
-        viewMat.rotate(0.f, params.rotation, 0.f);
-        viewMat.scale(params.scalex, params.scaley, 1.f);
-        viewMat.translate(-params.dx, -params.dy, 0.f);
-        this->setViewMatrix(viewMat);
-        this->setWorldMatrix(Matrix4());
-
-        if(mCurrFrameBuffer) {
-            RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
-            if(dsView) dsView->enableDepth(false);
-        }
-
-        if(mIs2D && m2DEffect) {
-
-            if(m2DEffect->getVertexShader()) {
-                if(!m2DEffect->getVertexShader()->setMatrixVariable("worldMatrix", mWorldMatrix))
-                    log_error("error setting world matrix in effect");
-                if(!m2DEffect->getVertexShader()->setMatrixVariable("projectionMatrix", mProjectionMatrix))
-                    log_error("error setting projection matrix in effect");
-                if(!m2DEffect->getVertexShader()->setMatrixVariable("viewMatrix", mViewMatrix))
-                    log_error("error setting view matrix in effect");
-            }
-        }
-    }
-
-    void D3D11GraphicDevice::end2DRendering() {
-        mIs2D = false;
-        disableAlphaBlending();
-
-        this->popProjectionMatrix();
-        this->popViewMatrix();
-
-        if(mCurrFrameBuffer) {
-            CameraPtr cam = mCurrFrameBuffer->getViewport().camera;
-            this->setProjectionMatrix(cam->getProjMatrix());
-            this->setViewMatrix(cam->getViewMatrix());
-
-            RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
-            if(dsView) dsView->enableDepth(true);
-        }
     }
 
     void D3D11GraphicDevice::enableAlphaBlending() {

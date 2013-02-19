@@ -16,42 +16,5 @@ namespace ukn {
 
 	}
 
-	void D3D11RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format) {
-		if(mEffect) {
-            mEffect->setVertexFormat(format);
-		}
-	}
-
-	void D3D11RenderBuffer::onSetVertexFormat(const vertex_elements_type& format) {
-		if(mEffect) {
-			mEffect->setVertexFormat(format);
-		}
-	}
-
-	void D3D11RenderBuffer::onBindIndexStream(GraphicBufferPtr indexStream) {
-
-	}
-
-	void D3D11RenderBuffer::onSetIndexCount(uint32 count) {
-
-	}
-
-	void D3D11RenderBuffer::onSetVertexCount(uint32 count) {
-
-	}
-
-	void D3D11RenderBuffer::onSetIndexStartIndex(uint32 index) {
-
-	}
-
-	void D3D11RenderBuffer::onUseIndexStream(bool flag) {
-
-	}
-
-    void D3D11RenderBuffer::onSetEffect(const EffectPtr& effect) {
-        if(getVertexStream().isValid()) {
-             mEffect->setVertexFormat(getVertexFormat());
-		}
-    }
 
 }

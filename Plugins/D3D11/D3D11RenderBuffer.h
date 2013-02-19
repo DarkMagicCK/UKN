@@ -12,16 +12,6 @@ namespace ukn {
 		D3D11RenderBuffer(D3D11GraphicDevice* device);
 		virtual ~D3D11RenderBuffer();
 		
-	protected:
-		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format);
-		virtual void onSetVertexFormat(const vertex_elements_type& format);
-		virtual void onBindIndexStream(GraphicBufferPtr indexStream);
-		virtual void onSetIndexCount(uint32 count);
-		virtual void onSetVertexCount(uint32 count);
-		virtual void onSetIndexStartIndex(uint32 index);
-		virtual void onUseIndexStream(bool flag);
-        virtual void onSetEffect(const EffectPtr& effect);
-
 	private:
 		D3D11GraphicDevice* mDevice;
 	};

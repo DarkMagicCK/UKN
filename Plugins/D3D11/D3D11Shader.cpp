@@ -69,7 +69,7 @@ namespace ukn {
 		return true;
 	}
 
-	void D3D11Effect::setVertexFormat(const ukn::vertex_elements_type& format) {
+	void D3D11Effect::setVertexFormat(uint32 pass, const ukn::vertex_elements_type& format) {
 		if(!mEffect)
 			return ;
 
@@ -90,7 +90,7 @@ namespace ukn {
 		}
 	}
 
-	void D3D11Effect::unbind() {
+	void D3D11Effect::unbind(uint32 pass) {
 		if(mLayout) {
 			mDevice->getD3DDeviceContext()->IASetInputLayout(0);
 		}

@@ -14,6 +14,7 @@
 #include "UKN/Texture.h"
 #include "UKN/GraphicBuffer.h"
 #include "UKN/FrameBuffer.h"
+#include "UKN/2DHelper.h"
 
 #include "mist/Singleton.h"
 #include "mist/Profiler.h"
@@ -172,14 +173,16 @@ namespace ukn {
     }
     
     SpriteBatch::SpriteBatch() {
-        mRenderBuffer = Context::Instance().getGraphicFactory().createRenderBuffer();
+        GraphicFactory& gf = Context::Instance().getGraphicFactory();
+
+        mRenderBuffer = gf.createRenderBuffer();
         mist_assert(mRenderBuffer);
         
-        mVertexBuffer = Context::Instance().getGraphicFactory().createVertexBuffer(GraphicBuffer::WriteOnly, 
-                                                                                   GraphicBuffer::Dynamic, 
-                                                                                   6, 
-                                                                                   0, 
-                                                                                   Vertex2D::Format());
+        mVertexBuffer = gf.createVertexBuffer(GraphicBuffer::WriteOnly, 
+                                              GraphicBuffer::Dynamic, 
+                                              1024, 
+                                              0, 
+                                              Vertex2D::Format());
         mist_assert(mVertexBuffer);
         
         mRenderBuffer->bindVertexStream(mVertexBuffer, Vertex2D::Format());
@@ -187,6 +190,9 @@ namespace ukn {
         mBegan = false;
         mBatchRendering = false;
         mCurrMode = SBS_None;
+
+
+        mTransformMatrix = Matrix4();
     }
     
     SpriteBatch::~SpriteBatch() {
@@ -208,14 +214,13 @@ namespace ukn {
     
     void SpriteBatch::onRenderBegin() {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-        
-        gd.begin2DRendering();
+    
+        Ukn2DHelper::Instance().setupMat(mTransformMatrix);
     }
     
     void SpriteBatch::onRenderEnd() {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
-        gd.end2DRendering();
         if(!mBatchRendering)
             mRenderQueue.clear();
         else  
@@ -234,15 +239,43 @@ namespace ukn {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         RenderQueue::iterator it = mRenderQueue.begin();
+        TexturePtr currTexture;
+        uint32 renderCount = 0;
+        
+        Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
+        Ukn2DHelper& helper = Ukn2DHelper::Instance();
+
         while(it != mRenderQueue.end()) { 
-            Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
-            memcpy(vertices, &it->vertices[0], sizeof(Vertex2D)*6);
-            mVertexBuffer->unmap();
+            if(currTexture &&
+                it->texture != currTexture) {
+                mVertexBuffer->unmap();
+                
+                helper.bindTexture(currTexture);
+                helper.begin();
+                mRenderBuffer->setVertexCount(renderCount);
+                gd.renderBuffer(mRenderBuffer);
+                helper.end();
+
+                renderCount = 0;
+                vertices = (Vertex2D*)mVertexBuffer->map();
+            }
+            memcpy(vertices + renderCount, &it->vertices[0], sizeof(Vertex2D)*6);
+            renderCount += 6;
             
-            gd.bindTexture(it->texture);
-            gd.renderBuffer(mRenderBuffer);
-            
+            currTexture = it->texture;
+
             ++it;
+            if(it == mRenderQueue.end()) {
+                mVertexBuffer->unmap();
+                
+                helper.bindTexture(currTexture);
+                helper.begin();
+                mRenderBuffer->setVertexCount(renderCount);
+                gd.renderBuffer(mRenderBuffer);
+                helper.end();
+
+                renderCount = 0;
+            }
         }
     }
     
@@ -271,10 +304,15 @@ namespace ukn {
             
             onRenderBegin();
             GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-
-            gd.bindTexture(mRenderQueue[mCurrentBatchIndex].texture);
-            gd.renderBuffer(mRenderBuffer);
             
+            Ukn2DHelper& helper = Ukn2DHelper::Instance();
+
+            helper.bindTexture(mRenderQueue[mCurrentBatchIndex].texture);
+
+            helper.begin();
+            gd.renderBuffer(mRenderBuffer);
+            helper.end();
+
             onRenderEnd();
         }
         mBatchRendering = false;

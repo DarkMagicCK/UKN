@@ -104,11 +104,9 @@ namespace ukn {
                
         virtual void setViewMatrix(const Matrix4& mat) = 0;
         virtual void setProjectionMatrix(const Matrix4& mat) = 0;
-        virtual void setWorldMatrix(const Matrix4& mat) = 0;
 
         virtual void getViewMatrix(Matrix4& mat) const = 0;
         virtual void getProjectionMatrix(Matrix4& mat) const = 0;
-        virtual void getWorldMatrix(Matrix4& mat) const = 0;
         
         virtual void fillGraphicCaps(GraphicDeviceCaps& caps) = 0;
     
@@ -118,23 +116,13 @@ namespace ukn {
         virtual void setRenderState(RenderStateType type, uint32 func) = 0;
 
         virtual void adjustPerspectiveMat(Matrix4& mat) {}
+        virtual void adjustOrthoMat(Matrix4& mat) {}
         
-        /* sets up orthogonal projection with ortho parameters */
-        /* (0,0) = top left
-            (width, height) = bottom right
-            alpha blending = on
-            depth test = off
-            */
-        virtual void begin2DRendering(const OrthogonalParams& params = OrthogonalParams()) = 0;
-        virtual void end2DRendering() = 0;
-
         virtual void setBlendState(const BlendStatePtr& blendState) = 0;
         virtual void setSamplerState(const SamplerStatePtr& samplerState) = 0;
        
-    public:
         virtual void bindTexture(const TexturePtr& texture) = 0;
-        virtual void bindEffect(const EffectPtr& effect) = 0;
-    
+
     public:
         WindowPtr createRenderWindow(const UknString& name, const RenderSettings& settings);
         
@@ -147,7 +135,14 @@ namespace ukn {
         void clearStencil(int32 stencil);
         
         void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
-        
+        void enableDepth(bool flag);
+        /* automatically sets
+            projectionMatrix
+            viewMatrix
+         */
+        void bindEffect(const EffectPtr& effect);
+        const EffectPtr& getBindedEffect() const;
+
     protected:
         FrameBufferPtr mCurrFrameBuffer;
         FrameBufferPtr mScreenFrameBuffer;
@@ -155,8 +150,8 @@ namespace ukn {
         Color mClearColor;
         float mClearDepth;
         int mClearStencil;
-        
-        RenderTargetPtr mCurrTarget;
+
+        EffectPtr mBindedEffect;
     };
     
 } // namespace ukn

@@ -93,7 +93,6 @@
     <ClInclude Include="..\..\Plugins\D3D11\D3D11RenderBuffer.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11RenderView.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11SamplerStateObject.h" />
-    <ClInclude Include="..\..\Plugins\D3D11\D3D11Shader.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Texture.h" />
     <ClInclude Include="..\..\Plugins\D3D11\MetroWindows.h" />
     <ClInclude Include="..\..\Plugins\D3D11\WindowsWindow.h" />
@@ -114,7 +113,6 @@
     <ClCompile Include="..\..\Plugins\D3D11\D3D11RenderBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11RenderView.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11SamplerStateObject.cpp" />
-    <ClCompile Include="..\..\Plugins\D3D11\D3D11Shader.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture2D.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11TextureCube.cpp" />

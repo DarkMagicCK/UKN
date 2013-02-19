@@ -56,9 +56,6 @@ namespace ukn {
         uint32              getIndexStartIndex() const;
         void                setIndexStartIndex(uint32 index);
 
-        void                setEffect(const EffectPtr& effect);
-        EffectPtr           getEffect() const;
-
 	protected:
 		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format);
 		virtual void onSetVertexFormat(const vertex_elements_type& format);
@@ -67,7 +64,6 @@ namespace ukn {
 		virtual void onSetVertexCount(uint32 count);
 		virtual void onSetIndexStartIndex(uint32 index);
 		virtual void onUseIndexStream(bool flag);
-        virtual void onSetEffect(const EffectPtr& effect);
         
     protected:
         RenderMode mRenderMode;

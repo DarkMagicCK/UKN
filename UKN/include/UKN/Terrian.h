@@ -125,9 +125,6 @@ namespace ukn {
 
         uint32 getDrawCount() const;
 
-        /* temporary for deferred test */
-        void setEffect(const EffectPtr& effect);
-       
     protected:
         Node* createNode(float x, float z, float w, VertexFormat* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices);
         uint32 triangleCount(float x, float z, float w, VertexFormat* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices, float& maxh, float &minh);

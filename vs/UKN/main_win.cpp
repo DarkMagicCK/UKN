@@ -58,6 +58,7 @@ int CALLBACK WinMain(
     ukn::TexturePtr texture2;
     ukn::Matrix4 worldMat;
     ukn::EffectPtr effect;
+    ukn::EffectPtr deferredEffect;
     ukn::CameraController* camController;
     ukn::FontPtr font;
     ukn::CompositeRenderTarget* renderTarget;
@@ -123,28 +124,47 @@ int CALLBACK WinMain(
         .connectRender([&](ukn::Window* wnd) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             renderTarget->attachToRender();
-
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
-
-            if(terrian) {
-                terrian->render();
-            }
-          
+            
             ukn::Viewport& vp = gd.getCurrFrameBuffer()->getViewport();
             const ukn::Frustum& frustum = vp.camera->getViewFrustum();
             int renderCount = 0;
 
+            gd.clear(ukn::CM_Color, mist::color::Black, 1.f, 0);
+            
+            effect->getPass(0)->getVertexShader()->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
+            effect->getPass(0)->getVertexShader()->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
+            effect->getPass(0)->getVertexShader()->setMatrixVariable("worldMatrix", ukn::Matrix4());
+            
+            deferredEffect->getPass(0)->getFragmentShader()->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
+            deferredEffect->getPass(0)->getFragmentShader()->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
+
+            if(terrian) {
+                effect->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
+                effect->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
+                       
+                effect->getPass(0)->begin();
+                terrian->render();            
+                effect->getPass(0)->end();
+            }
+            
             gd.bindTexture(texture2);
             for(int i=0; i<5; ++i) {
                 if(frustum.isSphereVisible(mist::Sphere(positions[i], 2.5)) != ukn::Frustum::No) {
-                    gd.setWorldMatrix(ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
-                  
+                    effect->getPass(0)->getVertexShader()->setMatrixVariable("worldMatrix", ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
+                    effect->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture2);
+                 
+                    effect->getPass(0)->begin();
+
                     if(renderBuffer)
                         gd.renderBuffer(renderBuffer);
+                    
+                    effect->getPass(0)->end();
 
                     renderCount++;
                 }
             }    
+
+            effect->getPass(0)->end();
 
             renderTarget->detachFromRender();
 
@@ -166,29 +186,42 @@ int CALLBACK WinMain(
             font->draw(ukn::Convert::ToString(terrian->getDrawCount()).c_str(), 0, 120, ukn::FA_Left, ukn::color::Red);
               
            // font->render();
+            
             renderTargetLightMap->attachToRender();
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
-           
-            gd.bindTexture(ukn::TexturePtr());
+            gd.clear(ukn::CM_Color, mist::color::Blue, 1.f, 0);
+            
+            
             deferredFragmentShader->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
             deferredFragmentShader->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
-            deferredFragmentShader->setTextureVariable("colorMap", renderTarget->getTargetTexture(ukn::ATT_Color0));
-            deferredFragmentShader->setTextureVariable("normalMap", renderTarget->getTargetTexture(ukn::ATT_Color1));
-            deferredFragmentShader->setTextureVariable("depthMap", renderTarget->getTargetTexture(ukn::ATT_Color2));
+            deferredFragmentShader->setTextureVariable("colorMap", 
+                                                         renderTarget->getTargetTexture(ukn::ATT_Color0));
+            deferredFragmentShader->setTextureVariable("normalMap", 
+                                                         renderTarget->getTargetTexture(ukn::ATT_Color1));
+            deferredFragmentShader->setTextureVariable("depthMap", 
+                                                         renderTarget->getTargetTexture(ukn::ATT_Color2));
             deferredFragmentShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
             
             deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), cos(r), 0, 1));
             deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
+           
+            deferredEffect->getPass(0)->begin();
             gd.renderBuffer(renderBufferDeferred);
-
+            deferredEffect->getPass(0)->end();
+            
             deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), 0, cos(r), 1));
             deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
+            
+            deferredEffect->getPass(0)->begin();
             gd.renderBuffer(renderBufferDeferred);
+            deferredEffect->getPass(0)->end();
 
             deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(0, cos(r), sin(r), 1));
             deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
+            
+            deferredEffect->getPass(0)->begin();
             gd.renderBuffer(renderBufferDeferred);
-
+            deferredEffect->getPass(0)->end();
+            
             renderTargetLightMap->detachFromRender();
 
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
@@ -216,19 +249,18 @@ int CALLBACK WinMain(
                     ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", ukn::VertexUVNormal::Format()));
             ukn::ShaderPtr fragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment_deferred.cg"), 
                     ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram"));
+            ukn::EffectPassPtr pass0 = effect->appendPass();
 
-            effect->setFragmentShader(fragmentShader);
-            effect->setVertexShader(vertexShader);
+            pass0->setFragmentShader(fragmentShader);
+            pass0->setVertexShader(vertexShader);
+            pass0->setVertexFormat(ukn::VertexUVNormal::Format());
             
-            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"test.png"));
-            texture = gf.create2DTexture(800, 600, 1, ukn::EF_RGBA8, 0);
+            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"dirt01.dds"));
             texture2 = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"grass.dds"));
 
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
             vp.camera->setViewParams(ukn::Vector3(0, 5, -30), ukn::Vector3(0, 0, 1));
-
-            renderBuffer->setEffect(effect);
 
             camController->attachCamera(vp.camera);
 
@@ -274,7 +306,7 @@ int CALLBACK WinMain(
                 .size(ukn::float2(100, 100));
             if(t->build()) {
                 t->texture(gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"dirt01.dds")));
-                t->setEffect(effect);
+
                 terrian = t;
                 
             } else {
@@ -310,16 +342,17 @@ int CALLBACK WinMain(
                                                                        format);
             renderBufferDeferred->bindVertexStream(vertexBuffer, format);
 
-            ukn::EffectPtr deferredEffect = gf.createEffect();
+            deferredEffect = gf.createEffect();
             ukn::ShaderPtr deferredVertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex_deferred_composite.cg"), 
                     ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", format));
             deferredFragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment_deferred_composite.cg"), 
                     ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram"));
-            deferredEffect->setFragmentShader(deferredFragmentShader);
-            deferredEffect->setVertexShader(deferredVertexShader);
 
+            ukn::EffectPassPtr deferredPass0 = deferredEffect->appendPass();
+            deferredPass0->setFragmentShader(deferredFragmentShader);
+            deferredPass0->setVertexShader(deferredVertexShader);
+            deferredPass0->setVertexFormat(format);
 
-            renderBufferDeferred->setEffect(deferredEffect);
         })
         .run();
     

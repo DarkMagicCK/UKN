@@ -187,5 +187,19 @@ namespace ukn {
             mCurrFrameBuffer->clear(flags, clr, depth, stencil);
         }
     }
-    
+
+    void GraphicDevice::bindEffect(const EffectPtr& effect) {
+        mBindedEffect = effect;
+    }
+
+    const EffectPtr& GraphicDevice::getBindedEffect() const {
+        return mBindedEffect;
+    }
+
+    void GraphicDevice::enableDepth(bool flag) {
+        if(mCurrFrameBuffer &&
+            mCurrFrameBuffer->attached(ATT_DepthStencil)) {
+            mCurrFrameBuffer->attached(ATT_DepthStencil)->enableDepth(flag);
+        }
+    }
 } // namespace ukn

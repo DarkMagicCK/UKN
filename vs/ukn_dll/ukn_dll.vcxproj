@@ -82,6 +82,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\UKN\include\UKN\2DHelper.h" />
     <ClInclude Include="..\..\UKN\include\UKN\App.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Asset.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Audio.h" />
@@ -148,6 +149,7 @@
     <ClCompile Include="..\..\UKN\src\Core\InputEngine.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTable.cpp" />
     <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTableLoader.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\2DHelper.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\BitmapFont.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\BlendStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />

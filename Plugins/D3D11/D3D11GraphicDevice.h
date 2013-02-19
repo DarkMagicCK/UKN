@@ -34,28 +34,15 @@ namespace ukn {
         
         void setViewMatrix(const Matrix4& mat) override;
         void setProjectionMatrix(const Matrix4& mat) override;
-        void setWorldMatrix(const Matrix4& mat) override;
-
+        
         void getViewMatrix(Matrix4& mat) const override;
         void getProjectionMatrix(Matrix4& mat) const override;
-        void getWorldMatrix(Matrix4& mat) const override;
-
+        
         void bindTexture(const TexturePtr& texture) override;
-     	void bindEffect(const EffectPtr& effect) override;
-
+     	
         void fillGraphicCaps(GraphicDeviceCaps& caps) override;
         
         void setRenderState(RenderStateType type, uint32 func) override;
-
-        void begin2DRendering(const OrthogonalParams& params) override;
-        void end2DRendering() override;
-
-		ID3D11Device* getD3DDevice() const;
-        ID3D11DeviceContext* getD3DDeviceContext() const;
-        IDXGISwapChain* getSwapChain() const;
-
-        /* get device feature level, this flag is required to determine shader profiles etc*/ 
-        D3D_FEATURE_LEVEL getDeviceFeatureLevel() const;
 
         void enableAlphaBlending();
         void disableAlphaBlending();
@@ -63,13 +50,18 @@ namespace ukn {
         void setBlendState(const BlendStatePtr& blendState) override;
         void setSamplerState(const SamplerStatePtr& samplerState) override;
         
+		ID3D11Device* getD3DDevice() const;
+        ID3D11DeviceContext* getD3DDeviceContext() const;
+        IDXGISwapChain* getSwapChain() const;
+
+        /* get device feature level, this flag is required to determine shader profiles etc*/ 
+        D3D_FEATURE_LEVEL getDeviceFeatureLevel() const;
+
     private:
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
 		void onWindowResize();
 
         WindowPtr mWindow;
-        TexturePtr mCurrTexture;
-        EffectPtr mEffect;
 
 		COM<ID3D11Device>::Ptr mDevice;
         COM<ID3D11DeviceContext>::Ptr mDeviceContext;
@@ -79,12 +71,8 @@ namespace ukn {
         COM<ID3D11BlendState>::Ptr mAlphaBlendState;
         COM<ID3D11SamplerState>::Ptr mSamplerState;
 
-		Matrix4 mWorldMatrix;
 		Matrix4 mProjectionMatrix;
 		Matrix4 mViewMatrix;
-
-        bool mIs2D;
-        EffectPtr m2DEffect;
 
 		ScopedPtr<D3D11Debug> mDebug;
         D3D_FEATURE_LEVEL mFeatureLevel;

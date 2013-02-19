@@ -42,9 +42,7 @@
 namespace ukn {
 
     GLGraphicDevice::GLGraphicDevice():
-    mCurrTexture(TexturePtr()),
-    mCurrGLFrameBuffer(0),
-    mIs2D(false) {
+    mCurrGLFrameBuffer(0) {
     }
 
     GLGraphicDevice::~GLGraphicDevice() {
@@ -113,16 +111,12 @@ namespace ukn {
     }
 
     void GLGraphicDevice::bindTexture(const TexturePtr& texture) {
-        mCurrTexture = texture;
-
-        if(mCurrTexture) {
-            if(mCurrTexture->type() == TT_Texture2D) {
-                glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, (GLuint)mCurrTexture->getTextureId());
-            } else if(mCurrTexture->type() == TT_Texture3D) {
-                glEnable(GL_TEXTURE_3D);
-                glBindTexture(GL_TEXTURE_3D, (GLuint)mCurrTexture->getTextureId());
-            }
+        if(texture->type() == TT_Texture2D) {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, (GLuint)texture->getTextureId());
+        } else if(texture->type() == TT_Texture3D) {
+            glEnable(GL_TEXTURE_3D);
+            glBindTexture(GL_TEXTURE_3D, (GLuint)texture->getTextureId());
         } else {
             glDisable(GL_TEXTURE_2D);
             glDisable(GL_TEXTURE_3D);
@@ -133,194 +127,153 @@ namespace ukn {
 #define BUFFER_OFFSET(buffer, i) (buffer->isInMemory() ? ((char*)buffer->map() + (i)) : ((char *)NULL + (i)))
 
         if(buffer.isValid()) {
-            EffectPtr effect = mIs2D ? m2DEffect : buffer->getEffect();
-            if(effect) {
-                /* temporary */
-                if(effect->getVertexShader()) {
-                    if(!effect->getVertexShader()->setMatrixVariable("worldMatrix", mWorldMat))
-                        log_error("error setting world matrix in effect");
-                    if(!effect->getVertexShader()->setMatrixVariable("projectionMatrix", mProjectionMat))
-                        log_error("error setting projection matrix in effect");
-                    if(!effect->getVertexShader()->setMatrixVariable("viewMatrix", mViewMat))
-                        log_error("error setting view matrix in effect");
-                }
-                if(effect->getFragmentShader()) {
-                    if(mCurrTexture) {
-                        if(!effect->getFragmentShader()->setTextureVariable("tex", mCurrTexture))
-                            log_error("error setting texture in effect");
-                    }
-                }
+            EffectPtr effect = mBindedEffect;
+            GraphicBufferPtr vertexBuffer = buffer->getVertexStream();
+            if(!vertexBuffer.isValid()) {
+                log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid vertex buffer stream");
+                return;
+            }
 
-                GraphicBufferPtr vertexBuffer = buffer->getVertexStream();
-                if(!vertexBuffer.isValid()) {
-                    log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid vertex buffer stream");
-                    return;
-                }
-/*
-                const VertexFormat& format = buffer->getVertexFormat();
-                if(format == Vertex2D::Format() &&
-                    !buffer->isUseIndexStream()) {
-                        // acceleration for 2d vertices
+            vertexBuffer->activate();
 
-                        if(vertexBuffer->isInMemory()) {
-                            glInterleavedArrays(GL_T2F_C4UB_V3F, 0, vertexBuffer->map());
-
-                            for(uint32 i=0; i<effect->getPasses(); ++i) {
-                                effect->bind(i);
-
-                                glDrawArrays(render_mode_to_gl_mode(buffer->getRenderMode()),
-                                    buffer->getVertexStartIndex(),
-                                    buffer->getVertexCount());
-                            }
-                            return;
-                        }
-                }
-*/
-                vertexBuffer->activate();
-
-                /* this need to be changed?
-                   since glVertexAttribPointer is introduced in 3.0 and 
-                   things like glVertexPointer is removed in 3.1
-                   but if we want backward-campability, it's better to stick with glVertexPointer ... ?
-                   and osx only have ogl 3.x after 10.7 lion...
-                   also attribute locations is causing problems in Cg shader, semantic names no longer working
-                    we have to write different shaders for gl and directx,
-                */
-                const vertex_elements_type& format = buffer->getVertexFormat();
-                uint32 total_size = GetVertexElementsTotalSize(format);
-                uint32 offset = 0;
-                for(vertex_elements_type::const_iterator it = format.begin(),
-                    end = format.end();
-                    it != end;
-                    ++it) {
-                    // deprecated way of transmission vertex arrays
-                    // though backward compatible and avoid generic attrib locations in shaders that causes different versions of shaders
-                    // but also lack of some vertex usage support
+            /* this need to be changed?
+                since glVertexAttribPointer is introduced in 3.0 and 
+                things like glVertexPointer is removed in 3.1
+                but if we want backward-campability, it's better to stick with glVertexPointer ... ?
+                and osx only have ogl 3.x after 10.7 lion...
+                also attribute locations is causing problems in Cg shader, semantic names no longer working
+                we have to write different shaders for gl and directx,
+            */
+            const vertex_elements_type& format = buffer->getVertexFormat();
+            uint32 total_size = GetVertexElementsTotalSize(format);
+            uint32 offset = 0;
+            for(vertex_elements_type::const_iterator it = format.begin(),
+                end = format.end();
+                it != end;
+                ++it) {
+                // deprecated way of transmission vertex arrays
+                // though backward compatible and avoid generic attrib locations in shaders that causes different versions of shaders
+                // but also lack of some vertex usage support
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
-                    switch(it->usage) {
-                        case VU_Position:
-                            glVertexPointer(GetElementComponentSize(it->format),
+                switch(it->usage) {
+                    case VU_Position:
+                        glVertexPointer(GetElementComponentSize(it->format),
+                                        element_format_to_gl_element_type(it->format),
+                                        total_size,
+                                        BUFFER_OFFSET(vertexBuffer, offset));
+                        glEnableClientState(GL_VERTEX_ARRAY);
+                        break;
+                            
+                    case VU_Diffuse:
+                        glColorPointer(GetElementComponentSize(it->format),
+                                        element_format_to_gl_element_type(it->format),
+                                        total_size,
+                                        BUFFER_OFFSET(vertexBuffer, offset));
+                        glEnableClientState(GL_COLOR_ARRAY);
+                        break;
+                            
+                    case VU_Specular:
+                        glColorPointer(GetElementComponentSize(it->format),
+                                        element_format_to_gl_element_type(it->format),
+                                        total_size,
+                                        BUFFER_OFFSET(vertexBuffer, offset));
+                        glEnableClientState(GL_COLOR_ARRAY);
+                        break;
+                            
+                    case VU_Normal:
+                        glNormalPointer(element_format_to_gl_element_type(it->format),
+                                        total_size,
+                                        BUFFER_OFFSET(vertexBuffer, offset));
+                        glEnableClientState(GL_NORMAL_ARRAY);
+                        break;
+                            
+                    case VU_UV:
+                        glTexCoordPointer(GetElementComponentSize(it->format),
                                             element_format_to_gl_element_type(it->format),
                                             total_size,
                                             BUFFER_OFFSET(vertexBuffer, offset));
-                            glEnableClientState(GL_VERTEX_ARRAY);
-                            break;
+                        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+                        break;
                             
-                        case VU_Diffuse:
-                            glColorPointer(GetElementComponentSize(it->format),
-                                            element_format_to_gl_element_type(it->format),
-                                            total_size,
-                                            BUFFER_OFFSET(vertexBuffer, offset));
-                            glEnableClientState(GL_COLOR_ARRAY);
-                            break;
-                            
-                        case VU_Specular:
-                            glColorPointer(GetElementComponentSize(it->format),
-                                            element_format_to_gl_element_type(it->format),
-                                            total_size,
-                                            BUFFER_OFFSET(vertexBuffer, offset));
-                            glEnableClientState(GL_COLOR_ARRAY);
-                            break;
-                            
-                        case VU_Normal:
-                            glNormalPointer(element_format_to_gl_element_type(it->format),
-                                            total_size,
-                                            BUFFER_OFFSET(vertexBuffer, offset));
-                            glEnableClientState(GL_NORMAL_ARRAY);
-                            break;
-                            
-                        case VU_UV:
-                            glTexCoordPointer(GetElementComponentSize(it->format),
-                                              element_format_to_gl_element_type(it->format),
-                                              total_size,
-                                              BUFFER_OFFSET(vertexBuffer, offset));
-                            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-                            break;
-                            
-                        default:
-                            break;
-                    }
-#else
-                    // ogl 3.x+
-                        int attribLoc = vertex_usage_to_attribute_location(it->usage);
-                        glVertexAttribPointer(attribLoc,
-                                              GetElementComponentSize(it->format),
-                                              element_format_to_gl_element_type(it->format),
-                                              (it->usage == VU_Specular || it->usage == VU_Diffuse) ? GL_TRUE : GL_FALSE,
-                                              total_size,
-                                              BUFFER_OFFSET(vertexBuffer, offset));
-                        glEnableVertexAttribArray(attribLoc);
-                        
-                        offset += it->size();
-#endif
+                    default:
+                        break;
                 }
+#else
+                // ogl 3.x+
+                    int attribLoc = vertex_usage_to_attribute_location(it->usage);
+                    glVertexAttribPointer(attribLoc,
+                                            GetElementComponentSize(it->format),
+                                            element_format_to_gl_element_type(it->format),
+                                            (it->usage == VU_Specular || it->usage == VU_Diffuse) ? GL_TRUE : GL_FALSE,
+                                            total_size,
+                                            BUFFER_OFFSET(vertexBuffer, offset));
+                    glEnableVertexAttribArray(attribLoc);
+                        
+                    offset += it->size();
+#endif
+            }
 
                 
-                GraphicBufferPtr indexBuffer = buffer->getIndexStream();
-                if(buffer->isUseIndexStream() &&
-                    indexBuffer.isValid()) {
-                        indexBuffer->activate();
-                }
-
-                for(uint32 i=0; i<effect->getPasses(); ++i) {
-                    effect->bind(i);
-
-                    if(buffer->isUseIndexStream()) {
-                        if(!indexBuffer.isValid()) {
-                            log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid index stream");
-                            return;
-                        }
-                        glDrawRangeElements(
-                            render_mode_to_gl_mode(buffer->getRenderMode()),
-                            buffer->getIndexStartIndex(),
-                            0xffffffff,
-                            buffer->getIndexCount(),
-                            GL_UNSIGNED_INT,
-                            BUFFER_OFFSET(vertexBuffer, buffer->getVertexStartIndex()));
-
-                    } else {
-                        glDrawArrays(
-                            render_mode_to_gl_mode(buffer->getRenderMode()),
-                                                    buffer->getVertexStartIndex(),
-                                                    buffer->getVertexCount());
-                    }
-                }
-
-                for(vertex_elements_type::const_iterator it = format.begin(),
-                    end = format.end();
-                    it != end;
-                    ++it) {
-#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
-                    switch(it->usage) {
-                        case VU_Position:
-                            glDisableClientState(GL_VERTEX_ARRAY);
-                            break;
-                            
-                        case VU_Diffuse:
-                            glDisableClientState(GL_COLOR_ARRAY);
-                            break;
-                            
-                        case VU_Specular:
-                            glDisableClientState(GL_COLOR_ARRAY);
-                            break;
-                            
-                        case VU_Normal:
-                            glDisableClientState(GL_NORMAL_ARRAY);
-                            break;
-                            
-                        case VU_UV:
-                            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-                            break;
-                            
-                        default:
-                            break;
-                    }
-#else
-                    // ogl 3.x+
-                   glDisableVertexAttribArray(vertex_usage_to_attribute_location(it->usage) );
-#endif
-                 }
+            GraphicBufferPtr indexBuffer = buffer->getIndexStream();
+            if(buffer->isUseIndexStream() &&
+                indexBuffer.isValid()) {
+                    indexBuffer->activate();
             }
+
+            if(buffer->isUseIndexStream()) {
+                if(!indexBuffer.isValid()) {
+                    log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid index stream");
+                    return;
+                }
+                glDrawRangeElements(
+                    render_mode_to_gl_mode(buffer->getRenderMode()),
+                    buffer->getIndexStartIndex(),
+                    0xffffffff,
+                    buffer->getIndexCount(),
+                    GL_UNSIGNED_INT,
+                    BUFFER_OFFSET(vertexBuffer, buffer->getVertexStartIndex()));
+
+            } else {
+                glDrawArrays(
+                    render_mode_to_gl_mode(buffer->getRenderMode()),
+                                            buffer->getVertexStartIndex(),
+                                            buffer->getVertexCount());
+            }
+
+            for(vertex_elements_type::const_iterator it = format.begin(),
+                end = format.end();
+                it != end;
+                ++it) {
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
+                switch(it->usage) {
+                    case VU_Position:
+                        glDisableClientState(GL_VERTEX_ARRAY);
+                        break;
+                            
+                    case VU_Diffuse:
+                        glDisableClientState(GL_COLOR_ARRAY);
+                        break;
+                            
+                    case VU_Specular:
+                        glDisableClientState(GL_COLOR_ARRAY);
+                        break;
+                            
+                    case VU_Normal:
+                        glDisableClientState(GL_NORMAL_ARRAY);
+                        break;
+                            
+                    case VU_UV:
+                        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+                        break;
+                            
+                    default:
+                        break;
+                }
+#else
+                // ogl 3.x+
+                glDisableVertexAttribArray(vertex_usage_to_attribute_location(it->usage) );
+#endif
+                }
         }
 
 
@@ -394,10 +347,6 @@ namespace ukn {
         mViewMat = matx;
     }
 
-    void GLGraphicDevice::setWorldMatrix(const Matrix4& mat) {
-        mWorldMat = mat;
-    }
-
     void GLGraphicDevice::setProjectionMatrix(const Matrix4& mat) {
         mProjectionMat = mat;
     }
@@ -408,14 +357,6 @@ namespace ukn {
 
     void GLGraphicDevice::getProjectionMatrix(Matrix4& mat) const {
         mat = mProjectionMat;
-    }
-
-    void GLGraphicDevice::getWorldMatrix(Matrix4& mat) const {
-        mat = mWorldMat;
-    }
-
-    void GLGraphicDevice::bindEffect(const EffectPtr& effect) {
-        mEffect = effect;
     }
 
     void GLGraphicDevice::setRenderState(RenderStateType type, uint32 func) {
@@ -525,63 +466,11 @@ namespace ukn {
     void GLGraphicDevice::adjustPerspectiveMat(Matrix4& mat) {
         mat *= (Matrix4::ScaleMat(1.f, 1.f, 2.f) * Matrix4::TransMat(0.f, 0.f, -1.f));
     }
-    void GLGraphicDevice::begin2DRendering(const OrthogonalParams& params) {
-        mIs2D = true;
 
-        if(!m2DEffect) {
-            m2DEffect = ukn::CreateCgEffet2D();
-            if(m2DEffect) 
-                this->bindEffect(m2DEffect);
-            else 
-                log_error("Error creating effect for 2d rendering");
-        }
-        
-        float width = params.width;
-        if(width == 0.f) width = mWindow->width();
-        float height = params.height;
-        if(height == 0.f) height = mWindow->height();
-        
-        this->pushProjectionMatrix();
-        this->pushViewMatrix();
-
-        this->setProjectionMatrix(
-            mist::Matrix4::OrthoOffCenterMatRH(
-                params.x,
-                params.x + width,
-                params.y + height,
-                params.y,
-                0.0,
-                1.0f));
-
-        Matrix4 viewMat;
-        viewMat.translate(params.x + params.dx, params.y + params.dy, 0.f);
-        viewMat.rotate(0.f, params.rotation, 0.f);
-        viewMat.scale(params.scalex, params.scaley, 1.f);
-        viewMat.translate(-params.dx, -params.dy, 0.f);
-        this->setViewMatrix(viewMat);
-
-        if(mCurrFrameBuffer) {
-            RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
-            if(dsView) dsView->enableDepth(false);
-        }
+    void GLGraphicDevice::adjustOrthoMat(Matrix4& mat) {
+        mat = Matrix4::LHToRH(mat);
     }
 
-    void GLGraphicDevice::end2DRendering() {
-        mIs2D = false;
-        
-        this->popProjectionMatrix();
-        this->popViewMatrix();
-        
-        if(mCurrFrameBuffer) {
-            CameraPtr cam = mCurrFrameBuffer->getViewport().camera;
-            this->setProjectionMatrix(cam->getProjMatrix());
-            this->setViewMatrix(cam->getViewMatrix());
-
-            RenderViewPtr dsView = mCurrFrameBuffer->attached(ATT_DepthStencil);
-            if(dsView) dsView->enableDepth(true);
-        }
-    }
-    
     void GLGraphicDevice::setBlendState(const BlendStatePtr& blendState) {
         const BlendStateDesc& desc = blendState->getDesc();
         

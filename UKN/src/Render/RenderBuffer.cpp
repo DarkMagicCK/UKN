@@ -168,17 +168,4 @@ namespace ukn {
 
 	}
 
-    void RenderBuffer::onSetEffect(const EffectPtr& effect) {
-
-    }
-
-    void RenderBuffer::setEffect(const EffectPtr& effect) {
-        mEffect = effect;
-        this->onSetEffect(mEffect);
-    }
-
-    EffectPtr RenderBuffer::getEffect() const {
-        return mEffect;
-    }
-
 } // namespace ukn

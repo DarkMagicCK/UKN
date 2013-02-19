@@ -17,25 +17,40 @@ namespace ukn {
 
     class D3D11GraphicDevice;
 
+    class DxEffectPass: public EffectPass {
+    public:
+        DxEffectPass(Effect* parent, D3D11GraphicDevice*);
+        virtual ~DxEffectPass();
+
+        bool createLayout();
+        ID3D11InputLayout* getD3D11InputLayout() const;
+
+        void begin() override;
+        void end() override;
+        
+        void setVertexFormat(const vertex_elements_type& format) override;
+
+    private:
+        D3D11GraphicDevice* mDevice;
+        COM<ID3D11InputLayout>::Ptr mLayout;
+    };
+
     class CgDxEffect: public Effect {
     public:
         CgDxEffect(D3D11GraphicDevice* device);
         virtual ~CgDxEffect();
 
-        void setVertexFormat(const vertex_elements_type& format) override;
-
         void bind(uint32 pass) override;
-        void unbind() override;
-        uint32 getPasses() const override;
+        void unbind(uint32 pass) override;
 
         ShaderPtr createShader(const ResourcePtr& resource, const ShaderDesc& desc) override;
+        EffectPassPtr createPass() override;
 
         CGcontext getContext() const;
 
     private:
         CGcontext mContext;
         D3D11GraphicDevice* mDevice;
-        COM<ID3D11InputLayout>::Ptr mLayout;
     };
 
     class CgDxShader: public Shader {

@@ -66,10 +66,71 @@ namespace ukn {
         }
     }
 
+    DxEffectPass::DxEffectPass(Effect* parent, D3D11GraphicDevice* device):
+        EffectPass(parent),
+        mDevice(device) {
+
+    }
+
+    DxEffectPass::~DxEffectPass() {
+    
+    }
+
+    bool DxEffectPass::createLayout() {
+        if(mFormat.empty()) {
+            return false;
+        }
+        if(mVertexShader) {
+            CgDxShader* vertexShader = checked_cast<CgDxShader*>(mVertexShader.get());
+            if(mLayout &&
+                is_vertex_elements_equal(mFormat, vertexShader->getDesc().format))
+                return true;
+
+            if(vertexShader) {
+                ID3DBlob* vsBlob = cgD3D11GetCompiledProgram(vertexShader->getProgram());
+                if(vsBlob) {
+                    ID3D11InputLayout* layout = D3D11ShaderUtilities::CreateLayout(
+                        mDevice->getD3DDevice(),
+                        vsBlob->GetBufferPointer(),
+                        vsBlob->GetBufferSize(),
+                        mFormat);
+                    if(layout) {
+                        mLayout = MakeCOMPtr(layout);
+                        return true;
+                    }
+                }
+                else
+                    log_error("CgDxEffect::setVertexFormat: Error get compiled vertex program");
+            }
+        }
+        
+        return false;
+    }
+
+    void DxEffectPass::setVertexFormat(const vertex_elements_type& format) {
+        EffectPass::setVertexFormat(format);
+        this->createLayout();
+    }
+
+    ID3D11InputLayout* DxEffectPass::getD3D11InputLayout() const {
+        return mLayout.get();
+    }
+
+    void DxEffectPass::begin() {
+        if(mLayout) {
+            mDevice->getD3DDeviceContext()->IASetInputLayout(mLayout.get());
+            EffectPass::begin();
+        }
+    }
+
+    void DxEffectPass::end() {
+        mDevice->getD3DDeviceContext()->IASetInputLayout(0);
+        EffectPass::end();
+    }
+
     CgDxEffect::CgDxEffect(D3D11GraphicDevice* device):
         mContext(0),
-        mDevice(device),
-        mLayout(0) {
+        mDevice(device) {
             mContext = cgCreateContext();
             mist_assert(mContext);
 
@@ -82,50 +143,20 @@ namespace ukn {
         }
     }
 
-    void CgDxEffect::setVertexFormat(const vertex_elements_type& format) {
-        if(mVertexShader) {
-            CgDxShader* vertexShader = checked_cast<CgDxShader*>(mVertexShader.get());
-            if(mLayout &&
-                is_vertex_elements_equal(format, vertexShader->getDesc().format))
-                return;
-
-            if(vertexShader) {
-                ID3DBlob* vsBlob = cgD3D11GetCompiledProgram(vertexShader->getProgram());
-                if(vsBlob) {
-                    ID3D11InputLayout* layout = D3D11ShaderUtilities::CreateLayout(
-                        mDevice->getD3DDevice(),
-                        vsBlob->GetBufferPointer(),
-                        vsBlob->GetBufferSize(),
-                        format);
-                    if(layout)
-                        mLayout = MakeCOMPtr(layout);
-                }
-                else
-                    log_error("CgDxEffect::setVertexFormat: Error get compiled vertex program");
-            }
-        }
+    void CgDxEffect::bind(uint32 passIndex) {
+        if(passIndex < this->getNumPasses()) {
+           const EffectPassPtr& pass = this->mPasses[passIndex];
+           pass->begin();
+        } else
+           log_warning(L"CgDxEffect::bind: pass overflow");
     }
 
-    void CgDxEffect::bind(uint32 pass) {
-        if(mLayout) {
-            mDevice->getD3DDeviceContext()->IASetInputLayout(mLayout.get());
-            if(mVertexShader)
-                mVertexShader->bind();
-            if(mFragmentShader) {
-                mFragmentShader->bind();
-            }
-            if(mGeometryShader)
-                mGeometryShader->bind();
-        }
-    }
-
-    void CgDxEffect::unbind() {
-        if(mVertexShader)
-            mVertexShader->unbind();
-        if(mFragmentShader)
-            mFragmentShader->unbind();
-        if(mGeometryShader)
-            mGeometryShader->unbind();
+    void CgDxEffect::unbind(uint32 passIndex) {
+        if(passIndex < this->getNumPasses()) {
+            const EffectPassPtr& pass = this->mPasses[passIndex];
+            pass->begin();
+        } else
+            log_warning(L"CgDxEffect::bind: pass overflow");
     }
 
     ShaderPtr CgDxEffect::createShader(const ResourcePtr& resource, const ShaderDesc& desc) {
@@ -136,12 +167,12 @@ namespace ukn {
         return ShaderPtr();
     }
 
-    uint32 CgDxEffect::getPasses() const {
-        return 1;
-    }
-
     CGcontext CgDxEffect::getContext() const {
         return mContext;
+    }
+    
+    EffectPassPtr CgDxEffect::createPass() {
+        return MakeSharedPtr<DxEffectPass>(this, this->mDevice);
     }
 
     CgDxShader::CgDxShader(CGcontext context):
@@ -164,7 +195,6 @@ namespace ukn {
         std::string content(memStream->data(), memStream->data() + memStream->size());
         
         CGprofile profile = _d3d_feature_level_to_cgprofile(device->getDeviceFeatureLevel(), desc.type);
-        CGprofile p2 = cgD3D11GetLatestPixelProfile();
         mProgram = cgCreateProgram(mContext, 
             CG_SOURCE, 
             content.c_str(), 
@@ -223,7 +253,7 @@ namespace ukn {
     }
 
     bool CgDxShader::setTextureVariable(const char* name, const TexturePtr& tex) {
-        if(mProgram) {
+        if(mProgram && tex) {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
                 cgD3D11SetTextureParameter(param, (ID3D11Resource*)tex->getTextureId());

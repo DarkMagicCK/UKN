@@ -8,6 +8,7 @@
 #include "UKN/CgHelper.h"
 #include "UKN/FrameBuffer.h"
 #include "UKN/Camera.h"
+#include "UKN/2DHelper.h"
 
 namespace ukn {
 
@@ -38,18 +39,19 @@ namespace ukn {
             FrameBufferPtr fb = gd.getCurrFrameBuffer();
             CameraPtr cam = fb->getViewport().camera;
             
-            Matrix4 worldMat;
-            gd.getWorldMatrix(worldMat);
             Matrix4 mat = Matrix4::ScaleMat(100, 100, 100);
             if(cam) {
                 Vector3 eye = cam->getEyePos();
                // mat.translate(eye.x(), eye.y(), eye.z());
             }
-            gd.setWorldMatrix(mat);
-            gd.bindTexture(mTexture);
+            Ukn2DHelper& helper = Ukn2DHelper::Instance();
+            helper.bindTexture(mTexture);
+            helper.setupMat(cam->getProjMatrix(), mat);
+
+            helper.begin();
             gd.renderBuffer(mRenderBuffer);
-            gd.setWorldMatrix(worldMat);
-            
+            helper.end();
+
         } else {
             log_error(L"Skybox::render: invalid render buffer");
         }
@@ -134,7 +136,7 @@ namespace ukn {
                                                    Vertex2D::Format());
         if(mVertexBuffer) {
             mRenderBuffer->bindVertexStream(mVertexBuffer, Vertex2D::Format());
-            mRenderBuffer->setEffect(ukn::CreateCgEffet2D());
+
         }
         return mRenderBuffer && mVertexBuffer;
     }

@@ -188,21 +188,22 @@ namespace ukn {
 
             EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
             if(effect) {
-                effect->setFragmentShader(effect->createShader(
+                EffectPassPtr pass0 = effect->appendPass();
+
+                pass0->setFragmentShader(effect->createShader(
                     ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_color_frag_program, 
                                                                          strlen(_color_frag_program)), 
                                                                          L""),
                                                    ukn::ShaderDesc(ST_FragmentShader,
                                                    "FragmentProgram")));
-                effect->setVertexShader(effect->createShader(
+                pass0->setVertexShader(effect->createShader(
                     ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_color_vert_program, 
                                                                          strlen(_color_vert_program)), 
                                                                          L""),
                                                    ukn::ShaderDesc(ST_VertexShader,
                                                    "VertexProgram")));
-                effect->setVertexFormat(ukn::GridTerrian::VertexFormat::Format());
+                pass0->setVertexFormat(ukn::GridTerrian::VertexFormat::Format());
 
-                mRenderBuffer->setEffect(effect);
                 mRenderBuffer->setRenderMode(RM_Line);
             } else 
                 error = true;
@@ -682,7 +683,4 @@ namespace ukn {
         renderNode(mRoot, gd, cam->getViewFrustum());
     }
 
-    void GridTerrianLightening::setEffect(const EffectPtr& effect) {
-        mRenderBuffer->setEffect(effect);
-    }
 }

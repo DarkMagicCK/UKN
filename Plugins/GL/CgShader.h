@@ -20,14 +20,11 @@ namespace ukn {
         CgGLEffect(GLGraphicDevice* device);
         virtual ~CgGLEffect();
 
-        void setVertexFormat(const vertex_elements_type& format) override;
-
         void bind(uint32 pass) override;
-        void unbind() override;
-        uint32 getPasses() const override;
+        void unbind(uint32 pass) override;
 
         ShaderPtr createShader(const ResourcePtr& resource, const ShaderDesc& desc) override;
-
+        
         CGcontext getContext() const;
 
     private:

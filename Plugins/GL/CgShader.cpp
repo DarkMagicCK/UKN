@@ -35,32 +35,20 @@ namespace ukn {
         }
     }
 
-    void CgGLEffect::setVertexFormat(const vertex_elements_type& format) {
-        if(mVertexShader) {
-            CgGLShader* vertexShader = checked_cast<CgGLShader*>(mVertexShader.get());
-            if(vertexShader) {
-
-            }
-        }
+    void CgGLEffect::bind(uint32 passIndex) {
+        if(passIndex < this->getNumPasses()) {
+            const EffectPassPtr& pass = this->mPasses[passIndex];
+            pass->begin();
+        } else
+            log_warning(L"CgGLEffect::bind: pass overflow");
     }
 
-    void CgGLEffect::bind(uint32 pass) {
-        if(mVertexShader)
-            mVertexShader->bind();
-        if(mFragmentShader) {
-            mFragmentShader->bind();
-        }
-        if(mGeometryShader)
-            mGeometryShader->bind();
-    }
-
-    void CgGLEffect::unbind() {
-        if(mVertexShader)
-            mVertexShader->unbind();
-        if(mFragmentShader)
-            mFragmentShader->unbind();
-        if(mGeometryShader)
-            mGeometryShader->unbind();
+    void CgGLEffect::unbind(uint32 passIndex) {
+        if(passIndex < this->getNumPasses()) {
+            const EffectPassPtr& pass = this->mPasses[passIndex];
+            pass->end();
+        } else
+            log_warning(L"CgGLEffect::bind: pass overflow");
     }
 
     ShaderPtr CgGLEffect::createShader(const ResourcePtr& resource, const ShaderDesc& desc) {
@@ -73,10 +61,6 @@ namespace ukn {
             log_error("CgGLEffect::createShader: invalid resource");
         }
         return ShaderPtr();
-    }
-
-    uint32 CgGLEffect::getPasses() const {
-        return 1;
     }
 
     CGcontext CgGLEffect::getContext() const {

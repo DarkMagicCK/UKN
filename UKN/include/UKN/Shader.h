@@ -39,27 +39,11 @@ namespace ukn {
     class Shader;
     typedef SharedPtr<Shader> ShaderPtr;
 	
-    /* 
-    currently
-    effect is only a container of shaders
-    not acctually "effect" files such as CgFx, D3D Effect etc
-    */
-    class UKN_API Effect: public Uncopyable {
+    class UKN_API EffectPass: Uncopyable {
     public:
-        Effect();
-        virtual ~Effect();
-
-        /* to do in custom shader compiler, no use now */		
-       // virtual bool initialize(const ResourcePtr& content, const VertexFormat& format) = 0;
-        virtual void setVertexFormat(const vertex_elements_type& format) = 0;
-        virtual uint32 getPasses() const = 0;
-
-        /* begin */
-        virtual void bind(uint32 pass = 0) = 0;
-        virtual void unbind() = 0;
-
-        virtual ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc) = 0;
-
+        EffectPass(Effect* parent);
+        virtual ~EffectPass();
+        
         void setFragmentShader(const ShaderPtr& shader);
         void setVertexShader(const ShaderPtr& shader);
         void setGeometryShader(const ShaderPtr& shader);
@@ -68,10 +52,57 @@ namespace ukn {
         ShaderPtr getVertexShader() const;
         ShaderPtr getGeometryShader() const;
 
+        const vertex_elements_type& getVertexFormat() const;
+       
+        virtual void setVertexFormat(const vertex_elements_type& format);
+
+        /* overridable */
+        virtual void begin();
+        virtual void end();
+
     protected:
+        Effect* mParent;
+
         ShaderPtr mFragmentShader;
         ShaderPtr mVertexShader;
         ShaderPtr mGeometryShader;
+
+        vertex_elements_type mFormat;
+    };
+
+    typedef SharedPtr<EffectPass> EffectPassPtr;
+
+    /* 
+    currently
+    effect is only a container of shaders
+    not acctually "effect" files such as CgFx, D3D Effect etc
+    */
+    class UKN_API Effect: Uncopyable {
+    public:
+        Effect();
+        virtual ~Effect();
+
+        uint32 getNumPasses() const;
+
+        /* to do in custom shader compiler, no use now */		
+        // virtual bool initialize(const ResourcePtr& content, const VertexFormat& format) = 0;
+        void setVertexFormat(uint32 pass, const vertex_elements_type& format);
+        
+        /* begin */
+        virtual void bind(uint32 pass) = 0;
+        virtual void unbind(uint32 pass) = 0;
+
+        virtual ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc) = 0;
+        virtual EffectPassPtr createPass();
+
+        /* create and append a pass */
+        EffectPassPtr appendPass();
+
+        void appendPass(const EffectPassPtr& pass);
+        EffectPassPtr getPass(uint32 pass) const;
+
+    protected:
+        std::vector<EffectPassPtr> mPasses;
     };
     
     class UKN_API Shader: public Uncopyable {

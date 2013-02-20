@@ -152,6 +152,10 @@ namespace ukn {
     struct BlendStateDesc;
     class BlendStateObject;
     typedef SharedPtr<BlendStateObject> BlendStatePtr;
+
+    struct RasterizerStateDesc;
+    class RasterizerStateObject;
+    typedef SharedPtr<RasterizerStateObject> RasterizerStatePtr;
     
     
 } // namespace ukn

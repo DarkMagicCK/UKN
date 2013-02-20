@@ -96,14 +96,6 @@ namespace ukn {
         virtual ~GridTerrianLightening();
 
     public:
-        struct VertexFormat {
-            float2 uv;
-            float3 position;
-            float3 normal;
-
-            static vertex_elements_type Format();
-        };
-
         struct Node {
             Node(float _x, float _z, float _w);
 
@@ -126,8 +118,8 @@ namespace ukn {
         uint32 getDrawCount() const;
 
     protected:
-        Node* createNode(float x, float z, float w, VertexFormat* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices);
-        uint32 triangleCount(float x, float z, float w, VertexFormat* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices, float& maxh, float &minh);
+        Node* createNode(float x, float z, float w, VertexUVNormal* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices);
+        uint32 triangleCount(float x, float z, float w, VertexUVNormal* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices, float& maxh, float &minh);
         void releaseNode(Node* node);
         void renderNode(Node* node, GraphicDevice& device, const Frustum& frustum);
 

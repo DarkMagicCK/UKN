@@ -112,6 +112,7 @@
     <ClInclude Include="..\..\UKN\include\UKN\Model.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Physics.h" />
     <ClInclude Include="..\..\UKN\include\UKN\PreDeclare.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\RasterizerStateObject.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Renderable.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderBuffer.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RenderEffect.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="..\..\UKN\src\Render\GraphicDevice.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\GraphicFactory.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Model.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\RasterizerStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderBuffer.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderState.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderTarget.cpp" />

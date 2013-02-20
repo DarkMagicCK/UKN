@@ -327,15 +327,6 @@ namespace ukn {
         delete node;
     }
 
-    vertex_elements_type GridTerrianLightening::VertexFormat::Format() {
-        static vertex_elements_type _format = VertexElementsBuilder()
-            .add(VertexElement(VU_UV, EF_Float2, 0))
-            .add(VertexElement(VU_Position, EF_Float3, 0))
-            .add(VertexElement(VU_Normal, EF_Float3, 0))
-            .to_vector();
-        return _format;
-    }
-
     GridTerrianLightening& GridTerrianLightening::texture(const TexturePtr& tex) {
         this->mTexture = tex;
         return *this;
@@ -369,7 +360,7 @@ namespace ukn {
         float3* normals = mist_malloc_t(float3, (this->mWidth - 1) * (this->mHeight - 1));
         
         uint32 vertexSize = this->mWidth * this->mHeight;
-        VertexFormat* vertices = mist_malloc_t(VertexFormat, vertexSize);
+        VertexUVNormal* vertices = mist_malloc_t(VertexUVNormal, vertexSize);
         
         float uInc = float(mTextureRepeat) / mWidth;
         float vInc = float(mTextureRepeat) / mHeight;
@@ -463,7 +454,7 @@ namespace ukn {
         mist_free(normals);
 
         uint32 faceSize = (this->mWidth - 1) * (this->mHeight - 1) * 6;
-        VertexFormat* faces = mist_malloc_t(VertexFormat, faceSize);
+        VertexUVNormal* faces = mist_malloc_t(VertexUVNormal, faceSize);
         index = 0;
         for(int32 z = 0; z < this->mHeight - 1; ++z) {
             for(int32 x = 0; x < this->mWidth - 1; ++x) {
@@ -519,7 +510,7 @@ namespace ukn {
             GraphicBuffer::Static,
             faceSize,
             faces,
-            VertexFormat::Format());
+            VertexUVNormal::Format());
         mIndexBuffer = gf.createIndexBuffer(
             GraphicBuffer::None,
             GraphicBuffer::Static,
@@ -528,7 +519,7 @@ namespace ukn {
 
         bool error = false;
         if(mRenderBuffer && mVertexBuffer && mIndexBuffer) {
-            mRenderBuffer->bindVertexStream(mVertexBuffer, VertexFormat::Format());
+            mRenderBuffer->bindVertexStream(mVertexBuffer, VertexUVNormal::Format());
             mRenderBuffer->setRenderMode(RM_Triangle);
 /*
             EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
@@ -571,7 +562,7 @@ namespace ukn {
         childs[0] = childs[1] = childs[2] = childs[3] = 0;
     }
 
-    GridTerrianLightening::Node* GridTerrianLightening::createNode(float x, float z, float w, VertexFormat* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices) {
+    GridTerrianLightening::Node* GridTerrianLightening::createNode(float x, float z, float w, VertexUVNormal* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices) {
         Node* node = new Node(x, z, w);
 
         std::vector<uint32> triangles;
@@ -601,7 +592,7 @@ namespace ukn {
         return node;
     }
     
-    uint32 GridTerrianLightening::triangleCount(float x, float z, float w, VertexFormat* vertices, uint32 pitch, uint32 h, std::vector<uint32>& triangles, float& maxh, float &minh) {
+    uint32 GridTerrianLightening::triangleCount(float x, float z, float w, VertexUVNormal* vertices, uint32 pitch, uint32 h, std::vector<uint32>& triangles, float& maxh, float &minh) {
         uint32 count = 0;
         float r = w/2;
         float _min_h = FLT_MAX, _max_h = FLT_MIN;
@@ -609,9 +600,9 @@ namespace ukn {
             uint32 j = 0;
             while(j < pitch) {
                 uint32 idx = i * pitch + j;
-                VertexFormat& vtx1 = vertices[idx];
-                VertexFormat& vtx2 = vertices[idx + 1];
-                VertexFormat& vtx3 = vertices[idx + 2];
+                VertexUVNormal& vtx1 = vertices[idx];
+                VertexUVNormal& vtx2 = vertices[idx + 1];
+                VertexUVNormal& vtx3 = vertices[idx + 2];
 
                 float minX = MIST_MIN(vtx1.position[0], MIST_MIN(vtx2.position[0], vtx3.position[0]));
                 if(minX > x + r)

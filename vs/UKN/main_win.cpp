@@ -129,8 +129,9 @@ int CALLBACK WinMain(
             const ukn::Frustum& frustum = vp.camera->getViewFrustum();
             int renderCount = 0;
 
-            gd.clear(ukn::CM_Color, mist::color::Black, 1.f, 0);
-            
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+            gd.enableDepth(true);
+
             effect->getPass(0)->getVertexShader()->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
             effect->getPass(0)->getVertexShader()->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
             effect->getPass(0)->getVertexShader()->setMatrixVariable("worldMatrix", ukn::Matrix4());
@@ -208,6 +209,7 @@ int CALLBACK WinMain(
             gd.renderBuffer(renderBufferDeferred);
             deferredEffect->getPass(0)->end();
             
+            /*
             deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), 0, cos(r), 1));
             deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
             
@@ -221,13 +223,13 @@ int CALLBACK WinMain(
             deferredEffect->getPass(0)->begin();
             gd.renderBuffer(renderBufferDeferred);
             deferredEffect->getPass(0)->end();
-            
+            */
             renderTargetLightMap->detachFromRender();
 
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
            
             ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
-            sb.begin();
+            sb.begin(ukn::SBB_None, ukn::SBS_Deffered, ukn::Matrix4());
             sb.draw(renderTarget->getTargetTexture(ukn::ATT_Color0), 
                     ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
             sb.draw(renderTarget->getTargetTexture(ukn::ATT_Color1), 

@@ -72,6 +72,9 @@
     <ClInclude Include="..\..\Plugins\D3D11\D3D11SamplerStateObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11RasterizerStateObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -132,6 +135,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11RasterizerStateObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

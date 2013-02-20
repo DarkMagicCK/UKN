@@ -9,6 +9,7 @@
 #include "D3D11RenderView.h"
 #include "D3D11BlendStateObject.h"
 #include "D3D11SamplerStateObject.h"
+#include "D3D11RasterizerStateObject.h"
 
 #include "CgShader.h"
 
@@ -58,7 +59,8 @@ namespace ukn {
         
         BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const;
         SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const;
-
+        RasterizerStatePtr createRasterizerStateObject(const RasterizerStateDesc& desc) const;
+    
     private:
         GraphicDevicePtr mGraphicDevice;
     };
@@ -163,6 +165,10 @@ namespace ukn {
 
     SamplerStatePtr D3D11GraphicFactory::createSamplerStateObject(const SamplerStateDesc& desc) const {
         return MakeSharedPtr<D3D11SamplerStateObject>(desc, ((D3D11GraphicDevice*)mGraphicDevice.get()));
+    }
+
+    RasterizerStatePtr D3D11GraphicFactory::createRasterizerStateObject(const RasterizerStateDesc& desc) const {
+        return MakeSharedPtr<D3D11RasterizerStateObject>(desc, ((D3D11GraphicDevice*)mGraphicDevice.get()));
     }
 
 } // namespace ukn

@@ -93,6 +93,15 @@
     <ClInclude Include="..\..\Plugins\GL\CgShader.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLBlendStateObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLSamplerStateObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLRasterizerStateObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -144,6 +153,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Plugins\GL\CgShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLBlendStateObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLSamplerStateObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

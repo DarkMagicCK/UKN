@@ -48,9 +48,10 @@ namespace ukn {
         void adjustPerspectiveMat(Matrix4& mat) override;
         void adjustOrthoMat(Matrix4& mat) override;
 
-        void setBlendState(const BlendStatePtr& blendState) override;
-        void setSamplerState(const SamplerStatePtr& samplerState) override;
-        
+        void onSetBlendState(const BlendStatePtr& blendState) override;
+        void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) override;
+        void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) override;
+
     private:
         WindowPtr mWindow;
         

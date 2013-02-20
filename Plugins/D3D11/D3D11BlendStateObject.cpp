@@ -13,6 +13,7 @@ namespace ukn {
         case RSP_BlendOpMin:            return D3D11_BLEND_OP_MIN;
         case RSP_BlendOpRevSubtract:    return D3D11_BLEND_OP_REV_SUBTRACT;
         }
+        return D3D11_BLEND_OP_ADD;
     }
 
     D3D11_BLEND _rs_to_blend(RenderStateParam param) {
@@ -27,8 +28,14 @@ namespace ukn {
         case RSP_BlendFuncSrcAlpha:         return D3D11_BLEND_SRC_ALPHA;
         case RSP_BlendFuncSrcColor:         return D3D11_BLEND_SRC_COLOR;
         case RSP_BlendFuncZero:             return D3D11_BLEND_ZERO;
-           
         }
+        return D3D11_BLEND_ONE;
+    }
+
+    D3D11BlendStateObject::D3D11BlendStateObject(const BlendStateDesc& desc, ID3D11BlendState* state):
+        BlendStateObject(desc),
+        mBlendState(MakeCOMPtr(state)) {
+
     }
 
     D3D11BlendStateObject::D3D11BlendStateObject(const BlendStateDesc& desc, D3D11GraphicDevice* device):

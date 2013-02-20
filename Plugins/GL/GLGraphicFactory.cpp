@@ -25,7 +25,7 @@
 #include "GLRenderView.h"
 #include "GLBlendStateObject.h"
 #include "GLSamplerStateObject.h"
-
+#include "GLRasterizerStateObject.h"
 
 #include "CgShader.h"
 
@@ -71,6 +71,7 @@ namespace ukn {
         
         BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const;
         SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const;
+        RasterizerStatePtr createRasterizerStateObject(const RasterizerStateDesc& desc) const;
 
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -174,6 +175,10 @@ namespace ukn {
     
     SamplerStatePtr GLGraphicFactory::createSamplerStateObject(const SamplerStateDesc& desc) const {
         return MakeSharedPtr<GLSamplerStateObject>(desc);
+    }
+
+    RasterizerStatePtr GLGraphicFactory::createRasterizerStateObject(const RasterizerStateDesc& desc) const {
+        return MakeSharedPtr<GLRasterizerStateObject>(desc);
     }
     
 } // namespace ukn

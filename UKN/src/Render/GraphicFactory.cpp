@@ -90,6 +90,10 @@ namespace ukn {
         SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const {
             return SamplerStatePtr();
         }
+
+        RasterizerStatePtr createRasterizerStateObject(const RasterizerStateDesc& desc) const {
+            return RasterizerStatePtr();
+        }
         
     };
     

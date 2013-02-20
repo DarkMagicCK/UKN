@@ -57,6 +57,7 @@ namespace ukn {
         Usage mUsage;
     };
     
+    /* just help orignizing temporary data */
     template<typename T>
     class UKN_API MemoryGraphicBuffer: public GraphicBuffer {
     public:

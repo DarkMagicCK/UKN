@@ -15,6 +15,7 @@
 #include "UKN/GraphicBuffer.h"
 #include "UKN/FrameBuffer.h"
 #include "UKN/2DHelper.h"
+#include "UKN/BlendStateObject.h"
 
 #include "mist/Singleton.h"
 #include "mist/Profiler.h"
@@ -193,6 +194,30 @@ namespace ukn {
 
 
         mTransformMatrix = Matrix4();
+
+        // create a alpha blend state object for rendering
+        BlendStateDesc desc;
+        desc.alpha_to_converage = false;
+        desc.blend_factor = float4(0, 0, 0, 0);
+        desc.blend_state.enabled = true;
+        desc.blend_state.src = RSP_BlendFuncSrcAlpha;
+        desc.blend_state.dst = RSP_BlendFuncOneMinusSrcAlpha;
+        desc.blend_state.op = RSP_BlendOpAdd;
+        desc.blend_state.src_alpha = RSP_BlendFuncOne;
+        desc.blend_state.dst_alpha = RSP_BlendFuncZero;
+        desc.blend_state.op_alpha = RSP_BlendOpAdd;
+        desc.blend_state.write_mask = 0x0f;
+
+        mAlphaBlendState = gf.createBlendStateObject(desc);
+
+        desc.blend_state.src = RSP_BlendFuncOne;
+        desc.blend_state.dst = RSP_BlendFuncOne;
+        desc.blend_state.dst_alpha = RSP_BlendFuncOne;
+
+        mAdditiveState = gf.createBlendStateObject(desc);
+
+        desc.blend_state.enabled = false;
+        mNoneBlendState = gf.createBlendStateObject(desc);
     }
     
     SpriteBatch::~SpriteBatch() {
@@ -465,29 +490,22 @@ namespace ukn {
         
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
-        /* alpha blend will be turned on default by begin2Drendering
-            to do with blend state object
-            */
-        /*
+        // save previous blend state;
+        mPrevState = gd.getBlendState();
         switch(blend) {
             case SBB_Alpha:
-                gd.setRenderState(RS_Blend, RSP_Enable);
-                gd.setRenderState(RS_SrcAlpha, RSP_BlendFuncOneMinusSrcAlpha);
-                gd.setRenderState(RS_ColorOp, RSP_ColorOpModulate);
+                gd.setBlendState(mAlphaBlendState);
                 break;
                 
-            case SBB_Addictive:
-                gd.setRenderState(RS_Blend, RSP_Enable);
-                gd.setRenderState(RS_SrcAlpha, RSP_BlendFuncOneMinusSrcAlpha);
-                gd.setRenderState(RS_ColorOp, RSP_ColorOpAdd);
+            case SBB_Additive:
+                gd.setBlendState(mAdditiveState);
                 break;
                 
             case SBB_None:
-                gd.setRenderState(RS_Blend, RSP_Disable);
+                gd.setBlendState(mNoneBlendState);
                 break;
         }
-        gd.setRenderState(RS_DepthTest, RSP_Disable);
-        gd.setRenderState(RS_DepthMask, RSP_Disable);*/
+        gd.enableDepth(false);
     }
     
     void SpriteBatch::end() {
@@ -507,6 +525,11 @@ namespace ukn {
 
         mBegan = false;
         mTransformMatrix = Matrix4();
+
+        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+
+        gd.setBlendState(mPrevState);
+        gd.enableDepth(true);
     }
     
     SpriteBatch& SpriteBatch::DefaultObject() {

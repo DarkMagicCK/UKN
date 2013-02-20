@@ -44,12 +44,10 @@ namespace ukn {
         
         void setRenderState(RenderStateType type, uint32 func) override;
 
-        void enableAlphaBlending();
-        void disableAlphaBlending();
-        
-        void setBlendState(const BlendStatePtr& blendState) override;
-        void setSamplerState(const SamplerStatePtr& samplerState) override;
-        
+        void onSetBlendState(const BlendStatePtr& blendState) override;
+        void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) override;
+        void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) override;
+
 		ID3D11Device* getD3DDevice() const;
         ID3D11DeviceContext* getD3DDeviceContext() const;
         IDXGISwapChain* getSwapChain() const;
@@ -66,10 +64,6 @@ namespace ukn {
 		COM<ID3D11Device>::Ptr mDevice;
         COM<ID3D11DeviceContext>::Ptr mDeviceContext;
 		COM<IDXGISwapChain>::Ptr mSwapChain;
-		COM<ID3D11RasterizerState>::Ptr mRasterState;
-		COM<ID3D11BlendState>::Ptr mBlendOffBlendState;
-        COM<ID3D11BlendState>::Ptr mAlphaBlendState;
-        COM<ID3D11SamplerState>::Ptr mSamplerState;
 
 		Matrix4 mProjectionMatrix;
 		Matrix4 mViewMatrix;

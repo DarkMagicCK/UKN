@@ -98,7 +98,7 @@ namespace ukn {
         virtual void endFrame() = 0;
         
         virtual void beginRendering() = 0;
-        
+
     public:
         virtual UknString description() const = 0;
                
@@ -118,10 +118,12 @@ namespace ukn {
         virtual void adjustPerspectiveMat(Matrix4& mat) {}
         virtual void adjustOrthoMat(Matrix4& mat) {}
         
-        virtual void setBlendState(const BlendStatePtr& blendState) = 0;
-        virtual void setSamplerState(const SamplerStatePtr& samplerState) = 0;
-       
         virtual void bindTexture(const TexturePtr& texture) = 0;
+
+    protected:        
+        virtual void onSetBlendState(const BlendStatePtr& blendState) = 0;
+        virtual void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) = 0;
+        virtual void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) = 0;
 
     public:
         WindowPtr createRenderWindow(const UknString& name, const RenderSettings& settings);
@@ -136,16 +138,22 @@ namespace ukn {
         
         void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
         void enableDepth(bool flag);
-        /* automatically sets
-            projectionMatrix
-            viewMatrix
-         */
-        void bindEffect(const EffectPtr& effect);
-        const EffectPtr& getBindedEffect() const;
+        
+        void setBlendState(const BlendStatePtr& blendState);
+        void setSamplerState(const SamplerStatePtr& samplerState, uint32 index = 0);
+        void setRasterizerState(const RasterizerStatePtr& rasterizerState);
+        
+        const BlendStatePtr& getBlendState() const;
+        const SamplerStatePtr& getSamplerState(uint32 index = 0) const;
+        const RasterizerStatePtr& getRasterizerState() const;
 
     protected:
         FrameBufferPtr mCurrFrameBuffer;
         FrameBufferPtr mScreenFrameBuffer;
+
+        BlendStatePtr mBlendState;
+        Array<SamplerStatePtr> mSamplerStates;
+        RasterizerStatePtr mRasterizerState;
         
         Color mClearColor;
         float mClearDepth;

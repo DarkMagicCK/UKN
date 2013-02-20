@@ -29,6 +29,7 @@
 #include "UKN/CgHelper.h"
 #include "UKN/BlendStateObject.h"
 #include "UKN/SamplerStateObject.h"
+#include "UKN/RasterizerStateObject.h"
 
 #include "GLFrameBuffer.h"
 #include "GLRenderView.h"
@@ -471,7 +472,7 @@ namespace ukn {
         mat = Matrix4::LHToRH(mat);
     }
 
-    void GLGraphicDevice::setBlendState(const BlendStatePtr& blendState) {
+    void GLGraphicDevice::onSetBlendState(const BlendStatePtr& blendState) {
         const BlendStateDesc& desc = blendState->getDesc();
         
         this->setRenderState(RS_Blend, desc.blend_state.enabled ? RSP_Enable : RSP_Disable);
@@ -488,12 +489,19 @@ namespace ukn {
                      desc.blend_factor.value[3]);
     }
     
-    void GLGraphicDevice::setSamplerState(const SamplerStatePtr& samplerState) {
+    void GLGraphicDevice::onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) {
         const SamplerStateDesc& desc = samplerState->getDesc();
         this->setRenderState(RS_Filter, desc.filter);
         this->setRenderState(RS_TextureWrap0, desc.address_u);
         this->setRenderState(RS_TextureWrap1, desc.address_v);
         this->setRenderState(RS_TextureWrap2, desc.address_w);
+    }
+
+    void GLGraphicDevice::onSetRasterizerState(const RasterizerStatePtr& rasterizerState) {
+        const RasterizerStateDesc& desc = rasterizerState->getDesc();
+        this->setRenderState(RS_CullFace, desc.cullface);
+        this->setRenderState(RS_FillMode, desc.fillmode);
+        this->setRenderState(RS_FrontFace, desc.frontface);
     }
 
 } // namespace ukn

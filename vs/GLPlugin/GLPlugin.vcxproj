@@ -90,6 +90,7 @@
     <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h" />
     <ClInclude Include="..\..\External\soil\stb_image_aug.h" />
     <ClInclude Include="..\..\Plugins\GL\CgShader.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLBlendStateObject.h" />
     <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFWInput.h" />
@@ -97,8 +98,10 @@
     <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h" />
     <ClInclude Include="..\..\Plugins\GL\GLGraphicFactory.h" />
     <ClInclude Include="..\..\Plugins\GL\GLPreq.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLRasterizerStateObject.h" />
     <ClInclude Include="..\..\Plugins\GL\GLRenderBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLRenderView.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLSamplerStateObject.h" />
     <ClInclude Include="..\..\Plugins\GL\GLShader.h" />
     <ClInclude Include="..\..\Plugins\GL\GLSpriteBatch.h" />
     <ClInclude Include="..\..\Plugins\GL\GLTexture.h" />
@@ -114,11 +117,13 @@
     <ClCompile Include="..\..\External\soil\SOIL.c" />
     <ClCompile Include="..\..\External\soil\stb_image_aug.c" />
     <ClCompile Include="..\..\Plugins\GL\CgShader.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLBlendStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicFactory.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLRenderView.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLSamplerStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLShader.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLSpriteBatch.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLTexture.cpp" />

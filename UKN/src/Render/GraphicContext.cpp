@@ -20,7 +20,7 @@ namespace ukn {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         
         mRenderBuffer = gf.createRenderBuffer();
-        mVertexBuffer = gf.createMemoryVertexBuffer<Vertex2D>(0, 0);
+        mVertexBuffer = new MemoryGraphicBuffer<Vertex2D>(0, 0);
         mRenderBuffer->bindVertexStream(mVertexBuffer, Vertex2D::Format());
     }
     

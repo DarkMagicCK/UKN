@@ -29,7 +29,7 @@ namespace ukn {
     
     enum SpriteBatchBlendMode {
         SBB_Alpha,
-        SBB_Addictive,
+        SBB_Additive,
         SBB_None,
     };
     
@@ -144,6 +144,10 @@ namespace ukn {
         
         Box mBoundingBox;
         Matrix4 mTransformMatrix;
+        BlendStatePtr mAlphaBlendState;
+        BlendStatePtr mAdditiveState;
+        BlendStatePtr mNoneBlendState;
+        BlendStatePtr mPrevState;
         
         bool mBegan;
         bool mBatchRendering;

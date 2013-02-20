@@ -28,6 +28,13 @@ namespace ukn {
         }
     }
 
+    D3D11SamplerStateObject::D3D11SamplerStateObject(const SamplerStateDesc& desc, ID3D11SamplerState* state):
+    SamplerStateObject(desc),
+    mSamplerState(MakeCOMPtr(state)) {
+
+
+    }
+
     D3D11SamplerStateObject::D3D11SamplerStateObject(const SamplerStateDesc& desc, D3D11GraphicDevice* device):
     SamplerStateObject(desc) {
         D3D11_SAMPLER_DESC d3ddesc;

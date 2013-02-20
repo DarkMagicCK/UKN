@@ -64,12 +64,8 @@ namespace ukn {
 
         virtual BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const = 0;
         virtual SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const = 0;
-        
-        template<typename T>
-        SharedPtr<MemoryGraphicBuffer<T> > createMemoryVertexBuffer(uint32 count,
-                                                                    const T* initialData) const {
-            return new MemoryGraphicBuffer<T>(count, initialData);
-        }
+        virtual RasterizerStatePtr createRasterizerStateObject(const RasterizerStateDesc& desc) const = 0;
+
     };
     
 } // namespace ukn

@@ -84,8 +84,9 @@ namespace ukn {
         void begin2DRendering(const OrthogonalParams& params) { }
         void end2DRendering() { }
         
-        void setBlendState(const BlendStatePtr& blendState) { }
-        void setSamplerState(const SamplerStatePtr& samplerState) { }
+        void onSetBlendState(const BlendStatePtr& blendState) { }
+        void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) { }
+        void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) { }
     };
     
     GraphicDevicePtr GraphicDevice::NullObject() {
@@ -189,18 +190,44 @@ namespace ukn {
         }
     }
 
-    void GraphicDevice::bindEffect(const EffectPtr& effect) {
-        mBindedEffect = effect;
-    }
-
-    const EffectPtr& GraphicDevice::getBindedEffect() const {
-        return mBindedEffect;
-    }
-
     void GraphicDevice::enableDepth(bool flag) {
         if(mCurrFrameBuffer &&
             mCurrFrameBuffer->attached(ATT_DepthStencil)) {
             mCurrFrameBuffer->attached(ATT_DepthStencil)->enableDepth(flag);
         }
     }
+
+    void GraphicDevice::setBlendState(const BlendStatePtr& blendState) {
+        mBlendState = blendState;
+        this->onSetBlendState(blendState);
+    }
+
+    void GraphicDevice::setSamplerState(const SamplerStatePtr& samplerState, uint32 index) {
+        while(mSamplerStates.size() <= index) {
+            mSamplerStates.push_back(SamplerStatePtr());
+        }
+        mSamplerStates[index] = samplerState;
+        this->onSetSamplerState(samplerState, index);
+    }
+
+    void GraphicDevice::setRasterizerState(const RasterizerStatePtr& rasterizerState) {
+        mRasterizerState = rasterizerState;
+        this->onSetRasterizerState(rasterizerState);
+    }
+        
+    const BlendStatePtr& GraphicDevice::getBlendState() const {
+        return mBlendState;
+    }
+
+    const SamplerStatePtr& GraphicDevice::getSamplerState(uint32 index) const {
+        if(index < mSamplerStates.size())
+            return mSamplerStates[index];
+        return SamplerStatePtr();
+    }
+
+    const RasterizerStatePtr& GraphicDevice::getRasterizerState() const {
+        return mRasterizerState;
+    }
+
+
 } // namespace ukn

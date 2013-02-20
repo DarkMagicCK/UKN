@@ -205,6 +205,10 @@ namespace ukn {
         RS_DepthTest,
         
         RS_PointSize,       // glPointSize, D3DRS_POINTSIZE
+
+        RS_CullFace,
+        RS_FillMode,
+        RS_FrontFace,
     };
     
     enum RenderStateParam {
@@ -263,6 +267,16 @@ namespace ukn {
         
         RSP_Enable,
         RSP_Disable, 
+    
+        RSP_CullFront,
+        RSP_CullBack,
+        RSP_CullNone,
+
+        RSP_FillWireFrame,
+        RSP_FillSolid,
+
+        RSP_FrontFaceClockwise,
+        RSP_FrontFaceCounterClockwise,
     };
     
 } // namespace ukn  

@@ -4,6 +4,7 @@
 #include "D3D11GraphicFactory.h"
 #include "D3D11BlendStateObject.h"
 #include "D3D11SamplerStateObject.h"
+#include "D3D11RasterizerStateObject.h"
 
 #include "WindowsWindow.h"
 
@@ -171,28 +172,26 @@ namespace ukn {
         mDebug.reset(new D3D11Debug(mDevice.get()));
 #endif
 
-
-        // rasterizer state
+       // rasterizer state
         {
-            D3D11_RASTERIZER_DESC rasterDesc;
-            ZeroMemory(&rasterDesc, sizeof(rasterDesc));
-            rasterDesc.AntialiasedLineEnable = false;
-            rasterDesc.CullMode = D3D11_CULL_NONE;
-            rasterDesc.DepthBias = 0;
-            rasterDesc.DepthBiasClamp = 0.f;
-            rasterDesc.DepthClipEnable = true;
-            rasterDesc.FillMode = D3D11_FILL_SOLID;
-            rasterDesc.FrontCounterClockwise = false;
-            rasterDesc.MultisampleEnable = settings.sample_count > 1;
-            rasterDesc.ScissorEnable = false;
-            rasterDesc.SlopeScaledDepthBias = 0.f;
+            D3D11_RASTERIZER_DESC rasterizerDesc;
+            ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
+            rasterizerDesc.AntialiasedLineEnable = false;
+            rasterizerDesc.CullMode = D3D11_CULL_NONE;
+            rasterizerDesc.DepthBias = 0;
+            rasterizerDesc.DepthBiasClamp = 0.f;
+            rasterizerDesc.DepthClipEnable = true;
+            rasterizerDesc.FillMode = D3D11_FILL_SOLID;
+            rasterizerDesc.FrontCounterClockwise = false;
+            rasterizerDesc.MultisampleEnable = settings.sample_count > 1;
+            rasterizerDesc.ScissorEnable = false;
+            rasterizerDesc.SlopeScaledDepthBias = 0.f;
 
-            ID3D11RasterizerState* rasterState;
-            result = mDevice->CreateRasterizerState(&rasterDesc, &rasterState);
+            ID3D11RasterizerState* rasterizerState;
+            result = mDevice->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
             CHECK_RESULT_AND_RETURN(result, L"ID3D11Device->CreateRasterizerState");
 
-            mDeviceContext->RSSetState(rasterState);
-            mRasterState = MakeCOMPtr(rasterState);
+            this->setRasterizerState(MakeSharedPtr<D3D11RasterizerStateObject>(RasterizerStateDesc(), rasterizerState)); 
         }
 
         /* blend states */
@@ -211,24 +210,11 @@ namespace ukn {
             blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
             blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
             blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
+            
             CHECK_RESULT_AND_RETURN(mDevice->CreateBlendState(&blendDesc, &blendState),
                 L"ID3D11Device->CreateBlendState");
 
-            mBlendOffBlendState = MakeCOMPtr(blendState);
-
-            // alpha blend
-            blendDesc.RenderTarget[0].BlendEnable = TRUE;
-            blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-            blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-            blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
-            blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-            blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-            blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-            blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-            CHECK_RESULT_AND_RETURN(mDevice->CreateBlendState(&blendDesc, &blendState),
-                L"ID3D11Device->CreateBlendState");
-
-            mAlphaBlendState = MakeCOMPtr(blendState);
+            this->setBlendState(MakeSharedPtr<D3D11BlendStateObject>(BlendStateDesc(), blendState));
         }
 
         {
@@ -252,7 +238,7 @@ namespace ukn {
             CHECK_RESULT_AND_RETURN(mDevice->CreateSamplerState(&samplerDesc, &samplerState), 
                 L"ID3D11Device->CreateSamplerState");
 
-            mSamplerState = MakeCOMPtr(samplerState);
+            this->setSamplerState(MakeSharedPtr<D3D11SamplerStateObject>(SamplerStateDesc(), samplerState), 0);
         }
 
         mScreenFrameBuffer = MakeSharedPtr<D3D11FrameBuffer>(false, this);
@@ -319,8 +305,7 @@ namespace ukn {
                     viewport.MinDepth = 0.0f;
 
                     mDeviceContext->RSSetViewports(1, &viewport);
-                    disableAlphaBlending();
-
+                    
                     fb.getViewport().camera->update();
 
                     this->setViewMatrix(fb.getViewport().camera->getViewMatrix());
@@ -364,8 +349,13 @@ namespace ukn {
 
             mDeviceContext->IASetPrimitiveTopology(RenderModeToPrimitiveTopology(buffer->getRenderMode()));
 
-            ID3D11SamplerState* samplerState = mSamplerState.get();
-            mDeviceContext->PSSetSamplers(0, 1, &samplerState);
+            for(int i=0; i < mSamplerStates.size(); ++i) {
+                D3D11SamplerStateObject* samplerObj = checked_cast<D3D11SamplerStateObject*>(mSamplerStates[i].get());
+                if(samplerObj) {
+                    ID3D11SamplerState* d3d11samplerState = samplerObj->getD3DSamplerState();
+                    mDeviceContext->PSSetSamplers(i, 1, &d3d11samplerState);
+                }
+            }
 
             if(indexBuffer.isValid() &&
                 buffer->isUseIndexStream()) {
@@ -413,37 +403,37 @@ namespace ukn {
 
     }
 
-    void D3D11GraphicDevice::enableAlphaBlending() {
-        float4 factor(0, 0, 0, 0);
-        mDeviceContext->OMSetBlendState(mAlphaBlendState.get(), factor.value, 0xffffffff);
-    }
-
-    void D3D11GraphicDevice::disableAlphaBlending() {
-        float4 factor(0, 0, 0, 0);
-        mDeviceContext->OMSetBlendState(mBlendOffBlendState.get(), factor.value, 0xffffffff);
-    }
-
     D3D_FEATURE_LEVEL D3D11GraphicDevice::getDeviceFeatureLevel() const {
         return mFeatureLevel;
     }
 
-    void D3D11GraphicDevice::setBlendState(const BlendStatePtr& blendState) {
+    void D3D11GraphicDevice::onSetBlendState(const BlendStatePtr& blendState) {
         if(blendState) {
             D3D11BlendStateObject* blendObj = checked_cast<D3D11BlendStateObject*>(blendState.get());
             if(blendObj) {
-                mDeviceContext->OMSetBlendState(blendObj->getD3DBlendState(),
+                mDeviceContext->OMSetBlendState(
+                    blendObj->getD3DBlendState(),
                     blendObj->getDesc().blend_factor.value,
                     0xffffffff);
             }
         }
     }
 
-    void D3D11GraphicDevice::setSamplerState(const SamplerStatePtr& samplerState) {
+    void D3D11GraphicDevice::onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) {
         if(samplerState) {
             D3D11SamplerStateObject* samplerObj = checked_cast<D3D11SamplerStateObject*>(samplerState.get());
             if(samplerObj) {
-                ID3D11SamplerState* samplerState = samplerObj->getD3DSamplerState();
-                mDeviceContext->PSSetSamplers(0, 1, &samplerState);
+                ID3D11SamplerState* d3d11samplerState = samplerObj->getD3DSamplerState();
+                mDeviceContext->PSSetSamplers(0, 1, &d3d11samplerState);
+            }
+        }
+    }
+
+    void D3D11GraphicDevice::onSetRasterizerState(const RasterizerStatePtr& rasterizerState) {
+        if(rasterizerState) {
+            D3D11RasterizerStateObject* rasterizerObj = checked_cast<D3D11RasterizerStateObject*>(rasterizerState.get());
+            if(rasterizerObj) {
+                mDeviceContext->RSSetState(rasterizerObj->getD3D11RasterizerState());
             }
         }
     }

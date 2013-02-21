@@ -93,8 +93,6 @@ namespace ukn {
     
     void RenderBuffer::setVertexStartIndex(uint32 index) {
         mVertexStartIndex = index;
-
-		this->setVertexStartIndex(index);
     }
     
     GraphicBufferPtr RenderBuffer::getIndexStream() const {

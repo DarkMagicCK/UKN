@@ -109,6 +109,9 @@ namespace ukn {
         // during the batch rendering, all draw calls must have the same texture param
         void startBatch();
         void endBatch();
+
+        // direct draw, current shader vertex format must = Vertex2D
+        void drawQuad(const Vector2& upper, const Vector2& lower);
         
         Matrix4& getTransformMatrix();
         const Matrix4& getTransformMatrix() const;

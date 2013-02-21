@@ -20,7 +20,8 @@
 
 namespace ukn {
     
-    class GraphicContext: public virtual Object {
+    /* rendering utilities */
+    class UKN_API GraphicContext: public virtual Object {
     public:
         GraphicContext();
         virtual ~GraphicContext();
@@ -41,7 +42,10 @@ namespace ukn {
         
         void drawRect(const ukn::Rectangle& rect, float z);
         void fillRect(const ukn::Rectangle& rect, float z);
-        
+
+        // render a quad, usually for texture
+        void drawQuad(const float2& upper_left, const float2& lower_right);
+
         void end();
         
     protected:
@@ -71,6 +75,8 @@ namespace ukn {
         RenderMode mCurrRenderMode;
     };
     
+    typedef SharedPtr<GraphicContext> GraphicContextPtr;
+
 } // namespace ukn
 
 #endif

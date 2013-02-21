@@ -19,6 +19,7 @@
 #include "UKN/CameraController.h"
 #include "UKN/Skybox.h"
 #include "UKN/Terrian.h"
+#include "UKN/GraphicContext.h"
 
 #include "UKN/tmx/TMXTiledMap.h"
 
@@ -58,16 +59,13 @@ int CALLBACK WinMain(
     ukn::TexturePtr texture2;
     ukn::Matrix4 worldMat;
     ukn::EffectPtr effect;
-    ukn::EffectPtr deferredEffect;
     ukn::CameraController* camController;
     ukn::FontPtr font;
     ukn::CompositeRenderTarget* renderTarget;
     ukn::CompositeRenderTarget* renderTargetLightMap;
     ukn::SkyboxPtr skybox;
     ukn::TerrianPtr terrian;
-
-    ukn::RenderBufferPtr renderBufferDeferred;
-    ukn::ShaderPtr deferredFragmentShader;
+    ukn::GraphicContextPtr context;
 
     ukn::Vector3 positions[5];
     
@@ -136,8 +134,8 @@ int CALLBACK WinMain(
             effect->getPass(0)->getVertexShader()->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
             effect->getPass(0)->getVertexShader()->setMatrixVariable("worldMatrix", ukn::Matrix4());
             
-            deferredEffect->getPass(0)->getFragmentShader()->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
-            deferredEffect->getPass(0)->getFragmentShader()->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
+            effect->getPass(1)->getFragmentShader()->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
+            effect->getPass(1)->getFragmentShader()->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
 
             if(terrian) {
                 effect->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
@@ -191,6 +189,7 @@ int CALLBACK WinMain(
             renderTargetLightMap->attachToRender();
             gd.clear(ukn::CM_Color, mist::color::Blue, 1.f, 0);
             
+            ukn::ShaderPtr deferredFragmentShader = effect->getPass(1)->getFragmentShader();
             
             deferredFragmentShader->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
             deferredFragmentShader->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
@@ -205,9 +204,9 @@ int CALLBACK WinMain(
             deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), cos(r), 0, 1));
             deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
            
-            deferredEffect->getPass(0)->begin();
-            gd.renderBuffer(renderBufferDeferred);
-            deferredEffect->getPass(0)->end();
+            effect->getPass(1)->begin();
+            ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, -1), ukn::Vector2(1, 1));
+            effect->getPass(1)->end();
             
             /*
             deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), 0, cos(r), 1));
@@ -316,45 +315,16 @@ int CALLBACK WinMain(
                 ukn::log_error(L"unable to build terrian");
             }
 
-            renderBufferDeferred = gf.createRenderBuffer();
-
-            struct {
-                ukn::float3 position;
-                ukn::float2 uv;
-            } vertices[6];
-
-            vertices[0].position = ukn::float3(-1, 1, 0); vertices[0].uv = ukn::float2(0, 0); 
-            vertices[1].position = ukn::float3(1.0, 1.0, 0); vertices[1].uv = ukn::float2(1, 0);
-            vertices[2].position = ukn::float3(1.0, -1.0, 0); vertices[2].uv = ukn::float2(1, 1);
-            vertices[3].position = ukn::float3(1.0, -1.0, 0); vertices[3].uv = ukn::float2(1, 1);
-            vertices[4].position = ukn::float3(-1, -1.0, 0); vertices[4].uv = ukn::float2(0, 1);
-            vertices[5].position = ukn::float3(-1, 1.0, 0); vertices[5].uv = ukn::float2(0, 0);
-
-            ukn::vertex_elements_type format = ukn::VertexElementsBuilder()
-                                           .add(ukn::VertexElement(ukn::VU_Position,
-                                                                   ukn::EF_Float3,
-                                                                   0))
-                                           .add(ukn::VertexElement(ukn::VU_UV,
-                                                                   ukn::EF_Float2,
-                                                                   0))
-                                           .to_vector();
-            ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::None,
-                                                                       ukn::GraphicBuffer::Static,
-                                                                       6,
-                                                                       vertices,
-                                                                       format);
-            renderBufferDeferred->bindVertexStream(vertexBuffer, format);
-
-            deferredEffect = gf.createEffect();
+            context = new ukn::GraphicContext();
             ukn::ShaderPtr deferredVertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex_deferred_composite.cg"), 
-                    ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", format));
-            deferredFragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment_deferred_composite.cg"), 
+                    ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", ukn::Vertex2D::Format()));
+            ukn::ShaderPtr deferredFragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment_deferred_composite.cg"), 
                     ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram"));
 
-            ukn::EffectPassPtr deferredPass0 = deferredEffect->appendPass();
-            deferredPass0->setFragmentShader(deferredFragmentShader);
-            deferredPass0->setVertexShader(deferredVertexShader);
-            deferredPass0->setVertexFormat(format);
+            ukn::EffectPassPtr deferredPass = effect->appendPass();
+            deferredPass->setFragmentShader(deferredFragmentShader);
+            deferredPass->setVertexShader(deferredVertexShader);
+            deferredPass->setVertexFormat(ukn::Vertex2D::Format());
 
         })
         .run();

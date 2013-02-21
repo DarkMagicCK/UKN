@@ -190,6 +190,10 @@ namespace ukn {
         
         addSeg(RM_Triangle);
     }
+
+    void GraphicContext::drawQuad(const float2& upper_left, const float2& lower_right) {
+        this->fillRect(ukn::Rectangle(upper_left, lower_right), 0);
+    }
     
     void GraphicContext::onRenderBegin() {
         

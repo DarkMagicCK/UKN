@@ -531,6 +531,37 @@ namespace ukn {
         gd.setBlendState(mPrevState);
         gd.enableDepth(true);
     }
+
+    void SpriteBatch::drawQuad(const Vector2& upper, const Vector2& lower) {
+        Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
+        
+        Vertex2D vertex;
+        vertex.xyz.set(upper.x(), upper.y(), 0);
+        vertex.uv.set(0, 0);
+        *vertices++ = vertex; 
+        
+        vertex.xyz.x() = lower.x();
+        vertex.uv.set(1, 0);
+        *vertices++ = vertex; 
+        
+        vertex.xyz.y() = lower.y();
+        vertex.uv.set(1, 1);
+        *vertices++ = vertex; 
+        *vertices++ = vertex; 
+
+        vertex.xyz.x() = upper.x();
+        vertex.uv.set(0, 1);
+        *vertices++ = vertex; 
+
+        vertex.xyz.y() = upper.y();
+        vertex.uv.set(0, 0);
+        *vertices++ = vertex; 
+        
+        mVertexBuffer->unmap();
+
+        mRenderBuffer->setVertexCount(6);
+        Context::Instance().getGraphicFactory().getGraphicDevice().renderBuffer(mRenderBuffer);
+    }
     
     SpriteBatch& SpriteBatch::DefaultObject() {
         static SpriteBatchPtr instance = Context::Instance().getGraphicFactory().createSpriteBatch();

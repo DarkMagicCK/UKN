@@ -72,7 +72,16 @@
     <ClInclude Include="..\..\External\glew\wglew.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\External\soil\image_DXT.h">
+    <ClInclude Include="..\..\Plugins\GL\CgShader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLBlendStateObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLSamplerStateObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\GL\GLRasterizerStateObject.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\External\soil\image_helper.h">
@@ -90,16 +99,7 @@
     <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\CgShader.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLBlendStateObject.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLSamplerStateObject.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\GL\GLRasterizerStateObject.h">
+    <ClInclude Include="..\..\External\soil\image_DXT.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -140,6 +140,15 @@
     <ClCompile Include="..\..\External\glew\glew.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\CgShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLBlendStateObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLSamplerStateObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\External\soil\image_helper.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -150,15 +159,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\External\soil\image_DXT.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\CgShader.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLBlendStateObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\GL\GLSamplerStateObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

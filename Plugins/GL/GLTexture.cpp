@@ -112,8 +112,8 @@ namespace ukn {
                                   element_format_to_gl_format(format),
                                   w,
                                   h,
-                                  GL_RGBA,
-                                  GL_UNSIGNED_BYTE,
+                                  element_format_to_texdata_format(format),
+                                  element_format_to_gl_element_type(format),
                                   texData);
             else
                 glTexImage2D(GL_TEXTURE_2D,
@@ -122,8 +122,8 @@ namespace ukn {
                              w,
                              h,
                              0,
-                             GL_RGBA,
-                             GL_UNSIGNED_BYTE,
+                             element_format_to_texdata_format(format),
+                             element_format_to_gl_element_type(format),
                              texData);
             if(initialData == 0)
                 mist_free(texData);
@@ -171,11 +171,12 @@ namespace ukn {
         glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
         glGetTexImage(GL_TEXTURE_2D,
                       level,
-                      element_format_to_gl_format(this->format()),
+                      element_format_to_texdata_format(this->format()),
                       element_format_to_gl_element_type(this->format()),
                       texData);
-        if(glGetError() != GL_NO_ERROR) {
-            log_error("GLGraphicDevice: error when locking texture");
+        int err = GL_NO_ERROR;
+        if((err = glGetError()) != GL_NO_ERROR) {
+            log_error(format_string("GLGraphicDevice: error when locking texture, code %d", err));
         }
         
         glBindTexture(GL_TEXTURE_2D, prevTexture);
@@ -201,12 +202,13 @@ namespace ukn {
                         0,
                         mWidth,
                         mHeight,
-                        element_format_to_gl_format(this->format()),
+                        element_format_to_texdata_format(this->format()),
                         element_format_to_gl_element_type(this->format()),
                         mTextureData);
         
-        if(glGetError() != GL_NO_ERROR) {
-            log_error("GLGraphicDevice: error when updating texture");
+        int err = GL_NO_ERROR;
+        if((err = glGetError()) != GL_NO_ERROR) {
+            log_error(format_string("GLGraphicDevice: error when locking texture, code %d", err));
         }
         
         glBindTexture(GL_TEXTURE_2D, prevTexture);

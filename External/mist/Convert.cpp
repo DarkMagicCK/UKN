@@ -72,4 +72,14 @@ namespace mist {
         return result;
     }
     
+    
+    void FormatString::replace(const MistString& search, const MistString& replacement) {
+        size_t pos = 0;
+        while((pos = mStr.find(search, pos)) != MistString::npos) {
+            mStr.replace(pos, search.length(), replacement);
+            pos += replacement.length();
+        }
+    }
+
+    
 } // namespace mist

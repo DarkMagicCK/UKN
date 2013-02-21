@@ -94,6 +94,12 @@ namespace ukn {
 
         glCullFace(GL_NONE);
         //
+        
+        GraphicFactory& factory = Context::Instance().getGraphicFactory();
+        
+        this->setBlendState(factory.createBlendStateObject(BlendStateDesc()));
+        this->setRasterizerState(factory.createRasterizerStateObject(RasterizerStateDesc()));
+        this->setSamplerState(factory.createSamplerStateObject(SamplerStateDesc()));
 
         return mWindow;
     }

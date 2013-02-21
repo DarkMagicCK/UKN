@@ -616,7 +616,7 @@ namespace mist {
     public:
         real x1, y1;
         real x2, y2;
-
+        
         AABB2(real _x1, real _y1, real _x2, real _y2, bool asWH=false);
         AABB2();
         AABB2(const Vector2& upper, const Vector2& lower);

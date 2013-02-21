@@ -75,6 +75,9 @@ namespace ukn {
 
         /* native handle */
         virtual uintPtr getTextureId() const = 0;
+        
+        virtual void* map(uint32 level = 0) = 0;
+        virtual void unmap() = 0;
 
         ElementFormat   format() const;
         TextureType     type() const;

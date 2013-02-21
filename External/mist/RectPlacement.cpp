@@ -49,6 +49,10 @@ namespace mist {
         
     }
     
+    RectPlacement::~RectPlacement() {
+        
+    }
+    
     bool RectPlacement::isOk() const {
         return m_size.width() > 0;
     }
@@ -66,7 +70,7 @@ namespace mist {
     }
     
     long RectPlacement::getTotalArea () const {
-        return m_size.w*m_size.h;
+        return m_size.width() * m_size.height();
     }
     
     void RectPlacement::setMargin(int32 margin) {

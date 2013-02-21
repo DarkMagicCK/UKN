@@ -63,8 +63,6 @@
 		8833AA0116C937E90051E378 /* BlendStateObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8833A9F816C937E90051E378 /* BlendStateObject.cpp */; };
 		8833AA0216C937E90051E378 /* Fog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8833A9F916C937E90051E378 /* Fog.cpp */; };
 		8833AA0316C937E90051E378 /* SamplerStateObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8833A9FA16C937E90051E378 /* SamplerStateObject.cpp */; };
-		8833AA0416C937E90051E378 /* SceneManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8833A9FB16C937E90051E378 /* SceneManager.cpp */; };
-		8833AA0516C937E90051E378 /* SceneObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8833A9FC16C937E90051E378 /* SceneObject.cpp */; };
 		8833AA0616C937E90051E378 /* Skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8833A9FD16C937E90051E378 /* Skybox.cpp */; };
 		8833AA0716C937E90051E378 /* SkyDome.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8833A9FE16C937E90051E378 /* SkyDome.cpp */; };
 		8833AA0816C937E90051E378 /* Terrian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8833A9FF16C937E90051E378 /* Terrian.cpp */; };
@@ -75,7 +73,6 @@
 		884CE4011490905900F58E2E /* GLSpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE4001490905600F58E2E /* GLSpriteBatch.cpp */; };
 		8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885449981491E253006B8B60 /* libfreetype.a */; };
 		88563D3116BCD1D4008D0F1C /* CgHelper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D3016BCD1D4008D0F1C /* CgHelper.cpp */; };
-		88563D3316BCD1F7008D0F1C /* main_win.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D3216BCD1F7008D0F1C /* main_win.cpp */; };
 		88563D3616BCD2B7008D0F1C /* CgShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D3416BCD2B7008D0F1C /* CgShader.cpp */; };
 		88563D3C16BCD2C7008D0F1C /* glew.c in Sources */ = {isa = PBXBuildFile; fileRef = 88563D3816BCD2C7008D0F1C /* glew.c */; };
 		88563D4316BCD366008D0F1C /* CameraController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88563D4216BCD365008D0F1C /* CameraController.cpp */; };
@@ -104,6 +101,8 @@
 		88AAC16D14868751007A80A4 /* Texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AAC15A14868751007A80A4 /* Texture.cpp */; };
 		88B2236914CDE18D00C871C8 /* RenderTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88B2236814CDE18D00C871C8 /* RenderTarget.cpp */; };
 		88D1301114CF9677001BB071 /* Input.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D1301014CF9677001BB071 /* Input.cpp */; };
+		88D3929516D6952500213E7D /* RasterizerStateObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D3929416D6952500213E7D /* RasterizerStateObject.cpp */; };
+		88D3929916D69B2D00213E7D /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88D3929716D69B2C00213E7D /* font.cpp */; };
 		88E1938F15EBD1F40098FA28 /* Arial.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88E1938D15EBD13E0098FA28 /* Arial.ttf */; };
 		88E3C3DE147F2CD400E8754D /* GLGraphicDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */; };
 		88E3C3E1147F2D6200E8754D /* GLGraphicFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3E0147F2D6200E8754D /* GLGraphicFactory.cpp */; };
@@ -283,8 +282,6 @@
 		8833A9F816C937E90051E378 /* BlendStateObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlendStateObject.cpp; sourceTree = "<group>"; };
 		8833A9F916C937E90051E378 /* Fog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Fog.cpp; sourceTree = "<group>"; };
 		8833A9FA16C937E90051E378 /* SamplerStateObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SamplerStateObject.cpp; sourceTree = "<group>"; };
-		8833A9FB16C937E90051E378 /* SceneManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneManager.cpp; sourceTree = "<group>"; };
-		8833A9FC16C937E90051E378 /* SceneObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SceneObject.cpp; sourceTree = "<group>"; };
 		8833A9FD16C937E90051E378 /* Skybox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Skybox.cpp; sourceTree = "<group>"; };
 		8833A9FE16C937E90051E378 /* SkyDome.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SkyDome.cpp; sourceTree = "<group>"; };
 		8833A9FF16C937E90051E378 /* Terrian.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terrian.cpp; sourceTree = "<group>"; };
@@ -385,7 +382,6 @@
 		8855E31E1656107B002311E9 /* LeapMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LeapMotion.h; sourceTree = "<group>"; };
 		88563D2D16BCD1B6008D0F1C /* CgHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CgHelper.h; sourceTree = "<group>"; };
 		88563D3016BCD1D4008D0F1C /* CgHelper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CgHelper.cpp; sourceTree = "<group>"; };
-		88563D3216BCD1F7008D0F1C /* main_win.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main_win.cpp; path = vs/UKN/main_win.cpp; sourceTree = SOURCE_ROOT; };
 		88563D3416BCD2B7008D0F1C /* CgShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CgShader.cpp; sourceTree = "<group>"; };
 		88563D3516BCD2B7008D0F1C /* CgShader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CgShader.h; sourceTree = "<group>"; };
 		88563D3816BCD2C7008D0F1C /* glew.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glew.c; sourceTree = "<group>"; };
@@ -458,6 +454,8 @@
 		88CC31191477915700558EA1 /* Project Unknown */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Project Unknown"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88D1300E14CF812C001BB071 /* GLFWInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFWInput.h; sourceTree = "<group>"; };
 		88D1301014CF9677001BB071 /* Input.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Input.cpp; sourceTree = "<group>"; };
+		88D3929416D6952500213E7D /* RasterizerStateObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RasterizerStateObject.cpp; sourceTree = "<group>"; };
+		88D3929716D69B2C00213E7D /* font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = font.cpp; path = tests/font.cpp; sourceTree = SOURCE_ROOT; };
 		88E1938D15EBD13E0098FA28 /* Arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Arial.ttf; path = /Library/Fonts/Arial.ttf; sourceTree = "<absolute>"; };
 		88E3C3DC147F2BBD00E8754D /* GLGraphicDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGraphicDevice.h; sourceTree = "<group>"; };
 		88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLGraphicDevice.cpp; sourceTree = "<group>"; };
@@ -925,10 +923,9 @@
 			isa = PBXGroup;
 			children = (
 				8833A9F816C937E90051E378 /* BlendStateObject.cpp */,
+				88D3929416D6952500213E7D /* RasterizerStateObject.cpp */,
 				8833A9F916C937E90051E378 /* Fog.cpp */,
 				8833A9FA16C937E90051E378 /* SamplerStateObject.cpp */,
-				8833A9FB16C937E90051E378 /* SceneManager.cpp */,
-				8833A9FC16C937E90051E378 /* SceneObject.cpp */,
 				8833A9FD16C937E90051E378 /* Skybox.cpp */,
 				8833A9FE16C937E90051E378 /* SkyDome.cpp */,
 				8833A9FF16C937E90051E378 /* Terrian.cpp */,
@@ -1039,7 +1036,7 @@
 				88AAC14414868751007A80A4 /* src */,
 				88AAC170148689ED007A80A4 /* External */,
 				88E3C3C7147F2BAC00E8754D /* Plugins */,
-				88563D3216BCD1F7008D0F1C /* main_win.cpp */,
+				88D3929716D69B2C00213E7D /* font.cpp */,
 				88E1938D15EBD13E0098FA28 /* Arial.ttf */,
 			);
 			path = "Project Unknown";
@@ -1444,7 +1441,6 @@
 				887ACB52166C170900EDFBB6 /* Serial.cpp in Sources */,
 				88757D441676F70200E31975 /* Query.cpp in Sources */,
 				88563D3116BCD1D4008D0F1C /* CgHelper.cpp in Sources */,
-				88563D3316BCD1F7008D0F1C /* main_win.cpp in Sources */,
 				88563D3616BCD2B7008D0F1C /* CgShader.cpp in Sources */,
 				88563D3C16BCD2C7008D0F1C /* glew.c in Sources */,
 				88563D4316BCD366008D0F1C /* CameraController.cpp in Sources */,
@@ -1455,8 +1451,6 @@
 				8833AA0116C937E90051E378 /* BlendStateObject.cpp in Sources */,
 				8833AA0216C937E90051E378 /* Fog.cpp in Sources */,
 				8833AA0316C937E90051E378 /* SamplerStateObject.cpp in Sources */,
-				8833AA0416C937E90051E378 /* SceneManager.cpp in Sources */,
-				8833AA0516C937E90051E378 /* SceneObject.cpp in Sources */,
 				8833AA0616C937E90051E378 /* Skybox.cpp in Sources */,
 				8833AA0716C937E90051E378 /* SkyDome.cpp in Sources */,
 				8833AA0816C937E90051E378 /* Terrian.cpp in Sources */,
@@ -1483,6 +1477,8 @@
 				8802B83F16D40958003C136C /* SceneManager.cpp in Sources */,
 				8802B84016D40958003C136C /* SceneObject.cpp in Sources */,
 				8802B84316D40A46003C136C /* RectPlacement.cpp in Sources */,
+				88D3929516D6952500213E7D /* RasterizerStateObject.cpp in Sources */,
+				88D3929916D69B2D00213E7D /* font.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

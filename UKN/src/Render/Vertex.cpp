@@ -123,7 +123,7 @@ namespace ukn {
     }
 
     uint32 VertexMapper::element_count() {
-        return elements.size();
+        return (uint32)elements.size();
     }
 
 

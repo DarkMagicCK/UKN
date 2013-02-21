@@ -28,11 +28,11 @@
 #include "mist/RandomUtil.h"
 #include "mist/Convert.h"
 #include "mist/TimeUtil.h"
+#include "mist/Query.h"
 
 #include <vector>
 #include <map>
 
-#include "mist/Query.h"
 
 #include <numeric>
 #ifndef MIST_OS_WINDOWS

@@ -219,7 +219,7 @@ namespace ukn {
         return mBlendState;
     }
 
-    const SamplerStatePtr& GraphicDevice::getSamplerState(uint32 index) const {
+    SamplerStatePtr GraphicDevice::getSamplerState(uint32 index) const {
         if(index < mSamplerStates.size())
             return mSamplerStates[index];
         return SamplerStatePtr();

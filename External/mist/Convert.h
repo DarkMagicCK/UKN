@@ -13,12 +13,14 @@
 #include "mist/Util.h"
 #include "mist/Serializer.h"
 
+#include <algorithm>
+
 namespace mist {
     
     class MIST_API Convert {
     public:
         template<typename T>
-        static MistString ToString(T t);
+        static MistString ToString(const T& t);
         
         static bool     ToBoolean(const MistString& str);
         
@@ -49,9 +51,37 @@ namespace mist {
     };
     
     template<typename T>
-    MistString Convert::ToString(T t) {
+    MistString Convert::ToString(const T& t) {
         return string::AnyToWString(t);
     }
+    
+    struct MIST_API FormatString {
+        FormatString(const MistString& str):
+        mStr(str),
+        mCurrIndex(0) {
+            
+        }
+        
+        operator MistString() { return mStr; }
+        
+        template<typename T>
+        FormatString& operator,(const T& t);
+        
+        void replace(const MistString& search, const MistString& replacement);
+        
+    private:
+        MistString mStr;
+        uint32 mCurrIndex;
+    };
+
+    template<typename T>
+    FormatString& FormatString::operator,(const T& t) {
+        MistString search = L"{" + Convert::ToString(mCurrIndex) + L"}";
+        this->replace(search, Convert::ToString(t));
+        mCurrIndex += 1;
+        return *this;
+    }
+    
     
     
 } // namespace mist

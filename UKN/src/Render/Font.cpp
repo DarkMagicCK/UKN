@@ -103,7 +103,8 @@ namespace ukn {
     texh(0),
     imgw(0),
     imgh(0),
-    texture(TexturePtr()) { 
+    texture_id(0) {
+
     }
         
     Font::FTGlyph:: ~FTGlyph() {
@@ -142,38 +143,44 @@ namespace ukn {
                         
                     if(imgw == 0 || imgh == 0)
                         return;
-                        
-                    uint32* texd = (uint32*)mist_malloc(imgw * imgh * 4);
-                    memset(texd, 0, imgw * imgh * 4);
-                    uint32* texp = texd;
-                    bool cflag = true;
-                    for(int i = 0; i < bits.rows; ++i) {
-                        uint32* rowp = texp;
-                        for(int j=0; j < bits.width; ++j) {
-                            if(*pt) {
-                                if(cflag) {
-                                    *rowp = *pt;
-                                    *rowp *= 0x01010101;
-                                } else {
-                                    *rowp = *pt << 24;
-                                    *rowp |= 0xffffffff;
-                                }
-                            } else {
-                                *rowp = 0;
-                            }
-                            pt++;
-                            rowp++;
-                        }
-                        texp += imgw;
+                    
+                    
+                    uint32 texid = font.getLastTexturePlacement();
+                    Font::TexturePlacement* placement = font.getTexturePlacement(texid);
+                    
+                    this->rect = Rectangle(0, 0, imgw, imgh);
+                    if(!placement->rect.addAtEmptySpotAutoGrow(this->rect, imgw, imgh)) {
+                        texid++;
+                        placement = font.appendTexturePlacement();
+                        placement->rect.addAtEmptySpotAutoGrow(this->rect, imgw, imgh);
                     }
-                        
-                    texture = Context::Instance().getGraphicFactory().create2DTexture(imgw,
-                                                                                        imgh,
-                                                                                        0,
-                                                                                        EF_RGBA8,
-                                                                                        (uint8*)texd);
-                    mist_free(texd);
-                    cached = true;
+                    
+                    uint32* texd = (uint32*)placement->texture->map();
+                    if(texd) {
+                        uint32* texp = texd + (uint32)this->rect.x();
+                        bool cflag = true;
+                        for(int i = 0; i < bits.rows; ++i) {
+                            uint32* rowp = texp;
+                            for(int j=0; j < bits.width; ++j) {
+                                if(*pt) {
+                                    if(cflag) {
+                                        *rowp = *pt;
+                                        *rowp *= 0x01010101;
+                                    } else {
+                                        *rowp = *pt << 24;
+                                        *rowp |= 0xffffffff;
+                                    }
+                                } else {
+                                    *rowp = 0;
+                                }
+                                pt++;
+                                rowp++;
+                            }
+                            texp += placement->texture->width();
+                        }
+                        placement->texture->unmap();
+                        cached = true;
+                    }
                 }
             }
         }
@@ -191,6 +198,8 @@ namespace ukn {
         mSpriteBatch = Context::Instance().getGraphicFactory().createSpriteBatch();
         if(!mSpriteBatch)
             log_error("ukn::Font::Font Error creating sprite batch for font rendering");
+        
+        this->appendTexturePlacement();
     }
     
     Font::~Font() {
@@ -349,9 +358,13 @@ namespace ukn {
                     if(gidx > 0 && gidx < mGlyphs.size()) {
                         FTGlyph& glyph = mGlyphs[gidx-1];
                         
-                        mSpriteBatch->draw(glyph.texture, 
+                        mSpriteBatch->draw(mTextures[glyph.texture_id].texture,
                                            Vector2(x+glyph.left, 
-                                                   y+glyph.size-glyph.top), 
+                                                   y+glyph.size-glyph.top),
+                                           glyph.rect,
+                                           Vector2(0, 0),
+                                           0,
+                                           Vector2(1, 1),
                                            data.char_rot, 
                                            data.clr);
                         
@@ -447,5 +460,21 @@ namespace ukn {
         }
     }
     
+    Font::TexturePlacement* Font::getTexturePlacement(uint32 tid) {
+        if(tid < mTextures.size());
+            return &mTextures[tid];
+        return 0;
+    }
+    
+    Font::TexturePlacement* Font::appendTexturePlacement() {
+        mTextures.push_back(TexturePlacement());
+        mTextures.back().texture = Context::Instance().getGraphicFactory().create2DTexture(1024, 1024, 1, ukn::EF_RGBA8);
+        mTextures.back().rect.init(1024, 1024);
+        return &mTextures.back();
+    }
+    
+    uint32 Font::getLastTexturePlacement() const {
+        return (uint32)mTextures.size() - 1;
+    }
     
 } // namespace ukn

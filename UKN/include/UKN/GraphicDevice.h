@@ -144,8 +144,8 @@ namespace ukn {
         void setRasterizerState(const RasterizerStatePtr& rasterizerState);
         
         const BlendStatePtr& getBlendState() const;
-        const SamplerStatePtr& getSamplerState(uint32 index = 0) const;
         const RasterizerStatePtr& getRasterizerState() const;
+        SamplerStatePtr getSamplerState(uint32 index = 0) const;
 
     protected:
         FrameBufferPtr mCurrFrameBuffer;

@@ -13,10 +13,11 @@
 #include "mist/Uncopyable.h"
 #include "mist/Serializer.h"
 #include "mist/Color.h"
+#include "mist/RectPlacement.h"
 
 #include "UKN/PreDeclare.h"
 #include "UKN/Renderable.h"
-
+#include "UKN/Texture.h"
 #include <vector>
 
 #include <ft2build.h>
@@ -81,6 +82,13 @@ namespace ukn {
         virtual bool deserialize(const ConfigParserPtr& cfg);
         virtual bool serialize(const ConfigParserPtr& cfg);
         
+        struct TexturePlacement {
+            mist::RectPlacement rect;
+            TexturePtr texture;
+        };
+        friend class FTGlyph;
+        TexturePlacement* getTexturePlacement(uint32 tid);
+        
     private:        
         void onRenderBegin();
         void onRenderEnd();
@@ -102,7 +110,6 @@ namespace ukn {
         int32 mShadowYOffset;
         
         SpriteBatchPtr mSpriteBatch;
-        
         
 		struct UKN_API StringData {
 			std::wstring string_to_render;
@@ -166,10 +173,17 @@ namespace ukn {
 			uint32 texh;
 			uint32 imgw;
 			uint32 imgh;
-        
-			TexturePtr texture;
+            
+            Rectangle rect;
+            uint32 texture_id;
 		};
         std::vector<FTGlyph> mGlyphs;
+        
+        
+        TexturePlacement* appendTexturePlacement();
+        uint32 getLastTexturePlacement() const;
+
+        std::vector<TexturePlacement> mTextures;
     };
     
 } // namespace ukn  

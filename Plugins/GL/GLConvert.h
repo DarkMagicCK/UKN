@@ -50,6 +50,19 @@ namespace ukn {
 		return GL_UNSIGNED_BYTE;
     }
     
+    inline GLenum element_format_to_texdata_format(ElementFormat format) {
+        switch(format) {
+            case EF_RGBA8: return GL_RGBA;
+            case EF_RGBA4444: return GL_RGBA;
+            case EF_RGB565: return GL_RGB;
+            case EF_RGB5A1: return GL_RGB;
+			case EF_D32: return GL_DEPTH_COMPONENT;
+			case EF_D16: return GL_DEPTH_COMPONENT;
+            case EF_D24S8: return GL_DEPTH_STENCIL;
+        }
+		return GL_UNSIGNED_BYTE;
+    }
+    
     inline GLenum element_format_to_gl_element_type(ElementFormat format) {
         switch(format) {
             case EF_RGBA8: return GL_UNSIGNED_BYTE;

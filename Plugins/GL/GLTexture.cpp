@@ -216,7 +216,30 @@ namespace ukn {
         mist_free(mTextureData);
         mTextureData = 0;
     }
-
+    
+    void GLTexture2D::updateData(const mist::Rectangle& rect, const uint8* data, uint32 level) {
+        GLint prevTexture;
+        glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
+        
+        glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
+        glTexSubImage2D(GL_TEXTURE_2D,
+                        level,
+                        rect.x(),
+                        rect.y(),
+                        rect.width(),
+                        rect.height(),
+                        element_format_to_texdata_format(this->format()),
+                        element_format_to_gl_element_type(this->format()),
+                        data);
+        
+        int err = GL_NO_ERROR;
+        if((err = glGetError()) != GL_NO_ERROR) {
+            log_error(format_string("GLGraphicDevice: error when updating texture, code %d", err));
+        }
+        
+        glBindTexture(GL_TEXTURE_2D, prevTexture);
+    }
+    
     uintPtr GLTexture2D::getTextureId() const {
         return mTextureId;
     }

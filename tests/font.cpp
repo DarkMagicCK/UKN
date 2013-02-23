@@ -81,22 +81,24 @@ int CALLBACK WinMain(__in  HINSTANCE hInstance,
         ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
         gd.clear(ukn::CM_Color, ukn::color::Black, 1.0f, 0.f);
         
+        font->begin();
         font->draw(L"ABCSDAKDadSKDJADLKSAJDKASDJALSDJAKSDJDEFGHIJKLMNOPQRSTUVWRST", 0, 0, ukn::FA_Left);
-        font->render();
-        
+        font->end();
         ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
+
         sb.begin();
         sb.draw(font->getTexturePlacement(0)->texture, ukn::Vector2(0, 0));
         sb.end();
         
     })
     .connectInit([&](ukn::Window* ) {
-        font = ukn::AssetManager::Instance().load<ukn::Font>(L"Arial.ttf");
-        if(font)
-            font->setStyleProperty(ukn::FSP_Size, 20);
-        
+        font = ukn::Font::Create(L"Arial.ttf", 20);
+
         mist::log_info((mist::FormatString(L"{0}, {1} {2}, {1} test"), 1, 0.2f, "test"));
 
+        ukn::ModelLoader::ModelDataPtr model = ukn::ModelLoader::LoadFromPly(
+            ukn::ResourceLoader::Instance().loadResource(L"dragon_vrip_res4.ply")
+        );
     })
     .run();
     

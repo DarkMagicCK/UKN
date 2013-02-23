@@ -467,6 +467,11 @@ namespace ukn {
         case RS_PointSize:
             glPointSize(mist::Convert::ReinterpretConvert<uint32, float>(func));
             break;
+                
+        case RS_CullFace:
+        case RS_FillMode:
+        case RS_FrontFace:
+            break;
         }
     }
 

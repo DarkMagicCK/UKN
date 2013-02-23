@@ -412,6 +412,7 @@
 		88871FDF148CB1800026B2B8 /* stbi_DDS_aug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stbi_DDS_aug.h; sourceTree = "<group>"; };
 		88871FE0148CB1800026B2B8 /* stbi_DDS_aug_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stbi_DDS_aug_c.h; sourceTree = "<group>"; };
 		88871FE7148CB2E60026B2B8 /* Asset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Asset.h; sourceTree = "<group>"; };
+		888CC03516D86A260017FCB9 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Model.h; sourceTree = "<group>"; };
 		88A98F1814D33BDD002A79CD /* TMXTiledMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMXTiledMap.cpp; sourceTree = "<group>"; };
 		88A98F1D14D33BEC002A79CD /* TMXTiledMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TMXTiledMap.h; sourceTree = "<group>"; };
 		88AAC0F914868751007A80A4 /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
@@ -880,6 +881,7 @@
 				88180F2016C175FF006AAA11 /* BlendStateObject.h */,
 				88180F2116C17650006AAA11 /* SamplerStateObject.h */,
 				8802B80E16D404C3003C136C /* ImageWriter.h */,
+				888CC03516D86A260017FCB9 /* Model.h */,
 			);
 			path = UKN;
 			sourceTree = "<group>";

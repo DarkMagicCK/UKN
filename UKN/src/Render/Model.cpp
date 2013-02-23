@@ -118,23 +118,228 @@ namespace ukn {
                 float3(min.x(), max.y(), max.z()), // 6
                 float3(max.x(), max.y(), max.z()) // 7
             };
+            
+            uint32 idx = 0;
+
+            Vertex2D vertices[6* 6];
+            
+            float half4 = 0.25f;
+            float half2 = 0.5f;
+            float half43 = 0.75f;
+            float half3 = 1.0f / 3;
+            float half32 = 2.0f / 3;
+            
+            // front, 0123
+            vertices[idx++].xyz = v[0]; vertices[idx++].xyz = v[1]; vertices[idx++].xyz = v[2];
+            vertices[idx++].xyz = v[2]; vertices[idx++].xyz = v[3]; vertices[idx++].xyz = v[0];
+            
+            // left, 1265
+            vertices[idx++].xyz = v[1]; vertices[idx++].xyz = v[2]; vertices[idx++].xyz = v[6];
+            vertices[idx++].xyz = v[6]; vertices[idx++].xyz = v[5]; vertices[idx++].xyz = v[1];
+            
+            // back, 4567
+            vertices[idx++].xyz = v[4]; vertices[idx++].xyz = v[5]; vertices[idx++].xyz = v[6];
+            vertices[idx++].xyz = v[6]; vertices[idx++].xyz = v[7]; vertices[idx++].xyz = v[4];
+            
+            // right, 0374
+            vertices[idx++].xyz = v[0]; vertices[idx++].xyz = v[3]; vertices[idx++].xyz = v[7];
+            vertices[idx++].xyz = v[7]; vertices[idx++].xyz = v[4]; vertices[idx++].xyz = v[0];
+            
+            // top, 2376
+            vertices[idx++].xyz = v[2]; vertices[idx++].xyz = v[3]; vertices[idx++].xyz = v[7];
+            vertices[idx++].xyz = v[7]; vertices[idx++].xyz = v[6]; vertices[idx++].xyz = v[2];
+            
+            // bottom, 0154
+            vertices[idx++].xyz = v[0]; vertices[idx++].xyz = v[1]; vertices[idx++].xyz = v[5];
+            vertices[idx++].xyz = v[5]; vertices[idx++].xyz = v[4]; vertices[idx++].xyz = v[0];
+            
+            idx = 0;
+            
+            vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, half3);
+            vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half2, half3); vertices[idx++].uv.set(half2, half32);
+            
+            vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(0, half3);
+            vertices[idx++].uv.set(0, half3); vertices[idx++].uv.set(0, half32); vertices[idx++].uv.set(half4, half32);
+            
+            vertices[idx++].uv.set(half43, half32); vertices[idx++].uv.set(1, half32); vertices[idx++].uv.set(1, half3);
+            vertices[idx++].uv.set(1, half3); vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half43, half32);
+            
+            vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half2, half3); vertices[idx++].uv.set(half43, half3);
+            vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half43, half32); vertices[idx++].uv.set(half2, half32);
+            
+            vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half2, half3); vertices[idx++].uv.set(half2, 0);
+            vertices[idx++].uv.set(half2, 0); vertices[idx++].uv.set(half4, 0); vertices[idx++].uv.set(half4, half3);
+            
+            vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, 1);
+            vertices[idx++].uv.set(half4, 1); vertices[idx++].uv.set(half2, 1); vertices[idx++].uv.set(half2, half32);
+            
+            
+            GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(GraphicBuffer::None,
+                                                                  GraphicBuffer::Static,
+                                                                  6 * 6,
+                                                                  vertices,
+                                                                  Vertex2D::Format());
+            if(vertexBuffer) {
+                renderBuffer->bindVertexStream(vertexBuffer, Vertex2D::Format());
+                
+            }
         }
         return renderBuffer;
     }
-
-    ukn::RenderBufferPtr ModelLoader::LoadFromCSV(const mist::ResourcePtr& file, const vertex_elements_type& elements) {
+    
+    ModelLoader::ModelDataPtr ModelLoader::LoadFromPly(const mist::ResourcePtr& file) {
         mist::TextStreamReader reader(file->getResourceStream());
         while(!reader.peek() != -1) {
-            MistString line = reader.readLine();
-            StringTokenlizer tokens(line, L",");
-            for(vertex_elements_type::const_iterator it = elements.begin(), end = elements.end();
-                it != end;
-                ++it) {
-                if(it-> format == EF_Float) {
-
+            MistString magic = reader.readString();
+            if(magic == L"ply") {
+                MistString header = reader.readString();
+                
+                uint32 vertexCount = 0;
+                uint32 indexCount = 0;
+                float version = 0;
+                
+                struct VertexComponent {
+                    enum Component {
+                        X, Y, Z,
+                        R, G, B,
+                        NX, NY, NZ,
+                        U, V
+                    };
+                    typedef std::vector<Component> ComponentVector;
+                    ComponentVector components;
+                    /* x y z r g b nx ny nz u v*/
+                    bool vertex_flag[11];
+                    
+                    VertexComponent() {
+                        memset(vertex_flag, 0, sizeof(vertex_flag));
+                    }
+                    
+                    void add(Component comp) {
+                        components.push_back(comp);
+                        vertex_flag[comp] = true;
+                    }
+                    
+                    bool hasXYZ() const {
+                        return vertex_flag[0] || vertex_flag[1] || vertex_flag[2];
+                    }
+                    bool hasNormal() const {
+                        return vertex_flag[3] || vertex_flag[4] || vertex_flag[5];
+                    }
+                    bool hasColor() const {
+                        return vertex_flag[6] || vertex_flag[7] || vertex_flag[8];
+                    }
+                    bool hasUV() const {
+                        return vertex_flag[10] || vertex_flag[9];
+                    }
+                    
+                    ComponentVector::const_iterator begin() const { return components.begin(); }
+                    ComponentVector::const_iterator end() const { return components.end(); }
+                    
+                } vertex_components;
+                
+                while(header != L"end_header") {
+                    if(header == L"format") {
+                        MistString format = reader.readString();
+                        assert(format == L"ascii");
+                        version = reader.readFloat();
+                        
+                    } else if(header == L"comment") {
+                        reader.readLine();
+                        
+                    } else if(header == L"element") {
+                        MistString element = reader.readString();
+                        if(element == L"vertex") {
+                            vertexCount = reader.readUInt32();
+                            MistString prop = reader.readString();
+                            
+                            while(prop == L"property") {
+                                MistString type = reader.readString();
+                                MistString component = reader.readString();
+                                if(component == L"x") { vertex_components.add(VertexComponent::X);
+                                
+                                }
+                                else if(component == L"y") { vertex_components.add(VertexComponent::Y);
+                                }
+                                else if(component == L"z") { vertex_components.add(VertexComponent::Z);
+                                }
+                                else if(component == L"red") { vertex_components.add(VertexComponent::R);
+                                }
+                                else if(component == L"green") { vertex_components.add(VertexComponent::G);
+                                }
+                                else if(component == L"blue") { vertex_components.add(VertexComponent::B);
+                                }
+                                else if(component == L"nx") { vertex_components.add(VertexComponent::NX);
+                                }
+                                else if(component == L"ny") { vertex_components.add(VertexComponent::NY);
+                                }
+                                else if(component == L"nz") { vertex_components.add(VertexComponent::NZ);
+                                }
+                                else if(component == L"u") { vertex_components.add(VertexComponent::U);
+                                }
+                                else if(component == L"v") { vertex_components.add(VertexComponent::V);
+                                }
+                                
+                                prop = reader.readString();
+                            }
+                            continue;
+                        } else if(element == L"face") {
+                            indexCount = reader.readUInt32();
+                        }
+                    }
+                    header = reader.readString();
                 }
+                
+                ModelData* data = new ModelData();
+                if(vertex_components.hasXYZ()) {
+                    data->position.resize(vertexCount);
+                }
+                if(vertex_components.hasColor()) {
+                    data->color.resize(vertexCount);
+                }
+                if(vertex_components.hasNormal()) {
+                    data->normal.resize(vertexCount);
+                }
+                if(vertex_components.hasUV()) {
+                    data->uv.resize(vertexCount);
+                }
+                
+                /* begin data */
+                for(uint32 i=0; i<vertexCount; ++i) {
+                    for(const VertexComponent::Component& c: vertex_components) {
+                        switch(c) {
+                            case VertexComponent::X: data->position[i][0] = reader.readFloat(); break;
+                            case VertexComponent::Y: data->position[i][1] = reader.readFloat(); break;
+                            case VertexComponent::Z: data->position[i][2] = reader.readFloat(); break;
+                            case VertexComponent::NX: data->normal[i][0] = reader.readFloat(); break;
+                            case VertexComponent::NY: data->normal[i][1] = reader.readFloat(); break;
+                            case VertexComponent::NZ: data->normal[i][2] = reader.readFloat(); break;
+                            case VertexComponent::R: data->color[i][0] = reader.readFloat(); break;
+                            case VertexComponent::G: data->color[i][1] = reader.readFloat(); break;
+                            case VertexComponent::B: data->color[i][2] = reader.readFloat(); break;
+                            case VertexComponent::U: data->uv[i][0] = reader.readFloat(); break;
+                            case VertexComponent::V: data->uv[i][1] = reader.readFloat(); break;
+                        }
+                    }
+                }
+                for(uint32 i=0; i<indexCount; ++i) {
+                    uint32 count = reader.readInt32();
+                    for(uint32 j=0; j<count; ++j) {
+                        data->indices.push_back(reader.readInt32());
+                    }
+                }
+                
+                return data;
             }
         }
-        return RenderBufferPtr();
+        return ModelDataPtr();
     }
+    
+    ModelLoader::ModelDataPtr ModelLoader::LoadFromObj(const mist::ResourcePtr& file) {
+        return ModelDataPtr();
+    }
+    
+    ModelLoader::ModelDataPtr ModelLoader::LoadFromPlaneFile(const mist::ResourcePtr& file) {
+        return ModelDataPtr();
+    }
+    
 }

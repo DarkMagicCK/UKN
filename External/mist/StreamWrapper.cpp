@@ -520,6 +520,10 @@ namespace mist {
         while(is_space((char)buffer))  
             mStream->read(&buffer, 1);
         
+        if(buffer == '-') {
+            result.push_back(buffer);
+            mStream->read(&buffer, 1);
+        }
         while(!mStream->eos() &&
               (((char)buffer >= '0' && (char)buffer <= '9') || (char)buffer == '.')) {
             result.push_back((char)buffer);

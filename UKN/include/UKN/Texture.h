@@ -78,6 +78,7 @@ namespace ukn {
         
         virtual void* map(uint32 level = 0) = 0;
         virtual void unmap() = 0;
+        virtual void updateData(const mist::Rectangle& rect, const uint8* data, uint32 level = 0);
 
         ElementFormat   format() const;
         TextureType     type() const;

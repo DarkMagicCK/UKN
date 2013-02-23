@@ -20,7 +20,7 @@
 
 namespace mist {
     
-    class RectPlacement {
+    class MIST_API RectPlacement {
     public:
         typedef std::vector<Vector2>  CPosArray;
         typedef std::vector<Rectangle>  CRectArray;
@@ -37,10 +37,10 @@ namespace mist {
         long getTotalArea() const;
         
         bool addAtEmptySpotAutoGrow (Rectangle& rect, int maxW, int maxH);
-        
+        bool addAtEmptySpot (Rectangle &r);
+
         void setMargin(int32 margin);
         int32 getMargin() const;
-        
         
     private:
         Rectangle   m_size;
@@ -53,7 +53,6 @@ namespace mist {
         bool isFree                 (const Rectangle &r) const;
         void addPosition            (const Vector2 &p);
         void addRect                (const Rectangle &r);
-        bool addAtEmptySpot         (Rectangle &r);
     };
 
 }

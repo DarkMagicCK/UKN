@@ -302,12 +302,8 @@ namespace mist {
     }
 
     bool AABB2::intersect(const AABB2& rhs) const {
-        if(fabs(this->x1 + this->x2 - rhs.x1 - rhs.x2) < (this->x2 - this->x1 + rhs.x2 - rhs.x1)) {
-            if(fabs(this->y1 + this->y2 - rhs.y1 - rhs.y2) < (this->y2 - this->y1 + rhs.y2 - rhs.y1)) {
-                return true;
-            }
-        }
-        return false;
+        return ((rhs.x() + rhs.width()) > this->x() && (rhs.x() < (this->x() + this->width())) &&
+                (rhs.y() + rhs.height()) > this->y() && (rhs.y() < (this->y() + this->height())));
     }
 
     bool AABB2::isEmpty() const {

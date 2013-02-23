@@ -72,6 +72,7 @@ namespace ukn {
         void attachCamera(const CameraPtr& camera);
 
         TexturePtr getTargetTexture(Attachment attach) const;
+        RenderTargetPtr getTarget(Attachment attach) const;
 
     private:
         void createFrameBuffer();

@@ -166,6 +166,13 @@ namespace ukn {
         return TexturePtr();
     }
 
+    RenderTargetPtr CompositeRenderTarget::getTarget(Attachment attach) const {
+        if(attach == ATT_DepthStencil)
+            return mDepthStencilTarget;
+
+        return mColorTargets[attach - ATT_Color0];
+    }
+
     void CompositeRenderTarget::createFrameBuffer() {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         mFrameBuffer = gf.createFrameBuffer();

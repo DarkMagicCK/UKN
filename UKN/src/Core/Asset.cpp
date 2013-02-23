@@ -34,7 +34,7 @@ namespace ukn {
         
         if(resource) {            
             SharedPtr<Font> font = new Font();
-            if(font && font->loadFromResource(resource))
+            if(font && font->loadFromConfigFile(resource))
                 return font;
         }
         

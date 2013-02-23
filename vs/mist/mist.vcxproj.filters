@@ -279,6 +279,9 @@
     <ClInclude Include="..\..\External\mist\safe_bool.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\External\mist\RectPlacement.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -438,6 +441,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\External\mist\Color.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\External\mist\RectPlacement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

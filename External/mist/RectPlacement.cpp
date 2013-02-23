@@ -45,7 +45,7 @@
 namespace mist {
     
     RectPlacement::RectPlacement():
-    m_margin(1) {
+    m_margin(0) {
         
     }
     
@@ -141,7 +141,7 @@ namespace mist {
         for (it = m_vPositions.begin();
              !bFound && it != m_vPositions.end();
              ++it) {
-            Rectangle rect(it->x(), it->y(), r.width(), r.height());
+            Rectangle rect(it->x(), it->y(), r.width(), r.height(), true);
             
             if (isFree(rect)) {
                 r = rect;
@@ -160,10 +160,10 @@ namespace mist {
             int x,y;
             
             for (x = 1; x <= r.x(); x++)
-                if (!isFree(Rectangle(r.x() - x, r.y(), r.width(), r.height())))
+                if (!isFree(Rectangle(r.x() - x, r.y(), r.width(), r.height(), true)))
                     break;
             for (y = 1; y <= r.y(); y++)
-                if (!isFree(Rectangle(r.x(), r.y() - y, r.width(), r.height())))
+                if (!isFree(Rectangle(r.x(), r.y() - y, r.width(), r.height(), true)))
                     break;
             if (y > x)
                 r.y1 -= y-1;

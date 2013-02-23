@@ -59,6 +59,7 @@ namespace ukn {
                         return false;
                     }
                     mShaderResourceView = MakeCOMPtr(shaderResourceView);
+                    mTexture->GetDesc(&mDesc);
                     return true;
             }
         }
@@ -72,7 +73,7 @@ namespace ukn {
         ZeroMemory(&desc, sizeof(desc));
         desc.Width = w;
         desc.Height = h;
-        desc.MipLevels = mipmaps == 0 ? 1: mipmaps;
+        desc.MipLevels = mipmaps == 0 ? 1 : mipmaps;
         desc.ArraySize = 1;
         desc.Format = ElementFormatToDxGIFormat(format);
         desc.SampleDesc.Count = 1;
@@ -88,11 +89,6 @@ namespace ukn {
         }
         if(flag & TB_Texture) {
             bindFlags |= D3D11_BIND_SHADER_RESOURCE;
-            // temporarys
-            if(flag == TB_Texture) {
-                desc.Usage = D3D11_USAGE_DYNAMIC;
-                desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-            }
         }
         desc.BindFlags = bindFlags;
 
@@ -112,6 +108,15 @@ namespace ukn {
             }
         }
         mTexture = MakeCOMPtr(texture);
+
+        desc.Usage = D3D11_USAGE_STAGING;
+        desc.BindFlags = 0;
+        desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+
+        ID3D11Texture2D* stagingTexture;
+        mDevice->getD3DDevice()->CreateTexture2D(&desc, 0, &stagingTexture);
+        if(stagingTexture)
+            mStagingTexture = MakeCOMPtr(stagingTexture);
 
         if(bindFlags & D3D11_BIND_SHADER_RESOURCE) {
             D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -137,6 +142,7 @@ namespace ukn {
             mShaderResourceView = MakeCOMPtr(shaderResourceView);
         }
 
+        mTexture->GetDesc(&mDesc);
         mFormat = format;
         mNumMipmaps = mipmaps;
         return true;
@@ -154,7 +160,7 @@ namespace ukn {
                     log_error("error mapping texture2d data");
                     return SharedPtr<uint8>();
             }
-            uint32 size = this->getWidth() * this->getHeight() * GetElementSize(this->getFormat());
+            uint32 size = this->width() * this->height() * GetElementSize(this->getFormat());
             uint8* texData = new uint8[size];
             memcpy(texData, mappedTex.pData, size);
 
@@ -163,16 +169,28 @@ namespace ukn {
         }
         return SharedPtr<uint8>();
 #endif
-        D3D11_MAPPED_SUBRESOURCE mappedTex;
-        if(FAILED(mDevice->getD3DDeviceContext()->Map(mTexture.get(), 
-                                                      0, 
-                                                      D3D11_MAP_WRITE_DISCARD, 
-                                                      0, 
-                                                      &mappedTex))) {
-            log_error("error mapping texture2d data");
-            return 0;
+        if(mStagingTexture) {
+            mDevice->getD3DDeviceContext()->CopyResource(mStagingTexture.get(), mTexture.get());
+            D3D11_MAPPED_SUBRESOURCE mappedTex;
+
+      //      uint32 size = this->width() * this->height() * GetElementSize(this->format());
+       //     uint8* texData = mist_malloc_t(uint8, size);
+        
+            if(FAILED(mDevice->getD3DDeviceContext()->Map(mStagingTexture.get(), 
+                                                            0, 
+                                                            D3D11_MAP_WRITE, 
+                                                            0, 
+                                                            &mappedTex))) {
+                log_error("error mapping texture2d data");
+                return 0;
+            }
+       //     memcpy(texData, mappedTex.pData, size);
+      //      mTexData = texData;
+        
+      //      mDevice->getD3DDeviceContext()->Unmap(mTexture.get(), 0);
+            return mappedTex.pData;
         }
-        return mappedTex.pData;
+        return 0;
     }
 
     void D3D11Texture2D::unmap() {
@@ -191,31 +209,39 @@ namespace ukn {
             }
             }*/
 #if defined(UKN_D3D10)	
-            mTexture->Unmap(D3D11CalcSubresource(0, 0, level));
+            
 #else
-            mDevice->getD3DDeviceContext()->Unmap(mTexture.get(), 0);
+            if(mStagingTexture) {
+                mDevice->getD3DDeviceContext()->Unmap(mStagingTexture.get(), 0);
+                mDevice->getD3DDeviceContext()->CopyResource(mTexture.get(), 
+                                                             mStagingTexture.get());
+                /*
+                mDevice->getD3DDeviceContext()->UpdateSubresource(mTexture.get(),
+                                                                  0,
+                                                                  0,
+                                                                  mTexData,
+                                                                  this->width() * GetElementSize(this->format()),
+                                                                  0);*/
+            //mist_free(mTexData);
+            }
 #endif
         }
     }
 
     uint32 D3D11Texture2D::width(uint32 level) const {
-        D3D11_TEXTURE2D_DESC desc;
         if(mTexture) {
-            mTexture->GetDesc(&desc);
             if(level == 0 || level == 1)
-                return desc.Width;
-            return desc.Width / (1U << (level-1));
+                return mDesc.Width;
+            return mDesc.Width / (1U << (level-1));
         }
     }
 
     uint32 D3D11Texture2D::height(uint32 level) const {
-        D3D11_TEXTURE2D_DESC desc;
         if(mTexture) {
-            mTexture->GetDesc(&desc);
             if(level == 0 || level == 1)
-                return desc.Height;
+                return mDesc.Height;
            
-            return desc.Height / (1U << (level-1));
+            return mDesc.Height / (1U << (level-1));
         }
     }
 

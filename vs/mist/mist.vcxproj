@@ -119,6 +119,7 @@
     <ClInclude Include="..\..\External\mist\Ptr.h" />
     <ClInclude Include="..\..\External\mist\Query.h" />
     <ClInclude Include="..\..\External\mist\RandomUtil.h" />
+    <ClInclude Include="..\..\External\mist\RectPlacement.h" />
     <ClInclude Include="..\..\External\mist\RefCounted.h" />
     <ClInclude Include="..\..\External\mist\Reflection.h" />
     <ClInclude Include="..\..\External\mist\Resource.h" />
@@ -187,6 +188,7 @@
     <ClCompile Include="..\..\External\mist\Profiler.cpp" />
     <ClCompile Include="..\..\External\mist\Query.cpp" />
     <ClCompile Include="..\..\External\mist\RandomUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\RectPlacement.cpp" />
     <ClCompile Include="..\..\External\mist\Resource.cpp" />
     <ClCompile Include="..\..\External\mist\Serial.cpp" />
     <ClCompile Include="..\..\External\mist\Serializer.cpp" />

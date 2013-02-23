@@ -27,6 +27,24 @@
 #endif
 
 namespace ukn {
+
+    FontPtr Font::Create(const UknString& name_or_path, uint32 size, bool bold, bool italic) {
+        ResourcePtr resource;
+        
+        if(mist::File::FileExists(name_or_path)) {
+            resource = ResourceLoader::Instance().loadResource(name_or_path);
+        } else {
+            resource = ResourceLoader::Instance().loadResource(mist::Path::GetFont() + name_or_path);
+        }
+        
+        if(resource) {            
+            SharedPtr<Font> font = new Font();
+            if(font && font->loadFromFontFile(resource, size, bold, italic))
+                return font;
+        }
+        
+        return SharedPtr<Font>();
+    }
     
     struct Font::FTLibrary {
         static FTLibrary& Instance() {
@@ -101,8 +119,6 @@ namespace ukn {
     left(0),
     texw(0),
     texh(0),
-    imgw(0),
-    imgh(0),
     texture_id(0) {
 
     }
@@ -117,9 +133,9 @@ namespace ukn {
         }
     }
         
-    void Font::FTGlyph::cache(uint32 index, Font& font) {
+    bool Font::FTGlyph::cache(uint32 index, Font& font, uint32* texdata, TexturePlacement& placement) {
         if(cached)
-            return;
+            return true;
             
         FT_Set_Pixel_Sizes(*face, 0, size);
         if(!FT_Load_Glyph(*face, index, FT_LOAD_DEFAULT)) {
@@ -132,8 +148,8 @@ namespace ukn {
                         
                     top = glyph->bitmap_top;
                     left = glyph->bitmap_left;
-                    imgw = 1;
-                    imgh = 1;
+                    uint32 imgw = 1;
+                    uint32 imgh = 1;
                     texw = bits.width;
                     texh = bits.rows;
                         
@@ -142,22 +158,16 @@ namespace ukn {
                     imgw > imgh ? imgh = imgw : imgw = imgh;
                         
                     if(imgw == 0 || imgh == 0)
-                        return;
+                        return true;
                     
-                    
-                    uint32 texid = font.getLastTexturePlacement();
-                    Font::TexturePlacement* placement = font.getTexturePlacement(texid);
-                    
-                    this->rect = Rectangle(0, 0, imgw, imgh);
-                    if(!placement->rect.addAtEmptySpotAutoGrow(this->rect, imgw, imgh)) {
-                        texid++;
-                        placement = font.appendTexturePlacement();
-                        placement->rect.addAtEmptySpotAutoGrow(this->rect, imgw, imgh);
+                    this->rect = mist::Rectangle(0, 0, imgw, imgh, true);
+                    if(!placement.rect.addAtEmptySpotAutoGrow(this->rect, imgw, imgh)) {
+                        return false;
                     }
                     
-                    uint32* texd = (uint32*)placement->texture->map();
-                    if(texd) {
-                        uint32* texp = texd + (uint32)this->rect.x();
+                    if(texdata) {
+                        uint32* texp = texdata + (uint32)this->rect.x() 
+                                               + (uint32)this->rect.y() * placement.texture->width();
                         bool cflag = true;
                         for(int i = 0; i < bits.rows; ++i) {
                             uint32* rowp = texp;
@@ -176,10 +186,10 @@ namespace ukn {
                                 pt++;
                                 rowp++;
                             }
-                            texp += placement->texture->width();
+                            texp += placement.texture->width();
                         }
-                        placement->texture->unmap();
                         cached = true;
+                        return true;
                     }
                 }
             }
@@ -194,6 +204,11 @@ namespace ukn {
     mStrokeWidth(0),
     mShadowXOffset(0),
     mShadowYOffset(0),
+    mKerningWidth(0),
+    mKerningHeight(0),
+    mCharRotation(0),
+    mLineWidth(0),
+    mBegan(false),
     mFace(new Font::FTFace) {
         mSpriteBatch = Context::Instance().getGraphicFactory().createSpriteBatch();
         if(!mSpriteBatch)
@@ -206,39 +221,45 @@ namespace ukn {
         
     }
     
-    bool Font::loadFromResource(const ResourcePtr& resource) {
-        if(resource->getName().find(L".xml") == UknString::npos) {
-            bool result = mFace->load(resource);
-            if(result) {
-                mGlyphs.resize(mFace->face->num_glyphs);
+    bool Font::loadFromFontFile(const ResourcePtr& resource, uint32 size, bool bold, bool italic) {
+        bool result = mFace->load(resource);
+        if(result) {
+            mGlyphs.resize(mFace->face->num_glyphs);
                 
-                for(int i = 0; i < mFace->face->num_glyphs; ++i) {
-                    mGlyphs[i].size = mFontSize;
-                    mGlyphs[i].face = &mFace->face;
-                }
-                
-                mEnableShadow = false;
-                mEnableStroke = false;
-                
-                mShadowXOffset = 0;
-                mShadowYOffset = 0;
-                
-                mStrokeWidth = 0;
-                
-                mFontSize = 14;
-                mFontName = resource->getName();
+            for(int i = 0; i < mFace->face->num_glyphs; ++i) {
+                mGlyphs[i].size = mFontSize;
+                mGlyphs[i].face = &mFace->face;
             }
-            return result;
+                
+            mEnableShadow = false;
+            mEnableStroke = false;
+                
+            mShadowXOffset = 0;
+            mShadowYOffset = 0;
+                
+            mStrokeWidth = 0;
+                
+            mFontSize = size;
+            if(bold) {
+                this->setFTStyle(FT_STYLE_FLAG_BOLD);
+            }
+            if(italic) {
+                this->setFTStyle(FT_STYLE_FLAG_ITALIC);
+            }
+            mFontName = resource->getName();
         }
-        
+
+        return result;
+    }
+
+    bool Font::loadFromConfigFile(const ResourcePtr& resource) {
         ConfigParserPtr config = ConfigParser::MakeParser(resource);
         
         if(config)
             return deserialize(config);
         else {
             log_error(L"ukn::Font::loadFromResource: invalid resource ptr, with resource name" + resource->getName());
-            
-                    }
+        }
         return false;
     }
     
@@ -272,7 +293,13 @@ namespace ukn {
             
             mEnableShadow = config->getBool(L"shadow", false);
             mEnableStroke = config->getBool(L"stroke", false);
-            
+
+            if(config->getBool(L"bold", false)) {
+                this->setFTStyle(FT_STYLE_FLAG_BOLD);
+            }
+            if(config->getBool(L"italic", false)) {
+                this->setFTStyle(FT_STYLE_FLAG_ITALIC);
+            }
             mShadowXOffset = config->getInt(L"shadow_offset_x", 0);
             mShadowYOffset = config->getInt(L"shadow_offset_y", 0);
             
@@ -298,6 +325,9 @@ namespace ukn {
             cfg->setInt(L"shadow_offset_y", mShadowYOffset);
             cfg->setInt(L"stroke_width", mStrokeWidth);
             cfg->setInt(L"size", mFontSize);
+            cfg->setBool(L"bold", mFace->face->style_flags & FT_STYLE_FLAG_BOLD);
+            cfg->setBool(L"italic", mFace->face->style_flags & FT_STYLE_FLAG_ITALIC);
+
             cfg->endNode();
             
             return true;
@@ -320,21 +350,17 @@ namespace ukn {
         switch(style) {
             case FS_Shadow: mEnableShadow = flag; break;
             case FS_Stroke: mEnableStroke = flag; break;
-            case FS_Bold:
-                setFTStyle(FT_STYLE_FLAG_BOLD);
-                break;
-            case FS_Italic:
-                setFTStyle(FT_STYLE_FLAG_ITALIC);
-                break;
         }
     }
     
     void Font::setStyleProperty(FontStyleProperty sp, int32 prop) {
         switch(sp) {
-            case FSP_Stroke_Width: mStrokeWidth = prop; break;
-            case FSP_Shadow_XOffset: mShadowXOffset = prop; break;
-            case FSP_Shadow_YOffset: mShadowYOffset = prop; break;
-            case FSP_Size: mFontSize = prop; break;
+            case FSP_StrokeWidth: mStrokeWidth = prop; break;
+            case FSP_ShadowXOffset: mShadowXOffset = prop; break;
+            case FSP_ShadowYOffset: mShadowYOffset = prop; break;
+            case FSP_KerningHeight: mKerningHeight = prop; break;
+            case FSP_KerningWidth: mKerningWidth = prop; break;
+            case FSP_LineWidth: mLineWidth = prop; break;
         }
     }
     
@@ -342,18 +368,98 @@ namespace ukn {
         return !mGlyphs.empty();
     }
     
-    void Font::doRender(const StringData& data) {
-        float x = data.x;
-        float y = data.y;
+    void Font::begin() {
+        if(!mSpriteBatch)
+            return;
+           
+        if(mSpriteBatch) {
+            mSpriteBatch->begin();
+            mBegan = true;
+        }
+    }
+
+    void Font::end() {
+        if(mGlyphs.size() == 0)
+            return;
+                
+        mBegan = false;
+        if(mSpriteBatch) {
+            mSpriteBatch->end();
+        }
+    }
+    
+    uint32 Font::getGlyphByChar(uint16 chr) {
+        uint32 idx = FT_Get_Char_Index(mFace->face, chr);
+        if(idx == 0)
+            return idx;
         
-        std::wstring::const_iterator it = data.string_to_render.begin();
-        while(it != data.string_to_render.end() && *it != 0) {
-            if(*it != L'\n') {
-                if(*it == L' ') {
-                    x += mFontSize / 2 + data.kerning_width;
+        FTGlyph& glyph = mGlyphs[idx-1];
+		/* each font should be cached here */
+        if((idx && !glyph.cached)) {
+			return 0;
+		}
+        return idx;
+    }
+
+    void Font::cacheString(const std::wstring& str) {
+       
+       std::vector<uint32> uncached_idx;
+       for(wchar_t chr: str) {
+           uint32 idx = FT_Get_Char_Index(mFace->face, chr);
+           if(idx == 0) {
+               continue;
+           }
+           if(!mGlyphs[idx-1].cached)
+               uncached_idx.push_back(idx);
+       }
+
+       if(!uncached_idx.empty()) {
+           TexturePlacement* placement = this->getTexturePlacement(this->getLastTexturePlacement());
+           uint32* texdata = (uint32*)placement->texture->map();
+
+           if(texdata) {
+               for(uint32& idx: uncached_idx) {
+                   FTGlyph& glyph = mGlyphs[idx-1];
+                   glyph.size = mFontSize;
+                   if(!glyph.cache(idx, *this, texdata, *placement)) {
+                       // texture full, add a new texture
+                       placement->texture->unmap();
+                       placement = this->appendTexturePlacement();
+                       texdata = (uint32*)placement->texture->map();
+                       if(!texdata) {
+                           log_error(L"Font::cacheString: unable to map texture");
+                           break;
+                       }
+                   }
+               }
+    
+               placement->texture->unmap();
+           } else {
+               log_error(L"Font::cacheString: unable to map texture");
+           }
+       }
+    }
+    
+    void Font::draw(const std::wstring& str, float _x, float _y, FontAlignment alignment, const Color& clr) {
+        if(!mBegan) {
+            log_warning("Font::draw: Font::begin must be called before drawing the string");
+            return;
+        }
+
+        this->cacheString(str);
+
+        float start_x = _x;
+        float start_y = _y;
+        float x = _x;
+        float y = _y;
+        
+        for(wchar_t chr: str) {
+            if(chr != L'\n') {
+                if(chr == L' ') {
+                    x += mFontSize / 2 + this->mKerningWidth;
                     
                 } else {
-                    uint32 gidx = getGlyphByChar(*it);
+                    uint32 gidx = getGlyphByChar(chr);
                     
                     if(gidx > 0 && gidx < mGlyphs.size()) {
                         FTGlyph& glyph = mGlyphs[gidx-1];
@@ -365,74 +471,31 @@ namespace ukn {
                                            Vector2(0, 0),
                                            0,
                                            Vector2(1, 1),
-                                           data.char_rot, 
-                                           data.clr);
+                                           mCharRotation, 
+                                           clr);
                         
-                        x += glyph.texw + glyph.left + data.kerning_width;
+                        x += glyph.texw + glyph.left + mKerningWidth;
                     }
                     
-                    if(data.line_width != 0.f && (x - data.x) > data.line_width) {
-                        y += mFontSize + data.kerning_height;
-                        x = data.x;
+                    if(mLineWidth > 0 && (x - start_y) > mLineWidth) {
+                        y += mFontSize + mKerningHeight;
+                        x = start_x;
                     }
                }
             } else {
-                y += mFontSize + data.kerning_height;
-                x = data.x;
+                y += mFontSize + mKerningHeight;
+                x = start_x;
             }
-            
-            ++it;
         }
     }
     
-    void Font::render() {
-        if(!mSpriteBatch)
-            return;
-        if(mGlyphs.size() == 0)
-            return;
-    
-        onRenderBegin();
-                
-        std::vector<StringData>::const_iterator it = mRenderQueue.begin();
-        while(it != mRenderQueue.end()) {
-            doRender(*it);
-            
-            ++it;
-        }
-                
-        onRenderEnd();
-    }
-    
-    uint32 Font::getGlyphByChar(uint16 chr) {
-        uint32 idx = FT_Get_Char_Index(mFace->face, chr);
-        if(idx == 0)
-            return idx;
-        
-        FTGlyph& glyph = mGlyphs[idx-1];
-		if((idx && !glyph.cached) || glyph.size != mFontSize) {
-			glyph.resetFontSize(mFontSize);
-			glyph.cache(idx, *this);
-		}
-        return idx;
-    }
-    
-    void Font::draw(const wchar_t* str, float x, float y, FontAlignment alignment, const Color& clr) {
-        // in windows, gbk -> utf8
-        Font::StringData data(str, x, y, alignment);
-        data.clr = clr;
-        
-        mRenderQueue.push_back(data);
-    }
-    
-    float2 Font::getStringDimensions(const wchar_t* str, float kw, float kh) {
+    float2 Font::getStringDimensions(const std::wstring& str, float kw, float kh) {
         float2 dim(0.f, 0.f);
         
         float tmpw = 0.f;
-     //   uint32 size = (uint32)wcslen(str);
-        const wchar_t* ustr = str;
-        while(ustr && *ustr) {
-            if(*ustr != L'\n') {
-                tmpw += mGlyphs[getGlyphByChar(*ustr)].imgw + kw;
+        for(wchar_t chr: str) {
+            if(chr != L'\n') {
+                tmpw += mGlyphs[getGlyphByChar(chr)].texw + kw;
                 if(dim[0] < tmpw) 
                     dim[0] = tmpw;
             }
@@ -440,24 +503,8 @@ namespace ukn {
                 dim[1] += mFontSize + kh;
                 tmpw = 0.f;
             }
-            
-            ustr++;
         }
         return dim;
-    }
-    
-    void Font::onRenderBegin() {
-        if(mSpriteBatch) {
-            mSpriteBatch->begin();
-        }
-    }
-    
-    void Font::onRenderEnd() {
-        mRenderQueue.clear();
-        
-        if(mSpriteBatch) {
-            mSpriteBatch->end();
-        }
     }
     
     Font::TexturePlacement* Font::getTexturePlacement(uint32 tid) {
@@ -468,7 +515,10 @@ namespace ukn {
     
     Font::TexturePlacement* Font::appendTexturePlacement() {
         mTextures.push_back(TexturePlacement());
-        mTextures.back().texture = Context::Instance().getGraphicFactory().create2DTexture(1024, 1024, 1, ukn::EF_RGBA8);
+        mTextures.back().texture = Context::Instance().getGraphicFactory().create2DTexture(1024, 
+                                                                                           1024,
+                                                                                           0, 
+                                                                                           ukn::EF_RGBA8);
         mTextures.back().rect.init(1024, 1024);
         return &mTextures.back();
     }

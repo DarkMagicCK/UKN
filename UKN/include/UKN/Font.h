@@ -30,53 +30,60 @@ namespace ukn {
      **/
     
     enum FontAlignment {
-        FA_Left     = 1UL,
-        FA_Right    = 1UL << 1,
-        FA_Center   = 1UL << 2,
-        
-        FA_XCenter  = 1UL << 3
+        FA_Left,
+        FA_Right,
+        FA_Center,
+        FA_XCenter,
     };
     
     enum FontStyle {
         FS_Shadow,
         FS_Stroke,
-        FS_Italic,
-        FS_Bold,
     };
     
     enum FontStyleProperty {
-        FSP_Shadow_XOffset,
-        FSP_Shadow_YOffset,
-        FSP_Stroke_Width,
-        FSP_Size,
+        FSP_ShadowXOffset,
+        FSP_ShadowYOffset,
+        FSP_StrokeWidth,
+        FSP_KerningWidth,
+        FSP_KerningHeight,
+        FSP_LineWidth,
     };
 
     class UKN_API Font: Uncopyable, public virtual IConfigSerializable {
     public:
+        static FontPtr Create(const UknString& name_or_path, uint32 size, bool bold = false, bool italic = false);
+
+    public:
         Font();
         ~Font();
-           
+        
         /**
          * load from font config resource
          * should be .uknfnt
          **/
-        bool loadFromResource(const ResourcePtr& resource);
-        
+        bool loadFromFontFile(const ResourcePtr& resource, uint32 size, bool bold = false, bool italic = false);
+        bool loadFromConfigFile(const ResourcePtr& resource);
+
         /**
          * set font style 
          **/
         void setStyle(FontStyle style, bool flag);
         void setStyleProperty(FontStyleProperty sp, int32 prop);
         
-        void draw(const wchar_t* str, float x, float y, FontAlignment alignment, const Color& clr = color::White);
+        void draw(const std::wstring& str, float x, float y, FontAlignment alignment, const Color& clr = color::White);
         
-        float2 getStringDimensions(const wchar_t* str, float kw=0, float kh=0);
+        float2 getStringDimensions(const std::wstring& str, float kw=0, float kh=0);
         bool isValid() const;
         
+        /* pre cache a string */        
+        void cacheString(const std::wstring& str);
+
     public:
         // IRenderable
-        virtual void render();
-                       
+        virtual void begin();
+        virtual void end();
+
     public:
         // IConfigSerializable
         virtual bool deserialize(const ConfigParserPtr& cfg);
@@ -89,10 +96,7 @@ namespace ukn {
         friend class FTGlyph;
         TexturePlacement* getTexturePlacement(uint32 tid);
         
-    private:        
-        void onRenderBegin();
-        void onRenderEnd();
-
+    private:
         friend class AssetManager;
         
         uint32 getGlyphByChar(uint16 chr);
@@ -108,46 +112,16 @@ namespace ukn {
         int32 mStrokeWidth;
         int32 mShadowXOffset;
         int32 mShadowYOffset;
+
+        int32 mKerningWidth;
+        int32 mKerningHeight;
+        int32 mLineWidth;
+        bool mBegan;
+
+        float mCharRotation;
         
         SpriteBatchPtr mSpriteBatch;
-        
-		struct UKN_API StringData {
-			std::wstring string_to_render;
-			float x;
-			float y;
-			float char_rot;
-			float kerning_width;
-			float kerning_height;
-			float line_width;
-			FontAlignment alignment;
-			Color clr;
-        
-			StringData():
-			x(0),
-			y(0),
-			char_rot(0),
-			kerning_width(0),
-			kerning_height(0),
-			line_width(0),
-			alignment(FA_Left) {
-        
-			}
-        
-			StringData(const wchar_t* str, float _x, float _y, FontAlignment align):
-			x(_x),
-			y(_y),
-			char_rot(0),
-			kerning_width(0),
-			kerning_height(0),
-			line_width(0),
-			alignment(align) {
-				string_to_render = str;
-			}
-		};
-        std::vector<StringData> mRenderQueue;
-        
-        void doRender(const StringData& data);
-        
+      
         struct FTLibrary;
         struct FTFace;
         struct FTGlyph;
@@ -162,7 +136,7 @@ namespace ukn {
 			bool cached;
         
 			void resetFontSize(uint32 newsize);
-			void cache(uint32 index, Font& font);
+			bool cache(uint32 index, Font& font, uint32* texdata, TexturePlacement& placement);
         
 			FT_Face* face;
         
@@ -171,14 +145,11 @@ namespace ukn {
 			uint32 left;
 			uint32 texw;
 			uint32 texh;
-			uint32 imgw;
-			uint32 imgh;
             
-            Rectangle rect;
+            mist::Rectangle rect;
             uint32 texture_id;
 		};
         std::vector<FTGlyph> mGlyphs;
-        
         
         TexturePlacement* appendTexturePlacement();
         uint32 getLastTexturePlacement() const;

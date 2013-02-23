@@ -173,18 +173,6 @@ int CALLBACK WinMain(
 
             r += 0.01;
            
-            font->draw(gd.description().c_str(), 0, 30, ukn::FA_Left, ukn::color::Lightgreen);
-            font->draw(ukn::SystemInformation::GetOSVersion().c_str(), 0, 60, ukn::FA_Left, ukn::color::Lightgreen);
-            font->draw((L"Fps: " + mist::Convert::ToString(mist::FrameCounter::Instance().getCurrentFps())).c_str(), 
-                        0, 
-                        0, 
-                        ukn::FA_Left,
-                        ukn::color::Black);
-
-            font->draw(ukn::Convert::ToString(renderCount).c_str(), 0, 90, ukn::FA_Left, ukn::color::Red);
-            font->draw(ukn::Convert::ToString(terrian->getDrawCount()).c_str(), 0, 120, ukn::FA_Left, ukn::color::Red);
-              
-           // font->render();
             
             renderTargetLightMap->attachToRender();
             gd.clear(ukn::CM_Color, mist::color::Blue, 1.f, 0);
@@ -205,7 +193,7 @@ int CALLBACK WinMain(
             deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
            
             effect->getPass(1)->begin();
-            ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, -1), ukn::Vector2(1, 1));
+            ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
             effect->getPass(1)->end();
             
             /*
@@ -237,8 +225,24 @@ int CALLBACK WinMain(
                     ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
             sb.draw(renderTargetLightMap->getTargetTexture(ukn::ATT_Color0), 
                     ukn::Rectangle(wnd->width() / 2, 0, wnd->width() / 2, wnd->height() / 2, true));
-            
+         //   sb.draw(font->getTexturePlacement(0)->texture, ukn::Vector2(0, 0));
             sb.end();
+
+            if(font) {
+                font->begin();
+                font->draw(gd.description().c_str(), 0, 30, ukn::FA_Left, ukn::color::Lightgreen);
+                font->draw(ukn::SystemInformation::GetOSVersion().c_str(), 0, 60, ukn::FA_Left, ukn::color::Lightgreen);
+                font->draw((L"Fps: " + mist::Convert::ToString(mist::FrameCounter::Instance().getCurrentFps())).c_str(), 
+                            0, 
+                            0, 
+                            ukn::FA_Left,
+                            ukn::color::Black);
+
+                font->draw(ukn::Convert::ToString(renderCount).c_str(), 0, 90, ukn::FA_Left, ukn::color::Red);
+                font->draw(ukn::Convert::ToString(terrian->getDrawCount()).c_str(), 0, 120, ukn::FA_Left, ukn::color::Red);
+              
+                font->end();
+            }
         })
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
@@ -265,9 +269,7 @@ int CALLBACK WinMain(
 
             camController->attachCamera(vp.camera);
 
-            font = ukn::AssetManager::Instance().load<ukn::Font>(L"Consola.ttf");
-            if(font)
-                font->setStyleProperty(ukn::FSP_Size, 20);
+            font = ukn::Font::Create(L"Consola.ttf", 20);
 
             renderTarget = new ukn::CompositeRenderTarget();
             renderTarget->attach(ukn::ATT_Color0,

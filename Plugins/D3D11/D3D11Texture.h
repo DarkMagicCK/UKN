@@ -58,6 +58,10 @@ namespace ukn {
 
 	private:
 		COM<ID3D11Texture2D>::Ptr mTexture;
+        D3D11_TEXTURE2D_DESC mDesc;
+
+        COM<ID3D11Texture2D>::Ptr mStagingTexture;
+        uint8* mTexData;
 	};
 
     class D3D11TextureCube: public D3D11Texture {

@@ -177,7 +177,7 @@ namespace ukn {
             D3D11_RASTERIZER_DESC rasterizerDesc;
             ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
             rasterizerDesc.AntialiasedLineEnable = false;
-            rasterizerDesc.CullMode = D3D11_CULL_NONE;
+            rasterizerDesc.CullMode = D3D11_CULL_BACK;
             rasterizerDesc.DepthBias = 0;
             rasterizerDesc.DepthBiasClamp = 0.f;
             rasterizerDesc.DepthClipEnable = true;
@@ -356,6 +356,12 @@ namespace ukn {
                     mDeviceContext->PSSetSamplers(i, 1, &d3d11samplerState);
                 }
             }
+            if(mSamplerStates.size() < mCurrFrameBuffer->colorViewSize()) {
+                for(int i=mSamplerStates.size(); i<mCurrFrameBuffer->colorViewSize(); ++i) {
+                    ID3D11SamplerState* empty_state = 0;
+                    mDeviceContext->PSSetSamplers(i, 1, &empty_state);
+                }
+            }
 
             if(indexBuffer.isValid() &&
                 buffer->isUseIndexStream()) {
@@ -424,8 +430,11 @@ namespace ukn {
             D3D11SamplerStateObject* samplerObj = checked_cast<D3D11SamplerStateObject*>(samplerState.get());
             if(samplerObj) {
                 ID3D11SamplerState* d3d11samplerState = samplerObj->getD3DSamplerState();
-                mDeviceContext->PSSetSamplers(0, 1, &d3d11samplerState);
+                mDeviceContext->PSSetSamplers(index, 1, &d3d11samplerState);
             }
+        } else {
+            ID3D11SamplerState* empty_state = 0;
+            mDeviceContext->PSSetSamplers(index, 1, &empty_state);
         }
     }
 

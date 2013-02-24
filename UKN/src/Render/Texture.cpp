@@ -39,9 +39,9 @@ namespace ukn {
 
         }
 
-        void* map(uint32 pass) { return 0; }
+        void* map(uint32 level) { return 0; }
         void unmap() { }
-
+        void updateData(const mist::Rectangle& rect, const uint8* data, uint32 level) { }
     };
     
     TexturePtr Texture::NullObject() {

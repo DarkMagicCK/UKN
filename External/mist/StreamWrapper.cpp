@@ -418,7 +418,7 @@ namespace mist {
     }
     
     char TextStreamReader::peek() {
-        if(!mStream->isValid()) 
+        if(!mStream || !mStream->isValid()) 
             return -1;
         
         size_t pos = mStream->pos();
@@ -519,13 +519,9 @@ namespace mist {
         uint8 buffer = ' ';
         while(is_space((char)buffer))  
             mStream->read(&buffer, 1);
-        
-        if(buffer == '-') {
-            result.push_back(buffer);
-            mStream->read(&buffer, 1);
-        }
+   
         while(!mStream->eos() &&
-              (((char)buffer >= '0' && (char)buffer <= '9') || (char)buffer == '.')) {
+              !is_space((char)buffer)) {
             result.push_back((char)buffer);
             mStream->read(&buffer, 1);
         }

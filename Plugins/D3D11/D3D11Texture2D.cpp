@@ -228,6 +228,20 @@ namespace ukn {
         }
     }
 
+    void D3D11Texture2D::updateData(const mist::Rectangle& rect, const uint8* data, uint32 level) {
+        if(mTexture) {
+            D3D11_BOX box;
+            box.top = rect.y(); box.left = rect.x();
+            box.bottom = rect.bottom(); box.right = rect.right();
+            mDevice->getD3DDeviceContext()->UpdateSubresource(mTexture.get(),
+                                                              level,
+                                                              &box,
+                                                              data,
+                                                              rect.width() * GetElementSize(this->format()),
+                                                              0);
+        }
+    }
+
     uint32 D3D11Texture2D::width(uint32 level) const {
         if(mTexture) {
             if(level == 0 || level == 1)

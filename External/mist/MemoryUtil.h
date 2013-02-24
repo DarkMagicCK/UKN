@@ -66,7 +66,7 @@ namespace mist {
     }
 
 #define mist_malloc_t(t, size) \
-    (t*)mist_malloc(sizeof(t) * size);
+    (t*)mist::mist_malloc(sizeof(t) * size);
 
 } // namespace mist
 

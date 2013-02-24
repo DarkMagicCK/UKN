@@ -26,11 +26,11 @@ namespace ukn {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         
         mTexture = gf.create2DTexture(width, 
-                                                      height, 
-                                                      num_of_levels, 
-                                                      color_format, 
-                                                      0,
-                                                      TB_RenderTarget | TB_Texture);
+                                      height, 
+                                      num_of_levels, 
+                                      color_format, 
+                                      0,
+                                      TB_RenderTarget | TB_Texture);
         if(!mTexture) {
             MIST_THROW_EXCEPTION(L"ukn::CompositeRenderTarget: error creating target texture");
         }

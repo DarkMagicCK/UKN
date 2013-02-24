@@ -67,6 +67,8 @@ int CALLBACK WinMain(
     ukn::TerrianPtr terrian;
     ukn::GraphicContextPtr context;
 
+    ukn::RenderBufferPtr dragonBuffer;
+
     ukn::Vector3 positions[5];
     
     ukn::float4 colors[5];
@@ -87,6 +89,7 @@ int CALLBACK WinMain(
     ukn::Context::Instance().registerGraphicFactory(factory);
 #endif
 
+    ukn::uint32 count;
     float r = 0;
      ukn::AppLauncher(L"Windows Test")
         .create(
@@ -139,14 +142,13 @@ int CALLBACK WinMain(
 
             if(terrian) {
                 effect->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
-                effect->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
                        
                 effect->getPass(0)->begin();
-                terrian->render();            
+      //          terrian->render();            
                 effect->getPass(0)->end();
             }
             
-            gd.bindTexture(texture2);
+           /* gd.bindTexture(texture2);
             for(int i=0; i<5; ++i) {
                 if(frustum.isSphereVisible(mist::Sphere(positions[i], 2.5)) != ukn::Frustum::No) {
                     effect->getPass(0)->getVertexShader()->setMatrixVariable("worldMatrix", ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
@@ -162,7 +164,12 @@ int CALLBACK WinMain(
                     renderCount++;
                 }
             }    
-
+            */
+            gd.bindTexture(texture2);
+            effect->getPass(0)->getVertexShader()->setMatrixVariable("worldMatrix", ukn::Matrix4::ScaleMat(100, 100, 100));
+                    
+            effect->getPass(0)->begin();
+            gd.renderBuffer(dragonBuffer);
             effect->getPass(0)->end();
 
             renderTarget->detachFromRender();
@@ -189,7 +196,7 @@ int CALLBACK WinMain(
                                                          renderTarget->getTargetTexture(ukn::ATT_Color2));
             deferredFragmentShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
             
-            deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), cos(r), 0, 1));
+            deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), -1, 0, 1));
             deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
            
             effect->getPass(1)->begin();
@@ -239,7 +246,7 @@ int CALLBACK WinMain(
                             ukn::color::Black);
 
                 font->draw(ukn::Convert::ToString(renderCount).c_str(), 0, 90, ukn::FA_Left, ukn::color::Red);
-                font->draw(ukn::Convert::ToString(terrian->getDrawCount()).c_str(), 0, 120, ukn::FA_Left, ukn::color::Red);
+                font->draw(ukn::Convert::ToString(count).c_str(), 0, 120, ukn::FA_Left, ukn::color::Red);
               
                 font->end();
             }
@@ -287,6 +294,10 @@ int CALLBACK WinMain(
                                                           600,
                                                           1,
                                                           ukn::EF_Float));
+            renderTarget->attach(ukn::ATT_DepthStencil,
+                                    new ukn::RenderTarget(800,
+                                                          600,
+                                                          ukn::EF_D16));
             renderTarget->attachCamera(vp.camera);
 
             renderTargetLightMap = new ukn::CompositeRenderTarget();
@@ -327,6 +338,51 @@ int CALLBACK WinMain(
             deferredPass->setFragmentShader(deferredFragmentShader);
             deferredPass->setVertexShader(deferredVertexShader);
             deferredPass->setVertexFormat(ukn::Vertex2D::Format());
+
+            ukn::ModelLoader::ModelDataPtr dragonModel = ukn::ModelLoader::LoadFromPly(
+                ukn::ResourceLoader::Instance().loadResource(L"dragon_recon/dragon_vrip_res4.ply"));
+
+            if(dragonModel) {
+                ukn::ModelLoader::ModelData* pdragonModel = dragonModel.get();
+                ukn::VertexUVNormal* vertices = mist_malloc_t(ukn::VertexUVNormal, pdragonModel->indices.size());
+                for(size_t i=0; i<dragonModel->indices.size(); ++i) {
+                    vertices[i].position = pdragonModel->position[pdragonModel->indices[i]];
+                    if(dragonModel->uv.size() > 0)
+                        vertices[i].uv = pdragonModel->uv[pdragonModel->indices[i]];
+                    else
+                        vertices[i].uv = ukn::float2(0, 0);
+                }
+                // calculate normals
+                ukn::uint32 index = 0;
+                for(size_t i=0; i<dragonModel->indices.size() / 3; ++i) {
+                    ukn::VertexUVNormal& p1 = vertices[index];
+                    ukn::VertexUVNormal& p2 = vertices[index+1];
+                    ukn::VertexUVNormal& p3 = vertices[index+2];
+
+                    ukn::Vector3 u = p2.position - p1.position;
+                    ukn::Vector3 v = p3.position - p1.position;
+                    ukn::float3 normal = u.cross(v);
+
+                    p1.normal = p2.normal = p3.normal = normal;
+                    index += 3;
+                }
+                count = dragonModel->indices.size();
+                ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::None,
+                                                                           ukn::GraphicBuffer::Static,
+                                                                           dragonModel->indices.size(),
+                                                                           vertices,
+                                                                           ukn::VertexUVNormal::Format());
+                ukn::GraphicBufferPtr indexBuffer = gf.createIndexBuffer(ukn::GraphicBuffer::None,
+                                                                         ukn::GraphicBuffer::Static,
+                                                                         dragonModel->indices.size(),
+                                                                         &dragonModel->indices[0]);
+                dragonBuffer = gf.createRenderBuffer();
+                dragonBuffer->bindVertexStream(vertexBuffer, ukn::VertexUVNormal::Format());
+                dragonBuffer->bindIndexStream(indexBuffer);
+                dragonBuffer->setRenderMode(ukn::RM_Triangle);
+
+                mist::mist_free(vertices);
+            }
 
         })
         .run();

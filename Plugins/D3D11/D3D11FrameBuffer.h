@@ -26,6 +26,8 @@ namespace ukn {
     private:
         bool mOffscreen;
         D3D11GraphicDevice* mGraphicDevice;
+        
+        std::vector<SamplerStatePtr> mSamplerStates;
 
         friend class GLWindow;
     };

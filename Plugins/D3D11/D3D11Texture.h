@@ -51,8 +51,9 @@ namespace ukn {
 		/* uintPtr of ID3D11Texture2D */
         uintPtr getTextureId() const override;
 
-        void* map(uint32 level = 0);
-        void unmap();
+        void* map(uint32 level = 0) override;
+        void unmap() override;
+        void updateData(const mist::Rectangle& rect, const uint8* data, uint32 level = 0) override;
         
 		ID3D11Texture2D* getTexture() const;
 

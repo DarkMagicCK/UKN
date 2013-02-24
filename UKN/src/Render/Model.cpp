@@ -256,7 +256,6 @@ namespace ukn {
                                 MistString type = reader.readString();
                                 MistString component = reader.readString();
                                 if(component == L"x") { vertex_components.add(VertexComponent::X);
-                                
                                 }
                                 else if(component == L"y") { vertex_components.add(VertexComponent::Y);
                                 }
@@ -324,6 +323,12 @@ namespace ukn {
                 for(uint32 i=0; i<indexCount; ++i) {
                     uint32 count = reader.readInt32();
                     for(uint32 j=0; j<count; ++j) {
+                        /* triangle strip */
+                        if(j >= 3) {
+                            size_t size = data->indices.size();
+                            data->indices.push_back(data->indices[size-2]);
+                            data->indices.push_back(data->indices[size-1]);
+                        }
                         data->indices.push_back(reader.readInt32());
                     }
                 }

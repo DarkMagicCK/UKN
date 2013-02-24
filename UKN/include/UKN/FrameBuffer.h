@@ -69,6 +69,7 @@ namespace ukn {
         void detach(uint32 attachment);
         
         RenderViewPtr attached(uint32 att) const;
+        size_t colorViewSize() const;
         
         virtual void clear(uint32 flags, const class Color& clr, float depth, int32 stencil) = 0;
         virtual void onBind();

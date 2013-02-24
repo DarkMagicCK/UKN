@@ -71,7 +71,14 @@ namespace ukn {
     }
 
     void D3D11FrameBuffer::onUnbind() {
-
+        std::vector<ID3D11RenderTargetView*> rtViews;
+        for(uint32 i = 0; i < mClearViews.size(); ++i) {
+            rtViews.push_back(0);
+        }
+        mGraphicDevice->getD3DDeviceContext()->OMSetRenderTargets(
+            mClearViews.size(), 
+            &rtViews[0], 
+            0);
     }
 
 

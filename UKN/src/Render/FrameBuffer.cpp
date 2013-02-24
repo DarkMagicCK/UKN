@@ -88,6 +88,10 @@ namespace ukn {
         mActive = flag;
     }
 
+    size_t FrameBuffer::colorViewSize() const {
+        return mClearViews.size();
+    }
+
     void FrameBuffer::attach(uint32 attachment, const RenderViewPtr& view) {
         switch(attachment) {
         case ATT_DepthStencil:

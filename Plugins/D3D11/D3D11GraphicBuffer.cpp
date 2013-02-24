@@ -232,8 +232,7 @@ namespace ukn {
 	}
 
 	D3D11IndexBuffer::~D3D11IndexBuffer() {
-		if(mBuffer)
-			mBuffer->Release();
+
 	}
 
 	void* D3D11IndexBuffer::map() {

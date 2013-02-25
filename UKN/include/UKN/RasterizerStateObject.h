@@ -15,6 +15,10 @@ namespace ukn {
         RenderStateParam fillmode;  /* solid, wireframe */
         
         // line smooth / multisample / depth bias ?
+        RasterizerStateDesc():
+        cullface(RSP_CullBack),
+        frontface(RSP_FrontFaceClockwise),
+        fillmode(RSP_FillSolid) { }
     };
     
     class UKN_API RasterizerStateObject {

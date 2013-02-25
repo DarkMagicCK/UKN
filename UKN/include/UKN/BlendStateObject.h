@@ -34,8 +34,22 @@ namespace ukn {
             RenderStateParam dst_alpha;
             RenderStateParam op_alpha;
             uint8 write_mask; // D3D*_COLOR_WRITE_ENABLE_ALL
+
+            BlendState():
+            enabled(false),
+            src(RSP_BlendFuncOne),
+            dst(RSP_BlendFuncZero),
+            op(RSP_BlendOpAdd),
+            src_alpha(RSP_BlendFuncOne),
+            dst_alpha(RSP_BlendFuncZero),
+            op_alpha(RSP_BlendOpAdd),
+            write_mask(0x0f) { }
         };
         BlendState blend_state;
+
+        BlendStateDesc():
+        alpha_to_converage(false),
+        blend_factor(float4(0, 0, 0, 0)) { }
     };
     
     class UKN_API BlendStateObject {

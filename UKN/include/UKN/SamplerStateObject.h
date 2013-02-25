@@ -25,6 +25,12 @@ namespace ukn {
         uint32           max_anisotropy; // GL_TEXTURE_MAX_ANISOTROPY_EXT
         
         // camparison & lod in gl?
+        SamplerStateDesc():
+        filter(RSP_FilterMinMagMipLinear),
+        address_u(RSP_TextureWrapClamp),
+        address_v(RSP_TextureWrapClamp),
+        address_w(RSP_TextureWrapClamp),
+        max_anisotropy(1) { }
     };
     
     class UKN_API SamplerStateObject {

@@ -20,6 +20,9 @@
 #include "UKN/Skybox.h"
 #include "UKN/Terrian.h"
 #include "UKN/GraphicContext.h"
+#include "UKN/RasterizerStateObject.h"
+#include "UKN/BlendStateObject.h"
+#include "UKN/SamplerStateObject.h"
 
 #include "UKN/tmx/TMXTiledMap.h"
 
@@ -63,10 +66,14 @@ int CALLBACK WinMain(
     ukn::FontPtr font;
     ukn::CompositeRenderTarget* renderTarget;
     ukn::CompositeRenderTarget* renderTargetLightMap;
+    ukn::CompositeRenderTarget* renderTargetFinal;
     ukn::SkyboxPtr skybox;
     ukn::TerrianPtr terrian;
     ukn::GraphicContextPtr context;
-
+    ukn::RasterizerStatePtr previousRasterizerState;
+    ukn::RasterizerStatePtr wireframeRasterizerState;
+    ukn::BlendStatePtr lightingBlendState;
+    ukn::BlendStatePtr previousBlendState;
     ukn::RenderBufferPtr dragonBuffer;
 
     ukn::Vector3 positions[5];
@@ -109,29 +116,49 @@ int CALLBACK WinMain(
             if(e.key == ukn::input::Escape)
                 ukn::Context::Instance().getApp().terminate();
 
-            if(e.key == ukn::input::F1 &&
+            if(
                 e.state == ukn::input::Release) {
-                if(camController->getAttachedCamera()) {
-                    camController->detachCamera();
-                } else {
-                    ukn::Viewport& vp = ukn::Context::Instance()
-                                            .getGraphicFactory()
-                                            .getGraphicDevice()
-                                            .getCurrFrameBuffer()->getViewport();
-                    camController->attachCamera(vp.camera);
+                if(e.key == ukn::input::F1) {
+                    if(camController->getAttachedCamera()) {
+                        camController->detachCamera();
+                    } else {
+                        ukn::Viewport& vp = ukn::Context::Instance()
+                                                .getGraphicFactory()
+                                                .getGraphicDevice()
+                                                .getCurrFrameBuffer()->getViewport();
+                        camController->attachCamera(vp.camera);
+                    }
+                } else if(e.key == ukn::input::F2) {
+                    static bool wireframe = false;
+                    if(!wireframe) {
+                        ukn::Context::Instance().getGraphicFactory().getGraphicDevice().setRasterizerState(wireframeRasterizerState);
+                        wireframe = true;
+                    } else {
+                        ukn::Context::Instance().getGraphicFactory().getGraphicDevice().setRasterizerState(previousRasterizerState);
+                        wireframe = false;
+                    }
                 }
             }
         })
         .connectRender([&](ukn::Window* wnd) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
+            
+
             renderTarget->attachToRender();
+
+            effect->getPass(4)->begin();
+            ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
+            effect->getPass(4)->end();
+
             
             ukn::Viewport& vp = gd.getCurrFrameBuffer()->getViewport();
             const ukn::Frustum& frustum = vp.camera->getViewFrustum();
             int renderCount = 0;
 
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+            gd.clear(ukn::CM_Depth, mist::color::Transparent, 1.f, 0);
             gd.enableDepth(true);
+            
+            gd.setBlendState(previousBlendState);
 
             effect->getPass(0)->getVertexShader()->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
             effect->getPass(0)->getVertexShader()->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
@@ -144,27 +171,10 @@ int CALLBACK WinMain(
                 effect->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
                        
                 effect->getPass(0)->begin();
-      //          terrian->render();            
+                terrian->render();            
                 effect->getPass(0)->end();
             }
             
-           /* gd.bindTexture(texture2);
-            for(int i=0; i<5; ++i) {
-                if(frustum.isSphereVisible(mist::Sphere(positions[i], 2.5)) != ukn::Frustum::No) {
-                    effect->getPass(0)->getVertexShader()->setMatrixVariable("worldMatrix", ukn::Matrix4::TransMat(positions[i].x(), positions[i].y(), positions[i].z()));
-                    effect->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture2);
-                 
-                    effect->getPass(0)->begin();
-
-                    if(renderBuffer)
-                        gd.renderBuffer(renderBuffer);
-                    
-                    effect->getPass(0)->end();
-
-                    renderCount++;
-                }
-            }    
-            */
             gd.bindTexture(texture2);
             effect->getPass(0)->getVertexShader()->setMatrixVariable("worldMatrix", ukn::Matrix4::ScaleMat(100, 100, 100));
                     
@@ -182,7 +192,7 @@ int CALLBACK WinMain(
            
             
             renderTargetLightMap->attachToRender();
-            gd.clear(ukn::CM_Color, mist::color::Blue, 1.f, 0);
+            gd.clear(ukn::CM_Color, mist::color::Transparent, 1.f, 0);
             
             ukn::ShaderPtr deferredFragmentShader = effect->getPass(1)->getFragmentShader();
             
@@ -196,29 +206,87 @@ int CALLBACK WinMain(
                                                          renderTarget->getTargetTexture(ukn::ATT_Color2));
             deferredFragmentShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
             
-            deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), -1, 0, 1));
-            deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
-           
-            effect->getPass(1)->begin();
-            ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
-            effect->getPass(1)->end();
             
+            gd.setBlendState(lightingBlendState);
+            {
+                deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(0, -1, 0, 1));
+                deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
+            
+                effect->getPass(1)->begin();
+                ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
+                effect->getPass(1)->end();
             /*
-            deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(sin(r), 0, cos(r), 1));
-            deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
+                deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(-1, 0, 0, 1));
+                deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(0, 0, 1, 1));
             
-            deferredEffect->getPass(0)->begin();
-            gd.renderBuffer(renderBufferDeferred);
-            deferredEffect->getPass(0)->end();
+                effect->getPass(1)->begin();
+                ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
+                effect->getPass(1)->end();
 
-            deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(0, cos(r), sin(r), 1));
-            deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 1, 1, 1));
+                deferredFragmentShader->setFloatVectorVariable("lightDirection", ukn::float4(1, 0, 0, 1));
+                deferredFragmentShader->setFloatVectorVariable("lightColor", ukn::float4(1, 0, 0, 1));
+        
+                effect->getPass(1)->begin();
+                ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
+                effect->getPass(1)->end();*/
+            }
+
+            ukn::ShaderPtr deferredVertexShader = effect->getPass(3)->getVertexShader();
+            deferredFragmentShader = effect->getPass(3)->getFragmentShader();
             
-            deferredEffect->getPass(0)->begin();
-            gd.renderBuffer(renderBufferDeferred);
-            deferredEffect->getPass(0)->end();
-            */
+            deferredFragmentShader->setFloatVectorVariable("cameraPosition", ukn::Vector4(vp.camera->getEyePos()));
+            deferredVertexShader->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
+            deferredVertexShader->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
+            
+            deferredFragmentShader->setMatrixVariable("viewMatrix", vp.camera->getViewMatrix());
+            deferredFragmentShader->setMatrixVariable("projectionMatrix", vp.camera->getProjMatrix());
+            
+            deferredFragmentShader->setTextureVariable("colorMap", 
+                                                         renderTarget->getTargetTexture(ukn::ATT_Color0));
+            deferredFragmentShader->setTextureVariable("normalMap", 
+                                                         renderTarget->getTargetTexture(ukn::ATT_Color1));
+            deferredFragmentShader->setTextureVariable("depthMap", 
+                                                         renderTarget->getTargetTexture(ukn::ATT_Color2));
+            
+            {
+                for(int i=1; i<=18; ++i) {
+                    float radius = 12;
+                    ukn::float4 position = ukn::float4(sin(i * ukn::d_pi / 18 * 2 + r) * 10, 10, cos(i * ukn::d_pi / 18 * 2 + r) * 20, 1);
+                    ukn::Color c = ukn::Color(i * sin(r), i * cos(r), i * 0.1, 1);
+
+                    deferredFragmentShader->setFloatVariable("lightIntensity", 1, ukn::float1(2).value);
+                    deferredFragmentShader->setFloatVariable("lightRadius", 1, ukn::float1(radius).value);
+                    deferredFragmentShader->setFloatVectorVariable("lightPosition", position);
+                    deferredFragmentShader->setFloatVectorVariable("lightColor", c.c);
+                    
+                    ukn::Matrix4 sphereWorld = ukn::Matrix4::ScaleMat(radius, radius, radius) * ukn::Matrix4::TransMat(position[0], position[1], position[2]);
+                    
+                    deferredVertexShader->setMatrixVariable("worldMatrix", sphereWorld);
+                    
+                    effect->getPass(3)->begin();
+                    gd.renderBuffer(renderBuffer);
+                    effect->getPass(3)->end();
+                }
+            }
+            
             renderTargetLightMap->detachFromRender();
+
+            gd.setBlendState(previousBlendState);
+
+            {
+            renderTargetFinal->attachToRender();
+
+            effect->getPass(2)->getFragmentShader()->setTextureVariable("colorMap", 
+                                                         renderTarget->getTargetTexture(ukn::ATT_Color0));
+            effect->getPass(2)->getFragmentShader()->setTextureVariable("lightMap", 
+                                                         renderTargetLightMap->getTargetTexture(ukn::ATT_Color0));                                                    
+
+            effect->getPass(2)->begin();
+            ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
+            effect->getPass(2)->end();
+
+            renderTargetFinal->detachFromRender();
+            }
 
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
            
@@ -228,7 +296,7 @@ int CALLBACK WinMain(
                     ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
             sb.draw(renderTarget->getTargetTexture(ukn::ATT_Color1), 
                     ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
-            sb.draw(renderTarget->getTargetTexture(ukn::ATT_Color2), 
+            sb.draw(renderTargetFinal->getTargetTexture(ukn::ATT_Color0), 
                     ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
             sb.draw(renderTargetLightMap->getTargetTexture(ukn::ATT_Color0), 
                     ukn::Rectangle(wnd->width() / 2, 0, wnd->width() / 2, wnd->height() / 2, true));
@@ -254,19 +322,8 @@ int CALLBACK WinMain(
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
      
-            renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 2.5), 20);
+            renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 1.0), 10);
 
-            effect = gf.createEffect();
-            ukn::ShaderPtr vertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex_deferred.cg"), 
-                    ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", ukn::VertexUVNormal::Format()));
-            ukn::ShaderPtr fragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment_deferred.cg"), 
-                    ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram"));
-            ukn::EffectPassPtr pass0 = effect->appendPass();
-
-            pass0->setFragmentShader(fragmentShader);
-            pass0->setVertexShader(vertexShader);
-            pass0->setVertexFormat(ukn::VertexUVNormal::Format());
-            
             texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"dirt01.dds"));
             texture2 = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"grass.dds"));
 
@@ -277,37 +334,6 @@ int CALLBACK WinMain(
             camController->attachCamera(vp.camera);
 
             font = ukn::Font::Create(L"Consola.ttf", 20);
-
-            renderTarget = new ukn::CompositeRenderTarget();
-            renderTarget->attach(ukn::ATT_Color0,
-                                    new ukn::RenderTarget(800,
-                                                          600,
-                                                          1,
-                                                          ukn::EF_RGBA8));
-            renderTarget->attach(ukn::ATT_Color1,
-                                    new ukn::RenderTarget(800,
-                                                          600,
-                                                          1,
-                                                          ukn::EF_RGBA8));
-            renderTarget->attach(ukn::ATT_Color2,
-                                    new ukn::RenderTarget(800,
-                                                          600,
-                                                          1,
-                                                          ukn::EF_Float));
-            renderTarget->attach(ukn::ATT_DepthStencil,
-                                    new ukn::RenderTarget(800,
-                                                          600,
-                                                          ukn::EF_D16));
-            renderTarget->attachCamera(vp.camera);
-
-            renderTargetLightMap = new ukn::CompositeRenderTarget();
-            renderTargetLightMap->attach(ukn::ATT_Color0,
-                                    new ukn::RenderTarget(800,
-                                                          600,
-                                                          1,
-                                                          ukn::EF_RGBA8));
-            
-            renderTargetLightMap->attachCamera(vp.camera);
 
             skybox = new ukn::Skybox();
             if(!skybox->load(mist::ResourceLoader::Instance().loadResource(L"skyboxsun25degtest.png"))) {
@@ -328,20 +354,10 @@ int CALLBACK WinMain(
                 ukn::log_error(L"unable to build terrian");
             }
 
-            context = new ukn::GraphicContext();
-            ukn::ShaderPtr deferredVertexShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"vertex_deferred_composite.cg"), 
-                    ukn::ShaderDesc(ukn::ST_VertexShader, "VertexProgram", ukn::Vertex2D::Format()));
-            ukn::ShaderPtr deferredFragmentShader = effect->createShader(ukn::ResourceLoader::Instance().loadResource(L"fragment_deferred_composite.cg"), 
-                    ukn::ShaderDesc(ukn::ST_FragmentShader, "FragmentProgram"));
-
-            ukn::EffectPassPtr deferredPass = effect->appendPass();
-            deferredPass->setFragmentShader(deferredFragmentShader);
-            deferredPass->setVertexShader(deferredVertexShader);
-            deferredPass->setVertexFormat(ukn::Vertex2D::Format());
-
+          
             ukn::ModelLoader::ModelDataPtr dragonModel = ukn::ModelLoader::LoadFromPly(
-                ukn::ResourceLoader::Instance().loadResource(L"dragon_recon/dragon_vrip_res4.ply"));
-
+                ukn::ResourceLoader::Instance().loadResource(L"dragon_recon/dragon_vrip_res2.ply"));
+          
             if(dragonModel) {
                 ukn::ModelLoader::ModelData* pdragonModel = dragonModel.get();
                 ukn::VertexUVNormal* vertices = mist_malloc_t(ukn::VertexUVNormal, pdragonModel->indices.size());
@@ -384,6 +400,25 @@ int CALLBACK WinMain(
                 mist::mist_free(vertices);
             }
 
+            ukn::RasterizerStateDesc wireframeDesc;
+            wireframeDesc.cullface = ukn::RSP_CullBack;
+            wireframeDesc.fillmode = ukn::RSP_FillWireFrame;
+            wireframeDesc.frontface = ukn::RSP_FrontFaceClockwise;
+
+            wireframeRasterizerState = gf.createRasterizerStateObject(wireframeDesc);
+            previousRasterizerState = gf.getGraphicDevice().getRasterizerState(); 
+
+            ukn::BlendStateDesc blendDesc;
+            blendDesc.blend_state.enabled = true;
+            blendDesc.blend_state.src = ukn::RSP_BlendFuncOne;
+            blendDesc.blend_state.dst = ukn::RSP_BlendFuncOne;
+            blendDesc.blend_state.op = ukn::RSP_BlendOpAdd;
+            blendDesc.blend_state.src_alpha = ukn::RSP_BlendFuncOne;
+            blendDesc.blend_state.dst_alpha = ukn::RSP_BlendFuncOne;
+            blendDesc.blend_state.op_alpha = ukn::RSP_BlendOpAdd;
+
+            lightingBlendState = gf.createBlendStateObject(blendDesc);
+            previousBlendState = gf.getGraphicDevice().getBlendState();
         })
         .run();
     

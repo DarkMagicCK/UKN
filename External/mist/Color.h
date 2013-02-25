@@ -213,7 +213,7 @@ namespace mist {
         ColorHSV(float _h, float _s, float _v, float _a):
             c(_h, _s, _v, _a) {}
 
-        ColorHSV(uint32 col) {
+        ColorHSV(const Color& col) {
             this->fromRGBA(col);
         }
 
@@ -230,8 +230,8 @@ namespace mist {
         bool operator ==(const ColorHSV& c) const;
         bool operator !=(const ColorHSV& c) const;
 
-        void fromRGBA(uint32 col);
-        uint32 toRGBA() const;
+        void fromRGBA(const Color& col);
+        Color toRGBA() const;
     };
 
 

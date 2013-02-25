@@ -65,9 +65,7 @@ namespace ukn {
     }
 
     void D3D11ScreenColorRenderView::clearColor(const Color& clr) {
-        float color[4];
-        color[0] = clr.r(); color[1] = clr.g(); color[2] = clr.b(); color[3] = clr.a();
-        mGraphicDevice->getD3DDeviceContext()->ClearRenderTargetView(mRenderTargetView.get(), color); 
+        mGraphicDevice->getD3DDeviceContext()->ClearRenderTargetView(mRenderTargetView.get(), clr.c.value); 
     }
 
     void D3D11ScreenColorRenderView::clearDepth(float depth) {

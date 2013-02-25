@@ -83,6 +83,8 @@ namespace ukn {
         FrameBufferPtr mFrameBuffer;
         FrameBufferPtr mPrevFrameBuffer;
     };
+
+    typedef SharedPtr<CompositeRenderTarget> CompositeRenderTargetPtr;
     
 } // namespace ukn
 

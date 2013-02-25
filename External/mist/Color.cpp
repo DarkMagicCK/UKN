@@ -141,15 +141,15 @@ namespace mist {
         return *this;
     }
 
-    void ColorHSV::fromRGBA(uint32 col) {
+    void ColorHSV::fromRGBA(const Color& col) {
         float r, g, b;
         float minv, maxv, delta;
         float del_R, del_G, del_B;
         
-        this->a() = (col & 0xFF) / 255.0f;
-        r = ((col>>24) & 0xFF) / 255.0f;
-        g = ((col>>16) & 0xFF) / 255.0f;
-        b = ((col>>8)  & 0xFF) / 255.0f;
+        this->a() = col.a();
+        r = col.r();
+        g = col.g();
+        b = col.b();
         
         minv = std::min(std::min(r, g), b);
         maxv = std::max(std::max(r, g), b);
@@ -176,7 +176,7 @@ namespace mist {
         }
     }
     
-    uint32 ColorHSV::toRGBA() const {
+    Color ColorHSV::toRGBA() const {
         float r, g, b;
         float xh, i, p1, p2, p3;
         
@@ -201,10 +201,7 @@ namespace mist {
             else			 {r = this->v();  g = p1; b = p2;}
         }
         
-        return (uint32(this->a()*255.0f)) + 
-                (uint32(r*255.0f)<<24) + 
-                (uint32(g*255.0f)<<16) + 
-                (uint32(b*255.0f)<<8);
+        return Color(r, g, b, this->a());
     }
     
 

@@ -116,7 +116,13 @@ namespace mist {
         ResourceFactories mResourceFactories;
         ResourcePaths mResourcePaths;
     };
-    
+
+#define MIST_LOAD_RESOURCE(name) \
+        mist::ResourceLoader::Instance().loadResource((name))
+
+#define MIST_CREATE_RESOURCE(data, size) \
+        mist::ResourceLoader::Instance().createMemoryResource(data, size)
+
     template<typename T>
     struct ResourcePoolObject {
         T obj;

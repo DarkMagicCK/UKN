@@ -23,18 +23,20 @@ namespace ukn {
     struct ShaderDesc {
         std::string entry;
 		ShaderType type;
-		vertex_elements_type format; /* used by vertex shaders */
-
-		ShaderDesc() { }
-		ShaderDesc(ShaderType type, const std::string& entry, const vertex_elements_type& format):
-		type(type),
-		entry(entry),
-		format(format) { }
 
 		ShaderDesc(ShaderType type, const std::string& entry):
 		type(type),
 		entry(entry) { }
     };
+
+#define VERTEX_SHADER_DESC(entry) \
+    ShaderDesc(ST_VertexShader, (entry))
+
+#define FRAGMENT_SHADER_DESC(entry) \
+    ShaderDesc(ST_FragmentShader, (entry))
+
+#define GEOMETRY_SHADER_DESC(entry) \
+    ShaderDesc(ST_GeometryShader, (entry))
     
     class Shader;
     typedef SharedPtr<Shader> ShaderPtr;

@@ -29,6 +29,19 @@ namespace ukn {
         virtual ~RasterizerStateObject() = 0;
         
         const RasterizerStateDesc& getDesc() const;
+
+    public:
+        //  cull clock wise
+        //      front = cw, cull = back
+        //  cull counter clock wise
+        //      front = ccw, cull = back
+        //  cull none
+        //      cull = none
+        static void InitializeBuildInStates();
+
+        static RasterizerStatePtr CullClockwise();
+        static RasterizerStatePtr CullCounterClockwise();
+        static RasterizerStatePtr CullNone();
         
     private:
         RasterizerStateDesc mDesc;

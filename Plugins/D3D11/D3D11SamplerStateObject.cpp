@@ -10,7 +10,7 @@ namespace ukn {
         case RSP_TextureWrapClamp: return D3D11_TEXTURE_ADDRESS_CLAMP;
         case RSP_TextureWrapMirror: return D3D11_TEXTURE_ADDRESS_MIRROR;
         case RSP_TextureWrapClampToBorder: return D3D11_TEXTURE_ADDRESS_BORDER;
-        case RSP_TextureWrapRepeat: return D3D11_TEXTURE_ADDRESS_WRAP;
+        case RSP_TextureWrapWrap: return D3D11_TEXTURE_ADDRESS_WRAP;
         }
     }
 
@@ -22,7 +22,7 @@ namespace ukn {
         case RSP_FilterMinMagLinearMipPoint:    return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
         case RSP_FilterMinMagMipLinear:         return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
         case RSP_FilterMinMagPointMipLinear:    return D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
-        case RSP_FilterMinMapMipPoint:          return D3D11_FILTER_MIN_MAG_MIP_POINT;
+        case RSP_FilterMinMagMipPoint:          return D3D11_FILTER_MIN_MAG_MIP_POINT;
         case RSP_FilterMinPointMagLinearMipPoint: return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
         case RSP_FilterMinPointMagMipLinear:    return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
         }
@@ -38,7 +38,7 @@ namespace ukn {
     D3D11SamplerStateObject::D3D11SamplerStateObject(const SamplerStateDesc& desc, D3D11GraphicDevice* device):
     SamplerStateObject(desc) {
         D3D11_SAMPLER_DESC d3ddesc;
-        ZeroMemory(&d3ddesc, 0);
+        ZeroMemory(&d3ddesc, sizeof(D3D11_SAMPLER_DESC));
 
         d3ddesc.AddressU = _rs_to_tex_address( desc.address_u );
         d3ddesc.AddressV = _rs_to_tex_address( desc.address_v );

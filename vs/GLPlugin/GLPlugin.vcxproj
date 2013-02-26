@@ -92,6 +92,7 @@
     <ClInclude Include="..\..\Plugins\GL\CgShader.h" />
     <ClInclude Include="..\..\Plugins\GL\GLBlendStateObject.h" />
     <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
+    <ClInclude Include="..\..\Plugins\GL\GLDepthStencilStateObject.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
     <ClInclude Include="..\..\Plugins\GL\GLFWInput.h" />
     <ClInclude Include="..\..\Plugins\GL\GLGraphicBuffer.h" />
@@ -118,6 +119,7 @@
     <ClCompile Include="..\..\External\soil\stb_image_aug.c" />
     <ClCompile Include="..\..\Plugins\GL\CgShader.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLBlendStateObject.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLDepthStencilStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />

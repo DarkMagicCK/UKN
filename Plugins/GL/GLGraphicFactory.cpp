@@ -26,6 +26,7 @@
 #include "GLBlendStateObject.h"
 #include "GLSamplerStateObject.h"
 #include "GLRasterizerStateObject.h"
+#include "GLDepthStencilStateObject.h"
 
 #include "CgShader.h"
 
@@ -72,6 +73,7 @@ namespace ukn {
         BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const;
         SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const;
         RasterizerStatePtr createRasterizerStateObject(const RasterizerStateDesc& desc) const;
+        DepthStencilStatePtr createDepthStencilStateObject(const DepthStencilStateDesc& desc) const;
 
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -179,6 +181,10 @@ namespace ukn {
 
     RasterizerStatePtr GLGraphicFactory::createRasterizerStateObject(const RasterizerStateDesc& desc) const {
         return MakeSharedPtr<GLRasterizerStateObject>(desc);
+    }
+
+    DepthStencilStatePtr GLGraphicFactory::createDepthStencilStateObject(const DepthStencilStateDesc& desc) const {
+        return MakeSharedPtr<GLDepthStencilStateObject>(desc);
     }
     
 } // namespace ukn

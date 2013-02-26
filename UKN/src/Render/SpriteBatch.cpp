@@ -16,6 +16,7 @@
 #include "UKN/FrameBuffer.h"
 #include "UKN/2DHelper.h"
 #include "UKN/BlendStateObject.h"
+#include "UKN/DepthStencilStateObject.h"
 
 #include "mist/Singleton.h"
 #include "mist/Profiler.h"
@@ -192,32 +193,7 @@ namespace ukn {
         mBatchRendering = false;
         mCurrMode = SBS_None;
 
-
         mTransformMatrix = Matrix4();
-
-        // create a alpha blend state object for rendering
-        BlendStateDesc desc;
-        desc.alpha_to_converage = false;
-        desc.blend_factor = float4(0, 0, 0, 0);
-        desc.blend_state.enabled = true;
-        desc.blend_state.src = RSP_BlendFuncSrcAlpha;
-        desc.blend_state.dst = RSP_BlendFuncOneMinusSrcAlpha;
-        desc.blend_state.op = RSP_BlendOpAdd;
-        desc.blend_state.src_alpha = RSP_BlendFuncOne;
-        desc.blend_state.dst_alpha = RSP_BlendFuncZero;
-        desc.blend_state.op_alpha = RSP_BlendOpAdd;
-        desc.blend_state.write_mask = 0x0f;
-
-        mAlphaBlendState = gf.createBlendStateObject(desc);
-
-        desc.blend_state.src = RSP_BlendFuncOne;
-        desc.blend_state.dst = RSP_BlendFuncOne;
-        desc.blend_state.dst_alpha = RSP_BlendFuncOne;
-
-        mAdditiveState = gf.createBlendStateObject(desc);
-
-        desc.blend_state.enabled = false;
-        mNoneBlendState = gf.createBlendStateObject(desc);
     }
     
     SpriteBatch::~SpriteBatch() {
@@ -490,22 +466,20 @@ namespace ukn {
         
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
-        // save previous blend state;
-        mPrevState = gd.getBlendState();
         switch(blend) {
             case SBB_Alpha:
-                gd.setBlendState(mAlphaBlendState);
+                gd.setBlendState(BlendStateObject::AlphaBlend());
                 break;
                 
             case SBB_Additive:
-                gd.setBlendState(mAdditiveState);
+                gd.setBlendState(BlendStateObject::Addtive());
                 break;
                 
             case SBB_None:
-                gd.setBlendState(mNoneBlendState);
+                gd.setBlendState(BlendStateObject::BlendOff());
                 break;
         }
-        gd.enableDepth(false);
+        gd.setDepthStencilState(DepthStencilStateObject::None());
     }
     
     void SpriteBatch::end() {
@@ -525,11 +499,6 @@ namespace ukn {
 
         mBegan = false;
         mTransformMatrix = Matrix4();
-
-        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-
-        gd.setBlendState(mPrevState);
-        gd.enableDepth(true);
     }
 
     void SpriteBatch::drawQuad(const Vector2& upper, const Vector2& lower) {

@@ -147,10 +147,6 @@ namespace ukn {
         
         Box mBoundingBox;
         Matrix4 mTransformMatrix;
-        BlendStatePtr mAlphaBlendState;
-        BlendStatePtr mAdditiveState;
-        BlendStatePtr mNoneBlendState;
-        BlendStatePtr mPrevState;
         
         bool mBegan;
         bool mBatchRendering;

@@ -157,6 +157,15 @@ namespace ukn {
     class RasterizerStateObject;
     typedef SharedPtr<RasterizerStateObject> RasterizerStatePtr;
     
+    struct DepthStencilStateDesc;
+    class DepthStencilStateObject;
+    typedef SharedPtr<DepthStencilStateObject> DepthStencilStatePtr;
+
+    class DirectionalLight;
+    typedef SharedPtr<DirectionalLight> DirectionalLightPtr;
+
+    class LightManager;
+    typedef SharedPtr<LightManager> LightManagerPtr;
     
 } // namespace ukn
 

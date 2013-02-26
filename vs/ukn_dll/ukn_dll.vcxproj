@@ -94,6 +94,8 @@
     <ClInclude Include="..\..\UKN\include\UKN\CameraController.h" />
     <ClInclude Include="..\..\UKN\include\UKN\CgHelper.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Context.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Deferred.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\DepthStencilStateObject.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Fog.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Font.h" />
     <ClInclude Include="..\..\UKN\include\UKN\FrameBuffer.h" />
@@ -106,6 +108,8 @@
     <ClInclude Include="..\..\UKN\include\UKN\Input.h" />
     <ClInclude Include="..\..\UKN\include\UKN\InputDevice.h" />
     <ClInclude Include="..\..\UKN\include\UKN\InputEngine.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\Light.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\LightManager.h" />
     <ClInclude Include="..\..\UKN\include\UKN\ListenerManager.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Material.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Mesh.h" />
@@ -156,6 +160,8 @@
     <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\CameraController.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\CgHelper.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Deferred.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\DepthStencilStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Fog.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Font.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\FrameBuffer.cpp" />
@@ -164,6 +170,8 @@
     <ClCompile Include="..\..\UKN\src\Render\GraphicContext.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\GraphicDevice.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\GraphicFactory.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\Light.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\LightManager.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Model.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RasterizerStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderBuffer.cpp" />

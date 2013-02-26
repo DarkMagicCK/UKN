@@ -94,7 +94,10 @@ namespace ukn {
         RasterizerStatePtr createRasterizerStateObject(const RasterizerStateDesc& desc) const {
             return RasterizerStatePtr();
         }
-        
+
+        DepthStencilStatePtr createDepthStencilStateObject(const DepthStencilStateDesc& desc) const {
+            return DepthStencilStatePtr();
+        }
     };
     
     GraphicFactoryPtr GraphicFactory::NullObject() {

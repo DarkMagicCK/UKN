@@ -47,6 +47,7 @@ namespace ukn {
         void onSetBlendState(const BlendStatePtr& blendState) override;
         void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) override;
         void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) override;
+        void onSetDepthStencilState(const DepthStencilStatePtr& depthstentialState) override;
 
 		ID3D11Device* getD3DDevice() const;
         ID3D11DeviceContext* getD3DDeviceContext() const;

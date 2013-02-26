@@ -22,6 +22,11 @@
 #include "UKN/GraphicFactory.h"
 #include "UKN/SpriteBatch.h"
 
+#include "UKN/BlendStateObject.h"
+#include "UKN/RasterizerStateObject.h"
+#include "UKN/SamplerStateObject.h"
+#include "UKN/DepthStencilStateObject.h"
+
 #include "UKN/Camera.h"
 
 #include "UKN/UKN.h"
@@ -129,7 +134,19 @@ namespace ukn {
                                caps.max_vertex_texture_units));
         
         Logger::Instance().setFeature(LF_PrependRunningTime, true);
-        
+
+        // setup default rendering states
+
+        BlendStateObject::InitializeBuildInStates();
+        RasterizerStateObject::InitializeBuildInStates();
+        SamplerStateObject::InitializeBuildInStates();
+        DepthStencilStateObject::InitializeBuildInStates();
+
+        graphic_device.setBlendState(BlendStateObject::BlendOff());
+        graphic_device.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
+        graphic_device.setSamplerState(SamplerStateObject::LinearClamp());
+        graphic_device.setDepthStencilState(DepthStencilStateObject::Default());
+
     }
     
     void AppLauncher::terminate() {

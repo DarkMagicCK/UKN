@@ -30,6 +30,7 @@
 #include "UKN/BlendStateObject.h"
 #include "UKN/SamplerStateObject.h"
 #include "UKN/RasterizerStateObject.h"
+#include "UKN/DepthStencilStateObject.h"
 
 #include "GLFrameBuffer.h"
 #include "GLRenderView.h"
@@ -91,15 +92,6 @@ namespace ukn {
 
         GraphicDevice::bindFrameBuffer(((GLWindow*)mWindow.get())->getFrameBuffer());
         mScreenFrameBuffer = mCurrFrameBuffer;
-
-        glCullFace(GL_NONE);
-        //
-        
-        GraphicFactory& factory = Context::Instance().getGraphicFactory();
-        
-        this->setBlendState(factory.createBlendStateObject(BlendStateDesc()));
-        this->setRasterizerState(factory.createRasterizerStateObject(RasterizerStateDesc()));
-        this->setSamplerState(factory.createSamplerStateObject(SamplerStateDesc()));
 
         return mWindow;
     }
@@ -407,7 +399,7 @@ namespace ukn {
                     glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                     break;
                     
-                case RSP_FilterMinMapMipPoint:
+                case RSP_FilterMinMagMipPoint:
                     glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
                     glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
                     break;
@@ -513,6 +505,37 @@ namespace ukn {
         this->setRenderState(RS_CullFace, desc.cullface);
         this->setRenderState(RS_FillMode, desc.fillmode);
         this->setRenderState(RS_FrontFace, desc.frontface);
+    }
+
+    void GLGraphicDevice::onSetDepthStencilState(const DepthStencilStatePtr& depthStencilState) {
+        const DepthStencilStateDesc& desc = depthStencilState->getDesc();
+
+        if(desc.depth_enable)
+            glEnable(GL_DEPTH_TEST);
+        else
+            glDisable(GL_DEPTH_TEST);
+        glDepthMask(desc.depth_write_mask);
+        glDepthFunc(render_state_param_to_gl_state_param(desc.depth_func));
+
+        if(desc.stencil_enable)
+            glEnable(GL_STENCIL_TEST);
+        else
+            glDisable(GL_STENCIL_TEST);
+        glStencilMask(desc.stencil_write_mask);
+
+        glStencilOpSeparate(GL_FRONT,
+                            render_state_param_to_gl_state_param(desc.front.stencil_fail_op),
+                            render_state_param_to_gl_state_param(desc.front.depth_fail_op),
+                            render_state_param_to_gl_state_param(desc.front.pass_op));
+        glStencilOpSeparate(GL_BACK,
+                            render_state_param_to_gl_state_param(desc.back.stencil_fail_op),
+                            render_state_param_to_gl_state_param(desc.back.depth_fail_op),
+                            render_state_param_to_gl_state_param(desc.back.pass_op));
+        glStencilFuncSeparate(render_state_param_to_gl_state_param(desc.front.func),
+                              render_state_param_to_gl_state_param(desc.back.func),
+                              desc.stencil_ref,
+                              1);
+
     }
 
 } // namespace ukn

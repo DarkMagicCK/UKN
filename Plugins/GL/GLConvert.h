@@ -145,7 +145,7 @@ namespace ukn {
         switch(param) {
             case RSP_TextureWrapClamp:
                 return GL_CLAMP_TO_EDGE;
-            case RSP_TextureWrapRepeat:
+            case RSP_TextureWrapWrap:
                 return GL_REPEAT;
             case RSP_TextureWrapClampToBorder:
                 return GL_CLAMP_TO_BORDER;

@@ -27,6 +27,8 @@ namespace ukn {
 		ShaderDesc(ShaderType type, const std::string& entry):
 		type(type),
 		entry(entry) { }
+
+        ShaderDesc() { }
     };
 
 #define VERTEX_SHADER_DESC(entry) \

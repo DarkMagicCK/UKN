@@ -119,17 +119,6 @@ namespace ukn {
         // false
     }
 
-    void GLScreenDepthStencilRenderView::enableDepth(bool flag) {
-        if(flag) {
-            glEnable(GL_DEPTH_TEST);
-            glDepthMask(GL_TRUE);
-        }
-        else {
-            glDisable(GL_DEPTH_TEST);
-            glDepthMask(GL_FALSE);
-        }
-    }
-
     void GLScreenDepthStencilRenderView::onAttached(FrameBuffer& fb, uint32 att) {
         mIndex = 0;
         GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());

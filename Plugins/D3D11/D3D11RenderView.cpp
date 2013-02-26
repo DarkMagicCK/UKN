@@ -110,11 +110,14 @@ namespace ukn {
             depthBufferDesc.CPUAccessFlags = 0;
             depthBufferDesc.MiscFlags = 0;
 
-            HRESULT result = idevice->CreateTexture2D(&depthBufferDesc, NULL, &mDepthStencilBuffer);
+            ID3D11Texture2D* depthBufferTex;
+            HRESULT result = idevice->CreateTexture2D(&depthBufferDesc, NULL, &depthBufferTex);
             if(FAILED(result))
-                MIST_THROW_EXCEPTION(L"Error create depth stencil texture 2d");
-
-            this->createDSView(ef, sampleCount);
+                log_error(L"D3D1DepthStencilRenderView: Error create depth stencil texture 2d");
+            else {
+                mDepthStencilBuffer = MakeCOMPtr(depthBufferTex);
+                this->createDSView(ef, sampleCount);
+            }
     }
 
     D3D11DepthStencilRenderView::D3D11DepthStencilRenderView(const TexturePtr& texture, D3D11GraphicDevice* device):
@@ -126,43 +129,10 @@ namespace ukn {
     }
 
     D3D11DepthStencilRenderView::~D3D11DepthStencilRenderView() {
-        mDepthStencilView->Release();
-        mDepthStencilState->Release();
-        mDepthStencilDisabledState->Release();
     }
 
     void D3D11DepthStencilRenderView::createDSView(ElementFormat ef, int32 sampleCount) {
         ID3D11Device* idevice = mGraphicDevice->getD3DDevice();
-
-        D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
-        ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
-        depthStencilDesc.DepthEnable = true;
-        depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-        depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
-        depthStencilDesc.StencilEnable = ef == EF_D24S8;
-        depthStencilDesc.StencilReadMask = 0xFF;
-        depthStencilDesc.StencilWriteMask = 0xFF;
-        depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-        depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
-        depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-        depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-        depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
-        depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
-        depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
-        depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
-
-        HRESULT result = idevice->CreateDepthStencilState(&depthStencilDesc, &mDepthStencilState);
-        if(FAILED(result))
-            MIST_THROW_EXCEPTION(L"Error create depth stencil state");
-
-        D3D11_DEPTH_STENCIL_DESC depthStencilDisabledDesc;
-        memcpy(&depthStencilDisabledDesc, &depthStencilDesc, sizeof(depthStencilDesc));
-        depthStencilDisabledDesc.DepthEnable = false;
-        depthStencilDisabledDesc.StencilEnable = false;
-
-        result = idevice->CreateDepthStencilState(&depthStencilDisabledDesc, &mDepthStencilDisabledState);
-        if(FAILED(result))
-            MIST_THROW_EXCEPTION(L"Error create depth stencil disabled state");
 
         D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
         ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
@@ -170,14 +140,18 @@ namespace ukn {
         depthStencilViewDesc.ViewDimension = sampleCount > 1 ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
         depthStencilViewDesc.Texture2D.MipSlice = 0;
 
-        result = idevice->CreateDepthStencilView(mDepthStencilBuffer, &depthStencilViewDesc, &mDepthStencilView);
+        ID3D11DepthStencilView* view;
+        HRESULT result = idevice->CreateDepthStencilView(mDepthStencilBuffer.get(), 
+                                                         &depthStencilViewDesc, 
+                                                         &view);
         if(FAILED(result))
-            MIST_THROW_EXCEPTION(L"Error create depth stencil view");
-
+            log_error(L"D3D1DepthStencilRenderView: Error create depth stencil view");
+        else
+            mDepthStencilView = MakeCOMPtr(view);
     }
 
     ID3D11DepthStencilView* D3D11DepthStencilRenderView::getD3D11DepthStencilView() const {
-        return mDepthStencilView;
+        return mDepthStencilView.get();
     }
 
     void D3D11DepthStencilRenderView::clearColor(const Color& clr) {
@@ -185,28 +159,35 @@ namespace ukn {
     }
 
     void D3D11DepthStencilRenderView::clearDepth(float depth) {
-        mGraphicDevice->getD3DDeviceContext()->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH, depth, 0);
+        if(mDepthStencilView)
+            mGraphicDevice->getD3DDeviceContext()->ClearDepthStencilView(mDepthStencilView.get(), 
+                                                                         D3D11_CLEAR_DEPTH, 
+                                                                         depth, 
+                                                                         0);
     }
 
     void D3D11DepthStencilRenderView::clearStencil(int32 stencil) {
-        mGraphicDevice->getD3DDeviceContext()->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_STENCIL, 0, stencil);
+        if(mDepthStencilView)
+            mGraphicDevice->getD3DDeviceContext()->ClearDepthStencilView(mDepthStencilView.get(), 
+                                                                         D3D11_CLEAR_STENCIL, 
+                                                                         0, 
+                                                                         stencil);
     }
 
     void D3D11DepthStencilRenderView::clearDepthStencil(float depth, int32 stencil) {
-        mGraphicDevice->getD3DDeviceContext()->ClearDepthStencilView(mDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, depth, stencil);
+        if(mDepthStencilView)
+            mGraphicDevice->getD3DDeviceContext()->ClearDepthStencilView(mDepthStencilView.get(), 
+                                                                         D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 
+                                                                         depth, 
+                                                                         stencil);
     }
 
     void D3D11DepthStencilRenderView::onAttached(FrameBuffer& fb, uint32 att) {
-        mGraphicDevice->getD3DDeviceContext()->OMSetDepthStencilState(mDepthStencilState, 1);
+    
     }
 
     void D3D11DepthStencilRenderView::onDetached(FrameBuffer& fb, uint32 att) {
 
-    }
-
-    void D3D11DepthStencilRenderView::enableDepth(bool flag) {
-        mGraphicDevice->getD3DDeviceContext()->OMSetDepthStencilState(flag ? mDepthStencilState : mDepthStencilDisabledState,
-            1);
     }
 
     D3D11Texture2DRenderView::D3D11Texture2DRenderView(const TexturePtr& texture, D3D11GraphicDevice* device):

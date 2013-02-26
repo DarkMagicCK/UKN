@@ -213,11 +213,11 @@ namespace ukn {
     
     enum RenderStateParam {
         RSP_TextureWrapClamp = 0,       // D3DTADDRESS_CLAMP, GL_CLAMP
-        RSP_TextureWrapRepeat,          // D3DTADDRESS_REPEAT, GL_REPEAT
+        RSP_TextureWrapWrap,          // D3DTADDRESS_REPEAT, GL_WRAP
         RSP_TextureWrapClampToBorder,  // D3DTADDRESS_BORDER, GL_CLAMP_TO_BORDER
         RSP_TextureWrapMirror,          // D3DTADDRESS_MIRROR, GL_MIRRORED_REPEAT
         
-        RSP_FilterMinMapMipPoint,       // GL_NEAREST * al
+        RSP_FilterMinMagMipPoint,       // GL_NEAREST * al
         RSP_FilterMinMagPointMipLinear,
         RSP_FilterMinPointMagLinearMipPoint,
         RSP_FilterMinPointMagMipLinear,

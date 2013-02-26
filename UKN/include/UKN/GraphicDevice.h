@@ -124,6 +124,7 @@ namespace ukn {
         virtual void onSetBlendState(const BlendStatePtr& blendState) = 0;
         virtual void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) = 0;
         virtual void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) = 0;
+        virtual void onSetDepthStencilState(const DepthStencilStatePtr& depthstentialState) = 0;
 
     public:
         WindowPtr createRenderWindow(const UknString& name, const RenderSettings& settings);
@@ -137,15 +138,16 @@ namespace ukn {
         void clearStencil(int32 stencil);
         
         void clear(uint32 flags, const class Color& clr, float depth, int32 stencil);
-        void enableDepth(bool flag);
-        
+     
         void setBlendState(const BlendStatePtr& blendState);
         void setSamplerState(const SamplerStatePtr& samplerState, uint32 index = 0);
         void setRasterizerState(const RasterizerStatePtr& rasterizerState);
-        
+        void setDepthStencilState(const DepthStencilStatePtr& depthStencilState);
+
         const BlendStatePtr& getBlendState() const;
         const RasterizerStatePtr& getRasterizerState() const;
         SamplerStatePtr getSamplerState(uint32 index = 0) const;
+        const DepthStencilStatePtr& getDepthStencilState() const;
 
     protected:
         FrameBufferPtr mCurrFrameBuffer;
@@ -154,7 +156,8 @@ namespace ukn {
         BlendStatePtr mBlendState;
         Array<SamplerStatePtr> mSamplerStates;
         RasterizerStatePtr mRasterizerState;
-        
+        DepthStencilStatePtr mDepthStencilState;
+
         Color mClearColor;
         float mClearDepth;
         int mClearStencil;

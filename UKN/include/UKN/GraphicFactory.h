@@ -65,7 +65,7 @@ namespace ukn {
         virtual BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const = 0;
         virtual SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const = 0;
         virtual RasterizerStatePtr createRasterizerStateObject(const RasterizerStateDesc& desc) const = 0;
-
+        virtual DepthStencilStatePtr createDepthStencilStateObject(const DepthStencilStateDesc& desc) const = 0;
     };
     
 } // namespace ukn

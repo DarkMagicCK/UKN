@@ -83,6 +83,7 @@
     <ClInclude Include="..\..\Plugins\D3D11\D3D11BlendStateObject.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Convert.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Debug.h" />
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11DepthStencilStateObject.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11FrameBuffer.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11GraphicBuffer.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11GraphicDevice.h" />
@@ -105,6 +106,7 @@
     <ClCompile Include="..\..\Plugins\D3D11\D3D11BlendStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Convert.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Debug.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11DepthStencilStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11FrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11GraphicBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11GraphicDevice.cpp" />

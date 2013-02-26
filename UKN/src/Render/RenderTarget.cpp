@@ -183,4 +183,8 @@ namespace ukn {
             mFrameBuffer->getViewport().camera = camera;
     }
 
+    const FrameBufferPtr& CompositeRenderTarget::getFrameBuffer() const {
+        return mFrameBuffer;
+    }
+
 } // namespace ukn

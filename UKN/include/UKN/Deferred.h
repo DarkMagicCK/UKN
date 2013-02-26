@@ -2,6 +2,8 @@
 #define UKN_DEFERRED_H_
 
 #include "UKN/PreDeclare.h"
+#include "UKN/Shader.h"
+#include "UKN/RenderTarget.h"
 
 namespace ukn {
 
@@ -19,7 +21,7 @@ namespace ukn {
         ATT_Color2 = Depth: R32
         ATT_DepthStencil = depth buffer for depth test: D16
     */
-    class DeferredRenderer: Uncopyable {
+    class UKN_API DeferredRenderer: Uncopyable {
     public:
         /* if size = (0, 0), then will use screen size */
         DeferredRenderer(const float2& size = float2(0, 0));
@@ -30,18 +32,30 @@ namespace ukn {
         const CompositeRenderTargetPtr& getLightMapRT() const;
         const CompositeRenderTargetPtr& getCompositeRT() const;
 
-
         float2 size() const;
+
+        void begin(const LightManagerPtr& lights);
+
+        void renderBuffer(const RenderBufferPtr& buffer, const TexturePtr& tex, const Matrix4& worldMat);
+
+        void startRenderBuffer(const Matrix4& worldMat, const TexturePtr& tex);
+        void endRenderBuffer();
+
+        void end();
 
     private:
         bool init();
+        void makeLightMap(const LightManagerPtr& lights);
+        void composite();
+
+        bool mBegan;
 
         float2 mSize;
 
         EffectPtr mEffect;
         EffectPassPtr mClearPass;
         EffectPassPtr mGBufferPass;
-        EffectPassPtr mDirectLightPass;
+        EffectPassPtr mDirectionalLightPass;
         EffectPassPtr mPointLightPass;
         EffectPassPtr mSpotlightPass;
         EffectPassPtr mCompositePass;
@@ -55,6 +69,8 @@ namespace ukn {
 
         RenderBufferPtr mPointLightGeometry;
         RenderBufferPtr mSpotLightGeometry;
+
+        LightManagerPtr mLights;
     };
 
     typedef SharedPtr<DeferredRenderer> DeferredRendererPtr;

@@ -13,6 +13,13 @@
 #include "UKN/RenderTarget.h"
 #include "UKN/RenderView.h"
 #include "UKN/Shader.h"
+#include "UKN/DepthStencilStateObject.h"
+#include "UKN/Context.h"
+#include "UKN/DepthStencilStateObject.h"
+#include "UKN/GraphicFactory.h"
+#include "UKN/SamplerStateObject.h"
+#include "UKN/RasterizerStateObject.h"
+#include "UKN/BlendStateObject.h"
 
 namespace ukn {
     
@@ -87,6 +94,7 @@ namespace ukn {
         void onSetBlendState(const BlendStatePtr& blendState) { }
         void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) { }
         void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) { }
+        void onSetDepthStencilState(const DepthStencilStatePtr& depthStencilState) { }
     };
     
     GraphicDevicePtr GraphicDevice::NullObject() {
@@ -190,13 +198,6 @@ namespace ukn {
         }
     }
 
-    void GraphicDevice::enableDepth(bool flag) {
-        if(mCurrFrameBuffer &&
-            mCurrFrameBuffer->attached(ATT_DepthStencil)) {
-            mCurrFrameBuffer->attached(ATT_DepthStencil)->enableDepth(flag);
-        }
-    }
-
     void GraphicDevice::setBlendState(const BlendStatePtr& blendState) {
         mBlendState = blendState;
         this->onSetBlendState(blendState);
@@ -214,6 +215,11 @@ namespace ukn {
         mRasterizerState = rasterizerState;
         this->onSetRasterizerState(rasterizerState);
     }
+
+    void GraphicDevice::setDepthStencilState(const DepthStencilStatePtr& depthStencilState) {
+        mDepthStencilState = depthStencilState;
+        this->onSetDepthStencilState(depthStencilState);
+    }
         
     const BlendStatePtr& GraphicDevice::getBlendState() const {
         return mBlendState;
@@ -229,5 +235,8 @@ namespace ukn {
         return mRasterizerState;
     }
 
+    const DepthStencilStatePtr& GraphicDevice::getDepthStencilState() const {
+        return mDepthStencilState;
+    }
 
 } // namespace ukn

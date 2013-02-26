@@ -67,19 +67,14 @@ namespace ukn {
 		void onAttached(FrameBuffer& fb, uint32 att);
 		void onDetached(FrameBuffer& fb, uint32 att);
 
-		void enableDepth(bool flag);
-
 		ID3D11DepthStencilView* getD3D11DepthStencilView() const;
 
 	private:
         void createDSView(ElementFormat ef, int32 sampleCount);
 
         TexturePtr mTexture;
-		ID3D11Texture2D* mDepthStencilBuffer;
-		ID3D11DepthStencilView* mDepthStencilView;
-		ID3D11DepthStencilState* mDepthStencilState;
-		/* for 2d rendering */
-		ID3D11DepthStencilState* mDepthStencilDisabledState;
+		COM<ID3D11Texture2D>::Ptr mDepthStencilBuffer;
+		COM<ID3D11DepthStencilView>::Ptr mDepthStencilView;
 	};
 
 	typedef SharedPtr<D3D11DepthStencilRenderView> D3D11DepthStencilRenderViewPtr;

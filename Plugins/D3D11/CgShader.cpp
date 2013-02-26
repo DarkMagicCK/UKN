@@ -82,8 +82,7 @@ namespace ukn {
         }
         if(mVertexShader) {
             CgDxShader* vertexShader = checked_cast<CgDxShader*>(mVertexShader.get());
-            if(mLayout &&
-                is_vertex_elements_equal(mFormat, vertexShader->getDesc().format))
+            if(mLayout)
                 return true;
 
             if(vertexShader) {

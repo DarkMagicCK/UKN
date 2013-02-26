@@ -60,7 +60,25 @@ namespace ukn {
         virtual ~BlendStateObject() = 0;
       
         const BlendStateDesc& getDesc() const;
-        
+     
+    public:
+    //  opaque
+    //      src = one, src_alpha = one, dst = 0, dst_alpha = 0
+    //  additive
+    //      src = source_alpha, src_alpha = source_alpha, dst = one, dst_alpha = one
+    //  alphablend
+    //      src = one, src_alpha = one, dst = dst_alpha = inv_source_alpha
+    //  nonpremultiplied
+    //      src = source, src_alpha = souce, dst = dst_alpha = inv_srouce_alpha
+        /* intialize will be called automatically by app */
+        static void InitializeBuildInStates();
+
+        static BlendStatePtr Opaque();
+        static BlendStatePtr Addtive();
+        static BlendStatePtr AlphaBlend();
+        static BlendStatePtr NonPreMultiplied();
+        static BlendStatePtr BlendOff();
+
     private:
         BlendStateDesc mDesc;
     };

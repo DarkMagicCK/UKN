@@ -55,6 +55,8 @@ namespace ukn {
         float mPrevY;
     };
 
+    typedef SharedPtr<CameraController> CameraControllerPtr;
+
 }
 
 #endif

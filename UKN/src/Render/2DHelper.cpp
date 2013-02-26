@@ -5,6 +5,7 @@
 #include "UKN/GraphicFactory.h"
 #include "UKN/GraphicDevice.h"
 #include "UKN/FrameBuffer.h"
+#include "UKN/DepthStencilStateObject.h"
 
 namespace ukn {
 
@@ -33,9 +34,6 @@ namespace ukn {
             this->initialize();
 
         if(mEffect) {
-            GraphicDevice& device = Context::Instance().getGraphicFactory().getGraphicDevice();
-            device.enableDepth(false);
-
             mEffect->getPass(0)->begin();
         }
     }
@@ -71,9 +69,6 @@ namespace ukn {
     void Ukn2DHelper::end() {
         if(mEffect) {
             mEffect->getPass(0)->end();
-
-            GraphicDevice& device = Context::Instance().getGraphicFactory().getGraphicDevice();
-            device.enableDepth(true);
         }
     }
 

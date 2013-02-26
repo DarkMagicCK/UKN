@@ -1,0 +1,38 @@
+struct VertexOutputType {
+    float4 position: POSITION;
+    float2 texCoord: TEXCOORD0;
+    float3 normal: TEXCOORD1;
+    float3 depth: TEXCOORD2;
+};
+
+struct FragmentOutputType {
+    float4 color  :COLOR0;
+    float4 normal :COLOR1;
+    float4 depth  :COLOR2;
+};
+
+float3 encode(float3 n) {
+    n = normalize(n);
+    n.xyz = 0.5f * (n.xyz + 1.0f);
+    return n;
+}
+
+float3 decode(float4 enc) {
+    return (2.0f * enc.xyz - 1.0f);
+}
+
+FragmentOutputType FragmentProgram(VertexOutputType input,
+				                   uniform sampler2D tex: TEX0) {    
+    FragmentOutputType output;
+    // not using specular map now
+
+    output.color = tex2D(tex, input.texCoord);
+    output.color.w = 0.2;
+
+    output.normal.xyz = encode(input.normal);
+    output.normal.w = 0.4;
+
+    output.depth = input.depth.x / input.depth.y;
+    output.depth.g = input.depth.z;
+    return output;
+}

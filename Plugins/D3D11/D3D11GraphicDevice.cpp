@@ -5,6 +5,7 @@
 #include "D3D11BlendStateObject.h"
 #include "D3D11SamplerStateObject.h"
 #include "D3D11RasterizerStateObject.h"
+#include "D3D11DepthStencilStateObject.h"
 
 #include "WindowsWindow.h"
 
@@ -171,75 +172,6 @@ namespace ukn {
 #if defined(MIST_DEBUG)
         mDebug.reset(new D3D11Debug(mDevice.get()));
 #endif
-
-       // rasterizer state
-        {
-            D3D11_RASTERIZER_DESC rasterizerDesc;
-            ZeroMemory(&rasterizerDesc, sizeof(rasterizerDesc));
-            rasterizerDesc.AntialiasedLineEnable = false;
-            rasterizerDesc.CullMode = D3D11_CULL_BACK;
-            rasterizerDesc.DepthBias = 0;
-            rasterizerDesc.DepthBiasClamp = 0.f;
-            rasterizerDesc.DepthClipEnable = true;
-            rasterizerDesc.FillMode = D3D11_FILL_SOLID;
-            rasterizerDesc.FrontCounterClockwise = false;
-            rasterizerDesc.MultisampleEnable = settings.sample_count > 1;
-            rasterizerDesc.ScissorEnable = false;
-            rasterizerDesc.SlopeScaledDepthBias = 0.f;
-
-            ID3D11RasterizerState* rasterizerState;
-            result = mDevice->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
-            CHECK_RESULT_AND_RETURN(result, L"ID3D11Device->CreateRasterizerState");
-
-            this->setRasterizerState(MakeSharedPtr<D3D11RasterizerStateObject>(RasterizerStateDesc(), rasterizerState)); 
-        }
-
-        /* blend states */
-        {
-            D3D11_BLEND_DESC blendDesc;
-            ZeroMemory(&blendDesc, sizeof(blendDesc));
-
-            ID3D11BlendState* blendState;
-            blendDesc.AlphaToCoverageEnable = FALSE;
-            blendDesc.IndependentBlendEnable = FALSE;
-            blendDesc.RenderTarget[0].BlendEnable = FALSE;
-            blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
-            blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
-            blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
-            blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
-            blendDesc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-            blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
-            blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-            
-            CHECK_RESULT_AND_RETURN(mDevice->CreateBlendState(&blendDesc, &blendState),
-                L"ID3D11Device->CreateBlendState");
-
-            this->setBlendState(MakeSharedPtr<D3D11BlendStateObject>(BlendStateDesc(), blendState));
-        }
-
-        {
-            ID3D11SamplerState* samplerState;
-            D3D11_SAMPLER_DESC samplerDesc;
-
-            samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
-            samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-            samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-            samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-            samplerDesc.MipLODBias = 0.f;
-            samplerDesc.MaxAnisotropy = 1;
-            samplerDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-            samplerDesc.BorderColor[0] = 0;
-            samplerDesc.BorderColor[1] = 0;
-            samplerDesc.BorderColor[2] = 0;
-            samplerDesc.BorderColor[3] = 0;
-            samplerDesc.MinLOD = 0;
-            samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
-
-            CHECK_RESULT_AND_RETURN(mDevice->CreateSamplerState(&samplerDesc, &samplerState), 
-                L"ID3D11Device->CreateSamplerState");
-
-            this->setSamplerState(MakeSharedPtr<D3D11SamplerStateObject>(SamplerStateDesc(), samplerState), 0);
-        }
 
         mScreenFrameBuffer = MakeSharedPtr<D3D11FrameBuffer>(false, this);
         mScreenFrameBuffer->attach(ATT_Color0,
@@ -446,5 +378,13 @@ namespace ukn {
             }
         }
     }
-
+     void D3D11GraphicDevice::onSetDepthStencilState(const DepthStencilStatePtr& depthStencilState) {
+         if(depthStencilState) {
+             D3D11DepthStencilStateObject* depthStencilObject = checked_cast<D3D11DepthStencilStateObject*>(depthStencilState.get());
+             if(depthStencilObject) {
+                 mDeviceContext->OMSetDepthStencilState(depthStencilObject->getD3DDepthStencilState(), 
+                                                        depthStencilObject->getDesc().stencil_ref);
+             }
+         }
+     }
 } // namespace ukn

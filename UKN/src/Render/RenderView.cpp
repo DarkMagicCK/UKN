@@ -58,10 +58,5 @@ namespace ukn {
         
     }
     
-    void RenderView::enableDepth(bool flag) {
-
-    }
-    
-    
     
 } // namespace ukn

@@ -1,0 +1,72 @@
+const uniform float3 cameraPosition;
+const uniform float4x4 inverseView;
+const uniform float4x4 inverseViewProj;
+const uniform float2 gbufferSize;
+
+// directional light properties
+const uniform float3 lightDirection;
+const uniform float4 lightColor;
+const uniform float lightIntensity;
+
+struct VertexOutputType {
+    float4 position: POSITION;
+    float2 texCoord: TEXCOORD0;
+};
+
+// manual linear sampling
+float4 manualSample(sampler2D sampler, float2 uv, float2 textureSize) {
+    float2 texelPos = textureSize * uv;
+    float2 lerps = frac(texelPos);
+    float texelSize = 1.0 / textureSize;
+
+    float4 sourcevals[4];
+    sourcevals[0] = tex2D(sampler, uv);
+    sourcevals[1] = tex2D(sampler, uv + float2(texelSize, 0));
+    sourcevals[2] = tex2D(sampler, uv + float2(0, texelSize));
+    sourcevals[3] = tex2D(sampler, uv + float2(texelSize, texelSize));
+
+    float4 interpolated = lerp(lerp(sourcevals[0], sourcevals[1], lerps.x),
+                               lerp(sourcevals[2], sourcevals[3], lerps.x),
+                               lerps.y);
+    return interpolated;
+}
+
+// phong shader
+float4 phong(float3 position, float3 N, float specularIntensity, float specularPower) {
+    float3 R = normalize(reflect(lightDirection, N));
+    float3 E = normalize(cameraPosition - position.xyz);
+    float NL = dot(N, -lightDirection);
+
+    float3 diffuse = NL * lightColor.xyz;
+    float specular = specularIntensity * pow(saturate(dot(R, E)), specularPower);
+
+    return lightIntensity * float4(diffuse.rgb, specular);
+}
+
+float3 decode(float3 enc) {
+    return (2.0f * enc.xyz - 1.0f);
+}
+
+float4 FragmentProgram(VertexOutputType input,
+                       uniform sampler2D colorMap: TEX0,
+                       uniform sampler2D normalMap: TEX1,
+                       uniform sampler2D depthMap: TEX2
+                       ): COLOR0 {
+
+    float4 encodedNormal = tex2D(normalMap, input.texCoord);
+    float3 normal = decode(encodedNormal.xyz);
+
+    float specularIntensity = tex2D(colorMap, input.texCoord).w;
+    float specularPower = encodedNormal.w * 255;
+
+    float depth = manualSample(depthMap, input.texCoord, gbufferSize).x;
+    float4 position = 1.0f;
+    position.x = input.texCoord.x * 2.0f - 1.0f;
+    position.y = -(input.texCoord.x * 2.0f - 1.0f);
+    position.z = depth;
+    position = mul(position, inverseViewProj);
+    position /= position.w;
+
+    return phong(position.xyz, normal, 0, 0);
+    
+}

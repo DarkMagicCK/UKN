@@ -11,7 +11,7 @@ namespace ukn {
 	public:
 		D3D11RenderBuffer(D3D11GraphicDevice* device);
 		virtual ~D3D11RenderBuffer();
-		
+
 	private:
 		D3D11GraphicDevice* mDevice;
 	};

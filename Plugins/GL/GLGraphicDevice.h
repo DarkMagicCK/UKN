@@ -51,6 +51,7 @@ namespace ukn {
         void onSetBlendState(const BlendStatePtr& blendState) override;
         void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) override;
         void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) override;
+        void onSetDepthStencilState(const DepthStencilStatePtr& depthStencilState) override;
 
     private:
         WindowPtr mWindow;

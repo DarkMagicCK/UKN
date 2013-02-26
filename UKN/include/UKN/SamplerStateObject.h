@@ -41,6 +41,24 @@ namespace ukn {
         virtual ~SamplerStateObject() = 0;
         
         const SamplerStateDesc& getDesc() const;
+
+    public:
+        // linear clamp
+        //  min mag mip = clamp, address u v w = clamp
+        // linear wrap
+        //  lin mag mip = linear, address u v w = wrap
+        // point clamp
+        //  min mag mip = point, address u v w = clamp
+        // point wrap
+        //  min mag mip = point, address u v w = wrap
+        static void InitializeBuildInStates();
+
+        // static SamplerStatePtr AnisotropicClamp();
+        // static SamplerStatePtr AnisotropicWrap();
+        static SamplerStatePtr LinearClamp();
+        static SamplerStatePtr LinearWrap();
+        static SamplerStatePtr PointClamp();
+        static SamplerStatePtr PointWrap();
         
     private:
         SamplerStateDesc mDesc;

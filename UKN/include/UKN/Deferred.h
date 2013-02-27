@@ -36,6 +36,7 @@ namespace ukn {
 
         void begin(const LightManagerPtr& lights);
 
+        // temporary functions for testing...
         void renderBuffer(const RenderBufferPtr& buffer, const TexturePtr& tex, const Matrix4& worldMat);
 
         void startRenderBuffer(const Matrix4& worldMat, const TexturePtr& tex);

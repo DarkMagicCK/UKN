@@ -180,7 +180,7 @@ namespace ukn {
             MO_Orthogonal
         };
         
-        class Map: public virtual IRenderable, public virtual IConfigSerializable, public virtual Object {
+        class Map: public Renderable, public virtual IConfigSerializable {
         public:
             typedef Array<TileSet> TileSetList;
             typedef Array<SharedPtr<Layer> > LayerList;

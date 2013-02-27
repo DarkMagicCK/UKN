@@ -9,7 +9,8 @@ namespace ukn {
         SOA_Cullable    = 1UL << 0,
         SOA_Overlay     = 1UL << 1,
         SOA_Moveable    = 1UL << 2,
-        SOA_Unvisible   = 1UL << 3
+        SOA_Unvisible   = 1UL << 3,
+        SOA_NotCastShadow = 1UL << 4,
     };
     
     class UKN_API SceneObject {
@@ -32,6 +33,7 @@ namespace ukn {
     protected:
         uint32 mAttribute;
         RenderablePtr mRenderable;
+        Matrix4 mModelMat;
     };
     
 

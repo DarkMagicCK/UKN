@@ -38,7 +38,7 @@ namespace ukn {
         mist::Matrix4 mScreenOrthoMat;
         mist::Matrix4 mScreenTransformMat;
 
-        friend class ClassInstantiator<Ukn2DHelper>;
+        friend struct ClassInstantiator<Ukn2DHelper>;
     };
 
 

@@ -1,4 +1,5 @@
 #include "UKN/SceneManager.h"
+#include "UKN/SceneObject.h"
 
 namespace ukn {
 
@@ -18,16 +19,20 @@ namespace ukn {
 	}
         
     void SceneManager::addSceneObject(const SceneObjectPtr& obj) {
-
+        mSceneObjects.push_back(obj);
+        this->onAddSceneObject(obj);
 	}
 
     void SceneManager::delSceneObject(const SceneObjectPtr& obj) {
-
-
-	}
-        
-    void SceneManager::addRenderable(const RenderablePtr& renderable) {
-
+        for(SceneObjectList::const_iterator it = mSceneObjects.begin(), end = mSceneObjects.end();
+            it != end;
+            ++it) {
+               if(*it == obj) {
+                   mSceneObjects.erase(it);
+                   this->onDelSceneObject(obj);
+                   break;
+               }
+        }
 	}
         
     SceneManager::SceneObjectList& SceneManager::getSceneObjects() {
@@ -47,7 +52,9 @@ namespace ukn {
 	}
         
     void SceneManager::update() {
-
+        for(SceneObjectPtr& object: mSceneObjects) {
+            object->update();
+        }
 	}
         
     uint32 SceneManager::numObjectsRendered() const {
@@ -73,6 +80,7 @@ namespace ukn {
     void SceneManager::onAddSceneObject(const SceneObjectPtr& obj) {
 
 	}
+
     void SceneManager::onDelSceneObject(const SceneObjectPtr& obj) {
 
 	}

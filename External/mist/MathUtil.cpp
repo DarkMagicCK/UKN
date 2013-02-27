@@ -212,6 +212,12 @@ namespace mist {
             return Quaternion(-q.x() * inv, -q.y() * inv, -q.z ()* inv, q.w() * inv);
         }
 
+
+        float3 cross(const float3& lhs, const float3& rhs) {
+            return float3(-lhs[2]*rhs[1] + lhs[1]*rhs[2], 
+                          lhs[2]*rhs[0] - lhs[0]*rhs[2], 
+                          -lhs[1]*rhs[0] + lhs[0]*rhs[1]);
+        }
     }
 
     AABB2::AABB2(real _x1, real _y1, real _x2, real _y2, bool asWH):
@@ -308,6 +314,17 @@ namespace mist {
 
     bool AABB2::isEmpty() const {
         return (x1 == x2) || (y1 == y2);
+    }
+
+    void AABB2::extend(const AABB2& rhs) {
+        if(this->x1 > rhs.x1)
+            this->x1 = rhs.x1;
+        if(this->y1 > rhs.y1)
+            this->y1 = rhs.y1;
+        if(this->x2 < rhs.x2)
+            this->x2 = rhs.x2;
+        if(this->y2 < rhs.y2)
+            this->y2 = rhs.y2;
     }
 
     Vector2 AABB2::getPosition() const {
@@ -1026,6 +1043,21 @@ namespace mist {
 
         set(Vector3(newMin),
             Vector3(newMax));
+    }
+
+    void AABB3::extend(const AABB3& rhs) {
+        if(this->lower_left.x() > rhs.lower_left.x())
+            this->lower_left.x() = rhs.lower_left.x();
+        if(this->lower_left.y() > rhs.lower_left.y())
+            this->lower_left.y() = rhs.lower_left.y();
+        if(this->lower_left.z() > rhs.lower_left.z()) 
+            this->lower_left.z() = rhs.lower_left.z();
+        if(this->upper_right.x() < rhs.upper_right.x())
+            this->upper_right.x() = rhs.upper_right.x();
+        if(this->upper_right.y() < rhs.upper_right.y())
+            this->upper_right.y() = rhs.upper_right.y();
+        if(this->upper_right.z() < rhs.upper_right.z()) 
+            this->upper_right.z() = rhs.upper_right.z();
     }
 
     const Vector3& AABB3::getMin() const {

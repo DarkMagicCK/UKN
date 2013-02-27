@@ -58,6 +58,7 @@ namespace ukn {
     };
     
     typedef std::vector<VertexElement> vertex_elements_type;
+    typedef vertex_elements_type vertex_format;
 
     inline bool is_vertex_elements_equal(const vertex_elements_type& lhs, const vertex_elements_type& rhs) {
         if(lhs.size() != rhs.size()) return false;

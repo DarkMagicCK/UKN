@@ -179,13 +179,13 @@ namespace mist {
         if (rect.width() <= 0)
             return true;
         
-        int orgW = m_size.width();
-        int orgH = m_size.height();
+        int orgW = (int)m_size.width();
+        int orgH = (int)m_size.height();
         
         // Try to add it in the existing space
         while (!addAtEmptySpot(rect)) {
-            int pw = m_size.width();
-            int ph = m_size.height();
+            int pw = (int)m_size.width();
+            int ph = (int)m_size.height();
             
             // Sanity check - if area is complete.
             if (pw >= maxW && ph >= maxH)

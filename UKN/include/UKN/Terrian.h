@@ -26,7 +26,7 @@ namespace ukn {
 
     };
 
-    class UKN_API Terrian: Uncopyable, public IRenderable {
+    class UKN_API Terrian: Uncopyable, public Renderable {
     public:
         virtual ~Terrian();
 

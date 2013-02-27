@@ -29,4 +29,19 @@ namespace ukn {
         }
     }
 
+    void LightManager::addLight(const SpotLightPtr& light) {
+        mSpotLights.push_back(light);
+    }
+
+    void LightManager::removeLight(const SpotLightPtr& light) {
+        for(SpotLightVec::const_iterator it = mSpotLights.begin(), end = mSpotLights.end();
+            it != end;
+            ++it) {
+               if(*it == light) {
+                   mSpotLights.erase(it);
+                   break;
+               }
+        }
+    }
+
 } // namespace ukn

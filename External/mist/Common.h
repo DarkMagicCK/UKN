@@ -11,15 +11,6 @@
 
 #include "mist/Platform.h"
 
-#ifdef MIST_OS_WINDOWS
-
-#include <windows.h>
-
-#else
-
-
-#endif // MIST_OS_WINDOWS
-
 #include <cstdarg>
 #include <cstdio>
 

@@ -13,9 +13,9 @@ namespace ukn {
 
     inline void _get_sphere_vertex(double r, double a, double b, VertexUVNormal& vertex) {
         double sina = sin(a);
-        vertex.position = Vector3(r * sina * cos(b),
-                                  r * sina * sin(b),
-                                  r * cos(a));
+        vertex.position = Vector3(r * sina * cosf(b),
+                                  r * sina * sinf(b),
+                                  r * cosf(a));
 
         vertex.normal = vertex.position.normalize();
 
@@ -189,7 +189,7 @@ namespace ukn {
     
     ModelLoader::ModelDataPtr ModelLoader::LoadFromPly(const mist::ResourcePtr& file) {
         mist::TextStreamReader reader(file->getResourceStream());
-        while(!reader.peek() != -1) {
+        while(reader.peek() != -1) {
             MistString magic = reader.readString();
             if(magic == L"ply") {
                 MistString header = reader.readString();
@@ -347,4 +347,177 @@ namespace ukn {
         return ModelDataPtr();
     }
     
+    /* Mesh */
+
+    Mesh::Mesh(const ModelPtr& model, const UknString& name):
+    mName(name),
+    mMaterialId(0),
+    mModel(model) {
+
+    }
+
+    Mesh::~Mesh() {
+
+    }
+
+    const UknString& Mesh::getName() const {
+        return mName;
+    }
+
+    Box Mesh::getBound() const {
+        return mBoundingBox;
+    }
+
+    RenderBufferPtr Mesh::getRenderBuffer() const {
+        return mRenderBuffer;
+    }
+
+    int32 Mesh::getMaterialId() const {
+        return mMaterialId;
+    }
+
+    void Mesh::setMaterailId(int32 mid) {
+        mMaterialId = mid;
+    }
+
+    uint32 Mesh::getNumVertices() const {
+        return mRenderBuffer->getVertexCount();
+    }
+
+    void Mesh::setNumVertices(uint32 num) {
+        mRenderBuffer->setVertexCount(num);
+    }
+
+    uint32 Mesh::getNumTriangles() const {
+        return mRenderBuffer->getIndexCount() / 3;
+    }
+
+    void Mesh::setNumTriangles(uint32 num) {
+        mRenderBuffer->setIndexCount(num * 3);
+    }
+
+    uint32 Mesh::getNumIndicies() const {
+        return mRenderBuffer->getIndexCount();
+    }
+
+    void Mesh::setNumIndicies(uint32 num) {
+        mRenderBuffer->setIndexCount(num);
+    }
+
+    uint32 Mesh::getVertexStartIndex() const {
+        return mRenderBuffer->getVertexStartIndex();
+    }
+
+    void Mesh::setVertexStartIndex(uint32 index) {
+        mRenderBuffer->setVertexStartIndex(index);
+    }
+
+    uint32 Mesh::getIndexStartIndex() const {
+        return mRenderBuffer->getIndexStartIndex();
+    }
+
+    void Mesh::setIndexStartIndex(uint32 index) {
+        mRenderBuffer->setIndexStartIndex(index);
+    }
+        
+    void Mesh::setIndexStream(const GraphicBufferPtr& index_stream) {
+        mRenderBuffer->bindIndexStream(index_stream);
+    }
+
+    void Mesh::setVertexStream(const GraphicBufferPtr& vtx_stream, const vertex_elements_type& format) {
+        mRenderBuffer->bindVertexStream(vtx_stream, format);
+    }
+
+    void Mesh::buildInfo() {
+        ModelPtr model = mModel.lock();
+
+        /* retrieve textures from material */
+        const MaterialPtr& mat = model->getMaterial(mMaterialId);
+        for(std::pair<std::string, std::string>& texel: mat->textures) {
+            TexturePtr tex = model->getTexture(texel.second);
+            if(tex) {
+                if(texel.first == "diffuse")
+                    mDiffuseTex = tex;
+                else if(texel.first == "specular")
+                    mSpecularTex = tex;
+                else if(texel.first == "normal" || texel.first == "bump")
+                    mNormalTex = tex;
+                else if(texel.first == "height")
+                    mHeightTex = tex;
+                else if(texel.first == "self_illumination")
+                    mEmitTex = tex;
+            }
+        }
+    }
+
+    /* Model */
+
+    Model::Model(const UknString& name):
+    mName(name) {
+
+    }
+
+    Model::~Model() {
+
+    }
+
+    const UknString& Model::getName() const {
+        return mName;
+    }
+
+    RenderBufferPtr Model::getRenderBuffer() const {
+        return mRenderBuffer;
+    }
+
+    void Model::onRenderBegin() {
+        for(MeshPtr& mesh: mMeshes) {
+            mesh->onRenderBegin();
+        }
+    }
+
+    void Model::onRenderEnd() {
+        for(MeshPtr& mesh: mMeshes) {
+            mesh->onRenderEnd();
+        }
+    }
+
+    const MeshPtr& Model::getMesh(size_t mid) const {
+        return mMeshes[mid];
+    }
+
+    size_t Model::getMeshCount() const {
+        return mMeshes.size();
+    }
+
+    const MaterialPtr& Model::getMaterial(size_t mid) const {
+        return mMaterials[mid];
+    }
+
+    size_t Model::getMaterialCount() const {
+        return mMaterials.size();
+    }
+
+    const TexturePtr& Model::getTexture(const std::string& name) {
+        auto it = mTexturePool.find(name);
+        if(it == mTexturePool.end()) {
+            TexturePtr tex = Context::Instance().getGraphicFactory().load2DTexture(
+                ResourceLoader::Instance().loadResource(string::StringToWString(name)),
+                false);
+            it = mTexturePool.insert(std::make_pair(name, tex)).first;
+        }
+        return it->second;
+    }
+
+    void Model::updateBoundingBox() {
+        mBoundingBox = AABB3();
+        for(MeshPtr& mesh: mMeshes) {
+            mBoundingBox.extend(mesh->getBound());
+        }
+    }
+
+    Box Model::getBound() const {
+        return mBoundingBox;
+    }
+
+
 }

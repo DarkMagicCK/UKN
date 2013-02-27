@@ -106,14 +106,11 @@ namespace ukn {
     class Font;
     typedef SharedPtr<Font> FontPtr;
     
-    class Texture;
-   
     class Camera;
     typedef SharedPtr<Camera> CameraPtr;
     
     class Window;
     typedef SharedPtr<Window> WindowPtr;
-    
     
     class AppInstance;
     typedef SharedPtr<AppInstance> AppPtr;
@@ -127,8 +124,8 @@ namespace ukn {
     class Scene;
     typedef SharedPtr<Scene> ScenePtr;
            
-    class IRenderable;
-    typedef SharedPtr<IRenderable> RenderablePtr;
+    class Renderable;
+    typedef SharedPtr<Renderable> RenderablePtr;
     
     class SceneObject;
     typedef SharedPtr<SceneObject> SceneObjectPtr;
@@ -161,11 +158,20 @@ namespace ukn {
     class DepthStencilStateObject;
     typedef SharedPtr<DepthStencilStateObject> DepthStencilStatePtr;
 
-    class DirectionalLight;
-    typedef SharedPtr<DirectionalLight> DirectionalLightPtr;
-
+    class LightSource;
+    typedef SharedPtr<LightSource> LightSourcePtr;
+    
     class LightManager;
     typedef SharedPtr<LightManager> LightManagerPtr;
+
+    struct Material;
+    typedef SharedPtr<Material> MaterialPtr;
+
+    class Model;
+    typedef SharedPtr<Model> ModelPtr;
+
+    class Mesh;
+    typedef SharedPtr<Mesh> MeshPtr;
     
 } // namespace ukn
 

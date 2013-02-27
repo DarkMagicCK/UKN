@@ -70,6 +70,8 @@ namespace mist {
         MIST_API int16 flip_bytes(int16 value);
         MIST_API int32 flip_bytes(int32 value);
 
+        MIST_API float3 cross(const float3& lhs, const float3& rhs);
+
         template <typename T>
         inline T lerp(T t1, T t2, real t) {
             if(t < 0.f) t = 0.f;
@@ -568,6 +570,19 @@ namespace mist {
         friend Vector3_T operator *(const Vector3_T& lhs, const Vector3_T& rhs) {
             return Vector3_T(lhs.x * rhs.x, lhs.y * rhs.y, lhs.z * rhs.z);
         }
+        
+    public:
+        static float3 Backward() { return float3(0, 0, 1); }
+        static float3 Down()     { return float3(0, -1, 0); }
+        static float3 Forward()  { return float3(0, 0, -1); }
+        static float3 Left()     { return float3(-1, 0, 0); }
+        static float3 One()      { return float3(1, 1, 1); }
+        static float3 Right()    { return float3(1, 0, 0); }
+        static float3 UnitX()    { return float3(1, 0, 0); }
+        static float3 UnitY()    { return float3(0, 1, 0); }
+        static float3 UnitZ()    { return float3(0, 0, 1); }
+        static float3 Up()       { return float3(0, 1, 0); }
+        static float3 Zero()     { return float3(0, 0, 0); }
     };
     typedef Vector3_T<float> Vector3;
 
@@ -647,6 +662,8 @@ namespace mist {
         bool intersect(const AABB2& rhs) const;
         bool isEmpty() const;
         Vector2 getPosition() const;
+
+        void extend(const AABB2& rhs);
     };
 
     typedef AABB2 Rectangle;
@@ -770,6 +787,8 @@ namespace mist {
         real getHeight() const;
         real getDepth() const;
         void scale(float scale);
+        
+        void extend(const AABB3& rhs);
     };
 
     typedef AABB3 Box;

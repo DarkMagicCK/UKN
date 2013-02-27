@@ -8,10 +8,6 @@ namespace ukn {
         ShaderManager();
         virtual ~ShaderManager();
 
-    public:
-
-    private:
-
     };
 
 

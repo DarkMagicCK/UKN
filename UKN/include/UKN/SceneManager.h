@@ -10,10 +10,7 @@ namespace ukn {
     class UKN_API SceneManager: Uncopyable {
     public:
         typedef std::vector<SceneObjectPtr> SceneObjectList;
-        
-    protected:
-        typedef std::vector<RenderablePtr> RenderItemsList;
-        
+
     public:
         SceneManager();
         virtual ~SceneManager();
@@ -24,8 +21,6 @@ namespace ukn {
         
         void addSceneObject(const SceneObjectPtr& obj);
         void delSceneObject(const SceneObjectPtr& obj);
-        
-        void addRenderable(const RenderablePtr& renderable);
         
         SceneObjectList& getSceneObjects();
         const SceneObjectList& getSceneObjects() const;
@@ -48,7 +43,7 @@ namespace ukn {
         virtual void onDelSceneObject(const SceneObjectPtr& obj);
         
     protected:
-        const Frustum* mFrustim;
+        const Frustum* mFrustum;
         
         SceneObjectList mSceneObjects;
         

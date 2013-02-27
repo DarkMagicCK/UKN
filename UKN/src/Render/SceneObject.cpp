@@ -12,14 +12,12 @@ namespace ukn {
         
     }
 
-    
     const RenderablePtr& SceneObject::getRenderable() const {
         return mRenderable;
     }
     
     const Matrix4& SceneObject::getModelMatrix() const {
-        static Matrix4 mat;
-        return mat;
+        return mModelMat;
     }
     
     Box SceneObject::getBound() const {

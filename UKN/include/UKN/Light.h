@@ -12,6 +12,7 @@ namespace ukn {
         LS_Directional,
         LS_Spot,
         LS_Point,
+        LS_Ambient,
     };
 
     class UKN_API LightSource {
@@ -21,10 +22,35 @@ namespace ukn {
 
         virtual void update();
 
+    public:
         LightSourceType type() const;
+        
+        const float3& getDirection() const;
+        const float4& getColor() const;
+        const float3& getPosition() const;
+        float getIntensity() const;
 
-    private:
+        void setDirection(const float3& dir);
+        void setColor(const float4& color);
+        void setColor(const Color& color);
+        void setPosition(const float3& pos);
+        void setIntensity(float intensity);
+
+        bool getCastShadows() const;
+        void setCastShadows(bool flag);
+
+        bool getEnabled() const;
+        void setEnabled(bool flag);
+
+    protected:
         LightSourceType mType;
+
+        float3 mDirection;
+        float4 mColor;
+        float3 mPosition;
+        float  mIntensity;
+        bool   mCastShadows;
+        bool   mEnabled;
     };
 
     typedef SharedPtr<LightSource> LightSourcePtr;
@@ -33,23 +59,7 @@ namespace ukn {
     public:
         DirectionalLight();
         DirectionalLight(const float3& dir, const float4& color, float intensity);
-        DirectionalLight(const DirectionalLight& rhs);
         ~DirectionalLight();
-
-        DirectionalLight& operator=(const DirectionalLight& rhs);
-
-        const float3& getDirection() const;
-        const float4& getColor() const;
-        float getIntensity() const;
-
-        DirectionalLight& setDirection(const float3& dir);
-        DirectionalLight& setColor(const float4& color);
-        DirectionalLight& setIntensity(float intensity);
-
-    private:
-        float3 mDir;
-        float4 mColor;
-        float mIntensity;
     };
 
     typedef SharedPtr<DirectionalLight> DirectionalLightPtr;
@@ -63,14 +73,9 @@ namespace ukn {
                   const TexturePtr& attenuationTex);
         ~SpotLight();
 
-        const float3& getPosition() const;
-        const float3& getDirection() const;
-        const float4& getColor() const;
-        float getIntensity() const;
         float getNearPlane() const;
         float getFarPlane() const;
         float getFOV() const;
-        bool getCastShadows() const;
         float getDepthBias() const;
         const Matrix4& getWorldMat() const;
         const Matrix4& getViewMat() const;
@@ -78,26 +83,16 @@ namespace ukn {
         const RenderTargetPtr& getShadowMap() const;
         const TexturePtr& getAttenuationTexture() const;
 
-        SpotLight& setPosition(const float3& position);
-        SpotLight& setColor(const float4& color);
-        SpotLight& setColor(const Color& color);
-        SpotLight& setIntensity(float intensity);
-        SpotLight& setCastShadows(bool flag);
-        SpotLight& setDepthBias(float bias);
-        SpotLight& setAttenuationTexture(const TexturePtr& attenuationTex);
+        void setDepthBias(float bias);
+        void setAttenuationTexture(const TexturePtr& attenuationTex);
 
         void update();
         float lightAngleCos();
 
     private:
-        float3 mPosition;
-        float3 mDirection;
-        float4 mColor;
-        float mIntensity;
         float mNearPlane;
         float mFarPlane;
         float mFOV;
-        bool mCastShadows;
         int32 mShadowMapResolution;
         float mDepthBias;
         Matrix4 mWorldMat;

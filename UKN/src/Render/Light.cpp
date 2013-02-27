@@ -6,7 +6,13 @@
 namespace ukn {
 
     LightSource::LightSource(LightSourceType type):
-    mType(type) {
+    mType(type),
+    mDirection(float3(0, 0, 0)),
+    mColor(float4(1, 1, 1, 1)),
+    mPosition(float3(0, 0, 0)),
+    mIntensity(0.f),
+    mCastShadows(false),
+    mEnabled(true) {
     
     }
 
@@ -21,69 +27,73 @@ namespace ukn {
     LightSourceType LightSource::type() const {
         return mType;
     }
+    
+    const float3& LightSource::getPosition() const {
+        return mPosition;
+    }
+
+    const float3& LightSource::getDirection() const {
+        return mDirection;
+    }
+
+    const float4& LightSource::getColor() const {
+        return mColor;
+    }
+
+    bool LightSource::getCastShadows() const {
+        return mCastShadows;
+    }
+
+    void LightSource::setPosition(const float3& position) {
+        mPosition = position;
+    }
+
+    void LightSource::setColor(const float4& color) {
+        mColor = color;
+    }
+
+    void LightSource::setColor(const Color& color) {
+        mColor = color.c;
+    }
+    
+    void LightSource::setCastShadows(bool flag) {
+        mCastShadows = flag;
+    }
+
+    void LightSource::setDirection(const float3& dir) {
+        mDirection = dir;
+    }
+    
+    float LightSource::getIntensity() const {
+        return mIntensity;
+    }
+    
+    void LightSource::setIntensity(float intensity) {
+        mIntensity = intensity;
+    }
+
+    bool LightSource::getEnabled() const {
+        return mEnabled;
+    }
+
+    void LightSource::setEnabled(bool flag) {
+        mEnabled = flag;
+    }
 
     DirectionalLight::DirectionalLight():
-    LightSource(LS_Directional),
-    mDir(float3(0, 0, 0)),
-    mColor(float4(1, 1, 1, 1)),
-    mIntensity(0.f) {
+    LightSource(LS_Directional) {
 
     }
 
     DirectionalLight::DirectionalLight(const float3& _dir, const float4& _color, float _intensity):
-    LightSource(LS_Directional),
-    mDir(_dir),
-    mColor(_color),
-    mIntensity(_intensity) {
-
-    }
-
-    DirectionalLight::DirectionalLight(const DirectionalLight& rhs):
-    LightSource(LS_Directional),
-    mDir(rhs.mDir),
-    mColor(rhs.mColor),
-    mIntensity(rhs.mIntensity) {
-
+    LightSource(LS_Directional) {
+        mDirection = _dir;
+        mColor = _color;
+        mIntensity = _intensity;
     }
 
     DirectionalLight::~DirectionalLight() {
 
-    }
-
-    DirectionalLight& DirectionalLight::operator=(const DirectionalLight& rhs) {
-        if(this != &rhs) {
-            mDir = rhs.mDir;
-            mColor = rhs.mColor;
-            mIntensity = rhs.mIntensity;
-        }
-        return *this;
-    }
-
-    const float3& DirectionalLight::getDirection() const {
-        return mDir;
-    }
-
-    const float4& DirectionalLight::getColor() const {
-        return mColor;
-    }
-
-    float DirectionalLight::getIntensity() const {
-        return mIntensity;
-    }
-
-    DirectionalLight& DirectionalLight::setDirection(const float3& dir) {
-        mDir = dir;
-        return *this;
-    }
-
-    DirectionalLight& DirectionalLight::setColor(const float4& color) {
-        mColor = color;
-        return *this;
-    }
-
-    DirectionalLight& DirectionalLight::setIntensity(float intensity) {
-        mIntensity = intensity;
-        return *this;
     }
 
     SpotLight::SpotLight(const float3& position, const float3& direction,
@@ -91,11 +101,6 @@ namespace ukn {
                          bool castShadows, int shadowMapResolution,
                          const TexturePtr& attenuationTex):
     LightSource(LS_Spot),
-    mPosition(position),
-    mDirection(direction),
-    mColor(color),
-    mIntensity(intensity),
-    mCastShadows(castShadows),
     mShadowMapResolution(shadowMapResolution),
     mAttenuationTexture(attenuationTex),
     mNearPlane(0.1f),
@@ -107,8 +112,13 @@ namespace ukn {
                                       mShadowMapResolution,
                                       EF_D24S8);
 
+        mPosition = position;
+        mDirection = direction;
+        mColor = color;
+        mIntensity = intensity;
+        mCastShadows = castShadows;
+        
         this->update();
-
     }
 
     SpotLight::SpotLight():
@@ -118,22 +128,6 @@ namespace ukn {
 
     SpotLight::~SpotLight() {
 
-    }
-
-    const float3& SpotLight::getPosition() const {
-        return mPosition;
-    }
-
-    const float3& SpotLight::getDirection() const {
-        return mDirection;
-    }
-
-    const float4& SpotLight::getColor() const {
-        return mColor;
-    }
-
-    float SpotLight::getIntensity() const {
-        return mIntensity;
     }
 
     float SpotLight::getNearPlane() const {
@@ -146,10 +140,6 @@ namespace ukn {
 
     float SpotLight::getFOV() const {
         return mFOV;
-    }
-
-    bool SpotLight::getCastShadows() const {
-        return mCastShadows;
     }
 
     float SpotLight::getDepthBias() const {
@@ -175,40 +165,13 @@ namespace ukn {
     const TexturePtr& SpotLight::getAttenuationTexture() const {
         return mAttenuationTexture;
     }
-
-    SpotLight& SpotLight::setPosition(const float3& position) {
-        mPosition = position;
-        return *this;
-    }
-
-    SpotLight& SpotLight::setColor(const float4& color) {
-        mColor = color;
-        return *this;
-    }
-
-    SpotLight& SpotLight::setColor(const Color& color) {
-        mColor = color.c;
-        return *this;
-    }
-
-    SpotLight& SpotLight::setIntensity(float intensity) {
-        mIntensity = intensity;
-        return *this;
-    }
-
-    SpotLight& SpotLight::setCastShadows(bool flag) {
-        mCastShadows = flag;
-        return *this;
-    }
-
-    SpotLight& SpotLight::setDepthBias(float bias) {
+    
+    void SpotLight::setDepthBias(float bias) {
         mDepthBias = bias;
-        return *this;
     }
 
-    SpotLight& SpotLight::setAttenuationTexture(const TexturePtr& attenuationTex) {
+    void SpotLight::setAttenuationTexture(const TexturePtr& attenuationTex) {
         mAttenuationTexture = attenuationTex;
-        return *this;
     }
 
     float SpotLight::lightAngleCos() {

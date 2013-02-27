@@ -1,5 +1,10 @@
 #include "UKN/SceneManager.h"
 #include "UKN/SceneObject.h"
+#include "UKN/Light.h"
+#include "UKN/LightManager.h"
+#include "UKN/GraphicDevice.h"
+#include "UKN/GraphicFactory.h"
+#include "UKN/Context.h"
 
 namespace ukn {
 
@@ -23,7 +28,7 @@ namespace ukn {
         this->onAddSceneObject(obj);
 	}
 
-    void SceneManager::delSceneObject(const SceneObjectPtr& obj) {
+    void SceneManager::removeSceneObject(const SceneObjectPtr& obj) {
         for(SceneObjectList::const_iterator it = mSceneObjects.begin(), end = mSceneObjects.end();
             it != end;
             ++it) {
@@ -34,6 +39,19 @@ namespace ukn {
                }
         }
 	}
+
+    void SceneManager::addLight(const LightSourcePtr& light) {
+        switch (light->type()) {
+        case LS_Directional:
+        case LS_Spot:
+        case LS_Point:
+            break;
+        }
+    }
+
+    void SceneManager::removeLight(const LightSourcePtr& light) {
+
+    }
         
     SceneManager::SceneObjectList& SceneManager::getSceneObjects() {
 		return mSceneObjects;

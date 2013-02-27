@@ -7,6 +7,14 @@ namespace ukn {
     mAttribute(attribute) {
         
     }
+
+    SceneObject::SceneObject(const RenderablePtr& renderable, uint32 attr):
+    mRenderable(renderable),
+    mAttribute(attr) {
+        if(mRenderable) {
+            mRenderable->setModelMatrix(mModelMat);
+        }
+    }
     
     SceneObject::~SceneObject() {
         
@@ -18,6 +26,10 @@ namespace ukn {
     
     const Matrix4& SceneObject::getModelMatrix() const {
         return mModelMat;
+    }
+
+    void SceneObject::setModelMatrix(const Matrix4& mat) {
+        mModelMat = mat;
     }
     
     Box SceneObject::getBound() const {

@@ -20,10 +20,13 @@ namespace ukn {
         virtual void clipScene();
         
         void addSceneObject(const SceneObjectPtr& obj);
-        void delSceneObject(const SceneObjectPtr& obj);
+        void removeSceneObject(const SceneObjectPtr& obj);
         
         SceneObjectList& getSceneObjects();
         const SceneObjectList& getSceneObjects() const;
+
+        void addLight(const LightSourcePtr& light);
+        void removeLight(const LightSourcePtr& light);
         
         virtual bool isBoxVisible(const Box& box);
         
@@ -54,6 +57,8 @@ namespace ukn {
         uint32 mNumRenderableRendered;
         uint32 mNumPrimitivesRendered;
         uint32 mNumVerticesRendered;
+
+        LightManagerPtr mLightManager;
     };
     
 }

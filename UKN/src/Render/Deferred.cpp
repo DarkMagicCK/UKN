@@ -279,7 +279,7 @@ namespace ukn {
         fragmentShader->setTextureVariable("depthMap", 
                                             mGBufferRT->getTargetTexture(ukn::ATT_Color2));
 
-        for(const DirectionalLightPtr& light: lights->getDirectionalLights()) {
+        for(const LightSourcePtr& light: lights->getDirectionalLights()) {
             fragmentShader->setFloatVectorVariable("lightColor", light->getColor());
             fragmentShader->setFloatVariable("lightDirection", 3, light->getDirection().value);
             

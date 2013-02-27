@@ -16,15 +16,19 @@ namespace ukn {
     class UKN_API SceneObject {
     public:
         explicit SceneObject(uint32 attribute);
+        SceneObject(const RenderablePtr& renderable, uint32 attr);
+
         virtual ~SceneObject();
         
-        const RenderablePtr& getRenderable() const;
-        
+        virtual void setModelMatrix(const Matrix4& mat);
         virtual const Matrix4& getModelMatrix() const;
         virtual Box getBound() const;
         
         virtual void addToSceneManager();
         virtual void update();
+        
+    public:
+        const RenderablePtr& getRenderable() const;
         
         uint32 getAttribute() const;
         bool isVisible() const;

@@ -12,25 +12,20 @@ namespace ukn {
         ~LightManager();
 
     public:
-        typedef std::vector<DirectionalLightPtr> DirectionalLightVec;
-        const DirectionalLightVec& getDirectionalLights() const;
+        typedef std::vector<LightSourcePtr> LightSourceVec;
+        const LightSourceVec& getDirectionalLights() const;
+        const LightSourceVec& getSpotLights() const;
 
-        typedef std::vector<SpotLightPtr> SpotLightVec;
-        const SpotLightVec& getSpotLights() const;
-
-        void addLight(const DirectionalLightPtr& light);
-        void removeLight(const DirectionalLightPtr& light);
-
-        void addLight(const SpotLightPtr& light);
-        void removeLight(const SpotLightPtr& light);
+        void addLight(const LightSourcePtr& light);
+        void removeLight(const LightSourcePtr& light);
 
         // temporary functions for testing..
         void beginShadowMap();
         void endShadowMap();
 
     private:
-        DirectionalLightVec mDirectionalLights;
-        SpotLightVec mSpotLights;
+        LightSourceVec mDirectionalLights;
+        LightSourceVec mSpotLights;
 
         EffectPtr mDepthWriteEffect;
     };

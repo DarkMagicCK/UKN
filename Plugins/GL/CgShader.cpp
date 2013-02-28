@@ -182,7 +182,7 @@ namespace ukn {
     }
 
     bool CgGLShader::setTextureVariable(const char* name, const TexturePtr& tex) {
-        if(mProgram) {
+        if(mProgram && tex) {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
                 cgGLSetTextureParameter(param, (GLuint)tex->getTextureId());

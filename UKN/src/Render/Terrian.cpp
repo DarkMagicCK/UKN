@@ -668,8 +668,7 @@ namespace ukn {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
         CameraPtr cam = gd.getCurrFrameBuffer()->getViewport().camera;
-        gd.bindTexture(mTexture);
-
+     
         mDrawCount = 0;
         renderNode(mRoot, gd, cam->getViewFrustum());
     }

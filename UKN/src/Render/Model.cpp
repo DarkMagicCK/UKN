@@ -187,7 +187,7 @@ namespace ukn {
         return renderBuffer;
     }
     
-    ModelLoader::ModelDataPtr ModelLoader::LoadFromPly(const mist::ResourcePtr& file) {
+    ModelLoader::ModelDataPtr ModelLoader::LoadFromPly(const mist::ResourcePtr& file, bool calculate_normal) {
         mist::TextStreamReader reader(file->getResourceStream());
         while(reader.peek() != -1) {
             MistString magic = reader.readString();
@@ -210,6 +210,8 @@ namespace ukn {
                     /* x y z r g b nx ny nz u v*/
                     bool vertex_flag[11];
                     
+                    vertex_elements_type format;
+
                     VertexComponent() {
                         memset(vertex_flag, 0, sizeof(vertex_flag));
                     }
@@ -217,6 +219,21 @@ namespace ukn {
                     void add(Component comp) {
                         components.push_back(comp);
                         vertex_flag[comp] = true;
+
+                        switch(comp) {
+                        case Z:
+                            format.push_back(VertexElement(VU_Position, EF_Float3, 0));
+                            break;
+                        case NZ:
+                            format.push_back(VertexElement(VU_Normal, EF_Float3, 0));
+                            break;
+                        case B:
+                            format.push_back(VertexElement(VU_Diffuse, EF_RGBA8, 0));
+                            break;
+                        case V:
+                            format.push_back(VertexElement(VU_UV, EF_Float2, 0));
+                            break;
+                        }
                     }
                     
                     bool hasXYZ() const {
@@ -234,6 +251,7 @@ namespace ukn {
                     
                     ComponentVector::const_iterator begin() const { return components.begin(); }
                     ComponentVector::const_iterator end() const { return components.end(); }
+
                     
                 } vertex_components;
                 
@@ -288,51 +306,161 @@ namespace ukn {
                     header = reader.readString();
                 }
                 
-                ModelData* data = new ModelData();
-                if(vertex_components.hasXYZ()) {
-                    data->position.resize(vertexCount);
-                }
-                if(vertex_components.hasColor()) {
-                    data->color.resize(vertexCount);
-                }
-                if(vertex_components.hasNormal()) {
-                    data->normal.resize(vertexCount);
-                }
-                if(vertex_components.hasUV()) {
-                    data->uv.resize(vertexCount);
-                }
-                
                 /* begin data */
+                std::vector<float3> position;
+                std::vector<float3> normal;
+                std::vector<float3> color;
+                std::vector<float2> uv;
+
+                position.resize(vertexCount);
+                normal.resize(vertexCount);
+                if(vertex_components.hasColor())
+                    color.resize(vertexCount);
+                uv.resize(vertexCount);
                 for(uint32 i=0; i<vertexCount; ++i) {
                     for(const VertexComponent::Component& c: vertex_components) {
                         switch(c) {
-                            case VertexComponent::X: data->position[i][0] = reader.readFloat(); break;
-                            case VertexComponent::Y: data->position[i][1] = reader.readFloat(); break;
-                            case VertexComponent::Z: data->position[i][2] = reader.readFloat(); break;
-                            case VertexComponent::NX: data->normal[i][0] = reader.readFloat(); break;
-                            case VertexComponent::NY: data->normal[i][1] = reader.readFloat(); break;
-                            case VertexComponent::NZ: data->normal[i][2] = reader.readFloat(); break;
-                            case VertexComponent::R: data->color[i][0] = reader.readFloat(); break;
-                            case VertexComponent::G: data->color[i][1] = reader.readFloat(); break;
-                            case VertexComponent::B: data->color[i][2] = reader.readFloat(); break;
-                            case VertexComponent::U: data->uv[i][0] = reader.readFloat(); break;
-                            case VertexComponent::V: data->uv[i][1] = reader.readFloat(); break;
+                            case VertexComponent::X: position[i][0] = reader.readFloat(); break;
+                            case VertexComponent::Y: position[i][1] = reader.readFloat(); break;
+                            case VertexComponent::Z: position[i][2] = reader.readFloat(); break;
+                            case VertexComponent::NX: normal[i][0] = reader.readFloat(); break;
+                            case VertexComponent::NY: normal[i][1] = reader.readFloat(); break;
+                            case VertexComponent::NZ: normal[i][2] = reader.readFloat(); break;
+                            case VertexComponent::R: color[i][0] = reader.readFloat(); break;
+                            case VertexComponent::G: color[i][1] = reader.readFloat(); break;
+                            case VertexComponent::B: color[i][2] = reader.readFloat(); break;
+                            case VertexComponent::U: uv[i][0] = reader.readFloat(); break;
+                            case VertexComponent::V: uv[i][1] = reader.readFloat(); break;
                         }
                     }
                 }
+              
+                if(!vertex_components.hasUV()) {
+                    std::fill(uv.begin(), uv.end(), float2(0, 0));
+                }
+                
+                ModelData* data = new ModelData();
+
+                std::vector<float3> n_position;
+                std::vector<float2> n_uv;
+                std::vector<float3> n_color;
+
+                std::vector<uint32>& index_data = data->index_data;
                 for(uint32 i=0; i<indexCount; ++i) {
                     uint32 count = reader.readInt32();
                     for(uint32 j=0; j<count; ++j) {
                         /* triangle strip */
                         if(j >= 3) {
-                            size_t size = data->indices.size();
-                            data->indices.push_back(data->indices[size-2]);
-                            data->indices.push_back(data->indices[size-1]);
+                            size_t size = index_data.size();
+                            index_data.push_back(index_data[size-2]);
+                            index_data.push_back(index_data[size-1]);
+
+                            if(calculate_normal && !vertex_components.hasNormal()) {
+                                n_position.push_back(position[index_data[size-2]]);
+                                n_position.push_back(position[index_data[size-1]]);
+                                
+                                n_uv.push_back(uv[index_data[size-2]]);
+                                n_uv.push_back(uv[index_data[size-1]]);
+                                
+                                if(vertex_components.hasColor()) {
+                                    n_color.push_back(color[index_data[size-2]]);
+                                    n_color.push_back(color[index_data[size-1]]);
+                                }
+                            }
                         }
-                        data->indices.push_back(reader.readInt32());
+                        uint32 index = reader.readInt32();
+                        index_data.push_back(index);
+
+                        if(calculate_normal && !vertex_components.hasNormal()) {
+                            n_position.push_back(position[index]);
+                            n_uv.push_back(uv[index]);
+
+                            if(vertex_components.hasColor())
+                                n_color.push_back(color[index]);
+                        }
                     }
                 }
                 
+                data->vertex_data.push_back(std::vector<uint8>());
+                std::vector<uint8>& vert_data = data->vertex_data.back();
+
+                /* ply sometimes does not contain normal data, calculate manually here */
+                if(calculate_normal && !vertex_components.hasNormal()) {
+                    normal.resize(n_position.size());
+
+                    // calculate normals
+                    ukn::uint32 index = 0;
+                    for(size_t i=0; i<index_data.size() / 3; ++i) {
+                        ukn::float3& p1 = n_position[index];
+                        ukn::float3& p2 = n_position[index+1];
+                        ukn::float3& p3 = n_position[index+2];
+
+                        ukn::float3 u = p2 - p1;
+                        ukn::float3 v = p3 - p1;
+                        ukn::float3 n = math::cross(u, v);
+
+                        normal[index] = normal[index+1] = normal[index+2] = n;
+                        index += 3;
+                    }
+                }
+
+                bool new_data = (calculate_normal & !vertex_components.hasNormal());
+                
+                std::vector<float3>& position_source = new_data ? n_position: position;
+                std::vector<float3>& normal_source = normal;
+                std::vector<float2>& uv_source = new_data ? n_uv: uv;
+                std::vector<float3>& color_source = new_data ? n_color: color;
+                
+                data->vertex_format = vertex_components.format;
+                if(new_data) 
+                    data->vertex_format = VertexUVNormal::Format();
+
+
+             //   vert_data.resize(GetVertexElementsTotalSize(vertex_components.format) * position_source.size());
+                for(size_t i=0; i<position_source.size(); ++i) {
+                    
+                    for(VertexElement& element: data->vertex_format) {
+                        switch(element.usage) {
+                        case VU_Position:
+                            vert_data.insert(vert_data.end(),
+                                                (uint8*)position_source[i].value,
+                                                (uint8*)(position_source[i].value + 3));
+                            break;
+                        case VU_Normal:
+                            vert_data.insert(vert_data.end(),
+                                                (uint8*)normal_source[i].value,
+                                                (uint8*)(normal_source[i].value + 3));
+                            break;
+                        case VU_UV:
+                            vert_data.insert(vert_data.end(),
+                                                (uint8*)uv_source[i].value,
+                                                (uint8*)(uv_source[i].value + 2));
+                            break;
+                        case VU_Diffuse:
+                            float3& rgb = color_source[i];
+                            uint32 c = COLOR_RGBA(rgb[0] / 255.f,
+                                                  rgb[1] / 255.f,
+                                                  rgb[2] / 255.f,
+                                                  1);
+                            vert_data.insert(vert_data.end(),
+                                             (uint8*)&c,
+                                             ((uint8*)&c) + 4);
+                            break;
+                        }
+                    }
+                }
+
+                ModelData::MeshData mesh;
+                mesh.num_indices = index_data.size();
+                mesh.start_index = 0;
+                mesh.num_vertices = position_source.size();
+                mesh.start_vertex = 0;
+                mesh.material_id = 0;
+                mesh.name = file->getName();
+                data->meshes.push_back(mesh);
+
+                data->vertex_count = (uint32)position_source.size();
+
                 return data;
             }
         }
@@ -345,6 +473,22 @@ namespace ukn {
     
     ModelLoader::ModelDataPtr ModelLoader::LoadFromPlaneFile(const mist::ResourcePtr& file) {
         return ModelDataPtr();
+    }
+
+    ModelPtr ModelLoader::LoadModel(const UknString& name, uint32 access_hint) {
+        return ModelPtr();
+    }
+
+    ModelPtr ModelLoader::CreateModel(const ModelDataPtr& data) {
+        return ModelPtr();
+    }
+
+    bool ModelLoader::SaveModel(const ModelPtr& model, const UknString& save_to, const std::string& mesh_name) {
+        return false;
+    }
+
+    bool ModelLoader::SaveModel(const ModelDataPtr& model, const UknString& save_to, const std::string& mesh_name) {
+        return false;
     }
     
     /* Mesh */

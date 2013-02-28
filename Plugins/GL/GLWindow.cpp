@@ -194,6 +194,8 @@ namespace ukn {
 
             glfwWindowHint(GLFW_RESIZABLE, settings.resizable);
 
+            /* maybe there are bugs... let glfw decide the best version */
+            /*
             glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, UKN_OPENGL_VERSION_MAJOR);
             glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, UKN_OPENGL_VERSION_MINOR);
             if(UKN_OPENGL_VERSION_MAJOR >= 3) {
@@ -204,6 +206,7 @@ namespace ukn {
                 glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
 #endif
             }
+            */
             if(!settings.native_window_handle) {
                 if((mGlfwWindow = glfwCreateWindow(settings.width,
                                                    settings.height,

@@ -171,8 +171,8 @@ namespace ukn {
         glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
         glGetTexImage(GL_TEXTURE_2D,
                       level,
-                      element_format_to_texdata_format(this->format()),
                       element_format_to_gl_element_type(this->format()),
+                      element_format_to_texdata_format(this->format()),
                       texData);
         int err = GL_NO_ERROR;
         if((err = glGetError()) != GL_NO_ERROR) {

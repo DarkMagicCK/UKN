@@ -20,26 +20,48 @@ namespace ukn {
         /* simple format loaders
             to do with more complicated loaders, such as Scene, Lights & Animations
          */
-        
         struct ModelData {
-            Array<float3> position;
-            Array<float3> normal;
-            Array<float3> tangent;
-            Array<float3> binormal;
-            Array<float2> uv;
-            Array<float3> color;
-            Array<uint32> indices;
+            std::vector<std::vector<uint8> > vertex_data;
+            uint32 vertex_count;
+
+            std::vector<uint32> index_data;
+            vertex_format vertex_format;
+
+            std::vector<MaterialPtr> materials;
+
+            struct MeshData {
+                uint32 num_vertices;
+                uint32 start_vertex;
+                uint32 num_indices;
+                uint32 start_index;
+
+                uint32 material_id;
+                Box bounding_box;
+                UknString name;
+            };
+            std::vector<MeshData> meshes;
         };
         
         typedef SharedPtr<ModelData> ModelDataPtr;
         
         /* stanford polygon format */
-        static ModelDataPtr LoadFromPly(const mist::ResourcePtr& file);
+        static ModelDataPtr LoadFromPly(const mist::ResourcePtr& file, bool calculate_normal);
         /* wavefront obj format */
         static ModelDataPtr LoadFromObj(const mist::ResourcePtr& file);
         /* plane space separated file */
         static ModelDataPtr LoadFromPlaneFile(const mist::ResourcePtr& file);
         
+
+        static ModelPtr LoadModel(const UknString& name,
+                                  uint32 access_hint);
+        static ModelPtr CreateModel(const ModelDataPtr& data);
+        static bool     SaveModel(const ModelPtr& model, 
+                                  const UknString& save_to, 
+                                  const std::string& mesh_name);
+        static bool     SaveModel(const ModelDataPtr& data,
+                                  const UknString& save_to,
+                                  const std::string& mesh_name);
+
     };
 
     class Model;

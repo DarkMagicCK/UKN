@@ -65,7 +65,7 @@ namespace ukn {
     
     inline GLenum element_format_to_gl_element_type(ElementFormat format) {
         switch(format) {
-            case EF_RGBA8: return GL_UNSIGNED_BYTE;
+            case EF_RGBA8: return GL_UNSIGNED_INT_8_8_8_8;
             case EF_RGBA4444: return GL_UNSIGNED_SHORT_4_4_4_4;
             case EF_RGB565: return GL_UNSIGNED_SHORT_5_6_5;
             case EF_RGB5A1: return GL_UNSIGNED_SHORT_5_5_5_1;

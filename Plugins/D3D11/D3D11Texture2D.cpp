@@ -4,6 +4,7 @@
 #include "D3D11Convert.h"
 
 #include "mist/Logger.h"
+#include <D3DX11.h>
 
 namespace ukn {
 

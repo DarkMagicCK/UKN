@@ -9,7 +9,7 @@
 #include "UKN/Vertex.h"
 #include "UKN/GraphicSettings.h"
 
-#include <D3DX11.h>
+#include <D3D11.h>
 
     struct D3DXMATRIX;
    

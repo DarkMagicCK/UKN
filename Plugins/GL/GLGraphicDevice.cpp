@@ -110,6 +110,7 @@ namespace ukn {
     }
 
     void GLGraphicDevice::bindTexture(const TexturePtr& texture) {
+
         if(texture->type() == TT_Texture2D) {
             glEnable(GL_TEXTURE_2D);
             glBindTexture(GL_TEXTURE_2D, (GLuint)texture->getTextureId());

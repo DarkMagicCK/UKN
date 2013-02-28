@@ -194,48 +194,25 @@ int CALLBACK WinMain(
 
           
             ukn::ModelLoader::ModelDataPtr dragonModel = ukn::ModelLoader::LoadFromPly(
-                ukn::ResourceLoader::Instance().loadResource(L"dragon_recon/dragon_vrip_res4.ply"));
+                ukn::ResourceLoader::Instance().loadResource(L"dragon_recon/dragon_vrip_res4.ply"),
+                true);
           
             if(dragonModel) {
                 ukn::ModelLoader::ModelData* pdragonModel = dragonModel.get();
-                ukn::VertexUVNormal* vertices = mist_malloc_t(ukn::VertexUVNormal, pdragonModel->indices.size());
-                for(size_t i=0; i<dragonModel->indices.size(); ++i) {
-                    vertices[i].position = pdragonModel->position[pdragonModel->indices[i]];
-                    if(dragonModel->uv.size() > 0)
-                        vertices[i].uv = pdragonModel->uv[pdragonModel->indices[i]];
-                    else
-                        vertices[i].uv = ukn::float2(0, 0);
-                }
-                // calculate normals
-                ukn::uint32 index = 0;
-                for(size_t i=0; i<dragonModel->indices.size() / 3; ++i) {
-                    ukn::VertexUVNormal& p1 = vertices[index];
-                    ukn::VertexUVNormal& p2 = vertices[index+1];
-                    ukn::VertexUVNormal& p3 = vertices[index+2];
-
-                    ukn::Vector3 u = p2.position - p1.position;
-                    ukn::Vector3 v = p3.position - p1.position;
-                    ukn::float3 normal = u.cross(v);
-
-                    p1.normal = p2.normal = p3.normal = normal;
-                    index += 3;
-                }
-                count = dragonModel->indices.size();
+                
                 ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::None,
                                                                            ukn::GraphicBuffer::Static,
-                                                                           dragonModel->indices.size(),
-                                                                           vertices,
-                                                                           ukn::VertexUVNormal::Format());
+                                                                           dragonModel->vertex_count,
+                                                                           &dragonModel->vertex_data[0][0],
+                                                                           dragonModel->vertex_format);
                 ukn::GraphicBufferPtr indexBuffer = gf.createIndexBuffer(ukn::GraphicBuffer::None,
                                                                          ukn::GraphicBuffer::Static,
-                                                                         dragonModel->indices.size(),
-                                                                         &dragonModel->indices[0]);
+                                                                         dragonModel->index_data.size(),
+                                                                         &dragonModel->index_data[0]);
                 dragonBuffer = gf.createRenderBuffer();
                 dragonBuffer->bindVertexStream(vertexBuffer, ukn::VertexUVNormal::Format());
-                dragonBuffer->bindIndexStream(indexBuffer);
+          //      dragonBuffer->bindIndexStream(indexBuffer);
                 dragonBuffer->setRenderMode(ukn::RM_Triangle);
-
-                mist::mist_free(vertices);
             }
 
             deferredRenderer = new ukn::DeferredRenderer();

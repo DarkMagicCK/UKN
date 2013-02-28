@@ -1,6 +1,6 @@
 #include "UKN/RenderBuffer.h"
 
-class ID3D11InputLayout;
+struct ID3D11InputLayout;
 
 namespace ukn {
 

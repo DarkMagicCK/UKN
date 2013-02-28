@@ -24,7 +24,7 @@ namespace ukn {
         case RSP_BlendFuncOneMinusDstAlpha: return D3D11_BLEND_INV_DEST_ALPHA;
         case RSP_BlendFuncOneMinusDstColor: return D3D11_BLEND_INV_DEST_COLOR;
         case RSP_BlendFuncOneMinusSrcAlpha: return D3D11_BLEND_INV_SRC_ALPHA;
-        case RSP_BlendFuncOneMinusSrcColor: return D3D11_BLEND_INV_DEST_ALPHA;
+        case RSP_BlendFuncOneMinusSrcColor: return D3D11_BLEND_INV_SRC_COLOR;
         case RSP_BlendFuncSrcAlpha:         return D3D11_BLEND_SRC_ALPHA;
         case RSP_BlendFuncSrcColor:         return D3D11_BLEND_SRC_COLOR;
         case RSP_BlendFuncZero:             return D3D11_BLEND_ZERO;
@@ -41,6 +41,7 @@ namespace ukn {
     D3D11BlendStateObject::D3D11BlendStateObject(const BlendStateDesc& desc, D3D11GraphicDevice* device):
     BlendStateObject(desc) {
         D3D11_BLEND_DESC d3ddesc;
+        ZeroMemory(&d3ddesc, sizeof(D3D11_BLEND_DESC));
         d3ddesc.AlphaToCoverageEnable = desc.alpha_to_converage;
         d3ddesc.IndependentBlendEnable = FALSE;
         d3ddesc.RenderTarget[0].BlendEnable = desc.blend_state.enabled;

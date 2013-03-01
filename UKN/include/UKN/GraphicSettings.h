@@ -278,6 +278,12 @@ namespace ukn {
         RSP_FrontFaceClockwise,
         RSP_FrontFaceCounterClockwise,
     };
+
+    enum BufferAccess {
+        BA_CPU_Read,        /* STAGING buffer */
+        BA_CPU_Write,
+        BA_GPU_Access,      /* default buffer */
+    };
     
 } // namespace ukn  
 

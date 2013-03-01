@@ -34,6 +34,7 @@ namespace ukn {
         desc.blend_state.enabled = false;
         _g_blendoff = gf.createBlendStateObject(desc);
 
+        desc.blend_state.enabled = true;
         desc.blend_state.src = RSP_BlendFuncOne;
         desc.blend_state.src_alpha = RSP_BlendFuncOne;
         desc.blend_state.dst = RSP_BlendFuncZero;

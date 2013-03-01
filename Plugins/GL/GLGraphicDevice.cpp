@@ -124,7 +124,7 @@ namespace ukn {
     }
 
     void GLGraphicDevice::renderBuffer(const RenderBufferPtr& buffer) {
-#define BUFFER_OFFSET(buffer, i) (buffer->isInMemory() ? ((char*)buffer->map() + (i)) : ((char *)NULL + (i)))
+#define BUFFER_OFFSET(buffer, i) ((char*)buffer->map() + (i))
 
         if(buffer.isValid()) {
             EffectPtr effect = mBindedEffect;

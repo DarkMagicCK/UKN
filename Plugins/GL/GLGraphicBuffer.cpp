@@ -120,8 +120,11 @@ namespace ukn {
         return mCount;
     }
     
-    bool GLVertexBuffer::isInMemory() const {
-        return false;
+    void GLVertexBuffer::copyBuffer(const GraphicBufferPtr& to) {
+        if(to) {
+            GLVertexBuffer* dest = checked_cast<GLVertexBuffer*>(to.get());
+
+        }
     }
 
     GLIndexBuffer::GLIndexBuffer(GraphicBuffer::Access access,
@@ -203,8 +206,11 @@ namespace ukn {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    bool GLIndexBuffer::isInMemory() const {
-        return false;
+    void GLIndexBuffer::copyBuffer(const GraphicBufferPtr& to) {
+        if(to) {
+            GLIndexBuffer* dest = checked_cast<GLIndexBuffer*>(to.get());
+
+        }
     }
     
     void GLIndexBuffer::unmap() {

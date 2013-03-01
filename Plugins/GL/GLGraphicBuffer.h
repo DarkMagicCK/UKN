@@ -26,18 +26,18 @@ namespace ukn {
 
         virtual ~GLVertexBuffer();
 
-        virtual void* map();
-        virtual void unmap();
+        void* map() override;
+        void unmap() override;
 
-        virtual void activate();
-        virtual void deactivate();
-        virtual bool isInMemory() const;
+        void activate() override;
+        void deactivate() override;
 
         vertex_elements_type& format();
         const vertex_elements_type& format() const;
 
-        uint32 count() const;
-        void resize(uint32 desired_count);
+        uint32 count() const override;
+        void resize(uint32 desired_count) override;
+        void copyBuffer(const GraphicBufferPtr& to) override;
 
     private:
         GLuint mId;
@@ -56,15 +56,15 @@ namespace ukn {
 
         virtual ~GLIndexBuffer();
 
-        virtual void* map();
-        virtual void unmap();
+        void* map() override;
+        void unmap() override;
 
-        virtual void activate();
-        virtual void deactivate();
-        virtual bool isInMemory() const;
+        void activate() override;
+        void deactivate() override;
         
-        uint32 count() const;
-        void resize(uint32 desired_count);
+        uint32 count() const override;
+        void resize(uint32 desired_count) override;
+        void copyBuffer(const GraphicBufferPtr& to) override;
 
     private:
         GLuint mId;

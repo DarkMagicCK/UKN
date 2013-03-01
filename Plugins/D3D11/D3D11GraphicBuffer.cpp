@@ -148,6 +148,10 @@ namespace ukn {
 		}
 	}
 
+    ID3D11Buffer* D3D11VertexBuffer::getD3DBuffer() const {
+        return mBuffer.get();
+    }
+
 	uint32 D3D11VertexBuffer::offset() const {
 		return mOffset;
 	}
@@ -156,9 +160,13 @@ namespace ukn {
 		mOffset = offset;
 	}
 
-	bool D3D11VertexBuffer::isInMemory() const {
-		return false;
-	}
+	void D3D11VertexBuffer::copyBuffer(const GraphicBufferPtr& to) {
+        if(to) {
+            D3D11VertexBuffer* dest = checked_cast<D3D11VertexBuffer*>(to.get());
+            mDevice->getD3DDeviceContext()->CopyResource(this->mBuffer.get(),
+                                                         dest->getD3DBuffer());
+        }
+    }
 
 	vertex_elements_type& D3D11VertexBuffer::format() {
 		return mFormat;
@@ -290,9 +298,13 @@ namespace ukn {
 		mOffset = offset;
 	}
 
-	bool D3D11IndexBuffer::isInMemory() const {
-		return false;
-	}
+	void D3D11IndexBuffer::copyBuffer(const GraphicBufferPtr& to) {
+        if(to) {
+            D3D11IndexBuffer* dest = checked_cast<D3D11IndexBuffer*>(to.get());
+            mDevice->getD3DDeviceContext()->CopyResource(this->mBuffer.get(),
+                                                         dest->getD3DBuffer());
+        }
+    }
 
 	uint32 D3D11IndexBuffer::count() const {
 		return mCount;
@@ -319,5 +331,9 @@ namespace ukn {
 	        mBuffer = MakeCOMPtr(buffer);
 		}
 	}
+
+    ID3D11Buffer* D3D11IndexBuffer::getD3DBuffer() const {
+        return mBuffer.get();
+    }
 
 }

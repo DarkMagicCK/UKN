@@ -19,7 +19,8 @@ namespace ukn {
      * such as VertexBuffer
      **/
     class UKN_API GraphicBuffer {
-    public:        
+    public:      
+        /* CPU Access */
         enum Access {
             None,
             ReadOnly,
@@ -46,8 +47,9 @@ namespace ukn {
         
 		virtual uint32  count() const = 0;
         
-        virtual void resize(uint32 desired_count) = 0;
-        virtual bool isInMemory() const = 0;
+        virtual void    resize(uint32 desired_count) = 0;
+        /* copy to another buffer, transfer between GPU and CPU */
+        virtual void    copyBuffer(const GraphicBufferPtr& to) = 0;
         
         Usage   usage() const;
         Access  access() const;
@@ -78,11 +80,13 @@ namespace ukn {
         
         virtual void    activate() { }
         virtual void    deactivate() { }
-        
+
         virtual uint32  count() const { return (uint32)mContainer.size(); }
         
         virtual void resize(uint32 desired_count) { mContainer.resize(desired_count); }
         virtual bool isInMemory() const { return true; }
+
+        void copyBuffer(const GraphicBufferPtr& buffer) { }
         
     public:
         void clear() { mContainer.clear(); }

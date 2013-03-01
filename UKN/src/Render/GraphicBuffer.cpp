@@ -44,6 +44,10 @@ namespace ukn {
         bool isInMemory() const {
             return false;
         }
+
+        void copyBuffer(const GraphicBufferPtr& rhs) {
+
+        }
     };
         
     GraphicBufferPtr GraphicBuffer::NullObject() {

@@ -29,8 +29,9 @@ namespace ukn {
         };
         
         enum Usage {
-            Static,     // GL_STATIC_DRAW etc
-            Dynamic,
+            Static,     // GL_STATIC_ etc, D3D_STATIC
+            Dynamic,    // GL_DYNAMIC_ etc, D3D_DYNAMIC,
+            Staging,    // GL_COPY, D3D_STAGING
         };
         
         static GraphicBufferPtr NullObject();

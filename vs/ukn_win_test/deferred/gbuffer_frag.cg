@@ -22,11 +22,11 @@ float3 decode(float4 enc) {
 }
 
 FragmentOutputType FragmentProgram(VertexOutputType input,
-				                   uniform sampler2D tex: TEX0) {    
+				                   uniform sampler2D diffuseMap: TEX0) {    
     FragmentOutputType output;
     // not using specular map now
 
-    output.color = tex2D(tex, input.texCoord);
+    output.color = tex2D(diffuseMap, input.texCoord);
     output.color.w = 0.2;
 
     output.normal.xyz = encode(input.normal);

@@ -233,7 +233,7 @@ namespace mist {
     }
     
     StreamPtr MemoryStream::readIntoMemory() {
-        return new MemoryStream(*this);
+        return MakeSharedPtr<MemoryStream>(*this);
     }
     
     bool MemoryStream::eos() const {

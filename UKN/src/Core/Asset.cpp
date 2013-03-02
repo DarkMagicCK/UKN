@@ -11,7 +11,7 @@
 #include "UKN/Texture.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/Context.h"
-
+#include "UKN/Model.h"
 
 #include "mist/ConfigParser.h"
 #include "mist/Resource.h"
@@ -33,7 +33,7 @@ namespace ukn {
         }
         
         if(resource) {            
-            SharedPtr<Font> font = new Font();
+            SharedPtr<Font> font = MakeSharedPtr<Font>();
             if(font && font->loadFromConfigFile(resource))
                 return font;
         }
@@ -67,6 +67,10 @@ namespace ukn {
         return resource;
     }
     
+    ModelPtr AssetLoader<Model>::Load(const UknString& name, const UknString& path) {
+        return ModelLoader::LoadModel(path, 0);
+    }
+
     AssetManager& AssetManager::Instance() {
         static AssetManager instance;
         return instance;

@@ -9,7 +9,7 @@
 namespace ukn {
 
 	SceneManager::SceneManager() {
-
+        mLightManager = MakeSharedPtr<LightManager>();
 	}
     SceneManager::~SceneManager() {
 
@@ -41,12 +41,7 @@ namespace ukn {
 	}
 
     void SceneManager::addLight(const LightSourcePtr& light) {
-        switch (light->type()) {
-        case LS_Directional:
-        case LS_Spot:
-        case LS_Point:
-            break;
-        }
+        mLightManager->addLight(light);
     }
 
     void SceneManager::removeLight(const LightSourcePtr& light) {
@@ -103,5 +98,8 @@ namespace ukn {
 
 	}
     
+    const LightManagerPtr& SceneManager::getLightManager() const {
+        return mLightManager;
+    }
 
 }

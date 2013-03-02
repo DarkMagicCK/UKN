@@ -20,6 +20,10 @@ namespace ukn {
         
     }
 
+    RenderablePtr& SceneObject::getRenderable() {
+        return mRenderable;
+    }
+
     const RenderablePtr& SceneObject::getRenderable() const {
         return mRenderable;
     }

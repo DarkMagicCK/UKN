@@ -44,13 +44,13 @@ namespace ukn {
         EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
         EffectPassPtr pass0 = effect->appendPass();
         pass0->setFragmentShader(effect->createShader(
-            ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_2d_frag_program, 
+            ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_2d_frag_program, 
                                                                  strlen(_2d_frag_program)), 
                                                                  L""),
                                            ukn::ShaderDesc(ST_FragmentShader,
                                            "FragmentProgram")));
         pass0->setVertexShader(effect->createShader(
-            ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_2d_vert_program, 
+            ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_2d_vert_program, 
                                                                  strlen(_2d_vert_program)), 
                                                                  L""),
                                            ukn::ShaderDesc(ST_VertexShader,

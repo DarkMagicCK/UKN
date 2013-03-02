@@ -39,6 +39,8 @@ namespace ukn {
         void resize(uint32 desired_count) override;
         void copyBuffer(const GraphicBufferPtr& to) override;
 
+        GLint getGLBuffer() const;
+
     private:
         GLuint mId;
 
@@ -65,6 +67,8 @@ namespace ukn {
         uint32 count() const override;
         void resize(uint32 desired_count) override;
         void copyBuffer(const GraphicBufferPtr& to) override;
+
+        GLint getGLBuffer() const;
 
     private:
         GLuint mId;

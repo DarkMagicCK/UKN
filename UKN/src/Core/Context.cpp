@@ -126,6 +126,8 @@ namespace ukn {
     
     void Context::setApp(AppLauncher* app) {
         mApp = app;
+
+        mScene = MakeSharedPtr<SceneManager>();
     }
     
     AppLauncher& Context::getApp() const {

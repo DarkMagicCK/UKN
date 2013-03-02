@@ -31,7 +31,7 @@ namespace mist {
     
     class TaskNotificationEventArgs {
     public:
-        TaskNotificationEventArgs(TaskNotificationType type, const TaskPtr& task):
+        TaskNotificationEventArgs(TaskNotificationType type, Task* task):
         mTask(task),
         mType(type) {
         }
@@ -40,12 +40,12 @@ namespace mist {
             return mType;
         }
         
-        TaskPtr task() const {
+        Task* task() const {
             return mTask;
         }
                 
     private:
-        TaskPtr mTask;
+        Task* mTask;
         TaskNotificationType mType;
     };
     
@@ -134,6 +134,7 @@ namespace mist {
         void onUpdate(float dt);
         
     private:
+        void removeTask(Task* task);
         void taskFinished(Task* task);
         void taskStarted(Task* task);
         void taskCanceld(Task* task);

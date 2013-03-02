@@ -208,7 +208,7 @@ namespace mist {
     
     inline void create_linear_animation(const MistString& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
         if(type == L"int") {
-            LinearAnimation<int>* anim = new LinearAnimation<int>;
+            SharedPtr<LinearAnimation<int> > anim = MakeSharedPtr<LinearAnimation<int> >();
             anim->setFrom(parser->getInt(L"from", 0));
             anim->setTo(parser->getInt(L"to", 0));
             anim->setDuration(parser->getInt(L"duration", 0));
@@ -219,7 +219,7 @@ namespace mist {
         }
         
         if(type == L"float") {
-            LinearAnimation<float>* anim = new LinearAnimation<float>;
+            SharedPtr<LinearAnimation<float> > anim =  MakeSharedPtr<LinearAnimation<float> >();
             anim->setFrom(parser->getFloat(L"from", 0));
             anim->setTo(parser->getFloat(L"to", 0));
             anim->setDuration(parser->getInt(L"duration", 0));
@@ -230,7 +230,7 @@ namespace mist {
         }
         
         if(type == L"uint") {
-            LinearAnimation<uint32>* anim = new LinearAnimation<uint32>;
+            SharedPtr<LinearAnimation<uint32> > anim =  MakeSharedPtr<LinearAnimation<uint32> >();
             anim->setFrom(parser->getInt(L"from", 0));
             anim->setTo(parser->getInt(L"to", 0));
             anim->setDuration(parser->getInt(L"duration", 0));
@@ -241,7 +241,7 @@ namespace mist {
         }
         
         if(type == L"double") {
-            LinearAnimation<double>* anim = new LinearAnimation<double>;
+            SharedPtr<LinearAnimation<double> > anim = MakeSharedPtr<LinearAnimation<double> >();
             anim->setFrom(parser->getFloat(L"from", 0));
             anim->setTo(parser->getFloat(L"to", 0));
             anim->setDuration(parser->getInt(L"duration", 0));
@@ -260,7 +260,7 @@ namespace mist {
     inline void create_key_frame_animation(const MistString& type, void* prop, const ConfigParserPtr& parser, StoryBoard* storyboard) {
         
         if(type == L"int") {
-            KeyFrameAnimation<int>* anim = new KeyFrameAnimation<int>;
+            SharedPtr<KeyFrameAnimation<int> > anim = MakeSharedPtr<KeyFrameAnimation<int> >();
             
             int32 time = parser->getInt(L"time", 0);
             int32 duration = parser->getInt(L"duration", 0);
@@ -292,7 +292,7 @@ namespace mist {
         } 
         
         if(type == L"float") {
-            KeyFrameAnimation<float>* anim = new KeyFrameAnimation<float>;
+            SharedPtr<KeyFrameAnimation<float> > anim = MakeSharedPtr<KeyFrameAnimation<float> >();
             
             int32 time = parser->getInt(L"time", 0);
             int32 duration = parser->getInt(L"duration", 0);
@@ -324,7 +324,7 @@ namespace mist {
         } 
         
         if(type == L"double") {
-            KeyFrameAnimation<double>* anim = new KeyFrameAnimation<double>;
+            SharedPtr<KeyFrameAnimation<double> > anim = MakeSharedPtr<KeyFrameAnimation<double> >();
             
             int32 time = parser->getInt(L"time", 0);
             int32 duration = parser->getInt(L"duration", 0);
@@ -355,7 +355,7 @@ namespace mist {
         } 
         
         if(type == L"uint") {
-            KeyFrameAnimation<uint32>* anim = new KeyFrameAnimation<uint32>;
+            SharedPtr<KeyFrameAnimation<uint32> > anim = MakeSharedPtr<KeyFrameAnimation<uint32> >();
             
             int32 time = parser->getInt(L"time", 0);
             int32 duration = parser->getInt(L"duration", 0);
@@ -397,7 +397,7 @@ namespace mist {
         if(parser->toNode(L"animations")) {
             if(parser->toFirstChild()) {
                 do {
-                    StoryBoardPtr storyboard = new StoryBoard;
+                    StoryBoardPtr storyboard = MakeSharedPtr<StoryBoard>();
                     MistString name = parser->getString(L"name");
                     if(!name.empty()) {
                         bool isdefault = parser->getBool(L"default", false);

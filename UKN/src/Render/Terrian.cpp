@@ -6,6 +6,7 @@
 #include "UKN/GraphicDevice.h"
 #include "UKN/Shader.h"
 #include "UKN/FrameBuffer.h"
+#include "UKN/Renderable.h"
 
 #include "mist/MemoryUtil.h"
 #include "mist/Profiler.h"
@@ -191,13 +192,13 @@ namespace ukn {
                 EffectPassPtr pass0 = effect->appendPass();
 
                 pass0->setFragmentShader(effect->createShader(
-                    ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_color_frag_program, 
+                    ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_color_frag_program, 
                                                                          strlen(_color_frag_program)), 
                                                                          L""),
                                                    ukn::ShaderDesc(ST_FragmentShader,
                                                    "FragmentProgram")));
                 pass0->setVertexShader(effect->createShader(
-                    ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_color_vert_program, 
+                    ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_color_vert_program, 
                                                                          strlen(_color_vert_program)), 
                                                                          L""),
                                                    ukn::ShaderDesc(ST_VertexShader,
@@ -263,52 +264,6 @@ namespace ukn {
 
     }
 
-    static const char* _light_vert_program = "\
-                                             const uniform float4x4 worldMatrix;         \
-                                             const uniform float4x4 viewMatrix;          \
-                                             const uniform float4x4 projectionMatrix;    \
-                                             struct VertexOutputType {\
-                                                float4 position: POSITION;\
-                                                float3 normal: TEXCOORD1;\
-                                                float2 texCoord: TEXCOORD0; \
-                                             };\
-                                             VertexOutputType VertexProgram(in float3 position: POSITION,  \
-                                                                            in float3 normal: NORMAL, \
-                                                                            in float2 texCoord: TEXCOORD0) {      \
-                                             VertexOutputType output;\
-                                             output.position = float4(position, 1);\
-                                             output.position = mul(output.position, worldMatrix);\
-                                             output.position = mul(output.position, viewMatrix);\
-                                             output.position = mul(output.position, projectionMatrix);\
-                                             output.normal = normalize(mul(normal, (float3x3)worldMatrix));\
-                                             output.texCoord = texCoord; \
-                                             return output;\
-                                             }\0";
-
-    static const char* _light_frag_program = "\
-                                             const uniform float4 diffuseColor; \
-                                             const uniform float4 ambientColor; \
-                                             const uniform float4 lightDirection; \
-                                             struct VertexOutputType {\
-                                             float4 position: POSITION; \
-                                             float3 normal: TEXCOORD1; \
-                                             float2 texCoord: TEXCOORD0; \
-                                             };\
-                                             float4 FragmentProgram(VertexOutputType input, \
-                                                                    uniform sampler2D tex: TEX0): COLOR {\
-                                             float3 nLightDir; \
-                                             float lightIntensity; \
-                                             float4 color; \
-                                             \
-                                             color = ambientColor; \
-                                             nLightDir = -lightDirection; \
-                                             lightIntensity = saturate(dot(input.normal, nLightDir)); \
-                                             if(lightIntensity > 0.0f) { \
-                                                color += (diffuseColor * lightIntensity); \
-                                             } \
-                                             return saturate(color) * tex2D(tex, input.texCoord); \
-                                             }\0";
-
     GridTerrianLightening::GridTerrianLightening():
     mTextureRepeat(10) {
 
@@ -328,7 +283,7 @@ namespace ukn {
     }
 
     GridTerrianLightening& GridTerrianLightening::texture(const TexturePtr& tex) {
-        this->mTexture = tex;
+        this->mDiffuseTex = tex;
         return *this;
     }
 
@@ -521,33 +476,7 @@ namespace ukn {
         if(mRenderBuffer && mVertexBuffer && mIndexBuffer) {
             mRenderBuffer->bindVertexStream(mVertexBuffer, VertexUVNormal::Format());
             mRenderBuffer->setRenderMode(RM_Triangle);
-/*
-            EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
-            if(effect) {
-                effect->setFragmentShader(effect->createShader(
-                    ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_light_frag_program, 
-                                                                         strlen(_light_frag_program)), 
-                                                                         L""),
-                                                   ukn::ShaderDesc(ST_FragmentShader,
-                                                   "FragmentProgram")));
-                effect->setVertexShader(effect->createShader(
-                    ukn::Resource::MakeResourcePtr(new ukn::MemoryStream((const uint8*)_light_vert_program, 
-                                                                         strlen(_light_vert_program)), 
-                                                                         L""),
-                                                   ukn::ShaderDesc(ST_VertexShader,
-                                                   "VertexProgram")));
-                effect->setVertexFormat(ukn::GridTerrianLightening::VertexFormat::Format());
 
-                ShaderPtr fragmentShader = effect->getFragmentShader();
-                if(fragmentShader) {
-                    fragmentShader->setFloatVectorVariable("ambientColor", float4(0.6f, 0.6f, 0.6f, 1.0f));
-                    fragmentShader->setFloatVectorVariable("diffuseColor", float4(0.9f, 0.8f, 0.6f, 1.0f));
-                    fragmentShader->setFloatVectorVariable("lightDirection", float4(0, 0, -0.5f, 1));
-                }
-
-                mRenderBuffer->setEffect(effect);
-            } else 
-                error = true;*/
         } else
             error = true;
 

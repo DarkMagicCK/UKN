@@ -65,6 +65,10 @@ namespace mist {
         static MistString GetWrittable();
         static MistString GetResource();
         static MistString GetApplicationPath();
+
+        static MistString GetDirectory(const MistString& path);
+        static MistString GetFileName(const MistString& path);
+        static MistString GetFileNameWithoutExtension(const MistString& path);
         
         // check and get path of a font
         // priority follows current path, resource path, system font folder, asset resource name

@@ -63,6 +63,12 @@ namespace ukn {
     public:
         static SharedPtr<Resource> Load(const UknString& name, const UknString& path);
     };
+
+    template<>
+    class UKN_API AssetLoader<Model> {
+    public:
+        static ModelPtr Load(const UknString& name, const UknString& path);
+    };
     
     class UKN_API AssetManager: Uncopyable, public IConfigSerializable {
     public:

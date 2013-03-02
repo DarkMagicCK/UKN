@@ -128,7 +128,6 @@ namespace ukn {
 
         float heightFunc(float, float);
 
-        TexturePtr mTexture;
         // repeat in x,y defualt = size / 10;
         uint32 mTextureRepeat;
     };

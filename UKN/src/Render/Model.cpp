@@ -4,6 +4,9 @@
 #include "UKN/GraphicDevice.h"
 #include "UKN/RenderBuffer.h"
 
+#include "mist/Resource.h"
+#include "mist/FileUtil.h"
+
 namespace ukn {
 
     using namespace mist;
@@ -461,7 +464,7 @@ namespace ukn {
 
                 data->vertex_count = (uint32)position_source.size();
 
-                return data;
+                return SharedPtr<ModelData>(data);
             }
         }
         return ModelDataPtr();
@@ -476,7 +479,63 @@ namespace ukn {
     }
 
     ModelPtr ModelLoader::LoadModel(const UknString& name, uint32 access_hint) {
-        return ModelPtr();
+        if(name.find(L".ply") != UknString::npos) {
+            ModelDataPtr data = ModelLoader::LoadFromPly(
+                ResourceLoader::Instance().loadResource(name), 
+                true
+            );
+            if(data) {
+                ModelPtr model = MakeSharedPtr<Model>(Path::GetFileNameWithoutExtension(name));
+                
+                ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
+     
+                ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::None,
+                                                                           ukn::GraphicBuffer::Static,
+                                                                           data->vertex_count,
+                                                                           &data->vertex_data[0][0],
+                                                                           data->vertex_format);
+                ukn::GraphicBufferPtr indexBuffer = gf.createIndexBuffer(ukn::GraphicBuffer::None,
+                                                                         ukn::GraphicBuffer::Static,
+                                                                         data->index_data.size(),
+                                                                         &data->index_data[0]);
+                ukn::RenderBufferPtr buffer = gf.createRenderBuffer();
+                buffer->bindVertexStream(vertexBuffer, ukn::VertexUVNormal::Format());
+                buffer->bindIndexStream(indexBuffer);
+                buffer->setRenderMode(ukn::RM_Triangle);
+                
+                model->setRenderBuffer(buffer);
+
+                MeshPtr mesh = MakeSharedPtr<Mesh>(model, L"main");
+                mesh->setRenderBuffer(buffer);
+
+                MaterialPtr default_mat = MakeSharedPtr<Material>();
+                default_mat->ambient = float3(1, 1, 1);
+                default_mat->diffuse = float3(1, 1, 1);
+                default_mat->emit = float3(0, 0, 0);
+                default_mat->opacity = 1.f;
+                default_mat->shininess = 10.f;
+                default_mat->specular = float3(0, 0, 0);
+                default_mat->specular_power = 16.f;
+                default_mat->textures.push_back(std::make_pair("diffuse",
+                                                               "white"));
+
+                model->addMaterial(default_mat);
+                model->addMesh(mesh);
+
+                uint32 white(0xFFFFFFFF);
+                model->mTexturePool.insert(std::make_pair("white",
+                                                          gf.create2DTexture(1, 1, 0, EF_RGBA8, (uint8*)&white)));
+
+                mesh->buildInfo();
+
+                return model;
+
+            } else {
+                log_error(L"error loading model data");
+            }
+
+            return ModelPtr();
+        }
     }
 
     ModelPtr ModelLoader::CreateModel(const ModelDataPtr& data) {
@@ -496,7 +555,11 @@ namespace ukn {
     Mesh::Mesh(const ModelPtr& model, const UknString& name):
     mName(name),
     mMaterialId(0),
-    mModel(model) {
+    mModel(model),
+    mVertexStartIndex(0),
+    mIndexStartIndex(0),
+    mNumVertices(0),
+    mNumIndices(0) {
 
     }
 
@@ -513,6 +576,11 @@ namespace ukn {
     }
 
     RenderBufferPtr Mesh::getRenderBuffer() const {
+        mRenderBuffer->setVertexStartIndex(mVertexStartIndex);
+        mRenderBuffer->setVertexCount(mNumVertices);
+        mRenderBuffer->setIndexStartIndex(mIndexStartIndex);
+        mRenderBuffer->setIndexCount(mNumIndices);
+      
         return mRenderBuffer;
     }
 
@@ -525,71 +593,87 @@ namespace ukn {
     }
 
     uint32 Mesh::getNumVertices() const {
-        return mRenderBuffer->getVertexCount();
+        return mNumVertices;
     }
 
     void Mesh::setNumVertices(uint32 num) {
-        mRenderBuffer->setVertexCount(num);
+        mNumVertices= num;
     }
 
     uint32 Mesh::getNumTriangles() const {
-        return mRenderBuffer->getIndexCount() / 3;
+        return mNumIndices / 3;
     }
 
     void Mesh::setNumTriangles(uint32 num) {
-        mRenderBuffer->setIndexCount(num * 3);
+        mNumIndices = num * 3;
     }
 
     uint32 Mesh::getNumIndicies() const {
-        return mRenderBuffer->getIndexCount();
+        return mNumIndices;
     }
 
     void Mesh::setNumIndicies(uint32 num) {
-        mRenderBuffer->setIndexCount(num);
+        mNumIndices = num;
     }
 
     uint32 Mesh::getVertexStartIndex() const {
-        return mRenderBuffer->getVertexStartIndex();
+        return mVertexStartIndex;
     }
 
     void Mesh::setVertexStartIndex(uint32 index) {
-        mRenderBuffer->setVertexStartIndex(index);
+        mVertexStartIndex = index;
     }
 
     uint32 Mesh::getIndexStartIndex() const {
-        return mRenderBuffer->getIndexStartIndex();
+        return mIndexStartIndex;
     }
 
     void Mesh::setIndexStartIndex(uint32 index) {
-        mRenderBuffer->setIndexStartIndex(index);
+        mIndexStartIndex = index;
     }
         
     void Mesh::setIndexStream(const GraphicBufferPtr& index_stream) {
-        mRenderBuffer->bindIndexStream(index_stream);
+        if(mRenderBuffer)
+            mRenderBuffer->bindIndexStream(index_stream);
+        else {
+            mRenderBuffer = ukn::Context::Instance().getGraphicFactory().createRenderBuffer();
+        }
     }
 
     void Mesh::setVertexStream(const GraphicBufferPtr& vtx_stream, const vertex_elements_type& format) {
-        mRenderBuffer->bindVertexStream(vtx_stream, format);
+        if(mRenderBuffer) 
+           mRenderBuffer->bindVertexStream(vtx_stream, format);
+        else {
+            mRenderBuffer = ukn::Context::Instance().getGraphicFactory().createRenderBuffer();
+        }
+    }
+
+    void Mesh::setRenderBuffer(const RenderBufferPtr& buffer) {
+        mRenderBuffer = buffer;
+        this->setNumIndicies(mRenderBuffer->getIndexCount());
+        this->setNumVertices(mRenderBuffer->getVertexCount());
     }
 
     void Mesh::buildInfo() {
         ModelPtr model = mModel.lock();
 
         /* retrieve textures from material */
-        const MaterialPtr& mat = model->getMaterial(mMaterialId);
-        for(std::pair<std::string, std::string>& texel: mat->textures) {
-            TexturePtr tex = model->getTexture(texel.second);
-            if(tex) {
-                if(texel.first == "diffuse")
-                    mDiffuseTex = tex;
-                else if(texel.first == "specular")
-                    mSpecularTex = tex;
-                else if(texel.first == "normal" || texel.first == "bump")
-                    mNormalTex = tex;
-                else if(texel.first == "height")
-                    mHeightTex = tex;
-                else if(texel.first == "self_illumination")
-                    mEmitTex = tex;
+        if(mMaterialId < model->getMaterialCount()) {
+            const MaterialPtr& mat = model->getMaterial(mMaterialId);
+            for(std::pair<std::string, std::string>& texel: mat->textures) {
+                TexturePtr tex = model->getTexture(texel.second);
+                if(tex) {
+                    if(texel.first == "diffuse")
+                        mDiffuseTex = tex;
+                    else if(texel.first == "specular")
+                        mSpecularTex = tex;
+                    else if(texel.first == "normal" || texel.first == "bump")
+                        mNormalTex = tex;
+                    else if(texel.first == "height")
+                        mHeightTex = tex;
+                    else if(texel.first == "self_illumination")
+                        mEmitTex = tex;
+                }
             }
         }
     }
@@ -661,6 +745,18 @@ namespace ukn {
 
     Box Model::getBound() const {
         return mBoundingBox;
+    }
+
+    void Model::addMesh(const MeshPtr& mesh) {
+        mMeshes.push_back(mesh);
+    }
+
+    void Model::addMaterial(const MaterialPtr& mat) {
+        mMaterials.push_back(mat);
+    }
+
+    void Model::setRenderBuffer(const RenderBufferPtr& buffer) {
+        mRenderBuffer = buffer;
     }
 
 

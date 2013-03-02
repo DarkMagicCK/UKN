@@ -12,6 +12,17 @@
 
 namespace ukn {
 
+    inline GLenum _usage_to_gl(GraphicBuffer::Usage usage) {
+        switch(usage) {
+        case GraphicBuffer::Dynamic:
+            return GL_DYNAMIC_DRAW;
+        case GraphicBuffer::Static:
+            return GL_STATIC_DRAW;
+        case GraphicBuffer::Staging:
+            return GL_DYNAMIC_COPY;
+        }
+    }
+
     GLVertexBuffer::GLVertexBuffer(GraphicBuffer::Access access,
                                    GraphicBuffer::Usage usage,
                                    uint32 desired_count,
@@ -28,13 +39,13 @@ namespace ukn {
             glBufferData(GL_ARRAY_BUFFER,
                          static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(format)),
                          static_cast<const GLvoid*>(initData),
-                         usage == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+                         _usage_to_gl(usage));
 
         } else {
             glBufferData(GL_ARRAY_BUFFER,
                          static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(format)),
                          0,
-                         usage == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+                         _usage_to_gl(usage));
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -119,11 +130,30 @@ namespace ukn {
     uint32 GLVertexBuffer::count() const {
         return mCount;
     }
+
+    GLint GLVertexBuffer::getGLBuffer() const {
+        return mId;
+    }
     
     void GLVertexBuffer::copyBuffer(const GraphicBufferPtr& to) {
         if(to) {
             GLVertexBuffer* dest = checked_cast<GLVertexBuffer*>(to.get());
+            if(glCopyBufferSubData) {
+                GLint prevBuffer;
+                glBindBuffer(GL_COPY_READ_BUFFER, this->getGLBuffer());
+                glBindBuffer(GL_COPY_WRITE_BUFFER, dest->getGLBuffer());
 
+                glCopyBufferSubData(GL_COPY_READ_BUFFER,
+                                    GL_COPY_WRITE_BUFFER,
+                                    0,
+                                    0,
+                                    this->count() * GetVertexElementsTotalSize(this->format()));
+
+                glBindBuffer(GL_COPY_READ_BUFFER, 0);
+                glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
+            } else {
+                log_error(L"GLVertexBuffer::copyBuffer: GL Copy Buffer Sub Data not supported");
+            }
         }
     }
 
@@ -148,7 +178,6 @@ namespace ukn {
                          usage == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
         }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
 
         mCount = desired_count;
     }
@@ -210,7 +239,27 @@ namespace ukn {
         if(to) {
             GLIndexBuffer* dest = checked_cast<GLIndexBuffer*>(to.get());
 
+            if(glCopyBufferSubData) {
+                GLint prevBuffer;
+                glBindBuffer(GL_COPY_READ_BUFFER, this->getGLBuffer());
+                glBindBuffer(GL_COPY_WRITE_BUFFER, dest->getGLBuffer());
+
+                glCopyBufferSubData(GL_COPY_READ_BUFFER,
+                                    GL_COPY_WRITE_BUFFER,
+                                    0,
+                                    0,
+                                    this->count() * sizeof(uint32));
+
+                glBindBuffer(GL_COPY_READ_BUFFER, 0);
+                glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
+            } else {
+                log_error(L"GLIndexBuffer::copyBuffer: GL Copy Buffer Sub Data not supported");
+            }
         }
+    }
+
+    GLint GLIndexBuffer::getGLBuffer() const {
+        return mId;
     }
     
     void GLIndexBuffer::unmap() {

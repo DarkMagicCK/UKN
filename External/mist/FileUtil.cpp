@@ -594,6 +594,37 @@ namespace mist {
         return result;
 #endif    
     }
+
+    MistString Path::GetDirectory(const MistString& path) {
+        size_t rs = path.rfind(L'/');
+        if(rs == MistString::npos) {
+            rs = path.rfind(L'\\');
+        }
+        if(rs != MistString::npos) {
+            return MistString(path.begin(), path.begin() + rs);
+        }
+        return MistString(L"");
+    }
+
+    MistString Path::GetFileName(const MistString& path) {
+        size_t rs = path.rfind(L'/');
+        if(rs == MistString::npos) {
+            rs = path.rfind(L'\\');
+        }
+        if(rs != MistString::npos) {
+            return MistString(path.begin() + (rs+1), path.end());
+        }
+        return path;
+    }
+
+    MistString Path::GetFileNameWithoutExtension(const MistString& path) {
+        MistString filename = Path::GetFileName(path);
+        size_t rs = filename.rfind(L'.');
+        if(rs != MistString::npos) {
+            return MistString(filename.begin(), filename.begin() + rs);
+        }
+        return filename;
+    }
     
 } // namespace mist
 

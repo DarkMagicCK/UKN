@@ -28,6 +28,7 @@ namespace ukn {
         virtual void update();
         
     public:
+        RenderablePtr& getRenderable();
         const RenderablePtr& getRenderable() const;
         
         uint32 getAttribute() const;

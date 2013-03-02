@@ -38,7 +38,7 @@ namespace ukn {
         }
         
         if(resource) {            
-            SharedPtr<Font> font = new Font();
+            SharedPtr<Font> font = MakeSharedPtr<Font>();
             if(font && font->loadFromFontFile(resource, size, bold, italic))
                 return font;
         }

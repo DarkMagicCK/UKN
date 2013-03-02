@@ -123,6 +123,9 @@ namespace mist {
         }
     };
 
+    template<typename T>
+    class WeakPtr;
+
     template<typename T, class RP=SharedPtrReleasePolicy<T> >
     class SharedPtr: public safe_bool<SharedPtr<T, RP> > {
     public:
@@ -133,9 +136,14 @@ namespace mist {
             mCounter(new SharedPtrRefCounter) {
         }
 
-        SharedPtr(T* t): 
+        explicit SharedPtr(T* t): 
             mPtr(t), 
             mCounter(new SharedPtrRefCounter){ 
+        }
+
+        explicit SharedPtr(const WeakPtr<T>& rhs):
+            mCounter(rhs.mCounter) {
+                mPtr = rhs.mPtr;
         }
 
         template<class Other, class OtherRP>
@@ -186,10 +194,6 @@ namespace mist {
             this->assign(ptr);
         }
 
-        void alloc() {
-            
-        }
-
         SharedPtr& operator=(const SharedPtr& rhs) { 
             return this->assign(rhs);
         }
@@ -226,9 +230,6 @@ namespace mist {
             return this->mPtr;
         }
 
-        T* operator->() {
-            return this->deref();
-        }
         T* operator->() const {
             return this->deref();
         }
@@ -250,9 +251,6 @@ namespace mist {
         bool operator ==(const SharedPtr& rhs) const {
             return this->get() != rhs.get();
         }
-        bool operator -=(const T* rhs) const {
-            return this->get() != rhs;
-        }
         bool operator ==(T* rhs) const {
             return this->get() != rhs;
         }
@@ -262,43 +260,7 @@ namespace mist {
         bool operator !=(const T* rhs) const {
             return this->get() != rhs;
         }
-        bool operator !=(T* rhs) const {
-            return this->get() != rhs;
-        }
-        bool operator>(const SharedPtr& rhs) const {
-            return this->get() > rhs.get();
-        }
-        bool operator>(T* rhs) const {
-            return this->get() > rhs;
-        }
-        bool operator<(const T* rhs) const {
-            return this->get() < rhs;
-        }
-        bool operator>(const T* rhs) const {
-            return this->get() > rhs;
-        }
-        bool operator<(T* rhs) const {
-            return this->get() < rhs;
-        }
-        bool operator<=(const SharedPtr& rhs) const {
-            return this->get() < rhs.get();
-        }
-        bool operator>=(const SharedPtr& rhs) const {
-            return this->get() > rhs.get();
-        }
-        bool operator>=(T* rhs) const {
-            return this->get() > rhs;
-        }
-        bool operator<=(const T* rhs) const {
-            return this->get() < rhs;
-        }
-        bool operator>=(const T* rhs) const {
-            return this->get() > rhs;
-        }
-        bool operator<=(T* rhs) const {
-            return this->get() < rhs;
-        }
-
+       
         bool isValid() const {
             return this->mPtr!=0;
         }
@@ -349,8 +311,10 @@ namespace mist {
                     mCounter->incRef();
         }
 
-        template<class OC, class ORP>
+        template<typename OC, typename ORP>
         friend class SharedPtr;
+
+        template<typename T> friend class WeakPtr;
     };
 
     template <class C, class RP>
@@ -582,8 +546,11 @@ namespace mist {
         T* mPtr;
         SharedPtrRefCounter* mCounter;
 
-        template<class Y>
+        template<typename Y>
         friend class WeakPtr;
+
+        template<typename T, typename A>
+        friend class SharedPtr;
     };
 
     template<class T>
@@ -599,6 +566,41 @@ namespace mist {
     private:
         void operator&() const;
     } nullptr_t = {};
+
+
+    // copy of boost::enable_shared_from_this
+    template<typename T>
+    class enable_shared_from_this {
+    protected:
+        enable_shared_from_this() { 
+        }
+
+        enable_shared_from_this(const enable_shared_from_this&) {
+        }
+
+        enable_shared_from_this& operator=(const enable_shared_from_this&) {
+            return *this;
+        }
+
+        ~enable_shared_from_this() {
+        }
+
+    public:
+        SharedPtr<T> shared_from_this() {
+            SharedPtr<T> p(_internal_weak_this);
+            assert(p.get() == this);
+            return p;
+        }
+
+        SharedPtr<T const> shared_from_this() const {
+            SharedPtr<T const> p(_internal_weak_this);
+            assert(p.get() == this);
+            return p;
+        }
+
+        typedef T _internal_element_type;
+        mutable WeakPtr<_internal_element_type> _internal_weak_this;
+    };
 
 } // namespace mist
 #endif

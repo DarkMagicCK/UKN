@@ -197,7 +197,7 @@ namespace ukn {
             
             mist_assert(!mTileSets.empty());
             
-            mLayers.push_back(new Layer());
+            mLayers.push_back(MakeSharedPtr<Layer>());
             
             Layer& layer = *mLayers.back();
             layer.name = config->getString(L"name");
@@ -352,7 +352,7 @@ namespace ukn {
         }
         
         void Map::parseObjectGroup(const ConfigParserPtr& config) {
-            mLayers.push_back(new ObjectGroup());
+            mLayers.push_back(MakeSharedPtr<ObjectGroup>());
             
             ObjectGroup& obj_group = *static_cast<ObjectGroup*>(mLayers.back().get());
             

@@ -51,6 +51,8 @@ namespace ukn {
         /* plane space separated file */
         static ModelDataPtr LoadFromPlaneFile(const mist::ResourcePtr& file);
         
+        /* ukn model format, to do */
+        static ModelDataPtr LoadFromUknModel(const mist::ResourcePtr& file, bool is_bin);
 
         static ModelPtr LoadModel(const UknString& name,
                                   uint32 access_hint);
@@ -66,7 +68,7 @@ namespace ukn {
 
     class Model;
 
-    class Mesh: public Renderable {
+    class UKN_API Mesh: public Renderable {
     public:
         Mesh(const ModelPtr& model, const UknString& name);
         virtual ~Mesh();
@@ -77,10 +79,13 @@ namespace ukn {
         
         virtual Box getBound() const;
         virtual RenderBufferPtr getRenderBuffer() const;
-        
+
     public:
         int32 getMaterialId() const;
         void setMaterailId(int32 mid);
+        
+        uint32 getVertexStartIndex() const;
+        void setVertexStartIndex(uint32 index);
 
         uint32 getNumVertices() const;
         void setNumVertices(uint32 num);
@@ -91,9 +96,6 @@ namespace ukn {
         uint32 getNumIndicies() const;
         void setNumIndicies(uint32 num);
 
-        uint32 getVertexStartIndex() const;
-        void setVertexStartIndex(uint32 index);
-
         uint32 getIndexStartIndex() const;
         void setIndexStartIndex(uint32 index);
 
@@ -102,32 +104,40 @@ namespace ukn {
         void setVertexStream(const GraphicBufferPtr& vtx_stream, const vertex_elements_type& format);
 
     protected:
+        friend class ModelLoader;
+
         void buildInfo();
+        void setRenderBuffer(const RenderBufferPtr& buffer);
 
         UknString mName;
         Box mBoundingBox;
         int32 mMaterialId;
+
+        uint32 mVertexStartIndex;
+        uint32 mIndexStartIndex;
+        uint32 mNumVertices;
+        uint32 mNumIndices;
 
         RenderBufferPtr mRenderBuffer;
 
         WeakPtr<Model> mModel; /* parent model */
     };
 
-    class Model: public Renderable {
+    class UKN_API Model: public Renderable {
     public:
         Model(const UknString& name);
         virtual ~Model();
 
     public:
        /* IRenderable */
-        virtual const UknString& getName() const;
+        const UknString& getName() const override;
         
-        virtual Box getBound() const;
-        virtual RenderBufferPtr getRenderBuffer() const;
+        Box getBound() const;
+        RenderBufferPtr getRenderBuffer() const override;
         
-        virtual void onRenderBegin();
-        virtual void onRenderEnd();
-        
+        void onRenderBegin() override;
+        void onRenderEnd() override;
+
     public:
         const MeshPtr& getMesh(size_t mid) const;
         size_t getMeshCount() const;
@@ -138,7 +148,12 @@ namespace ukn {
         const TexturePtr& getTexture(const std::string& name);
 
     protected:
+        friend class ModelLoader;
+
         void updateBoundingBox();
+        void addMesh(const MeshPtr& mesh);
+        void addMaterial(const MaterialPtr& mat);
+        void setRenderBuffer(const RenderBufferPtr& buffer);
 
         UknString mName;
         Box mBoundingBox;

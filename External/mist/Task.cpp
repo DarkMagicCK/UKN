@@ -177,6 +177,10 @@ namespace mist {
     }
     
     void TaskManager::removeTask(const TaskPtr& task) {
+        this->removeTask(task.get());
+    }
+
+    void TaskManager::removeTask(Task* task) {
         TaskList::iterator it = mTasks.begin();
         TaskList::iterator end = mTasks.end();
         for(; it != end; ++it) {

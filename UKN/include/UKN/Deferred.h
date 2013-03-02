@@ -34,20 +34,17 @@ namespace ukn {
 
         float2 size() const;
 
-        void begin(const LightManagerPtr& lights);
-
-        // temporary functions for testing...
-        void renderBuffer(const RenderBufferPtr& buffer, const TexturePtr& tex, const Matrix4& worldMat);
-
-        void startRenderBuffer(const Matrix4& worldMat, const TexturePtr& tex);
-        void endRenderBuffer();
-
-        void end();
+        // render currrent scene, see Context::getSceneManager()
+        void renderScene();
 
     private:
         bool init();
+        void renderRenderable(Renderable& renderable, GraphicDevice& gd, const EffectPassPtr& pass);
+        
+        void prepare();
+        void makeGBuffer();
         void makeLightMap(const LightManagerPtr& lights);
-        void composite();
+        void makeFinal();
 
         bool mBegan;
 

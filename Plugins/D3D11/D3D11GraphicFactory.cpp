@@ -119,7 +119,7 @@ namespace ukn {
     RenderViewPtr D3D11GraphicFactory::createRenderView(const TexturePtr& texture) const {
         if(texture->type() == TT_Texture2D)
             return MakeSharedPtr<D3D11Texture2DRenderView>(texture, (D3D11GraphicDevice*)mGraphicDevice.get());
-        return 0;
+        return RenderViewPtr();
     }
 
     RenderViewPtr D3D11GraphicFactory::createDepthStencilView(const TexturePtr& texture) const {

@@ -12,6 +12,7 @@
 #include "mist/Platform.h"
 #include "mist/MathUtil.h"
 #include "mist/StringUtil.h"
+#include "mist/Ptr.h"
 
 #include "UKN/PreDeclare.h"
 
@@ -32,7 +33,7 @@ namespace ukn {
 
     typedef SharedPtr<Material> MaterialPtr;
 
-    class UKN_API Renderable: public virtual Interface {
+    class UKN_API Renderable: public virtual Interface, public mist::enable_shared_from_this<Renderable> {
     public:
         Renderable();
         virtual ~Renderable();
@@ -46,11 +47,11 @@ namespace ukn {
         virtual void onRenderEnd();
         
         virtual void render();
+        virtual void setModelMatrix(const Matrix4& mat);
 
     public:
         const Matrix4& getModelMatrix() const;
-        void setModelMatrix(const Matrix4& mat);
-
+       
         MaterialPtr getMaterial() const;
 
     public:

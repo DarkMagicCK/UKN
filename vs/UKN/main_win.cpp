@@ -26,6 +26,9 @@
 #include "UKN/Deferred.h"
 #include "UKN/Light.h"
 #include "UKN/LightManager.h"
+#include "UKN/SceneObjectWrapper.h"
+#include "UKN/SceneManager.h"
+#include "UKN/SceneObject.h"
 
 #include "UKN/tmx/TMXTiledMap.h"
 
@@ -60,9 +63,6 @@ int CALLBACK WinMain(
   __in  int nCmdSho) {
 #endif
 
-    ukn::RenderBufferPtr renderBuffer;
-    ukn::TexturePtr texture;
-    ukn::TexturePtr texture2;
     ukn::Matrix4 worldMat;
     ukn::CameraController* camController;
     ukn::FontPtr font;
@@ -117,14 +117,7 @@ int CALLBACK WinMain(
         .connectRender([&](ukn::Window* wnd) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             
-            deferredRenderer->begin(lights);
-            deferredRenderer->renderBuffer(dragonBuffer, texture2, ukn::Matrix4::ScaleMat(100, 100, 100));
-            if(terrian) {
-                deferredRenderer->startRenderBuffer(ukn::Matrix4(), texture);
-                terrian->render();
-                deferredRenderer->endRenderBuffer();
-            }
-            deferredRenderer->end();
+            deferredRenderer->renderScene();
 
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
            
@@ -158,16 +151,9 @@ int CALLBACK WinMain(
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
      
-            renderBuffer = ukn::ModelLoader::BuildFromSphere(mist::Sphere(ukn::Vector3(0, 0, 0), 1.0), 10);
-
-            texture = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"grass.dds"));
-           
-            ukn::uint32 c = 0xFFFFFFFF;
-            texture2 = gf.create2DTexture(1, 1, 0, ukn::EF_RGBA8, (mist::uint8*)&c);
-
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
-            vp.camera->setViewParams(ukn::Vector3(0, 5, -20), ukn::Vector3(0, 0, 1));
+            vp.camera->setViewParams(ukn::Vector3(0, 5, -10), ukn::Vector3(0, 0, 1));
 
             camController->attachCamera(vp.camera);
 
@@ -192,35 +178,22 @@ int CALLBACK WinMain(
                 ukn::log_error(L"unable to build terrian");
             }
 
-          
-            ukn::ModelLoader::ModelDataPtr dragonModel = ukn::ModelLoader::LoadFromPly(
-                ukn::ResourceLoader::Instance().loadResource(L"dragon_recon/dragon_vrip_res4.ply"),
-                true);
-          
-            if(dragonModel) {
-                ukn::ModelLoader::ModelData* pdragonModel = dragonModel.get();
-                
-                ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::None,
-                                                                           ukn::GraphicBuffer::Static,
-                                                                           dragonModel->vertex_count,
-                                                                           &dragonModel->vertex_data[0][0],
-                                                                           dragonModel->vertex_format);
-                ukn::GraphicBufferPtr indexBuffer = gf.createIndexBuffer(ukn::GraphicBuffer::None,
-                                                                         ukn::GraphicBuffer::Static,
-                                                                         dragonModel->index_data.size(),
-                                                                         &dragonModel->index_data[0]);
-                dragonBuffer = gf.createRenderBuffer();
-                dragonBuffer->bindVertexStream(vertexBuffer, ukn::VertexUVNormal::Format());
-          //      dragonBuffer->bindIndexStream(indexBuffer);
-                dragonBuffer->setRenderMode(ukn::RM_Triangle);
-            }
-
             deferredRenderer = new ukn::DeferredRenderer();
 
-            lights = new ukn::LightManager();
-            lights->addLight(new ukn::DirectionalLight(ukn::float3(0, -1, 0),
-                                                       ukn::float4(1, 1, 1, 1),
-                                                       1));
+            ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
+           
+            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
+            if(dragonModel) {
+                ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, 0);
+                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(50, 50, 50));
+                scene.addSceneObject(dragonObject);
+
+                ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, 0);
+                scene.addSceneObject(terrianObject);
+            }
+            scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Down(),
+                                                                     ukn::float4(1, 1, 1, 1),
+                                                                     1.0));
         })
         .run();
     

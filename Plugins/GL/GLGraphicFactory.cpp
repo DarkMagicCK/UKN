@@ -132,7 +132,7 @@ namespace ukn {
     
     RenderViewPtr GLGraphicFactory::createRenderView(const TexturePtr& texture) const {
         if(texture->type() == TT_Texture2D)
-            return new GLTexture2DRenderView(texture, 0, 0);
+            return MakeSharedPtr<GLTexture2DRenderView>(texture, 0, 0);
         return RenderViewPtr();
     }
     
@@ -168,7 +168,7 @@ namespace ukn {
     }
 
     EffectPtr GLGraphicFactory::createEffect() const {
-        return new CgGLEffect((GLGraphicDevice*)mGraphicDevice.get());
+        return MakeSharedPtr<CgGLEffect>((GLGraphicDevice*)mGraphicDevice.get());
     }
     
     BlendStatePtr GLGraphicFactory::createBlendStateObject(const BlendStateDesc& desc) const {

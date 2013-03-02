@@ -38,6 +38,8 @@ namespace ukn {
         uint32 numRenderableRendered() const;
         uint32 numPrimitivesRenderered() const;
         uint32 numVerticesRendered() const;
+
+        const LightManagerPtr& getLightManager() const;
         
     protected:
         void flush();

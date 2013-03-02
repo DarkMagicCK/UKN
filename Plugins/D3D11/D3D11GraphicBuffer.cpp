@@ -14,6 +14,8 @@ namespace ukn {
 			return D3D11_USAGE_DEFAULT;
 		case ukn::GraphicBuffer::Dynamic:
 			return D3D11_USAGE_DYNAMIC;
+        case ukn::GraphicBuffer::Staging:
+            return D3D11_USAGE_STAGING;
 		}
 	}
 

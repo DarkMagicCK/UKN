@@ -44,13 +44,15 @@ namespace ukn {
         
         const RenderTargetPtr& getShadowMap() const;
         const TexturePtr& getAttenuationTexture() const;
+        const RenderTargetPtr& getDSView() const;
         void setAttenuationTexture(const TexturePtr& attenuationTex);
 
         int32 getShadowMapResolution() const;
 
         const Matrix4& getWorldMatrix() const;
-        const Matrix4& getViewMatrix() const;
-        const Matrix4& getProjMatrix() const;
+        
+    public:
+        virtual const CameraPtr& getCamera(uint32 index = 0) const;
 
     protected:
         LightSourceType mType;
@@ -63,10 +65,9 @@ namespace ukn {
         bool   mEnabled;
 
         Matrix4 mWorldMat;
-        Matrix4 mViewMat;
-        Matrix4 mProjectionMat;
 
         RenderTargetPtr mShadowMap;
+        RenderTargetPtr mDSView;
         int32 mShadowMapResolution;
         TexturePtr mAttenuationTexture;
     };
@@ -100,11 +101,15 @@ namespace ukn {
         void update();
         float lightAngleCos();
 
+        const CameraPtr& getCamera(uint32 index) const;
+
     private:
         float mNearPlane;
         float mFarPlane;
         float mFOV;
         float mDepthBias;
+
+        CameraPtr mCam;
     };
 
     typedef SharedPtr<SpotLight> SpotLightPtr;

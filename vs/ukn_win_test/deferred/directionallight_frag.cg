@@ -1,5 +1,4 @@
 const uniform float3 cameraPosition;
-const uniform float4x4 inverseView;
 const uniform float4x4 inverseViewProj;
 const uniform float2 gbufferSize;
 

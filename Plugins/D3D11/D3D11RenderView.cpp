@@ -148,6 +148,7 @@ namespace ukn {
             log_error(L"D3D1DepthStencilRenderView: Error create depth stencil view");
         else
             mDepthStencilView = MakeCOMPtr(view);
+
     }
 
     ID3D11DepthStencilView* D3D11DepthStencilRenderView::getD3D11DepthStencilView() const {
@@ -213,6 +214,10 @@ namespace ukn {
                     MIST_THROW_EXCEPTION(L"Error creating render target view");
             }
             mRenderTargetView = MakeCOMPtr(renderTargetView);
+
+            mWidth = d3d11Texture->width(0);
+            mHeight = d3d11Texture->height(0);
+            mElementFormat = d3d11Texture->format();
         }
     }
 

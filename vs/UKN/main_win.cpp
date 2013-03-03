@@ -156,7 +156,7 @@ int CALLBACK WinMain(
      
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
-            vp.camera->setViewParams(ukn::Vector3(0, 5, -10), ukn::Vector3(0, 0, 1));
+            vp.camera->setViewParams(ukn::Vector3(0, 30, 0), ukn::Vector3(0, 0, 1));
 
             camController->attachCamera(vp.camera);
 
@@ -196,23 +196,14 @@ int CALLBACK WinMain(
             }
             scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Down(),
                                                                      ukn::float4(1, 1, 1, 1),
-                                                                     1.0));
-            scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Right(),
-                                                                     ukn::float4(1, 0, 0, 1),
-                                                                     0.3));
-            scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Left(),
-                                                                     ukn::float4(0, 1, 0, 1),
-                                                                     0.3));
-            scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Up(),
-                                                                     ukn::float4(0, 0, 1, 1),
-                                                                     0.3));
+                                                                     0));
 
-            spotLight = ukn::MakeSharedPtr<ukn::SpotLight>(ukn::float3(0, 5, -10),
-                                                           ukn::float3(0, 0, 1),
+            spotLight = ukn::MakeSharedPtr<ukn::SpotLight>(ukn::float3(0, 30, 0),
+                                                           ukn::float3(0, -1, 0),
                                                            ukn::float4(1, 1, 1, 1),
-                                                           0.5,
+                                                           0.4,
                                                            true, 
-                                                           512,
+                                                           1024,
                                                            gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"SpotCookie.dds")));
             scene.addLight(spotLight);
         })

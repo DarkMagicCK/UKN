@@ -8,6 +8,7 @@
 
 #include "UKN/GraphicDevice.h"
 #include "UKN/Texture.h"
+#include "UKN/Viewport.h"
 
 #include "D3D11Preq.h"
 
@@ -57,6 +58,7 @@ namespace ukn {
         D3D_FEATURE_LEVEL getDeviceFeatureLevel() const;
 
     private:
+        void setViewport(const Viewport& vp);
 		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
 		void onWindowResize();
 

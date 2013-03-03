@@ -214,6 +214,17 @@ namespace ukn {
         mWindow->onFrameEnd().raise(mWindow.get(), _NullEventArgs);
     }
 
+    void D3D11GraphicDevice::setViewport(const Viewport& vp) {
+        D3D11_VIEWPORT viewport;
+        viewport.Width = (FLOAT)vp.width;
+        viewport.Height = (FLOAT)vp.height;
+        viewport.TopLeftX = (FLOAT)vp.left;
+        viewport.TopLeftY = (FLOAT)vp.top;
+        viewport.MaxDepth = 1.0f;
+        viewport.MinDepth = 0.f;
+        mDeviceContext->RSSetViewports(1, &viewport);
+    }
+
     void D3D11GraphicDevice::beginRendering() {
         FrameBuffer& fb = *this->getScreenFrameBuffer();
 
@@ -228,18 +239,11 @@ namespace ukn {
                 {            
                     MIST_PROFILE(L"__MainFrame__");
 
-                    D3D11_VIEWPORT viewport;
-                    viewport.Width = (FLOAT)fb.getViewport().width;
-                    viewport.Height = (FLOAT)fb.getViewport().height;
-                    viewport.TopLeftX = (FLOAT)fb.getViewport().left;
-                    viewport.TopLeftY = (FLOAT)fb.getViewport().top;
-                    viewport.MaxDepth = 1.0f;
-                    viewport.MinDepth = 0.0f;
-
-                    mDeviceContext->RSSetViewports(1, &viewport);
+                    
                     
                     fb.getViewport().camera->update();
 
+                    this->setViewport(fb.getViewport());
                     this->setViewMatrix(fb.getViewport().camera->getViewMatrix());
                     this->setProjectionMatrix(fb.getViewport().camera->getProjMatrix());
 
@@ -309,7 +313,8 @@ namespace ukn {
     }
 
     void D3D11GraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
-
+        Viewport& vp = frameBuffer->getViewport();
+        this->setViewport(vp);
     }
 
     void D3D11GraphicDevice::setViewMatrix(const Matrix4& mat) {

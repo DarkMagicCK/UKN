@@ -66,11 +66,23 @@ namespace ukn {
             mShadowMap = new RenderTarget(mShadowMapResolution,
                                           mShadowMapResolution,
                                           1,
-                                          EF_Float4);
+                                          EF_Float);
             if(!mShadowMap)
                 log_error(L"LightSource::setCastShadows: error creating shadow map");
         
+            mDSView = new RenderTarget(mShadowMapResolution,
+                                       mShadowMapResolution,
+                                       EF_D24S8);
         }
+    }
+
+     const CameraPtr& LightSource::getCamera(uint32 index) const {
+         static CameraPtr cam;
+         return cam;
+     }
+
+    const RenderTargetPtr& LightSource::getDSView() const {
+        return mDSView;
     }
 
     void LightSource::setDirection(const float3& dir) {
@@ -109,14 +121,6 @@ namespace ukn {
         return mWorldMat;
     }
 
-    const Matrix4& LightSource::getViewMatrix() const {
-        return mViewMat;
-    }
-
-    const Matrix4& LightSource::getProjMatrix() const {
-        return mProjectionMat;
-    }
-
     DirectionalLight::DirectionalLight():
     LightSource(LS_Directional) {
 
@@ -141,7 +145,8 @@ namespace ukn {
     mNearPlane(0.1f),
     mFarPlane(100.f),
     mFOV(d_pi_2),
-    mDepthBias(1.f / 2000.f) {
+    mDepthBias(1.f / 2000.f),
+    mCam(MakeSharedPtr<Camera>()){
 
         mPosition = position;
         mDirection = direction;
@@ -152,7 +157,7 @@ namespace ukn {
         
         this->setCastShadows(castShadows);
         
-        mProjectionMat = Matrix4::PerspectiveFovMatLH(mFOV, 1.0f, mNearPlane, mFarPlane);
+        mCam->setProjParams(mFOV, 1.0f, mNearPlane, mFarPlane);
         this->update();
     }
 
@@ -200,12 +205,12 @@ namespace ukn {
         else
             up = Vector3::Up();
 
-        mViewMat = Matrix4::LookAtMatLH(mPosition, target, up);
+        mCam->setViewParams(mPosition, target, up);
         float radial = float(tanf(mFOV / 2.0f) * 2 * mFarPlane);
 
         Matrix4 scaling = Matrix4::ScaleMat(radial, radial, mFarPlane);
         Matrix4 translation = Matrix4::TransMat(mPosition[0], mPosition[1], mPosition[2]);
-        Matrix4 inverseView = mViewMat.inverted();
+        Matrix4 inverseView = mCam->getViewMatrix().inverted();
         Matrix4 semiProduct = scaling * inverseView;
 
         Vector3 scale, trans, rot;
@@ -214,4 +219,7 @@ namespace ukn {
         mWorldMat = scaling * Matrix4::RotMat(rot.x(), rot.y(), rot.z()) * translation;
     }
 
+    const CameraPtr& SpotLight::getCamera(uint32 index) const {
+        return mCam;
+    }
 } // namespace ukn

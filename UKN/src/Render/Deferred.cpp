@@ -202,7 +202,6 @@ namespace ukn {
         const FrameBufferPtr& fb = mLightMapRT->getFrameBuffer();
         const CameraPtr& cam = fb->getViewport().camera;
     
-        Matrix4 invView = cam->getViewMatrix().inverted();
         Matrix4 invViewProj = (cam->getViewMatrix() * cam->getProjMatrix()).inverted();
 
         BlendStatePtr prevBS = gd.getBlendState();
@@ -215,8 +214,7 @@ namespace ukn {
         {
             Shader* fragmentShader = mDirectionalLightPass->getFragmentShader().get();
 
-            fragmentShader->setMatrixVariable("inverseView", invView);
-            fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
+            fragmentShader->setMatrixVariable("inverseViewProj",  (cam->getViewMatrix() * cam->getProjMatrix()));
             fragmentShader->setFloatVariable("cameraPosition", 3, cam->getEyePos().value);
             fragmentShader->setFloatVariable("gbufferSize", 2, mSize.value);
         
@@ -239,13 +237,12 @@ namespace ukn {
         }
         // spot lights
         {
-            Shader* fragmentShader = mDirectionalLightPass->getFragmentShader().get();
-            Shader* vertexShader = mDirectionalLightPass->getVertexShader().get();
+            Shader* fragmentShader = mSpotLightPass->getFragmentShader().get();
+            Shader* vertexShader = mSpotLightPass->getVertexShader().get();
             
             vertexShader->setMatrixVariable("viewMatrix", cam->getViewMatrix());
             vertexShader->setMatrixVariable("projectionMatrix", cam->getProjMatrix());
 
-            fragmentShader->setMatrixVariable("inverseView", invView);
             fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
             fragmentShader->setFloatVariable("cameraPosition", 3, cam->getEyePos().value);
             fragmentShader->setFloatVariable("gbufferSize", 2, mSize.value);
@@ -266,9 +263,11 @@ namespace ukn {
                 }
                 
                 SpotLight* sl = (SpotLight*)light.get();
+                
+                const CameraPtr& cam = sl->getCamera(0);
 
-                vertexShader->setMatrixVariable("worldMatrix", sl->getWorldMatrix());
-                fragmentShader->setMatrixVariable("lightViewProj", sl->getViewMatrix() * sl->getProjMatrix());
+                vertexShader->setMatrixVariable("worldMatrix", Matrix4::ScaleMat(10, 10, 10).translate(0, 1, 0));
+                fragmentShader->setMatrixVariable("lightViewProj", cam->getViewMatrix() * cam->getProjMatrix());
                 fragmentShader->setFloatVectorVariable("lightPosition", sl->getPosition());
                 fragmentShader->setFloatVectorVariable("lightColor", sl->getColor());
                 fragmentShader->setFloatVectorVariable("lightDirection", sl->getDirection());
@@ -293,6 +292,7 @@ namespace ukn {
 
                     mSpotLightPass->begin();
                     // render spot light
+                    gd.renderBuffer(lights->getSpotLightGeometry());
                     mSpotLightPass->end();
                 }
 

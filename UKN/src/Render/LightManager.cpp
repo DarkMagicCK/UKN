@@ -34,6 +34,8 @@ namespace ukn {
         mDepthMapPass->setVertexFormat(ukn::VertexUVNormal::Format());
 
         mShadowMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
+
+        mSpotLightGeometry = ModelLoader::BuildFromSphere(mist::Sphere(Vector3(0, 0, 0), 1), 10);
     }
 
     LightManager::~LightManager() {
@@ -74,10 +76,10 @@ namespace ukn {
         const RenderTargetPtr& rt = ls->getShadowMap();
 
         mShadowMapRT->attach(ATT_Color0, ls->getShadowMap());
-     //   mShadowMapRT->attach(ATT_DepthStencil, ls->getDSView());
+        mShadowMapRT->attach(ATT_DepthStencil, ls->getDSView());
         mShadowMapRT->attachToRender();
 
-        gd.clear(CM_Color, color::Transparent, 1.0f, 0.f);
+        gd.clear(CM_Color | CM_Depth, color::Transparent, 1.0f, 0.f);
 
         Shader* fragmentShader = mDepthMapPass->getFragmentShader().get();
         fragmentShader->setFloatVectorVariable("lightPosition", ls->getPosition());
@@ -85,7 +87,9 @@ namespace ukn {
         SpotLight* sl = (SpotLight*)ls.get();
         fragmentShader->setFloatVariable("depthPrecision", sl->getFarPlane());
 
-        scene.render(mDepthMapPass, ls->getViewMatrix(), ls->getProjMatrix());
+        const CameraPtr& cam = ls->getCamera(0);
+
+        scene.render(mDepthMapPass, cam->getViewMatrix(), cam->getProjMatrix());
 
         mShadowMapRT->detachFromRender();
     }
@@ -97,17 +101,23 @@ namespace ukn {
         gd.setDepthStencilState(DepthStencilStateObject::Default());
         gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
         
-        CameraPtr currCamera = gd.getCurrFrameBuffer()->getViewport().camera;
-        mShadowMapRT->attachCamera(currCamera);
-
         const LightManagerPtr& lights = scene.getLightManager();
         for(const LightSourcePtr& light: lights->getSpotLights()) {
             light->update();
 
             if(light->getCastShadows()) {
+                mShadowMapRT->attachCamera(light->getCamera(0));
                 this->renderShadowMap(gd, scene, light);
             }
         }
+    }
+
+    const RenderBufferPtr& LightManager::getSpotLightGeometry() const {
+        return mSpotLightGeometry;
+    }
+   
+    const RenderBufferPtr& LightManager::getPointLightGeometry() const {
+        return mPointLightGeometry;
     }
 
 } // namespace ukn

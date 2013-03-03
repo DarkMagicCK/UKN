@@ -21,6 +21,9 @@ namespace ukn {
 
         void makeShadowMaps(SceneManager& scene);
 
+        const RenderBufferPtr& getSpotLightGeometry() const;
+        const RenderBufferPtr& getPointLightGeometry() const;
+
     private:
         void renderShadowMap(GraphicDevice& gd, SceneManager& scene, const LightSourcePtr& ls);
         

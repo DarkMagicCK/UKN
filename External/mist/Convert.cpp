@@ -59,6 +59,67 @@ namespace mist {
         SerializeHelper::FromString(str, &result);
         return result;
     }
+
+    float3 Convert::ToFloat3(const MistString& str) {
+        MistString buffer;
+        size_t pos = 0;
+        float3 result;
+        while(str[pos] == L' ') 
+            pos ++;
+        for(int i=0; i<3; ++i) {
+            while(str[pos] != ' ' && pos < str.size()) {
+                buffer.push_back(str[pos]);
+                pos ++;
+            }
+            result.value[i] = (float)Convert::ToDouble(buffer);
+            buffer.clear();
+
+            while(str[pos] == L' ' && pos < str.size()) 
+                pos ++;
+        }
+        return result;
+    }
+
+    float4 Convert::ToFloat4(const MistString& str) {
+        MistString buffer;
+        size_t pos = 0;
+        float4 result;
+        while(str[pos] == L' ') 
+            pos ++;
+        for(int i=0; i<4; ++i) {
+            while(str[pos] != ' ' && pos < str.size()) {
+                buffer.push_back(str[pos]);
+                pos ++;
+            }
+            result.value[i] = (float)Convert::ToDouble(buffer);
+            buffer.clear();
+
+            while(str[pos] == L' ' && pos < str.size()) 
+                pos ++;
+        }
+        return result;
+    }
+
+    float2 Convert::ToFloat2(const MistString& str) {
+        MistString buffer;
+        size_t pos = 0;
+        float2 result;
+        while(str[pos] == L' ') 
+            pos ++;
+        for(int i=0; i<2; ++i) {
+            while(str[pos] != ' ' && pos < str.size()) {
+                buffer.push_back(str[pos]);
+                pos ++;
+            }
+            result.value[i] = (float)Convert::ToDouble(buffer);
+            buffer.clear();
+
+            while(str[pos] == L' ' && pos < str.size()) 
+                pos ++;
+        }
+        return result;
+    }
+
     /*
     Array<uint16> Convert::ToUnicode(const MistString& str) {
         uint16* buffer = ukn_malloc_t(uint16, str.size()+1);

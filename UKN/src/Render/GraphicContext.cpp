@@ -107,8 +107,8 @@ namespace ukn {
         double step = mist::math::degree_to_radius(360.f / seg_size);
         for(uint32 i = 0; i < seg_size; ++i) {
             Vertex2D vertex;
-            vertex.xyz.set(x + r * cosf(i * step),
-                           y + r * sinf(i * step),
+            vertex.xyz.set((float)(x + r * cos(i * step)),
+                           (float)(y + r * sin(i * step)),
                            z);
             vertex.color = mDrawColor.toRGBA();
             
@@ -129,8 +129,8 @@ namespace ukn {
         double step = mist::math::degree_to_radius(360.f / seg_size);
         for(uint32 i = 0; i <= seg_size; ++i) {
             Vertex2D vertex;
-            vertex.xyz.set(x + r * cosf(i * step),
-                           y + r * sinf(i * step),
+            vertex.xyz.set((float)(x + r * cos(i * step)),
+                           (float)(y + r * sin(i * step)),
                            z);
             vertex.color = mFillColor.toRGBA();
             

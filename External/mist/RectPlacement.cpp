@@ -58,11 +58,11 @@ namespace mist {
     }
     
     int  RectPlacement::getW() const {
-        return m_size.width();
+        return (int)m_size.width();
     }
     
     int  RectPlacement::getH() const {
-        return m_size.height();
+        return (int)m_size.height();
     }
     
     long RectPlacement::getArea () const {
@@ -70,7 +70,7 @@ namespace mist {
     }
     
     long RectPlacement::getTotalArea () const {
-        return m_size.width() * m_size.height();
+        return long(m_size.width() * m_size.height());
     }
     
     void RectPlacement::setMargin(int32 margin) {
@@ -85,7 +85,7 @@ namespace mist {
         end();
         
         m_size = Rectangle(0, 0, w, h, true);
-        m_vPositions.push_back(Vector2(m_margin, m_margin));
+        m_vPositions.push_back(Vector2(float(m_margin), float(m_margin)));
         m_area = 0;
     }
     

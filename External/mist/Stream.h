@@ -20,6 +20,7 @@ namespace mist {
         ST_Memory,
         ST_File,
         ST_Net,
+        ST_String,
     };
     
     class MIST_API Stream {
@@ -201,6 +202,35 @@ namespace mist {
     private:
         Array<uint8> mBuffer;
         StreamPtr mStream;
+    };
+
+    class StringStream: public Stream {
+    public:
+        StringStream(const MistString& stream);
+        virtual ~StringStream();
+        
+        bool	canRead() const override;
+        bool	canWrite() const override;
+        bool 	canSeek() const override;
+    	
+        bool    seek(size_t pos) override;
+        size_t  read(uint8* buffer, size_t length) override;
+        size_t  write(const uint8* buffer, size_t length) override;
+        
+        bool    eos() const override;
+        size_t  pos() const override;
+        size_t  size() const override;
+        bool    isValid() const override;
+        
+        void    close() override;
+        void    flush() override;
+        
+        StreamType getStreamType() const override;
+        StreamPtr readIntoMemory() override;
+        
+    private:
+        MistString mString;
+        size_t mPos;
     };
         
     /**

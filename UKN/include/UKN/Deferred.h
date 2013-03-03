@@ -35,15 +35,14 @@ namespace ukn {
         float2 size() const;
 
         // render currrent scene, see Context::getSceneManager()
-        void renderScene();
+        void renderScene(SceneManager& scene);
 
     private:
         bool init();
-        void renderRenderable(Renderable& renderable, GraphicDevice& gd, const EffectPassPtr& pass);
         
         void prepare();
-        void makeGBuffer();
-        void makeLightMap(const LightManagerPtr& lights);
+        void makeGBuffer(SceneManager& scene);
+        void makeLightMap(SceneManager& scene);
         void makeFinal();
 
         bool mBegan;
@@ -54,6 +53,7 @@ namespace ukn {
         EffectPassPtr mClearPass;
         EffectPassPtr mGBufferPass;
         EffectPassPtr mDirectionalLightPass;
+        EffectPassPtr mSpotLightPass;
         EffectPassPtr mPointLightPass;
         EffectPassPtr mSpotlightPass;
         EffectPassPtr mCompositePass;
@@ -64,9 +64,6 @@ namespace ukn {
 
         BlendStatePtr mLightMapBS;
         RasterizerStatePtr mWireframeRS;
-
-        RenderBufferPtr mPointLightGeometry;
-        RenderBufferPtr mSpotLightGeometry;
 
         LightManagerPtr mLights;
     };

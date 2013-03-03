@@ -24,7 +24,7 @@ namespace mist {
 #define COLOR_ARGB_SETG(col,g)		 (((col) & 0xFFFF00FF) + (uint32(g)<<8))
 #define COLOR_ARGB_SETB(col,b)		 (((col) & 0xFFFFFF00) + uint32(b))
 
-#define COLOR_RGBA(r,g,b,a)         ((uint32(a)) + (uint32(r)<<24) + (uint32(g)<<16) + uint32(b)<<8)
+#define COLOR_RGBA(r,g,b,a)         ((uint32(a)) + (uint32(r)<<24) + (uint32(g)<<16) + (uint32(b)<<8))
 #define COLOR_RGBA_GETA(col)        ((col) & 0xFF)
 #define COLOR_RGBA_GETR(col)        (((col)>>24) & 0xFF)
 #define COLOR_RGBA_GETG(col)        (((col)>>16) & 0xFF)

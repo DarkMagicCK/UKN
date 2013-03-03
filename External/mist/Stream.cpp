@@ -550,6 +550,77 @@ namespace mist {
     StreamPtr BufferedStream::readIntoMemory() {
         return mStream->readIntoMemory();
     }
+
+
+
+    bool StringStream::eos() const {
+        return mPos >= mString.size();
+    }
+    
+    bool StringStream::canRead() const {
+        return true;
+    }
+    
+    bool StringStream::canWrite() const {
+        return true;
+    }
+    
+    bool StringStream::canSeek() const {
+        return true;
+    }
+    
+    bool StringStream::seek(size_t pos) {
+        if(pos < this->size()) { 
+            mPos = pos; 
+            return true;
+        }
+        mPos = mString.size() - 1;
+        return false;
+    }
+    
+    size_t StringStream::read(uint8* buffer, size_t length) {
+        const uint8* data = (const uint8*)mString.data();
+        size_t rl = length;
+        if(rl + mPos >= this->size())
+            rl = this->size() - mPos;
+        std::copy(data, data + rl, buffer);
+        return rl;
+    }
+    
+    size_t StringStream::write(const uint8* buffer, size_t length) {
+        size_t rl = length / sizeof(wchar_t);
+        const wchar_t* data = (const wchar_t*)buffer;
+        mString.append(data, data + rl);
+        return length;
+    }
+    
+    size_t StringStream::pos() const {
+        return mPos;
+    }
+    
+    size_t StringStream::size() const {
+        return mString.size() * sizeof(wchar_t);
+    }
+    
+    bool StringStream::isValid() const {
+        return mPos < this->size() && !mString.empty();
+    }
+    
+    void StringStream::close() {
+        
+    }
+    
+    void StringStream::flush() {
+   
+    }
+    
+    StreamType StringStream::getStreamType() const {
+        return ST_String;
+    }
+    
+    StreamPtr StringStream::readIntoMemory() {
+        return StreamPtr(new MemoryStream((const uint8*)mString.data(), this->size()));
+    }
     
 } // namespace mist
 

@@ -291,7 +291,7 @@ namespace ukn {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
                 cgGetMatrixParameterfc(param, (float*)mat.x);
-                return _check_error(mContext);
+                return _check_error(mContext); 
             }
         }
         return false;

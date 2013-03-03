@@ -12,6 +12,7 @@
 #include "mist/Platform.h"
 #include "mist/Util.h"
 #include "mist/Serializer.h"
+#include "mist/MathUtil.h"
 
 #include <algorithm>
 
@@ -35,6 +36,10 @@ namespace mist {
         static uint8    ToByte(const MistString& str);
         static double   ToDouble(const MistString& str);
         
+        /* space separated values */
+        static float3   ToFloat3(const MistString& str);
+        static float4   ToFloat4(const MistString& str);
+        static float2   ToFloat2(const MistString& str);
         
         template<typename T1, typename T2>
         union _ReinterpretConvertUnion {

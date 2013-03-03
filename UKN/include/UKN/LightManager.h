@@ -19,15 +19,21 @@ namespace ukn {
         void addLight(const LightSourcePtr& light);
         void removeLight(const LightSourcePtr& light);
 
-        // temporary functions for testing..
-        void beginShadowMap();
-        void endShadowMap();
+        void makeShadowMaps(SceneManager& scene);
 
     private:
+        void renderShadowMap(GraphicDevice& gd, SceneManager& scene, const LightSourcePtr& ls);
+        
         LightSourceVec mDirectionalLights;
         LightSourceVec mSpotLights;
 
         EffectPtr mDepthWriteEffect;
+        EffectPassPtr mDepthMapPass;
+        
+        RenderBufferPtr mPointLightGeometry;
+        RenderBufferPtr mSpotLightGeometry;
+
+        CompositeRenderTargetPtr mShadowMapRT;
     };
 
     typedef SharedPtr<LightManager> LightManagerPtr;

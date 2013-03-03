@@ -498,8 +498,8 @@ namespace ukn {
         uint32 triangle_count = this->triangleCount(x, z, w, vertices, pitch, h, triangles, node->max_h, node->min_h);
         if(triangle_count > 10000) {
             for(int i=0; i<4; ++i) {
-                float offX ( (((i % 2) < 1) ? -1.0 : 1.0) * (w / 4) );
-                float offZ ( (((i % 4) < 2) ? -1.0: 1.0) * (w / 4) );
+                float offX ( (((i % 2) < 1) ? -1.0f : 1.0f) * (w / 4) );
+                float offZ ( (((i % 4) < 2) ? -1.0f: 1.0f) * (w / 4) );
 
                 if(w / 2 > 0) {
                     node->childs[i] = createNode(x + offX, z + offZ, w / 2, vertices, pitch, h, indices);

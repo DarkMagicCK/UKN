@@ -58,7 +58,7 @@ namespace ukn {
         ~CompositeRenderTarget();
         
         /* attach a render target */
-        bool attach(Attachment attach, RenderTargetPtr);
+        bool attach(Attachment attach, const RenderTargetPtr&);
         RenderTargetPtr detach(Attachment attach);
         
         uint32  width() const;

@@ -6,6 +6,8 @@
 
 #include "mist/Resource.h"
 #include "mist/FileUtil.h"
+#include "mist/ConfigParser.h"
+#include "mist/Convert.h"
 
 namespace ukn {
 
@@ -16,9 +18,9 @@ namespace ukn {
 
     inline void _get_sphere_vertex(double r, double a, double b, VertexUVNormal& vertex) {
         double sina = sin(a);
-        vertex.position = Vector3(r * sina * cosf(b),
-                                  r * sina * sinf(b),
-                                  r * cosf(a));
+        vertex.position = Vector3((float)(r * sina * cos(b)),
+                                  (float)(r * sina * sin(b)),
+                                  (float)(r * cos(a)));
 
         vertex.normal = vertex.position.normalize();
 
@@ -52,8 +54,8 @@ namespace ukn {
                     for(b = 0.0, j = 0; j < w; j++, b += wStep) {
                         VertexUVNormal vertex;
                         _get_sphere_vertex(sphere.radius(),
-                                           math::degree_to_radius(a),
-                                           math::degree_to_radius(b),
+                                           (real)math::degree_to_radius(a),
+                                           (real)math::degree_to_radius(b),
                                            vertex);
                         vertices.push_back(vertex);
                     }
@@ -478,6 +480,114 @@ namespace ukn {
         return ModelDataPtr();
     }
 
+    ModelLoader::ModelDataPtr ModelLoader::LoadFromMeshML(const mist::ResourcePtr& file) {
+        // load from xml
+        ConfigParserPtr xml = ConfigParser::MakeParser(file);
+        if(xml) {
+
+            if(xml->toNode(L"model")) {
+                xml->toFirstChild();
+                ModelData* data = new ModelData;;
+
+                do {
+                    MistString node = xml->getCurrentNodeName();
+
+                    if(node == L"materials_chunk") {
+                        // load materials
+                        xml->toFirstChild();
+
+                        do {
+
+                            MistString matNodeName = xml->getCurrentNodeName();
+                            if(matNodeName == L"material") {
+
+                                Material* mat = new Material();
+                                mat->ambient = Convert::ToFloat3(xml->getString(L"ambient"));
+                                mat->diffuse = Convert::ToFloat3(xml->getString(L"diffuse"));
+                                mat->specular = Convert::ToFloat3(xml->getString(L"specular"));
+                                mat->emit = Convert::ToFloat3(xml->getString(L"emit"));
+                                mat->opacity = (float)Convert::ToDouble(xml->getString(L"opacity"));
+                                mat->specular = Convert::ToFloat3(xml->getString(L"specular"));
+                                mat->specular_power = (float)Convert::ToDouble(xml->getString(L"specular_level"));
+                                mat->shininess = (float)Convert::ToDouble(xml->getString(L"shininess"));
+
+                                data->materials.push_back(SharedPtr<Material>(mat));
+
+                            }
+
+                        } while(xml->toNextChild());
+
+                        xml->toParent();
+                    
+                    } else if(node == L"meshes_chunk") {
+
+                        xml->toFirstChild();
+
+                        do {
+
+                            MistString meshNodeName = xml->getCurrentNodeName();
+                            if(meshNodeName == L"mesh") {
+
+                                ModelData::MeshData mesh;
+                                mesh.name = xml->getString(L"name");
+                                mesh.material_id = Convert::ToInt32(xml->getString(L"mtl_id"));
+
+                                xml->toFirstChild();
+
+                                do {
+
+                                    MistString meshDataNodeName = xml->getCurrentNodeName();
+                                    if(meshDataNodeName == L"vertices_chunk") {
+
+                                        xml->toFirstChild();
+
+                                        do {
+
+                                            MistString vertexNodeName = xml->getCurrentNodeName();
+
+                                            if(vertexNodeName == L"pos_bb") {
+                                                mesh.bounding_box = Box(
+                                                    Convert::ToFloat3(xml->getString(L"min")),
+                                                    Convert::ToFloat3(xml->getString(L"max"))
+                                                );
+                                            } else if(vertexNodeName == L"tc_bb") {
+                                                // continue
+                                            } else if(vertexNodeName == L"vertex") {
+
+                                                
+
+                                            }
+
+                                        } while(xml->toNextChild());
+
+                                        xml->toParent();
+
+                                    }
+
+                                } while(xml->toNextChild());
+
+                                xml->toParent();
+                            }
+
+                        } while(xml->toNextChild());
+
+                        xml->toParent();
+                    }
+
+                } while(xml->toNextChild());
+               
+            }
+
+        } else {
+            log_error(L"error loading xml data");
+        }
+        return ModelDataPtr();
+    }
+
+    ModelLoader::ModelDataPtr ModelLoader::LoadFromCollada(const mist::ResourcePtr& file) {
+        return ModelDataPtr();
+    }
+
     ModelPtr ModelLoader::LoadModel(const UknString& name, uint32 access_hint) {
         if(name.find(L".ply") != UknString::npos) {
             ModelDataPtr data = ModelLoader::LoadFromPly(
@@ -533,9 +643,10 @@ namespace ukn {
             } else {
                 log_error(L"error loading model data");
             }
-
-            return ModelPtr();
         }
+        
+
+        return ModelPtr();
     }
 
     ModelPtr ModelLoader::CreateModel(const ModelDataPtr& data) {
@@ -543,6 +654,7 @@ namespace ukn {
     }
 
     bool ModelLoader::SaveModel(const ModelPtr& model, const UknString& save_to, const std::string& mesh_name) {
+        RenderablePtr rp = model;
         return false;
     }
 
@@ -758,6 +870,5 @@ namespace ukn {
     void Model::setRenderBuffer(const RenderBufferPtr& buffer) {
         mRenderBuffer = buffer;
     }
-
 
 }

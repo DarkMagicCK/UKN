@@ -134,6 +134,16 @@ namespace ukn {
 		virtual bool getFloatVectorVariable(const char* name, float4& vec) = 0;
 		virtual bool getIntVectorVariable(const char* name, int4& vec) = 0;
 
+    public:
+        /* helper functions */
+        bool setFloatVectorVariable(const char* name, const float3& vec);
+        bool setFloatVectorVariable(const char* name, const float2& vec);
+        bool setFloatVariable(const char* name, float v);
+
+        bool setIntVectorVariable(const char* name, const int3& vec);
+        bool setIntVectorVariable(const char* name, const int2& vec);
+        bool setIntVariable(const char* name, float v);
+
     };
     
 } // namespace ukn

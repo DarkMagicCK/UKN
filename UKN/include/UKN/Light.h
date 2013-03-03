@@ -41,6 +41,16 @@ namespace ukn {
 
         bool getEnabled() const;
         void setEnabled(bool flag);
+        
+        const RenderTargetPtr& getShadowMap() const;
+        const TexturePtr& getAttenuationTexture() const;
+        void setAttenuationTexture(const TexturePtr& attenuationTex);
+
+        int32 getShadowMapResolution() const;
+
+        const Matrix4& getWorldMatrix() const;
+        const Matrix4& getViewMatrix() const;
+        const Matrix4& getProjMatrix() const;
 
     protected:
         LightSourceType mType;
@@ -51,6 +61,14 @@ namespace ukn {
         float  mIntensity;
         bool   mCastShadows;
         bool   mEnabled;
+
+        Matrix4 mWorldMat;
+        Matrix4 mViewMat;
+        Matrix4 mProjectionMat;
+
+        RenderTargetPtr mShadowMap;
+        int32 mShadowMapResolution;
+        TexturePtr mAttenuationTexture;
     };
 
     typedef SharedPtr<LightSource> LightSourcePtr;
@@ -77,15 +95,8 @@ namespace ukn {
         float getFarPlane() const;
         float getFOV() const;
         float getDepthBias() const;
-        const Matrix4& getWorldMat() const;
-        const Matrix4& getViewMat() const;
-        const Matrix4& getProjMat() const;
-        const RenderTargetPtr& getShadowMap() const;
-        const TexturePtr& getAttenuationTexture() const;
 
         void setDepthBias(float bias);
-        void setAttenuationTexture(const TexturePtr& attenuationTex);
-
         void update();
         float lightAngleCos();
 
@@ -93,14 +104,7 @@ namespace ukn {
         float mNearPlane;
         float mFarPlane;
         float mFOV;
-        int32 mShadowMapResolution;
         float mDepthBias;
-        Matrix4 mWorldMat;
-        Matrix4 mViewMat;
-        Matrix4 mProjectionMat;
-
-        RenderTargetPtr mShadowMap;
-        TexturePtr mAttenuationTexture;
     };
 
     typedef SharedPtr<SpotLight> SpotLightPtr;

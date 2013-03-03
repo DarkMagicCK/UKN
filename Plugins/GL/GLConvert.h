@@ -38,11 +38,10 @@ namespace ukn {
 			case EF_D16: return GL_DEPTH_COMPONENT16;
             case EF_D24S8: return GL_DEPTH24_STENCIL8;
                 // not used in GL, total_size / component_size
-            case EF_Float4:
-            case EF_Float3:
-            case EF_Float2:
-            case EF_Float:
-                return GL_FLOAT;
+            case EF_Float4: return GL_RGBA32F;
+            case EF_Float3: return GL_RGB32F;
+            case EF_Float2: return GL_RG32F;
+            case EF_Float: return GL_R32F;
             case EF_UInt32: return GL_RGBA8;
             default:
                 return GL_UNSIGNED_BYTE;

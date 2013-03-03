@@ -32,7 +32,6 @@ namespace mist {
         STI_INT16,
         
         STI_UINT,
-        STI_INT,
         
         STI_ULONG,
         STI_LONG,
@@ -41,13 +40,22 @@ namespace mist {
         STI_CHAR,
         STI_WCHAR,
         
-        STI_FLOAT,
         STI_DOUBLE,
         
         STI_UINT64,
         STI_INT64,
         
         STI_STRING,
+        
+        STI_FLOAT,
+        STI_FLOAT2,
+        STI_FLOAT3,
+        STI_FLOAT4,
+        
+        STI_INT,
+        STI_INT2,
+        STI_INT3,
+        STI_INT4,
         
         STI_RAW
     };
@@ -72,7 +80,7 @@ namespace mist {
         virtual bool serialize(const ConfigParserPtr& config) = 0;
         virtual bool deserialize(const ConfigParserPtr& config) = 0;
     };
-    
+
 } // namespace mist
 
 #endif

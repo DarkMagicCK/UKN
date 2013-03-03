@@ -4,6 +4,7 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/Frustum.h"
 #include "UKN/Renderable.h"
+#include "UKN/Shader.h"
 
 namespace ukn {
 
@@ -40,10 +41,13 @@ namespace ukn {
         uint32 numVerticesRendered() const;
 
         const LightManagerPtr& getLightManager() const;
+
+        void render(const EffectPassPtr& pass, const Matrix4& viewMat, const Matrix4& projMat);
         
     protected:
         void flush();
-        
+        void renderRenderable(GraphicDevice& gd, Renderable& renderable, const EffectPassPtr& pass);
+
         virtual void onAddSceneObject(const SceneObjectPtr& obj);
         virtual void onDelSceneObject(const SceneObjectPtr& obj);
         

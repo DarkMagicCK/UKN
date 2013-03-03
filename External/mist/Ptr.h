@@ -233,10 +233,7 @@ namespace mist {
         T* operator->() const {
             return this->deref();
         }
-
-        T& operator*() {
-            return *this->deref();
-        }
+        
         T& operator*() const {
             return *this->deref();
         }

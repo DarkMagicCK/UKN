@@ -99,6 +99,9 @@ namespace ukn {
     
     class Effect;
     typedef SharedPtr<Effect> EffectPtr;
+
+    class EffectPass;
+    typedef SharedPtr<EffectPass> EffectPassPtr;
     
     class Texture;
     typedef SharedPtr<Texture> TexturePtr;

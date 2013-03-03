@@ -69,7 +69,7 @@ int CALLBACK WinMain(
     ukn::SkyboxPtr skybox;
     ukn::TerrianPtr terrian;
     ukn::RenderBufferPtr dragonBuffer;
-    ukn::LightManagerPtr lights;
+    ukn::LightSourcePtr spotLight;
 
     ukn::DeferredRendererPtr deferredRenderer;
     
@@ -117,7 +117,10 @@ int CALLBACK WinMain(
         .connectRender([&](ukn::Window* wnd) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             
-            deferredRenderer->renderScene();
+            ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
+            
+            scene.getLightManager()->makeShadowMaps(scene);
+            deferredRenderer->renderScene(scene);
 
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
            
@@ -126,7 +129,7 @@ int CALLBACK WinMain(
 
             const ukn::CompositeRenderTargetPtr& gbuffer = deferredRenderer->getGBufferRT();
 
-            sb.draw(gbuffer->getTargetTexture(ukn::ATT_Color0), 
+            sb.draw(spotLight->getShadowMap()->getTexture(), 
                     ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
             sb.draw(gbuffer->getTargetTexture(ukn::ATT_Color1), 
                     ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
@@ -184,16 +187,34 @@ int CALLBACK WinMain(
            
             ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
             if(dragonModel) {
-                ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, 0);
+                ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, ukn::SOA_Cullable | ukn::SOA_Moveable);
                 dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(50, 50, 50));
                 scene.addSceneObject(dragonObject);
 
-                ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, 0);
+                ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
                 scene.addSceneObject(terrianObject);
             }
             scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Down(),
                                                                      ukn::float4(1, 1, 1, 1),
                                                                      1.0));
+            scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Right(),
+                                                                     ukn::float4(1, 0, 0, 1),
+                                                                     0.3));
+            scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Left(),
+                                                                     ukn::float4(0, 1, 0, 1),
+                                                                     0.3));
+            scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Up(),
+                                                                     ukn::float4(0, 0, 1, 1),
+                                                                     0.3));
+
+            spotLight = ukn::MakeSharedPtr<ukn::SpotLight>(ukn::float3(0, 5, -10),
+                                                           ukn::float3(0, 0, 1),
+                                                           ukn::float4(1, 1, 1, 1),
+                                                           0.5,
+                                                           true, 
+                                                           512,
+                                                           gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"SpotCookie.dds")));
+            scene.addLight(spotLight);
         })
         .run();
     

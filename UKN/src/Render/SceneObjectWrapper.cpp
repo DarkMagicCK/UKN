@@ -12,9 +12,6 @@ namespace ukn {
 
     }
 
-    
-
-
     SceneObjectLightSource::SceneObjectLightSource(const LightSourcePtr& light):
     SceneObject(SOA_Cullable | SOA_Moveable | SOA_NotCastShadow),
     mLightSource(light) {

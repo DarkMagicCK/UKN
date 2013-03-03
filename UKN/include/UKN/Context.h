@@ -87,7 +87,6 @@ namespace ukn {
         DllLoader mGraphicFactoryLoader;
         
         GraphicFactoryPtr mGraphicFactory;
-        
         SceneManagerPtr mScene;
     };
     

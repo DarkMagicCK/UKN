@@ -5,6 +5,7 @@
 #include "UKN/GraphicDevice.h"
 #include "UKN/GraphicFactory.h"
 #include "UKN/Context.h"
+#include "UKN/Model.h"
 
 namespace ukn {
 
@@ -100,6 +101,62 @@ namespace ukn {
     
     const LightManagerPtr& SceneManager::getLightManager() const {
         return mLightManager;
+    }
+
+    void SceneManager::render(const EffectPassPtr& pass, const Matrix4& viewMat, const Matrix4& projMat) {
+        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+        
+        const SceneManager::SceneObjectList& objects = this->getSceneObjects();
+        Shader* vertexShader = pass->getVertexShader().get();
+        Shader* fragmentShader = pass->getFragmentShader().get();
+        
+        vertexShader->setMatrixVariable("viewMatrix", viewMat);
+        vertexShader->setMatrixVariable("projectionMatrix", projMat);
+        
+        for(const SceneObjectPtr& obj: objects) {
+            vertexShader->setMatrixVariable("worldMatrix", obj->getModelMatrix());
+      
+            const RenderablePtr& pr = obj->getRenderable();
+            if(pr) {
+                Model* model = dynamic_cast<Model*>(pr.get());
+                // if it's a model, render each mesh
+                if(model) {
+                    for(uint32 i=0; i<model->getMeshCount(); ++i) {
+                        const MeshPtr& mesh = model->getMesh(i);
+                        this->renderRenderable(gd, *mesh.get(), pass);
+                    }
+                } else {
+                    this->renderRenderable(gd, *pr.get(), pass);
+                }
+            }
+        }
+    }
+
+    
+    void SceneManager::renderRenderable(GraphicDevice& gd, Renderable& renderable, const EffectPassPtr& pass) {
+        Shader* vertexShader = pass->getVertexShader().get();
+        Shader* fragmentShader = pass->getFragmentShader().get();
+     
+        if(renderable.getDiffuseTex()) {
+            fragmentShader->setTextureVariable("diffuseMap", renderable.getDiffuseTex());
+        }
+        if(renderable.getEmitTex()) {
+            fragmentShader->setTextureVariable("emitMap", renderable.getEmitTex());
+        }
+        if(renderable.getNormalTex()) {
+            fragmentShader->setTextureVariable("normalMap", renderable.getNormalTex());
+        }
+        if(renderable.getHeightTex()) {
+            fragmentShader->setTextureVariable("heightMap", renderable.getHeightTex());
+        }
+        if(renderable.getSpecularTex()) {
+            fragmentShader->setTextureVariable("specularMap", renderable.getSpecularTex());
+        }
+
+        // to do with material
+        pass->begin();
+        renderable.render();
+        pass->end();
     }
 
 }

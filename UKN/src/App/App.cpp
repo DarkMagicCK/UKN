@@ -36,7 +36,7 @@ namespace ukn {
     AppLauncher::AppLauncher(const UknString& name):
     mName(name),
     mInited(false) {
-        Context::Instance().setApp(this);
+
     }
     
     AppLauncher::~AppLauncher() {
@@ -180,6 +180,8 @@ namespace ukn {
             log_error("ukn::AppLauncher::run: cannot without a AppLauncher");
             return *this;
         }
+        
+        Context::Instance().setApp(this);
         
         // on init
         mMainWindow->onInit().raise(mMainWindow.get(), _NullEventArgs);

@@ -100,7 +100,7 @@ namespace ukn {
 
     }
     
-    bool CompositeRenderTarget::attach(Attachment attach, RenderTargetPtr renderTarget) {
+    bool CompositeRenderTarget::attach(Attachment attach, const RenderTargetPtr& renderTarget) {
         if(!renderTarget)
             return false;
 

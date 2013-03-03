@@ -50,6 +50,10 @@ namespace ukn {
         static ModelDataPtr LoadFromObj(const mist::ResourcePtr& file);
         /* plane space separated file */
         static ModelDataPtr LoadFromPlaneFile(const mist::ResourcePtr& file);
+        /* KlayGE mesh ml file */
+        static ModelDataPtr LoadFromMeshML(const mist::ResourcePtr& file);
+        /* Collada file */
+        static ModelDataPtr LoadFromCollada(const mist::ResourcePtr& file);
         
         /* ukn model format, to do */
         static ModelDataPtr LoadFromUknModel(const mist::ResourcePtr& file, bool is_bin);

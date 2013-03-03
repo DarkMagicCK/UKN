@@ -229,10 +229,10 @@ namespace ukn {
                     MIST_PROFILE(L"__MainFrame__");
 
                     D3D11_VIEWPORT viewport;
-                    viewport.Width = fb.getViewport().width;
-                    viewport.Height = fb.getViewport().height;
-                    viewport.TopLeftX = fb.getViewport().left;
-                    viewport.TopLeftY = fb.getViewport().top;
+                    viewport.Width = (FLOAT)fb.getViewport().width;
+                    viewport.Height = (FLOAT)fb.getViewport().height;
+                    viewport.TopLeftX = (FLOAT)fb.getViewport().left;
+                    viewport.TopLeftY = (FLOAT)fb.getViewport().top;
                     viewport.MaxDepth = 1.0f;
                     viewport.MinDepth = 0.0f;
 

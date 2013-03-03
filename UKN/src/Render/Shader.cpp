@@ -112,4 +112,29 @@ namespace ukn {
         return pass;
     }
 
+    bool Shader::setFloatVectorVariable(const char* name, const float3& vec) {
+        return this->setFloatVariable(name, 3, vec.value);
+    }
+
+    bool Shader::setFloatVectorVariable(const char* name, const float2& vec) {
+        return this->setFloatVariable(name, 2, vec.value);
+    }
+    
+    bool Shader::setFloatVariable(const char* name, float v) {
+        float tv = v;
+        return this->setFloatVariable(name, 1, &tv);
+    }
+
+    bool Shader::setIntVectorVariable(const char* name, const int3& vec) {
+        return this->setIntVariable(name, 3, vec.value);
+    }
+
+    bool Shader::setIntVectorVariable(const char* name, const int2& vec) {
+        return this->setIntVariable(name, 2, vec.value);
+    }
+
+    bool Shader::setIntVariable(const char* name, float v) {
+        int32 tv = v;
+        return this->setIntVariable(name, 1, &tv);
+    }
 }

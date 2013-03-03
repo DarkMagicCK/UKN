@@ -224,10 +224,10 @@ namespace ukn {
         glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
         glTexSubImage2D(GL_TEXTURE_2D,
                         level,
-                        rect.x(),
-                        rect.y(),
-                        rect.width(),
-                        rect.height(),
+                        (GLsizei)rect.x(),
+                        (GLsizei)rect.y(),
+                        (GLsizei)rect.width(),
+                        (GLsizei)rect.height(),
                         element_format_to_texdata_format(this->format()),
                         element_format_to_gl_element_type(this->format()),
                         data);

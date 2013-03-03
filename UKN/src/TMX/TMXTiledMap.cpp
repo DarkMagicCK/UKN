@@ -432,8 +432,8 @@ namespace ukn {
                     } while(config->toNextChild());
                     
                     mViewRect.set(Vector2(0, 0), 
-                                  Vector2(mMapWidth * mTileWidth,
-                                          mMapHeight * mTileHeight));
+                                  Vector2(float(mMapWidth * mTileWidth),
+                                          float(mMapHeight * mTileHeight)));
                     
                     // <map>
                     config->toParent();
@@ -498,8 +498,8 @@ namespace ukn {
                             TileSet& ts = mTileSets[tile.tileset_id];
 
                             if(tile.tile_id != -1) {
-                                float dx = ts.tile_offset_x + x * mTileWidth;
-                                float dy = ts.tile_offset_y + (y + 1) * mTileHeight - ts.tile_height;
+                                float dx = (float)ts.tile_offset_x + x * mTileWidth;
+                                float dy = (float)ts.tile_offset_y + (y + 1) * mTileHeight - ts.tile_height;
                                 
                                 if(tile.flipped_diagonally) {
                                     dy += ts.tile_height - ts.tile_width;

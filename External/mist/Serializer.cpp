@@ -8,6 +8,8 @@
 
 #include "mist/Serializer.h"
 #include "mist/Stream.h"
+#include "mist/MathUtil.h"
+#include "mist/Convert.h"
 
 #ifndef MIST_WINDOWS
 #include <wchar.h>
@@ -154,7 +156,7 @@ namespace mist {
     SerializableTypeId SerializeHelper::GetTypeId<float>() {
         return STI_FLOAT;
     }
-    
+
     // double
     template<>
     void SerializeHelper::FromString<double>(const MistString& str, double* val) {

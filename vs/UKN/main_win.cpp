@@ -70,6 +70,7 @@ int CALLBACK WinMain(
     ukn::TerrianPtr terrian;
     ukn::RenderBufferPtr dragonBuffer;
     ukn::LightSourcePtr spotLight;
+    ukn::LightSourcePtr directionalLight;
 
     ukn::DeferredRendererPtr deferredRenderer;
     
@@ -129,7 +130,7 @@ int CALLBACK WinMain(
 
             const ukn::CompositeRenderTargetPtr& gbuffer = deferredRenderer->getGBufferRT();
 
-            sb.draw(spotLight->getShadowMap()->getTexture(), 
+            sb.draw(directionalLight->getShadowMap()->getTexture(), 
                     ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
             sb.draw(gbuffer->getTargetTexture(ukn::ATT_Color1), 
                     ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
@@ -194,18 +195,21 @@ int CALLBACK WinMain(
                 ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
                 scene.addSceneObject(terrianObject);
             }
-            scene.addLight(ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::Vector3::Down(),
-                                                                     ukn::float4(1, 1, 1, 1),
-                                                                     0));
+            directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 0),
+                                                                        ukn::float4(1, 1, 1, 1),
+                                                                        1.0,
+                                                                        true,
+                                                                        1024);
 
-            spotLight = ukn::MakeSharedPtr<ukn::SpotLight>(ukn::float3(0, 30, 0),
+            spotLight = ukn::MakeSharedPtr<ukn::SpotLight>(ukn::float3(0, 10, 0),
                                                            ukn::float3(0, -1, 0),
                                                            ukn::float4(1, 1, 1, 1),
-                                                           0.4,
+                                                           1.0,
                                                            true, 
                                                            1024,
                                                            gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"SpotCookie.dds")));
             scene.addLight(spotLight);
+            scene.addLight(directionalLight);
         })
         .run();
     

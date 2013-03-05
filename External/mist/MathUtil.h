@@ -39,6 +39,9 @@ namespace mist {
 #define MIST_MAX(a, b) (a) > (b) ? (a) : (b)
 #define MIST_ABS(a) (a) < 0 ? -(a) : (a)
 
+    class Matrix4;
+    class Quaternion;
+
     namespace math {
 
         MIST_API real degree_to_radius(real dgr);
@@ -71,6 +74,8 @@ namespace mist {
         MIST_API int32 flip_bytes(int32 value);
 
         MIST_API float3 cross(const float3& lhs, const float3& rhs);
+
+        MIST_API void translate(Matrix4& lhs, const float3& rhs);
 
         template <typename T>
         inline T lerp(T t1, T t2, real t) {

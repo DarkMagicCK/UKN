@@ -226,10 +226,21 @@ namespace ukn {
                                                 mGBufferRT->getTargetTexture(ukn::ATT_Color2));
 
             for(const LightSourcePtr& light: lights->getDirectionalLights()) {
+                if(light->getCastShadows() && light->getShadowMap()) {
+                    fragmentShader->setTextureVariable("shadowMap", light->getShadowMap()->getTexture());
+                }
+                
                 fragmentShader->setFloatVectorVariable("lightColor", light->getColor());
                 fragmentShader->setFloatVariable("lightDirection", 3, light->getDirection().value);
                 fragmentShader->setFloatVariable("lightIntensity", light->getIntensity());
-
+                
+                const CameraPtr& lightCam = light->getCamera(0);
+                fragmentShader->setMatrixVariable("lightView", lightCam->getViewMatrix());
+                fragmentShader->setMatrixVariable("lightViewProj", lightCam->getViewMatrix() * lightCam->getProjMatrix());
+                fragmentShader->setIntVariable("hasShadow", light->getCastShadows() ? 1 : 0);
+                fragmentShader->setFloatVariable("shadowMapSize", (float)light->getShadowMapResolution());
+                fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
+                
                 mDirectionalLightPass->begin();
                 ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
                 mDirectionalLightPass->end();
@@ -264,20 +275,20 @@ namespace ukn {
                 
                 SpotLight* sl = (SpotLight*)light.get();
                 
-                const CameraPtr& cam = sl->getCamera(0);
+                const CameraPtr& lightCam = sl->getCamera(0);
 
-                vertexShader->setMatrixVariable("worldMatrix", Matrix4::ScaleMat(10, 10, 10).translate(0, 1, 0));
-                fragmentShader->setMatrixVariable("lightViewProj", cam->getViewMatrix() * cam->getProjMatrix());
+                vertexShader->setMatrixVariable("worldMatrix", sl->getWorldMatrix());
+                fragmentShader->setMatrixVariable("lightViewProj", lightCam->getViewMatrix() * lightCam->getProjMatrix());
                 fragmentShader->setFloatVectorVariable("lightPosition", sl->getPosition());
                 fragmentShader->setFloatVectorVariable("lightColor", sl->getColor());
                 fragmentShader->setFloatVectorVariable("lightDirection", sl->getDirection());
                 fragmentShader->setFloatVariable("lightIntensity", sl->getIntensity());
 
                 fragmentShader->setFloatVariable("lightAngleCos", sl->lightAngleCos());
-                fragmentShader->setFloatVariable("lightHeight", sl->getFarPlane());
+                fragmentShader->setFloatVariable("lightHeight", lightCam->getNearPlane());
                 fragmentShader->setIntVariable("hasShadow", sl->getCastShadows() ? 1 : 0);
                 fragmentShader->setFloatVariable("shadowMapSize", (float)sl->getShadowMapResolution());
-                fragmentShader->setFloatVariable("depthPrecision", sl->getFarPlane());
+                fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
                 fragmentShader->setFloatVariable("depthBias", sl->getDepthBias());
 
                 {
@@ -285,9 +296,10 @@ namespace ukn {
                     float SL = abs(L.dot(sl->getDirection()));
 
                     if(SL < sl->lightAngleCos()) {
+                        // within light  
                         gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
                     } else {
-                        gd.setRasterizerState(RasterizerStateObject::CullClockwise());
+                        gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
                     }
 
                     mSpotLightPass->begin();

@@ -22,6 +22,10 @@ namespace ukn {
             
         void setViewParams(const Vector3& eye, const Vector3& lookat, const Vector3& up = Vector3(0, 1, 0));
         void setProjParams(float fov, float aspect, float near, float far);
+
+        // sets up a orthogonal projection matrix, fov & aspect will not be avaiable
+        // far helper functions
+        void setProjParamsOrtho(float l, float r, float b, float t, float n, float f);
     
         Vector3 getEyePos() const;
         Vector3 getLookAt() const;

@@ -30,6 +30,7 @@ namespace ukn {
         mUpVec = up;
         
         mViewVec = (mLookAt - mEysPos).normalize();
+        mViewMat[1] = mViewMat[0];
         mViewMat[0] = Matrix4::LookAtMatLH(eye, lookat, up);
         mFrustumDirty = true;
     }
@@ -40,11 +41,23 @@ namespace ukn {
         mNearPlane = nearx;
         mFarPlane = farx;
         
+        mProjMat[1] = mProjMat[0];
         mProjMat[0] = Matrix4::PerspectiveFovMatLH(fov, aspect, nearx, farx);
         mFrustumDirty = true;
         
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         gd.adjustPerspectiveMat(mProjMat[0]);
+    }
+
+    void Camera::setProjParamsOrtho(float l, float r, float b, float t, float n, float f) {
+        mNearPlane = n;
+        mFarPlane = f;
+        mFOV = d_pi_2;
+        mAspect = (r - l) / (t - b);
+
+        mProjMat[1] = mProjMat[0];
+        mProjMat[0] = Matrix4::OrthoOffCenterMatLH(l, r, b, t, n, f);
+        mFrustumDirty = true;
     }
     
     Vector3 Camera::getEyePos() const {
@@ -80,11 +93,11 @@ namespace ukn {
     }
     
     const Matrix4& Camera::getPrevViewMatrix() const {
-        return mViewMat[0];
+        return mViewMat[1];
     }
     
     const Matrix4& Camera::getPrevProjMatrix() const {
-        return mProjMat[0];
+        return mProjMat[1];
     }
     
     const Frustum& Camera::getViewFrustum() const {

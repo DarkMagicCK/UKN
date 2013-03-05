@@ -33,7 +33,7 @@ namespace ukn {
         /* front = cw, cull = back */
         _g_counterclockwise = gf.createRasterizerStateObject(desc);
 
-        /* front = ccw, cull = back */
+        /* front = ccw, cull = front */
         desc.frontface = RSP_FrontFaceCounterClockwise;
         _g_clockwise = gf.createRasterizerStateObject(desc);
 

@@ -218,6 +218,10 @@ namespace mist {
                           lhs[2]*rhs[0] - lhs[0]*rhs[2], 
                           -lhs[1]*rhs[0] + lhs[0]*rhs[1]);
         }
+
+        void translate(Matrix4& lhs, const float3& rhs) {
+            lhs.translate(rhs[0], rhs[1], rhs[2]);
+        }
     }
 
     AABB2::AABB2(real _x1, real _y1, real _x2, real _y2, bool asWH):
@@ -819,17 +823,17 @@ namespace mist {
     }
 
     Matrix4& Matrix4::translate( const real x, const real y, const real z ) {
-        *this = TransMat( x, y, z ) * *this;
+        *this = *this * TransMat( x, y, z );
         return *this;
     }
 
     Matrix4& Matrix4::scale( const real x, const real y, const real z ) {
-        *this = ScaleMat( x, y, z ) * *this;
+        *this = *this * ScaleMat( x, y, z );
         return *this;
     }
 
     Matrix4& Matrix4::rotate( const real x, const real y, const real z ) {
-        *this = RotMat( x, y, z ) * *this;
+        *this = *this * RotMat( x, y, z );
         return *this;
     }
 

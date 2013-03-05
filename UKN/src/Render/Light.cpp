@@ -2,6 +2,10 @@
 #include "UKN/GraphicFactory.h"
 #include "UKN/RenderTarget.h"
 #include "UKN/Texture.h"
+#include "UKN/GraphicDevice.h"
+#include "UKN/FrameBuffer.h"
+#include "UKN/Camera.h"
+#include "UKN/Context.h"
 
 namespace ukn {
 
@@ -62,18 +66,6 @@ namespace ukn {
     
     void LightSource::setCastShadows(bool flag) {
         mCastShadows = flag;
-        if(!mShadowMap && mShadowMapResolution > 0) {
-            mShadowMap = new RenderTarget(mShadowMapResolution,
-                                          mShadowMapResolution,
-                                          1,
-                                          EF_Float);
-            if(!mShadowMap)
-                log_error(L"LightSource::setCastShadows: error creating shadow map");
-        
-            mDSView = new RenderTarget(mShadowMapResolution,
-                                       mShadowMapResolution,
-                                       EF_D24S8);
-        }
     }
 
      const CameraPtr& LightSource::getCamera(uint32 index) const {
@@ -86,7 +78,7 @@ namespace ukn {
     }
 
     void LightSource::setDirection(const float3& dir) {
-        mDirection = dir;
+        mDirection = dir.normalize();
     }
     
     float LightSource::getIntensity() const {
@@ -126,15 +118,67 @@ namespace ukn {
 
     }
     
-    DirectionalLight::DirectionalLight(const float3& _dir, const float4& _color, float _intensity):
-    LightSource(LS_Directional) {
+    DirectionalLight::DirectionalLight(const float3& _dir, const float4& _color, float _intensity, bool castShadows, int shadowMapResolution):
+    LightSource(LS_Directional),
+    mCamera(MakeSharedPtr<Camera>()){
         mDirection = _dir;
         mColor = _color;
         mIntensity = _intensity;
+        mShadowMapResolution = shadowMapResolution;
+        
+        this->setCastShadows(castShadows);
+        this->update();
     }
 
     DirectionalLight::~DirectionalLight() {
 
+    }
+
+    void DirectionalLight::update() {
+        const GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+        const CameraPtr& cp = gd.getCurrFrameBuffer()->getViewport().camera;
+        
+        float farPlane = 1000.f;
+        float nearPlane = 0.1f;
+        if(cp) {
+            farPlane = cp->getFarPlane();
+            nearPlane = cp->getNearPlane();
+        }
+
+        mCamera->setProjParamsOrtho(-50, 50, -50, 50, nearPlane, farPlane);
+        
+        float3 target = mPosition + mDirection;
+        if(target.sqrLength() == 0) 
+            target = -Vector3::Up();
+
+        float3 up = math::cross(mDirection, Vector3::Up());
+        if(up.sqrLength() == 0) 
+            up = Vector3::Right();
+        else
+            up = Vector3::Up();
+
+        mCamera->setViewParams(mPosition, target, up);
+    }
+
+    const CameraPtr& DirectionalLight::getCamera(uint32 index) const {
+        return mCamera;
+    }
+
+    void DirectionalLight::setCastShadows(bool flag) {
+        LightSource::setCastShadows(flag);
+
+        if(!mShadowMap && mShadowMapResolution > 0) {
+            mShadowMap = new RenderTarget(mShadowMapResolution,
+                                          mShadowMapResolution,
+                                          1,
+                                          EF_RGBA8);
+            if(!mShadowMap)
+                log_error(L"LightSource::setCastShadows: error creating shadow map");
+        
+            mDSView = new RenderTarget(mShadowMapResolution,
+                                       mShadowMapResolution,
+                                       EF_D24S8);
+        }
     }
 
     SpotLight::SpotLight(const float3& position, const float3& direction,
@@ -142,22 +186,18 @@ namespace ukn {
                          bool castShadows, int shadowMapResolution,
                          const TexturePtr& attenuationTex):
     LightSource(LS_Spot),
-    mNearPlane(0.1f),
-    mFarPlane(100.f),
     mFOV(d_pi_2),
     mDepthBias(1.f / 2000.f),
     mCam(MakeSharedPtr<Camera>()){
 
         mPosition = position;
-        mDirection = direction;
+        setDirection(direction);
         mColor = color;
         mIntensity = intensity;
         mShadowMapResolution = shadowMapResolution;
         mAttenuationTexture = attenuationTex;
         
         this->setCastShadows(castShadows);
-        
-        mCam->setProjParams(mFOV, 1.0f, mNearPlane, mFarPlane);
         this->update();
     }
 
@@ -168,14 +208,6 @@ namespace ukn {
 
     SpotLight::~SpotLight() {
 
-    }
-
-    float SpotLight::getNearPlane() const {
-        return mNearPlane;
-    }
-
-    float SpotLight::getFarPlane() const {
-        return mFarPlane;
     }
 
     float SpotLight::getFOV() const {
@@ -206,9 +238,21 @@ namespace ukn {
             up = Vector3::Up();
 
         mCam->setViewParams(mPosition, target, up);
-        float radial = float(tanf(mFOV / 2.0f) * 2 * mFarPlane);
 
-        Matrix4 scaling = Matrix4::ScaleMat(radial, radial, mFarPlane);
+        const GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+        const CameraPtr& cp = gd.getCurrFrameBuffer()->getViewport().camera;
+
+        float farPlane = 1000.f;
+        float nearPlane = 0.f;
+        if(cp) {
+            farPlane = cp->getFarPlane();
+            nearPlane = cp->getNearPlane();
+        }
+
+        mCam->setProjParams(mFOV, 1.0f, nearPlane, farPlane);
+        float radial = float(tanf(mFOV / 2.0f) * 2 * farPlane);
+
+        Matrix4 scaling = Matrix4::ScaleMat(radial, radial, farPlane);
         Matrix4 translation = Matrix4::TransMat(mPosition[0], mPosition[1], mPosition[2]);
         Matrix4 inverseView = mCam->getViewMatrix().inverted();
         Matrix4 semiProduct = scaling * inverseView;
@@ -222,4 +266,43 @@ namespace ukn {
     const CameraPtr& SpotLight::getCamera(uint32 index) const {
         return mCam;
     }
+
+    void SpotLight::setCastShadows(bool flag) {
+        LightSource::setCastShadows(flag);
+
+        if(!mShadowMap && mShadowMapResolution > 0) {
+            mShadowMap = new RenderTarget(mShadowMapResolution,
+                                          mShadowMapResolution,
+                                          1,
+                                          EF_Float);
+            if(!mShadowMap)
+                log_error(L"LightSource::setCastShadows: error creating shadow map");
+        
+            mDSView = new RenderTarget(mShadowMapResolution,
+                                       mShadowMapResolution,
+                                       EF_D24S8);
+        }
+    }
+
+    PointLight::PointLight():
+    LightSource(LS_Point) {
+
+    }
+
+    PointLight::~PointLight() {
+
+    }
+
+    void PointLight::update() {
+        mWorldMat = Matrix4::ScaleMat(mRadius, mRadius, mRadius).translate(mPosition[0], mPosition[1], mPosition[2]);
+    }
+
+    float PointLight::getRadius() const {
+        return mRadius;
+    }
+
+    void PointLight::setRadius(float r) {
+        mRadius = r;
+    }
+
 } // namespace ukn

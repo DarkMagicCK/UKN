@@ -77,9 +77,9 @@ namespace mist {
     void Profiler::updateTimeRatio(uint64 frametime, uint64 frameDelta) {
         ProfileDataMap::iterator it = mProfiles.begin();
         while(it != mProfiles.end()) {
-            it->second.time_ratio = (it->second.time_ratio * (it->second.recorded_frames - 1) + (double)it->second.time / frametime) / it->second.recorded_frames;
+            it->second.time_ratio = (float)(it->second.time_ratio * (it->second.recorded_frames - 1) + (double)it->second.time / frametime) / it->second.recorded_frames;
             
-            it->second.time_ratio_frame = (it->second.time_ratio_frame * (it->second.recorded_frames - 1) + (double)it->second.time / frameDelta) / it->second.recorded_frames;
+            it->second.time_ratio_frame = (float)(it->second.time_ratio_frame * (it->second.recorded_frames - 1) + (double)it->second.time / frameDelta) / it->second.recorded_frames;
             
             ++it;
         }

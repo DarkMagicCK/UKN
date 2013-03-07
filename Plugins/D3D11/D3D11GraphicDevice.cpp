@@ -6,6 +6,7 @@
 #include "D3D11SamplerStateObject.h"
 #include "D3D11RasterizerStateObject.h"
 #include "D3D11DepthStencilStateObject.h"
+#include "D3D11GraphicBuffer.h"
 
 #include "WindowsWindow.h"
 
@@ -275,9 +276,39 @@ namespace ukn {
 
         GraphicBufferPtr indexBuffer = buffer->getIndexStream();
 
-        D3D11RenderBuffer* D3D11buffer = checked_cast<D3D11RenderBuffer*>(buffer.get());
-        if(D3D11buffer) {
-            vertexBuffer->activate();
+        D3D11RenderBuffer* d3dBuffer = checked_cast<D3D11RenderBuffer*>(buffer.get());
+        if(d3dBuffer) {
+            const RenderBuffer::VertexStreamVec& vertex_streams = d3dBuffer->getVertexStreams();
+            std::vector<ID3D11Buffer*> vertex_buffer_arr;
+            std::vector<UINT> strides;
+            std::vector<UINT> offsets;
+
+            for(const RenderBuffer::StreamObject& so: vertex_streams) {
+                D3D11VertexBuffer* vb = checked_cast<D3D11VertexBuffer*>(so.stream.get());
+                if(vb) {
+                    vertex_buffer_arr.push_back(vb->getD3DBuffer());
+                    offsets.push_back(0);
+                    strides.push_back(so.vertex_size);
+                }
+            }
+            if(d3dBuffer->hasInstanceStream()) {
+                D3D11VertexBuffer* vb = checked_cast<D3D11VertexBuffer*>(d3dBuffer->getInstanceStream().get());
+                if(vb) {
+                    vertex_buffer_arr.push_back(vb->getD3DBuffer());
+                    offsets.push_back(0);
+                    strides.push_back(d3dBuffer->getInstanceFormatSize());
+                }
+            }
+
+            if(vertex_buffer_arr.empty()) {
+                return;
+            }
+            mDeviceContext->IASetVertexBuffers(0, 
+                                               vertex_buffer_arr.size(),
+                                               &vertex_buffer_arr[0],
+                                               &strides[0],
+                                               &offsets[0]);
+
             if(indexBuffer.isValid() &&
                 buffer->isUseIndexStream()) {
                     indexBuffer->activate();
@@ -299,16 +330,33 @@ namespace ukn {
                 }
             }
 
-            if(indexBuffer.isValid() &&
-                buffer->isUseIndexStream()) {
-                    mDeviceContext->DrawIndexed(buffer->getIndexCount(),
-                        buffer->getIndexStartIndex(),
-                        buffer->getVertexStartIndex());
+            if(buffer->hasInstanceStream()) {
+                if(indexBuffer.isValid() &&
+                    buffer->isUseIndexStream()) {
+                        mDeviceContext->DrawIndexedInstanced(
+                            buffer->getIndexCount(),
+                            buffer->getInstanceCount(),
+                            buffer->getIndexStartIndex(),
+                            buffer->getVertexStartIndex(),
+                            buffer->getInstanceStartIndex());
+                } else {
+                    mDeviceContext->DrawInstanced(
+                        buffer->getVertexCount(),
+                        buffer->getInstanceCount(),
+                        buffer->getVertexStartIndex(),
+                        buffer->getInstanceStartIndex());
+                }
             } else {
-                mDeviceContext->Draw(buffer->getVertexCount(),
-                    buffer->getVertexStartIndex());
+                if(indexBuffer.isValid() &&
+                    buffer->isUseIndexStream()) {
+                        mDeviceContext->DrawIndexed(buffer->getIndexCount(),
+                            buffer->getIndexStartIndex(),
+                            buffer->getVertexStartIndex());
+                } else {
+                    mDeviceContext->Draw(buffer->getVertexCount(),
+                        buffer->getVertexStartIndex());
+                }
             }
-            vertexBuffer->deactivate();
         }
     }
 

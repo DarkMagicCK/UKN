@@ -78,13 +78,6 @@ namespace ukn {
     
     }
     
-    void Effect::setVertexFormat(uint32 passIndex, const vertex_elements_type& format) {
-        if(passIndex < this->getNumPasses()) {
-            this->mPasses[passIndex]->setVertexFormat(format);
-        } else
-           log_error(L"Effect::setVertexFormat: pass overflow");
-    }
-
     uint32 Effect::getNumPasses() const {
         return uint32(mPasses.size());
     }

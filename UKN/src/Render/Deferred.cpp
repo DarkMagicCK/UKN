@@ -16,6 +16,8 @@
 #include "UKN/SceneObjectWrapper.h"
 #include "UKN/Model.h"
 
+#include "mist/Profiler.h"
+
 namespace ukn {
 
     DeferredRenderer::DeferredRenderer(const float2& size):
@@ -55,7 +57,7 @@ namespace ukn {
 
         if(mSize[0] == 0 && mSize[1] == 0) {
             Window& wnd = Context::Instance().getApp().getWindow();
-            mSize = float2(wnd.width(), wnd.height());
+            mSize = float2((float)wnd.width(), (float)wnd.height());
         }
         /* render targets */
         {
@@ -194,13 +196,16 @@ namespace ukn {
 
 
     void DeferredRenderer::makeLightMap(SceneManager& scene) {
+        MIST_PROFILE(L"DEFERRED_LIGHTMAP");
+
         mLightMapRT->attachToRender();
         
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-        gd.clear(ukn::CM_Color, ukn::color::Transparent, 1.f, 0.f);
+        gd.clear(ukn::CM_Color, ukn::color::Transparent, 1.f, 0);
        
         const FrameBufferPtr& fb = mLightMapRT->getFrameBuffer();
         const CameraPtr& cam = fb->getViewport().camera;
+        const Frustum& frustum = cam->getViewFrustum();
     
         Matrix4 invViewProj = (cam->getViewMatrix() * cam->getProjMatrix()).inverted();
 
@@ -338,12 +343,15 @@ namespace ukn {
             for(const LightSourcePtr& light: lights->getPointLights()) {
                 if(!light->getEnabled())
                     continue;
+                
+                PointLight* sl = (PointLight*)light.get();
+                if(!frustum.isSphereVisible(mist::Sphere(light->getPosition(), sl->getRadius())))
+                    continue;
 
                 if(light->getCastShadows() && light->getShadowMap()) {
                     fragmentShader->setTextureVariable("shadowMap", light->getShadowMap()->getTexture());
                 }
                 
-                PointLight* sl = (PointLight*)light.get();
                 
                 const CameraPtr& lightCam = sl->getCamera(0);
 
@@ -396,6 +404,8 @@ namespace ukn {
     }
 
     void DeferredRenderer::makeGBuffer(SceneManager& scene) {
+        MIST_PROFILE(L"DEFERRED_GBUFFER");
+
         mGBufferRT->attachToRender();
         
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();

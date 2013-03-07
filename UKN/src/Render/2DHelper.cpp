@@ -21,7 +21,6 @@ namespace ukn {
         if(!mEffect) {
             mEffect = CreateCgEffet2D();
             if(mEffect) {
-                mEffect->setVertexFormat(0, Vertex2D::Format());
                 this->setupMat();
             }
             else

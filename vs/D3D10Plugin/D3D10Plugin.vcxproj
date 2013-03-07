@@ -96,6 +96,7 @@
     <ClInclude Include="..\..\Plugins\D3D11\D3D11RenderView.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11SamplerStateObject.h" />
     <ClInclude Include="..\..\Plugins\D3D11\D3D11Texture.h" />
+    <ClInclude Include="..\..\Plugins\D3D11\D3D11VertexLayout.h" />
     <ClInclude Include="..\..\Plugins\D3D11\MetroWindows.h" />
     <ClInclude Include="..\..\Plugins\D3D11\WindowsWindow.h" />
     <ClInclude Include="stdafx.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11Texture2D.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\D3D11TextureCube.cpp" />
+    <ClCompile Include="..\..\Plugins\D3D11\D3D11VertexLayout.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\MetroWindow.cpp" />
     <ClCompile Include="..\..\Plugins\D3D11\WindowsWindow.cpp" />
     <ClCompile Include="dllmain.cpp">

@@ -3,7 +3,7 @@
 
 namespace ukn {
 
-    ID3D11InputLayout* D3D11ShaderUtilities::CreateLayout(ID3D11Device* device, const void* signature, SIZE_T size, const ukn::vertex_elements_type& format) {
+    ID3D11InputLayout* D3D11ShaderUtilities::CreateLayout(ID3D11Device* device, const void* signature, SIZE_T size, const ukn::vertex_elements_type& format, uint32 instance_start, uint32 instance_end) {
         D3D11_INPUT_ELEMENT_DESC* layoutDesc = new D3D11_INPUT_ELEMENT_DESC[format.size()];
 
         uint32 offset = 0;
@@ -17,7 +17,9 @@ namespace ukn {
             layoutDesc[index].Format = ElementFormatToDxGIFormat(it->format);
             layoutDesc[index].InputSlot = 0;
             layoutDesc[index].AlignedByteOffset = D3D11_APPEND_ALIGNED_ELEMENT;
-            layoutDesc[index].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+            layoutDesc[index].InputSlotClass = (instance_end != 0 && index >= instance_start && index < instance_end) ? 
+                                                    D3D11_INPUT_PER_INSTANCE_DATA:
+                                                    D3D11_INPUT_PER_VERTEX_DATA;
             layoutDesc[index].InstanceDataStepRate = 0;
             index += 1;
             offset += it->size();

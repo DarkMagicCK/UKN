@@ -299,10 +299,10 @@ namespace ukn {
                                 tile = *g_tile;
                                 
                                 TileSet& tileset = mTileSets[tile.tileset_id];
-                                tile.tile_bounding_rect = mist::Rectangle((i % layer.width) * tileset.tile_width,
-																			(i / layer.width) * tileset.tile_height,
-																			(i % layer.width) * tileset.tile_width + tileset.tile_width,
-																			(i / layer.width) * tileset.tile_height + tileset.tile_height);
+                                tile.tile_bounding_rect = mist::Rectangle((float)(i % layer.width) * tileset.tile_width,
+																			(float)(i / layer.width) * tileset.tile_height,
+																			(float)(i % layer.width) * tileset.tile_width + tileset.tile_width,
+																			(float)(i / layer.width) * tileset.tile_height + tileset.tile_height);
                             } else
                                 log_error(L"ukn::tmx::Map::parseLayer: invalid tile with gid " + tiles[j * layer.width + i]);
                         }
@@ -444,7 +444,7 @@ namespace ukn {
         }
         
         Tile& Layer::getTileAt(const Vector2& pos) {
-            return tiles[pos.x() / parent->getTileWidth() + pos.y() / parent->getTileHeight() * parent->getMapWidth()];
+            return tiles[uint32(pos.x() / parent->getTileWidth() + pos.y() / parent->getTileHeight() * parent->getMapWidth())];
         }
         
         Tile& Map::getTileAt(uint32 layer_index, const Vector2& pos) {
@@ -532,7 +532,7 @@ namespace ukn {
         
         float2 Map::pixelToTileCoords(float x, float y) const {
             if(mOrientation == MO_Isometric) {
-                float ratio = mTileWidth / mTileHeight;
+                float ratio = (float)mTileWidth / mTileHeight;
                 
                 x -= mMapHeight * mTileWidth / 2;
                 float mx = y + (x / ratio);

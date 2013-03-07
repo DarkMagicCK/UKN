@@ -20,8 +20,25 @@ namespace ukn {
      * RenderBuffer Object
      * Represents a vertex stream/list and a index list to render
      **/
+
+    enum VertexStreamType {
+        VST_Geometry,
+        // hardware instancing stream
+        VST_Instance, 
+    };
     
     class UKN_API RenderBuffer {
+    public:
+        struct StreamObject {
+            StreamObject(): vertex_size(0), type(VST_Geometry) { }
+
+            GraphicBufferPtr stream;
+            vertex_elements_type format;
+            uint32 vertex_size;
+            VertexStreamType type;
+        };
+        typedef std::vector<StreamObject> VertexStreamVec;
+
     public:
         RenderBuffer();
         // force base class
@@ -32,11 +49,16 @@ namespace ukn {
         RenderMode          getRenderMode() const;
         void                setRenderMode(RenderMode mode);
         
-        GraphicBufferPtr    getVertexStream() const;
-        void                bindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format);
+        GraphicBufferPtr    getVertexStream(uint32 index = 0) const;
+        void                bindVertexStream(const GraphicBufferPtr& vertexStream, const vertex_elements_type& format);
         
-        const vertex_elements_type& getVertexFormat() const;
-        void                setVertexFormat(const vertex_elements_type& format);
+        const VertexStreamVec& getVertexStreams() const;
+
+        void                setVertexStream(uint32 index, const GraphicBufferPtr& stream, const vertex_elements_type& format);
+        void                removeVertexStream(uint32 index);
+
+        vertex_elements_type getVertexFormat(uint32 index = 0) const;
+        void                setVertexFormat(const vertex_elements_type& format, uint32 index = 0);
         
         uint32              getVertexCount() const;
         void                setVertexCount(uint32 count);
@@ -48,7 +70,7 @@ namespace ukn {
         bool                isUseIndexStream() const;
         
         GraphicBufferPtr    getIndexStream() const;
-        void                bindIndexStream(GraphicBufferPtr indexStream);
+        void                bindIndexStream(const GraphicBufferPtr& indexStream);
         
         uint32              getIndexCount() const;
         void                setIndexCount(uint32 count);
@@ -56,23 +78,33 @@ namespace ukn {
         uint32              getIndexStartIndex() const;
         void                setIndexStartIndex(uint32 index);
 
+        /* instancing */
+        void    setInstanceCount(uint32 count);
+        uint32  getInstanceCount() const;
+        void    bindInstanceStream(const GraphicBufferPtr& instanceStream, const vertex_elements_type& format);
+
+        uint32 getInstanceStartIndex() const;
+        void   setInstanceStartIndex(uint32 index);
+
+        bool    hasInstanceStream() const;
+        const GraphicBufferPtr& getInstanceStream() const;
+        uint32 getInstanceFormatSize() const;
+
 	protected:
-		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format);
-		virtual void onSetVertexFormat(const vertex_elements_type& format);
+		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format, VertexStreamType type);
+		virtual void onSetVertexFormat(const vertex_elements_type& format, uint32 index);
 		virtual void onBindIndexStream(GraphicBufferPtr indexStream);
 		virtual void onSetIndexCount(uint32 count);
 		virtual void onSetVertexCount(uint32 count);
 		virtual void onSetIndexStartIndex(uint32 index);
 		virtual void onUseIndexStream(bool flag);
-        
+
     protected:
         RenderMode mRenderMode;
-        
-        GraphicBufferPtr mVertexStream;
-        vertex_elements_type mVertexFormat;
-        
-        EffectPtr mEffect;
 
+        VertexStreamVec mVertexStreams;
+        StreamObject mInstanceStream;
+        
         uint32 mVertexStartIndex;
         uint32 mVertexCount;
 
@@ -80,6 +112,9 @@ namespace ukn {
         GraphicBufferPtr mIndexStream;
         uint32 mIndexStartIndex;
         uint32 mIndexCount;
+
+        uint32 mInstanceCount;
+        uint32 mInstanceStartIndex;
     };
 
 } // namespace ukn

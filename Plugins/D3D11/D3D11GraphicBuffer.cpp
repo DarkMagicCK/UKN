@@ -17,13 +17,11 @@ namespace ukn {
         case ukn::GraphicBuffer::Staging:
             return D3D11_USAGE_STAGING;
 		}
+        return D3D11_USAGE_DEFAULT;
 	}
 
 	inline UINT GraphicBufferAccessToD3D11Access(ukn::GraphicBuffer::Access access) {
 		switch (access) {
-        case ukn::GraphicBuffer::None:
-            return 0;
-
 		case ukn::GraphicBuffer::ReadOnly:
 			return D3D11_CPU_ACCESS_READ;
 
@@ -33,6 +31,7 @@ namespace ukn {
 		case ukn::GraphicBuffer::ReadWrite:
 			return D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
 		}
+        return 0;
 	}
 
 	inline D3D11_MAP GraphicBufferAccessToD3D11Map(ukn::GraphicBuffer::Access access) {
@@ -46,6 +45,7 @@ namespace ukn {
 		case ukn::GraphicBuffer::ReadWrite:
 			return D3D11_MAP_READ_WRITE;
 		}
+        return D3D11_MAP_READ;
 	}
 
 	D3D11VertexBuffer::D3D11VertexBuffer(GraphicBuffer::Access access,
@@ -127,27 +127,11 @@ namespace ukn {
 	}
 
 	void D3D11VertexBuffer::activate() {
-		if(mBuffer && mDevice) {
-			UINT stride = GetVertexElementsTotalSize(this->format());
-            ID3D11Buffer* buffer = mBuffer.get();
-			mDevice->getD3DDeviceContext()->IASetVertexBuffers(0, 
-													           1, 
-														       &buffer, 
-														       &stride, 
-														       &mOffset);
-		}
+		// pass
 	}
 
 	void D3D11VertexBuffer::deactivate() {
-		UINT empty = NULL;
-		ID3D11Buffer* emptyBuffer = NULL;
-		if(mDevice) {
-			mDevice->getD3DDeviceContext()->IASetVertexBuffers(0, 
-                                                               1, 
-                                                               &emptyBuffer, 
-                                                               &empty, 
-                                                               &empty);
-		}
+		// pass
 	}
 
     ID3D11Buffer* D3D11VertexBuffer::getD3DBuffer() const {

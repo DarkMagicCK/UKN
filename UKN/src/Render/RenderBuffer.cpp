@@ -30,14 +30,13 @@ namespace ukn {
     
     RenderBuffer::RenderBuffer():
     mRenderMode(RM_Triangle),
-    mVertexStream(GraphicBufferPtr()),
     mVertexStartIndex(0),
     mVertexCount(0),
     mUseIndexStream(false),
     mIndexStream(GraphicBufferPtr()),
     mIndexStartIndex(0),
     mIndexCount(0),
-    mEffect(EffectPtr()) {
+    mInstanceStartIndex(0) {
         
     }
     
@@ -53,30 +52,52 @@ namespace ukn {
         mRenderMode = mode;
     }
 
-    GraphicBufferPtr RenderBuffer::getVertexStream() const {
-        return mVertexStream;
+    GraphicBufferPtr RenderBuffer::getVertexStream(uint32 index) const {
+        if(index < mVertexStreams.size())
+            return mVertexStreams[index].stream;
     }
     
-    void RenderBuffer::bindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format) {
-        mVertexStream = vertexStream;
-        mVertexFormat = format;
+    void RenderBuffer::bindVertexStream(const GraphicBufferPtr& vertexStream, const vertex_elements_type& format) {
+        for(StreamObject& so: mVertexStreams) {
+            if(so.format == format) {
+                so.stream = vertexStream;
+                so.vertex_size = GetVertexElementsTotalSize(format);
+                so.type = VST_Geometry;
 
-		this->onBindVertexStream(vertexStream, format);
-    }
-    
-    const vertex_elements_type& RenderBuffer::getVertexFormat() const {
-        return mVertexFormat;
-    }
-    
-    void RenderBuffer::setVertexFormat(const vertex_elements_type& format) {
-        mVertexFormat = format;
+		        return;
+            }
+        }
+        StreamObject so;
+        so.stream = vertexStream;
+        so.format = format;
+        so.vertex_size = GetVertexElementsTotalSize(format);
+        so.type = VST_Geometry;
+       
+        mVertexStreams.push_back(so);
 
-		this->onSetVertexFormat(format);
+		this->onBindVertexStream(vertexStream, format, VST_Geometry);
+    }
+    
+    vertex_elements_type RenderBuffer::getVertexFormat(uint32 index) const {
+        if(index < mVertexStreams.size())
+            return mVertexStreams[index].format;
+        return vertex_elements_type();
+    }
+    
+    void RenderBuffer::setVertexFormat(const vertex_elements_type& format, uint32 index) {
+        if(index < mVertexStreams.size()) {
+            mVertexStreams[index].format = format;
+            mVertexStreams[index].vertex_size = GetVertexElementsTotalSize(format);
+            
+    		this->onSetVertexFormat(format, index);
+        } else {
+            log_error(L"RenderBuffer::setVertexFormat: invalid index");
+        }
     }
     
     uint32 RenderBuffer::getVertexCount() const {
-        if(mVertexCount == 0 && mVertexStream) {
-            return mVertexStream->count();
+        if(mVertexCount == 0 && !mVertexStreams.empty()) {
+            return mVertexStreams[0].stream->count();
         }
         return mVertexCount;
     }
@@ -99,7 +120,7 @@ namespace ukn {
         return mIndexStream;
     }
     
-    void RenderBuffer::bindIndexStream(GraphicBufferPtr indexStream) {
+    void RenderBuffer::bindIndexStream(const GraphicBufferPtr& indexStream) {
         mIndexStream = indexStream;
 
 		this->onBindIndexStream(indexStream);
@@ -137,12 +158,51 @@ namespace ukn {
     bool RenderBuffer::isUseIndexStream() const {
         return mUseIndexStream;
     }
+
+    uint32 RenderBuffer::getInstanceCount() const {
+        return mInstanceCount;
+    }
+
+    void RenderBuffer::setInstanceCount(uint32 count) {
+        mInstanceCount = count;
+    }
+
+    void RenderBuffer::bindInstanceStream(const GraphicBufferPtr& instanceStream, const vertex_elements_type& format) {
+        mInstanceStream.stream = instanceStream;
+        mInstanceStream.format = format;
+        mInstanceStream.vertex_size = GetVertexElementsTotalSize(format);
+        mInstanceStream.type = VST_Instance;
+    }
+
+    uint32 RenderBuffer::getInstanceStartIndex() const {
+        return mInstanceStartIndex;
+    }
+
+    void RenderBuffer::setInstanceStartIndex(uint32 index) {
+        mInstanceStartIndex = index;
+    }
+
+    const RenderBuffer::VertexStreamVec& RenderBuffer::getVertexStreams() const {
+        return mVertexStreams;
+    }
+
+    const GraphicBufferPtr& RenderBuffer::getInstanceStream() const {
+        return mInstanceStream.stream;
+    }
+
+    uint32 RenderBuffer::getInstanceFormatSize() const {
+        return mInstanceStream.vertex_size;
+    }
+
+    bool RenderBuffer::hasInstanceStream() const {
+        return mInstanceStream.stream && mInstanceCount > 0;
+    }
     
-	void RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format) {
+	void RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format, VertexStreamType type) {
 
 	}
 
-	void RenderBuffer::onSetVertexFormat(const vertex_elements_type& format) {
+	void RenderBuffer::onSetVertexFormat(const vertex_elements_type& format, uint32 index) {
 
 	}
 

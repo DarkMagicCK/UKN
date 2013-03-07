@@ -90,7 +90,6 @@ namespace ukn {
 
         /* to do in custom shader compiler, no use now */		
         // virtual bool initialize(const ResourcePtr& content, const VertexFormat& format) = 0;
-        void setVertexFormat(uint32 pass, const vertex_elements_type& format);
         
         /* begin */
         virtual void bind(uint32 pass) = 0;

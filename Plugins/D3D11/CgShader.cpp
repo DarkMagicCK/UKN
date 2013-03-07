@@ -76,57 +76,6 @@ namespace ukn {
     
     }
 
-    bool DxEffectPass::createLayout() {
-        if(mFormat.empty()) {
-            return false;
-        }
-        if(mVertexShader) {
-            CgDxShader* vertexShader = checked_cast<CgDxShader*>(mVertexShader.get());
-            if(mLayout)
-                return true;
-
-            if(vertexShader) {
-                ID3DBlob* vsBlob = cgD3D11GetCompiledProgram(vertexShader->getProgram());
-                if(vsBlob) {
-                    ID3D11InputLayout* layout = D3D11ShaderUtilities::CreateLayout(
-                        mDevice->getD3DDevice(),
-                        vsBlob->GetBufferPointer(),
-                        vsBlob->GetBufferSize(),
-                        mFormat);
-                    if(layout) {
-                        mLayout = MakeCOMPtr(layout);
-                        return true;
-                    }
-                }
-                else
-                    log_error("CgDxEffect::setVertexFormat: Error get compiled vertex program");
-            }
-        }
-        
-        return false;
-    }
-
-    void DxEffectPass::setVertexFormat(const vertex_elements_type& format) {
-        EffectPass::setVertexFormat(format);
-        this->createLayout();
-    }
-
-    ID3D11InputLayout* DxEffectPass::getD3D11InputLayout() const {
-        return mLayout.get();
-    }
-
-    void DxEffectPass::begin() {
-        if(mLayout) {
-            mDevice->getD3DDeviceContext()->IASetInputLayout(mLayout.get());
-            EffectPass::begin();
-        }
-    }
-
-    void DxEffectPass::end() {
-        mDevice->getD3DDeviceContext()->IASetInputLayout(0);
-        EffectPass::end();
-    }
-
     CgDxEffect::CgDxEffect(D3D11GraphicDevice* device):
         mContext(0),
         mDevice(device) {
@@ -331,5 +280,8 @@ namespace ukn {
         return mDesc;
     }
 
+    ID3DBlob* CgDxShader::getCompiledProgram() const {
+        return cgD3D11GetCompiledProgram(this->getProgram());
+    }
 
 }

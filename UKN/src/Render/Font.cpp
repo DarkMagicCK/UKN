@@ -160,7 +160,7 @@ namespace ukn {
                     if(imgw == 0 || imgh == 0)
                         return true;
                     
-                    this->rect = mist::Rectangle(0, 0, imgw, imgh, true);
+                    this->rect = mist::Rectangle(0.f, 0.f, (float)imgw, (float)imgh, true);
                     if(!placement.rect.addAtEmptySpotAutoGrow(this->rect, imgw, imgh)) {
                         return false;
                     }
@@ -509,7 +509,7 @@ namespace ukn {
     }
     
     Font::TexturePlacement* Font::getTexturePlacement(uint32 tid) {
-        if(tid < mTextures.size());
+        if(tid < mTextures.size())
             return &mTextures[tid];
         return 0;
     }

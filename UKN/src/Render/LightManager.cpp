@@ -17,6 +17,8 @@
 #include "UKN/SceneObjectWrapper.h"
 #include "UKN/Model.h"
 
+#include "mist/Profiler.h"
+
 namespace ukn {
 
     LightManager::LightManager() {
@@ -121,6 +123,8 @@ namespace ukn {
     }
 
     void LightManager::makeShadowMaps(SceneManager& scene) {
+        MIST_PROFILE(L"SHADOW_MAP");
+
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         gd.setBlendState(BlendStateObject::Opaque());

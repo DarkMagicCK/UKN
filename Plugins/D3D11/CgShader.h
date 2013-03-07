@@ -1,6 +1,7 @@
 #include "mist/Platform.h"
 #include "ukn/Shader.h"
 
+#include <d3dcommon.h>
 #include "Cg/cg.h"
 
 #if defined(MIST_PLATFORM_32)
@@ -22,17 +23,8 @@ namespace ukn {
         DxEffectPass(Effect* parent, D3D11GraphicDevice*);
         virtual ~DxEffectPass();
 
-        bool createLayout();
-        ID3D11InputLayout* getD3D11InputLayout() const;
-
-        void begin() override;
-        void end() override;
-        
-        void setVertexFormat(const vertex_elements_type& format) override;
-
     private:
         D3D11GraphicDevice* mDevice;
-        COM<ID3D11InputLayout>::Ptr mLayout;
     };
 
     class CgDxEffect: public Effect {
@@ -68,7 +60,6 @@ namespace ukn {
         bool setFloatVariable(const char* name, uint32 len, const float* vals) override;
         bool setIntVariable(const char* name, uint32 len, const int* vals) override;
         
-
 	    bool getMatrixVariable(const char* name, Matrix4& mat) override;
 	    bool getFloatVectorVariable(const char* name, float4& vec) override;
 	    bool getIntVectorVariable(const char* name, int4& vec) override;
@@ -79,6 +70,8 @@ namespace ukn {
         CGprogram getProgram() const;
         CGcontext getContext() const;
         const ShaderDesc& getDesc() const;
+
+        ID3DBlob* getCompiledProgram() const;
 
     private:
         CGprogram mProgram;

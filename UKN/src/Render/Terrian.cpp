@@ -293,9 +293,7 @@ namespace ukn {
     }
 
     float GridTerrianLightening::heightFunc(float x, float y) {
-        return mist::PerlinNoise::Gen(x * mNoise,
-                                      y * mNoise,
-                                      0) * mNoiseWeight;
+        return 0;
     }
 
     bool GridTerrianLightening::build() {
@@ -399,7 +397,7 @@ namespace ukn {
                     sum += normals[i];
                     c++;
                 }
-                sum /= c;
+                sum /= (float)c;
 
                 uint32 current = z * this->mWidth + x;
 

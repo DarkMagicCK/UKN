@@ -38,6 +38,7 @@
 #include "mist/Convert.h"
 #include "mist/TimeUtil.h"
 #include "mist/Query.h"
+#include "mist/Profiler.h"
 
 #include <vector>
 #include <map>
@@ -105,15 +106,14 @@ int CALLBACK WinMain(
                   .fps(60)
                )
         .connectUpdate([&](ukn::Window* ) {
-            for(int i=0; i<200; ++i) {
+            for(int i=0; i<50; ++i) {
                 pointLights[i]->setPosition(ukn::float3(
-                                            sinf(r + rs[i]) * i / 2,
+                                            sinf(r + rs[i]) * i + 30,
                                             5,
-                                            cosf(r + rs[i]) * i / 2));
-                pointLights[i]->setRadius(pointLights[i]->getRadius() + 0.01f);
+                                            cosf(r + rs[i]) * i + 30));
             }
             
-            r += ukn::d_pi / 180;
+            r += (float)ukn::d_pi / 180.f;
         })
         .connectKey([&](ukn::Window* window, ukn::input::KeyEventArgs& e) {
             if(e.key == ukn::input::Escape)
@@ -146,8 +146,14 @@ int CALLBACK WinMain(
             
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
             
-            scene.getLightManager()->makeShadowMaps(scene);
-            deferredRenderer->renderScene(scene);
+            {
+                scene.getLightManager()->makeShadowMaps(scene);
+            }
+            {
+                deferredRenderer->renderScene(scene);
+            }
+
+            // to do with rendering shader
 
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
            
@@ -178,11 +184,24 @@ int CALLBACK WinMain(
 
 
             if(font) {
+                mist::ProfileData shadowMapProf = mist::Profiler::Instance().get(L"SHADOW_MAP");
+                mist::ProfileData gbufferProf = mist::Profiler::Instance().get(L"DEFERRED_GBUFFER");
+                mist::ProfileData lightMapPro = mist::Profiler::Instance().get(L"DEFERRED_LIGHTMAP");
+
                 font->begin();
                 font->draw(gd.description().c_str(), 0, 20, ukn::FA_Left, ukn::color::Skyblue);
                 font->draw((ukn::FormatString(L"FPS: {0}"), mist::FrameCounter::Instance().getCurrentFps()),
                             0, 
                             0, 
+                            ukn::FA_Left,
+                            ukn::color::Skyblue);
+
+                font->draw((ukn::FormatString(L"ShadowMap: {0}\nGBuffer: {1}\nLightMap: {2}"), 
+                                shadowMapProf.time,
+                                gbufferProf.time,
+                                lightMapPro.time),
+                            0, 
+                            40, 
                             ukn::FA_Left,
                             ukn::color::Skyblue);
 
@@ -251,8 +270,8 @@ int CALLBACK WinMain(
                                                            false, 
                                                            1024);
            */
-            for(int i=0; i<200; ++i) {
-                pointLights[i]  = ukn::MakeSharedPtr<ukn::PointLight>(ukn::float3(i / 2+ 10,
+            for(int i=0; i<50; ++i) {
+                pointLights[i]  = ukn::MakeSharedPtr<ukn::PointLight>(ukn::float3(i + 30,
                                                                                5,
                                                                                0),
                                                                    20.f,

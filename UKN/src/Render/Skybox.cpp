@@ -22,8 +22,8 @@ namespace ukn {
 
     bool Skybox::load(const ResourcePtr& resource) {
         GraphicFactory& factory = Context::Instance().getGraphicFactory();
-        mTexture = factory.load2DTexture(resource, false);
-        if(!mTexture) {
+        mDiffuseTex = factory.load2DTexture(resource, false);
+        if(!mDiffuseTex) {
             log_error(L"Skybox::load: error loading texture");
             return false;
         }
@@ -34,23 +34,7 @@ namespace ukn {
     void Skybox::render() {
         if(mRenderBuffer) {
             GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-
-            // reset world matrix
-            FrameBufferPtr fb = gd.getCurrFrameBuffer();
-            CameraPtr cam = fb->getViewport().camera;
-            
-            Matrix4 mat = Matrix4::ScaleMat(100, 100, 100);
-            if(cam) {
-                Vector3 eye = cam->getEyePos();
-               // mat.translate(eye.x(), eye.y(), eye.z());
-            }
-            Ukn2DHelper& helper = Ukn2DHelper::Instance();
-            helper.bindTexture(mTexture);
-            helper.setupMat(cam->getProjMatrix(), mat);
-
-            helper.begin();
             gd.renderBuffer(mRenderBuffer);
-            helper.end();
 
         } else {
             log_error(L"Skybox::render: invalid render buffer");
@@ -58,7 +42,7 @@ namespace ukn {
     }
 
     bool Skybox::buildVertices(const GraphicFactory& factory) {
-        Vertex2D vertices[6* 6];
+        VertexUVNormal vertices[6* 6];
 
         float half4 = 0.25f;
         float half2 = 0.5f;
@@ -85,28 +69,28 @@ namespace ukn {
         uint32 idx = 0;
         
         // front, 0123
-        vertices[idx++].xyz = v[0]; vertices[idx++].xyz = v[1]; vertices[idx++].xyz = v[2];
-        vertices[idx++].xyz = v[2]; vertices[idx++].xyz = v[3]; vertices[idx++].xyz = v[0];
+        vertices[idx++].position = v[0]; vertices[idx++].position = v[1]; vertices[idx++].position = v[2];
+        vertices[idx++].position = v[2]; vertices[idx++].position = v[3]; vertices[idx++].position = v[0];
 
         // left, 1265
-        vertices[idx++].xyz = v[1]; vertices[idx++].xyz = v[2]; vertices[idx++].xyz = v[6];
-        vertices[idx++].xyz = v[6]; vertices[idx++].xyz = v[5]; vertices[idx++].xyz = v[1];
+        vertices[idx++].position = v[1]; vertices[idx++].position = v[2]; vertices[idx++].position = v[6];
+        vertices[idx++].position = v[6]; vertices[idx++].position = v[5]; vertices[idx++].position = v[1];
 
         // back, 4567
-        vertices[idx++].xyz = v[4]; vertices[idx++].xyz = v[5]; vertices[idx++].xyz = v[6];
-        vertices[idx++].xyz = v[6]; vertices[idx++].xyz = v[7]; vertices[idx++].xyz = v[4];
+        vertices[idx++].position = v[4]; vertices[idx++].position = v[5]; vertices[idx++].position = v[6];
+        vertices[idx++].position = v[6]; vertices[idx++].position = v[7]; vertices[idx++].position = v[4];
 
         // right, 0374
-        vertices[idx++].xyz = v[0]; vertices[idx++].xyz = v[3]; vertices[idx++].xyz = v[7];
-        vertices[idx++].xyz = v[7]; vertices[idx++].xyz = v[4]; vertices[idx++].xyz = v[0];
+        vertices[idx++].position = v[0]; vertices[idx++].position = v[3]; vertices[idx++].position = v[7];
+        vertices[idx++].position = v[7]; vertices[idx++].position = v[4]; vertices[idx++].position = v[0];
 
         // top, 2376
-        vertices[idx++].xyz = v[2]; vertices[idx++].xyz = v[3]; vertices[idx++].xyz = v[7];
-        vertices[idx++].xyz = v[7]; vertices[idx++].xyz = v[6]; vertices[idx++].xyz = v[2];
+        vertices[idx++].position = v[2]; vertices[idx++].position = v[3]; vertices[idx++].position = v[7];
+        vertices[idx++].position = v[7]; vertices[idx++].position = v[6]; vertices[idx++].position = v[2];
 
         // bottom, 0154
-        vertices[idx++].xyz = v[0]; vertices[idx++].xyz = v[1]; vertices[idx++].xyz = v[5];
-        vertices[idx++].xyz = v[5]; vertices[idx++].xyz = v[4]; vertices[idx++].xyz = v[0];
+        vertices[idx++].position = v[0]; vertices[idx++].position = v[1]; vertices[idx++].position = v[5];
+        vertices[idx++].position = v[5]; vertices[idx++].position = v[4]; vertices[idx++].position = v[0];
 
         idx = 0;
 
@@ -133,12 +117,26 @@ namespace ukn {
                                                    GraphicBuffer::Static,
                                                    6 * 6,
                                                    vertices,
-                                                   Vertex2D::Format());
+                                                   VertexUVNormal::Format());
         if(mVertexBuffer) {
-            mRenderBuffer->bindVertexStream(mVertexBuffer, Vertex2D::Format());
+            mRenderBuffer->bindVertexStream(mVertexBuffer, VertexUVNormal::Format());
 
         }
         return mRenderBuffer && mVertexBuffer;
+    }
+
+    
+    const UknString& Skybox::getName() const {
+        static UknString name(L"SkyBox");
+        return name;
+    }
+        
+    Box Skybox::getBound() const {
+        return Box();
+    }
+
+    RenderBufferPtr Skybox::getRenderBuffer() const {
+        return mRenderBuffer;
     }
 
 }

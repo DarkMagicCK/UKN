@@ -133,7 +133,7 @@ namespace ukn {
         return this->setIntVariable(name, 2, vec.value);
     }
 
-    bool Shader::setIntVariable(const char* name, float v) {
+    bool Shader::setIntVariable(const char* name, int32 v) {
         int32 tv = v;
         return this->setIntVariable(name, 1, &tv);
     }

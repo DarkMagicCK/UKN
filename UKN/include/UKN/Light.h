@@ -20,8 +20,6 @@ namespace ukn {
         LightSource(LightSourceType type);
         virtual ~LightSource();
 
-        virtual void update();
-
     public:
         LightSourceType type() const;
         
@@ -29,6 +27,7 @@ namespace ukn {
         const float4& getColor() const;
         const float3& getPosition() const;
         float getIntensity() const;
+        float getDepthBias() const;
 
         virtual void setDirection(const float3& dir);
         virtual void setColor(const float4& color);
@@ -36,6 +35,7 @@ namespace ukn {
         virtual void setPosition(const float3& pos);
         virtual void setIntensity(float intensity);
         virtual void setCastShadows(bool flag);
+        virtual void setDepthBias(float bias);
 
         bool getCastShadows() const;
         bool getEnabled() const;
@@ -60,6 +60,7 @@ namespace ukn {
         float4 mColor;
         float3 mPosition;
         float  mIntensity;
+        float  mDepthBias;
         bool   mCastShadows;
         bool   mEnabled;
 
@@ -76,16 +77,21 @@ namespace ukn {
     class UKN_API DirectionalLight: public LightSource {
     public:
         DirectionalLight();
-        DirectionalLight(const float3& dir, const float4& color, float intensity,
-                         bool castShadows, int shadowMapResolution);
+        DirectionalLight(const float3& dir,
+                         const float4& color, float intensity,
+                         bool castShadows = false, int shadowMapResolution = 256);
         virtual ~DirectionalLight();
 
     public:
-        void update() override;
         const CameraPtr& getCamera(uint32 index) const override;
         void setCastShadows(bool flag) override;
 
+        void setPosition(const float3& pos) override;
+        void setDirection(const float3& dir) override;
+
     private:
+        void updateCamera();
+
         CameraPtr mCamera;
     };
 
@@ -96,48 +102,51 @@ namespace ukn {
         SpotLight();
         SpotLight(const float3& position, const float3& direction,
                   const float4& color, float intensity,
-                  bool castShadows, int shadowMapResolution,
-                  const TexturePtr& attenuationTex);
+                  const TexturePtr& attenuationTex,
+                  bool castShadows = false, int shadowMapResolution = 256);
         virtual ~SpotLight();
 
         float getFOV() const;
-        float getDepthBias() const;
-
-        void setDepthBias(float bias);
         float lightAngleCos();
 
-    
     public:
-        void update() override;
         const CameraPtr& getCamera(uint32 index) const override;
         
         void setCastShadows(bool flag) override;
 
     private:
-        float mFOV;
-        float mDepthBias;
+        void updateCamera();
 
+        float mFOV;
         CameraPtr mCam;
     };
 
     typedef SharedPtr<SpotLight> SpotLightPtr;
 
-    class PointLight: public LightSource {
+    class UKN_API PointLight: public LightSource {
     public:
         PointLight();
+        PointLight(const float3& position, float radius,
+                   const float4& color, float intensity,
+                   bool castShadows = false, int shadowMapResolution = 256);
         virtual ~PointLight();
 
         float getRadius() const;
         void setRadius(float r);
 
     public:
-        void update() override;
+        const CameraPtr& getCamera(uint32 index) const override;
+        
+        void setPosition(const float3& pos);
 
     private:
+        void updateCamera();
+
         CameraPtr mCamera[6];
         float mRadius;
-
     };
+
+    typedef SharedPtr<PointLight> PointLightPtr;
 
 } // namespace ukn
 

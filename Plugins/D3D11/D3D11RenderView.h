@@ -70,7 +70,7 @@ namespace ukn {
 		ID3D11DepthStencilView* getD3D11DepthStencilView() const;
 
 	private:
-        void createDSView(ElementFormat ef, int32 sampleCount);
+        void createDSView(uint32 bindFlag, ElementFormat ef, int32 sampleCount);
 
         TexturePtr mTexture;
 		COM<ID3D11Texture2D>::Ptr mDepthStencilBuffer;

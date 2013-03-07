@@ -61,6 +61,7 @@ namespace ukn {
                     }
                     mShaderResourceView = MakeCOMPtr(shaderResourceView);
                     mTexture->GetDesc(&mDesc);
+                    this->mBindFlag = TB_Texture;
                     return true;
             }
         }
@@ -69,6 +70,8 @@ namespace ukn {
     }
 
     bool D3D11Texture2D::create(uint32 w, uint32 h, uint32 mipmaps, ElementFormat format, const uint8* initialData, uint32 flag) {
+        this->mBindFlag = flag;
+        
         D3D11_TEXTURE2D_DESC desc;
 
         ZeroMemory(&desc, sizeof(desc));
@@ -84,6 +87,11 @@ namespace ukn {
         DWORD bindFlags = 0;
         if(flag & TB_DepthStencil) {
             bindFlags |= D3D11_BIND_DEPTH_STENCIL;
+            if(flag & TB_Texture) {
+                // for a depth-stencil view with shader-resource, the format
+                // must be DXGI_FORMAT_R32_TYPELESS from MSDN
+                desc.Format = DXGI_FORMAT_R32_TYPELESS;
+            }
         }
         if(flag & TB_RenderTarget) {
             bindFlags |= D3D11_BIND_RENDER_TARGET;
@@ -110,20 +118,15 @@ namespace ukn {
         }
         mTexture = MakeCOMPtr(texture);
 
-        desc.Usage = D3D11_USAGE_STAGING;
-        desc.BindFlags = 0;
-        desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
-
-        ID3D11Texture2D* stagingTexture;
-        mDevice->getD3DDevice()->CreateTexture2D(&desc, 0, &stagingTexture);
-        if(stagingTexture)
-            mStagingTexture = MakeCOMPtr(stagingTexture);
-
         if(bindFlags & D3D11_BIND_SHADER_RESOURCE) {
             D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
 
             ZeroMemory(&srvDesc, sizeof(srvDesc));
-            srvDesc.Format = desc.Format;
+            if(bindFlags & D3D11_BIND_DEPTH_STENCIL) 
+                // choose something equal to R32_TYPELESS here
+                srvDesc.Format = DXGI_FORMAT_R32_FLOAT;
+            else
+                srvDesc.Format = desc.Format;
             srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
             srvDesc.Texture2D.MipLevels = desc.MipLevels;
             srvDesc.Texture1D.MostDetailedMip = desc.MipLevels - 1;
@@ -150,6 +153,20 @@ namespace ukn {
 
     }
 
+    void D3D11Texture2D::makeStagingTexture() {
+        D3D11_TEXTURE2D_DESC desc;
+        memcpy(&desc, &mDesc, sizeof(D3D11_TEXTURE2D_DESC));
+
+        desc.Usage = D3D11_USAGE_STAGING;
+        desc.BindFlags = 0;
+        desc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+
+        ID3D11Texture2D* stagingTexture;
+        mDevice->getD3DDevice()->CreateTexture2D(&desc, 0, &stagingTexture);
+        if(stagingTexture)
+            mStagingTexture = MakeCOMPtr(stagingTexture);
+    }
+
     void* D3D11Texture2D::map(uint32 level) {
 #if defined(UKN_D3D10)
         D3D11_MAPPED_TEXTURE2D mappedTex;
@@ -170,7 +187,11 @@ namespace ukn {
         }
         return SharedPtr<uint8>();
 #endif
+        if(!mStagingTexture)
+            this->makeStagingTexture();
+
         if(mStagingTexture) {
+          
             mDevice->getD3DDeviceContext()->CopyResource(mStagingTexture.get(), mTexture.get());
             D3D11_MAPPED_SUBRESOURCE mappedTex;
 
@@ -190,6 +211,8 @@ namespace ukn {
         
       //      mDevice->getD3DDeviceContext()->Unmap(mTexture.get(), 0);
             return mappedTex.pData;
+        } else {
+            log_error(L"D3D11Texture2D::map: unable to create a staging texture to copy resource");
         }
         return 0;
     }

@@ -116,30 +116,37 @@ namespace ukn {
                 log_error(L"D3D1DepthStencilRenderView: Error create depth stencil texture 2d");
             else {
                 mDepthStencilBuffer = MakeCOMPtr(depthBufferTex);
-                this->createDSView(ef, sampleCount);
+                this->createDSView(TB_DepthStencil, ef, sampleCount);
             }
     }
 
     D3D11DepthStencilRenderView::D3D11DepthStencilRenderView(const TexturePtr& texture, D3D11GraphicDevice* device):
     D3D11RenderView(device) {
-        mTexture = texture;
-        mDepthStencilBuffer = (ID3D11Texture2D*)mTexture->getTextureId();
-        // temp
-        this->createDSView(texture->format(), 1);
+        if(texture->type() != TT_Texture2D) {
+            log_error("D3D11DepthStencilRenderView: invalid texture format");
+        } else {
+            mTexture = texture;
+            mDepthStencilBuffer = (ID3D11Texture2D*)mTexture->getTextureId();
+            // temp
+            this->createDSView(((D3D11Texture*)texture.get())->getTextureId(), 
+                                texture->format(), 
+                                1);
+        }
     }
 
     D3D11DepthStencilRenderView::~D3D11DepthStencilRenderView() {
     }
 
-    void D3D11DepthStencilRenderView::createDSView(ElementFormat ef, int32 sampleCount) {
+    void D3D11DepthStencilRenderView::createDSView(uint32 bindFlag, ElementFormat ef, int32 sampleCount) {
         ID3D11Device* idevice = mGraphicDevice->getD3DDevice();
 
         D3D11_DEPTH_STENCIL_VIEW_DESC depthStencilViewDesc;
         ZeroMemory(&depthStencilViewDesc, sizeof(depthStencilViewDesc));
+
         depthStencilViewDesc.Format = ElementFormatToDxGIFormat(ef);
         depthStencilViewDesc.ViewDimension = sampleCount > 1 ? D3D11_DSV_DIMENSION_TEXTURE2DMS : D3D11_DSV_DIMENSION_TEXTURE2D;
         depthStencilViewDesc.Texture2D.MipSlice = 0;
-
+        
         ID3D11DepthStencilView* view;
         HRESULT result = idevice->CreateDepthStencilView(mDepthStencilBuffer.get(), 
                                                          &depthStencilViewDesc, 

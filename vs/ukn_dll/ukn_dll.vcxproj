@@ -186,7 +186,6 @@
     <ClCompile Include="..\..\UKN\src\Render\Shader.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\ShaderManager.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Skybox.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\SkyDome.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Terrian.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Texture.cpp" />

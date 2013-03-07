@@ -20,7 +20,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ukn_win_test", "ukn_win_tes
 		{1BDF3CCB-F71F-445A-A748-A08681D01606} = {1BDF3CCB-F71F-445A-A748-A08681D01606}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3D10Plugin", "D3D10Plugin\D3D10Plugin.vcxproj", "{C424847A-BE07-4086-BCC4-4E1AD76F93F3}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3D11Plugin", "D3D10Plugin\D3D10Plugin.vcxproj", "{C424847A-BE07-4086-BCC4-4E1AD76F93F3}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1BDF3CCB-F71F-445A-A748-A08681D01606} = {1BDF3CCB-F71F-445A-A748-A08681D01606}
 	EndProjectSection
@@ -66,5 +66,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

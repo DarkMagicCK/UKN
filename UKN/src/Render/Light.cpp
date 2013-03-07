@@ -15,17 +15,15 @@ namespace ukn {
     mColor(float4(1, 1, 1, 1)),
     mPosition(float3(0, 0, 0)),
     mIntensity(0.f),
+    mDepthBias(1.f / 2000.f),
     mCastShadows(false),
     mEnabled(true),
     mShadowMapResolution(0) {
+
     }
 
     LightSource::~LightSource() {
 
-    }
-
-    void LightSource::update() {
-    
     }
 
     LightSourceType LightSource::type() const {
@@ -58,6 +56,10 @@ namespace ukn {
 
     void LightSource::setColor(const Color& color) {
         mColor = color.c;
+    }
+
+    void LightSource::setDepthBias(float bias) {
+        mDepthBias = bias;
     }
 
     int32 LightSource::getShadowMapResolution() const {
@@ -113,12 +115,18 @@ namespace ukn {
         return mWorldMat;
     }
 
+    float LightSource::getDepthBias() const {
+        return mDepthBias;
+    }
+
     DirectionalLight::DirectionalLight():
     LightSource(LS_Directional) {
 
     }
     
-    DirectionalLight::DirectionalLight(const float3& _dir, const float4& _color, float _intensity, bool castShadows, int shadowMapResolution):
+    DirectionalLight::DirectionalLight(const float3& _dir, const float4& _color, 
+                                       float _intensity, 
+                                       bool castShadows, int shadowMapResolution):
     LightSource(LS_Directional),
     mCamera(MakeSharedPtr<Camera>()){
         mDirection = _dir;
@@ -127,14 +135,14 @@ namespace ukn {
         mShadowMapResolution = shadowMapResolution;
         
         this->setCastShadows(castShadows);
-        this->update();
+        this->updateCamera();
     }
 
     DirectionalLight::~DirectionalLight() {
 
     }
 
-    void DirectionalLight::update() {
+    void DirectionalLight::updateCamera() {
         const GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         const CameraPtr& cp = gd.getCurrFrameBuffer()->getViewport().camera;
         
@@ -183,11 +191,10 @@ namespace ukn {
 
     SpotLight::SpotLight(const float3& position, const float3& direction,
                          const float4& color, float intensity,
-                         bool castShadows, int shadowMapResolution,
-                         const TexturePtr& attenuationTex):
+                         const TexturePtr& attenuationTex,
+                         bool castShadows, int shadowMapResolution):
     LightSource(LS_Spot),
-    mFOV(d_pi_2),
-    mDepthBias(1.f / 2000.f),
+    mFOV(pi_2),
     mCam(MakeSharedPtr<Camera>()){
 
         mPosition = position;
@@ -198,7 +205,7 @@ namespace ukn {
         mAttenuationTexture = attenuationTex;
         
         this->setCastShadows(castShadows);
-        this->update();
+        this->updateCamera();
     }
 
     SpotLight::SpotLight():
@@ -214,19 +221,11 @@ namespace ukn {
         return mFOV;
     }
 
-    float SpotLight::getDepthBias() const {
-        return mDepthBias;
-    }
-
-    void SpotLight::setDepthBias(float bias) {
-        mDepthBias = bias;
-    }
-
     float SpotLight::lightAngleCos() {
         return cosf(mFOV);
     }
 
-    void SpotLight::update() {
+    void SpotLight::updateCamera() {
         float3 target = mPosition + mDirection;
         if(target.sqrLength() == 0) 
             target = -Vector3::Up();
@@ -263,6 +262,14 @@ namespace ukn {
         mWorldMat = scaling * Matrix4::RotMat(rot.x(), rot.y(), rot.z()) * translation;
     }
 
+    void DirectionalLight::setPosition(const float3& pos) {
+        this->updateCamera();
+    }
+
+    void DirectionalLight::setDirection(const float3& dir) {
+        this->updateCamera();
+    }
+
     const CameraPtr& SpotLight::getCamera(uint32 index) const {
         return mCam;
     }
@@ -289,12 +296,26 @@ namespace ukn {
 
     }
 
-    PointLight::~PointLight() {
+    PointLight::PointLight(const float3& position, float radius, 
+                           const float4& color, float intensity,
+                           bool castShadows, int shadowMapResolution):
+    LightSource(LS_Point) {
+        for(int i=0; i<6; ++i) {
+            mCamera[i] = MakeSharedPtr<Camera>();
+        }
+        mPosition = position;
+        mRadius = radius;
+        mColor = color;
+        mIntensity = intensity;
+    
+        mShadowMapResolution = shadowMapResolution;
+        this->setCastShadows(castShadows);
 
+        this->updateCamera();
     }
 
-    void PointLight::update() {
-        mWorldMat = Matrix4::ScaleMat(mRadius, mRadius, mRadius).translate(mPosition[0], mPosition[1], mPosition[2]);
+    PointLight::~PointLight() {
+
     }
 
     float PointLight::getRadius() const {
@@ -303,6 +324,48 @@ namespace ukn {
 
     void PointLight::setRadius(float r) {
         mRadius = r;
+
+        this->updateCamera();
+    }
+
+    void PointLight::setPosition(const float3& pos) {
+        LightSource::setPosition(pos);
+
+        this->updateCamera();
+    }
+
+    void PointLight::updateCamera() {
+        // foreword, backword, left, right, down, up
+        mCamera[0]->setViewParams(this->getPosition(),
+                                  this->getPosition() + Vector3::Forward(),
+                                  Vector3::Up());
+        mCamera[1]->setViewParams(this->getPosition(),
+                                  this->getPosition() + Vector3::Backward(),
+                                  Vector3::Up());
+        mCamera[2]->setViewParams(this->getPosition(),
+                                  this->getPosition() + Vector3::Left(),
+                                  Vector3::Up());
+        mCamera[3]->setViewParams(this->getPosition(),
+                                  this->getPosition() + Vector3::Right(),
+                                  Vector3::Up());
+        mCamera[4]->setViewParams(this->getPosition(),
+                                  this->getPosition() + Vector3::Down(),
+                                  Vector3::Forward());
+        mCamera[5]->setViewParams(this->getPosition(),
+                                  this->getPosition() + Vector3::Up(),
+                                  Vector3::Backward());
+        mWorldMat = Matrix4::ScaleMat(mRadius, mRadius, mRadius).translate(mPosition[0], mPosition[1], mPosition[2]);
+        
+        for(int i=0; i<6; ++i)
+            mCamera[i]->setProjParams(pi_2,
+                                      1.0f,
+                                      1.0f,
+                                      mRadius);
+
+    }
+
+    const CameraPtr& PointLight::getCamera(uint32 index) const {
+        return mCamera[index];
     }
 
 } // namespace ukn

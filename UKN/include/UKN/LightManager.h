@@ -15,6 +15,7 @@ namespace ukn {
         typedef std::vector<LightSourcePtr> LightSourceVec;
         const LightSourceVec& getDirectionalLights() const;
         const LightSourceVec& getSpotLights() const;
+        const LightSourceVec& getPointLights() const;
 
         void addLight(const LightSourcePtr& light);
         void removeLight(const LightSourcePtr& light);
@@ -29,6 +30,7 @@ namespace ukn {
         
         LightSourceVec mDirectionalLights;
         LightSourceVec mSpotLights;
+        LightSourceVec mPointLights;
 
         EffectPtr mDepthWriteEffect;
         EffectPassPtr mEXPDepthMapPass;

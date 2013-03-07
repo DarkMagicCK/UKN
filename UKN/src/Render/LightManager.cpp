@@ -22,6 +22,7 @@ namespace ukn {
     LightManager::LightManager() {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
 
+        // tests
         mDepthWriteEffect = gf.createEffect();
         ukn::ShaderPtr vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/expdepth_vert.cg"), 
                                                                         VERTEX_SHADER_DESC("VertexProgram"));
@@ -45,7 +46,10 @@ namespace ukn {
 
         mShadowMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
 
-        mSpotLightGeometry = ModelLoader::BuildFromSphere(mist::Sphere(Vector3(0, 0, 0), 1), 10);
+        // temporary 
+        mSpotLightGeometry = ModelLoader::BuildFromSphere(mist::Sphere(Vector3(0, 0, 0), 1), 5);
+    
+        mPointLightGeometry = ModelLoader::BuildFromSphere(mist::Sphere(Vector3(0, 0, 0), 1), 5);
     }
 
     LightManager::~LightManager() {
@@ -60,11 +64,15 @@ namespace ukn {
         return mSpotLights;
     }
 
+    const LightManager::LightSourceVec& LightManager::getPointLights() const {
+        return mPointLights;
+    }
+
     void LightManager::addLight(const LightSourcePtr& light) {
         switch(light->type()) {
         case LS_Directional: mDirectionalLights.push_back(light); break;
         case LS_Spot:        mSpotLights.push_back(light); break;
-        case LS_Point:       break;
+        case LS_Point:       mPointLights.push_back(light); break;
         }
     }
 
@@ -78,7 +86,10 @@ namespace ukn {
                                                            mSpotLights.end(),
                                                            light),
                                                mSpotLights.end()); break;
-        case LS_Point:       break;
+        case LS_Point:       mPointLights.erase(std::remove(mPointLights.begin(),
+                                                            mPointLights.end(),
+                                                            light),
+                                                mPointLights.end());
         }
     }
 
@@ -91,10 +102,12 @@ namespace ukn {
             pass = mEXPDepthMapPass;
 
         mShadowMapRT->attach(ATT_Color0, ls->getShadowMap());
-        mShadowMapRT->attach(ATT_DepthStencil, ls->getDSView());
+        mShadowMapRT->attach(ATT_DepthStencil, 
+                             ls->getDSView());
+
         mShadowMapRT->attachToRender();
 
-        gd.clear(CM_Color | CM_Depth, color::Transparent, 1.0f, 0.f);
+        gd.clear(CM_Color | CM_Depth, color::Transparent, 1.0f, 0);
 
         Shader* fragmentShader = mDepthMapPass->getFragmentShader().get();
         fragmentShader->setFloatVectorVariable("lightPosition", ls->getPosition());
@@ -113,11 +126,9 @@ namespace ukn {
         gd.setBlendState(BlendStateObject::Opaque());
         gd.setDepthStencilState(DepthStencilStateObject::Default());
         gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
-        
+
         LightManagerPtr lights = scene.getLightManager();
         for(const LightSourcePtr& light: lights->getDirectionalLights()) {
-            light->update();
-
             if(light->getCastShadows()) {
                 mShadowMapRT->attachCamera(light->getCamera(0));
                 this->renderShadowMap(gd, scene, light);
@@ -126,8 +137,6 @@ namespace ukn {
 
         lights = scene.getLightManager();
         for(const LightSourcePtr& light: lights->getSpotLights()) {
-            light->update();
-
             if(light->getCastShadows()) {
                 mShadowMapRT->attachCamera(light->getCamera(0));
                 this->renderShadowMap(gd, scene, light);

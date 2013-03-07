@@ -3,6 +3,7 @@
 
 
 #include "UKN/PreDeclare.h"
+#include "UKN/Renderable.h"
 
 namespace ukn {
 
@@ -11,7 +12,7 @@ namespace ukn {
         since TextureCubemap is not done yet
     */
 
-    class UKN_API Skybox {
+    class UKN_API Skybox: public Renderable {
     public:
         Skybox();
         ~Skybox();
@@ -20,6 +21,11 @@ namespace ukn {
         bool load(const ResourcePtr& resource);
 
         void render();
+
+        const UknString& getName() const override;
+        
+        Box getBound() const  override;
+        RenderBufferPtr getRenderBuffer() const override;
 
     private:
         bool buildVertices(const GraphicFactory& factory);

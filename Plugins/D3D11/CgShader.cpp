@@ -256,7 +256,6 @@ namespace ukn {
             CGparameter param = cgGetNamedParameter(mProgram, name);
             if(_check_error(mContext) && param) {
                 cgD3D11SetTextureParameter(param, (ID3D11Resource*)tex->getTextureId());
-                cgD3D11SetSamplerStateParameter(param, 0);
                 return _check_error(mContext);
             }
         }

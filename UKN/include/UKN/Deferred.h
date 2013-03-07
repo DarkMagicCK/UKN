@@ -55,7 +55,6 @@ namespace ukn {
         EffectPassPtr mDirectionalLightPass;
         EffectPassPtr mSpotLightPass;
         EffectPassPtr mPointLightPass;
-        EffectPassPtr mSpotlightPass;
         EffectPassPtr mCompositePass;
 
         CompositeRenderTargetPtr mGBufferRT;

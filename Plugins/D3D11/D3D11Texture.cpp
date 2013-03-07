@@ -11,12 +11,17 @@ namespace ukn {
                                uint32 access_hint, 
                                D3D11GraphicDevice* device):
     Texture(type, sample_count, sample_quality, access_hint),
-    mDevice(device) {
+    mDevice(device),
+    mBindFlag(0) {
 
     }
 
     D3D11Texture::~D3D11Texture() {
 
+    }
+
+    uint32 D3D11Texture::getBindFlag() const {
+        return mBindFlag;
     }
 
     uint32 D3D11Texture::width(uint32 level) const {

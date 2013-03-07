@@ -142,7 +142,7 @@ namespace ukn {
 
         bool setIntVectorVariable(const char* name, const int3& vec);
         bool setIntVectorVariable(const char* name, const int2& vec);
-        bool setIntVariable(const char* name, float v);
+        bool setIntVariable(const char* name, int32 v);
 
     };
     

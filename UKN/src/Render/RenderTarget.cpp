@@ -42,8 +42,8 @@ namespace ukn {
     }
 
     RenderTarget::RenderTarget(uint32 width,
-                    uint32 height,
-                    ElementFormat depth_stencil_format) {
+                               uint32 height,
+                               ElementFormat depth_stencil_format) {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         
         mTexture = gf.create2DTexture(width, 

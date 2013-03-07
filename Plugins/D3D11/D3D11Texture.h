@@ -26,10 +26,13 @@ namespace ukn {
         
         /* may be null if bindFlag & TB_Texture = 0 */
         ID3D11ShaderResourceView* getShaderResourceView() const;
+        
+        uint32 getBindFlag() const;
 
     protected:
         COM<ID3D11ShaderResourceView>::Ptr mShaderResourceView;
         D3D11GraphicDevice* mDevice;
+        uint32 mBindFlag;
     };
 
 	class D3D11Texture2D: public D3D11Texture {
@@ -58,6 +61,8 @@ namespace ukn {
 		ID3D11Texture2D* getTexture() const;
 
 	private:
+        void makeStagingTexture();
+
 		COM<ID3D11Texture2D>::Ptr mTexture;
         D3D11_TEXTURE2D_DESC mDesc;
 

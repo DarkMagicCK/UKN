@@ -73,6 +73,17 @@ int CALLBACK WinMain(
     ukn::LightSourcePtr directionalLight;
 
     ukn::DeferredRendererPtr deferredRenderer;
+
+    ukn::PointLightPtr pointLights[200];
+    float rs[200];
+
+    enum Mode {
+        LightMap,
+        Scene,
+        All,
+    };
+
+    Mode mode = Scene;
     
 #ifndef MIST_OS_WINDOWS
     ukn::GraphicFactoryPtr factory;
@@ -93,15 +104,22 @@ int CALLBACK WinMain(
                   .graphicFactoryName(L"D3D11Plugin.dll")
                   .fps(60)
                )
-        .connectUpdate([](ukn::Window* ) {
-
+        .connectUpdate([&](ukn::Window* ) {
+            for(int i=0; i<200; ++i) {
+                pointLights[i]->setPosition(ukn::float3(
+                                            sinf(r + rs[i]) * i / 2,
+                                            5,
+                                            cosf(r + rs[i]) * i / 2));
+                pointLights[i]->setRadius(pointLights[i]->getRadius() + 0.01f);
+            }
+            
+            r += ukn::d_pi / 180;
         })
         .connectKey([&](ukn::Window* window, ukn::input::KeyEventArgs& e) {
             if(e.key == ukn::input::Escape)
                 ukn::Context::Instance().getApp().terminate();
 
-            if(
-                e.state == ukn::input::Release) {
+            if(e.state == ukn::input::Release) {
                 if(e.key == ukn::input::F1) {
                     if(camController->getAttachedCamera()) {
                         camController->detachCamera();
@@ -109,9 +127,17 @@ int CALLBACK WinMain(
                         ukn::Viewport& vp = ukn::Context::Instance()
                                                 .getGraphicFactory()
                                                 .getGraphicDevice()
-                                                .getCurrFrameBuffer()->getViewport();
+                                                .getScreenFrameBuffer()->getViewport();
                         camController->attachCamera(vp.camera);
                     }
+                } else if(e.key == ukn::input::F2) {
+                    directionalLight->setEnabled(!directionalLight->getEnabled());
+                } else if(e.key == ukn::input::F3) {
+                    mode = LightMap;
+                } else if(e.key == ukn::input::F4) {
+                    mode = Scene;
+                } else if(e.key == ukn::input::F5) {
+                    mode = All;
                 }
             }
         })
@@ -130,15 +156,26 @@ int CALLBACK WinMain(
 
             const ukn::CompositeRenderTargetPtr& gbuffer = deferredRenderer->getGBufferRT();
 
-            sb.draw(directionalLight->getShadowMap()->getTexture(), 
-                    ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
-            sb.draw(gbuffer->getTargetTexture(ukn::ATT_Color1), 
-                    ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
-            sb.draw(deferredRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0), 
-                    ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
-            sb.draw(deferredRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0), 
-                    ukn::Rectangle(wnd->width() / 2, 0, wnd->width() / 2, wnd->height() / 2, true));
+            if(mode == All) {
+                sb.draw(gbuffer->getTargetTexture(ukn::ATT_Color0), 
+                        ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
+                sb.draw(gbuffer->getTargetTexture(ukn::ATT_Color1), 
+                        ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
+                sb.draw(deferredRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0), 
+                        ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
+                sb.draw(deferredRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0), 
+                        ukn::Rectangle(wnd->width() / 2, 0, wnd->width() / 2, wnd->height() / 2, true));
+            } else if(mode == LightMap) {
+                sb.draw(deferredRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0), 
+                        ukn::Rectangle(0, 0, wnd->width() , wnd->height(), true));
+
+            } else if(mode == Scene) {
+                sb.draw(deferredRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0), 
+                        ukn::Rectangle(0, 0, wnd->width() , wnd->height(), true));
+
+            }
             sb.end();
+
 
             if(font) {
                 font->begin();
@@ -169,10 +206,10 @@ int CALLBACK WinMain(
             }
 
             ukn::GridTerrianLightening* t = new ukn::GridTerrianLightening();
-            (*t).position(ukn::float3(-50, 0, -50))
+            (*t).position(ukn::float3(-100, 0, -100))
                 .noise(10)
                 .noiseWeight(5)
-                .size(ukn::float2(100, 100));
+                .size(ukn::float2(200, 200));
             if(t->build()) {
                 t->texture(gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"dirt01.dds")));
 
@@ -186,10 +223,15 @@ int CALLBACK WinMain(
 
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
-            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
+            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip.ply");
             if(dragonModel) {
+                ukn::SceneObjectPtr skyboxObject = ukn::MakeSharedPtr<ukn::SceneObject>(skybox, ukn::SOA_Overlay);
+                skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(50, 50, 50));
+                
+           //     scene.addSceneObject(skyboxObject);
+
                 ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, ukn::SOA_Cullable | ukn::SOA_Moveable);
-                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(50, 50, 50));
+                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(150, 150, 150));
                 scene.addSceneObject(dragonObject);
 
                 ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
@@ -197,18 +239,34 @@ int CALLBACK WinMain(
             }
             directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 0),
                                                                         ukn::float4(1, 1, 1, 1),
-                                                                        1.0,
+                                                                        0.3,
                                                                         true,
                                                                         1024);
 
-            spotLight = ukn::MakeSharedPtr<ukn::SpotLight>(ukn::float3(0, 10, 0),
+      /*      spotLight = ukn::MakeSharedPtr<ukn::SpotLight>(ukn::float3(0, 10, 0),
                                                            ukn::float3(0, -1, 0),
                                                            ukn::float4(1, 1, 1, 1),
                                                            1.0,
-                                                           true, 
-                                                           1024,
-                                                           gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"SpotCookie.dds")));
-            scene.addLight(spotLight);
+                                                           gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"SpotCookie.dds")),
+                                                           false, 
+                                                           1024);
+           */
+            for(int i=0; i<200; ++i) {
+                pointLights[i]  = ukn::MakeSharedPtr<ukn::PointLight>(ukn::float3(i / 2+ 10,
+                                                                               5,
+                                                                               0),
+                                                                   20.f,
+                                                                   ukn::float4(ukn::Random::RandomFloat(0, 1), 
+                                                                               ukn::Random::RandomFloat(0, 1), 
+                                                                               ukn::Random::RandomFloat(0, 1), 1),
+                                                                   1.0f,
+                                                                   false,
+                                                                   256);
+                 rs[i] = ukn::Random::RandomFloat(0, ukn::d_pi * 2);
+                scene.addLight(pointLights[i]);
+            }
+            
+   //         scene.addLight(spotLight);
             scene.addLight(directionalLight);
         })
         .run();

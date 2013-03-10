@@ -652,7 +652,7 @@ namespace ukn {
             }
         }
         
-        void Map::render() {
+        void Map::render(const EffectTechniquePtr& technique) {
             mMapRenderer->begin(SBS_Deffered, Matrix4::TransMat(mPosition.x(), mPosition.y(), 0.f));
             
             if(mOrientation == MO_Orthogonal)

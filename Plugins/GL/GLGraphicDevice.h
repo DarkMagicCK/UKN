@@ -10,6 +10,7 @@
 #define Project_Unknown_GLRenderDevice_h
 
 #include "UKN/GraphicDevice.h"
+#include "UKN/Vertex.h"
 #include "GLPreq.h"
 
 namespace ukn {
@@ -27,7 +28,7 @@ namespace ukn {
         void endFrame();
         void beginRendering();
         
-        void renderBuffer(const RenderBufferPtr& buffer);
+        void renderBuffer(const EffectTechniquePtr& technique, const RenderBufferPtr& buffer);
         void onBindFrameBuffer(const FrameBufferPtr& frameBuffer);
         
         void setViewMatrix(const Matrix4& mat);
@@ -54,6 +55,8 @@ namespace ukn {
         void onSetDepthStencilState(const DepthStencilStatePtr& depthStencilState) override;
 
     private:
+        std::vector<int> applyBuffer(const vertex_elements_type& format, uint32 size, uint32 instance_freq);
+
         WindowPtr mWindow;
         
         Matrix4 mViewMat;

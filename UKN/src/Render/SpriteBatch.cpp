@@ -17,6 +17,7 @@
 #include "UKN/2DHelper.h"
 #include "UKN/BlendStateObject.h"
 #include "UKN/DepthStencilStateObject.h"
+#include "UKN/Shader.h"
 
 #include "mist/Singleton.h"
 #include "mist/Profiler.h"
@@ -242,16 +243,16 @@ namespace ukn {
         Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
         Ukn2DHelper& helper = Ukn2DHelper::Instance();
 
+        helper.setupMat();
         while(it != mRenderQueue.end()) { 
             if(currTexture &&
                 it->texture != currTexture) {
                 mVertexBuffer->unmap();
                 
                 helper.bindTexture(currTexture);
-                helper.begin();
                 mRenderBuffer->setVertexCount(renderCount);
-                gd.renderBuffer(mRenderBuffer);
-                helper.end();
+                gd.renderBuffer(helper.getEffect()->getTechnique(0),
+                                mRenderBuffer);
 
                 renderCount = 0;
                 vertices = (Vertex2D*)mVertexBuffer->map();
@@ -266,10 +267,9 @@ namespace ukn {
                 mVertexBuffer->unmap();
                 
                 helper.bindTexture(currTexture);
-                helper.begin();
                 mRenderBuffer->setVertexCount(renderCount);
-                gd.renderBuffer(mRenderBuffer);
-                helper.end();
+                gd.renderBuffer(helper.getEffect()->getTechnique(0),
+                                mRenderBuffer);
 
                 renderCount = 0;
             }
@@ -306,9 +306,8 @@ namespace ukn {
 
             helper.bindTexture(mRenderQueue[mCurrentBatchIndex].texture);
 
-            helper.begin();
-            gd.renderBuffer(mRenderBuffer);
-            helper.end();
+            gd.renderBuffer(helper.getEffect()->getTechnique(0),
+                            mRenderBuffer);
 
             onRenderEnd();
         }
@@ -501,7 +500,7 @@ namespace ukn {
         mTransformMatrix = Matrix4();
     }
 
-    void SpriteBatch::drawQuad(const Vector2& upper, const Vector2& lower) {
+    void SpriteBatch::drawQuad(const EffectTechniquePtr& technique, const Vector2& upper, const Vector2& lower) {
         Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
         
         if(vertices) {
@@ -530,7 +529,7 @@ namespace ukn {
             mVertexBuffer->unmap();
 
             mRenderBuffer->setVertexCount(6);
-            Context::Instance().getGraphicFactory().getGraphicDevice().renderBuffer(mRenderBuffer);
+            Context::Instance().getGraphicFactory().getGraphicDevice().renderBuffer(technique, mRenderBuffer);
         } else {
             log_error(L"SpriteBatch::drawQuad: error mapping data");
         }

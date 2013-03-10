@@ -189,22 +189,7 @@ namespace ukn {
 
             EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
             if(effect) {
-                EffectPassPtr pass0 = effect->appendPass();
-
-                pass0->setFragmentShader(effect->createShader(
-                    ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_color_frag_program, 
-                                                                         strlen(_color_frag_program)), 
-                                                                         L""),
-                                                   ukn::ShaderDesc(ST_FragmentShader,
-                                                   "FragmentProgram")));
-                pass0->setVertexShader(effect->createShader(
-                    ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_color_vert_program, 
-                                                                         strlen(_color_vert_program)), 
-                                                                         L""),
-                                                   ukn::ShaderDesc(ST_VertexShader,
-                                                   "VertexProgram")));
-                pass0->setVertexFormat(ukn::GridTerrian::VertexFormat::Format());
-
+              
                 mRenderBuffer->setRenderMode(RM_Line);
             } else 
                 error = true;
@@ -217,13 +202,13 @@ namespace ukn {
         return !error;
     }
 
-    void GridTerrian::render() {
+    void GridTerrian::render(const EffectTechniquePtr& technique) {
         if(!mRenderBuffer)
             return;
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
         gd.bindTexture(TexturePtr());
-        gd.renderBuffer(mRenderBuffer);
+        gd.renderBuffer(technique, mRenderBuffer);
     }
 
     uint32 GridTerrian::getDrawCount() const {
@@ -564,7 +549,7 @@ namespace ukn {
         return count;
     }
 
-    void GridTerrianLightening::renderNode(Node* node, GraphicDevice& device, const Frustum& frustum) {
+    void GridTerrianLightening::renderNode(const EffectTechniquePtr& technique, Node* node, GraphicDevice& device, const Frustum& frustum) {
         if(node->index_count &&
             frustum.isBoxVisible(Box(Vector3(node->x - node->width / 2,
                                              mPosition[1] - node->min_h,
@@ -575,12 +560,12 @@ namespace ukn {
             mRenderBuffer->setIndexStartIndex(node->index_start);
             mRenderBuffer->setIndexCount(node->index_count);
 
-            device.renderBuffer(mRenderBuffer);
+            device.renderBuffer(technique, mRenderBuffer);
             mDrawCount += node->index_count;
         }
         for(uint32 i=0; i<4; ++i) {
             if(node->childs[i]) {
-                renderNode(node->childs[i], device, frustum);
+                renderNode(technique, node->childs[i], device, frustum);
             }
         }
     }
@@ -589,7 +574,7 @@ namespace ukn {
         return mDrawCount;
     }
 
-    void GridTerrianLightening::render() {
+    void GridTerrianLightening::render(const EffectTechniquePtr& technique) {
         if(!mRenderBuffer)
             return;
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
@@ -597,7 +582,7 @@ namespace ukn {
         CameraPtr cam = gd.getCurrFrameBuffer()->getViewport().camera;
      
         mDrawCount = 0;
-        renderNode(mRoot, gd, cam->getViewFrustum());
+        renderNode(technique, mRoot, gd, cam->getViewFrustum());
     }
 
 }

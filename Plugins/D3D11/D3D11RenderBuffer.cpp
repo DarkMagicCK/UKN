@@ -17,7 +17,7 @@ namespace ukn {
 	}
 
     
-    ID3D11InputLayout* D3D11RenderBuffer::inputLayout(uint8* code, uint32 signature) {
+    ID3D11InputLayout* D3D11RenderBuffer::inputLayout(void* code, uint32 signature) {
         for(D3D11VertexLayoutPtr& layout: mLayouts) {
             if(*layout == signature) {
                 return layout->getD3DLayout();

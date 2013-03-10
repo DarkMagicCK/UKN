@@ -112,60 +112,43 @@ namespace ukn {
                 fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/clear_frag.cg"), 
                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
 
-                mClearPass = mEffect->appendPass();
-                mClearPass->setFragmentShader(fragmentShader);
-                mClearPass->setVertexShader(vertexShader);
-                mClearPass->setVertexFormat(ukn::Vertex2D::Format());
+                mClearTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
 
                 vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/gbuffer_vert.cg"), 
                                                      VERTEX_SHADER_DESC("VertexProgram"));
                 fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/gbuffer_frag.cg"), 
                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
             
-                mGBufferPass = mEffect->appendPass();
-                mGBufferPass->setFragmentShader(fragmentShader);
-                mGBufferPass->setVertexShader(vertexShader);
-                mGBufferPass->setVertexFormat(ukn::VertexUVNormal::Format());
+                mGBufferTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
 
                 vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/directionallight_vert.cg"), 
                                                      VERTEX_SHADER_DESC("VertexProgram"));
                 fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/directionallight_frag.cg"), 
                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
 
-                mDirectionalLightPass = mEffect->appendPass();
-                mDirectionalLightPass->setFragmentShader(fragmentShader);
-                mDirectionalLightPass->setVertexShader(vertexShader);
-                mDirectionalLightPass->setVertexFormat(ukn::Vertex2D::Format());
+                mDirectionalLightTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
 
                 vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/spotlight_vert.cg"), 
                                                      VERTEX_SHADER_DESC("VertexProgram"));
                 fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/spotlight_frag.cg"), 
                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
 
-                mSpotLightPass = mEffect->appendPass();
-                mSpotLightPass->setFragmentShader(fragmentShader);
-                mSpotLightPass->setVertexShader(vertexShader);
-                mSpotLightPass->setVertexFormat(ukn::Vertex2D::Format());
-            
+                mSpotLightTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
+
                 vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/pointlight_vert.cg"), 
                                                      VERTEX_SHADER_DESC("VertexProgram"));
                 fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/pointlight_frag.cg"), 
                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
 
-                mPointLightPass = mEffect->appendPass();
-                mPointLightPass->setFragmentShader(fragmentShader);
-                mPointLightPass->setVertexShader(vertexShader);
-                mPointLightPass->setVertexFormat(ukn::Vertex2D::Format());
+                mPointLightTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
+
 
                 vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/composite_vert.cg"), 
                                                      VERTEX_SHADER_DESC("VertexProgram"));
                 fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/composite_frag.cg"), 
                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
 
-                mCompositePass = mEffect->appendPass();
-                mCompositePass->setFragmentShader(fragmentShader);
-                mCompositePass->setVertexShader(vertexShader);
-                mCompositePass->setVertexFormat(ukn::Vertex2D::Format());
+                mCompositeTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
 
             }
         }
@@ -197,9 +180,8 @@ namespace ukn {
 
     void DeferredRenderer::makeLightMap(SceneManager& scene) {
         MIST_PROFILE(L"DEFERRED_LIGHTMAP");
-
         mLightMapRT->attachToRender();
-        
+
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         gd.clear(ukn::CM_Color, ukn::color::Transparent, 1.f, 0);
        
@@ -209,7 +191,6 @@ namespace ukn {
     
         Matrix4 invViewProj = (cam->getViewMatrix() * cam->getProjMatrix()).inverted();
 
-        BlendStatePtr prevBS = gd.getBlendState();
         gd.setBlendState(mLightMapBS);
         gd.setDepthStencilState(DepthStencilStateObject::None());
 
@@ -217,195 +198,196 @@ namespace ukn {
 
         // directional lights
         {
-            Shader* fragmentShader = mDirectionalLightPass->getFragmentShader().get();
+            MIST_PROFILE(L"DEFERRED_LIGHTMAP_DIRECTIONAL");
 
-            fragmentShader->setMatrixVariable("inverseViewProj",  (cam->getViewMatrix() * cam->getProjMatrix()));
-            fragmentShader->setFloatVariable("cameraPosition", 3, cam->getEyePos().value);
-            fragmentShader->setFloatVariable("gbufferSize", 2, mSize.value);
+            if(lights->getDirectionalLights().size() > 0) {
+                Shader* fragmentShader = mDirectionalLightTechnique->getPass(0)->getFragmentShader().get();
+
+                fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
+                fragmentShader->setFloatVectorVariable("cameraPosition", cam->getEyePos());
+                fragmentShader->setFloatVectorVariable("gbufferSize", mSize);
         
-            fragmentShader->setTextureVariable("colorMap", 
-                                                mGBufferRT->getTargetTexture(ukn::ATT_Color0));
-            fragmentShader->setTextureVariable("normalMap", 
-                                                mGBufferRT->getTargetTexture(ukn::ATT_Color1));
-            fragmentShader->setTextureVariable("depthMap", 
-                                                mGBufferRT->getTargetTexture(ukn::ATT_Color2));
+                fragmentShader->setTextureVariable("colorMap", 
+                                                    mGBufferRT->getTargetTexture(ukn::ATT_Color0));
+                fragmentShader->setTextureVariable("normalMap", 
+                                                    mGBufferRT->getTargetTexture(ukn::ATT_Color1));
+                fragmentShader->setTextureVariable("depthMap", 
+                                                    mGBufferRT->getTargetTexture(ukn::ATT_Color2));
 
-            for(const LightSourcePtr& light: lights->getDirectionalLights()) {
-                if(!light->getEnabled())
-                    continue;
+                for(const LightSourcePtr& light: lights->getDirectionalLights()) {
+                    if(!light->getEnabled())
+                        continue;
 
-                if(light->getCastShadows() && light->getShadowMap()) {
-                    fragmentShader->setTextureVariable("shadowMap", light->getShadowMap()->getTexture());
+                    if(light->getCastShadows() && light->getShadowMap()) {
+                        fragmentShader->setTextureVariable("shadowMap", light->getShadowMap()->getTexture());
+                    }
+                
+                    fragmentShader->setFloatVectorVariable("lightColor", light->getColor());
+                    fragmentShader->setFloatVariable("lightDirection", 3, light->getDirection().value);
+                    fragmentShader->setFloatVariable("lightIntensity", light->getIntensity());
+                
+                    const CameraPtr& lightCam = light->getCamera(0);
+                    fragmentShader->setMatrixVariable("lightView", lightCam->getViewMatrix());
+                    fragmentShader->setMatrixVariable("lightViewProj", lightCam->getViewMatrix() * lightCam->getProjMatrix());
+                    fragmentShader->setIntVariable("hasShadow", light->getCastShadows() ? 1 : 0);
+                    fragmentShader->setFloatVariable("shadowMapSize", (float)light->getShadowMapResolution());
+                    fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
+                
+                    ukn::SpriteBatch::DefaultObject().drawQuad(mDirectionalLightTechnique, 
+                                                               ukn::Vector2(-1, 1), 
+                                                               ukn::Vector2(1, -1));
+
                 }
-                
-                fragmentShader->setFloatVectorVariable("lightColor", light->getColor());
-                fragmentShader->setFloatVariable("lightDirection", 3, light->getDirection().value);
-                fragmentShader->setFloatVariable("lightIntensity", light->getIntensity());
-                
-                const CameraPtr& lightCam = light->getCamera(0);
-                fragmentShader->setMatrixVariable("lightView", lightCam->getViewMatrix());
-                fragmentShader->setMatrixVariable("lightViewProj", lightCam->getViewMatrix() * lightCam->getProjMatrix());
-                fragmentShader->setIntVariable("hasShadow", light->getCastShadows() ? 1 : 0);
-                fragmentShader->setFloatVariable("shadowMapSize", (float)light->getShadowMapResolution());
-                fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
-                
-                mDirectionalLightPass->begin();
-                ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
-                mDirectionalLightPass->end();
             }
         }
         // spot lights
         {
-            Shader* fragmentShader = mSpotLightPass->getFragmentShader().get();
-            Shader* vertexShader = mSpotLightPass->getVertexShader().get();
+            MIST_PROFILE(L"DEFERRED_LIGHTMAP_SPOT");
+
+            if(lights->getSpotLights().size() > 0) {
+                Shader* fragmentShader = mSpotLightTechnique->getPass(0)->getFragmentShader().get();
+                Shader* vertexShader = mSpotLightTechnique->getPass(0)->getVertexShader().get();
             
-            vertexShader->setMatrixVariable("viewMatrix", cam->getViewMatrix());
-            vertexShader->setMatrixVariable("projectionMatrix", cam->getProjMatrix());
+                vertexShader->setMatrixVariable("viewMatrix", cam->getViewMatrix());
+                vertexShader->setMatrixVariable("projectionMatrix", cam->getProjMatrix());
 
-            fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
-            fragmentShader->setFloatVariable("cameraPosition", 3, cam->getEyePos().value);
-            fragmentShader->setFloatVariable("gbufferSize", 2, mSize.value);
+                fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
+                fragmentShader->setFloatVariable("cameraPosition", 3, cam->getEyePos().value);
+                fragmentShader->setFloatVariable("gbufferSize", 2, mSize.value);
 
-            fragmentShader->setTextureVariable("colorMap", 
-                                                mGBufferRT->getTargetTexture(ukn::ATT_Color0));
-            fragmentShader->setTextureVariable("normalMap", 
-                                                mGBufferRT->getTargetTexture(ukn::ATT_Color1));
-            fragmentShader->setTextureVariable("depthMap", 
-                                                mGBufferRT->getTargetTexture(ukn::ATT_Color2));
+                fragmentShader->setTextureVariable("colorMap", 
+                                                    mGBufferRT->getTargetTexture(ukn::ATT_Color0));
+                fragmentShader->setTextureVariable("normalMap", 
+                                                    mGBufferRT->getTargetTexture(ukn::ATT_Color1));
+                fragmentShader->setTextureVariable("depthMap", 
+                                                    mGBufferRT->getTargetTexture(ukn::ATT_Color2));
         
-            for(const LightSourcePtr& light: lights->getSpotLights()) {
-                if(!light->getEnabled())
-                    continue;
+                for(const LightSourcePtr& light: lights->getSpotLights()) {
+                    if(!light->getEnabled())
+                        continue;
 
-                if(light->getAttenuationTexture()) {
-                    fragmentShader->setTextureVariable("attenuationMap", light->getAttenuationTexture());
-                }
-                if(light->getCastShadows() && light->getShadowMap()) {
-                    fragmentShader->setTextureVariable("shadowMap", light->getShadowMap()->getTexture());
-                }
+                    if(light->getAttenuationTexture()) {
+                        fragmentShader->setTextureVariable("attenuationMap", light->getAttenuationTexture());
+                    }
+                    if(light->getCastShadows() && light->getShadowMap()) {
+                        fragmentShader->setTextureVariable("shadowMap", light->getShadowMap()->getTexture());
+                    }
                 
-                SpotLight* sl = (SpotLight*)light.get();
+                    SpotLight* sl = (SpotLight*)light.get();
                 
-                const CameraPtr& lightCam = sl->getCamera(0);
+                    const CameraPtr& lightCam = sl->getCamera(0);
 
-                vertexShader->setMatrixVariable("worldMatrix", sl->getWorldMatrix());
-                fragmentShader->setMatrixVariable("lightViewProj", lightCam->getViewMatrix() * lightCam->getProjMatrix());
-                fragmentShader->setFloatVectorVariable("lightPosition", sl->getPosition());
-                fragmentShader->setFloatVectorVariable("lightColor", sl->getColor());
-                fragmentShader->setFloatVectorVariable("lightDirection", sl->getDirection());
-                fragmentShader->setFloatVariable("lightIntensity", sl->getIntensity());
+                    vertexShader->setMatrixVariable("worldMatrix", sl->getWorldMatrix());
+                    fragmentShader->setMatrixVariable("lightViewProj", lightCam->getViewMatrix() * lightCam->getProjMatrix());
+                    fragmentShader->setFloatVectorVariable("lightPosition", sl->getPosition());
+                    fragmentShader->setFloatVectorVariable("lightColor", sl->getColor());
+                    fragmentShader->setFloatVectorVariable("lightDirection", sl->getDirection());
+                    fragmentShader->setFloatVariable("lightIntensity", sl->getIntensity());
 
-                fragmentShader->setFloatVariable("lightAngleCos", sl->lightAngleCos());
-                fragmentShader->setFloatVariable("lightHeight", lightCam->getNearPlane());
-                fragmentShader->setIntVariable("hasShadow", sl->getCastShadows() ? 1 : 0);
-                fragmentShader->setFloatVariable("shadowMapSize", (float)sl->getShadowMapResolution());
-                fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
-                fragmentShader->setFloatVariable("depthBias", sl->getDepthBias());
+                    fragmentShader->setFloatVariable("lightAngleCos", sl->lightAngleCos());
+                    fragmentShader->setFloatVariable("lightHeight", lightCam->getNearPlane());
+                    fragmentShader->setIntVariable("hasShadow", sl->getCastShadows() ? 1 : 0);
+                    fragmentShader->setFloatVariable("shadowMapSize", (float)sl->getShadowMapResolution());
+                    fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
+                    fragmentShader->setFloatVariable("depthBias", sl->getDepthBias());
 
-                {
-                    float3 L = cam->getEyePos() - sl->getPosition();
-                    float SL = abs(L.dot(sl->getDirection()));
+                    {
+                        float3 L = cam->getEyePos() - sl->getPosition();
+                        float SL = abs(L.dot(sl->getDirection()));
 
-                    if(SL < sl->lightAngleCos()) {
-                        // within light  
-                        gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
-                    } else {
-                        gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
+                        if(SL < sl->lightAngleCos()) {
+                            // within light  
+                            gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
+                        } else {
+                            gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
+                        }
+
+                        // render spot light
+                        gd.renderBuffer(mSpotLightTechnique, lights->getSpotLightGeometry());
                     }
 
-                    mSpotLightPass->begin();
-                    // render spot light
-                    gd.renderBuffer(lights->getSpotLightGeometry());
-                    mSpotLightPass->end();
                 }
-
             }
         }
         // point lights
         {
-            Shader* fragmentShader = mPointLightPass->getFragmentShader().get();
-            Shader* vertexShader = mPointLightPass->getVertexShader().get();
+            MIST_PROFILE(L"DEFERRED_LIGHTMAP_POINT");
+
+            if(lights->getPointLights().size() > 0) {
+                Shader* fragmentShader = mPointLightTechnique->getPass(0)->getFragmentShader().get();
+                Shader* vertexShader = mPointLightTechnique->getPass(0)->getVertexShader().get();
             
-            vertexShader->setMatrixVariable("viewMatrix", cam->getViewMatrix());
-            vertexShader->setMatrixVariable("projectionMatrix", cam->getProjMatrix());
+                vertexShader->setMatrixVariable("viewMatrix", cam->getViewMatrix());
+                vertexShader->setMatrixVariable("projectionMatrix", cam->getProjMatrix());
 
-            fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
-            fragmentShader->setFloatVariable("cameraPosition", 3, cam->getEyePos().value);
-            fragmentShader->setFloatVariable("gbufferSize", 2, mSize.value);
+                fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
+                fragmentShader->setFloatVariable("cameraPosition", 3, cam->getEyePos().value);
+                fragmentShader->setFloatVariable("gbufferSize", 2, mSize.value);
 
-            fragmentShader->setTextureVariable("colorMap", 
-                                                mGBufferRT->getTargetTexture(ukn::ATT_Color0));
-            fragmentShader->setTextureVariable("normalMap", 
-                                                mGBufferRT->getTargetTexture(ukn::ATT_Color1));
-            fragmentShader->setTextureVariable("depthMap", 
-                                                mGBufferRT->getTargetTexture(ukn::ATT_Color2));
+                fragmentShader->setTextureVariable("colorMap", 
+                                                    mGBufferRT->getTargetTexture(ukn::ATT_Color0));
+                fragmentShader->setTextureVariable("normalMap", 
+                                                    mGBufferRT->getTargetTexture(ukn::ATT_Color1));
+                fragmentShader->setTextureVariable("depthMap", 
+                                                    mGBufferRT->getTargetTexture(ukn::ATT_Color2));
         
-            for(const LightSourcePtr& light: lights->getPointLights()) {
-                if(!light->getEnabled())
-                    continue;
+                for(const LightSourcePtr& light: lights->getPointLights()) {
+                    if(!light->getEnabled())
+                        continue;
                 
-                PointLight* sl = (PointLight*)light.get();
-                if(!frustum.isSphereVisible(mist::Sphere(light->getPosition(), sl->getRadius())))
-                    continue;
+                    PointLight* sl = (PointLight*)light.get();
+                    if(!frustum.isSphereVisible(mist::Sphere(light->getPosition(), sl->getRadius())))
+                        continue;
 
-                if(light->getCastShadows() && light->getShadowMap()) {
-                    fragmentShader->setTextureVariable("shadowMap", light->getShadowMap()->getTexture());
+                    if(light->getCastShadows() && light->getShadowMap()) {
+                        fragmentShader->setTextureVariable("shadowMap", light->getShadowMap()->getTexture());
+                    }
+                    const CameraPtr& lightCam = sl->getCamera(0);
+
+                    vertexShader->setMatrixVariable("worldMatrix", sl->getWorldMatrix());
+                    fragmentShader->setFloatVectorVariable("lightPosition", sl->getPosition());
+                    fragmentShader->setFloatVectorVariable("lightColor", sl->getColor());
+                    fragmentShader->setFloatVariable("lightRadius", sl->getRadius());
+                    fragmentShader->setFloatVariable("lightIntensity", sl->getIntensity());
+
+                    fragmentShader->setIntVariable("hasShadow", sl->getCastShadows() ? 1 : 0);
+                    fragmentShader->setFloatVariable("shadowMapSize", (float)sl->getShadowMapResolution());
+                    fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
+                    fragmentShader->setFloatVariable("depthBias", sl->getDepthBias());
+                    {
+                        // render spot light
+                        gd.renderBuffer(mPointLightTechnique, lights->getPointLightGeometry());
+                    }
+
                 }
-                
-                
-                const CameraPtr& lightCam = sl->getCamera(0);
-
-                vertexShader->setMatrixVariable("worldMatrix", sl->getWorldMatrix());
-                fragmentShader->setFloatVectorVariable("lightPosition", sl->getPosition());
-                fragmentShader->setFloatVectorVariable("lightColor", sl->getColor());
-                fragmentShader->setFloatVariable("lightRadius", sl->getRadius());
-                fragmentShader->setFloatVariable("lightIntensity", sl->getIntensity());
-
-                fragmentShader->setIntVariable("hasShadow", sl->getCastShadows() ? 1 : 0);
-                fragmentShader->setFloatVariable("shadowMapSize", (float)sl->getShadowMapResolution());
-                fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
-                fragmentShader->setFloatVariable("depthBias", sl->getDepthBias());
-                {
-                    mPointLightPass->begin();
-                    // render spot light
-                    gd.renderBuffer(lights->getPointLightGeometry());
-                    mPointLightPass->end();
-                }
-
             }
         }
-
         mLightMapRT->detachFromRender();
-
+           
         gd.setBlendState(BlendStateObject::Opaque());
         gd.setDepthStencilState(DepthStencilStateObject::Default());
         gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
-
-        gd.setBlendState(prevBS);
     }
 
     void DeferredRenderer::makeFinal() {
-        mCompositeRT->attachToRender();
-
+         mCompositeRT->attachToRender();
+        
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         gd.clear(ukn::CM_Color, ukn::color::Transparent, 1.f, 0);
 
-        const ShaderPtr& fragmentShader = mCompositePass->getFragmentShader();
+        const ShaderPtr& fragmentShader = mCompositeTechnique->getPass(0)->getFragmentShader();
         fragmentShader->setTextureVariable("colorMap", 
                                             mGBufferRT->getTargetTexture(ATT_Color0));
         fragmentShader->setTextureVariable("lightMap",
                                             mLightMapRT->getTargetTexture(ATT_Color0));
 
-        mCompositePass->begin();
-        ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
-        mCompositePass->end();
-
+        ukn::SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
+        
         mCompositeRT->detachFromRender();
     }
 
     void DeferredRenderer::makeGBuffer(SceneManager& scene) {
         MIST_PROFILE(L"DEFERRED_GBUFFER");
-
         mGBufferRT->attachToRender();
         
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
@@ -415,9 +397,7 @@ namespace ukn {
         gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
 
         // first clear the GBuffer
-        mClearPass->begin();
-        ukn::SpriteBatch::DefaultObject().drawQuad(ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
-        mClearPass->end();    
+        ukn::SpriteBatch::DefaultObject().drawQuad(mClearTechnique, ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
 
         gd.setDepthStencilState(DepthStencilStateObject::Default());
         gd.clear(ukn::CM_Depth, mist::color::Transparent, 1.f, 0);
@@ -426,7 +406,7 @@ namespace ukn {
         const CameraPtr& cam = fb->getViewport().camera;
 
         // render scene
-        scene.render(mGBufferPass, cam->getViewMatrix(), cam->getProjMatrix());
+        scene.render(mGBufferTechnique, cam->getViewMatrix(), cam->getProjMatrix());
 
         mGBufferRT->detachFromRender();
     }

@@ -13,6 +13,8 @@
 #include "UKN/GraphicFactory.h"
 #include "UKN/Context.h"
 #include "UKN/RenderBuffer.h"
+#include "UKN/2DHelper.h"
+#include "UKN/Shader.h"
 
 namespace ukn {
     
@@ -212,7 +214,8 @@ namespace ukn {
                 mRenderBuffer->setVertexCount(seg.length);
                 mRenderBuffer->setVertexStartIndex(seg.start_index);
                 
-                gd.renderBuffer(mRenderBuffer);
+                gd.renderBuffer(Ukn2DHelper::Instance().getEffect()->getTechnique(0),
+                                mRenderBuffer);
             }
             
             mSegments.clear();

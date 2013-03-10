@@ -66,16 +66,6 @@ namespace ukn {
         }
     }
 
-    DxEffectPass::DxEffectPass(Effect* parent, D3D11GraphicDevice* device):
-        EffectPass(parent),
-        mDevice(device) {
-
-    }
-
-    DxEffectPass::~DxEffectPass() {
-    
-    }
-
     CgDxEffect::CgDxEffect(D3D11GraphicDevice* device):
         mContext(0),
         mDevice(device) {
@@ -91,21 +81,6 @@ namespace ukn {
         }
     }
 
-    void CgDxEffect::bind(uint32 passIndex) {
-        if(passIndex < this->getNumPasses()) {
-           const EffectPassPtr& pass = this->mPasses[passIndex];
-           pass->begin();
-        } else
-           log_warning(L"CgDxEffect::bind: pass overflow");
-    }
-
-    void CgDxEffect::unbind(uint32 passIndex) {
-        if(passIndex < this->getNumPasses()) {
-            const EffectPassPtr& pass = this->mPasses[passIndex];
-            pass->begin();
-        } else
-            log_warning(L"CgDxEffect::bind: pass overflow");
-    }
 
     ShaderPtr CgDxEffect::createShader(const ResourcePtr& resource, const ShaderDesc& desc) {
         CgDxShader* shader = new CgDxShader(mContext);
@@ -119,10 +94,6 @@ namespace ukn {
         return mContext;
     }
     
-    EffectPassPtr CgDxEffect::createPass() {
-        return MakeSharedPtr<DxEffectPass>(this, this->mDevice);
-    }
-
     CgDxShader::CgDxShader(CGcontext context):
         mContext(context),
         mProgram(0) {

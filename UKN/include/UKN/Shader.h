@@ -45,27 +45,23 @@ namespace ukn {
 	
     class UKN_API EffectPass: Uncopyable {
     public:
-        EffectPass(Effect* parent);
+        EffectPass(EffectTechnique* parent);
         virtual ~EffectPass();
         
         void setFragmentShader(const ShaderPtr& shader);
         void setVertexShader(const ShaderPtr& shader);
         void setGeometryShader(const ShaderPtr& shader);
 
-        ShaderPtr getFragmentShader() const;
-        ShaderPtr getVertexShader() const;
-        ShaderPtr getGeometryShader() const;
-
-        const vertex_elements_type& getVertexFormat() const;
-       
-        virtual void setVertexFormat(const vertex_elements_type& format);
+        const ShaderPtr& getFragmentShader() const;
+        const ShaderPtr& getVertexShader() const;
+        const ShaderPtr& getGeometryShader() const;
 
         /* overridable */
         virtual void begin();
         virtual void end();
 
     protected:
-        Effect* mParent;
+        EffectTechnique* mParent;
 
         ShaderPtr mFragmentShader;
         ShaderPtr mVertexShader;
@@ -75,6 +71,32 @@ namespace ukn {
     };
 
     typedef SharedPtr<EffectPass> EffectPassPtr;
+
+    class UKN_API EffectTechnique: Uncopyable {
+    public:
+        EffectTechnique(Effect* parent);
+        virtual ~EffectTechnique();
+        
+        /* create and append a pass */
+        const EffectPassPtr& appendPass();
+        const EffectPassPtr& appendPass(const ShaderPtr& fragmentShader, const ShaderPtr& vertexShader, const ShaderPtr& geometryShader);
+        void appendPass(const EffectPassPtr& pass);
+        const EffectPassPtr& getPass(uint32 pass) const;
+        
+        /* begin */
+        void bind(uint32 pass);
+        void unbind(uint32 pass);
+        
+        uint32 getNumPasses() const;
+
+        virtual EffectPassPtr createPass();
+
+    protected:
+        Effect* mParent;
+        std::vector<EffectPassPtr> mPasses;
+    };
+
+    typedef SharedPtr<EffectTechnique> EffectTechniquePtr;
 
     /* 
     currently
@@ -86,26 +108,21 @@ namespace ukn {
         Effect();
         virtual ~Effect();
 
-        uint32 getNumPasses() const;
-
         /* to do in custom shader compiler, no use now */		
         // virtual bool initialize(const ResourcePtr& content, const VertexFormat& format) = 0;
         
-        /* begin */
-        virtual void bind(uint32 pass) = 0;
-        virtual void unbind(uint32 pass) = 0;
-
         virtual ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc) = 0;
-        virtual EffectPassPtr createPass();
+        virtual EffectTechniquePtr createTechnique();
 
-        /* create and append a pass */
-        EffectPassPtr appendPass();
+        const EffectTechniquePtr& appendTechnique();
+        const EffectTechniquePtr& appendTechnique(const ShaderPtr& fragment, const ShaderPtr& vertex, const ShaderPtr& geometry);
+        const EffectTechniquePtr& getTechnique(uint32 index) const;
 
-        void appendPass(const EffectPassPtr& pass);
-        EffectPassPtr getPass(uint32 pass) const;
+        uint32 getNumTechniques() const;
 
     protected:
-        std::vector<EffectPassPtr> mPasses;
+        typedef std::vector<EffectTechniquePtr> TechniqueVec;
+        TechniqueVec mTechniques;
     };
     
     class UKN_API Shader: public Uncopyable {

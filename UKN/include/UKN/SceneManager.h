@@ -42,11 +42,11 @@ namespace ukn {
 
         const LightManagerPtr& getLightManager() const;
 
-        void render(const EffectPassPtr& pass, const Matrix4& viewMat, const Matrix4& projMat);
+        void render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat);
         
     protected:
         void flush();
-        void renderRenderable(GraphicDevice& gd, Renderable& renderable, const EffectPassPtr& pass);
+        void renderRenderable(GraphicDevice& gd, Renderable& renderable, const EffectTechniquePtr& technique);
 
         virtual void onAddSceneObject(const SceneObjectPtr& obj);
         virtual void onDelSceneObject(const SceneObjectPtr& obj);

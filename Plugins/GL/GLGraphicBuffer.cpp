@@ -7,7 +7,7 @@
 //
 
 #include "GLGraphicBuffer.h"
-
+#include "GLConvert.h"
 #include "GLPreq.h"
 
 namespace ukn {
@@ -102,6 +102,7 @@ namespace ukn {
 
     void GLVertexBuffer::activate() {
         glBindBuffer(GL_ARRAY_BUFFER, mId);
+
     }
     
     void GLVertexBuffer::deactivate() {

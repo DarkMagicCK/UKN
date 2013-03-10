@@ -3,7 +3,7 @@
 
 #include "UKN/GraphicFactory.h"
 #include "UKN/GraphicDevice.h"
-
+#include "UKN/Shader.h"
 #include "UKN/RenderBuffer.h"
 #include "UKN/CgHelper.h"
 #include "UKN/FrameBuffer.h"
@@ -31,10 +31,11 @@ namespace ukn {
         return this->buildVertices(factory);
     }
 
-    void Skybox::render() {
+    void Skybox::render(const EffectTechniquePtr& technique) {
         if(mRenderBuffer) {
             GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-            gd.renderBuffer(mRenderBuffer);
+            gd.renderBuffer(technique,
+                            mRenderBuffer);
 
         } else {
             log_error(L"Skybox::render: invalid render buffer");

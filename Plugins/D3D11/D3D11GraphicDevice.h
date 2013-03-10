@@ -30,7 +30,7 @@ namespace ukn {
         void endFrame() override;
         void beginRendering() override;
         
-        void renderBuffer(const RenderBufferPtr& buffer) override;
+        void renderBuffer(const EffectTechniquePtr& technique, const RenderBufferPtr& buffer) override;
         void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) override;
         
         void setViewMatrix(const Matrix4& mat) override;

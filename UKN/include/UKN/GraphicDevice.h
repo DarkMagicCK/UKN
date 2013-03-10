@@ -110,7 +110,7 @@ namespace ukn {
         
         virtual void fillGraphicCaps(GraphicDeviceCaps& caps) = 0;
     
-        virtual void renderBuffer(const RenderBufferPtr& buffer) = 0;
+        virtual void renderBuffer(const EffectTechniquePtr& technique, const RenderBufferPtr& buffer) = 0;
         virtual void onBindFrameBuffer(const FrameBufferPtr& frameBuffer) = 0;
         
         virtual void setRenderState(RenderStateType type, uint32 func) = 0;

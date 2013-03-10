@@ -110,8 +110,8 @@ namespace ukn {
         void startBatch();
         void endBatch();
 
-        // direct draw, current shader vertex format must = Vertex2D
-        void drawQuad(const Vector2& upper, const Vector2& lower);
+        // direct draw
+        void drawQuad(const EffectTechniquePtr& technique, const Vector2& upper, const Vector2& lower);
         
         Matrix4& getTransformMatrix();
         const Matrix4& getTransformMatrix() const;

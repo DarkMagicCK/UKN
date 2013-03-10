@@ -123,160 +123,212 @@ namespace ukn {
         }
     }
 
-    void GLGraphicDevice::renderBuffer(const RenderBufferPtr& buffer) {
-#define BUFFER_OFFSET(buffer, i) ((char*)buffer->map() + (i))
+    std::vector<int> GLGraphicDevice::applyBuffer(const vertex_elements_type& format, uint32 size, uint32 instance_freq) {
+        #define BUFFER_OFFSET(off) (((char*)0) + off)
+             
+        if(instance_freq > 0 &&
+            !glVertexAttribDivisor) {
+            // if instancing is required but not supported
+            // just return
+                return std::vector<int>();
+        }
+        /* this need to be changed?
+            since glVertexAttribPointer is introduced in 3.0 and 
+            things like glVertexPointer is removed in 3.1
+            but if we want backward-campability, it's better to stick with glVertexPointer ... ?
+            and osx only have ogl 3.x after 10.7 lion...
+            also attribute locations is causing problems in Cg shader, semantic names no longer working
+            we have to write different shaders for gl and directx,
+            but ... instancing requires vertex attribute..
+            so anyway we need a shader compiler first
+        */
+        uint32 offset = 0;
+        std::vector<int> attributes;
+        for(vertex_elements_type::const_iterator it = format.begin(),
+            end = format.end();
+            it != end;
+            ++it) {
+            // deprecated way of transmission vertex arrays
+            // though backward compatible and avoid generic attrib locations in shaders that causes different versions of shaders
+            // but also lack of some vertex usage support
 
-        if(buffer.isValid()) {
-            EffectPtr effect = mBindedEffect;
-            GraphicBufferPtr vertexBuffer = buffer->getVertexStream();
-            if(!vertexBuffer.isValid()) {
-                log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid vertex buffer stream");
-                return;
+#ifndef UKN_OPENGL_VERSION_MAJOR <= 2
+            switch(it->usage) {
+                case VU_Position:
+                    glVertexPointer(GetElementComponentSize(it->format),
+                                    element_format_to_gl_element_type(it->format),
+                                    size,
+                                    BUFFER_OFFSET(offset));
+                    glEnableClientState(GL_VERTEX_ARRAY);
+
+                    attributes.push_back(GL_VERTEX_ARRAY);
+                    break;
+                            
+                case VU_Diffuse:
+                    glColorPointer(GetElementComponentSize(it->format),
+                                    element_format_to_gl_element_type(it->format),
+                                    size,
+                                    BUFFER_OFFSET(offset));
+                    glEnableClientState(GL_COLOR_ARRAY);
+                    
+                    attributes.push_back(GL_COLOR_ARRAY);
+                    break;
+                            
+                case VU_Specular:
+                    glColorPointer(GetElementComponentSize(it->format),
+                                    element_format_to_gl_element_type(it->format),
+                                    size,
+                                    BUFFER_OFFSET(offset));
+                    glEnableClientState(GL_COLOR_ARRAY);
+
+                    attributes.push_back(GL_COLOR_ARRAY);
+                    break;
+                            
+                case VU_Normal:
+                    glNormalPointer(element_format_to_gl_element_type(it->format),
+                                    size,
+                                    BUFFER_OFFSET(offset));
+                    glEnableClientState(GL_NORMAL_ARRAY);
+
+                    attributes.push_back(GL_NORMAL_ARRAY);
+                    break;
+                            
+                case VU_UV:
+                    glTexCoordPointer(GetElementComponentSize(it->format),
+                                        element_format_to_gl_element_type(it->format),
+                                        size,
+                                        BUFFER_OFFSET(offset));
+                    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+                    attributes.push_back(GL_TEXTURE_COORD_ARRAY);
+                    break;
+                            
+                default:
+                    break;
             }
-
-            vertexBuffer->activate();
-
-            /* this need to be changed?
-                since glVertexAttribPointer is introduced in 3.0 and 
-                things like glVertexPointer is removed in 3.1
-                but if we want backward-campability, it's better to stick with glVertexPointer ... ?
-                and osx only have ogl 3.x after 10.7 lion...
-                also attribute locations is causing problems in Cg shader, semantic names no longer working
-                we have to write different shaders for gl and directx,
-            */
-            const vertex_elements_type& format = buffer->getVertexFormat();
-            uint32 total_size = GetVertexElementsTotalSize(format);
-            uint32 offset = 0;
-            for(vertex_elements_type::const_iterator it = format.begin(),
-                end = format.end();
-                it != end;
-                ++it) {
-                // deprecated way of transmission vertex arrays
-                // though backward compatible and avoid generic attrib locations in shaders that causes different versions of shaders
-                // but also lack of some vertex usage support
-#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
-                switch(it->usage) {
-                    case VU_Position:
-                        glVertexPointer(GetElementComponentSize(it->format),
-                                        element_format_to_gl_element_type(it->format),
-                                        total_size,
-                                        BUFFER_OFFSET(vertexBuffer, offset));
-                        glEnableClientState(GL_VERTEX_ARRAY);
-                        break;
-                            
-                    case VU_Diffuse:
-                        glColorPointer(GetElementComponentSize(it->format),
-                                        element_format_to_gl_element_type(it->format),
-                                        total_size,
-                                        BUFFER_OFFSET(vertexBuffer, offset));
-                        glEnableClientState(GL_COLOR_ARRAY);
-                        break;
-                            
-                    case VU_Specular:
-                        glColorPointer(GetElementComponentSize(it->format),
-                                        element_format_to_gl_element_type(it->format),
-                                        total_size,
-                                        BUFFER_OFFSET(vertexBuffer, offset));
-                        glEnableClientState(GL_COLOR_ARRAY);
-                        break;
-                            
-                    case VU_Normal:
-                        glNormalPointer(element_format_to_gl_element_type(it->format),
-                                        total_size,
-                                        BUFFER_OFFSET(vertexBuffer, offset));
-                        glEnableClientState(GL_NORMAL_ARRAY);
-                        break;
-                            
-                    case VU_UV:
-                        glTexCoordPointer(GetElementComponentSize(it->format),
-                                            element_format_to_gl_element_type(it->format),
-                                            total_size,
-                                            BUFFER_OFFSET(vertexBuffer, offset));
-                        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-                        break;
-                            
-                    default:
-                        break;
-                }
 #else
-                // ogl 3.x+
-                    int attribLoc = vertex_usage_to_attribute_location(it->usage);
-                    glVertexAttribPointer(attribLoc,
-                                            GetElementComponentSize(it->format),
-                                            element_format_to_gl_element_type(it->format),
-                                            (it->usage == VU_Specular || it->usage == VU_Diffuse) ? GL_TRUE : GL_FALSE,
-                                            total_size,
-                                            BUFFER_OFFSET(vertexBuffer, offset));
-                    glEnableVertexAttribArray(attribLoc);
+            // ogl 3.x+
+                int attribLoc = vertex_usage_to_attribute_location(it->usage);
+                glVertexAttribPointer(attribLoc,
+                                        GetElementComponentSize(it->format),
+                                        element_format_to_gl_element_type(it->format),
+                                        (it->usage == VU_Specular || it->usage == VU_Diffuse) ? GL_TRUE : GL_FALSE,
+                                        size,
+                                        BUFFER_OFFSET(offset));
+                glEnableVertexAttribArray(attribLoc);
+                glVertexAttribDivisor(attribLoc, instance_freq);
                         
-                    offset += it->size();
+                offset += it->size();
+
+                attributes.push_back(attribLoc);
 #endif
+        }
+    }
+
+    void GLGraphicDevice::renderBuffer(const EffectTechniquePtr& technique, const RenderBufferPtr& buffer) {
+        if(buffer) {
+            EffectPtr effect = mBindedEffect;
+            const RenderBuffer::VertexStreamVec& vertex_streams = buffer->getVertexStreams();
+
+            uint32 total_stream_size = 0;
+            std::vector<int> attributes;
+            for(const RenderBuffer::StreamObject& so: vertex_streams) {
+                const GraphicBufferPtr& vertexBuffer = so.stream;
+                
+                // bind vbo and vertex attributes
+                vertexBuffer->activate();
+                std::vector<int> appliedAttr = this->applyBuffer(so.format, so.vertex_size, 0);
+                attributes.insert(attributes.end(), appliedAttr.begin(), appliedAttr.end());
+
+                total_stream_size += so.vertex_size;
             }
 
-                
-            GraphicBufferPtr indexBuffer = buffer->getIndexStream();
+            if(buffer->hasInstanceStream()) {
+                const GraphicBufferPtr& instanceStream = buffer->getInstanceStream();
+                instanceStream->activate();
+                std::vector<int> appliedAttr = this->applyBuffer(buffer->getInstanceFormat(), 
+                                  buffer->getInstanceFormatSize(), 
+                                  1);
+                attributes.insert(attributes.end(), appliedAttr.begin(), appliedAttr.end());
+
+            }
+               
+            const GraphicBufferPtr& indexBuffer = buffer->getIndexStream();
             if(buffer->isUseIndexStream() &&
-                indexBuffer.isValid()) {
+                indexBuffer) {
                     indexBuffer->activate();
             }
 
-            if(buffer->isUseIndexStream()) {
-                if(!indexBuffer.isValid()) {
-                    log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid index stream");
-                    return;
-                }
-                glDrawRangeElements(
-                    render_mode_to_gl_mode(buffer->getRenderMode()),
-                    buffer->getIndexStartIndex(),
-                    0xffffffff,
-                    buffer->getIndexCount(),
-                    GL_UNSIGNED_INT,
-                    BUFFER_OFFSET(vertexBuffer, buffer->getVertexStartIndex()));
+            for(uint32 i=0; i<technique->getNumPasses(); ++i) {
+                const EffectPassPtr& pass = technique->getPass(i);
+                   
+                pass->begin();
+                if(!buffer->hasInstanceStream()) {
+                    if(buffer->isUseIndexStream()) {
+                        glDrawRangeElements(
+                            render_mode_to_gl_mode(buffer->getRenderMode()),
+                            buffer->getIndexStartIndex(),
+                            0xffffffff,
+                            buffer->getIndexCount(),
+                            GL_UNSIGNED_INT,
+                            BUFFER_OFFSET(0));
 
-            } else {
-                glDrawArrays(
-                    render_mode_to_gl_mode(buffer->getRenderMode()),
-                                            buffer->getVertexStartIndex(),
-                                            buffer->getVertexCount());
+                    } else {
+                        glDrawArrays(
+                            render_mode_to_gl_mode(buffer->getRenderMode()),
+                            buffer->getVertexStartIndex(),
+                            buffer->getVertexCount());
+                    }
+                } else {
+                    if(glDrawElementsInstanced &&
+                        glDrawArraysInstanced) {
+                        if(buffer->isUseIndexStream()) {
+                            glDrawElementsInstanced(
+                                render_mode_to_gl_mode(buffer->getRenderMode()),
+                                buffer->getInstanceCount(),
+                                GL_UNSIGNED_INT,
+                                BUFFER_OFFSET(0),
+                                buffer->getInstanceCount());
+
+                        } else {
+                            glDrawArraysInstanced(
+                                render_mode_to_gl_mode(buffer->getRenderMode()),
+                                buffer->getVertexStartIndex(),
+                                buffer->getVertexCount(),
+                                buffer->getInstanceCount());
+                        }
+                    } else {
+                        // fallback, assume that we are using software instancing...
+                        for(uint32 i=0; i<buffer->getInstanceCount(); ++i) {
+                            if(buffer->isUseIndexStream()) {
+                                glDrawRangeElements(
+                                    render_mode_to_gl_mode(buffer->getRenderMode()),
+                                    buffer->getIndexStartIndex(),
+                                    0xffffffff,
+                                    buffer->getIndexCount(),
+                                    GL_UNSIGNED_INT,
+                                    BUFFER_OFFSET(0));
+
+                            } else {
+                                glDrawArrays(
+                                    render_mode_to_gl_mode(buffer->getRenderMode()),
+                                    buffer->getVertexStartIndex(),
+                                    buffer->getVertexCount());
+                            }
+                        }
+                    }
+                }
+                pass->end();
             }
-
-            for(vertex_elements_type::const_iterator it = format.begin(),
-                end = format.end();
-                it != end;
-                ++it) {
-#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
-                switch(it->usage) {
-                    case VU_Position:
-                        glDisableClientState(GL_VERTEX_ARRAY);
-                        break;
-                            
-                    case VU_Diffuse:
-                        glDisableClientState(GL_COLOR_ARRAY);
-                        break;
-                            
-                    case VU_Specular:
-                        glDisableClientState(GL_COLOR_ARRAY);
-                        break;
-                            
-                    case VU_Normal:
-                        glDisableClientState(GL_NORMAL_ARRAY);
-                        break;
-                            
-                    case VU_UV:
-                        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-                        break;
-                            
-                    default:
-                        break;
-                }
+            for(auto attr: attributes) {
+#ifndef UKN_OPENGL_VERSION_MAJOR <= 2
+                glDisableClientState(attr);
 #else
                 // ogl 3.x+
-                glDisableVertexAttribArray(vertex_usage_to_attribute_location(it->usage) );
+                glDisableVertexAttribArray(attr);
 #endif
-                }
-        }
-
-
+            }
+        }  
     }
 
     void GLGraphicDevice::bindGLFrameBuffer(GLuint fbo) {

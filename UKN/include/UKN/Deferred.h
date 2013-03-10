@@ -50,12 +50,12 @@ namespace ukn {
         float2 mSize;
 
         EffectPtr mEffect;
-        EffectPassPtr mClearPass;
-        EffectPassPtr mGBufferPass;
-        EffectPassPtr mDirectionalLightPass;
-        EffectPassPtr mSpotLightPass;
-        EffectPassPtr mPointLightPass;
-        EffectPassPtr mCompositePass;
+        EffectTechniquePtr mClearTechnique;
+        EffectTechniquePtr mGBufferTechnique;
+        EffectTechniquePtr mDirectionalLightTechnique;
+        EffectTechniquePtr mSpotLightTechnique;
+        EffectTechniquePtr mPointLightTechnique;
+        EffectTechniquePtr mCompositeTechnique;
 
         CompositeRenderTargetPtr mGBufferRT;
         CompositeRenderTargetPtr mLightMapRT;

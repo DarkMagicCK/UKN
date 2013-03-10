@@ -103,12 +103,12 @@ namespace ukn {
         return mLightManager;
     }
 
-    void SceneManager::render(const EffectPassPtr& pass, const Matrix4& viewMat, const Matrix4& projMat) {
+    void SceneManager::render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat) {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         const SceneManager::SceneObjectList& objects = this->getSceneObjects();
-        Shader* vertexShader = pass->getVertexShader().get();
-        Shader* fragmentShader = pass->getFragmentShader().get();
+        Shader* vertexShader = technique->getPass(0)->getVertexShader().get();
+        Shader* fragmentShader = technique->getPass(0)->getFragmentShader().get();
         
         vertexShader->setMatrixVariable("viewMatrix", viewMat);
         vertexShader->setMatrixVariable("projectionMatrix", projMat);
@@ -123,19 +123,19 @@ namespace ukn {
                 if(model) {
                     for(uint32 i=0; i<model->getMeshCount(); ++i) {
                         const MeshPtr& mesh = model->getMesh(i);
-                        this->renderRenderable(gd, *mesh.get(), pass);
+                        this->renderRenderable(gd, *mesh.get(), technique);
                     }
                 } else {
-                    this->renderRenderable(gd, *pr.get(), pass);
+                    this->renderRenderable(gd, *pr.get(), technique);
                 }
             }
         }
     }
 
     
-    void SceneManager::renderRenderable(GraphicDevice& gd, Renderable& renderable, const EffectPassPtr& pass) {
-        Shader* vertexShader = pass->getVertexShader().get();
-        Shader* fragmentShader = pass->getFragmentShader().get();
+    void SceneManager::renderRenderable(GraphicDevice& gd, Renderable& renderable, const EffectTechniquePtr& technique) {
+        Shader* vertexShader = technique->getPass(0)->getVertexShader().get();
+        Shader* fragmentShader = technique->getPass(0)->getFragmentShader().get();
      
         if(renderable.getDiffuseTex()) {
             fragmentShader->setTextureVariable("diffuseMap", renderable.getDiffuseTex());
@@ -154,9 +154,7 @@ namespace ukn {
         }
 
         // to do with material
-        pass->begin();
-        renderable.render();
-        pass->end();
+        renderable.render(technique);
     }
 
 }

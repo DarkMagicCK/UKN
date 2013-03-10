@@ -16,6 +16,7 @@
 #include "UKN/FrameBuffer.h"
 
 #include "mist/Logger.h"
+#include "mist/Profiler.h"
 
 namespace ukn {
 

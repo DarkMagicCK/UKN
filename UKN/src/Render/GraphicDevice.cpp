@@ -21,6 +21,8 @@
 #include "UKN/RasterizerStateObject.h"
 #include "UKN/BlendStateObject.h"
 
+#include "mist/Profiler.h"
+
 namespace ukn {
     
     class NullWindow: public Window {
@@ -53,7 +55,7 @@ namespace ukn {
             return static_ptr;
         }
         
-        void renderBuffer(const RenderBufferPtr& buffer) { }
+        void renderBuffer(const EffectTechniquePtr& technique, const RenderBufferPtr& buffer) { }
         
         UknString description() const {
             return UknString(L"Null GraphicDevice");

@@ -20,7 +20,7 @@ namespace ukn {
         /* load an aligned cubemap skybox in a texture */
         bool load(const ResourcePtr& resource);
 
-        void render();
+        void render(const EffectTechniquePtr& technique);
 
         const UknString& getName() const override;
         

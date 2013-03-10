@@ -7,6 +7,7 @@
 #include "D3D11RasterizerStateObject.h"
 #include "D3D11DepthStencilStateObject.h"
 #include "D3D11GraphicBuffer.h"
+#include "CgShader.h"
 
 #include "WindowsWindow.h"
 
@@ -265,16 +266,16 @@ namespace ukn {
         }
     }
 
-    void D3D11GraphicDevice::renderBuffer(const RenderBufferPtr& buffer) {
+    void D3D11GraphicDevice::renderBuffer(const EffectTechniquePtr& technique, const RenderBufferPtr& buffer) {
         mist_assert(buffer.isValid());
 
-        GraphicBufferPtr vertexBuffer = buffer->getVertexStream();
+        const GraphicBufferPtr& vertexBuffer = buffer->getVertexStream();
         if(!vertexBuffer.isValid()) {
             log_error("ukn::GLGraphicDevice::onRenderBuffer: invalid vertex buffer stream");
             return;
         }
 
-        GraphicBufferPtr indexBuffer = buffer->getIndexStream();
+        const GraphicBufferPtr& indexBuffer = buffer->getIndexStream();
 
         D3D11RenderBuffer* d3dBuffer = checked_cast<D3D11RenderBuffer*>(buffer.get());
         if(d3dBuffer) {
@@ -330,32 +331,42 @@ namespace ukn {
                 }
             }
 
-            if(buffer->hasInstanceStream()) {
-                if(indexBuffer.isValid() &&
-                    buffer->isUseIndexStream()) {
-                        mDeviceContext->DrawIndexedInstanced(
-                            buffer->getIndexCount(),
+            for(uint32 i=0; i<technique->getNumPasses(); ++i) {
+                const EffectPassPtr& pass = technique->getPass(i);
+                CgDxShader* shader = (CgDxShader*)pass->getVertexShader().get();
+                ID3D10Blob* blob = shader->getCompiledProgram();
+                mDeviceContext->IASetInputLayout(d3dBuffer->inputLayout(blob->GetBufferPointer(),
+                                                                        blob->GetBufferSize()));
+                   
+                pass->begin();
+                if(buffer->hasInstanceStream()) {
+                    if(indexBuffer.isValid() &&
+                        buffer->isUseIndexStream()) {
+                            mDeviceContext->DrawIndexedInstanced(
+                                buffer->getIndexCount(),
+                                buffer->getInstanceCount(),
+                                buffer->getIndexStartIndex(),
+                                buffer->getVertexStartIndex(),
+                                buffer->getInstanceStartIndex());
+                    } else {
+                        mDeviceContext->DrawInstanced(
+                            buffer->getVertexCount(),
                             buffer->getInstanceCount(),
-                            buffer->getIndexStartIndex(),
                             buffer->getVertexStartIndex(),
                             buffer->getInstanceStartIndex());
+                    }
                 } else {
-                    mDeviceContext->DrawInstanced(
-                        buffer->getVertexCount(),
-                        buffer->getInstanceCount(),
-                        buffer->getVertexStartIndex(),
-                        buffer->getInstanceStartIndex());
-                }
-            } else {
-                if(indexBuffer.isValid() &&
-                    buffer->isUseIndexStream()) {
-                        mDeviceContext->DrawIndexed(buffer->getIndexCount(),
-                            buffer->getIndexStartIndex(),
+                    if(indexBuffer.isValid() &&
+                        buffer->isUseIndexStream()) {
+                            mDeviceContext->DrawIndexed(buffer->getIndexCount(),
+                                buffer->getIndexStartIndex(),
+                                buffer->getVertexStartIndex());
+                    } else {
+                        mDeviceContext->Draw(buffer->getVertexCount(),
                             buffer->getVertexStartIndex());
-                } else {
-                    mDeviceContext->Draw(buffer->getVertexCount(),
-                        buffer->getVertexStartIndex());
+                    }
                 }
+                pass->end();
             }
         }
     }

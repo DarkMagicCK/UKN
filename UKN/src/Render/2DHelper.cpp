@@ -28,15 +28,6 @@ namespace ukn {
         }
     }
 
-    void Ukn2DHelper::begin() {
-        if(!mEffect)
-            this->initialize();
-
-        if(mEffect) {
-            mEffect->getPass(0)->begin();
-        }
-    }
-
     void Ukn2DHelper::setupMat() {
         this->setupMat(mScreenTransformMat);
     }
@@ -59,21 +50,15 @@ namespace ukn {
             this->initialize();
 
         if(mEffect) {
-            EffectPassPtr pass0 = mEffect->getPass(0);
+            EffectPassPtr pass0 = mEffect->getTechnique(0)->getPass(0);
             pass0->getVertexShader()->setMatrixVariable("projectionMatrix", orthoMat);
             pass0->getVertexShader()->setMatrixVariable("viewMatrix", viewMat);
         }
     }
 
-    void Ukn2DHelper::end() {
-        if(mEffect) {
-            mEffect->getPass(0)->end();
-        }
-    }
-
     void Ukn2DHelper::bindTexture(const TexturePtr& texture) {
         if(mEffect) {
-            mEffect->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
+            mEffect->getTechnique(0)->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
         }
     }
 

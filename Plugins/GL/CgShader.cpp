@@ -35,22 +35,6 @@ namespace ukn {
         }
     }
 
-    void CgGLEffect::bind(uint32 passIndex) {
-        if(passIndex < this->getNumPasses()) {
-            const EffectPassPtr& pass = this->mPasses[passIndex];
-            pass->begin();
-        } else
-            log_warning(L"CgGLEffect::bind: pass overflow");
-    }
-
-    void CgGLEffect::unbind(uint32 passIndex) {
-        if(passIndex < this->getNumPasses()) {
-            const EffectPassPtr& pass = this->mPasses[passIndex];
-            pass->end();
-        } else
-            log_warning(L"CgGLEffect::bind: pass overflow");
-    }
-
     ShaderPtr CgGLEffect::createShader(const ResourcePtr& resource, const ShaderDesc& desc) {
         if(resource) {
             CgGLShader* shader = new CgGLShader(mContext);

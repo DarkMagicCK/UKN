@@ -26,13 +26,13 @@ namespace ukn {
         return mMaterial;
     }
 
-    void Renderable::render() {
+    void Renderable::render(const EffectTechniquePtr& technique) {
        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
        RenderBufferPtr& gb = this->getRenderBuffer();
 
        this->onRenderBegin();
-       gd.renderBuffer(gb);
+       gd.renderBuffer(technique, gb);
        this->onRenderEnd();
     }
 

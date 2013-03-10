@@ -18,26 +18,13 @@ namespace ukn {
 
     class D3D11GraphicDevice;
 
-    class DxEffectPass: public EffectPass {
-    public:
-        DxEffectPass(Effect* parent, D3D11GraphicDevice*);
-        virtual ~DxEffectPass();
-
-    private:
-        D3D11GraphicDevice* mDevice;
-    };
-
     class CgDxEffect: public Effect {
     public:
         CgDxEffect(D3D11GraphicDevice* device);
         virtual ~CgDxEffect();
 
-        void bind(uint32 pass) override;
-        void unbind(uint32 pass) override;
-
         ShaderPtr createShader(const ResourcePtr& resource, const ShaderDesc& desc) override;
-        EffectPassPtr createPass() override;
-
+        
         CGcontext getContext() const;
 
     private:

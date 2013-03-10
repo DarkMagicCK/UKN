@@ -5,7 +5,7 @@
 namespace ukn {
     
     D3D11VertexLayout::D3D11VertexLayout(const vertex_elements_type& format, 
-                                        uint8* code, 
+                                        void* code, 
                                         uint32 signature, 
                                         D3D11GraphicDevice* device,
                                         uint32 instance_start,

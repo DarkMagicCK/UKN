@@ -31,20 +31,16 @@ namespace ukn {
         ukn::ShaderPtr fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/expdepth_frag.cg"), 
                                                                         FRAGMENT_SHADER_DESC("FragmentProgram"));
 
-        mEXPDepthMapPass = mDepthWriteEffect->appendPass();
-        mEXPDepthMapPass->setFragmentShader(fragmentShader);
-        mEXPDepthMapPass->setVertexShader(vertexShader);
-        mEXPDepthMapPass->setVertexFormat(ukn::VertexUVNormal::Format());
+        mEXPDepthMapTechnique = mDepthWriteEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
+
 
         vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/depth_vert.cg"), 
                                                                         VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/depth_frag.cg"), 
                                                                         FRAGMENT_SHADER_DESC("FragmentProgram"));
 
-        mDepthMapPass = mDepthWriteEffect->appendPass();
-        mDepthMapPass->setFragmentShader(fragmentShader);
-        mDepthMapPass->setVertexShader(vertexShader);
-        mDepthMapPass->setVertexFormat(ukn::VertexUVNormal::Format());
+        mDepthMapTechnique = mDepthWriteEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
+
 
         mShadowMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
 
@@ -97,11 +93,11 @@ namespace ukn {
 
     void LightManager::renderShadowMap(GraphicDevice& gd, SceneManager& scene, const LightSourcePtr& ls) {
         const RenderTargetPtr& rt = ls->getShadowMap();
-        EffectPassPtr pass;
+        EffectTechniquePtr techniuqe;
         if(ls->type() == LS_Directional)
-            pass = mDepthMapPass;
+            techniuqe = mDepthMapTechnique;
         else
-            pass = mEXPDepthMapPass;
+            techniuqe = mEXPDepthMapTechnique;
 
         mShadowMapRT->attach(ATT_Color0, ls->getShadowMap());
         mShadowMapRT->attach(ATT_DepthStencil, 
@@ -111,13 +107,13 @@ namespace ukn {
 
         gd.clear(CM_Color | CM_Depth, color::Transparent, 1.0f, 0);
 
-        Shader* fragmentShader = mDepthMapPass->getFragmentShader().get();
+        Shader* fragmentShader = mDepthMapTechnique->getPass(0)->getFragmentShader().get();
         fragmentShader->setFloatVectorVariable("lightPosition", ls->getPosition());
         
         const CameraPtr& cam = ls->getCamera(0);
         fragmentShader->setFloatVariable("depthPrecision", cam->getFarPlane());
 
-        scene.render(pass, cam->getViewMatrix(), cam->getProjMatrix());
+        scene.render(techniuqe, cam->getViewMatrix(), cam->getProjMatrix());
 
         mShadowMapRT->detachFromRender();
     }

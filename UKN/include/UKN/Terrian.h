@@ -31,7 +31,7 @@ namespace ukn {
         virtual ~Terrian();
 
         virtual bool build() = 0;
-        virtual void render() = 0;
+        virtual void render(const EffectTechniquePtr& technique) = 0;
         virtual uint32 getVertexCount() const = 0;
         virtual uint32 getIndexCount() const = 0;
         virtual uint32 getDrawCount() const = 0;
@@ -57,7 +57,7 @@ namespace ukn {
         // noise = perlin noise weight
         // noiseWeight = vertex height weight 
         virtual bool build();
-        virtual void render();
+        virtual void render(const EffectTechniquePtr& technique);
 
         /* should be called before build */
         GridTerrian& position(const float3& pos);
@@ -113,7 +113,7 @@ namespace ukn {
         GridTerrianLightening& textureRepeat(uint32 texRepeat);
 
         virtual bool build();
-        virtual void render();
+        virtual void render(const EffectTechniquePtr& technique);
 
         uint32 getDrawCount() const;
 
@@ -121,7 +121,7 @@ namespace ukn {
         Node* createNode(float x, float z, float w, VertexUVNormal* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices);
         uint32 triangleCount(float x, float z, float w, VertexUVNormal* vertices, uint32 pitch, uint32 h, std::vector<uint32>& indices, float& maxh, float &minh);
         void releaseNode(Node* node);
-        void renderNode(Node* node, GraphicDevice& device, const Frustum& frustum);
+        void renderNode(const EffectTechniquePtr& technique, Node* node, GraphicDevice& device, const Frustum& frustum);
 
         Node* mRoot;
         uint32 mDrawCount;

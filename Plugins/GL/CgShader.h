@@ -20,9 +20,6 @@ namespace ukn {
         CgGLEffect(GLGraphicDevice* device);
         virtual ~CgGLEffect();
 
-        void bind(uint32 pass) override;
-        void unbind(uint32 pass) override;
-
         ShaderPtr createShader(const ResourcePtr& resource, const ShaderDesc& desc) override;
         
         CGcontext getContext() const;

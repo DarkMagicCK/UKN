@@ -228,7 +228,7 @@ namespace ukn {
             virtual void onRenderBegin() override;
             virtual void onRenderEnd() override;
             
-            virtual void render() override;
+            virtual void render(const EffectTechniquePtr& technique) override;
             
         private:
             void orthogonalRender();

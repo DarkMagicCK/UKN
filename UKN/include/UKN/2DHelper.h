@@ -17,15 +17,12 @@ namespace ukn {
         ~Ukn2DHelper();
 
     public:
-        void begin();
         /* setup with screen orthogonal mat(current framebuffer) & identity transform mat */
         void setupMat();
         /* setup with custom transform mat */
         void setupMat(const mist::Matrix4& viewMat);
         /* setup with custom orthogonal mat & transform mat*/
         void setupMat(const mist::Matrix4& orthoMat, const mist::Matrix4& viewMat);
-
-        void end();
 
         void bindTexture(const TexturePtr& texture);
 

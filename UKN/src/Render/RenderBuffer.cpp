@@ -52,9 +52,10 @@ namespace ukn {
         mRenderMode = mode;
     }
 
-    GraphicBufferPtr RenderBuffer::getVertexStream(uint32 index) const {
+    const GraphicBufferPtr& RenderBuffer::getVertexStream(uint32 index) const {
         if(index < mVertexStreams.size())
             return mVertexStreams[index].stream;
+        return StaticEmptySharedPtr<GraphicBuffer>();
     }
     
     void RenderBuffer::bindVertexStream(const GraphicBufferPtr& vertexStream, const vertex_elements_type& format) {
@@ -116,7 +117,7 @@ namespace ukn {
         mVertexStartIndex = index;
     }
     
-    GraphicBufferPtr RenderBuffer::getIndexStream() const {
+    const GraphicBufferPtr& RenderBuffer::getIndexStream() const {
         return mIndexStream;
     }
     
@@ -197,8 +198,12 @@ namespace ukn {
     bool RenderBuffer::hasInstanceStream() const {
         return mInstanceStream.stream && mInstanceCount > 0;
     }
+
+    const vertex_elements_type& RenderBuffer::getInstanceFormat() const {
+        return mInstanceStream.format;
+    }
     
-	void RenderBuffer::onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format, VertexStreamType type) {
+	void RenderBuffer::onBindVertexStream(const GraphicBufferPtr& vertexStream, const vertex_elements_type& format, VertexStreamType type) {
 
 	}
 
@@ -206,7 +211,7 @@ namespace ukn {
 
 	}
 
-	void RenderBuffer::onBindIndexStream(GraphicBufferPtr indexStream) {
+	void RenderBuffer::onBindIndexStream(const GraphicBufferPtr& indexStream) {
 
 	}
 

@@ -46,7 +46,7 @@ namespace ukn {
         virtual void onRenderBegin();
         virtual void onRenderEnd();
         
-        virtual void render();
+        virtual void render(const EffectTechniquePtr& technique);
         virtual void setModelMatrix(const Matrix4& mat);
 
     public:

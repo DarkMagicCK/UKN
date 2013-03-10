@@ -33,8 +33,8 @@ namespace ukn {
         LightSourceVec mPointLights;
 
         EffectPtr mDepthWriteEffect;
-        EffectPassPtr mEXPDepthMapPass;
-        EffectPassPtr mDepthMapPass;
+        EffectTechniquePtr mEXPDepthMapTechnique;
+        EffectTechniquePtr mDepthMapTechnique;
 
         RenderBufferPtr mPointLightGeometry;
         RenderBufferPtr mSpotLightGeometry;

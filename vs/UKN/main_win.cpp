@@ -106,7 +106,7 @@ int CALLBACK WinMain(
                   .fps(60)
                )
         .connectUpdate([&](ukn::Window* ) {
-            for(int i=0; i<50; ++i) {
+            for(int i=0; i<0; ++i) {
                 pointLights[i]->setPosition(ukn::float3(
                                             sinf(r + rs[i]) * i + 30,
                                             5,
@@ -187,7 +187,7 @@ int CALLBACK WinMain(
                 mist::ProfileData shadowMapProf = mist::Profiler::Instance().get(L"SHADOW_MAP");
                 mist::ProfileData gbufferProf = mist::Profiler::Instance().get(L"DEFERRED_GBUFFER");
                 mist::ProfileData lightMapPro = mist::Profiler::Instance().get(L"DEFERRED_LIGHTMAP");
-
+            
                 font->begin();
                 font->draw(gd.description().c_str(), 0, 20, ukn::FA_Left, ukn::color::Skyblue);
                 font->draw((ukn::FormatString(L"FPS: {0}"), mist::FrameCounter::Instance().getCurrentFps()),
@@ -196,10 +196,10 @@ int CALLBACK WinMain(
                             ukn::FA_Left,
                             ukn::color::Skyblue);
 
-                font->draw((ukn::FormatString(L"ShadowMap: {0}\nGBuffer: {1}\nLightMap: {2}"), 
-                                shadowMapProf.time,
-                                gbufferProf.time,
-                                lightMapPro.time),
+                font->draw((ukn::FormatString(L"ShadowMap: {0}\nGBuffer: {1}\nLightMap: {2}\n"), 
+                                shadowMapProf.average_time,
+                                gbufferProf.average_time,
+                                lightMapPro.average_time),
                             0, 
                             40, 
                             ukn::FA_Left,
@@ -228,7 +228,8 @@ int CALLBACK WinMain(
             (*t).position(ukn::float3(-100, 0, -100))
                 .noise(10)
                 .noiseWeight(5)
-                .size(ukn::float2(200, 200));
+                .size(ukn::float2(20, 20))
+                .grid_size(10);
             if(t->build()) {
                 t->texture(gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"dirt01.dds")));
 
@@ -242,7 +243,7 @@ int CALLBACK WinMain(
 
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
-            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip.ply");
+            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
             if(dragonModel) {
                 ukn::SceneObjectPtr skyboxObject = ukn::MakeSharedPtr<ukn::SceneObject>(skybox, ukn::SOA_Overlay);
                 skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(50, 50, 50));
@@ -270,7 +271,7 @@ int CALLBACK WinMain(
                                                            false, 
                                                            1024);
            */
-            for(int i=0; i<50; ++i) {
+            for(int i=0; i<0; ++i) {
                 pointLights[i]  = ukn::MakeSharedPtr<ukn::PointLight>(ukn::float3(i + 30,
                                                                                5,
                                                                                0),

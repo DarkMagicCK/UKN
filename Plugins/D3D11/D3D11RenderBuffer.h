@@ -15,7 +15,7 @@ namespace ukn {
 		D3D11RenderBuffer(D3D11GraphicDevice* device);
 		virtual ~D3D11RenderBuffer();
 
-        ID3D11InputLayout* inputLayout(uint8* code, uint32 signature);
+        ID3D11InputLayout* inputLayout(void* code, uint32 signature);
 
 	private:
 		D3D11GraphicDevice* mDevice;

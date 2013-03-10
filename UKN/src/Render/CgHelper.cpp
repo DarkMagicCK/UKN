@@ -42,7 +42,8 @@ namespace ukn {
 
     EffectPtr CreateCgEffet2D() {
         EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
-        EffectPassPtr pass0 = effect->appendPass();
+        EffectTechniquePtr technique = effect->appendTechnique();
+        EffectPassPtr pass0 = technique->appendPass();
         pass0->setFragmentShader(effect->createShader(
             ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_2d_frag_program, 
                                                                  strlen(_2d_frag_program)), 
@@ -55,7 +56,6 @@ namespace ukn {
                                                                  L""),
                                            ukn::ShaderDesc(ST_VertexShader,
                                            "VertexProgram")));
-        pass0->setVertexFormat(ukn::Vertex2D::Format());
         return effect;
     }
 

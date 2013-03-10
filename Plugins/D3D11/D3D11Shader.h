@@ -22,9 +22,6 @@ namespace ukn {
 		
         ShaderPtr createShader(const ResourcePtr& content, const ShaderDesc& desc) override;
 
-        virtual void bind(uint32 pass) override;
-        virtual void unbind(uint32 pass) override;
-
 	private:
 		ID3DX11Effect* mEffect;
 		ID3DX11EffectTechnique* mTechnique;

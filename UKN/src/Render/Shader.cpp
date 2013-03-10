@@ -11,7 +11,7 @@
 
 namespace ukn {
 
-    EffectPass::EffectPass(Effect* parent):
+    EffectPass::EffectPass(EffectTechnique* parent):
         mParent(parent) {
 
     }
@@ -32,24 +32,16 @@ namespace ukn {
         mGeometryShader = shader;
     }
 
-    ShaderPtr EffectPass::getFragmentShader() const {
+    const ShaderPtr& EffectPass::getFragmentShader() const {
         return mFragmentShader;
     }
 
-    ShaderPtr EffectPass::getVertexShader() const {
+    const ShaderPtr& EffectPass::getVertexShader() const {
         return mVertexShader;
     }
 
-    ShaderPtr EffectPass::getGeometryShader() const {
+    const ShaderPtr& EffectPass::getGeometryShader() const {
         return mGeometryShader;
-    }
-
-    const vertex_elements_type& EffectPass::getVertexFormat() const {
-        return mFormat;
-    }
-    
-    void EffectPass::setVertexFormat(const vertex_elements_type& format) {
-        mFormat = format;
     }
 
     void EffectPass::begin() {
@@ -77,32 +69,88 @@ namespace ukn {
     Effect::~Effect() {
     
     }
+
+    EffectTechniquePtr Effect::createTechnique() {
+        return MakeSharedPtr<EffectTechnique>(this);
+    }
+
+    const EffectTechniquePtr& Effect::appendTechnique() {
+        mTechniques.push_back(this->createTechnique());
+        return mTechniques.back();
+    }
+
+    const EffectTechniquePtr& Effect::appendTechnique(const ShaderPtr& fragment, const ShaderPtr& vertex, const ShaderPtr& geometry) {
+        const EffectTechniquePtr& t = this->appendTechnique();
+        t->appendPass(fragment, vertex, geometry);
+        return t;
+    }
+
+    const EffectTechniquePtr& Effect::getTechnique(uint32 index) const {
+        if(index < mTechniques.size()) 
+            return mTechniques[index];
+        return StaticEmptySharedPtr<EffectTechnique>();
+    }
+
+    uint32 Effect::getNumTechniques() const {
+        return mTechniques.size();
+    }
+
+    EffectTechnique::EffectTechnique(Effect* parent):
+    mParent(parent) {
+
+    }
+
+    EffectTechnique::~EffectTechnique() {
+
+    }
     
-    uint32 Effect::getNumPasses() const {
+    const EffectPassPtr& EffectTechnique::appendPass(const ShaderPtr& fragmentShader, const ShaderPtr& vertexShader, const ShaderPtr& geometryShader) {
+        const EffectPassPtr& pass = this->appendPass();
+        pass->setFragmentShader(fragmentShader);
+        pass->setVertexShader(vertexShader);
+        pass->setGeometryShader(geometryShader);
+        return pass;
+    }
+
+    uint32 EffectTechnique::getNumPasses() const {
         return uint32(mPasses.size());
     }
 
-    void Effect::appendPass(const EffectPassPtr& pass) {
+    void EffectTechnique::appendPass(const EffectPassPtr& pass) {
         mPasses.push_back(pass);
     }
 
-    EffectPassPtr Effect::createPass() {
-        EffectPass* pass = new EffectPass(this);
-        return EffectPassPtr(pass);
+    EffectPassPtr EffectTechnique::createPass() {
+        return MakeSharedPtr<EffectPass>(this);
     }
 
-    EffectPassPtr Effect::getPass(uint32 pass) const {
+    const EffectPassPtr& EffectTechnique::getPass(uint32 pass) const {
         if(pass < mPasses.size())
             return mPasses.at(pass);
         else
             log_error(format_string("Effect::getPass, pass %d overflows", pass));
-        return EffectPassPtr();
+        return StaticEmptySharedPtr<EffectPass>();
     }
 
-    EffectPassPtr Effect::appendPass() {
-        EffectPassPtr pass = this->createPass();
-        this->appendPass(pass);
-        return pass;
+    const EffectPassPtr& EffectTechnique::appendPass() {
+        this->appendPass(this->createPass());
+        return mPasses.back();
+    }
+
+    void EffectTechnique::bind(uint32 pass) {
+        if(pass < mPasses.size()) {
+            mPasses[pass]->begin();
+        } else {
+            log_error(L"EffectTechnique::bind: invalid pass index");
+        }
+    }
+
+    void EffectTechnique::unbind(uint32 pass) {
+        if(pass < mPasses.size()) {
+            mPasses[pass]->end();
+        } else {
+            log_error(L"EffectTechnique::bind: invalid pass index");
+        }
     }
 
     bool Shader::setFloatVectorVariable(const char* name, const float3& vec) {

@@ -337,12 +337,6 @@ namespace mist {
     }
 
     template<typename T>
-    class EnableSharedPtrFromThis: public SharedPtr<T> {
-    public:
-        typedef SharedPtr<T> Ptr;
-    };
-
-    template<typename T>
     SharedPtr<T> MakeSharedPtr() {
         return SharedPtr<T>(new T());
     }
@@ -598,6 +592,12 @@ namespace mist {
         typedef T _internal_element_type;
         mutable WeakPtr<_internal_element_type> _internal_weak_this;
     };
+
+    template<typename T>
+    const SharedPtr<T>& StaticEmptySharedPtr() {
+        static SharedPtr<T> _val;
+        return _val;
+    }
 
 } // namespace mist
 #endif

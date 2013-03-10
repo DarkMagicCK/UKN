@@ -49,7 +49,7 @@ namespace ukn {
         RenderMode          getRenderMode() const;
         void                setRenderMode(RenderMode mode);
         
-        GraphicBufferPtr    getVertexStream(uint32 index = 0) const;
+        const GraphicBufferPtr& getVertexStream(uint32 index = 0) const;
         void                bindVertexStream(const GraphicBufferPtr& vertexStream, const vertex_elements_type& format);
         
         const VertexStreamVec& getVertexStreams() const;
@@ -69,7 +69,7 @@ namespace ukn {
         void                useIndexStream(bool flag);
         bool                isUseIndexStream() const;
         
-        GraphicBufferPtr    getIndexStream() const;
+        const GraphicBufferPtr& getIndexStream() const;
         void                bindIndexStream(const GraphicBufferPtr& indexStream);
         
         uint32              getIndexCount() const;
@@ -82,6 +82,7 @@ namespace ukn {
         void    setInstanceCount(uint32 count);
         uint32  getInstanceCount() const;
         void    bindInstanceStream(const GraphicBufferPtr& instanceStream, const vertex_elements_type& format);
+        const vertex_elements_type& getInstanceFormat() const;
 
         uint32 getInstanceStartIndex() const;
         void   setInstanceStartIndex(uint32 index);
@@ -91,9 +92,9 @@ namespace ukn {
         uint32 getInstanceFormatSize() const;
 
 	protected:
-		virtual void onBindVertexStream(GraphicBufferPtr vertexStream, const vertex_elements_type& format, VertexStreamType type);
+		virtual void onBindVertexStream(const GraphicBufferPtr& vertexStream, const vertex_elements_type& format, VertexStreamType type);
 		virtual void onSetVertexFormat(const vertex_elements_type& format, uint32 index);
-		virtual void onBindIndexStream(GraphicBufferPtr indexStream);
+		virtual void onBindIndexStream(const GraphicBufferPtr& indexStream);
 		virtual void onSetIndexCount(uint32 count);
 		virtual void onSetVertexCount(uint32 count);
 		virtual void onSetIndexStartIndex(uint32 index);

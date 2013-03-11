@@ -505,25 +505,25 @@ namespace ukn {
         
         if(vertices) {
             Vertex2D vertex;
-            vertex.xyz.set(upper.x(), upper.y(), 0);
-            vertex.uv.set(0, 0);
-            *vertices++ = vertex; 
-        
-            vertex.xyz.x() = lower.x();
-            vertex.uv.set(1, 0);
-            *vertices++ = vertex; 
-        
-            vertex.xyz.y() = lower.y();
+            vertex.xyz.set(lower.x(), lower.y(), 0);
             vertex.uv.set(1, 1);
             *vertices++ = vertex; 
-            *vertices++ = vertex; 
-
+        
             vertex.xyz.x() = upper.x();
             vertex.uv.set(0, 1);
             *vertices++ = vertex; 
-
+        
             vertex.xyz.y() = upper.y();
             vertex.uv.set(0, 0);
+            *vertices++ = vertex; 
+            *vertices++ = vertex; 
+
+            vertex.xyz.x() = lower.x();
+            vertex.uv.set(1, 0);
+            *vertices++ = vertex; 
+
+            vertex.xyz.y() = lower.y();
+            vertex.uv.set(1, 1);
             *vertices++ = vertex; 
         
             mVertexBuffer->unmap();

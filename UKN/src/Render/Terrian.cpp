@@ -278,7 +278,7 @@ namespace ukn {
     }
 
     float GridTerrianLightening::heightFunc(float x, float y) {
-        return 0;
+        return PerlinNoise::Gen(x * 10 ,y * 10 , 0) * 3;
     }
 
     bool GridTerrianLightening::build() {

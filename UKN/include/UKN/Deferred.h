@@ -45,8 +45,6 @@ namespace ukn {
         void makeLightMap(SceneManager& scene);
         void makeFinal();
 
-        bool mBegan;
-
         float2 mSize;
 
         EffectPtr mEffect;
@@ -63,8 +61,6 @@ namespace ukn {
 
         BlendStatePtr mLightMapBS;
         RasterizerStatePtr mWireframeRS;
-
-        LightManagerPtr mLights;
     };
 
     typedef SharedPtr<DeferredRenderer> DeferredRendererPtr;

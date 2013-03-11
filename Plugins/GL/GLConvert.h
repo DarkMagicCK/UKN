@@ -42,6 +42,10 @@ namespace ukn {
             case EF_Float2: return GL_RG32F;
             case EF_Float: return GL_R32F;
             case EF_UInt32: return GL_RGBA8;
+            case EF_RGBA64: return GL_RGBA16;
+            case EF_RG32: return GL_RG16;
+            case EF_HalfFloat2: return GL_RG16;
+            case EF_HalfFloat4: return GL_RGBA16;
             default:
                 return GL_UNSIGNED_BYTE;
         }
@@ -76,6 +80,10 @@ namespace ukn {
             case EF_Float3:
             case EF_Float4:
                 return GL_FLOAT;
+            case EF_RGBA64: return GL_UNSIGNED_INT;
+            case EF_RG32: return GL_UNSIGNED_INT;
+            case EF_HalfFloat2: return GL_FLOAT;
+            case EF_HalfFloat4: return GL_FLOAT;
             default:
                 return GL_UNSIGNED_BYTE;
         }

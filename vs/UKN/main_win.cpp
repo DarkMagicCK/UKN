@@ -29,6 +29,7 @@
 #include "UKN/SceneObjectWrapper.h"
 #include "UKN/SceneManager.h"
 #include "UKN/SceneObject.h"
+#include "UKN/SSAO.h"
 
 #include "UKN/tmx/TMXTiledMap.h"
 
@@ -72,6 +73,10 @@ int CALLBACK WinMain(
     ukn::RenderBufferPtr dragonBuffer;
     ukn::LightSourcePtr spotLight;
     ukn::LightSourcePtr directionalLight;
+    ukn::SSAOPtr ssao;
+
+    ukn::EffectPtr testEffect;
+    ukn::EffectTechniquePtr displayDepthTechnique;
 
     ukn::DeferredRendererPtr deferredRenderer;
 
@@ -84,7 +89,7 @@ int CALLBACK WinMain(
         All,
     };
 
-    Mode mode = Scene;
+    Mode mode = All;
     
 #ifndef MIST_OS_WINDOWS
     ukn::GraphicFactoryPtr factory;
@@ -140,6 +145,18 @@ int CALLBACK WinMain(
                     mode = All;
                 }
             }
+
+            
+            if(e.key == ukn::input::U) {
+                ssao->setSampleRadius(ssao->getSampleRadius() + 0.01);
+            } else if(e.key == ukn::input::I) {
+                ssao->setDistanceScale(ssao->getDistanceScale() + 0.01);
+            }
+            else if(e.key == ukn::input::J) {
+                ssao->setSampleRadius(ssao->getSampleRadius() - 0.01);
+            } else if(e.key == ukn::input::K) {
+                ssao->setDistanceScale(ssao->getDistanceScale() - 0.01);
+            }
         })
         .connectRender([&](ukn::Window* wnd) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
@@ -152,7 +169,10 @@ int CALLBACK WinMain(
             {
                 deferredRenderer->renderScene(scene);
             }
-
+            {
+                ssao->render(deferredRenderer->getGBufferRT(), 
+                             deferredRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0));
+            }
             // to do with rendering shader
 
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
@@ -163,11 +183,11 @@ int CALLBACK WinMain(
             const ukn::CompositeRenderTargetPtr& gbuffer = deferredRenderer->getGBufferRT();
 
             if(mode == All) {
-                sb.draw(gbuffer->getTargetTexture(ukn::ATT_Color0), 
+                sb.draw(ssao->getSSAOTarget()->getTexture(), 
                         ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
-                sb.draw(gbuffer->getTargetTexture(ukn::ATT_Color1), 
+                sb.draw(ssao->getSSAOBlurTarget()->getTexture(), 
                         ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
-                sb.draw(deferredRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0), 
+                sb.draw(ssao->getCompositeTarget()->getTexture(), 
                         ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
                 sb.draw(deferredRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0), 
                         ukn::Rectangle(wnd->width() / 2, 0, wnd->width() / 2, wnd->height() / 2, true));
@@ -181,8 +201,16 @@ int CALLBACK WinMain(
 
             }
             sb.end();
-
-
+            
+            /*
+            displayDepthTechnique->getPass(0)->getFragmentShader()->setTextureVariable("depthMap", 
+                deferredRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color2));
+            
+            ukn::SpriteBatch::DefaultObject().drawQuad(displayDepthTechnique, 
+                ukn::Vector2(-1, 0), 
+                ukn::Vector2(0, -1));
+              */  
+                
             if(font) {
                 mist::ProfileData shadowMapProf = mist::Profiler::Instance().get(L"SHADOW_MAP");
                 mist::ProfileData gbufferProf = mist::Profiler::Instance().get(L"DEFERRED_GBUFFER");
@@ -196,10 +224,12 @@ int CALLBACK WinMain(
                             ukn::FA_Left,
                             ukn::color::Skyblue);
 
-                font->draw((ukn::FormatString(L"ShadowMap: {0}\nGBuffer: {1}\nLightMap: {2}\n"), 
+                font->draw((ukn::FormatString(L"ShadowMap: {0}\nGBuffer: {1}\nLightMap: {2}\nSample Radius: {3}\nDistance Scale: {4}"), 
                                 shadowMapProf.average_time,
                                 gbufferProf.average_time,
-                                lightMapPro.average_time),
+                                lightMapPro.average_time,
+                                ssao->getSampleRadius(),
+                                ssao->getDistanceScale()),
                             0, 
                             40, 
                             ukn::FA_Left,
@@ -225,11 +255,11 @@ int CALLBACK WinMain(
             }
 
             ukn::GridTerrianLightening* t = new ukn::GridTerrianLightening();
-            (*t).position(ukn::float3(-100, 0, -100))
+            (*t).position(ukn::float3(-50, 0, -50))
                 .noise(10)
                 .noiseWeight(5)
-                .size(ukn::float2(20, 20))
-                .grid_size(10);
+                .size(ukn::float2(100, 100))
+                .grid_size(1);
             if(t->build()) {
                 t->texture(gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"dirt01.dds")));
 
@@ -240,6 +270,7 @@ int CALLBACK WinMain(
             }
 
             deferredRenderer = new ukn::DeferredRenderer();
+            ssao = new ukn::SSAO();
 
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
@@ -257,9 +288,9 @@ int CALLBACK WinMain(
                 ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
                 scene.addSceneObject(terrianObject);
             }
-            directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 0),
+            directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 1),
                                                                         ukn::float4(1, 1, 1, 1),
-                                                                        0.3,
+                                                                        1.0,
                                                                         true,
                                                                         1024);
 
@@ -288,6 +319,17 @@ int CALLBACK WinMain(
             
    //         scene.addLight(spotLight);
             scene.addLight(directionalLight);
+
+            testEffect = gf.createEffect();
+            displayDepthTechnique = testEffect->appendTechnique(
+                testEffect->createShader(
+                ukn::ResourceLoader::Instance().loadResource(L"deferred/display_depth_frag.cg"),
+                FRAGMENT_SHADER_DESC("FragmentProgram")),
+                testEffect->createShader(
+                ukn::ResourceLoader::Instance().loadResource(L"deferred/display_depth_vert.cg"),
+                VERTEX_SHADER_DESC("VertexProgram")),
+                ukn::ShaderPtr());
+
         })
         .run();
     

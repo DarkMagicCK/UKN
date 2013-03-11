@@ -32,13 +32,13 @@ namespace ukn {
     };
 
 #define VERTEX_SHADER_DESC(entry) \
-    ShaderDesc(ST_VertexShader, (entry))
+    ukn::ShaderDesc(ukn::ST_VertexShader, (entry))
 
 #define FRAGMENT_SHADER_DESC(entry) \
-    ShaderDesc(ST_FragmentShader, (entry))
+    ukn::ShaderDesc(ukn::ST_FragmentShader, (entry))
 
 #define GEOMETRY_SHADER_DESC(entry) \
-    ShaderDesc(ST_GeometryShader, (entry))
+    ukn::ShaderDesc(ukn::ST_GeometryShader, (entry))
     
     class Shader;
     typedef SharedPtr<Shader> ShaderPtr;

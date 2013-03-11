@@ -32,7 +32,7 @@ FragmentOutputType FragmentProgram(VertexOutputType input,
     output.normal.xyz = encode(input.normal);
     output.normal.w = 0.4;
 
-    output.depth = input.depth.x / input.depth.y;
+    output.depth.r = input.depth.x / input.depth.y;
     output.depth.g = input.depth.z;
     return output;
 }

@@ -79,11 +79,11 @@ namespace ukn {
         return 0;
     }
 
-    RenderViewPtr RenderTarget::getRenderView() const {
+    const RenderViewPtr& RenderTarget::getRenderView() const {
         return mRenderView;
     }
 
-    TexturePtr RenderTarget::getTexture() const {
+    const TexturePtr& RenderTarget::getTexture() const {
         return mTexture;
     }
 

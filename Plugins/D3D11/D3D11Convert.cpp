@@ -48,6 +48,14 @@ namespace ukn {
             return DXGI_FORMAT_R32_FLOAT;
         case ElementFormat::EF_UInt32:
             return DXGI_FORMAT_R8G8B8A8_UNORM;
+        case ElementFormat::EF_RGBA64:
+            return DXGI_FORMAT_R16G16B16A16_UNORM;
+        case ElementFormat::EF_RG32:
+            return DXGI_FORMAT_R16G16_UNORM;
+        case ElementFormat::EF_HalfFloat2:
+            return DXGI_FORMAT_R16G16_FLOAT;
+        case ElementFormat::EF_HalfFloat4:
+            return DXGI_FORMAT_R16G16B16A16_FLOAT;
         }
     }
 
@@ -75,6 +83,14 @@ namespace ukn {
             return ElementFormat::EF_Float2;
         case DXGI_FORMAT_R32_FLOAT:
             return ElementFormat::EF_Float;
+        case DXGI_FORMAT_R16G16B16A16_UNORM:
+            return ElementFormat::EF_RGBA64;
+        case DXGI_FORMAT_R16G16_UNORM:
+            return ElementFormat::EF_RG32;
+        case DXGI_FORMAT_R16G16_FLOAT:
+            return ElementFormat::EF_HalfFloat2;
+        case DXGI_FORMAT_R16G16B16A16_FLOAT:
+            return ElementFormat::EF_HalfFloat4;
         }
     }
 

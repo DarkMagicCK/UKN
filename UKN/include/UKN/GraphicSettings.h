@@ -27,11 +27,17 @@ namespace ukn {
         EF_D32,
         EF_D16,
         
-        EF_Float4,
+        // 32bit each component
+        EF_Float4,  
         EF_Float3,
         EF_Float2,
         EF_Float,
-        EF_UInt32
+        EF_UInt32,
+
+        EF_RGBA64, /* unsigned rgba 16bit */
+        EF_RG32,   /* unsigned rg 16 bit */
+        EF_HalfFloat2, /* 32bit, 16bit r, g */
+        EF_HalfFloat4, /* 64bit, 16bit rgba */
     };
     
     template<int T>
@@ -59,6 +65,7 @@ namespace ukn {
         enum { Size = 2 };
     };
     
+    /* element size measured in uint8 */
     static uint8 GetElementSize(ElementFormat format) {
         switch(format) {
             case EF_RGBA8: return 4;
@@ -68,11 +75,15 @@ namespace ukn {
             case EF_D24S8: return 4;
             case EF_D32: return 4;
             case EF_D16: return 2;
-            case EF_Float: return sizeof(float);
-            case EF_Float2: return sizeof(float) * 2;
-            case EF_Float3: return sizeof(float) * 3;
-            case EF_Float4: return sizeof(float) * 4;
-            case EF_UInt32: return sizeof(uint32);
+            case EF_Float: return 4;
+            case EF_Float2: return 8;
+            case EF_Float3: return 12;
+            case EF_Float4: return 16;
+            case EF_UInt32: return 4;
+            case EF_RGBA64: return 8;
+            case EF_RG32:   return 4;
+            case EF_HalfFloat2: return 4;
+            case EF_HalfFloat4: return 8;
             default:
                 return 0;
         };
@@ -93,8 +104,12 @@ namespace ukn {
             case EF_Float3: return 3;
             case EF_Float4: return 4;
             case EF_UInt32: return 1;
+            case EF_RGBA64: return 4;
+            case EF_RG32: return 2;
+            case EF_HalfFloat2: return 2;
+            case EF_HalfFloat4: return 4;
             default:
-                return 0;
+                return 4;
         };
         return 0;
     }

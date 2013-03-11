@@ -114,6 +114,7 @@
     <ClInclude Include="..\..\UKN\include\UKN\Material.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Model.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Physics.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\PostEffect.h" />
     <ClInclude Include="..\..\UKN\include\UKN\PreDeclare.h" />
     <ClInclude Include="..\..\UKN\include\UKN\RasterizerStateObject.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Renderable.h" />
@@ -135,6 +136,7 @@
     <ClInclude Include="..\..\UKN\include\UKN\SkyDome.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Sprite.h" />
     <ClInclude Include="..\..\UKN\include\UKN\SpriteBatch.h" />
+    <ClInclude Include="..\..\UKN\include\UKN\SSAO.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Terrian.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Texture.h" />
     <ClInclude Include="..\..\UKN\include\UKN\Transform.h" />
@@ -173,6 +175,7 @@
     <ClCompile Include="..\..\UKN\src\Render\Light.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\LightManager.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Model.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\PostEffect.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RasterizerStateObject.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Renderable.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\RenderBuffer.cpp" />
@@ -187,6 +190,7 @@
     <ClCompile Include="..\..\UKN\src\Render\ShaderManager.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Skybox.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />
+    <ClCompile Include="..\..\UKN\src\Render\SSAO.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Terrian.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Texture.cpp" />
     <ClCompile Include="..\..\UKN\src\Render\Vertex.cpp" />

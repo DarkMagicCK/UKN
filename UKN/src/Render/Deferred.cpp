@@ -21,8 +21,7 @@
 namespace ukn {
 
     DeferredRenderer::DeferredRenderer(const float2& size):
-    mSize(size),
-    mBegan(false) {
+    mSize(size) {
         if(!this->init()) {
             log_error(L"DeferredRenderer::DeferredRenderer: error initializing deferred renderer");
         }
@@ -63,39 +62,39 @@ namespace ukn {
         {
             mGBufferRT = new ukn::CompositeRenderTarget();
             mGBufferRT->attach(ukn::ATT_Color0,
-                               MakeSharedPtr<ukn::RenderTarget>(mSize[0],
-                                                          mSize[1],
-                                                          1,
-                                                          ukn::EF_RGBA8));
+                               MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                (uint32)mSize[1],
+                                                                1,
+                                                                ukn::EF_RGBA8));
             mGBufferRT->attach(ukn::ATT_Color1,
-                               MakeSharedPtr<ukn::RenderTarget>(mSize[0],
-                                                          mSize[1],
-                                                          1,
-                                                          ukn::EF_RGBA8));
+                               MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                (uint32)mSize[1],
+                                                                1,
+                                                                ukn::EF_RGBA8));
             mGBufferRT->attach(ukn::ATT_Color2,
-                               MakeSharedPtr<ukn::RenderTarget>(mSize[0],
-                                                          mSize[1],
-                                                          1,
-                                                          ukn::EF_Float));
+                               MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                (uint32)mSize[1],
+                                                                1,
+                                                                ukn::EF_HalfFloat2));
             mGBufferRT->attach(ukn::ATT_DepthStencil,
-                               MakeSharedPtr<ukn::RenderTarget>(mSize[0],
-                                                          mSize[1],
-                                                          ukn::EF_D16));
+                               MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                (uint32)mSize[1],
+                                                                ukn::EF_D32));
 
             
             mLightMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
             mLightMapRT->attach(ukn::ATT_Color0,
                                 MakeSharedPtr<ukn::RenderTarget>(800,
-                                                          600,
-                                                          1,
-                                                          ukn::EF_RGBA8));
+                                                                 600,
+                                                                 1,
+                                                                 ukn::EF_RGBA8));
             
             mCompositeRT = new ukn::CompositeRenderTarget();
             mCompositeRT->attach(ukn::ATT_Color0,
                                  MakeSharedPtr<ukn::RenderTarget>(800,
-                                                          600,
-                                                          1,
-                                                          ukn::EF_RGBA8));
+                                                                  600,
+                                                                  1,
+                                                                  ukn::EF_RGBA8));
             
         }
         /* shaders */

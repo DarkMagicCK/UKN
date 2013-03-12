@@ -67,6 +67,16 @@ namespace ukn {
 
         };
 
+        float3 n[6] = {
+            float3(0, 0, -1), // 0
+            float3(-1, 0, 0), // 1
+            float3(0, 0, 1), // 2
+            float3(1, 0, 0), // 3
+            
+            float3(0, 1, 0), // 4
+            float3(0, -1, 0), // 5
+        };
+
         uint32 idx = 0;
         
         // front, 0123
@@ -113,6 +123,12 @@ namespace ukn {
         vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, 1);
         vertices[idx++].uv.set(half4, 1); vertices[idx++].uv.set(half2, 1); vertices[idx++].uv.set(half2, half32);
          
+        for(int i=0; i<6; ++i) {
+            for(int j=0; j<6; ++j) {
+                vertices[i * 6 + j].normal = n[i];
+            }
+        }
+
         mRenderBuffer = factory.createRenderBuffer();
         mVertexBuffer = factory.createVertexBuffer(GraphicBuffer::None,
                                                    GraphicBuffer::Static,

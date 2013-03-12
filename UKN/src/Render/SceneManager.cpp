@@ -6,6 +6,8 @@
 #include "UKN/GraphicFactory.h"
 #include "UKN/Context.h"
 #include "UKN/Model.h"
+#include "UKN/Renderable.h"
+#include "UKN/RenderBuffer.h"
 
 namespace ukn {
 
@@ -72,19 +74,19 @@ namespace ukn {
 	}
         
     uint32 SceneManager::numObjectsRendered() const {
-		return 0;
+		return mNumObjectsRendered;
 	}
 
     uint32 SceneManager::numRenderableRendered() const {
-		return 0;
+		return mNumRenderableRendered;
 	}
 
     uint32 SceneManager::numPrimitivesRenderered() const {
-		return 0;
+		return mNumPrimitivesRendered;
 	}
 
     uint32 SceneManager::numVerticesRendered() const {
-		return 0;
+		return mNumVerticesRendered;
 	}
         
     void SceneManager::flush() {
@@ -104,6 +106,11 @@ namespace ukn {
     }
 
     void SceneManager::render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat) {
+        mNumObjectsRendered = 0;
+        mNumRenderableRendered = 0;
+        mNumPrimitivesRendered = 0;
+        mNumVerticesRendered = 0;
+        
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         const SceneManager::SceneObjectList& objects = this->getSceneObjects();
@@ -129,6 +136,7 @@ namespace ukn {
                     this->renderRenderable(gd, *pr.get(), technique);
                 }
             }
+            mNumObjectsRendered++;
         }
     }
 
@@ -152,6 +160,8 @@ namespace ukn {
         if(renderable.getSpecularTex()) {
             fragmentShader->setTextureVariable("specularMap", renderable.getSpecularTex());
         }
+        mNumVerticesRendered += renderable.getRenderBuffer()->getVertexCount();
+        mNumRenderableRendered ++;
 
         // to do with material
         renderable.render(technique);

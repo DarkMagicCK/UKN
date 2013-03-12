@@ -80,16 +80,18 @@ int CALLBACK WinMain(
 
     ukn::DeferredRendererPtr deferredRenderer;
 
-    ukn::PointLightPtr pointLights[200];
-    float rs[200];
+    ukn::PointLightPtr pointLights[400];
+    float rs[400];
+    ukn::uint32 pointLightCount = 0;
 
     enum Mode {
         LightMap,
         Scene,
+        SSAOAll,
         All,
     };
 
-    Mode mode = All;
+    Mode mode = Scene;
     
 #ifndef MIST_OS_WINDOWS
     ukn::GraphicFactoryPtr factory;
@@ -108,14 +110,13 @@ int CALLBACK WinMain(
                   .showMouse(true)
                   .isFullScreen(false)
                   .graphicFactoryName(L"D3D11Plugin.dll")
-                  .fps(60)
                )
         .connectUpdate([&](ukn::Window* ) {
-            for(int i=0; i<0; ++i) {
+            for(int i=0; i<pointLightCount; ++i) {
                 pointLights[i]->setPosition(ukn::float3(
-                                            sinf(r + rs[i]) * i + 30,
+                                            sinf(r + rs[i]) * (i % 50),
                                             5,
-                                            cosf(r + rs[i]) * i + 30));
+                                            cosf(r + rs[i]) * (i % 50)));
             }
             
             r += (float)ukn::d_pi / 180.f;
@@ -137,12 +138,37 @@ int CALLBACK WinMain(
                     }
                 } else if(e.key == ukn::input::F2) {
                     directionalLight->setEnabled(!directionalLight->getEnabled());
-                } else if(e.key == ukn::input::F3) {
+                } else if(e.key == ukn::input::Num2) {
                     mode = LightMap;
-                } else if(e.key == ukn::input::F4) {
+                } else if(e.key == ukn::input::Num1) {
                     mode = Scene;
-                } else if(e.key == ukn::input::F5) {
+                } else if(e.key == ukn::input::Num3) {
                     mode = All;
+                } else if(e.key == ukn::input::Num4) {
+                    mode = SSAOAll;
+                } else if(e.key == ukn::input::Equals) {
+                    
+                    ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
+           
+                    pointLights[pointLightCount]  = ukn::MakeSharedPtr<ukn::PointLight>(ukn::float3(pointLightCount + 30,
+                                                                               5,
+                                                                               0),
+                                                                   20.f,
+                                                                   ukn::float4(ukn::Random::RandomFloat(0, 1), 
+                                                                               ukn::Random::RandomFloat(0, 1), 
+                                                                               ukn::Random::RandomFloat(0, 1), 1),
+                                                                   1.0f,
+                                                                   false,
+                                                                   256);
+                     rs[pointLightCount] = ukn::Random::RandomFloat(0, ukn::d_pi * 2);
+                     scene.addLight(pointLights[pointLightCount]);
+                     pointLightCount ++;
+                } else if(e.key == ukn::input::Num4) {
+                    
+                    ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
+           
+                    pointLightCount --;
+                    scene.removeLight(pointLights[pointLightCount]);
                 }
             }
 
@@ -182,12 +208,21 @@ int CALLBACK WinMain(
 
             const ukn::CompositeRenderTargetPtr& gbuffer = deferredRenderer->getGBufferRT();
 
-            if(mode == All) {
+            if(mode == SSAOAll) {
+           //     sb.draw(ssao->getSSAOTarget()->getTexture(), 
+           //             ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
                 sb.draw(ssao->getSSAOTarget()->getTexture(), 
-                        ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
-                sb.draw(ssao->getSSAOBlurTarget()->getTexture(), 
                         ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
                 sb.draw(ssao->getCompositeTarget()->getTexture(), 
+                        ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
+                sb.draw(deferredRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0), 
+                        ukn::Rectangle(wnd->width() / 2, 0, wnd->width() / 2, wnd->height() / 2, true));
+            }  else if(mode == All) {
+             //   sb.draw(ssao->getSSAOTarget()->getTexture(), 
+              //          ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
+                sb.draw(deferredRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0), 
+                        ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
+                sb.draw(deferredRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color1), 
                         ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
                 sb.draw(deferredRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0), 
                         ukn::Rectangle(wnd->width() / 2, 0, wnd->width() / 2, wnd->height() / 2, true));
@@ -202,15 +237,14 @@ int CALLBACK WinMain(
             }
             sb.end();
             
-            /*
-            displayDepthTechnique->getPass(0)->getFragmentShader()->setTextureVariable("depthMap", 
-                deferredRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color2));
-            
-            ukn::SpriteBatch::DefaultObject().drawQuad(displayDepthTechnique, 
-                ukn::Vector2(-1, 0), 
-                ukn::Vector2(0, -1));
-              */  
+            if(mode == All || mode == SSAOAll) {
+                displayDepthTechnique->getPass(0)->getFragmentShader()->setTextureVariable("depthMap", 
+                    deferredRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color2));
                 
+            ukn::SpriteBatch::DefaultObject().drawQuad(displayDepthTechnique, 
+                ukn::Vector2(-1, 1), 
+                ukn::Vector2(0, 0));
+            }    
             if(font) {
                 mist::ProfileData shadowMapProf = mist::Profiler::Instance().get(L"SHADOW_MAP");
                 mist::ProfileData gbufferProf = mist::Profiler::Instance().get(L"DEFERRED_GBUFFER");
@@ -224,10 +258,8 @@ int CALLBACK WinMain(
                             ukn::FA_Left,
                             ukn::color::Skyblue);
 
-                font->draw((ukn::FormatString(L"ShadowMap: {0}\nGBuffer: {1}\nLightMap: {2}\nSample Radius: {3}\nDistance Scale: {4}"), 
-                                shadowMapProf.average_time,
-                                gbufferProf.average_time,
-                                lightMapPro.average_time,
+                font->draw((ukn::FormatString(L"Vertices Rendered: {0}\nSample Radius: {1}\nDistance Scale: {2}"), 
+                                scene.numVerticesRendered(),
                                 ssao->getSampleRadius(),
                                 ssao->getDistanceScale()),
                             0, 
@@ -274,15 +306,15 @@ int CALLBACK WinMain(
 
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
-            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
+            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res2.ply");
             if(dragonModel) {
                 ukn::SceneObjectPtr skyboxObject = ukn::MakeSharedPtr<ukn::SceneObject>(skybox, ukn::SOA_Overlay);
-                skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(50, 50, 50));
+                skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(100, 100, 100));
                 
-           //     scene.addSceneObject(skyboxObject);
+       //         scene.addSceneObject(skyboxObject);
 
                 ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, ukn::SOA_Cullable | ukn::SOA_Moveable);
-                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(150, 150, 150));
+                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(30, 30, 30));
                 scene.addSceneObject(dragonObject);
 
                 ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
@@ -303,18 +335,7 @@ int CALLBACK WinMain(
                                                            1024);
            */
             for(int i=0; i<0; ++i) {
-                pointLights[i]  = ukn::MakeSharedPtr<ukn::PointLight>(ukn::float3(i + 30,
-                                                                               5,
-                                                                               0),
-                                                                   20.f,
-                                                                   ukn::float4(ukn::Random::RandomFloat(0, 1), 
-                                                                               ukn::Random::RandomFloat(0, 1), 
-                                                                               ukn::Random::RandomFloat(0, 1), 1),
-                                                                   1.0f,
-                                                                   false,
-                                                                   256);
-                 rs[i] = ukn::Random::RandomFloat(0, ukn::d_pi * 2);
-                scene.addLight(pointLights[i]);
+                
             }
             
    //         scene.addLight(spotLight);

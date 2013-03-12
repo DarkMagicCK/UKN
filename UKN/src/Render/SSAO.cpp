@@ -15,8 +15,8 @@ namespace ukn {
 
     SSAO::SSAO(const float2& size):
     mSize(size),
-    mSampleRadius(0),
-    mDistanceScale(0) {
+    mSampleRadius(0.3),
+    mDistanceScale(1.0) {
         if(!this->init()) {
         }
     }

@@ -81,6 +81,9 @@ float4 FragmentProgram(VertexOutputType input,
     float2 LUV = 0.5f * (float2(lightScreenPos.x, -lightScreenPos.y) + 1);
     float shadowFactor = 1.0f;
 
+    if(depth > 0.999)
+        return float4(1, 1, 1, 0);
+
     return shadowFactor * phong(position.xyz, normal, 0, 0);
     
 }

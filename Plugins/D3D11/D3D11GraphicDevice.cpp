@@ -223,7 +223,7 @@ namespace ukn {
         viewport.TopLeftX = (FLOAT)vp.left;
         viewport.TopLeftY = (FLOAT)vp.top;
         viewport.MaxDepth = 1.0f;
-        viewport.MinDepth = 0.f;
+        viewport.MinDepth = 0.0f;
         mDeviceContext->RSSetViewports(1, &viewport);
     }
 

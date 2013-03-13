@@ -19,7 +19,7 @@ class Vector3(object):
 	__metaclass__ = AutoFloatProperties('x','y','z')
 
 	def __init__(self, x=0, y=0, z=0):
-		self.x, self.y, self.z = x, y, z
+		self.x, self.y, self.z = float(x), float(y), float(z)
 
 	def __repr__(self):
 		return '[%.6f, %.6f, %.6f]' % (self.x, self.y, self.z)
@@ -88,17 +88,31 @@ class Material(object):
 	# 	height
 	textures = {}
 
+class Vertex(object):
+	position = Vector3()
+	uv = Vector3()
+	normal = Vector3()
+	tangent = Vector3()
+	binormal = Vector3()
+	color = Vector3()
+
+	def __init__(self, position = Vector3(), 
+					   uv = Vector3(), 
+					   normal = Vector3(), 
+					   tangent = Vector3(), 
+					   binormal = Vector3(), 
+					   color = Vector3()):
+		self.position, self.uv, self.normal = positions, uv, normal
+		self.tangent, self.binormal, self.color = tangent, binormal, color
+		pass
+
 # model mesh
 class Mesh(object):
 	# list of vertex attributes, all are lists Vector3(uv will only use xy)
 	# positions, uvs must be provided in the model
 	# normals, tangents and binormals may be calculated
-	# [Vector3 ......]
-	positions = []
-	uvs = []
-	normals = []
-	tangents = []
-	binormals = []
+	# [Vertex ......]
+	vertices = []
 
 	name = "default"
 	material_id = 0
@@ -185,8 +199,99 @@ class Model(object):
 		pass
 
 	# obj
-	def loadObj(self, file):
-		pass
+
+	def loadObj(self, f):
+		try:
+			OBJ_VERTEX = 1
+			OBJ_UV = 2
+			OBJ_FACE = 3
+			OBJ_VP = 4
+			OBJ_NORMAL = 5
+
+			mesh = Mesh()
+
+			for line in open(f, 'r').readlines():
+				if line.startswith('#'):
+					# comment line
+					pass
+				else:
+					components = [x.strip() for x in line.split(' ')]
+
+					select = {
+						'v': lambda x: OBJ_VERTEX,	# vertices
+						'vt': lambda x: OBJ_UV,			# uv
+						'f': lambda x: OBJ_FACE, 		# faces, must after vertices
+						'vp': lambda x: OBJ_VP,			# param space vertices
+						'vn': lambda x: OBJ_NORMAL, 	# normals
+					}[x[0]]()
+
+					positions = []
+					uvs = []
+					normals = []
+
+					data = components[1:]
+					if select == OBJ_VERTEX:
+						positions.append(Vector3(data[0], data[1], data[2]))
+						pass
+					elif select == OBJ_UV:
+						uvs.append(Vector3(data[0], data[1], 0))
+						pass
+					elif select == OBJ_NORMAL:
+						normals.append(Vector3(data[0], data[1], data[2]))
+						pass
+					elif select == OBJ_FACE:
+						face_data = [x.split('/') for x in data]
+						# if more than 3 vertices in a line, build triangles
+						for i in range(0, len(face_data) - 3):
+							# f v1 v2 v3...
+							if len(face_data[0]) == 1:
+								v1 = Vertex(position = positions[int(face_data[0+i][0])])
+								v2 = Vertex(position = positions[int(face_data[1+i][0])])
+								v3 = Vertex(position = positions[int(face_data[2+i][0])])
+								mesh.vertices += [v1, v2, v3]
+							# f v1/vt1 v2/vt2 ....
+							elif len(face_data[0] == 2):
+								v1 = Vertex(position = positions[int(face_data[0+i][0])],
+											uv = uvs[int(face_data[0+i][1])])
+								v2 = Vertex(position = positions[int(face_data[1+i][0])],
+											uv = uvs[int(face_data[1+i][1])])
+								v3 = Vertex(position = positions[int(face_data[2+i][0])],
+											uv = uvs[int(face_data[2+i][1])])
+								mesh.vertices += [v1, v2, v3]
+							# f v1/vt1/vn1 v2/vt2/vn2 ... or v1//vn1 v2//vn2
+							elif len(face_data[0] == 3):
+								if len(face_data[0][1]) != '0':
+									v1 = Vertex(position = positions[int(face_data[0+i][0])],
+												uv = uvs[int(face_data[0+i][1])],
+												normal = normals[int(face_data[0+i][2])])
+									v2 = Vertex(position = positions[int(face_data[1+i][0])],
+												uv = uvs[int(face_data[1+i][1])],
+												normal = normals[int(face_data[1+i][2])])
+									v3 = Vertex(position = positions[int(face_data[2+i][0])],
+												uv = uvs[int(face_data[2+i][1])],
+												normal = normals[int(face_data[2+i][2])])
+									mesh.vertices += [v1, v2, v3]
+								else:								
+									# v1//vn1 v2//vn2
+									v1 = Vertex(position = positions[int(face_data[0+i][0])],
+												normal = normals[int(face_data[0+i][2])])
+									v2 = Vertex(position = positions[int(face_data[1+i][0])],
+												normal = normals[int(face_data[1+i][2])])
+									v3 = Vertex(position = positions[int(face_data[2+i][0])],
+												normal = normals[int(face_data[2+i][2])])
+									mesh.vertices += [v1, v2, v3]
+							else:
+								print 'unrecognized face: ', face_data
+
+						pass
+					elif select == OBJ_VP:
+						# not supported currently
+						pass
+
+			self.meshes.append(mesh)
+
+		except Exception as err:
+			print 'Error while loading file ', f, ' exception = ', str(err) 
 
 	def save(self, file):
 		dom = minidom.getDOMImplementation().createDocument(None, 'Model', None)
@@ -195,18 +300,12 @@ class Model(object):
 		dom.appendChild(root)
 
 		try:
-			open(file, 'w+').write(dom.toprettyxml(indent='\t', encoding='utf-8 ≈'))
+			open(file, 'w+').write(dom.toprettyxml(indent='\t', encoding='utf-8'))
 		except Exception as ex:
 			print 'error saving file, exp = ', str(ex)
 
 # tests
 if __name__ == '__main__':
-	m = Mesh()
-	m.positions.append(Vector3(1, 2, 3))
-	m.uvs.append(Vector3(1, 2, 3))
-	m.normals.append(Vector3(0, 1, 0))
-
 	x = Model()
-	x.meshes.append(m)
-
+	x.loadObj('/Use/darkfall/Downloads/thompson.obj')
 	x.save('test.xml')

@@ -1,4 +1,4 @@
-import math
+import math, sys, traceback
 
 # http://stackoverflow.com/questions/2401185/python-vector-class
 def AutoFloatProperties(*props):
@@ -71,6 +71,7 @@ class Vector3(object):
 # model material
 class Material(object):
 	# 
+	name = "default"
 	diffuse = Vector3()
 	ambient = Vector3()
 	emit = Vector3()
@@ -102,7 +103,7 @@ class Vertex(object):
 					   tangent = Vector3(), 
 					   binormal = Vector3(), 
 					   color = Vector3()):
-		self.position, self.uv, self.normal = positions, uv, normal
+		self.position, self.uv, self.normal = position, uv, normal
 		self.tangent, self.binormal, self.color = tangent, binormal, color
 		pass
 
@@ -154,12 +155,16 @@ def CalculateTangentBinormal(p0, p1, p2, uv0, uv1, uv2):
 
 	binormal = binormal * tmp
 
-	return (normal.normalized(), 
-			tangent.normalized(), 
-			binormal.normalized())
+	return normal.normalized(), tangent.normalized(), binormal.normalized()
+
+def ResolveNTB(v1, v2, v3):
+	n, t, b = CalculateTangentBinormal(v1.position, v2.position, v3.position,
+									   v1.uv, v2.uv, v3.uv)
+	v1.normal = v2.normal = v3.normal = n
+	v1.tangent = v2.tangent = v3.tangent = t
+	v1.binormal = v2.binormal = v3.binormal = b
 
 import xml.dom.minidom as minidom
-
 
 # ukn model format
 # to do with bones, animations...
@@ -200,6 +205,47 @@ class Model(object):
 
 	# obj
 
+	def __loadObjMtl(self, f):
+		try:
+			mtllib_lines = open(f, 'r').readlines()
+			current_mat = None
+
+			for mat_line in mtllib_lines:
+				mat_cmmds = [x.strip() for x in mat_line.split(' ') ]
+
+				if mat_cmmds[0] == 'newmtl':
+					if current_mat != None:
+						self.materials.append(current_mat)
+
+					current_mat = Material()
+					current_mat.name = mat_cmmds[1]
+				else:
+					mat_data = [x for x in mat_cmmds[1:] if len(x) > 0]
+					if mat_cmmds[0] == 'Ka':
+						current_mat.ambient = Vector3(mat_data[0], mat_data[1], mat_data[2])
+					elif mat_cmmds[0] == 'Kd':
+						current_mat.diffuse = Vector3(mat_data[0], mat_data[1], mat_data[2])
+					elif mat_cmmds[0] == 'Ks':
+						current_mat.specular = Vector3(mat_data[0], mat_data[1], mat_data[2])
+					elif mat_cmmds[0] == 'Ns':
+						current_mat.specular_power = float(mat_data[0])
+					elif mat_cmmds[0] == 'r' or mat_cmmds[0] == 'Tr':
+						current_mat.opacity = float(mat_data[0])
+					elif mat_cmmds[0] == 'map_Ka':
+						current_mat.textures.update({'ambient': mat_data[-1]})
+					elif mat_cmmds[0] == 'map_Kd':
+						current_mat.textures.update({'diffuse': mat_data[-1]})
+					elif mat_cmmds[0] == 'map_Ks':
+						current_mat.textures.update({'specular': mat_data[-1]})
+					elif mat_cmmds[0] == 'map_bump' or mat_cmmds[0] == 'bump':
+						current_mat.textures.update({'normal': mat_data[-1]})
+
+			if current_mat != None:
+				self.materials.append(current_mat)
+
+		except Exception as exp:
+			print 'error opening mtllib file: ', data[0], ', exp = ', str(exp)
+
 	def loadObj(self, f):
 		try:
 			OBJ_VERTEX = 1
@@ -207,29 +253,45 @@ class Model(object):
 			OBJ_FACE = 3
 			OBJ_VP = 4
 			OBJ_NORMAL = 5
+			OBJ_MATERIAL = 6
+			USE_MATERIAL = 7
+
+			options = {
+				'v': OBJ_VERTEX,		# vertices
+				'vt': OBJ_UV,			# uv
+				'f': OBJ_FACE, 		# faces, must after vertices
+				'vp': OBJ_VP,			# param space vertices
+				'vn': OBJ_NORMAL, 	# normals
+				'mtllib': OBJ_MATERIAL,
+				'usemtl': USE_MATERIAL,
+			}
 
 			mesh = Mesh()
 
-			for line in open(f, 'r').readlines():
-				if line.startswith('#'):
+			lines = []
+			try:
+				lines = open(f, 'r').readlines()
+			except Exception as exp:
+				print 'error opening model file ', f, str(exp)
+
+			positions = []
+			uvs = []
+			normals = []
+			mat_id = -1
+
+			for line in lines:
+				if line.startswith('#') or len(line) <= 1:
 					# comment line
 					pass
 				else:
-					components = [x.strip() for x in line.split(' ')]
+					components = [x.strip() for x in line.split(' ') ]
+					if len(components) > 0 and not components[0] in options:
+						print 'unknown keyword: ', components[0]
+						continue;
 
-					select = {
-						'v': lambda x: OBJ_VERTEX,	# vertices
-						'vt': lambda x: OBJ_UV,			# uv
-						'f': lambda x: OBJ_FACE, 		# faces, must after vertices
-						'vp': lambda x: OBJ_VP,			# param space vertices
-						'vn': lambda x: OBJ_NORMAL, 	# normals
-					}[x[0]]()
+					select = options[components[0]]
 
-					positions = []
-					uvs = []
-					normals = []
-
-					data = components[1:]
+					data = [x for x in components[1:] if len(x) > 0]
 					if select == OBJ_VERTEX:
 						positions.append(Vector3(data[0], data[1], data[2]))
 						pass
@@ -242,12 +304,13 @@ class Model(object):
 					elif select == OBJ_FACE:
 						face_data = [x.split('/') for x in data]
 						# if more than 3 vertices in a line, build triangles
-						for i in range(0, len(face_data) - 3):
+						for i in range(0, len(face_data) - 2):
 							# f v1 v2 v3...
 							if len(face_data[0]) == 1:
 								v1 = Vertex(position = positions[int(face_data[0+i][0])])
 								v2 = Vertex(position = positions[int(face_data[1+i][0])])
 								v3 = Vertex(position = positions[int(face_data[2+i][0])])
+
 								mesh.vertices += [v1, v2, v3]
 							# f v1/vt1 v2/vt2 ....
 							elif len(face_data[0] == 2):
@@ -288,16 +351,80 @@ class Model(object):
 						# not supported currently
 						pass
 
+					elif select == OBJ_MATERIAL:
+						print '* found material lib: ', data[0]
+						self.__loadObjMtl(data[0])
+
+					elif select == USE_MATERIAL:
+						print '* selecting material'
+						for i in range(0, len(self.materials)):
+							print self.materials[i].name
+							if self.materials[i].name == data[0]:
+								mat_id = i
+								print '* using material ', data[0], ', id = ', mat_id
+								break
+						pass
+
+			i = 0
+			while i < len(mesh.vertices):
+				ResolveNTB(mesh.vertices[i], mesh.vertices[i+1], mesh.vertices[i+2])
+				i += 3
+
 			self.meshes.append(mesh)
 
 		except Exception as err:
 			print 'Error while loading file ', f, ' exception = ', str(err) 
+			traceback.print_exc(file=sys.stdout)
 
-	def save(self, file):
-		dom = minidom.getDOMImplementation().createDocument(None, 'Model', None)
+	SAVE_NORMAL = 1
+	SAVE_TANGENT = 1 << 1
+	SAVE_BINORMAL = 1 << 2
+	SAVE_UV = 1 << 3
+
+	def save(self, file, options = SAVE_NORMAL | SAVE_UV):
+		dom = minidom.getDOMImplementation().createDocument(None, 'model', None)
 
 		root = dom.documentElement
 		dom.appendChild(root)
+
+		for material in self.materials:
+			materialElement = dom.createElement('material')
+			materialElement.setAttribute('name', 			str(material.name))
+			materialElement.setAttribute('ambient', 		str(material.ambient))
+			materialElement.setAttribute('diffuse', 		str(material.diffuse))
+			materialElement.setAttribute('specular_power', 	str(material.specular_power))
+			materialElement.setAttribute('specular', 		str(material.specular))
+			materialElement.setAttribute('shininess', 		str(material.shininess))
+			materialElement.setAttribute('opacity', 		str(material.opacity))
+			materialElement.setAttribute('emit', 			str(material.emit))
+			for (tkey, tname) in material.textures:
+				textureElement = dom.createElement('texture')
+				textureElement.setAttribute('key', tkey)
+				textureElement.setAttribute('file', tname)
+				materialElement.appendChild(textureElement)
+
+			root.appendChild(materialElement)
+
+		for mesh in self.meshes:
+			meshElement = dom.createElement('mesh')
+			meshElement.setAttribute('name', mesh.name)
+			meshElement.setAttribute('material_id', str(mesh.material_id))
+			for vertex in mesh.vertices:
+				vertexElement = dom.createElement('vertex')
+				meshElement.appendChild(vertexElement)
+
+				vertexElement.setAttribute('position', str(vertex.position))
+				if options & self.SAVE_NORMAL:
+					vertexElement.setAttribute('normal', str(vertex.normal))
+				if options & self.SAVE_UV:
+					vertexElement.setAttribute('uv', str(vertex.uv))
+				if options & self.SAVE_TANGENT:
+					vertexElement.setAttribute('tangent', str(vertex.tangent))
+				if options & self.SAVE_BINORMAL:
+					vertexElement.setAttribute('binormal', str(vertex.binormal))
+				
+			root.appendChild(meshElement)
+			pass
 
 		try:
 			open(file, 'w+').write(dom.toprettyxml(indent='\t', encoding='utf-8'))
@@ -307,5 +434,5 @@ class Model(object):
 # tests
 if __name__ == '__main__':
 	x = Model()
-	x.loadObj('/Use/darkfall/Downloads/thompson.obj')
+	x.loadObj('dragon_test.obj')
 	x.save('test.xml')

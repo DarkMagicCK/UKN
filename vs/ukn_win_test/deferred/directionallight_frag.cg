@@ -43,6 +43,11 @@ float4 phong(float3 position, float3 N, float specularIntensity, float specularP
     float3 R = normalize(reflect(lightDirection, N));
     float3 E = normalize(cameraPosition - position.xyz);
     float NL = dot(N, -lightDirection);
+ /*   float df = max(0.0, NL);
+    if(df < 0.1) df = 0.0;
+    else if(df < 0.3) df = 0.3;
+    else if(df < 0.6) df = 0.6;
+    else df = 1.0;*/
 
     float3 diffuse = NL * lightColor.xyz;
     float specular = specularIntensity * pow(saturate(dot(R, E)), specularPower);

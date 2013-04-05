@@ -85,7 +85,13 @@
     <Image Include="ukn_win_test.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Tests\voxel\Game.cpp" />
+    <ClCompile Include="..\..\Tests\voxel\Voxel.cpp" />
     <ClCompile Include="..\UKN\main_win.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Tests\voxel\Game.h" />
+    <ClInclude Include="..\..\Tests\voxel\Voxel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

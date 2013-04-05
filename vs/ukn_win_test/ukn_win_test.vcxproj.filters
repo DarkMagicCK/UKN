@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\voxel">
+      <UniqueIdentifier>{3dfa46b0-ed05-40dc-afe4-ce7870189812}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ukn_win_test.rc">
@@ -31,5 +34,19 @@
     <ClCompile Include="..\UKN\main_win.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Tests\voxel\Voxel.cpp">
+      <Filter>Source Files\voxel</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Tests\voxel\Game.cpp">
+      <Filter>Source Files\voxel</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Tests\voxel\Voxel.h">
+      <Filter>Source Files\voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\voxel\Game.h">
+      <Filter>Source Files\voxel</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

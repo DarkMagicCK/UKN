@@ -43,9 +43,10 @@
 
 #include <vector>
 #include <map>
-
-
 #include <numeric>
+
+#include "../../Tests/voxel/Game.h"
+
 #ifndef MIST_OS_WINDOWS
 
 #include "../Plugins/gl/GLGraphicFactory.h"
@@ -64,6 +65,12 @@ int CALLBACK WinMain(
   __in  LPSTR lpCmdLine,
   __in  int nCmdSho) {
 #endif
+
+      {
+          ukn::voxel::Game game;
+          game.start();
+          return 0;
+      }
 
     ukn::Matrix4 worldMat;
     ukn::CameraController* camController;
@@ -147,7 +154,7 @@ int CALLBACK WinMain(
                 } else if(e.key == ukn::input::Num4) {
                     mode = SSAOAll;
                 } else if(e.key == ukn::input::Equals) {
-                    
+                   
                     ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
                     pointLights[pointLightCount]  = ukn::MakeSharedPtr<ukn::PointLight>(ukn::float3(pointLightCount + 30,

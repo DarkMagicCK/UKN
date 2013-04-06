@@ -107,6 +107,9 @@ class Vertex(object):
 		self.tangent, self.binormal, self.color = tangent, binormal, color
 		pass
 
+class Face(object):
+	vertices = []
+
 # model mesh
 class Mesh(object):
 	# list of vertex attributes, all are lists Vector3(uv will only use xy)
@@ -274,9 +277,9 @@ class Model(object):
 			except Exception as exp:
 				print 'error opening model file ', f, str(exp)
 
-			positions = []
-			uvs = []
-			normals = []
+			positions = [Vector3(), ]
+			uvs = [Vector3(), ]
+			normals = [Vector3(), ]
 			mat_id = -1
 
 			for line in lines:
@@ -303,48 +306,53 @@ class Model(object):
 						pass
 					elif select == OBJ_FACE:
 						face_data = [x.split('/') for x in data]
-						# if more than 3 vertices in a line, build triangles
-						for i in range(0, len(face_data) - 2):
-							# f v1 v2 v3...
-							if len(face_data[0]) == 1:
-								v1 = Vertex(position = positions[int(face_data[0+i][0])])
-								v2 = Vertex(position = positions[int(face_data[1+i][0])])
-								v3 = Vertex(position = positions[int(face_data[2+i][0])])
+						try:
+							# if more than 3 vertices in a line, build triangles
+							for i in range(0, len(face_data) - 2):
+								# f v1 v2 v3...
+								if len(face_data[0]) == 1:
+									v1 = Vertex(position = positions[int(face_data[0+i][0])])
+									v2 = Vertex(position = positions[int(face_data[1+i][0])])
+									v3 = Vertex(position = positions[int(face_data[2+i][0])])
 
-								mesh.vertices += [v1, v2, v3]
-							# f v1/vt1 v2/vt2 ....
-							elif len(face_data[0] == 2):
-								v1 = Vertex(position = positions[int(face_data[0+i][0])],
-											uv = uvs[int(face_data[0+i][1])])
-								v2 = Vertex(position = positions[int(face_data[1+i][0])],
-											uv = uvs[int(face_data[1+i][1])])
-								v3 = Vertex(position = positions[int(face_data[2+i][0])],
-											uv = uvs[int(face_data[2+i][1])])
-								mesh.vertices += [v1, v2, v3]
-							# f v1/vt1/vn1 v2/vt2/vn2 ... or v1//vn1 v2//vn2
-							elif len(face_data[0] == 3):
-								if len(face_data[0][1]) != '0':
-									v1 = Vertex(position = positions[int(face_data[0+i][0])],
-												uv = uvs[int(face_data[0+i][1])],
-												normal = normals[int(face_data[0+i][2])])
-									v2 = Vertex(position = positions[int(face_data[1+i][0])],
-												uv = uvs[int(face_data[1+i][1])],
-												normal = normals[int(face_data[1+i][2])])
-									v3 = Vertex(position = positions[int(face_data[2+i][0])],
-												uv = uvs[int(face_data[2+i][1])],
-												normal = normals[int(face_data[2+i][2])])
 									mesh.vertices += [v1, v2, v3]
-								else:								
-									# v1//vn1 v2//vn2
+								# f v1/vt1 v2/vt2 ....
+								elif len(face_data[0] == 2):
 									v1 = Vertex(position = positions[int(face_data[0+i][0])],
-												normal = normals[int(face_data[0+i][2])])
+												uv = uvs[int(face_data[0+i][1])])
 									v2 = Vertex(position = positions[int(face_data[1+i][0])],
-												normal = normals[int(face_data[1+i][2])])
+												uv = uvs[int(face_data[1+i][1])])
 									v3 = Vertex(position = positions[int(face_data[2+i][0])],
-												normal = normals[int(face_data[2+i][2])])
+												uv = uvs[int(face_data[2+i][1])])
 									mesh.vertices += [v1, v2, v3]
-							else:
-								print 'unrecognized face: ', face_data
+								# f v1/vt1/vn1 v2/vt2/vn2 ... or v1//vn1 v2//vn2
+								elif len(face_data[0] == 3):
+									if len(face_data[0][1]) != '0':
+										v1 = Vertex(position = positions[int(face_data[0+i][0])],
+													uv = uvs[int(face_data[0+i][1])],
+													normal = normals[int(face_data[0+i][2])])
+										v2 = Vertex(position = positions[int(face_data[1+i][0])],
+													uv = uvs[int(face_data[1+i][1])],
+													normal = normals[int(face_data[1+i][2])])
+										v3 = Vertex(position = positions[int(face_data[2+i][0])],
+													uv = uvs[int(face_data[2+i][1])],
+													normal = normals[int(face_data[2+i][2])])
+										mesh.vertices += [v1, v2, v3]
+									else:								
+										# v1//vn1 v2//vn2
+										v1 = Vertex(position = positions[int(face_data[0+i][0])],
+													normal = normals[int(face_data[0+i][2])])
+										v2 = Vertex(position = positions[int(face_data[1+i][0])],
+													normal = normals[int(face_data[1+i][2])])
+										v3 = Vertex(position = positions[int(face_data[2+i][0])],
+													normal = normals[int(face_data[2+i][2])])
+										mesh.vertices += [v1, v2, v3]
+								else:
+									print 'unrecognized face: ', face_data
+						except Exception as exp:
+							print str(exp)
+							for i in range(0, len(face_data) - 2):
+								print face_data
 
 						pass
 					elif select == OBJ_VP:
@@ -433,6 +441,14 @@ class Model(object):
 
 # tests
 if __name__ == '__main__':
-	x = Model()
-	x.loadObj('dragon_test.obj')
-	x.save('test.xml')
+    print sys.argv
+    if len(sys.argv) < 3:
+        x = Model()
+        x.loadObj('dragon_test.obj')
+        x.save('test.xml')
+    else:
+        if len(sys.argv) >= 3:
+            x = Model()
+            x.loadObj(sys.argv[1])
+            x.save(sys.argv[2])
+

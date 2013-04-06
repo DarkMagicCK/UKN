@@ -49,7 +49,7 @@ namespace ukn {
             return isSolid( Position(pos.x, pos.y + 1, pos.z) );
         }
 
-        bool BlockStorage::rightVisible(const Position& pos) const {
+        bool BlockStorage::bottomVisible(const Position& pos) const {
             return isSolid( Position(pos.x, pos.y - 1, pos.z) );
         }
 
@@ -358,6 +358,7 @@ namespace ukn {
                 updateBuffers();
             }
         }
+
 
     }
 }

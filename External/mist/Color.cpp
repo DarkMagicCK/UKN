@@ -34,9 +34,9 @@ namespace mist {
     }
 
     Color Color::operator = (uint32 col) {
-        this->c = float4(((col & 0xFF))/255.0f, 
+        this->c = float4(((col>>16) & 0xFF)/255.0f, 
                          ((col>>8) & 0xFF)/255.0f,
-                         ((col>>16) & 0xFF)/255.0f,
+                         ((col) & 0xFF)/255.0f,
                          ((col>>24) & 0xFF)/255.0f);
         return *this;
     }

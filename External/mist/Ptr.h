@@ -552,7 +552,7 @@ namespace mist {
 
     const struct {
         template<typename T>
-        operator T*() { return reinterpret_cast<T*>(0); }
+        operator T*() const { return reinterpret_cast<T*>(0); }
 
     private:
         void operator&() const;

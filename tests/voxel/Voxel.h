@@ -17,10 +17,6 @@ namespace ukn {
                 x(_x), y(_y), z(_z) { }
             Position(const Position& rhs):
                 x(rhs.x), y(rhs.y), z(rhs.z) { }
-
-            Position& x(int _x) { x = _x; return *this; }
-            Position& y(int _y) { y = _y; return *this; }
-            Position& z(int _z) { z = _z; return *this; }
         };
 
         bool operator == (const Position& p1, const Position& p2) {
@@ -29,11 +25,40 @@ namespace ukn {
                     p1.z == p2.z;
         }
 
+    }
+
+
+}
+
+namespace std {
+
+    /* hash function for our block position */
+    /* every chunk is 16 * y * 16 in size */
+    template<>
+    struct hash<ukn::voxel::Position> {
+        std::size_t operator()(const ukn::voxel::Position& key) {
+            std::size_t hash = key.x * 16 + key.z;
+            hash = hash + key.y * 255;
+            return hash;
+        }
+    };
+
+}
+
+
+namespace ukn {
+
+    namespace voxel {
+
+        enum { EmptyBlock = 0 };
+
         // a block in chunk
         // currently only holds a 8bit value for block type
         struct Block {
             uint8 type;
 
+            Block():
+                type(EmptyBlock) {}
             Block(uint8 _type):
                 type(_type) {}
         };
@@ -53,7 +78,7 @@ namespace ukn {
             bool leftVisible(const Position& pos) const;
             bool rightVisible(const Position& pos) const;
             bool topVisible(const Position& pos) const;
-            bool rightVisible(const Position& pos) const;
+            bool bottomVisible(const Position& pos) const;
             bool frontVisible(const Position& pos) const;
             bool backVisible(const Position& pos) const;
 
@@ -104,6 +129,8 @@ namespace ukn {
             T bottom;
         };
 
+        class Chunk;
+
         template<typename T>
         struct SixFaceStorage<T*> {
             typedef T* value_type;
@@ -116,9 +143,9 @@ namespace ukn {
             T* bottom;
 
             SixFaceStorage():
-                front(nullptr_t), back(nullptr_t),
-                left(nullptr_t), right(nullptr_t),
-                top(nullptr_t), bottom(nullptr_t) {}
+                front(ukn::nullptr_t), back(ukn::nullptr_t),
+                left(ukn::nullptr_t), right(ukn::nullptr_t),
+                top(ukn::nullptr_t), bottom(ukn::nullptr_t) {}
         };
 
 
@@ -204,21 +231,5 @@ namespace ukn {
     } 
 
 }
-
-namespace std {
-
-    /* hash function for our block position */
-    /* every chunk is 16 * y * 16 in size */
-    template<>
-    struct hash<ukn::voxel::Position> {
-        std::size_t operator()(const ukn::voxel::Position& key) {
-            std::size_t hash = key.x * 16 + key.z;
-            hash = hash + key.y * 255;
-            return hash;
-        }
-    };
-
-}
-
 
 #endif // UKN_TEST_VOXEL_H_

@@ -311,7 +311,7 @@ std::string MD5::hex_digest(){
   s[32]='\0';
 
   std::string result(s);
-  delete s;
+  delete []s;
   return result;
 }
 

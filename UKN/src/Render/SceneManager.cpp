@@ -147,6 +147,13 @@ namespace ukn {
      
         if(renderable.getDiffuseTex()) {
             fragmentShader->setTextureVariable("diffuseMap", renderable.getDiffuseTex());
+        } else {
+            /* at least makesure there's a white texture for diffuse */
+            uint32 c(0xFFFFFFFF);
+            static TexturePtr white = Context::Instance().getGraphicFactory()
+                                        .create2DTexture(1, 1, 0, EF_RGBA8, (uint8*)&c);
+
+            fragmentShader->setTextureVariable("diffuseMap", white);
         }
         if(renderable.getEmitTex()) {
             fragmentShader->setTextureVariable("emitMap", renderable.getEmitTex());

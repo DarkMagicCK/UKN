@@ -175,7 +175,7 @@ namespace ukn {
     void DirectionalLight::setCastShadows(bool flag) {
         LightSource::setCastShadows(flag);
 
-        if(!mShadowMap && mShadowMapResolution > 0) {
+        if(flag && !mShadowMap && mShadowMapResolution > 0) {
             mShadowMap = new RenderTarget(mShadowMapResolution,
                                           mShadowMapResolution,
                                           1,
@@ -263,10 +263,12 @@ namespace ukn {
     }
 
     void DirectionalLight::setPosition(const float3& pos) {
+        LightSource::setPosition(pos);
         this->updateCamera();
     }
 
     void DirectionalLight::setDirection(const float3& dir) {
+        LightSource::setDirection(dir);
         this->updateCamera();
     }
 

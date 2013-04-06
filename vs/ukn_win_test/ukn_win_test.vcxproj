@@ -41,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\External\freetype;$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\vs\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\External\polyvox_;$(SolutionDir)\..\External\freetype;$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\External\polyvox_;$(SolutionDir)\..\vs\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -86,11 +86,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Tests\voxel\Game.cpp" />
+    <ClCompile Include="..\..\Tests\voxel\PolyVoxVolume.cpp" />
     <ClCompile Include="..\..\Tests\voxel\Voxel.cpp" />
     <ClCompile Include="..\UKN\main_win.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Tests\voxel\Game.h" />
+    <ClInclude Include="..\..\Tests\voxel\PolyVoxVolume.h" />
     <ClInclude Include="..\..\Tests\voxel\Voxel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

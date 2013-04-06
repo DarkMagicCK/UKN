@@ -40,12 +40,18 @@
     <ClCompile Include="..\..\Tests\voxel\Game.cpp">
       <Filter>Source Files\voxel</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Tests\voxel\PolyVoxVolume.cpp">
+      <Filter>Source Files\voxel</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Tests\voxel\Voxel.h">
       <Filter>Source Files\voxel</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Tests\voxel\Game.h">
+      <Filter>Source Files\voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\voxel\PolyVoxVolume.h">
       <Filter>Source Files\voxel</Filter>
     </ClInclude>
   </ItemGroup>

@@ -126,7 +126,7 @@ namespace ukn {
             
             uint32 idx = 0;
 
-            Vertex2D vertices[6* 6];
+            Vertex2D vertices[6 * 6];
             
             float half4 = 0.25f;
             float half2 = 0.5f;

@@ -17,9 +17,14 @@ namespace ukn {
             void render(ukn::Window* wnd);
             void update(ukn::Window* wnd);
             void initialize(ukn::Window* wnd);
+            void keyDown(ukn::Window* wnd, input::KeyEventArgs& e);
 
         private:
+            ukn::DeferredRendererPtr mRenderer;
+            ukn::SSAOPtr mSSAO;
             ukn::AppLauncher* mApp;
+            ukn::CameraControllerPtr mCameraController;
+            ukn::LightSourcePtr mDirectionalLight;
         };
 
         class CameraController: public ukn::FpsCameraController {

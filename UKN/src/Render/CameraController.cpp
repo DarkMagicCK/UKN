@@ -53,8 +53,8 @@ namespace ukn {
         wnd.connectMouse(Bind(this, &FpsCameraController::onMouseMove));
         wnd.connectKey(Bind(this, &FpsCameraController::onKeyDown));
 
-        mPrevX = wnd.getMousePos()[0];
-        mPrevY = wnd.getMousePos()[1];
+        mPrevX = (float)wnd.getMousePos()[0];
+        mPrevY = (float)wnd.getMousePos()[1];
     }
 
     FpsCameraController::~FpsCameraController() {
@@ -75,12 +75,12 @@ namespace ukn {
         float yaw, pitch, roll;
         if(test > 0.499f * unit) {
             yaw = 2 * atan2(rotQ.z(), rotQ.w());
-            pitch = d_pi / 2;
+            pitch = pi / 2;
             roll = 0;
         } else {
             if(test < -0.499f * unit) {
                 yaw = -2 * atan2(rotQ.z(), rotQ.w());
-                pitch = -d_pi / 2;
+                pitch = -pi / 2;
                 roll = 0;
             } else {
                 yaw = atan2(2 * (rotQ.y() - rotQ.x() * rotQ.z()), -sqx - sqy + sqz + sqw);
@@ -140,8 +140,8 @@ namespace ukn {
             float delta_x = e.x - mPrevX;
             float delta_y = e.y - mPrevY;
 
-            mPrevX = e.x;
-            mPrevY = e.y;
+            mPrevX = (float)e.x;
+            mPrevY = (float)e.y;
            
             float dx = delta_x / 5;
             float dy = delta_y / 5;
@@ -157,22 +157,22 @@ namespace ukn {
         switch(e.key) {
         case input::W:
         case input::Up:
-            this->move(0, 0, 0.1);
+            this->move(0, 0, 0.1f);
             break;
 
         case input::S:
         case input::Down:
-            this->move(0, 0, -0.1);
+            this->move(0, 0, -0.1f);
             break;
 
         case input::A:
         case input::Left:
-            this->move(-0.1, 0, 0);
+            this->move(-0.1f, 0, 0);
             break;
 
         case input::D:
         case input::Right:
-            this->move(0.1, 0, 0);
+            this->move(0.1f, 0, 0);
             break;
         }
     }

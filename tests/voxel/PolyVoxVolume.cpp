@@ -3,10 +3,17 @@
 #undef MessageBox
 #include "mist/SysUtil.h"
 
+#include "PolyVoxCore/CubicSurfaceExtractorWithNormals.h"
+#include "PolyVoxCore/MarchingCubesSurfaceExtractor.h"
+#include "PolyVoxCore/SurfaceMesh.h"
+#include "PolyVoxCore/SimpleVolume.h"
+
 namespace ukn {
 
     namespace voxel {
         
+        using namespace PolyVox;
+
         void createSphereInVolume(SimpleVolume<uint8_t>& volData, float fRadius)
         {
 	        //This vector hold the position of the center of the volume
@@ -90,7 +97,8 @@ namespace ukn {
 
         void SimplePolyvoxVolume::init() {
               //Create an empty volume and then place a sphere in it
-	        SimpleVolume<uint8_t> volData(PolyVox::Region(Vector3DInt32(0,0,0), Vector3DInt32(63, 63, 63)));
+	        SimpleVolume<uint8_t> volData(PolyVox::Region(Vector3DInt32(0, 0, 0), 
+                                                          Vector3DInt32(63, 63, 63)));
 	        createSphereInVolume(volData, 30);
 
 	        //A mesh object to hold the result of surface extraction
@@ -103,21 +111,34 @@ namespace ukn {
 	        //Execute the surface extractor.
 	        surfaceExtractor.execute();
 
-           std::vector<VertexUVNormal> vertices(tranform_pv_vertex_to_vertex_uv_normal(mesh.getVertices()));
+          //  std::vector<VertexUVNormal> vertices(tranform_pv_vertex_to_vertex_uv_normal(mesh.getVertices()));
 
             ukn::GraphicFactory& gf = Context::Instance().getGraphicFactory();
             ukn::GraphicBufferPtr vtxBuffer = gf.createVertexBuffer(GraphicBuffer::None,
                                                                     GraphicBuffer::Static,
-                                                                    vertices.size(),
-                                                                    &vertices[0],
-                                                                    VertexUVNormal::Format());
+                                                                    mesh.getVertices().size(),
+                                                                    &mesh.getVertices()[0],
+                                                                    PVVertexMeshNormalVertex::Format());
             ukn::GraphicBufferPtr idxBuffer = gf.createIndexBuffer(GraphicBuffer::None,
                                                                    GraphicBuffer::Static,
                                                                    mesh.getIndices().size(),
                                                                    &mesh.getIndices()[0]);
+
+            MaterialPtr default_mat = MakeSharedPtr<Material>();
+                default_mat->ambient = color::Skyblue.getRGB();
+                default_mat->diffuse = color::Skyblue.getRGB();
+                default_mat->emit = float3(0, 0, 0);
+                default_mat->opacity = 1.f;
+                default_mat->shininess = 10.f;
+                default_mat->specular = float3(0, 0, 0);
+                default_mat->specular_power = 16.f;
+            mMaterial = default_mat;
+
+            this->setModelMatrix(Matrix4::TransMat(-32, -32, -32));
+
             if(vtxBuffer && idxBuffer) {
                 mRenderBuffer = gf.createRenderBuffer();
-                mRenderBuffer->bindVertexStream(vtxBuffer, VertexUVNormal::Format());
+                mRenderBuffer->bindVertexStream(vtxBuffer, PVVertexMeshNormalVertex::Format());
                 mRenderBuffer->bindIndexStream(idxBuffer);
                 mRenderBuffer->useIndexStream(true);
 

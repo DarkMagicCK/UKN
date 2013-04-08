@@ -150,6 +150,10 @@ namespace ukn {
         } else {
             /* at least makesure there's a white texture for diffuse */
             uint32 c(0xFFFFFFFF);
+            if(renderable.getMaterial()) {
+                float3 d = renderable.getMaterial()->diffuse;
+                c = COLOR_RGBA(d[0] * 255, d[1] * 255, d[2] * 255, 255);
+            }
             static TexturePtr white = Context::Instance().getGraphicFactory()
                                         .create2DTexture(1, 1, 0, EF_RGBA8, (uint8*)&c);
 
@@ -167,6 +171,17 @@ namespace ukn {
         if(renderable.getSpecularTex()) {
             fragmentShader->setTextureVariable("specularMap", renderable.getSpecularTex());
         }
+
+        if(renderable.getMaterial()) {
+            fragmentShader->setFloatVectorVariable("ambient", renderable.getMaterial()->ambient);
+            fragmentShader->setFloatVariable("specular_power", renderable.getMaterial()->specular[0]);
+            fragmentShader->setFloatVariable("specular_intensity", renderable.getMaterial()->specular_power);
+        } else {
+            fragmentShader->setFloatVectorVariable("ambient", float3(0, 0, 0));
+            fragmentShader->setFloatVariable("specular_power", 0);
+            fragmentShader->setFloatVariable("specular_intensity", 0);
+        }
+
         mNumVerticesRendered += renderable.getRenderBuffer()->getVertexCount();
         mNumRenderableRendered ++;
 

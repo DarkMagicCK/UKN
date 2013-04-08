@@ -52,7 +52,7 @@ namespace ukn {
     void Camera::setProjParamsOrtho(float l, float r, float b, float t, float n, float f) {
         mNearPlane = n;
         mFarPlane = f;
-        mFOV = d_pi_2;
+        mFOV = pi_2;
         mAspect = (r - l) / (t - b);
 
         mProjMat[1] = mProjMat[0];

@@ -3,6 +3,9 @@
 
 #include "UKN/PreDeclare.h"
 #include "UKN/Light.h"
+#include "UKN/RenderBuffer.h"
+#include "UKN/Shader.h"
+#include "UKN/RenderTarget.h"
 
 namespace ukn {
 

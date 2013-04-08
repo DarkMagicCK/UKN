@@ -9,7 +9,7 @@ namespace ukn {
     /* SSAO(ScreenSpace Ambient Occulusion) Implementation  */
     class UKN_API SSAO: public PostEffect {
     public:
-        SSAO(const float2& size = float2(0, 0));
+        SSAO();
         virtual ~SSAO();
 
         const EffectPtr& getEffect() const;
@@ -17,24 +17,28 @@ namespace ukn {
         const RenderTargetPtr& getSSAOBlurTarget() const;
         const RenderTargetPtr& getCompositeTarget() const;
 
-        float2 size() const;
-
         float getSampleRadius() const;
         float getDistanceScale() const;
 
         void setSampleRadius(float r);
         void setDistanceScale(float r);
 
-        const TexturePtr& getFinalTexture() const;
-
     public:
         // render currrent scene, see Context::getSceneManager()
-        void render(const CompositeRenderTargetPtr& gbuffer, const TexturePtr& target);
+        void render(const TexturePtr& color,
+                    const TexturePtr& normap,
+                    const TexturePtr& depth,
+                    const TexturePtr& target) override;
+        bool init(float2 size) override;
+        const TexturePtr& getFinalTexture() const override;
 
     private:
-        bool init();
-        void makeSSAO(const CompositeRenderTargetPtr& gbuffer);
-        void makeSSAOBlur(const CompositeRenderTargetPtr& gbuffer);
+        void makeSSAO(const TexturePtr& color,
+                      const TexturePtr& normap,
+                      const TexturePtr& depth);
+        void makeSSAOBlur(const TexturePtr& color,
+                          const TexturePtr& normap,
+                          const TexturePtr& depth);
         void makeFinal(const TexturePtr& target);
 
         CompositeRenderTargetPtr mRT;
@@ -47,9 +51,9 @@ namespace ukn {
         EffectTechniquePtr mSSAOBlurTechnique;
         EffectTechniquePtr mCompositeTechnique;
 
-        float2 mSize;
         float mSampleRadius;
         float mDistanceScale;
+        float2 mSize;
 
         TexturePtr mRandomNormalTex;
     };

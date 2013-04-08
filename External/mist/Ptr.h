@@ -91,6 +91,18 @@ namespace mist {
         int32 mWeakRef;
     };
 
+    template<typename T> void checked_delete(T* p) {
+        typedef char type_must_be_complete[sizeof(T) ? 1: - 1];
+        (void) sizeof(type_must_be_complete);
+        delete p;
+    }
+
+    template<typename T> void checked_array_delete(T* p) {
+        typedef char type_must_be_complete[sizeof(T) ? 1: - 1];
+        (void) sizeof(type_must_be_complete);
+        delete []p;
+    }
+
     template<class C>
     struct SharedPtrReleasePolicy {
         static C* Alloc() {
@@ -99,7 +111,7 @@ namespace mist {
 
         static void Release(C* obj) {
             if(obj)
-                delete obj;
+                checked_delete(obj);
         }
     };
 
@@ -107,7 +119,7 @@ namespace mist {
     struct SharedPtrReleaseArrayPolicy {
         static void Release(C* obj) {
             if(obj)
-                delete []obj;
+                checked_array_delete(obj);
         }
     };
 

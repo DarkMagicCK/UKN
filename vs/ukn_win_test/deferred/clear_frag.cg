@@ -6,6 +6,7 @@ struct FragmentOutputType {
     float4 color  :COLOR0;
     float4 normal :COLOR1;
     float4 depth  :COLOR2;
+    float4 light  :COLOR3;
 };
 
 FragmentOutputType FragmentProgram(VertexOutputType input) {    
@@ -15,5 +16,6 @@ FragmentOutputType FragmentProgram(VertexOutputType input) {
     output.normal.xyz = 0.5f;
     output.normal.w = 0.0f;
     output.depth = 1.0f;
+    output.light = 0.f;
     return output;
 }

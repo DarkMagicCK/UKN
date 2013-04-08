@@ -71,6 +71,7 @@ int CALLBACK WinMain(
           game.start();
           return 0;
       }
+      
 
     ukn::Matrix4 worldMat;
     ukn::CameraController* camController;
@@ -80,7 +81,7 @@ int CALLBACK WinMain(
     ukn::RenderBufferPtr dragonBuffer;
     ukn::LightSourcePtr spotLight;
     ukn::LightSourcePtr directionalLight;
-    ukn::SSAOPtr ssao;
+    ukn::SSAO* ssao;
 
     ukn::EffectPtr testEffect;
     ukn::EffectTechniquePtr displayDepthTechnique;
@@ -121,9 +122,9 @@ int CALLBACK WinMain(
         .connectUpdate([&](ukn::Window* ) {
             for(int i=0; i<pointLightCount; ++i) {
                 pointLights[i]->setPosition(ukn::float3(
-                                            sinf(r + rs[i]) * (i % 50),
-                                            5,
-                                            cosf(r + rs[i]) * (i % 50)));
+                                            sinf(r + rs[i]) * (i % 50) * 5,
+                                            15,
+                                            cosf(r + rs[i]) * (i % 50) * 5));
             }
             
             r += (float)ukn::d_pi / 180.f;
@@ -158,9 +159,9 @@ int CALLBACK WinMain(
                     ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
                     pointLights[pointLightCount]  = ukn::MakeSharedPtr<ukn::PointLight>(ukn::float3(pointLightCount + 30,
-                                                                               5,
+                                                                               0,
                                                                                0),
-                                                                   20.f,
+                                                                   50.f,
                                                                    ukn::float4(ukn::Random::RandomFloat(0, 1), 
                                                                                ukn::Random::RandomFloat(0, 1), 
                                                                                ukn::Random::RandomFloat(0, 1), 1),
@@ -203,8 +204,6 @@ int CALLBACK WinMain(
                 deferredRenderer->renderScene(scene);
             }
             {
-                ssao->render(deferredRenderer->getGBufferRT(), 
-                             deferredRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0));
             }
             // to do with rendering shader
 
@@ -309,11 +308,12 @@ int CALLBACK WinMain(
             }
 
             deferredRenderer = new ukn::DeferredRenderer();
-            ssao = new ukn::SSAO();
+            deferredRenderer->addPostEffect(L"SSAO");
+            ssao = ukn::checked_cast<ukn::SSAO*>(deferredRenderer->getPostEffect(L"SSAO").get());
 
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
-            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res2.ply");
+            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
             if(dragonModel) {
                 ukn::SceneObjectPtr skyboxObject = ukn::MakeSharedPtr<ukn::SceneObject>(skybox, ukn::SOA_Overlay);
                 skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(100, 100, 100));
@@ -329,7 +329,7 @@ int CALLBACK WinMain(
             }
             directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 1),
                                                                         ukn::float4(1, 1, 1, 1),
-                                                                        1.0,
+                                                                        0.5,
                                                                         true,
                                                                         1024);
 

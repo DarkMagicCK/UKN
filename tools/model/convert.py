@@ -293,7 +293,6 @@ class Model(object):
 						continue;
 
 					select = options[components[0]]
-
 					data = [x for x in components[1:] if len(x) > 0]
 					if select == OBJ_VERTEX:
 						positions.append(Vector3(data[0], data[1], data[2]))
@@ -309,6 +308,7 @@ class Model(object):
 						try:
 							# if more than 3 vertices in a line, build triangles
 							for i in range(0, len(face_data) - 2):
+								print face_data[0]
 								# f v1 v2 v3...
 								if len(face_data[0]) == 1:
 									v1 = Vertex(position = positions[int(face_data[0+i][0])])
@@ -317,7 +317,7 @@ class Model(object):
 
 									mesh.vertices += [v1, v2, v3]
 								# f v1/vt1 v2/vt2 ....
-								elif len(face_data[0] == 2):
+								elif len(face_data[0]) == 2:
 									v1 = Vertex(position = positions[int(face_data[0+i][0])],
 												uv = uvs[int(face_data[0+i][1])])
 									v2 = Vertex(position = positions[int(face_data[1+i][0])],
@@ -326,7 +326,7 @@ class Model(object):
 												uv = uvs[int(face_data[2+i][1])])
 									mesh.vertices += [v1, v2, v3]
 								# f v1/vt1/vn1 v2/vt2/vn2 ... or v1//vn1 v2//vn2
-								elif len(face_data[0] == 3):
+								elif len(face_data[0]) == 3:
 									if len(face_data[0][1]) != '0':
 										v1 = Vertex(position = positions[int(face_data[0+i][0])],
 													uv = uvs[int(face_data[0+i][1])],
@@ -350,9 +350,10 @@ class Model(object):
 								else:
 									print 'unrecognized face: ', face_data
 						except Exception as exp:
+							import traceback
+
 							print str(exp)
-							for i in range(0, len(face_data) - 2):
-								print face_data
+							print traceback.format_exc()
 
 						pass
 					elif select == OBJ_VP:
@@ -405,11 +406,17 @@ class Model(object):
 			materialElement.setAttribute('shininess', 		str(material.shininess))
 			materialElement.setAttribute('opacity', 		str(material.opacity))
 			materialElement.setAttribute('emit', 			str(material.emit))
-			for (tkey, tname) in material.textures:
-				textureElement = dom.createElement('texture')
-				textureElement.setAttribute('key', tkey)
-				textureElement.setAttribute('file', tname)
-				materialElement.appendChild(textureElement)
+			
+			try:
+				for (tkey, tname) in material.textures:
+					textureElement = dom.createElement('texture')
+					textureElement.setAttribute('key', tkey)
+					textureElement.setAttribute('file', tname)
+					materialElement.appendChild(textureElement)
+			except:
+				import traceback
+				print traceback.format_exc()
+				print material.textures
 
 			root.appendChild(materialElement)
 

@@ -119,9 +119,9 @@ namespace mist {
         
         class MIST_API SignalImpl {
         public:
-            typedef std::multimap<int, Connection> ConnectionMap;
-            typedef std::multimap<int, Connection>::iterator IteratorType;
-            ConnectionMap mConnections;
+            typedef std::multimap<int, Connection> connection_map;
+            typedef std::multimap<int, Connection>::iterator iterator_type;
+            connection_map mConnections;
             
             SignalImpl() {
                 in_distribute = false;
@@ -149,8 +149,8 @@ namespace mist {
                 return fn;
             }
             
-            typedef Function<SIG> FuncType;
-            FuncType fn;
+            typedef Function<SIG> func_type;
+            func_type fn;
         };
         
         class MIST_API ConnectionBase {
@@ -164,7 +164,7 @@ namespace mist {
             virtual void disconnect() = 0;
             
             SignalImpl* signal;
-            SignalImpl::IteratorType* iter;
+            SignalImpl::iterator_type* iter;
             bool __in_delete_list;
             
             typedef void (SignalImpl::*DisconnectFunc)(void*, void*);
@@ -174,7 +174,7 @@ namespace mist {
         template<typename SIG>
         class BasicConnection: public ConnectionBase {
         public:
-            typedef typename Slot<SIG>::FuncType FuncType;
+            typedef typename Slot<SIG>::func_type func_type;
             
             SharedPtr<Slot<SIG> > slot;
             
@@ -200,22 +200,22 @@ namespace mist {
     template<typename SIG>
     class SignalBase: public detail::SignalImpl {
     public:
-        typedef Connection ConnectionType;
-        typedef typename detail::BasicConnection<SIG>::FuncType SlotType;
+        typedef Connection connection_type;
+        typedef typename detail::BasicConnection<SIG>::func_type slot_type;
         
         template<typename F>
-        ConnectionType connect(const F& f) {
+        connection_type connect(const F& f) {
             return connect(0, f);
         }
         
         template<typename F>
-        ConnectionType connect(int32 priority, const F& f) {
+        connection_type connect(int32 priority, const F& f) {
             detail::BasicConnection<SIG>* con = new detail::BasicConnection<SIG>;
             Connection slotcon;
             slotcon.reset(con);
             
-            std::auto_ptr<IteratorType> saved_iter(new IteratorType());
-            IteratorType iter = mConnections.insert(std::make_pair(priority, slotcon));
+            std::auto_ptr<iterator_type> saved_iter(new iterator_type());
+            iterator_type iter = mConnections.insert(std::make_pair(priority, slotcon));
             *saved_iter = iter;
             
             // connection controller
@@ -268,7 +268,7 @@ namespace mist {
         RT sig() {
             typedef SignalBase<RT(void)> base_type;
             
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
             
@@ -293,7 +293,7 @@ namespace mist {
     public:
         void sig() {
             typedef SignalBase<void(void)> base_type;
-            base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -315,7 +315,7 @@ namespace mist {
     public:
         RT sig(T0 a0) {
             typedef SignalBase<RT(T0)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -341,7 +341,7 @@ namespace mist {
     public:
         void sig(T0 a0) {
             typedef SignalBase<void(T0)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -365,7 +365,7 @@ namespace mist {
     public:
         RT sig(T0 a0, T1 a1) {
             typedef SignalBase<RT(T0, T1)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -391,7 +391,7 @@ namespace mist {
     public:
         void sig(T0 a0, T1 a1) {
             typedef SignalBase<void(T0, T1)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -415,7 +415,7 @@ namespace mist {
     public:
         RT sig(T0 a0, T1 a1, T2 a2) {
             typedef SignalBase<RT(T0, T1, T2)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -441,7 +441,7 @@ namespace mist {
     public:
         void sig(T0 a0, T1 a1, T2 a2) {
             typedef SignalBase<void(T0, T1, T2)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -465,7 +465,7 @@ namespace mist {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3) {
             typedef SignalBase<RT(T0, T1, T2, T3)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -491,7 +491,7 @@ namespace mist {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3) {
             typedef SignalBase<void(T0, T1, T2, T3)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -515,7 +515,7 @@ namespace mist {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -541,7 +541,7 @@ namespace mist {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4) {
             typedef SignalBase<void(T0, T1, T2, T3, T4)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -565,7 +565,7 @@ namespace mist {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4, T5)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -591,7 +591,7 @@ namespace mist {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5) {
             typedef SignalBase<void(T0, T1, T2, T3, T4, T5)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -615,7 +615,7 @@ namespace mist {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4, T5, T6)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -641,7 +641,7 @@ namespace mist {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6) {
             typedef SignalBase<void(T0, T1, T2, T3, T4, T5, T6)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -665,7 +665,7 @@ namespace mist {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4, T5, T6, T7 a7)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -691,7 +691,7 @@ namespace mist {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7) {
             typedef SignalBase<void(T0, T1, T2, T3, T4, T5, T6, T7)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -715,7 +715,7 @@ namespace mist {
     public:
         RT sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) {
             typedef SignalBase<RT(T0, T1, T2, T3, T4, T5, T6, T7 a7, T8 a8)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 
@@ -741,7 +741,7 @@ namespace mist {
     public:
         void sig(T0 a0, T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8) {
             typedef SignalBase<void(T0, T1, T2, T3, T4, T5, T6, T7, T8)> base_type;
-            typename base_type::ConnectionMap::const_iterator itConnection = base_type::mConnections.begin();
+            typename base_type::connection_map::const_iterator itConnection = base_type::mConnections.begin();
             
             detail::SignalImpl::in_distribute = true;
 

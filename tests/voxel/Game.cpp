@@ -34,16 +34,16 @@ namespace ukn {
                 mRenderer->renderScene(scene);
             }
             {
-     //           mSSAO->render(mRenderer->getGBufferRT(), 
-       //                       mRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0));
             }
             ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
             sb.begin(ukn::SBB_None, ukn::SBS_Deffered, ukn::Matrix4());
-        //    sb.draw(mRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0), 
-        //            ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
-        //    sb.draw(mRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color1), 
-       //             ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
-            sb.draw(mRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0), 
+            sb.draw(mRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0), 
+                    ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
+            sb.draw(mRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color1), 
+                    ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
+            sb.draw(mSSAO->getSSAOTarget()->getTexture(), 
+                    ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
+            sb.draw(mSSAO->getCompositeTarget()->getTexture(), 
                     ukn::Rectangle(0, 0, wnd->width(), wnd->height(), true));
             sb.end();
         }
@@ -51,7 +51,7 @@ namespace ukn {
         void Game::update(ukn::Window* wnd) {
             static float v = 0.0f;
             v += 0.001f;
-            mDirectionalLight->setDirection(ukn::Vector3(sin(v), cos(v), 0));
+     //       mDirectionalLight->setDirection(ukn::Vector3(sin(v), cos(v), 0));
         }
 
         void Game::keyDown(ukn::Window* wnd, input::KeyEventArgs& e) {
@@ -69,18 +69,30 @@ namespace ukn {
                         mCameraController->attachCamera(vp.camera);
                     }
                 }
+
+                if(e.key == ukn::input::U) {
+                    mSSAO->setSampleRadius(mSSAO->getSampleRadius() + 0.01);
+                } else if(e.key == ukn::input::I) {
+                    mSSAO->setDistanceScale(mSSAO->getDistanceScale() + 0.01);
+                }
+                else if(e.key == ukn::input::J) {
+                    mSSAO->setSampleRadius(mSSAO->getSampleRadius() - 0.01);
+                } else if(e.key == ukn::input::K) {
+                    mSSAO->setDistanceScale(mSSAO->getDistanceScale() - 0.01);
+                }
             }
         }
 
         void Game::initialize(ukn::Window* wnd) {
             mRenderer = new ukn::DeferredRenderer();
-            mSSAO = new ukn::SSAO();
+            mRenderer->addPostEffect(L"SSAO");
+            mSSAO = checked_cast<SSAO*>(mRenderer->getPostEffect(L"SSAO").get());
 
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
      
             mCameraController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
-            vp.camera->setViewParams(ukn::Vector3(0, 30, 0), ukn::Vector3(0, 0, 1));
+            vp.camera->setViewParams(ukn::Vector3(0, 5, 0), ukn::Vector3(0, 0, 1));
 
             mCameraController->attachCamera(vp.camera);
             

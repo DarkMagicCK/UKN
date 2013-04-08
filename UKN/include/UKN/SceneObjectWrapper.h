@@ -4,6 +4,9 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/SceneObject.h"
 
+#include "UKN/Camera.h"
+#include "UKN/Light.h"
+
 namespace ukn {
 
     // scene object wrappers, such as LightSource, Camera

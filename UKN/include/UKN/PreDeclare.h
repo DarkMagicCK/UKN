@@ -178,6 +178,12 @@ namespace ukn {
 
     class Mesh;
     typedef SharedPtr<Mesh> MeshPtr;
+
+    class DeferredRenderer;
+    typedef SharedPtr<DeferredRenderer> DeferredRendererPtr;
+
+    class PostEffect;
+    typedef SharedPtr<PostEffect> PostEffectPtr;
     
 } // namespace ukn
 

@@ -15,6 +15,12 @@
 
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
+#include "UKN/FrameBuffer.h"
+#include "UKN/BlendStateObject.h"
+#include "UKN/RasterizerStateObject.h"
+#include "UKN/DepthStencilStateObject.h"
+#include "UKN/SamplerStateObject.h"
+#include "UKn/Shader.h"
 
 #include <stack>
 

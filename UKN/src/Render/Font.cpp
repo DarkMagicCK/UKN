@@ -326,8 +326,8 @@ namespace ukn {
             cfg->setInt(L"shadow_offset_y", mShadowYOffset);
             cfg->setInt(L"stroke_width", mStrokeWidth);
             cfg->setInt(L"size", mFontSize);
-            cfg->setBool(L"bold", mFace->face->style_flags & FT_STYLE_FLAG_BOLD);
-            cfg->setBool(L"italic", mFace->face->style_flags & FT_STYLE_FLAG_ITALIC);
+            cfg->setBool(L"bold", (bool)(mFace->face->style_flags & FT_STYLE_FLAG_BOLD));
+            cfg->setBool(L"italic", (bool)(mFace->face->style_flags & FT_STYLE_FLAG_ITALIC));
 
             cfg->endNode();
             

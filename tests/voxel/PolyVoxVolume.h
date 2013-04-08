@@ -3,9 +3,6 @@
 
 #include "UKN/UKN.h"
 
-#include "PolyVoxCore/CubicSurfaceExtractorWithNormals.h"
-#include "PolyVoxCore/SurfaceMesh.h"
-#include "PolyVoxCore/SimpleVolume.h"
 
 #ifdef MIST_DEBUG
 #pragma comment(lib, "PolyVoxCored.lib")
@@ -19,7 +16,6 @@ namespace ukn {
 
     namespace voxel {
 
-        using namespace PolyVox;
 
         class SimplePolyvoxVolume: public Renderable {
         public:

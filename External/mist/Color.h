@@ -46,7 +46,6 @@ namespace mist {
 
         void set(float _r, float _g, float _b, float _a);
 
-
         const float& a() const { return this->c[3]; }
         const float& r() const { return this->c[0]; }
         const float& g() const { return this->c[1]; }
@@ -77,6 +76,11 @@ namespace mist {
 
         static uint32 FromRGBA(float oR, float og, float ob, float oa);
         uint32 toARGB() const;
+
+        uint32 toBGRA() const;
+        uint32 toABGR() const;
+
+        float3 getRGB() const;
 
         static uint32 FromARGB(float oR, float og, float ob, float oa);
         static Color FromHWColor(uint32 col);

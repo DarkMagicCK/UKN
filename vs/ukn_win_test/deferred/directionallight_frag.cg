@@ -72,7 +72,7 @@ float4 FragmentProgram(VertexOutputType input,
     float specularIntensity = tex2D(colorMap, input.texCoord).w;
     float specularPower = encodedNormal.w * 255;
 
-    float depth = manualSample(depthMap, input.texCoord, gbufferSize).x;
+    float depth = manualSample(depthMap, input.texCoord, gbufferSize).r;
     float4 position = 1.0f;
     position.x = input.texCoord.x * 2.0f - 1.0f;
     position.y = -(input.texCoord.x * 2.0f - 1.0f);

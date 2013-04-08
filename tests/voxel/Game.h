@@ -21,7 +21,7 @@ namespace ukn {
 
         private:
             ukn::DeferredRendererPtr mRenderer;
-            ukn::SSAOPtr mSSAO;
+            ukn::SSAO* mSSAO;
             ukn::AppLauncher* mApp;
             ukn::CameraControllerPtr mCameraController;
             ukn::LightSourcePtr mDirectionalLight;

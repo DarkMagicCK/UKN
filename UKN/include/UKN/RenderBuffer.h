@@ -13,6 +13,7 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
 #include "UKN/Vertex.h"
+#include "UKN/GraphicBuffer.h"
 
 namespace ukn {
     

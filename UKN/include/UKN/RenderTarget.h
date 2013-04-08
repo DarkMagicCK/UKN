@@ -15,6 +15,7 @@
 #include "UKN/FrameBuffer.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/GraphicSettings.h"
+#include "UKN/Texture.h"
 
 namespace ukn {
     

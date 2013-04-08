@@ -2,6 +2,7 @@
 #define Project_Unknown_SceneObject_h
 
 #include "UKN/PreDeclare.h"
+#include "UKN/Renderable.h"
 
 namespace ukn {
 

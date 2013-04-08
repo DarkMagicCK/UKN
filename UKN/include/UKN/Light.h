@@ -6,6 +6,8 @@
 #include "mist/Color.h"
 #include "mist/MathUtil.h"
 
+#include "UKN/RenderTarget.h"
+
 namespace ukn {
 
     enum LightSourceType {

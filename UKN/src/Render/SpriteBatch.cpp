@@ -149,7 +149,7 @@ namespace ukn {
         }
         
         for(int i=0; i<4; ++i) {
-            tmpVert[i].color = descriptor.color.toARGB();
+            tmpVert[i].color = descriptor.color.toABGR();
         }
         
         vertices[0] = tmpVert[0];

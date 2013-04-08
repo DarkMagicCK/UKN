@@ -5,6 +5,8 @@
 #include "UKN/Frustum.h"
 #include "UKN/Renderable.h"
 #include "UKN/Shader.h"
+#include "UKN/LightManager.h"
+#include "UKN/SceneObject.h"
 
 namespace ukn {
 

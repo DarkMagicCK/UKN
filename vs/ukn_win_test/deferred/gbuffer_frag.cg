@@ -9,6 +9,7 @@ struct FragmentOutputType {
     float4 color  :COLOR0;
     float4 normal :COLOR1;
     float4 depth  :COLOR2;
+    float4 light  :COLOR3;
 };
 
 float3 encode(float3 n) {
@@ -21,18 +22,27 @@ float3 decode(float4 enc) {
     return (2.0f * enc.xyz - 1.0f);
 }
 
+// simple material properties
+// to do with material id and multiple material model
+const uniform float3 ambient = float3(0, 0, 0);
+const uniform float specular_intensity = 0;
+const uniform float specular_power = 0;
+
 FragmentOutputType FragmentProgram(VertexOutputType input,
 				                   uniform sampler2D diffuseMap: TEX0) {    
     FragmentOutputType output;
     // not using specular map now
 
     output.color = tex2D(diffuseMap, input.texCoord);
-    output.color.w = 0.2;
+    output.color.w = specular_intensity;
 
     output.normal.xyz = encode(input.normal);
-    output.normal.w = 0.4;
+    output.normal.w = specular_power;
 
     output.depth.r = input.depth.x / input.depth.y;
     output.depth.g = input.depth.z;
+
+    output.light = float4(ambient, 0);
+
     return output;
 }

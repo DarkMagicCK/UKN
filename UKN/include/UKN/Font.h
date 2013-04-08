@@ -18,6 +18,7 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/Renderable.h"
 #include "UKN/Texture.h"
+#include "UKN/SpriteBatch.h"
 #include <vector>
 
 #include <ft2build.h>

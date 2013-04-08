@@ -71,6 +71,7 @@ namespace ukn {
                         return false;
                 }
             }
+            return false;
         }
 
         bool BlockStorage::bottomBorderFull() const {
@@ -95,6 +96,7 @@ namespace ukn {
                         return false;
                 }
             }
+            return false;
         }
 
         bool BlockStorage::rightBorderFull() const {
@@ -107,6 +109,7 @@ namespace ukn {
                         return false;
                 }
             }
+            return false;
         }
 
         bool BlockStorage::frontBorderFull() const {
@@ -119,6 +122,7 @@ namespace ukn {
                         return false;
                 }
             }
+            return false;
         }
 
         bool BlockStorage::backBorderFull() const {
@@ -131,6 +135,7 @@ namespace ukn {
                         return false;
                 }
             }
+            return false;
         }
 
 

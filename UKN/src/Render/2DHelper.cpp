@@ -34,12 +34,12 @@ namespace ukn {
 
     void Ukn2DHelper::setupMat(const mist::Matrix4& viewMat) {
         GraphicDevice& device = Context::Instance().getGraphicFactory().getGraphicDevice();
-        mScreenOrthoMat = Matrix4::OrthoOffCenterMatLH(0,
+        mScreenOrthoMat = Matrix4::OrthoOffCenterMatLH(0.f,
                                                        device.getCurrFrameBuffer()->getViewport().width,
                                                        device.getCurrFrameBuffer()->getViewport().height,
-                                                       0,
-                                                       0,
-                                                       1.0);
+                                                       0.f,
+                                                       0.f,
+                                                       1.0f);
         device.adjustOrthoMat(mScreenOrthoMat);
 
         this->setupMat(mScreenOrthoMat, viewMat);

@@ -22,7 +22,7 @@ namespace ukn {
         mModelMatrix = mat;
     }
 
-    MaterialPtr Renderable::getMaterial() const {
+    const MaterialPtr& Renderable::getMaterial() const {
         return mMaterial;
     }
 

@@ -33,8 +33,8 @@ namespace ukn {
             float u = acosf(MAX(MIN(vertex.ny / phi, 1.0), -1.0)) / (2.0 * d_pi);
             vertex.u = vertex.nx > 0.f ? u : 1 - u;
         }*/
-        vertex.uv = Vector2(0.5 + asin(vertex.normal.x()) / d_pi,
-                            0.5 + asin(vertex.normal.y()) / (d_pi));
+        vertex.uv = Vector2(0.5f + asin(vertex.normal.x()) / pi,
+                            0.5f + asin(vertex.normal.y()) / (pi));
     }
 
     ukn::RenderBufferPtr ModelLoader::BuildFromSphere(const mist::Sphere& sphere, uint32 slices) {
@@ -619,7 +619,7 @@ namespace ukn {
                 mesh->setRenderBuffer(buffer);
 
                 MaterialPtr default_mat = MakeSharedPtr<Material>();
-                default_mat->ambient = float3(1, 1, 1);
+                default_mat->ambient = float3(0, 0, 0);
                 default_mat->diffuse = float3(1, 1, 1);
                 default_mat->emit = float3(0, 0, 0);
                 default_mat->opacity = 1.f;
@@ -787,6 +787,14 @@ namespace ukn {
                         mEmitTex = tex;
                 }
             }
+            if(!mDiffuseTex) {
+                uint32 c(COLOR_RGBA(mat->diffuse[0] * 255, 
+                                    mat->diffuse[1] * 255, 
+                                    mat->diffuse[2] * 255, 
+                                    255));
+                mDiffuseTex = Context::Instance().getGraphicFactory().create2DTexture(1, 1, 0, EF_RGBA8, (uint8*)&c);
+            }
+            mMaterial = mat;
         }
     }
 

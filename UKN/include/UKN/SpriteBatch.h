@@ -17,6 +17,7 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/Vertex.h"
 #include "UKN/Renderable.h"
+#include "UKn/RenderBuffer.h"
 
 namespace ukn {
     

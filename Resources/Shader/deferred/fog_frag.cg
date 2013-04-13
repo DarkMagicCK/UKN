@@ -1,0 +1,69 @@
+const uniform float3 cameraPosition;
+const uniform float4x4 inverseViewProj;
+
+const uniform float3 fogColor;
+const uniform float fogStart;
+const uniform float fogEnd;
+const uniform float fogDensity;
+const uniform float fogType;
+
+struct VertexOutputType {
+    float4 position: POSITION;
+    float2 texCoord: TEXCOORD0;
+};
+
+float3 decode(float3 enc) {
+    return (2.0f * enc.xyz - 1.0f);
+}
+
+// simple linear fog
+float4 linearFog(float3 color, float3 worldPosition) {
+    float d = length(worldPosition - cameraPosition);
+    float l = saturate((d - fogStart) / (fogEnd - fogStart));
+
+    return float4(lerp(color, fogColor, l), 1);
+}
+
+// exp fog
+float4 exponentialFog(float3 color, float3 worldPosition) {
+    float L = length(worldPosition - cameraPosition);
+    float f = exp(L * fogDensity);
+    f = 1.0f / f;
+    
+    return saturate(float4(f * color + (1 - f) * fogColor, 1));
+}
+
+// exp2 fog
+float4 exponential2Fog(float3 color, float3 worldPosition) {
+    float L = length(worldPosition - cameraPosition);
+    float f = 1.0 / exp(pow(L * fogDensity, 2));
+
+    return saturate(float4(f * color + (1 - f) * fogColor, 1));
+}
+
+float4 FragmentProgram(VertexOutputType input,
+                       uniform sampler2D colorMap: TEX0,
+                       uniform sampler2D depthMap: TEX1
+                       ): COLOR0 {
+
+    float depth = tex2D(depthMap, input.texCoord).r;
+    
+    float4 position = 1.0f;
+    position.x = input.texCoord.x * 2.0f - 1.0f;
+    position.y = -(input.texCoord.y * 2.0f - 1.0f);
+    position.z = depth;
+    position = mul(position, inverseViewProj);
+    position /= position.w;
+
+    float4 color = tex2D(colorMap, input.texCoord);
+
+    return exponential2Fog(color.rgb, position.xyz);
+    if(fogType <= 1.0f) {
+        return linearFog(color.rgb, position.xyz);
+    } else if(fogType <= 2.0f) {
+        return exponentialFog(color.rgb, position.xyz);
+    } else if(fogType <= 3.0f) {
+        return exponential2Fog(color.rgb, position.xyz);
+    }
+    return color;
+}

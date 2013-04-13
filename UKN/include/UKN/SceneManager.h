@@ -5,6 +5,8 @@
 #include "UKN/Frustum.h"
 #include "UKN/Renderable.h"
 #include "UKN/Shader.h"
+#include "UKN/LightManager.h"
+#include "UKN/SceneObject.h"
 
 namespace ukn {
 
@@ -42,7 +44,7 @@ namespace ukn {
 
         const LightManagerPtr& getLightManager() const;
 
-        void render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat);
+        void render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat, uint32 flag);
         
     protected:
         void flush();

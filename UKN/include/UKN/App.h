@@ -44,16 +44,16 @@ namespace ukn {
 			helper functions 
 			very handy with lambda functions
 		*/
-		AppLauncher& connectInit(const Window::InitializeEvent::signal_type::SlotType& f);
-		AppLauncher& connectUpdate(const Window::UpdateEvent::signal_type::SlotType& f);
-		AppLauncher& connectRender(const Window::RenderEvent::signal_type::SlotType& f);
-		AppLauncher& connectMouse(const Window::MouseEvent::signal_type::SlotType& f);
-		AppLauncher& connectKey(const Window::KeyEvent::signal_type::SlotType& f);
-		AppLauncher& connectClose(const Window::CloseEvent::signal_type::SlotType& f);
-		AppLauncher& connectResize(const Window::ResizeEvent::signal_type::SlotType& f);
-		AppLauncher& connectFrameStart(const Window:: FrameStartEvent::signal_type::SlotType& f);
-		AppLauncher& connectFrameEnd(const Window::FrameEndEvent::signal_type::SlotType& f);
-		AppLauncher& connectWindowCreate(const Window::WindowCreateEvent::signal_type::SlotType& f);
+		AppLauncher& connectInit(const Window::InitializeEvent::signal_type::slot_type& f);
+		AppLauncher& connectUpdate(const Window::UpdateEvent::signal_type::slot_type& f);
+		AppLauncher& connectRender(const Window::RenderEvent::signal_type::slot_type& f);
+		AppLauncher& connectMouse(const Window::MouseEvent::signal_type::slot_type& f);
+		AppLauncher& connectKey(const Window::KeyEvent::signal_type::slot_type& f);
+		AppLauncher& connectClose(const Window::CloseEvent::signal_type::slot_type& f);
+		AppLauncher& connectResize(const Window::ResizeEvent::signal_type::slot_type& f);
+		AppLauncher& connectFrameStart(const Window:: FrameStartEvent::signal_type::slot_type& f);
+		AppLauncher& connectFrameEnd(const Window::FrameEndEvent::signal_type::slot_type& f);
+		AppLauncher& connectWindowCreate(const Window::WindowCreateEvent::signal_type::slot_type& f);
         
     private:
         void doCreate();

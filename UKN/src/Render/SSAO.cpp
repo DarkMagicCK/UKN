@@ -10,15 +10,14 @@
 #include "UKN/SamplerStateObject.h"
 #include "UKN/BlendStateObject.h"
 #include "UKN/SpriteBatch.h"
+#include "UKN/Deferred.h"
 
 namespace ukn {
 
-    SSAO::SSAO(const float2& size):
-    mSize(size),
-    mSampleRadius(0),
-    mDistanceScale(0) {
-        if(!this->init()) {
-        }
+    SSAO::SSAO():
+    mSampleRadius(0.07f),
+    mDistanceScale(20.0f) {
+
     }
 
     SSAO::~SSAO() {
@@ -41,10 +40,6 @@ namespace ukn {
         return mSSAOBlurTarget;
     }
 
-    float2 SSAO::size() const {
-        return mSize;
-    }
-
     float SSAO::getSampleRadius() const {
         return mSampleRadius;
     }
@@ -61,40 +56,43 @@ namespace ukn {
         mDistanceScale = r;
     }
 
-    void SSAO::render(const CompositeRenderTargetPtr& scene, const TexturePtr& target) {
+    void SSAO::render(const TexturePtr& color,
+                      const TexturePtr& normal,
+                      const TexturePtr& depth) {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         CameraPtr currCamera = gd.getCurrFrameBuffer()->getViewport().camera;
         
         mRT->attachCamera(currCamera);
 
-        this->makeSSAO(scene);
-        this->makeSSAOBlur(scene);
-        this->makeFinal(target);
+        this->makeSSAO(color, normal, depth);
+        this->makeSSAOBlur(color, normal, depth);
+        this->makeFinal(color);
     }
 
-    bool SSAO::init() {
+    bool SSAO::init(float2 size) {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
 
-        if(mSize[0] == 0 && mSize[1] == 0) {
+        if(size[0] == 0 && size[1] == 0) {
             Window& wnd = Context::Instance().getApp().getWindow();
-            mSize = float2((float)wnd.width(), (float)wnd.height());
+            size = float2((float)wnd.width(), (float)wnd.height());
         }
+        mSize = size;
         /* render targets */
         {
             mRT = MakeSharedPtr<CompositeRenderTarget>();
 
-            mSSAOTarget = MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
-                                                           (uint32)mSize[1],
+            mSSAOTarget = MakeSharedPtr<ukn::RenderTarget>((uint32)size[0],
+                                                           (uint32)size[1],
                                                            1,
                                                            ukn::EF_RGBA8);
 
-            mSSAOBlurTarget = MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
-                                                               (uint32)mSize[1],
+            mSSAOBlurTarget = MakeSharedPtr<ukn::RenderTarget>((uint32)size[0],
+                                                               (uint32)size[1],
                                                                1,
                                                                ukn::EF_RGBA8);
 
-            mCompositeTarget = MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
-                                                                (uint32)mSize[1],
+            mCompositeTarget = MakeSharedPtr<ukn::RenderTarget>((uint32)size[0],
+                                                                (uint32)size[1],
                                                                 1,
                                                                 ukn::EF_RGBA8);
         }
@@ -137,16 +135,18 @@ namespace ukn {
         return true;
     }
 
-    void SSAO::makeSSAO(const CompositeRenderTargetPtr& gbuffer) {
+    void SSAO::makeSSAO(const TexturePtr& color,
+                        const TexturePtr& normal,
+                        const TexturePtr& depth) {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
         mRT->attach(ATT_Color0, mSSAOTarget);
         mRT->attachToRender();
-        gd.clear(CM_Color, color::White, 1.0f, 0);
+        gd.clear(CM_Color, color::Transparent, 1.0f, 0);
 
         const ShaderPtr& fragmentShader = mSSAOTechnique->getPass(0)->getFragmentShader();
-        fragmentShader->setTextureVariable("normalMap", gbuffer->getTargetTexture(ATT_Color1));
-        fragmentShader->setTextureVariable("depthMap", gbuffer->getTargetTexture(ATT_Color2));
+        fragmentShader->setTextureVariable("normalMap", normal);
+        fragmentShader->setTextureVariable("depthMap", depth);
         fragmentShader->setTextureVariable("randNormalMap", mRandomNormalTex);
 
         gd.setSamplerState(SamplerStateObject::LinearClamp(), 0);
@@ -162,14 +162,16 @@ namespace ukn {
         fragmentShader->setMatrixVariable("projection", cam->getProjMatrix());
         fragmentShader->setFloatVariable("sampleRadius", mSampleRadius);
         fragmentShader->setFloatVariable("distanceScale", mDistanceScale);
-        fragmentShader->setFloatVectorVariable("gbufferSize", this->size());
+        fragmentShader->setFloatVectorVariable("gbufferSize", mSize);
 
         SpriteBatch::DefaultObject().drawQuad(mSSAOTechnique, Vector2(-1, 1), Vector2(1, -1));
 
         mRT->detachFromRender();
     }
     
-    void SSAO::makeSSAOBlur(const CompositeRenderTargetPtr& gbuffer) {
+    void SSAO::makeSSAOBlur(const TexturePtr& color,
+                            const TexturePtr& normal,
+                            const TexturePtr& depth) {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
         mRT->attach(ATT_Color0, mSSAOBlurTarget);
@@ -179,19 +181,19 @@ namespace ukn {
         gd.setSamplerState(SamplerStateObject::LinearClamp(), 2);
 
         const ShaderPtr& fragmentShader = mSSAOBlurTechnique->getPass(0)->getFragmentShader();
-        fragmentShader->setTextureVariable("normalMap", gbuffer->getTargetTexture(ATT_Color1));
-        fragmentShader->setTextureVariable("depthMap", gbuffer->getTargetTexture(ATT_Color2));
+        fragmentShader->setTextureVariable("normalMap", normal);
+        fragmentShader->setTextureVariable("depthMap", depth);
         fragmentShader->setTextureVariable("SSAO", mSSAOTarget->getTexture());
 
         fragmentShader->setFloatVectorVariable("blurDirection", float2(1, 1));
-        fragmentShader->setFloatVectorVariable("targetSize", this->size());
+        fragmentShader->setFloatVectorVariable("targetSize", mSize);
         
         SpriteBatch::DefaultObject().drawQuad(mSSAOBlurTechnique, Vector2(-1, 1), Vector2(1, -1));
 
         mRT->detachFromRender();
     }
 
-    void SSAO::makeFinal(const TexturePtr& target) {
+    void SSAO::makeFinal(const TexturePtr& color) {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
         mRT->attach(ATT_Color0, mCompositeTarget);
@@ -199,7 +201,7 @@ namespace ukn {
         gd.clear(CM_Color, color::White, 1.0f, 0);
 
         const ShaderPtr& fragmentShader = mCompositeTechnique->getPass(0)->getFragmentShader();
-        fragmentShader->setTextureVariable("colorMap", target);
+        fragmentShader->setTextureVariable("colorMap", color);
         fragmentShader->setTextureVariable("SSAO", this->mSSAOTarget->getTexture());
         
         SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, Vector2(-1, 1), Vector2(1, -1));
@@ -207,7 +209,7 @@ namespace ukn {
         mRT->detachFromRender();
     }
 
-    const TexturePtr& SSAO::getFinalTexture() const {
+    TexturePtr SSAO::getFinalTexture() const {
         return mCompositeTarget->getTexture();
     }
 

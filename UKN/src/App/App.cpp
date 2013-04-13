@@ -192,52 +192,52 @@ namespace ukn {
     }
     
     
-	AppLauncher& AppLauncher::connectInit(const Window::InitializeEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectInit(const Window::InitializeEvent::signal_type::slot_type& f) {
 		mMainWindow->connectInit(f);
 		return *this;
 	}
 
-	AppLauncher& AppLauncher::connectUpdate(const Window::UpdateEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectUpdate(const Window::UpdateEvent::signal_type::slot_type& f) {
 		mMainWindow->connectUpdate(f);
 		return *this;
 	}
 
-	AppLauncher& AppLauncher::connectRender(const Window::RenderEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectRender(const Window::RenderEvent::signal_type::slot_type& f) {
 		mMainWindow->connectRender(f);
 		return *this;
 	}
 
-	AppLauncher& AppLauncher::connectMouse(const Window::MouseEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectMouse(const Window::MouseEvent::signal_type::slot_type& f) {
 		mMainWindow->connectMouse(f);
 		return *this;
 	}
 
-	AppLauncher& AppLauncher::connectKey(const Window::KeyEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectKey(const Window::KeyEvent::signal_type::slot_type& f) {
 		mMainWindow->connectKey(f);
 		return *this;
 	}
 
-	AppLauncher& AppLauncher::connectClose(const Window::CloseEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectClose(const Window::CloseEvent::signal_type::slot_type& f) {
 		mMainWindow->connectClose(f);
 		return *this;
 	}
 
-	AppLauncher& AppLauncher::connectResize(const Window::ResizeEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectResize(const Window::ResizeEvent::signal_type::slot_type& f) {
 		mMainWindow->connectResize(f);
 		return *this;
 	}
 
-	AppLauncher& AppLauncher::connectFrameStart(const Window::FrameStartEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectFrameStart(const Window::FrameStartEvent::signal_type::slot_type& f) {
 		mMainWindow->connectFrameStart(f);
 		return *this;
 	}
 
-	AppLauncher& AppLauncher::connectFrameEnd(const Window::FrameEndEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectFrameEnd(const Window::FrameEndEvent::signal_type::slot_type& f) {
 		mMainWindow->connectFrameEnd(f);
 		return *this;
 	}
 
-	AppLauncher& AppLauncher::connectWindowCreate(const Window::WindowCreateEvent::signal_type::SlotType& f) {
+	AppLauncher& AppLauncher::connectWindowCreate(const Window::WindowCreateEvent::signal_type::slot_type& f) {
 		mMainWindow->connectWindowCreate(f);
 		return *this;
 	}

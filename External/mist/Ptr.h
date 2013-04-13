@@ -91,6 +91,18 @@ namespace mist {
         int32 mWeakRef;
     };
 
+    template<typename T> void checked_delete(T* p) {
+        typedef char type_must_be_complete[sizeof(T) ? 1: - 1];
+        (void) sizeof(type_must_be_complete);
+        delete p;
+    }
+
+    template<typename T> void checked_array_delete(T* p) {
+        typedef char type_must_be_complete[sizeof(T) ? 1: - 1];
+        (void) sizeof(type_must_be_complete);
+        delete []p;
+    }
+
     template<class C>
     struct SharedPtrReleasePolicy {
         static C* Alloc() {
@@ -99,7 +111,7 @@ namespace mist {
 
         static void Release(C* obj) {
             if(obj)
-                delete obj;
+                checked_delete(obj);
         }
     };
 
@@ -107,7 +119,7 @@ namespace mist {
     struct SharedPtrReleaseArrayPolicy {
         static void Release(C* obj) {
             if(obj)
-                delete []obj;
+                checked_array_delete(obj);
         }
     };
 
@@ -311,7 +323,7 @@ namespace mist {
         template<typename OC, typename ORP>
         friend class SharedPtr;
 
-        template<typename T> friend class WeakPtr;
+        template<typename _TW> friend class WeakPtr;
     };
 
     template <class C, class RP>
@@ -540,7 +552,7 @@ namespace mist {
         template<typename Y>
         friend class WeakPtr;
 
-        template<typename T, typename A>
+        template<typename _TS, typename A>
         friend class SharedPtr;
     };
 
@@ -552,7 +564,7 @@ namespace mist {
 
     const struct {
         template<typename T>
-        operator T*() { return reinterpret_cast<T*>(0); }
+        operator T*() const { return reinterpret_cast<T*>(0); }
 
     private:
         void operator&() const;

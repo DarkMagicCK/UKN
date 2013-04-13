@@ -14,7 +14,7 @@ namespace ukn {
     
 	static bool is_win_key_down(int key) {
 		/* high-order bits == 1 -> key down) */
-		return ::GetKeyState(key) & 0x8000;
+		return (bool)(::GetKeyState(key) & 0x8000);
 	}
 
     static void update_key_flag() {

@@ -33,8 +33,38 @@ namespace ukn {
             float u = acosf(MAX(MIN(vertex.ny / phi, 1.0), -1.0)) / (2.0 * d_pi);
             vertex.u = vertex.nx > 0.f ? u : 1 - u;
         }*/
-        vertex.uv = Vector2(0.5 + asin(vertex.normal.x()) / d_pi,
-                            0.5 + asin(vertex.normal.y()) / (d_pi));
+        vertex.uv = Vector2(0.5f + asin(vertex.normal.x()) / pi,
+                            0.5f + asin(vertex.normal.y()) / (pi));
+    }
+
+    inline void _compute_tbn(const float3& p1, const float3& p2, const float3& p3, 
+                             const float2& uv1, const float2& uv2, const float2& uv3,
+                             float3& tout, float3& bout) {
+        Vector3 e0 = p2 - p1;
+        Vector3 e1 = p3 - p2;
+        Vector3 normal = e0.cross(e1);
+
+        float s1 = uv2[0] - uv1[0],
+              t1 = uv2[1] - uv1[1],
+              s2 = uv3[0] - uv1[0],
+              t2 = uv3[1] - uv1[1];
+        float tmp = 0.0;
+        float d = s1 * t2 - s2 * t1; 
+        if(fabs(d) <= MIST_TINY) 
+            tmp = 1.0;
+        else
+            tmp = 1.0 / d;
+        float3 tangent = float3(t2 * e0.x() - t1 * e1.x(),
+                                t2 * e0.y() - t1 * e1.y(),
+                                t2 * e0.z() - t2 * e1.z());
+        tangent = tangent * tmp;
+        float3 binormal = float3(s1 * e0.x() - s2 * e1.x(),
+                                 s1 * e0.x() - s2 * e1.x(),
+                                 s1 * e0.x() - s2 * e1.x());
+        binormal = binormal * tmp;
+       
+        tout = tangent.normalize();
+        bout = binormal.normalize();
     }
 
     ukn::RenderBufferPtr ModelLoader::BuildFromSphere(const mist::Sphere& sphere, uint32 slices) {
@@ -124,69 +154,86 @@ namespace ukn {
                 float3(max.x(), max.y(), max.z()) // 7
             };
             
-            uint32 idx = 0;
+            VertexUVNormal vertices[6* 6];
 
-            Vertex2D vertices[6* 6];
-            
             float half4 = 0.25f;
             float half2 = 0.5f;
             float half43 = 0.75f;
             float half3 = 1.0f / 3;
             float half32 = 2.0f / 3;
+
+            float d = 1;
+      
+            float3 n[6] = {
+                float3(0, 0, -1), // 0
+                float3(-1, 0, 0), // 1
+                float3(0, 0, 1), // 2
+                float3(1, 0, 0), // 3
             
+                float3(0, 1, 0), // 4
+                float3(0, -1, 0), // 5
+            };
+
+            uint32 idx = 0;
+        
             // front, 0123
-            vertices[idx++].xyz = v[0]; vertices[idx++].xyz = v[1]; vertices[idx++].xyz = v[2];
-            vertices[idx++].xyz = v[2]; vertices[idx++].xyz = v[3]; vertices[idx++].xyz = v[0];
-            
+            vertices[idx++].position = v[0]; vertices[idx++].position = v[2]; vertices[idx++].position = v[1];
+            vertices[idx++].position = v[2]; vertices[idx++].position = v[0]; vertices[idx++].position = v[3];
+
             // left, 1265
-            vertices[idx++].xyz = v[1]; vertices[idx++].xyz = v[2]; vertices[idx++].xyz = v[6];
-            vertices[idx++].xyz = v[6]; vertices[idx++].xyz = v[5]; vertices[idx++].xyz = v[1];
-            
+            vertices[idx++].position = v[1]; vertices[idx++].position = v[2]; vertices[idx++].position = v[6];
+            vertices[idx++].position = v[6]; vertices[idx++].position = v[5]; vertices[idx++].position = v[1];
+
             // back, 4567
-            vertices[idx++].xyz = v[4]; vertices[idx++].xyz = v[5]; vertices[idx++].xyz = v[6];
-            vertices[idx++].xyz = v[6]; vertices[idx++].xyz = v[7]; vertices[idx++].xyz = v[4];
-            
+            vertices[idx++].position = v[4]; vertices[idx++].position = v[5]; vertices[idx++].position = v[6];
+            vertices[idx++].position = v[6]; vertices[idx++].position = v[7]; vertices[idx++].position = v[4];
+
             // right, 0374
-            vertices[idx++].xyz = v[0]; vertices[idx++].xyz = v[3]; vertices[idx++].xyz = v[7];
-            vertices[idx++].xyz = v[7]; vertices[idx++].xyz = v[4]; vertices[idx++].xyz = v[0];
-            
+            vertices[idx++].position = v[0]; vertices[idx++].position = v[7]; vertices[idx++].position = v[3]; 
+            vertices[idx++].position = v[7]; vertices[idx++].position = v[0]; vertices[idx++].position = v[4]; 
+
             // top, 2376
-            vertices[idx++].xyz = v[2]; vertices[idx++].xyz = v[3]; vertices[idx++].xyz = v[7];
-            vertices[idx++].xyz = v[7]; vertices[idx++].xyz = v[6]; vertices[idx++].xyz = v[2];
-            
+            vertices[idx++].position = v[2]; vertices[idx++].position = v[3]; vertices[idx++].position = v[7];
+            vertices[idx++].position = v[7]; vertices[idx++].position = v[6]; vertices[idx++].position = v[2];
+
             // bottom, 0154
-            vertices[idx++].xyz = v[0]; vertices[idx++].xyz = v[1]; vertices[idx++].xyz = v[5];
-            vertices[idx++].xyz = v[5]; vertices[idx++].xyz = v[4]; vertices[idx++].xyz = v[0];
-            
+            vertices[idx++].position = v[0]; vertices[idx++].position = v[1]; vertices[idx++].position = v[5];
+            vertices[idx++].position = v[5]; vertices[idx++].position = v[4]; vertices[idx++].position = v[0];
+
             idx = 0;
-            
-            vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, half3);
-            vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half2, half3); vertices[idx++].uv.set(half2, half32);
-            
+
+            vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half4, half32); 
+            vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half2, half3); 
+        
             vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(0, half3);
             vertices[idx++].uv.set(0, half3); vertices[idx++].uv.set(0, half32); vertices[idx++].uv.set(half4, half32);
-            
+        
             vertices[idx++].uv.set(half43, half32); vertices[idx++].uv.set(1, half32); vertices[idx++].uv.set(1, half3);
             vertices[idx++].uv.set(1, half3); vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half43, half32);
-            
-            vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half2, half3); vertices[idx++].uv.set(half43, half3);
-            vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half43, half32); vertices[idx++].uv.set(half2, half32);
-            
+        
+            vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half2, half3);
+            vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half43, half32); 
+       
             vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half2, half3); vertices[idx++].uv.set(half2, 0);
             vertices[idx++].uv.set(half2, 0); vertices[idx++].uv.set(half4, 0); vertices[idx++].uv.set(half4, half3);
-            
+       
             vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, 1);
             vertices[idx++].uv.set(half4, 1); vertices[idx++].uv.set(half2, 1); vertices[idx++].uv.set(half2, half32);
-            
-            
+         
+            for(int i=0; i<6; ++i) {
+                for(int j=0; j<6; ++j) {
+                    vertices[i * 6 + j].normal = n[i];
+                }
+            }
+
             GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(GraphicBuffer::None,
                                                                   GraphicBuffer::Static,
                                                                   6 * 6,
                                                                   vertices,
-                                                                  Vertex2D::Format());
+                                                                  VertexUVNormal::Format());
             if(vertexBuffer) {
-                renderBuffer->bindVertexStream(vertexBuffer, Vertex2D::Format());
-                
+                renderBuffer->bindVertexStream(vertexBuffer, VertexUVNormal::Format());
+
             }
         }
         return renderBuffer;
@@ -416,15 +463,15 @@ namespace ukn {
                 std::vector<float2>& uv_source = new_data ? n_uv: uv;
                 std::vector<float3>& color_source = new_data ? n_color: color;
                 
-                data->vertex_format = vertex_components.format;
+                data->vertex_format.push_back(vertex_components.format);
                 if(new_data) 
-                    data->vertex_format = VertexUVNormal::Format();
+                    data->vertex_format.back() = VertexUVNormal::Format();
 
 
              //   vert_data.resize(GetVertexElementsTotalSize(vertex_components.format) * position_source.size());
                 for(size_t i=0; i<position_source.size(); ++i) {
                     
-                    for(VertexElement& element: data->vertex_format) {
+                    for(VertexElement& element: data->vertex_format.back()) {
                         switch(element.usage) {
                         case VU_Position:
                             vert_data.insert(vert_data.end(),
@@ -464,16 +511,214 @@ namespace ukn {
                 mesh.name = file->getName();
                 data->meshes.push_back(mesh);
 
-                data->vertex_count = (uint32)position_source.size();
-
                 return SharedPtr<ModelData>(data);
             }
         }
         return ModelDataPtr();
     }
     
+    struct ObjLoader {
+
+        std::vector<float3> positions;
+        std::vector<float3> normals;
+        std::vector<float2> uvs;
+        std::vector<VertexUVNormal> vertices;
+        ModelLoader::ModelDataPtr data;
+        ModelLoader::ModelData::MeshData mesh;
+        std::vector<std::pair<MistString, MaterialPtr> > materials;
+        bool needCalculateNormal;
+        bool needTBN;
+        bool useStart;
+
+        ObjLoader() {
+            data = MakeSharedPtr<ModelLoader::ModelData>();
+           
+            mesh.num_indices = 0;
+            mesh.num_vertices = 0;
+            mesh.start_vertex = 0;
+            mesh.start_index = 0;
+            needCalculateNormal = false;
+            needTBN = false;
+            useStart = false;
+        }
+
+        void addMesh() {
+            if(needCalculateNormal) {
+                for(uint32 i=mesh.start_vertex; i<vertices.size(); i+=3) {
+                    float3 p1 = vertices[i].position;
+                    float3 p2 = vertices[i+1].position;
+                    float3 p3 = vertices[i+2].position;
+
+                    Vector3 v1 = p1 - p3;
+                    Vector3 v2 = p3 - p2;
+
+                    vertices[i].normal = vertices[i+1].normal = vertices[i+2].normal = v1.cross(v2);
+
+                }
+            }
+
+            data->meshes.push_back(mesh);
+            mesh.num_indices = 0;
+            mesh.num_vertices = 0;
+            mesh.start_vertex = vertices.size();
+            mesh.start_index = data->index_data.size();
+
+            useStart = false;
+        }
+
+        ModelLoader::ModelDataPtr load(const ResourcePtr& file) {
+            mist::TextStreamReader reader(file->getResourceStream());
+
+
+#define TO_FLOAT3(t, i) float3((float)Convert::ToDouble(t[i]), \
+                               (float)Convert::ToDouble(t[i+1]), \
+                               (float)Convert::ToDouble(t[i+2]))
+
+            while(reader.peek() != -1) {
+                MistString line = reader.readLine();
+                if(line.empty())
+                    continue;
+                if(line[0] == L'#')
+                    continue;
+
+                StringTokenlizer tokens(line, L" ");
+                if(tokens.size() > 0) {
+                    if(tokens[0] == L"v") {
+                        if(useStart) addMesh();
+
+                        positions.push_back(TO_FLOAT3(tokens, 1));
+                    } else if(tokens[0] == L"vt") {
+                        uvs.push_back(float2((float)Convert::ToDouble(tokens[1]),
+                                             (float)Convert::ToDouble(tokens[2])));
+                    } else if(tokens[0] == L"vn") {
+                        normals.push_back(TO_FLOAT3(tokens, 1));
+                    } else if(tokens[0] == L"f") {
+                        for(uint32 fi=0; fi<tokens.size() - 3; ++fi) {
+                            StringTokenlizer t1(tokens[1+fi], L"/");
+                            StringTokenlizer t2(tokens[2+fi], L"/");
+                            StringTokenlizer t3(tokens[3+fi], L"/");
+                            if(t1.size() != t2.size() ||
+                                t2.size() != t3.size() ||
+                                t3.size() != t1.size())
+                                continue;
+
+                            VertexUVNormal v1, v2, v3;
+                            if(t1.size() >= 1) {
+                                v1.position = positions[Convert::ToUInt32(t1[0]) - 1];
+                                v2.position = positions[Convert::ToUInt32(t2[0]) - 1];
+                                v3.position = positions[Convert::ToUInt32(t3[0]) - 1];
+                            } 
+                            if(t1.size() >= 2) {
+                                v1.uv = uvs[Convert::ToUInt32(t1[1]) - 1];
+                                v2.uv = uvs[Convert::ToUInt32(t2[1]) - 1];
+                                v3.uv = uvs[Convert::ToUInt32(t3[1]) - 1];
+                            } else 
+                                v1.uv = v2.uv = v3.uv = float2(0, 0);
+                            if(t1.size() >= 3) {
+                                v1.normal = normals[Convert::ToUInt32(t1[2]) - 1];
+                                v2.normal = normals[Convert::ToUInt32(t2[2]) - 1];
+                                v3.normal = normals[Convert::ToUInt32(t3[2]) - 1];
+                            } else {
+                                v1.normal = v2.normal = v3.normal = float3(0, 0, 0);
+                                needCalculateNormal = true;
+                            }
+
+                            vertices.push_back(v1);
+                            vertices.push_back(v2);
+                            vertices.push_back(v3);
+                            mesh.num_vertices += 3;
+
+                            data->index_data.push_back(data->index_data.size());
+                            data->index_data.push_back(data->index_data.size());
+                            data->index_data.push_back(data->index_data.size());
+                            mesh.num_indices += 3;
+                        }
+                    } else if(tokens[0] == L"mtllib") {
+                        MistString dir = mist::Path::GetDirectory(file->getName());
+                        MistString mtlPath = dir + mist::string::Strip(tokens[1]);
+                        
+                        if(!parseMaterial(mtlPath, dir))
+                            log_error(L"ObjLoader::load: error parsing material file " + mtlPath);
+
+                    } else if(tokens[0] == L"usemtl") {
+                        for(uint32 i=0; i<materials.size(); ++i) {
+                            if(materials[i].first == tokens[1]) {
+                                mesh.material_id = i;
+                                mesh.name = materials[i].first;
+                                break;
+                            }
+                        }
+                        useStart = true;
+                    }
+                }
+
+            }
+        
+            if(!vertices.empty()) {
+                data->vertex_format.push_back(VertexUVNormal::Format());
+                data->vertex_data.push_back(std::vector<uint8>());
+                data->vertex_data.back().insert(data->vertex_data.back().end(),
+                                                (uint8*)&vertices.front(),
+                                                (uint8*)&vertices.back());
+                return data;
+            }
+        }
+
+        bool parseMaterial(const MistString& mtlPath, const MistString& dir) {
+            mist::ResourcePtr mtlResource = ResourceLoader::Instance().loadResource(mtlPath);
+            if(mtlResource && mtlResource->getResourceStream()) {
+                mist::TextStreamReader mtlReader(mtlResource->getResourceStream());
+                MaterialPtr currentMat;
+
+                while(mtlReader.peek() != -1) {
+                    MistString mtlLine = mtlReader.readLine();
+                    if(mtlLine.empty())
+                        continue;
+                    if(mtlLine[0] == L'#')
+                        continue;
+
+                    StringTokenlizer mtlTokens(mtlLine, L" ");
+                    if(mtlTokens.size() > 0) {
+                        if(mtlTokens[0] == L"newmtl") {
+                            currentMat = MakeSharedPtr<Material>();
+                            materials.push_back(std::make_pair(mtlTokens[1], currentMat));
+                            data->materials.push_back(currentMat);
+                        } else {
+                            if(mtlTokens[0] == L"Ka") {
+                                currentMat->ambient = TO_FLOAT3(mtlTokens, 1);
+                            } else if(mtlTokens[0] == L"Kd") {
+                                currentMat->diffuse = TO_FLOAT3(mtlTokens, 1);
+                            } else if(mtlTokens[0] == L"Ks") {
+                                currentMat->specular = TO_FLOAT3(mtlTokens, 1);
+                            } else if(mtlTokens[0] == L"Ns") {
+                                currentMat->specular_power = (float)Convert::ToDouble(mtlTokens[1]);
+                            } else if(mtlTokens[0] == L"d" || mtlTokens[0] == L"Tr") {
+                                currentMat->opacity = (float)Convert::ToDouble(mtlTokens[1]);
+                            } else if(mtlTokens[0] == L"map_Ka") {
+                                currentMat->textures.push_back(std::make_pair("ambient", 
+                                                                mist::string::WStringToString(dir + mtlTokens.back())));
+                            } else if(mtlTokens[0] == L"map_Kd") {
+                                currentMat->textures.push_back(std::make_pair("diffuse", 
+                                                                mist::string::WStringToString(dir + mtlTokens.back())));
+                            } else if(mtlTokens[0] == L"map_Ks") {
+                                currentMat->textures.push_back(std::make_pair("specular", 
+                                                                mist::string::WStringToString(dir + mtlTokens.back())));
+                            } else if(mtlTokens[0] == L"map_bump" || mtlTokens[0] == L"bump") {
+                                currentMat->textures.push_back(std::make_pair("normal", 
+                                                                mist::string::WStringToString(dir + mtlTokens[1])));
+                            }
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+    };
+    
     ModelLoader::ModelDataPtr ModelLoader::LoadFromObj(const mist::ResourcePtr& file) {
-        return ModelDataPtr();
+        ObjLoader loader;
+        return loader.load(file);
     }
     
     ModelLoader::ModelDataPtr ModelLoader::LoadFromPlaneFile(const mist::ResourcePtr& file) {
@@ -589,62 +834,94 @@ namespace ukn {
     }
 
     ModelPtr ModelLoader::LoadModel(const UknString& name, uint32 access_hint) {
+        ModelDataPtr data;
         if(name.find(L".ply") != UknString::npos) {
-            ModelDataPtr data = ModelLoader::LoadFromPly(
+            data = ModelLoader::LoadFromPly(
                 ResourceLoader::Instance().loadResource(name), 
                 true
             );
-            if(data) {
-                ModelPtr model = MakeSharedPtr<Model>(Path::GetFileNameWithoutExtension(name));
+        } else if(name.find(L".obj") != UknString::npos) {
+            data = ModelLoader::LoadFromObj(
+                ResourceLoader::Instance().loadResource(name)
+            );
+        }
+        if(data) {
+            ModelPtr model = MakeSharedPtr<Model>(Path::GetFileNameWithoutExtension(name));
                 
-                ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
-     
+            ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
+
+            std::vector<ukn::GraphicBufferPtr> vtxBuffers;
+            for(uint32 i=0; i<data->vertex_data.size(); ++i) {
                 ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::None,
                                                                            ukn::GraphicBuffer::Static,
-                                                                           data->vertex_count,
-                                                                           &data->vertex_data[0][0],
-                                                                           data->vertex_format);
-                ukn::GraphicBufferPtr indexBuffer = gf.createIndexBuffer(ukn::GraphicBuffer::None,
-                                                                         ukn::GraphicBuffer::Static,
-                                                                         data->index_data.size(),
-                                                                         &data->index_data[0]);
-                ukn::RenderBufferPtr buffer = gf.createRenderBuffer();
-                buffer->bindVertexStream(vertexBuffer, ukn::VertexUVNormal::Format());
-                buffer->bindIndexStream(indexBuffer);
-                buffer->setRenderMode(ukn::RM_Triangle);
+                                                                           data->vertex_data[i].size() / GetVertexElementsTotalSize(data->vertex_format[i]),
+                                                                           &data->vertex_data[i][0],
+                                                                           data->vertex_format[i]);
+                vtxBuffers.push_back(vertexBuffer);
+            }
+     
+            ukn::GraphicBufferPtr indexBuffer = gf.createIndexBuffer(ukn::GraphicBuffer::None,
+                                                                     ukn::GraphicBuffer::Static,
+                                                                     data->index_data.size(),
+                                                                     &data->index_data[0]);
+            ukn::RenderBufferPtr buffer = gf.createRenderBuffer();
+            for(size_t i=0; i<vtxBuffers.size(); ++i)
+                buffer->bindVertexStream(vtxBuffers[i], data->vertex_format[i]);
+            buffer->bindIndexStream(indexBuffer);
+          //  buffer->useIndexStream(true);
+           
+            buffer->setRenderMode(ukn::RM_Triangle);
                 
-                model->setRenderBuffer(buffer);
+            model->setRenderBuffer(buffer);
 
-                MeshPtr mesh = MakeSharedPtr<Mesh>(model, L"main");
-                mesh->setRenderBuffer(buffer);
-
+            if(data->materials.empty()) {
                 MaterialPtr default_mat = MakeSharedPtr<Material>();
-                default_mat->ambient = float3(1, 1, 1);
+                default_mat->ambient = float3(0, 0, 0);
                 default_mat->diffuse = float3(1, 1, 1);
                 default_mat->emit = float3(0, 0, 0);
                 default_mat->opacity = 1.f;
                 default_mat->shininess = 10.f;
                 default_mat->specular = float3(0, 0, 0);
-                default_mat->specular_power = 16.f;
+                default_mat->specular_power = 0.f;
                 default_mat->textures.push_back(std::make_pair("diffuse",
-                                                               "white"));
+                                                                "white"));
 
                 model->addMaterial(default_mat);
-                model->addMesh(mesh);
-
                 uint32 white(0xFFFFFFFF);
                 model->mTexturePool.insert(std::make_pair("white",
                                                           gf.create2DTexture(1, 1, 0, EF_RGBA8, (uint8*)&white)));
-
-                mesh->buildInfo();
-
-                return model;
-
             } else {
-                log_error(L"error loading model data");
+                for(MaterialPtr& mat: data->materials)
+                    model->addMaterial(mat);
             }
+
+            if(data->meshes.empty()) {
+                MeshPtr mesh = MakeSharedPtr<Mesh>(model, L"default");
+                mesh->setRenderBuffer(buffer);
+                
+                mesh->buildInfo();
+                model->addMesh(mesh);
+            } else {
+                for(ModelData::MeshData& meshData: data->meshes) {
+                    MeshPtr mesh = MakeSharedPtr<Mesh>(model, meshData.name);
+                    mesh->setRenderBuffer(buffer);
+                    mesh->setMaterailId(meshData.material_id);
+                    mesh->setIndexStartIndex(meshData.start_index);
+                    mesh->setVertexStartIndex(meshData.start_vertex);
+                    mesh->setNumIndicies(meshData.num_indices);
+                    mesh->setNumVertices(meshData.num_vertices);
+                    mesh->setBoundingBox(meshData.bounding_box);
+
+                    mesh->buildInfo();
+                    model->addMesh(mesh);
+                }
+            }    
+
+            return model;
+
+        } else {
+            log_error(L"error loading model data");
         }
-        
 
         return ModelPtr();
     }
@@ -787,7 +1064,19 @@ namespace ukn {
                         mEmitTex = tex;
                 }
             }
+            if(!mDiffuseTex) {
+                uint32 c(COLOR_RGBA(mat->diffuse[0] * 255, 
+                                    mat->diffuse[1] * 255, 
+                                    mat->diffuse[2] * 255, 
+                                    255));
+                mDiffuseTex = Context::Instance().getGraphicFactory().create2DTexture(1, 1, 0, EF_RGBA8, (uint8*)&c);
+            }
+            mMaterial = mat;
         }
+    }
+
+    void Mesh::setBoundingBox(const Box& box) {
+        mBoundingBox = box;
     }
 
     /* Model */

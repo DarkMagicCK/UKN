@@ -6,13 +6,14 @@
 #include "mist/Color.h"
 #include "mist/MathUtil.h"
 
+#include "UKN/RenderTarget.h"
+
 namespace ukn {
 
     enum LightSourceType {
         LS_Directional,
         LS_Spot,
         LS_Point,
-        LS_Ambient,
     };
 
     class UKN_API LightSource {

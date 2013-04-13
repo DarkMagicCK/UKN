@@ -34,9 +34,9 @@ namespace mist {
     }
 
     Color Color::operator = (uint32 col) {
-        this->c = float4(((col & 0xFF))/255.0f, 
+        this->c = float4(((col>>16) & 0xFF)/255.0f, 
                          ((col>>8) & 0xFF)/255.0f,
-                         ((col>>16) & 0xFF)/255.0f,
+                         ((col) & 0xFF)/255.0f,
                          ((col>>24) & 0xFF)/255.0f);
         return *this;
     }
@@ -127,6 +127,25 @@ namespace mist {
             ((unsigned int)(oR*255.0f)<<16) +
             ((unsigned int)(og*255.0f)<<8) +
             ((unsigned int)(ob*255.0f));
+    }
+
+    uint32 Color::toBGRA() const {
+        return ((unsigned int)(this->a()*255.0f)) +
+            ((unsigned int)(this->r()*255.0f)<<8) +
+            ((unsigned int)(this->g()*255.0f)<<16) +
+            ((unsigned int)(this->b()*255.0f)<<24);
+    }
+
+    uint32 Color::toABGR() const {
+        return ((unsigned int)(this->a()*255.0f)<<24) +
+            ((unsigned int)(this->r()*255.0f)) +
+            ((unsigned int)(this->g()*255.0f)<<8) +
+            ((unsigned int)(this->b()*255.0f)<<16);
+    }
+
+    
+    float3 Color::getRGB() const {
+        return float3(this->r(), this->g(), this->b());
     }
 
     Color Color::FromHWColor(uint32 col) {

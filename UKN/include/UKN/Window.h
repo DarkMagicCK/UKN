@@ -155,16 +155,16 @@ namespace ukn {
 			helper functions 
 			very handy with lambda functions
 		*/
-		Window& connectInit(const InitializeEvent::signal_type::SlotType& f);
-		Window& connectUpdate(const UpdateEvent::signal_type::SlotType& f);
-		Window& connectRender(const RenderEvent::signal_type::SlotType& f);
-		Window& connectMouse(const MouseEvent::signal_type::SlotType& f);
-		Window& connectKey(const KeyEvent::signal_type::SlotType& f);
-		Window& connectClose(const CloseEvent::signal_type::SlotType& f);
-		Window& connectResize(const ResizeEvent::signal_type::SlotType& f);
-		Window& connectFrameStart(const FrameStartEvent::signal_type::SlotType& f);
-		Window& connectFrameEnd(const FrameEndEvent::signal_type::SlotType& f);
-		Window& connectWindowCreate(const WindowCreateEvent::signal_type::SlotType& f);
+		Window& connectInit(const InitializeEvent::signal_type::slot_type& f);
+		Window& connectUpdate(const UpdateEvent::signal_type::slot_type& f);
+		Window& connectRender(const RenderEvent::signal_type::slot_type& f);
+		Window& connectMouse(const MouseEvent::signal_type::slot_type& f);
+		Window& connectKey(const KeyEvent::signal_type::slot_type& f);
+		Window& connectClose(const CloseEvent::signal_type::slot_type& f);
+		Window& connectResize(const ResizeEvent::signal_type::slot_type& f);
+		Window& connectFrameStart(const FrameStartEvent::signal_type::slot_type& f);
+		Window& connectFrameEnd(const FrameEndEvent::signal_type::slot_type& f);
+		Window& connectWindowCreate(const WindowCreateEvent::signal_type::slot_type& f);
     };
     
 } // namespace ukn

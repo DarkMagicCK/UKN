@@ -1,0 +1,84 @@
+const uniform float3 cameraPosition;
+const uniform float4x4 inverseViewProj;
+
+const uniform float2 gbufferSize;
+const uniform float shadowMapSize;
+
+// directional light properties
+const uniform float4 lightColor;
+const uniform float3 lightPosition;
+const uniform float lightRadius;
+const uniform float lightIntensity;
+
+const uniform float depthPrecision;
+const uniform float depthBias;
+const uniform int hasShadow;
+
+struct VertexOutputType {
+    float4 position: POSITION;
+    float4 screenPosition: TEXCOORD0;
+};
+
+// manual linear sampling
+float4 manualSample(sampler2D sampler, float2 uv, float2 textureSize) {
+    float2 texelPos = textureSize * uv;
+    float2 lerps = frac(texelPos);
+    float texelSize = 1.0 / textureSize;
+
+    float4 sourcevals[4];
+    sourcevals[0] = tex2D(sampler, uv);
+    sourcevals[1] = tex2D(sampler, uv + float2(texelSize, 0));
+    sourcevals[2] = tex2D(sampler, uv + float2(0, texelSize));
+    sourcevals[3] = tex2D(sampler, uv + float2(texelSize, texelSize));
+
+    float4 interpolated = lerp(lerp(sourcevals[0], sourcevals[1], lerps.x),
+                               lerp(sourcevals[2], sourcevals[3], lerps.x),
+                               lerps.y);
+    return interpolated;
+}
+
+// phong shader
+float4 phong(float3 position, float3 N, float specularIntensity, float specularPower) {
+    float3 L = lightPosition.xyz - position.xyz;
+    float attenuation = saturate(1.0f - length(L) / (lightRadius / 2)) * 3;
+
+    L = normalize(L);
+    float3 R = normalize(reflect(-L, N));
+    float3 E = normalize(cameraPosition - position.xyz);
+    float NL = max(0, dot(N, L));
+    float3 diffuse = NL * lightColor.xyz;
+    float specular = specularIntensity * pow(saturate(dot(R, E)), specularPower);
+
+    return attenuation * lightIntensity * float4(diffuse.rgb, specular);
+}
+
+float3 decode(float3 enc) {
+    return (2.0f * enc.xyz - 1.0f);
+}
+
+float4 FragmentProgram(VertexOutputType input,
+                       uniform sampler2D colorMap: TEX0,
+                       uniform sampler2D normalMap: TEX1,
+                       uniform sampler2D depthMap: TEX2,
+                       uniform sampler2D shadowMap: TEX3
+                       ): COLOR0 {
+    input.screenPosition.xy /= input.screenPosition.w;
+    float2 uv = 0.5f * (float2(input.screenPosition.x, 
+                               -input.screenPosition.y) + 1);
+    
+    float4 encodedNormal = tex2D(normalMap, uv);
+    float3 normal = decode(encodedNormal.xyz);
+
+    float depth = manualSample(depthMap, uv, gbufferSize).x;
+
+    float specularIntensity = tex2D(colorMap, uv).w;
+    float specularPower = encodedNormal.w * 255;
+
+    float4 position = 1.0f;
+    position.xy = input.screenPosition.xy;
+    position.z = depth;
+    position = mul(position, inverseViewProj);
+    position /= position.w;
+
+    return phong(position.xyz, normal, 0, 0);
+}

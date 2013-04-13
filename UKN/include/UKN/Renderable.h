@@ -15,6 +15,7 @@
 #include "mist/Ptr.h"
 
 #include "UKN/PreDeclare.h"
+#include "UKN/Texture.h"
 
 namespace ukn {
     
@@ -27,6 +28,22 @@ namespace ukn {
         float specular_power;
         float shininess;
 
+        Material():
+            ambient(float3(0, 0, 0)),
+            diffuse(float3(0, 0, 0)),
+            specular(float3(0, 0, 0)),
+            emit(float3(0, 0, 0)),
+            opacity(1.0),
+            specular_power(0),
+            shininess(0) { }
+
+        /* texture name maps
+            diffuse     * implemented
+            specular
+            normal
+            height
+            emit
+            */
         typedef std::vector<std::pair<std::string, std::string> > TextureVec;
         TextureVec textures;
     };
@@ -51,8 +68,7 @@ namespace ukn {
 
     public:
         const Matrix4& getModelMatrix() const;
-       
-        MaterialPtr getMaterial() const;
+        const MaterialPtr& getMaterial() const;
 
     public:
         const TexturePtr& getDiffuseTex() const;

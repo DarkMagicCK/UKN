@@ -18,6 +18,9 @@
 
 #include "mist/Profiler.h"
 
+#include "UKN/SSAO.h"
+#include "UKN/Fog.h"
+
 namespace ukn {
 
     DeferredRenderer::DeferredRenderer(const float2& size):
@@ -75,7 +78,7 @@ namespace ukn {
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
                                                                 1,
-                                                                ukn::EF_HalfFloat2));
+                                                                ukn::EF_Float2));
             mGBufferRT->attach(ukn::ATT_DepthStencil,
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
@@ -84,15 +87,17 @@ namespace ukn {
             
             mLightMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
             mLightMapRT->attach(ukn::ATT_Color0,
-                                MakeSharedPtr<ukn::RenderTarget>(800,
-                                                                 600,
+                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                 (uint32)mSize[1],
                                                                  1,
                                                                  ukn::EF_RGBA8));
+
+            mGBufferRT->attach(ukn::ATT_Color3, mLightMapRT->getTarget(ukn::ATT_Color0));
             
             mCompositeRT = new ukn::CompositeRenderTarget();
             mCompositeRT->attach(ukn::ATT_Color0,
-                                 MakeSharedPtr<ukn::RenderTarget>(800,
-                                                                  600,
+                                 MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                  (uint32)mSize[1],
                                                                   1,
                                                                   ukn::EF_RGBA8));
             
@@ -124,6 +129,8 @@ namespace ukn {
                                                      VERTEX_SHADER_DESC("VertexProgram"));
                 fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/directionallight_frag.cg"), 
                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
+
+
 
                 mDirectionalLightTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
 
@@ -162,7 +169,6 @@ namespace ukn {
             desc.blend_state.src_alpha = RSP_BlendFuncOne;
             desc.blend_state.dst_alpha = RSP_BlendFuncOne;
             desc.blend_state.op_alpha = RSP_BlendOpAdd;
-            desc.blend_state.write_mask = 0x0f;
 
             mLightMapBS = gf.createBlendStateObject(desc);
         }
@@ -173,16 +179,19 @@ namespace ukn {
             desc.cullface = RSP_CullBack;
             mWireframeRS = gf.createRasterizerStateObject(desc);
         }
+
+        // register default posteffects
+        this->registerPostEffect<SSAO>(L"SSAO");
+        this->registerPostEffect<Fog>(L"Fog");
         return true;
     }
-
 
     void DeferredRenderer::makeLightMap(SceneManager& scene) {
         MIST_PROFILE(L"DEFERRED_LIGHTMAP");
         mLightMapRT->attachToRender();
 
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-        gd.clear(ukn::CM_Color, ukn::color::Transparent, 1.f, 0);
+      //  gd.clear(ukn::CM_Color, ukn::color::Transparent, 1.f, 0);
        
         const FrameBufferPtr& fb = mLightMapRT->getFrameBuffer();
         const CameraPtr& cam = fb->getViewport().camera;
@@ -205,7 +214,7 @@ namespace ukn {
                 fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
                 fragmentShader->setFloatVectorVariable("cameraPosition", cam->getEyePos());
                 fragmentShader->setFloatVectorVariable("gbufferSize", mSize);
-        
+                
                 fragmentShader->setTextureVariable("colorMap", 
                                                     mGBufferRT->getTargetTexture(ukn::ATT_Color0));
                 fragmentShader->setTextureVariable("normalMap", 
@@ -224,14 +233,15 @@ namespace ukn {
                     fragmentShader->setFloatVectorVariable("lightColor", light->getColor());
                     fragmentShader->setFloatVariable("lightDirection", 3, light->getDirection().value);
                     fragmentShader->setFloatVariable("lightIntensity", light->getIntensity());
+                    fragmentShader->setFloatVectorVariable("lightPosition", light->getPosition());
+                    fragmentShader->setFloatVariable("depthBias", light->getDepthBias());
                 
                     const CameraPtr& lightCam = light->getCamera(0);
-                    fragmentShader->setMatrixVariable("lightView", lightCam->getViewMatrix());
                     fragmentShader->setMatrixVariable("lightViewProj", lightCam->getViewMatrix() * lightCam->getProjMatrix());
                     fragmentShader->setIntVariable("hasShadow", light->getCastShadows() ? 1 : 0);
                     fragmentShader->setFloatVariable("shadowMapSize", (float)light->getShadowMapResolution());
                     fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
-                
+                    
                     ukn::SpriteBatch::DefaultObject().drawQuad(mDirectionalLightTechnique, 
                                                                ukn::Vector2(-1, 1), 
                                                                ukn::Vector2(1, -1));
@@ -320,6 +330,8 @@ namespace ukn {
                 vertexShader->setMatrixVariable("projectionMatrix", cam->getProjMatrix());
 
                 fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
+                fragmentShader->setMatrixVariable("viewMat", cam->getViewMatrix());
+                fragmentShader->setMatrixVariable("projMat", cam->getProjMatrix());
                 fragmentShader->setFloatVariable("cameraPosition", 3, cam->getEyePos().value);
                 fragmentShader->setFloatVariable("gbufferSize", 2, mSize.value);
 
@@ -393,7 +405,8 @@ namespace ukn {
 
         gd.setBlendState(BlendStateObject::Opaque());
         gd.setDepthStencilState(DepthStencilStateObject::DepthRead());
-        gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
+        gd.setRasterizerState(RasterizerStateObject::CullNone());
+        gd.setSamplerState(SamplerStateObject::LinearWrap());
 
         // first clear the GBuffer
         ukn::SpriteBatch::DefaultObject().drawQuad(mClearTechnique, ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
@@ -405,7 +418,7 @@ namespace ukn {
         const CameraPtr& cam = fb->getViewport().camera;
 
         // render scene
-        scene.render(mGBufferTechnique, cam->getViewMatrix(), cam->getProjMatrix());
+        scene.render(mGBufferTechnique, cam->getViewMatrix(), cam->getProjMatrix(), SOA_Cullable | SOA_Moveable | SOA_Overlay);
 
         mGBufferRT->detachFromRender();
     }
@@ -424,6 +437,98 @@ namespace ukn {
         this->makeGBuffer(scene);
         this->makeLightMap(scene);
         this->makeFinal();
+
+        TexturePtr target = mCompositeRT->getTarget(ATT_Color0)->getTexture();
+        for(std::pair<MistString, PostEffectPtr>& pe: mPostEffects) {
+            pe.second->render(target,
+                              this->getNormalTarget()->getTexture(),
+                              this->getDepthTarget()->getTexture());
+            target = pe.second->getFinalTexture();
+        }
+    }
+
+    RenderTargetPtr DeferredRenderer::getColorTarget() const {
+        return mGBufferRT->getTarget(ATT_Color0);
+    }
+
+    RenderTargetPtr DeferredRenderer::getDepthTarget() const {
+        return mGBufferRT->getTarget(ATT_Color2);
+    }
+
+    RenderTargetPtr DeferredRenderer::getNormalTarget() const {
+        return mGBufferRT->getTarget(ATT_Color1);
+    }
+    
+    RenderTargetPtr DeferredRenderer::getLightTarget() const {
+        return mLightMapRT->getTarget(ATT_Color0);
+    }
+
+    TexturePtr DeferredRenderer::getFinalTexture() const {
+        if(mPostEffects.empty()) 
+            return mCompositeRT->getTarget(ATT_Color0)->getTexture();
+        else
+            return mPostEffects.back().second->getFinalTexture();
+    }
+
+    void DeferredRenderer::deregisterPostEffect(const MistString& name) {
+        mPostEffectFactory.deregisterClass(name);
+    }
+
+    bool DeferredRenderer::addPostEffect(const MistString& name, const MistString& after) {
+        PostEffect* pe = mPostEffectFactory.createClass(name);
+        if(!pe) {
+            log_error(L"DeferredRenderer::addPostEffect: error intiatiating post Effect " + name);
+        } else {
+            if(!pe->init(this->size())) {
+                log_error(L"DeferredRenderer::addPostEffect: error initializing post effect " + name);
+                return false;
+            }
+        }
+        if(after.length() == 0) {
+            mPostEffects.push_back(std::make_pair(name, PostEffectPtr(pe)));
+            return true;
+        } else {
+            for(PostEffectQueue::iterator it = mPostEffects.begin(), end = mPostEffects.end();
+                it != end;
+                ++it) {
+                    if(it->first == after) {
+                        mPostEffects.insert(it, std::make_pair(name, PostEffectPtr(pe)));
+                        return true;
+                    }
+            }
+            log_info(L"DeferredRenderer::addPostEffectAfter: error finding post effect with name in post effect queue " + after);
+            log_info(L"DeferredRenderer::addPostEffectAfter: effect appended to back");
+            mPostEffects.push_back(std::make_pair(name, PostEffectPtr(pe)));
+            return true;
+        }
+        return false;
+    }
+
+    void DeferredRenderer::removePostEffect(const MistString& name) {
+        for(PostEffectQueue::iterator it = mPostEffects.begin(), end = mPostEffects.end();
+            it != end;
+            ++it) {
+                if(it->first == name) {
+                    mPostEffects.erase(it);
+                    break;
+                }
+        }
+    }
+
+    const DeferredRenderer::PostEffectQueue& DeferredRenderer::getPostEffects() const {
+        return mPostEffects;
+    }
+
+    PostEffectPtr DeferredRenderer::getPostEffect(const MistString& name) const {
+        for(PostEffectQueue::const_iterator it = mPostEffects.begin(), end = mPostEffects.end();
+            it != end;
+            ++it) {
+                if(it->first == name) {
+                    return it->second;
+                    break;
+                }
+        }
+        return PostEffectPtr();
     }
 
 }

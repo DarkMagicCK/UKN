@@ -22,14 +22,14 @@ namespace ukn {
         mModelMatrix = mat;
     }
 
-    MaterialPtr Renderable::getMaterial() const {
+    const MaterialPtr& Renderable::getMaterial() const {
         return mMaterial;
     }
 
     void Renderable::render(const EffectTechniquePtr& technique) {
        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
-       RenderBufferPtr& gb = this->getRenderBuffer();
+       const RenderBufferPtr& gb = this->getRenderBuffer();
 
        this->onRenderBegin();
        gd.renderBuffer(technique, gb);

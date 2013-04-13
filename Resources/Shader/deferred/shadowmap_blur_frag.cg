@@ -1,0 +1,21 @@
+struct VertexOutputType {
+	float4 position: POSITION;
+	float2 texCoord: TEXCOORD0;
+};
+
+const uniform float2 buffersize;
+
+float4 FragmentProgram(VertexOutputType input,
+					   uniform sampler2D tex: TEXUNIT0): COLOR0 {
+	float gaussianMat[9] = {0.05472157, 0.11098164, 0.05472157,
+                            0.11098164, 0.22508352, 0.11098164,
+                            0.05472157, 0.11098164, 0.05472157};
+    float4 finalColor = 0.f;
+    float2 texelSize = 1.0 / buffersize;
+
+    for(int i= 0; i < 9; ++i) {
+    	float2 offset = input.texCoord + (i-4)*texelSize;
+    	finalColor += gaussianMat[i] * tex2D(tex, offset);
+    }
+    return finalColor;
+}

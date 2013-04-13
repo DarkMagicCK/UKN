@@ -61,16 +61,17 @@ namespace mist {
             return container != 0;
         }
         
-        SharedPtr<IReadIterator, 
-        SharedPtrFreeReleasePolicy<IReadIterator> > Field::getReadIterator(void* object) const {
+        typedef SharedPtr<IReadIterator, SharedPtrFreeReleasePolicy<IReadIterator> > ReadIteratorPtr;
+        typedef SharedPtr<IWriteIterator, SharedPtrFreeReleasePolicy<IWriteIterator> > WriteIteratorPtr;
+        
+        ReadIteratorPtr Field::getReadIterator(void* object) const {
             void* buffer = mist_malloc(container->getReadIteratorSize());
-            return container->newReadIterator(buffer, this->getPtr(object));
+            return ReadIteratorPtr(container->newReadIterator(buffer, this->getPtr(object)));
         }
         
-        SharedPtr<IWriteIterator, 
-        SharedPtrFreeReleasePolicy<IWriteIterator> > Field::getWriteIterator(void* object) const {
+        WriteIteratorPtr Field::getWriteIterator(void* object) const {
             void* buffer = mist_malloc(container->getWriteIteratorSize());
-            return container->newWriteIterator(buffer, this->getPtr(object));
+            return WriteIteratorPtr(container->newWriteIterator(buffer, this->getPtr(object)));
         }
     }
     

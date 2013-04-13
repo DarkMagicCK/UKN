@@ -9,6 +9,7 @@
 #include "GLGraphicBuffer.h"
 #include "GLConvert.h"
 #include "GLPreq.h"
+#include "GLError.h"
 
 namespace ukn {
 
@@ -36,16 +37,16 @@ namespace ukn {
         glBindBuffer(GL_ARRAY_BUFFER, mId);
 
         if(initData) {
-            glBufferData(GL_ARRAY_BUFFER,
-                         static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(format)),
-                         static_cast<const GLvoid*>(initData),
-                         _usage_to_gl(usage));
+            CHECK_GL_CALL(glBufferData(GL_ARRAY_BUFFER,
+                                  static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(format)),
+                                  static_cast<const GLvoid*>(initData),
+                                  _usage_to_gl(usage)));
 
         } else {
-            glBufferData(GL_ARRAY_BUFFER,
+            CHECK_GL_CALL(glBufferData(GL_ARRAY_BUFFER,
                          static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(format)),
                          0,
-                         _usage_to_gl(usage));
+                         _usage_to_gl(usage)));
         }
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
@@ -84,7 +85,7 @@ namespace ukn {
         }
 
         glBindBuffer(GL_ARRAY_BUFFER, mId);
-        void* p = glMapBuffer(GL_ARRAY_BUFFER, gl_acess);
+        void* p = CHECK_GL_CALL(glMapBuffer(GL_ARRAY_BUFFER, gl_acess));
         if(p)
             mMaped = true;
         return p;
@@ -92,10 +93,8 @@ namespace ukn {
 
     void GLVertexBuffer::unmap() {
         if(mMaped) {
-            glBindBuffer(GL_ARRAY_BUFFER, mId);
             glUnmapBuffer(GL_ARRAY_BUFFER);
             glBindBuffer(GL_ARRAY_BUFFER, 0);
-        
             mMaped = false;
         }
     }
@@ -112,10 +111,10 @@ namespace ukn {
     void GLVertexBuffer::resize(uint32 desired_count) {
         glBindBuffer(GL_ARRAY_BUFFER, mId);
 
-        glBufferData(GL_ARRAY_BUFFER,
+        CHECK_GL_CALL(glBufferData(GL_ARRAY_BUFFER,
                      static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(mFormat)),
                      0,
-                     usage() == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+                     usage() == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW));
         mCount = desired_count;
         glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
@@ -140,15 +139,14 @@ namespace ukn {
         if(to) {
             GLVertexBuffer* dest = checked_cast<GLVertexBuffer*>(to.get());
             if(glCopyBufferSubData) {
-                GLint prevBuffer;
                 glBindBuffer(GL_COPY_READ_BUFFER, this->getGLBuffer());
                 glBindBuffer(GL_COPY_WRITE_BUFFER, dest->getGLBuffer());
 
-                glCopyBufferSubData(GL_COPY_READ_BUFFER,
+                CHECK_GL_CALL(glCopyBufferSubData(GL_COPY_READ_BUFFER,
                                     GL_COPY_WRITE_BUFFER,
                                     0,
                                     0,
-                                    this->count() * GetVertexElementsTotalSize(this->format()));
+                                    this->count() * GetVertexElementsTotalSize(this->format())));
 
                 glBindBuffer(GL_COPY_READ_BUFFER, 0);
                 glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
@@ -168,15 +166,15 @@ namespace ukn {
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
         if(initData) {
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+            CHECK_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                          static_cast<GLsizeiptr>(desired_count * sizeof(uint32)),
                          static_cast<const GLvoid*>(initData),
-                         usage == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+                         usage == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW));
         } else {
-            glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+            CHECK_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                          static_cast<GLsizeiptr>(desired_count * sizeof(uint32)),
                          0,
-                         usage == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+                         usage == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW));
         }
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
@@ -219,19 +217,20 @@ namespace ukn {
         }
 
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
-        void* p = glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, gl_acess);
+        void* p = CHECK_GL_CALL(glMapBuffer(GL_ELEMENT_ARRAY_BUFFER, gl_acess));
         if(p)
             mMaped = true;
+
         return p;
     }
 
     void GLIndexBuffer::resize(uint32 desired_count) {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+        CHECK_GL_CALL(glBufferData(GL_ELEMENT_ARRAY_BUFFER,
                      static_cast<GLsizeiptr>(desired_count * sizeof(uint32)),
                      0,
-                     usage() == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW);
+                     usage() == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW));
         mCount = desired_count;
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
@@ -241,15 +240,14 @@ namespace ukn {
             GLIndexBuffer* dest = checked_cast<GLIndexBuffer*>(to.get());
 
             if(glCopyBufferSubData) {
-                GLint prevBuffer;
                 glBindBuffer(GL_COPY_READ_BUFFER, this->getGLBuffer());
                 glBindBuffer(GL_COPY_WRITE_BUFFER, dest->getGLBuffer());
 
-                glCopyBufferSubData(GL_COPY_READ_BUFFER,
+                CHECK_GL_CALL(glCopyBufferSubData(GL_COPY_READ_BUFFER,
                                     GL_COPY_WRITE_BUFFER,
                                     0,
                                     0,
-                                    this->count() * sizeof(uint32));
+                                    this->count() * sizeof(uint32)));
 
                 glBindBuffer(GL_COPY_READ_BUFFER, 0);
                 glBindBuffer(GL_COPY_WRITE_BUFFER, 0);
@@ -265,7 +263,6 @@ namespace ukn {
     
     void GLIndexBuffer::unmap() {
         if(mMaped) {
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mId);
             glUnmapBuffer(GL_ELEMENT_ARRAY_BUFFER);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         }

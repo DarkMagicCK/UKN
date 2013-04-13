@@ -45,13 +45,12 @@ namespace mist {
         Factory() { }
         
         ~Factory() {
-            for_each(this->mIntantiators.begin(), 
-                     this->mInstantiators.end(), 
-                     DeleteSTLPtr());
+            std::for_each(mInstantiators.begin(), 
+                          mInstantiators.end(), 
+                          DeleteSTLPairPtr());
         }
         
-        template<typename C>
-        void registerClass(const MistString& name, const ClassInstantiator<Base>* instantiator) {
+        void registerClass(const MistString& name, ClassInstantiator<Base>* instantiator) {
             if(mInstantiators.find(name) == mInstantiators.end())
                 mInstantiators.insert(std::make_pair(name, instantiator));
             else
@@ -64,6 +63,14 @@ namespace mist {
                 mInstantiators.insert(std::make_pair(name, new DefaultClassInstantiator<Base, C>()));
             else
                 log_error(format_string("mist::Factory::registerClass: class with name %s alreay registered", name.c_str()));
+        }
+
+        void deregisterClass(const MistString& name) {
+            iterator it;
+            if((it = mInstantiators.find(name)) != mInstantiators.end()) {
+                delete it->second;
+                mInstantiators.erase(it);
+            }
         }
         
         Base* createClass(const MistString& name) {

@@ -95,7 +95,7 @@ namespace ukn {
             case EF_RGBA8: return 4;
             case EF_RGB565: return 3;
             case EF_RGBA4444: return 4;
-            case EF_RGB5A1: return 3;
+            case EF_RGB5A1: return 4;
             case EF_D24S8: return 2;
             case EF_D32: return 1;
             case EF_D16: return 1;

@@ -1,0 +1,10 @@
+struct VertexOutputType {
+	float4 position: POSITION;
+	float2 texCoord: TEXCOORD0;
+};
+
+float4 FragmentProgram(VertexOutputType input,
+					   uniform sampler2D depthMap): COLOR0 {
+	float depth = tex2D(depthMap, input.texCoord).g;
+	return float4(depth / 50, depth / 50, depth / 50, 1.0);	
+}

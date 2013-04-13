@@ -28,6 +28,17 @@ namespace ukn {
             return false;
         }
 
+        MaterialPtr default_mat = MakeSharedPtr<Material>();
+        /* write colors to self-immumilation channel, so that always pass light pass */
+        default_mat->ambient = color::White.getRGB();
+        default_mat->diffuse = color::White.getRGB();
+        default_mat->emit = color::White.getRGB();
+        default_mat->opacity = 1.f;
+        default_mat->shininess = 1.f;
+        default_mat->specular = float3(0, 0, 0);
+        default_mat->specular_power = 0.f;
+        mMaterial = default_mat;
+
         return this->buildVertices(factory);
     }
 
@@ -67,11 +78,21 @@ namespace ukn {
 
         };
 
+        float3 n[6] = {
+            float3(0, 0, -1), // 0
+            float3(-1, 0, 0), // 1
+            float3(0, 0, 1), // 2
+            float3(1, 0, 0), // 3
+            
+            float3(0, 1, 0), // 4
+            float3(0, -1, 0), // 5
+        };
+
         uint32 idx = 0;
         
         // front, 0123
-        vertices[idx++].position = v[0]; vertices[idx++].position = v[1]; vertices[idx++].position = v[2];
-        vertices[idx++].position = v[2]; vertices[idx++].position = v[3]; vertices[idx++].position = v[0];
+        vertices[idx++].position = v[0]; vertices[idx++].position = v[2]; vertices[idx++].position = v[1];
+        vertices[idx++].position = v[2]; vertices[idx++].position = v[0]; vertices[idx++].position = v[3];
 
         // left, 1265
         vertices[idx++].position = v[1]; vertices[idx++].position = v[2]; vertices[idx++].position = v[6];
@@ -82,8 +103,8 @@ namespace ukn {
         vertices[idx++].position = v[6]; vertices[idx++].position = v[7]; vertices[idx++].position = v[4];
 
         // right, 0374
-        vertices[idx++].position = v[0]; vertices[idx++].position = v[3]; vertices[idx++].position = v[7];
-        vertices[idx++].position = v[7]; vertices[idx++].position = v[4]; vertices[idx++].position = v[0];
+        vertices[idx++].position = v[0]; vertices[idx++].position = v[7]; vertices[idx++].position = v[3]; 
+        vertices[idx++].position = v[7]; vertices[idx++].position = v[0]; vertices[idx++].position = v[4]; 
 
         // top, 2376
         vertices[idx++].position = v[2]; vertices[idx++].position = v[3]; vertices[idx++].position = v[7];
@@ -95,8 +116,8 @@ namespace ukn {
 
         idx = 0;
 
-        vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, half3);
-        vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half2, half3); vertices[idx++].uv.set(half2, half32);
+        vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half4, half32); 
+        vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half2, half3); 
         
         vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(0, half3);
         vertices[idx++].uv.set(0, half3); vertices[idx++].uv.set(0, half32); vertices[idx++].uv.set(half4, half32);
@@ -104,8 +125,8 @@ namespace ukn {
         vertices[idx++].uv.set(half43, half32); vertices[idx++].uv.set(1, half32); vertices[idx++].uv.set(1, half3);
         vertices[idx++].uv.set(1, half3); vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half43, half32);
         
-        vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half2, half3); vertices[idx++].uv.set(half43, half3);
-        vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half43, half32); vertices[idx++].uv.set(half2, half32);
+        vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half2, half3);
+        vertices[idx++].uv.set(half43, half3); vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half43, half32); 
        
         vertices[idx++].uv.set(half4, half3); vertices[idx++].uv.set(half2, half3); vertices[idx++].uv.set(half2, 0);
         vertices[idx++].uv.set(half2, 0); vertices[idx++].uv.set(half4, 0); vertices[idx++].uv.set(half4, half3);
@@ -113,6 +134,12 @@ namespace ukn {
         vertices[idx++].uv.set(half2, half32); vertices[idx++].uv.set(half4, half32); vertices[idx++].uv.set(half4, 1);
         vertices[idx++].uv.set(half4, 1); vertices[idx++].uv.set(half2, 1); vertices[idx++].uv.set(half2, half32);
          
+        for(int i=0; i<6; ++i) {
+            for(int j=0; j<6; ++j) {
+                vertices[i * 6 + j].normal = n[i];
+            }
+        }
+
         mRenderBuffer = factory.createRenderBuffer();
         mVertexBuffer = factory.createVertexBuffer(GraphicBuffer::None,
                                                    GraphicBuffer::Static,

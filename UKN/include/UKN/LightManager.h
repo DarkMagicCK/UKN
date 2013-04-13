@@ -3,6 +3,9 @@
 
 #include "UKN/PreDeclare.h"
 #include "UKN/Light.h"
+#include "UKN/RenderBuffer.h"
+#include "UKN/Shader.h"
+#include "UKN/RenderTarget.h"
 
 namespace ukn {
 
@@ -35,6 +38,7 @@ namespace ukn {
         EffectPtr mDepthWriteEffect;
         EffectTechniquePtr mEXPDepthMapTechnique;
         EffectTechniquePtr mDepthMapTechnique;
+        EffectTechniquePtr mBlurTechnique;
 
         RenderBufferPtr mPointLightGeometry;
         RenderBufferPtr mSpotLightGeometry;

@@ -17,6 +17,8 @@
 #include "UKN/GraphicSettings.h"
 #include "UKN/PreDeclare.h"
 #include "UKN/App.h"
+#include "UKN/SceneManager.h"
+#include "UKN/GraphicFactory.h"
 
 namespace ukn {
         

@@ -64,7 +64,7 @@ namespace mist {
     namespace detail {
 
         void SignalImpl::clearConnection() {
-            IteratorType it = mConnections.begin();
+            iterator_type it = mConnections.begin();
             while(it != mConnections.end()) {
                 it->second.setControl(false);
                 ++it;
@@ -74,7 +74,7 @@ namespace mist {
         
         void SignalImpl::disconnect(void* con, void* data) {
             if(!in_distribute) {
-                std::auto_ptr<IteratorType> slot(reinterpret_cast<IteratorType*>(data));
+                std::auto_ptr<iterator_type> slot(reinterpret_cast<iterator_type*>(data));
                 mConnections.erase(*slot);
                 
             } else {

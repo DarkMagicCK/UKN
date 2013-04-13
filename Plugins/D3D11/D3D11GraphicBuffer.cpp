@@ -193,7 +193,8 @@ namespace ukn {
 				D3D11GraphicDevice* device):
 	GraphicBuffer(access, usage),
 	mMaped(false),
-	mDevice(device) {
+	mDevice(device),
+    mOffset(0) {
 
 		D3D11_BUFFER_DESC indexBufferDesc;
 

@@ -41,6 +41,14 @@ namespace ukn {
 
         mDepthMapTechnique = mDepthWriteEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
 
+        
+        vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/shadowmap_blur_vert.cg"), 
+                                                                        VERTEX_SHADER_DESC("VertexProgram"));
+        fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/shadowmap_blur_frag.cg"), 
+                                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
+
+        mBlurTechnique = mDepthWriteEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
+
 
         mShadowMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
 
@@ -113,7 +121,7 @@ namespace ukn {
         const CameraPtr& cam = ls->getCamera(0);
         fragmentShader->setFloatVariable("depthPrecision", cam->getFarPlane());
 
-        scene.render(techniuqe, cam->getViewMatrix(), cam->getProjMatrix());
+        scene.render(techniuqe, cam->getViewMatrix(), cam->getProjMatrix(), ~SOA_NotCastShadow);
 
         mShadowMapRT->detachFromRender();
     }

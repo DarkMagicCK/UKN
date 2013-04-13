@@ -251,9 +251,9 @@ namespace ukn {
                             // Read out the flags
                             /* Bit 32 is used for storing whether the tile is horizontally flipped and bit 31 is used for the vertically flipped tiles. And since Tiled Qt 0.8.0, bit 30 means whether the tile is flipped (anti) diagonally, enabling tile rotation
                              */
-                            bool flipped_horizontally = global_tile_id & FLIPPED_HORIZONTALLY_FLAG;
-                            bool flipped_vertically = global_tile_id & FLIPPED_VERTICALLY_FLAG;                                          
-                            bool flipped_diagonally = global_tile_id & FLIPPED_DIAGONALLY_FLAG;
+                            bool flipped_horizontally = (bool)(global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
+                            bool flipped_vertically = (bool)(global_tile_id & FLIPPED_VERTICALLY_FLAG);                                          
+                            bool flipped_diagonally = (bool)(global_tile_id & FLIPPED_DIAGONALLY_FLAG);
                             
                             global_tile_id &= ~(FLIPPED_HORIZONTALLY_FLAG |
                                                 FLIPPED_VERTICALLY_FLAG |
@@ -576,7 +576,7 @@ namespace ukn {
                     int32 rowx = (int32)std::floor(tilePos[0]);
                     int32 rowy = (int32)std::floor(tilePos[1]);
                     
-                    float2 startPos = tileToPixelCoords(rowx, rowy);
+                    float2 startPos = tileToPixelCoords((float)rowx, (float)rowy);
                     
                     float startx = startPos[0] - mTileWidth / 2;
                     float starty = startPos[1] + mTileHeight;

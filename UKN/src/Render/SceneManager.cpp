@@ -6,6 +6,8 @@
 #include "UKN/GraphicFactory.h"
 #include "UKN/Context.h"
 #include "UKN/Model.h"
+#include "UKN/Renderable.h"
+#include "UKN/RenderBuffer.h"
 
 namespace ukn {
 
@@ -72,19 +74,19 @@ namespace ukn {
 	}
         
     uint32 SceneManager::numObjectsRendered() const {
-		return 0;
+		return mNumObjectsRendered;
 	}
 
     uint32 SceneManager::numRenderableRendered() const {
-		return 0;
+		return mNumRenderableRendered;
 	}
 
     uint32 SceneManager::numPrimitivesRenderered() const {
-		return 0;
+		return mNumPrimitivesRendered;
 	}
 
     uint32 SceneManager::numVerticesRendered() const {
-		return 0;
+		return mNumVerticesRendered;
 	}
         
     void SceneManager::flush() {
@@ -103,7 +105,12 @@ namespace ukn {
         return mLightManager;
     }
 
-    void SceneManager::render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat) {
+    void SceneManager::render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat, uint32 flag) {
+        mNumObjectsRendered = 0;
+        mNumRenderableRendered = 0;
+        mNumPrimitivesRendered = 0;
+        mNumVerticesRendered = 0;
+        
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         const SceneManager::SceneObjectList& objects = this->getSceneObjects();
@@ -114,20 +121,23 @@ namespace ukn {
         vertexShader->setMatrixVariable("projectionMatrix", projMat);
         
         for(const SceneObjectPtr& obj: objects) {
-            vertexShader->setMatrixVariable("worldMatrix", obj->getModelMatrix());
+            if(obj->getAttribute() & flag) {
+                vertexShader->setMatrixVariable("worldMatrix", obj->getModelMatrix());
       
-            const RenderablePtr& pr = obj->getRenderable();
-            if(pr) {
-                Model* model = dynamic_cast<Model*>(pr.get());
-                // if it's a model, render each mesh
-                if(model) {
-                    for(uint32 i=0; i<model->getMeshCount(); ++i) {
-                        const MeshPtr& mesh = model->getMesh(i);
-                        this->renderRenderable(gd, *mesh.get(), technique);
+                const RenderablePtr& pr = obj->getRenderable();
+                if(pr) {
+                    Model* model = dynamic_cast<Model*>(pr.get());
+                    // if it's a model, render each mesh
+                    if(model) {
+                        for(uint32 i=0; i<model->getMeshCount(); ++i) {
+                            const MeshPtr& mesh = model->getMesh(i);
+                            this->renderRenderable(gd, *mesh.get(), technique);
+                        }
+                    } else {
+                        this->renderRenderable(gd, *pr.get(), technique);
                     }
-                } else {
-                    this->renderRenderable(gd, *pr.get(), technique);
                 }
+                mNumObjectsRendered++;
             }
         }
     }
@@ -139,12 +149,24 @@ namespace ukn {
      
         if(renderable.getDiffuseTex()) {
             fragmentShader->setTextureVariable("diffuseMap", renderable.getDiffuseTex());
+        } else {
+            /* at least makesure there's a white texture for diffuse */
+            uint32 c(0xFFFFFFFF);
+            if(renderable.getMaterial()) {
+                float3 d = renderable.getMaterial()->diffuse;
+                c = COLOR_RGBA(d[0] * 255, d[1] * 255, d[2] * 255, 255);
+            }
+            static TexturePtr white = Context::Instance().getGraphicFactory()
+                                        .create2DTexture(1, 1, 0, EF_RGBA8, (uint8*)&c);
+
+            fragmentShader->setTextureVariable("diffuseMap", white);
         }
         if(renderable.getEmitTex()) {
             fragmentShader->setTextureVariable("emitMap", renderable.getEmitTex());
         }
         if(renderable.getNormalTex()) {
             fragmentShader->setTextureVariable("normalMap", renderable.getNormalTex());
+            fragmentShader->setIntVariable("use_bump_mapping", 1);
         }
         if(renderable.getHeightTex()) {
             fragmentShader->setTextureVariable("heightMap", renderable.getHeightTex());
@@ -152,6 +174,19 @@ namespace ukn {
         if(renderable.getSpecularTex()) {
             fragmentShader->setTextureVariable("specularMap", renderable.getSpecularTex());
         }
+
+        if(renderable.getMaterial()) {
+            fragmentShader->setFloatVectorVariable("ambient", renderable.getMaterial()->ambient);
+            fragmentShader->setFloatVariable("specular_power", renderable.getMaterial()->specular[0]);
+            fragmentShader->setFloatVariable("specular_intensity", renderable.getMaterial()->specular_power);
+        } else {
+            fragmentShader->setFloatVectorVariable("ambient", float3(0, 0, 0));
+            fragmentShader->setFloatVariable("specular_power", 0.f);
+            fragmentShader->setFloatVariable("specular_intensity", 0.f);
+        }
+
+        mNumVerticesRendered += renderable.getRenderBuffer()->getVertexCount();
+        mNumRenderableRendered ++;
 
         // to do with material
         renderable.render(technique);

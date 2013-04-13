@@ -1,0 +1,20 @@
+const uniform float4x4 worldMatrix;
+const uniform float4x4 viewMatrix;
+const uniform float4x4 projectionMatrix;
+
+struct VertexOutputType {
+    float4 position: POSITION;
+    float4 screenPosition: TEXCOORD0;
+};
+
+VertexOutputType VertexProgram(in float3 position: POSITION) {
+
+	VertexOutputType output;
+	float4 worldPos = mul(float4(position, 1), worldMatrix);
+	float4 viewPos = mul(worldPos, viewMatrix);
+	output.position = mul(viewPos, projectionMatrix);
+	output.screenPosition = output.position;
+
+	return output;
+}
+

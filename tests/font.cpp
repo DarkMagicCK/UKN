@@ -96,7 +96,8 @@ int CALLBACK WinMain(__in  HINSTANCE hInstance,
         mist::log_info((mist::FormatString(L"{0}, {1} {2}, {1} test"), 1, 0.2f, "test"));
 
         ukn::ModelLoader::ModelDataPtr model = ukn::ModelLoader::LoadFromPly(
-            ukn::ResourceLoader::Instance().loadResource(L"dragon_vrip_res4.ply")
+            ukn::ResourceLoader::Instance().loadResource(L"dragon_vrip_res4.ply"),
+                                                                             true
         );
     })
     .run();

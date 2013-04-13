@@ -104,57 +104,6 @@ namespace ukn {
         vertex_elements_type elements;
     };
 
-    /* a helper class that maps a vertex buffer in constructor
-        and unmap it in destrcutor
-        
-     */
-    struct VertexMapper {
-        VertexMapper(const GraphicBufferPtr& _buffer, const vertex_elements_type& _elements);
-        ~VertexMapper();
-
-        friend struct VertexIterator;
-        struct VertexIterator {
-            VertexIterator();
-            VertexIterator(const VertexIterator& rhs);
-            VertexIterator(void* ptr, VertexMapper* parent);
-
-            VertexIterator& operator++();
-            VertexIterator operator=(const VertexIterator& rhs);
-
-            bool operator!=(const VertexIterator& rhs) const;
-            bool operator==(const VertexIterator& rhs) const;
-
-            void* operator*() const;
-            void* curr() const;
-
-            VertexUsage currUsage() const;
-
-            // advance to next element in the vertex
-            void nextElement();
-
-            void* getElement(VertexUsage usage, uint32 index = 0);
-           
-            void* base_ptr;
-            void* curr_ptr;
-            uint32 index;
-            VertexMapper* parent;
-        };
-        
-        typedef VertexIterator iterator;
-
-        iterator begin();
-        iterator end();
-
-        // total size of vertex elements
-        // = vertex_elements_type.size()
-        uint32 element_count();
-
-        void* data;
-        GraphicBufferPtr buffer;
-        const vertex_elements_type& elements;
-        uint32 element_size;
-    };
-  
     /**
      * vertex format for 2d textures
      **/
@@ -191,6 +140,25 @@ namespace ukn {
                                                         .add(VertexElement(VU_UV, EF_Float2, 0))
                                                         .add(VertexElement(VU_Position, EF_Float3, 0))
                                                         .add(VertexElement(VU_Normal, EF_Float3, 0))
+                                                        .to_vector();
+            return static_format;
+        }
+    };
+
+    struct VertexTBN {
+        Vector2 uv;
+        Vector3 position;
+        Vector3 normal;
+        Vector3 tangent;
+        Vector3 binormal;
+
+        static vertex_elements_type& Format() {
+            static vertex_elements_type static_format = VertexElementsBuilder()
+                                                        .add(VertexElement(VU_UV, EF_Float2, 0))
+                                                        .add(VertexElement(VU_Position, EF_Float3, 0))
+                                                        .add(VertexElement(VU_Normal, EF_Float3, 0))
+                                                        .add(VertexElement(VU_Tangent, EF_Float3, 0))
+                                                        .add(VertexElement(VU_Binormal, EF_Float3, 0))
                                                         .to_vector();
             return static_format;
         }

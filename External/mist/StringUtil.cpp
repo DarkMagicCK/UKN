@@ -95,13 +95,19 @@ namespace mist {
     
     void StringTokenlizer::parse(const MistString& str, const MistString& deli) {
         size_t start = 0, end = 0;
+        while(isSpace(str[start]) && start < str.size())
+            start++;
+        end = start;
         if(deli.size() != 0) {
             while(end < str.size()) {
                 while((deli.find(str[end]) == MistString::npos) && end < str.size()) { ++end; }
                 if(end == str.size()) {
-                    while(deli.find(str[end]) != MistString::npos)
+                    --end;
+                    while(deli.find(str[end]) != MistString::npos || isSpace(str[end]))
                         --end;
-                    mTokens.push_back( str.substr(start, end-start) );
+                    MistString s = str.substr(start, end-start+1);
+                    if(!s.empty())
+                        mTokens.push_back( s );
                     break;
                 }
                 if(end != start)
@@ -248,7 +254,27 @@ namespace mist {
 		std::copy(str.begin(), str.end(), buffer.begin());
 		return buffer; 
     }
-    
+
+    MistString string::Strip(const MistString& str) {
+        size_t begin = 0;
+        while((str[begin] == L' ' ||
+                str[begin] == L'\n' ||
+                str[begin] == L'\r')
+               && begin < str.size()) {
+            begin++;
+        }
+        size_t end = str.size() - 1;
+        while((str[end] == L' ' ||
+                str[end] == L'\n' ||
+                str[end] == L'\r')
+               && end > begin) {
+            end --;
+        }
+        if(end > begin)
+            return str.substr(begin, end+1);
+        return str;
+    }
+
     MistString string::GetFileName(const MistString& str) {
         MistString::const_iterator it = str.end();
         it--;

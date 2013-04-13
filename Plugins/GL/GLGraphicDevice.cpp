@@ -37,6 +37,7 @@
 #include "GLTexture.h"
 #include "GLPreq.h"
 #include "GLGraphicFactory.h"
+#include "GLError.h"
 
 #include "CgShader.h"
 
@@ -152,53 +153,59 @@ namespace ukn {
             // though backward compatible and avoid generic attrib locations in shaders that causes different versions of shaders
             // but also lack of some vertex usage support
 
-#ifndef UKN_OPENGL_VERSION_MAJOR <= 2
+#if UKN_OPENGL_VERSION_MAJOR <= 2
             switch(it->usage) {
-                case VU_Position:
-                    glVertexPointer(GetElementComponentSize(it->format),
-                                    element_format_to_gl_element_type(it->format),
-                                    size,
-                                    BUFFER_OFFSET(offset));
+                case VU_Position: {
                     glEnableClientState(GL_VERTEX_ARRAY);
 
+                    CHECK_GL_CALL(glVertexPointer(GetElementComponentSize(it->format),
+                                    GL_FLOAT,
+                                    size,
+                                    BUFFER_OFFSET(offset)));
+                   
                     attributes.push_back(GL_VERTEX_ARRAY);
                     break;
-                            
+                }
+                    
                 case VU_Diffuse:
-                    glColorPointer(GetElementComponentSize(it->format),
-                                    element_format_to_gl_element_type(it->format),
-                                    size,
-                                    BUFFER_OFFSET(offset));
                     glEnableClientState(GL_COLOR_ARRAY);
+
+                    CHECK_GL_CALL(glColorPointer(GetElementComponentSize(it->format),
+                                    element_format_to_gl_data_type(it->format),
+                                    size,
+                                    BUFFER_OFFSET(offset)));
                     
                     attributes.push_back(GL_COLOR_ARRAY);
                     break;
                             
                 case VU_Specular:
+                    glEnableClientState(GL_COLOR_ARRAY);
+
                     glColorPointer(GetElementComponentSize(it->format),
-                                    element_format_to_gl_element_type(it->format),
+                                    element_format_to_gl_data_type(it->format),
                                     size,
                                     BUFFER_OFFSET(offset));
-                    glEnableClientState(GL_COLOR_ARRAY);
 
                     attributes.push_back(GL_COLOR_ARRAY);
                     break;
                             
                 case VU_Normal:
-                    glNormalPointer(element_format_to_gl_element_type(it->format),
-                                    size,
-                                    BUFFER_OFFSET(offset));
                     glEnableClientState(GL_NORMAL_ARRAY);
+
+                    CHECK_GL_CALL(glNormalPointer(element_format_to_gl_data_type(it->format),
+                                    size,
+                                    BUFFER_OFFSET(offset)));
 
                     attributes.push_back(GL_NORMAL_ARRAY);
                     break;
                             
                 case VU_UV:
-                    glTexCoordPointer(GetElementComponentSize(it->format),
-                                        element_format_to_gl_element_type(it->format),
-                                        size,
-                                        BUFFER_OFFSET(offset));
                     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+                    CHECK_GL_CALL(glTexCoordPointer(GetElementComponentSize(it->format),
+                                      GL_FLOAT,
+                                        size,
+                                        BUFFER_OFFSET(offset)));
 
                     attributes.push_back(GL_TEXTURE_COORD_ARRAY);
                     break;
@@ -209,20 +216,23 @@ namespace ukn {
 #else
             // ogl 3.x+
                 int attribLoc = vertex_usage_to_attribute_location(it->usage);
-                glVertexAttribPointer(attribLoc,
+                CHECK_GL_CALL(glVertexAttribPointer(attribLoc,
                                         GetElementComponentSize(it->format),
                                         element_format_to_gl_element_type(it->format),
                                         (it->usage == VU_Specular || it->usage == VU_Diffuse) ? GL_TRUE : GL_FALSE,
                                         size,
-                                        BUFFER_OFFSET(offset));
+                                        BUFFER_OFFSET(offset)));
                 glEnableVertexAttribArray(attribLoc);
-                glVertexAttribDivisor(attribLoc, instance_freq);
+                CHECK_GL_CALL(glVertexAttribDivisor(attribLoc, instance_freq));
                         
-                offset += it->size();
 
                 attributes.push_back(attribLoc);
 #endif
+            offset += it->size();
+            
         }
+        return attributes;
+
     }
 
     void GLGraphicDevice::renderBuffer(const EffectTechniquePtr& technique, const RenderBufferPtr& buffer) {
@@ -237,6 +247,7 @@ namespace ukn {
                 
                 // bind vbo and vertex attributes
                 vertexBuffer->activate();
+                
                 std::vector<int> appliedAttr = this->applyBuffer(so.format, so.vertex_size, 0);
                 attributes.insert(attributes.end(), appliedAttr.begin(), appliedAttr.end());
 
@@ -265,55 +276,55 @@ namespace ukn {
                 pass->begin();
                 if(!buffer->hasInstanceStream()) {
                     if(buffer->isUseIndexStream()) {
-                        glDrawRangeElements(
+                        CHECK_GL_CALL(glDrawRangeElements(
                             render_mode_to_gl_mode(buffer->getRenderMode()),
                             buffer->getIndexStartIndex(),
                             0xffffffff,
                             buffer->getIndexCount(),
                             GL_UNSIGNED_INT,
-                            BUFFER_OFFSET(0));
+                            BUFFER_OFFSET(0)));
 
                     } else {
-                        glDrawArrays(
+                        CHECK_GL_CALL(glDrawArrays(
                             render_mode_to_gl_mode(buffer->getRenderMode()),
                             buffer->getVertexStartIndex(),
-                            buffer->getVertexCount());
+                            buffer->getVertexCount()));
                     }
                 } else {
                     if(glDrawElementsInstanced &&
                         glDrawArraysInstanced) {
                         if(buffer->isUseIndexStream()) {
-                            glDrawElementsInstanced(
+                            CHECK_GL_CALL(glDrawElementsInstanced(
                                 render_mode_to_gl_mode(buffer->getRenderMode()),
                                 buffer->getInstanceCount(),
                                 GL_UNSIGNED_INT,
                                 BUFFER_OFFSET(0),
-                                buffer->getInstanceCount());
+                                buffer->getInstanceCount()));
 
                         } else {
-                            glDrawArraysInstanced(
+                            CHECK_GL_CALL(glDrawArraysInstanced(
                                 render_mode_to_gl_mode(buffer->getRenderMode()),
                                 buffer->getVertexStartIndex(),
                                 buffer->getVertexCount(),
-                                buffer->getInstanceCount());
+                                buffer->getInstanceCount()));
                         }
                     } else {
                         // fallback, assume that we are using software instancing...
                         for(uint32 i=0; i<buffer->getInstanceCount(); ++i) {
                             if(buffer->isUseIndexStream()) {
-                                glDrawRangeElements(
+                                CHECK_GL_CALL(glDrawRangeElements(
                                     render_mode_to_gl_mode(buffer->getRenderMode()),
                                     buffer->getIndexStartIndex(),
                                     0xffffffff,
                                     buffer->getIndexCount(),
                                     GL_UNSIGNED_INT,
-                                    BUFFER_OFFSET(0));
+                                    BUFFER_OFFSET(0)));
 
                             } else {
-                                glDrawArrays(
+                                CHECK_GL_CALL(glDrawArrays(
                                     render_mode_to_gl_mode(buffer->getRenderMode()),
                                     buffer->getVertexStartIndex(),
-                                    buffer->getVertexCount());
+                                    buffer->getVertexCount()));
                             }
                         }
                     }
@@ -321,7 +332,7 @@ namespace ukn {
                 pass->end();
             }
             for(auto attr: attributes) {
-#ifndef UKN_OPENGL_VERSION_MAJOR <= 2
+#if UKN_OPENGL_VERSION_MAJOR <= 2
                 glDisableClientState(attr);
 #else
                 // ogl 3.x+
@@ -334,7 +345,7 @@ namespace ukn {
     void GLGraphicDevice::bindGLFrameBuffer(GLuint fbo) {
         if(mCurrGLFrameBuffer != fbo) {
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
-            glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo);
+            CHECK_GL_CALL(glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, fbo));
 #else
             glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 #endif
@@ -414,15 +425,19 @@ namespace ukn {
     void GLGraphicDevice::setRenderState(RenderStateType type, uint32 func) {
         switch(type) {
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
+        case RS_ColorOp:
+            CHECK_GL_CALL(glTexEnvf(GL_TEXTURE_2D, 
+                render_state_to_gl_state(type), 
+                render_state_param_to_gl_state_param((RenderStateParam)func)));
+            break;
+#endif
+                
         case RS_TextureWrap0:
         case RS_TextureWrap1:
         case RS_TextureWrap2:
-        case RS_ColorOp:
-            glTexEnvf(GL_TEXTURE_2D, 
-                render_state_to_gl_state(type), 
-                render_state_param_to_gl_state_param((RenderStateParam)func));
-            break;
-#endif
+                CHECK_GL_CALL(glTexParameteri(GL_TEXTURE_2D,
+                                render_state_to_gl_state(type),
+                                render_state_param_to_gl_state_param((RenderStateParam)func)));
 
         case RS_Filter: {
             GLenum target = GL_TEXTURE_2D;
@@ -477,7 +492,7 @@ namespace ukn {
             break;
 
         case RS_DepthOp:
-            glDepthFunc(render_state_param_to_gl_state_param((RenderStateParam)func));
+            CHECK_GL_CALL(glDepthFunc(render_state_param_to_gl_state_param((RenderStateParam)func)));
             break;
         case RS_DepthMask:
             glDepthMask((func == RSP_Enable) ? GL_TRUE : GL_FALSE);
@@ -487,8 +502,8 @@ namespace ukn {
         case RS_DstBlend:
         case RS_SrcAlpha:
         case RS_DstAlpha:
-            glBlendFunc(render_state_to_gl_state(type), 
-                render_state_param_to_gl_state_param((RenderStateParam)func));
+            CHECK_GL_CALL(glBlendFunc(render_state_to_gl_state(type), 
+                render_state_param_to_gl_state_param((RenderStateParam)func)));
             break;
 
         case RS_Blend:
@@ -576,18 +591,22 @@ namespace ukn {
             glDisable(GL_STENCIL_TEST);
         glStencilMask(desc.stencil_write_mask);
 
-        glStencilOpSeparate(GL_FRONT,
-                            render_state_param_to_gl_state_param(desc.front.stencil_fail_op),
-                            render_state_param_to_gl_state_param(desc.front.depth_fail_op),
-                            render_state_param_to_gl_state_param(desc.front.pass_op));
-        glStencilOpSeparate(GL_BACK,
-                            render_state_param_to_gl_state_param(desc.back.stencil_fail_op),
-                            render_state_param_to_gl_state_param(desc.back.depth_fail_op),
-                            render_state_param_to_gl_state_param(desc.back.pass_op));
-        glStencilFuncSeparate(render_state_param_to_gl_state_param(desc.front.func),
-                              render_state_param_to_gl_state_param(desc.back.func),
-                              desc.stencil_ref,
-                              1);
+        CHECK_GL_CALL(glStencilOpSeparate(GL_FRONT,
+                                          render_state_param_to_gl_state_param(desc.front.stencil_fail_op),
+                                          render_state_param_to_gl_state_param(desc.front.depth_fail_op),
+                                          render_state_param_to_gl_state_param(desc.front.pass_op)));
+        CHECK_GL_CALL(glStencilOpSeparate(GL_BACK,
+                                          render_state_param_to_gl_state_param(desc.back.stencil_fail_op),
+                                          render_state_param_to_gl_state_param(desc.back.depth_fail_op),
+                                          render_state_param_to_gl_state_param(desc.back.pass_op)));
+        CHECK_GL_CALL(glStencilFuncSeparate(GL_FRONT,
+                                            render_state_param_to_gl_state_param(desc.front.func),
+                                            desc.stencil_ref,
+                                            0xFFFFFFFF));
+        CHECK_GL_CALL(glStencilFuncSeparate(GL_BACK,
+                                            render_state_param_to_gl_state_param(desc.back.func),
+                                            desc.stencil_ref,
+                                            0xFFFFFFFF));
 
     }
 

@@ -60,35 +60,7 @@ namespace ukn {
             }
         }
     }
-
-    static const char* _color_vert_program = "\
-                                             const uniform float4x4 worldMatrix;         \
-                                             const uniform float4x4 viewMatrix;          \
-                                             const uniform float4x4 projectionMatrix;    \
-                                             struct VertexOutputType {\
-                                                float4 position: POSITION;\
-                                                float4 color: COLOR;\
-                                             };\
-                                             VertexOutputType VertexProgram(in float3 position POSITION: ATTR0:,  \
-                                                                            in float4 color: COLOR: ATTR3) {      \
-                                             VertexOutputType output;\
-                                             output.position = float4(position, 1);\
-                                             output.position = mul(output.position, worldMatrix);\
-                                             output.position = mul(output.position, viewMatrix);\
-                                             output.position = mul(output.position, projectionMatrix);\
-                                             output.color = color;\
-                                             return output;\
-                                             }\0";
-
-    static const char* _color_frag_program = "\
-                                             struct VertexOutputType {\
-                                             float4 position: POSITION;\
-                                             float4 color: COLOR;\
-                                             };\
-                                             float4 FragmentProgram(VertexOutputType input): COLOR {\
-                                             return input.color;\
-                                             }\0";
-
+    
     Terrian::~Terrian() {
 
     }
@@ -124,12 +96,12 @@ namespace ukn {
     }
 
     GridTerrian& GridTerrian::noiseWeight(float noiseWeight) {
-        this->mNoiseWeight = mNoiseWeight;
+        this->mNoiseWeight = noiseWeight;
         return *this;
     }
 
     GridTerrian& GridTerrian::size(const float2& size) {
-        this->mWidth = size[0]; this->mHeight = size[1];
+        this->mWidth = (uint32)size[0]; this->mHeight = (uint32)size[1];
         return *this;
     }
 
@@ -278,7 +250,7 @@ namespace ukn {
     }
 
     float GridTerrianLightening::heightFunc(float x, float y) {
-        return PerlinNoise::Gen(x * 10 ,y * 10 , 0) * 3;
+        return PerlinNoise::Gen(x * 10 ,y * 10 , 0) * mNoiseWeight;
     }
 
     bool GridTerrianLightening::build() {

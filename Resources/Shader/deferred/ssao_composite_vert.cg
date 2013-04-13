@@ -1,0 +1,12 @@
+struct VertexOutputType {
+	float4 position: POSITION;
+	float2 uv: TEXCOORD0;
+};
+
+VertexOutputType VertexProgram(in float2 uv: TEXCOORD0,
+							   in float3 position: POSITION) {
+	VertexOutputType output;
+	output.position = float4(position, 1);
+	output.uv = uv;
+	return output;
+}

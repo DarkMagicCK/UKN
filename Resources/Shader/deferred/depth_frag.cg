@@ -1,0 +1,12 @@
+const uniform float depthPrecision;
+
+struct VertexOutputType {
+    float4 position: POSITION;
+    float4 screenPosition: TEXCOORD0;
+};
+
+float4 FragmentProgram(VertexOutputType input): COLOR0 {
+	float depth = input.screenPosition.z / input.screenPosition.w;
+
+	return float4(depth, depth, depth, 1.0);
+}

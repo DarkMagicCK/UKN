@@ -1,0 +1,15 @@
+const uniform float3 lightPosition;
+const uniform float depthPrecision;
+
+struct VertexOutputType {
+    float4 position: POSITION;
+    float4 worldPosition: TEXCOORD0;
+};
+
+float4 FragmentProgram(VertexOutputType input): COLOR0 {
+	input.worldPosition /= input.worldPosition.w;
+
+	float depth = max(0.01f, length(lightPosition - input.worldPosition)) / depthPrecision;
+
+	return exp((depthPrecision * 0.5) * depth);
+}

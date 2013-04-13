@@ -1,0 +1,15 @@
+
+struct VertexOutputType {
+    float4 position: POSITION;
+    float2 texCoord: TEXCOORD0;
+};
+
+float4 FragmentProgram(VertexOutputType input,
+                       uniform sampler2D colorMap: TEX0,
+                       uniform sampler2D lightMap: TEX1
+                       ): COLOR0 {
+    float4 color = tex2D(colorMap, input.texCoord);
+    float4 light = tex2D(lightMap, input.texCoord);
+    
+    return float4(color.xyz * light.xyz + light.w, 1);
+}

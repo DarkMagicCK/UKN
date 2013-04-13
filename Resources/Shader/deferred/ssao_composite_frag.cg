@@ -1,0 +1,12 @@
+struct VertexOutputType {
+	float4 position: POSITION;
+	float2 uv: TEXCOORD0;
+};
+
+float4 FragmentProgram(VertexOutputType input,
+					   uniform sampler2D colorMap,
+					   uniform sampler2D SSAO): COLOR0 {
+	float4 color = tex2D(colorMap, input.uv);
+	float4 ssao = tex2D(SSAO, input.uv);
+	return color * ssao;	
+}

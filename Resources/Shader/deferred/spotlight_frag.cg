@@ -1,0 +1,118 @@
+const uniform float3 cameraPosition;
+const uniform float4x4 inverseViewProj;
+
+const uniform float2 gbufferSize;
+const uniform float shadowMapSize;
+
+// spotlight properties
+const uniform float3 lightDirection;
+const uniform float4 lightColor;
+const uniform float lightIntensity;
+const uniform float3 lightPosition;
+const uniform float lightAngleCos;
+const uniform float lightHeight;
+const uniform float depthPrecision;
+const uniform float depthBias;
+const uniform float4x4 lightViewProj;
+const uniform int hasShadow;
+
+struct VertexOutputType {
+    float4 position: POSITION;
+    float4 screenPosition: TEXCOORD0;
+};
+
+// manual linear sampling
+float4 manualSample(sampler2D sampler, float2 uv, float2 textureSize) {
+    float2 texelPos = textureSize * uv;
+    float2 lerps = frac(texelPos);
+    float texelSize = 1.0 / textureSize;
+
+    float4 sourcevals[4];
+    sourcevals[0] = tex2D(sampler, uv);
+    sourcevals[1] = tex2D(sampler, uv + float2(texelSize, 0));
+    sourcevals[2] = tex2D(sampler, uv + float2(0, texelSize));
+    sourcevals[3] = tex2D(sampler, uv + float2(texelSize, texelSize));
+
+    float4 interpolated = lerp(lerp(sourcevals[0], sourcevals[1], lerps.x),
+                               lerp(sourcevals[2], sourcevals[3], lerps.x),
+                               lerps.y);
+    return interpolated;
+}
+
+// phong shader
+float4 phong(float3 position, float3 N, float radialAttenuation, float specularIntensity, float specularPower) {
+    float3 L = lightPosition - position;
+    float heightAttenuation = 1.0f - saturate(length(L) - lightHeight / 2);
+
+//    float d = length(L);
+//    float attenuation = (1 / (1.0 + 0.3 * d + 0.22 * d * d));
+    float attenuation = radialAttenuation;
+
+    L = normalize(L);
+    float SL = dot(L, lightDirection);
+    float4 shading = 0;
+    if(SL <= lightAngleCos) {
+        float3 R = normalize(reflect(-L, N));
+        float3 E = normalize(cameraPosition - position);
+        float NL = dot(N, L);
+
+        float3 diffuse = NL * lightColor.xyz;
+        float specular = specularIntensity * pow(saturate(dot(R, E)), specularPower);
+        shading = attenuation * lightIntensity * float4(diffuse.rgb, specular);
+    }
+    return shading;
+}
+
+float3 decode(float3 enc) {
+    return (2.0f * enc.xyz - 1.0f);
+}
+
+float RGBADecode(float4 value) {
+    const float4 bits = float4(1.0 / (256.0 * 256.0 * 256.0),
+                               1.0 / (256.0 * 256.0),
+                               1.0 / 256.0,
+                               1);
+    return dot(value, bits);
+}
+
+float4 FragmentProgram(VertexOutputType input,
+                       uniform sampler2D colorMap: TEX0,
+                       uniform sampler2D normalMap: TEX1,
+                       uniform sampler2D depthMap: TEX2,
+                       uniform sampler2D attenuationMap: TEX3,
+                       uniform sampler2D shadowMap: TEX4
+                       ): COLOR0 {
+    input.screenPosition.xy /= input.screenPosition.w;
+    float2 uv = 0.5f * (float2(input.screenPosition.x,
+                              -input.screenPosition.y) + 1) - float2(1.0f / gbufferSize.xy); 
+
+    float4 encodedNormal = tex2D(normalMap, uv);
+    float3 normal = decode(encodedNormal.xyz);
+
+    float specularIntensity = tex2D(colorMap, uv).w;
+    float specularPower = encodedNormal.w * 255;
+
+    float depth = manualSample(depthMap, uv, gbufferSize).x;
+    float4 position = 1.0f;
+    position.xy = input.screenPosition.xy;
+    position.z = depth;
+    position = mul(position, inverseViewProj);
+    position /= position.w;
+
+    float4 lightScreenPos = mul(position, lightViewProj);
+    lightScreenPos /= lightScreenPos.w;
+
+    float2 LUV = 0.5f * (float2(lightScreenPos.x, -lightScreenPos.y) + 1);
+    float attenuation = tex2D(attenuationMap, LUV).r;
+    float shadowFactor = 1.0f;
+
+    if(hasShadow) {
+        float lZ = manualSample(shadowMap, LUV, shadowMapSize);
+    
+        float len = max(0.01f, length(lightPosition - position)) / depthPrecision;
+        shadowFactor = (lZ * exp(-(depthPrecision * 0.5f) * (len - depthBias)));
+    }
+
+    return shadowFactor * phong(position.xyz, normal, attenuation, 0, 0);
+    
+}

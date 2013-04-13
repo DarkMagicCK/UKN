@@ -1,0 +1,52 @@
+struct VertexOutputType {
+	float4 position: POSITION;
+	float2 uv: TEXCOORD0;
+};
+
+const uniform float2 blurDirection;
+const uniform float2 targetSize;
+
+// manual linear sampling
+float4 manualSample(sampler2D sampler, float2 uv, float2 textureSize) {
+    float2 texelPos = textureSize * uv;
+    float2 lerps = frac(texelPos);
+    float texelSize = 1.0 / textureSize;
+
+    float4 sourcevals[4];
+    sourcevals[0] = tex2D(sampler, uv);
+    sourcevals[1] = tex2D(sampler, uv + float2(texelSize, 0));
+    sourcevals[2] = tex2D(sampler, uv + float2(0, texelSize));
+    sourcevals[3] = tex2D(sampler, uv + float2(texelSize, texelSize));
+
+    float4 interpolated = lerp(lerp(sourcevals[0], sourcevals[1], lerps.x),
+                               lerp(sourcevals[2], sourcevals[3], lerps.x),
+                               lerps.y);
+    return interpolated;
+}
+
+float3 decode(float3 enc) {
+    return (2.0f * enc.xyz - 1.0f);
+}
+
+float4 FragmentProgram(VertexOutputType input,
+					   uniform sampler2D normalMap: TEX0,
+					   uniform sampler2D depthMap: TEX1,
+					   uniform sampler2D SSAO: TEX2): COLOR0 {
+    float depth = manualSample(depthMap, input.uv, targetSize).y;
+    float3 normal = decode(tex2D(normalMap, input.uv).xyz);
+    float ssao = tex2D(SSAO, input.uv).x;
+    float ssaoNormalizer = 1;
+    int blurSamples = 8;
+    for(int i=-blurSamples/2; i<=blurSamples/2; i++) {
+    	float2 newUV = float2(input.uv.xy + i * blurDirection.xy);
+    	float sample = manualSample(SSAO, newUV, targetSize).y;
+    	float3 sampleNormal = decode(tex2D(normalMap, newUV).xyz);
+
+    	if(dot(sampleNormal, normal) > 0.99) {
+    		float contribution = blurSamples / 2 - abs((float)i);
+    		ssaoNormalizer += (blurSamples / 2 - abs((float)i));
+    		ssao += sample * contribution;
+    	}
+    }
+    return ssao / ssaoNormalizer;
+}

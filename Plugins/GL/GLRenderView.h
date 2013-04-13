@@ -24,9 +24,14 @@ namespace ukn {
         GLRenderView();
         virtual ~GLRenderView();
         
+        void clearColor(const Color& clr);
         void clearDepth(float depth);
         void clearStencil(int32 stencil);
         void clearDepthStencil(float depth, int32 stencil);
+        
+        GLuint getGLIndex() const;
+        GLuint getGLFBO() const;
+        GLuint getGLTex() const;
         
     protected:
         void doClear(uint32 flags, const class Color& clr, float depth, int32 stencil);
@@ -86,6 +91,17 @@ namespace ukn {
     class GLTexture2DDepthStencilView: Uncopyable, public GLRenderView {
     public:
         GLTexture2DDepthStencilView(uint32 width, uint32 height, ElementFormat ef);
+        GLTexture2DDepthStencilView(const TexturePtr& texture);
+        
+        void clearDepth(float depth);
+        void clearStencil(int32 stencil);
+        void clearDepthStencil(float depth, int32 stencil);
+        
+        void onAttached(FrameBuffer& fb, uint32 att);
+        void onDetached(FrameBuffer& fb, uint32 att);
+        
+    private:
+        TexturePtr mTexture;
     };
     
     typedef SharedPtr<GLTexture2DDepthStencilView> GLTexture2DDepthStencilViewPtr;

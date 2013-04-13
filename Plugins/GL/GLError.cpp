@@ -38,4 +38,28 @@ namespace ukn {
         return true;
     }
     
+    bool check_framebuffer_status() {
+        GLenum fbStatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+        if(fbStatus != GL_FRAMEBUFFER_COMPLETE) {
+            const wchar_t* fbError = L"unknown";
+            switch(fbStatus) {
+                case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT:
+                    fbError = L"incomplte attachment";
+                    break;
+                case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
+                    fbError = L"incomplte attachment";
+                    break;
+                case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+                    fbError = L"incomplte attachment";
+                    break;
+                case GL_FRAMEBUFFER_UNSUPPORTED:
+                    fbError = L"incomplte attachment";
+                    break;
+            }
+            log_error((mist::FormatString(L"GLGraphicDevice::bindGLFrameBuffer: incomplete framebuffer, reason = {0}"), fbError));
+            return false;
+        }
+        return true;
+    }
+    
 }

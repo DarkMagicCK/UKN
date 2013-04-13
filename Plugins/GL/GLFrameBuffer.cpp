@@ -12,6 +12,8 @@
 #include "GLGraphicDevice.h"
 #include "GLWindow.h"
 #include "GLGraphicFactory.h"
+#include "GLRenderView.h"
+
 #include "ukn/Context.h"
 
 #include "GLError.h"
@@ -71,7 +73,7 @@ namespace ukn {
         }
         
 #if defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE)
-        glBindBuffer(GL_FRAMEBUFFER, prevBuffer);
+        CHECK_GL_CALL(glBindBuffer(GL_FRAMEBUFFER, prevBuffer));
 #else
         CHECK_GL_CALL(glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, prevBuffer));
 #endif
@@ -105,7 +107,18 @@ namespace ukn {
         GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
         
         gd.bindGLFrameBuffer(mFBO);
-
+        
+        if(mFBO != 0) {
+            std::vector<GLuint> buffers;
+            for(const RenderViewPtr& rv: this->mClearViews) {
+                GLRenderView* glrv = checked_cast<GLRenderView*>(rv.get());
+                if(glrv) {
+                    GLuint index = glrv->getGLIndex();
+                    buffers.push_back(index);
+                }
+            }
+            CHECK_GL_CALL(glDrawBuffers((GLsizei)buffers.size(), &buffers[0]));
+        }
     }
     
     void GLFrameBuffer::onUnbind() {

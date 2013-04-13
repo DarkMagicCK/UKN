@@ -280,10 +280,10 @@ int main (int argc, const char * argv[])
             }
             
             deferredRenderer = new ukn::DeferredRenderer();
-            deferredRenderer->addPostEffect(L"SSAO");
+       //     deferredRenderer->addPostEffect(L"SSAO");
             //    deferredRenderer->addPostEffect(L"Fog");
             
-            ssao = ukn::checked_cast<ukn::SSAO*>(deferredRenderer->getPostEffect(L"SSAO").get());
+        //    ssao = ukn::checked_cast<ukn::SSAO*>(deferredRenderer->getPostEffect(L"SSAO").get());
             //    fog = ukn::checked_cast<ukn::Fog*>(deferredRenderer->getPostEffect(L"Fog").get());
             
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
@@ -306,7 +306,7 @@ int main (int argc, const char * argv[])
             directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 0.5),
                                                                          ukn::float4(1, 1, 1, 1),
                                                                          1.0,
-                                                                         true,
+                                                                         false,
                                                                          1024);
             scene.addLight(directionalLight);
             

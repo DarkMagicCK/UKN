@@ -350,6 +350,7 @@ namespace ukn {
             glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 #endif
             mCurrGLFrameBuffer = fbo;
+            check_framebuffer_status();
         }
     }
 

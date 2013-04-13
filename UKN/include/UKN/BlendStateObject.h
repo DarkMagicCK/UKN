@@ -43,7 +43,7 @@ namespace ukn {
             src_alpha(RSP_BlendFuncOne),
             dst_alpha(RSP_BlendFuncZero),
             op_alpha(RSP_BlendOpAdd),
-            write_mask(1 || 2 || 4 || 8) { }
+            write_mask(1 | 2 | 4 | 8) { }
         };
         BlendState blend_state;
 

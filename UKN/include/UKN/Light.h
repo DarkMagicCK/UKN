@@ -14,7 +14,6 @@ namespace ukn {
         LS_Directional,
         LS_Spot,
         LS_Point,
-        LS_Ambient,
     };
 
     class UKN_API LightSource {

@@ -61,6 +61,8 @@ namespace ukn {
 			case EF_D32: return GL_DEPTH_COMPONENT;
 			case EF_D16: return GL_DEPTH_COMPONENT;
             case EF_D24S8: return GL_DEPTH_STENCIL;
+            default:
+                return GL_UNSIGNED_BYTE;
         }
 		return GL_UNSIGNED_BYTE;
     }
@@ -81,6 +83,32 @@ namespace ukn {
             case EF_Float4:
                 return GL_FLOAT;
             case EF_RGBA64: return GL_UNSIGNED_INT;
+            case EF_RG32: return GL_UNSIGNED_INT;
+            case EF_HalfFloat2: return GL_FLOAT;
+            case EF_HalfFloat4: return GL_FLOAT;
+            default:
+                return GL_UNSIGNED_BYTE;
+        }
+		return GL_UNSIGNED_BYTE;
+    }
+    
+    inline GLenum element_format_to_gl_data_type(ElementFormat format) {
+        switch(format) {
+            case EF_RGBA8:
+            case EF_RGBA4444: 
+            case EF_RGB565: 
+            case EF_RGB5A1: return GL_UNSIGNED_BYTE;
+            case EF_UInt32: return GL_UNSIGNED_INT;
+
+            case EF_D32: return GL_UNSIGNED_INT;
+            case EF_D16: return GL_UNSIGNED_SHORT;
+            case EF_D24S8:  return GL_UNSIGNED_INT;
+            case EF_Float:
+            case EF_Float2:
+            case EF_Float3:
+            case EF_Float4:
+                return GL_FLOAT;
+            case EF_RGBA64: return GL_UNSIGNED_SHORT;
             case EF_RG32: return GL_UNSIGNED_INT;
             case EF_HalfFloat2: return GL_FLOAT;
             case EF_HalfFloat4: return GL_FLOAT;
@@ -215,7 +243,7 @@ namespace ukn {
             case RSP_CompNever:
                 return GL_NEVER;
             case RSP_CompAlways:
-                return GL_NEVER;
+                return GL_ALWAYS;
             case RSP_CompLess:
                 return GL_LESS;
             case RSP_CompLEqual:

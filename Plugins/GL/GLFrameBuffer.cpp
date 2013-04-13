@@ -14,6 +14,8 @@
 #include "GLGraphicFactory.h"
 #include "ukn/Context.h"
 
+#include "GLError.h"
+
 namespace ukn {
     
     GLFrameBuffer::GLFrameBuffer(bool offscreen):
@@ -47,7 +49,7 @@ namespace ukn {
 #if defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE)
         glBindBuffer(GL_FRAMEBUFFER, mFBO);
 #else
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, mFBO);
+        CHECK_GL_CALL(glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, mFBO));
 #endif
         
         if(width == 0)
@@ -56,13 +58,13 @@ namespace ukn {
             height = this->getViewport().height;
         
         uint8* texData = new uint8[width * height * GetElementSize(format)];
-        glReadPixels(x,
+        CHECK_GL_CALL(glReadPixels(x,
                      y,
                      width,
                      height,
                      element_format_to_gl_format(format),
                      element_format_to_gl_element_type(format),
-                     texData);
+                     texData));
         
         if(glGetError() != GL_NO_ERROR) {
             log_error("GLGraphicDevice: error when read pixels");
@@ -71,7 +73,7 @@ namespace ukn {
 #if defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE)
         glBindBuffer(GL_FRAMEBUFFER, prevBuffer);
 #else
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, prevBuffer);
+        CHECK_GL_CALL(glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, prevBuffer));
 #endif
         
         return SharedPtr<uint8>(texData);

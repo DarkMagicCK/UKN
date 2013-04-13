@@ -232,9 +232,9 @@ namespace mist {
         
         template<typename F>
         void disconnect(const F& f) {
-            IteratorType iter = mConnections.begin();
+            iterator_type iter = mConnections.begin();
             
-            IteratorType iter_to_disconn = mConnections.end();
+            iterator_type iter_to_disconn = mConnections.end();
             while(iter != mConnections.end()) {
                 detail::BasicConnection<SIG>* con = static_cast<detail::BasicConnection<SIG>* >(iter->second.get_con_base());
                 if(con && con->slot->fn == f) {

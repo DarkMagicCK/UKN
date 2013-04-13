@@ -323,7 +323,7 @@ namespace mist {
         template<typename OC, typename ORP>
         friend class SharedPtr;
 
-        template<typename T> friend class WeakPtr;
+        template<typename _TW> friend class WeakPtr;
     };
 
     template <class C, class RP>
@@ -552,7 +552,7 @@ namespace mist {
         template<typename Y>
         friend class WeakPtr;
 
-        template<typename T, typename A>
+        template<typename _TS, typename A>
         friend class SharedPtr;
     };
 

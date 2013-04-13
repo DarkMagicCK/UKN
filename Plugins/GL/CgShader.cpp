@@ -14,7 +14,11 @@ namespace ukn {
         const char* str = cgGetLastErrorString(&error);
         if(error != CG_NO_ERROR) {
             if(error == CG_COMPILER_ERROR) {
-                log_error(std::string(str) + cgGetLastListing(context));
+                const char* err = cgGetLastListing(context);
+                if(err)
+                    log_error(std::string(str) + err);
+                else
+                    log_error(str);
             } else 
                 log_error(str);
             return false;
@@ -75,6 +79,7 @@ namespace ukn {
             break;
         case ukn::ST_GeometryShader:
             profile = cgGLGetLatestProfile(CG_GL_GEOMETRY);
+            
             break;
         }
         StreamPtr stream = resource->readIntoMemory();

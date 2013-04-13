@@ -16,10 +16,12 @@
 
 #include "GLPreq.h"
 #include "GLConvert.h"
+#include "GLError.h"
 
 #if defined(MIST_OS_OSX)
 #include <OpenGL/glu.h>
 #endif
+
 
 namespace ukn {
 
@@ -31,8 +33,9 @@ namespace ukn {
     }
 
     GLTexture2D::~GLTexture2D() {
-        if(mTextureId != 0)
-            glDeleteTextures(1, (GLuint*)&mTextureId);
+        if(mTextureId != 0) {
+            CHECK_GL_CALL(glDeleteTextures(1, (GLuint*)&mTextureId));
+        }
     
     }
 
@@ -107,16 +110,17 @@ namespace ukn {
                 texData = const_cast<uint8*>(initialData);
             }
 
-            if(mipmaps != 0)
-                gluBuild2DMipmaps(GL_TEXTURE_2D,
+            if(mipmaps != 0) {
+                CHECK_GL_CALL(gluBuild2DMipmaps(GL_TEXTURE_2D,
                                   element_format_to_gl_format(format),
                                   w,
                                   h,
                                   element_format_to_texdata_format(format),
                                   element_format_to_gl_element_type(format),
-                                  texData);
-            else
-                glTexImage2D(GL_TEXTURE_2D,
+                                  texData));
+            }
+            else {
+                CHECK_GL_CALL(glTexImage2D(GL_TEXTURE_2D,
                              0,
                              element_format_to_gl_format(format),
                              w,
@@ -124,7 +128,8 @@ namespace ukn {
                              0,
                              element_format_to_texdata_format(format),
                              element_format_to_gl_element_type(format),
-                             texData);
+                             texData));
+            }
             if(initialData == 0)
                 mist_free(texData);
                 
@@ -169,11 +174,11 @@ namespace ukn {
         uint8* texData = mist_malloc_t(uint8, mOrigWidth * mOrigHeight * GetElementSize(this->format()));
         
         glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
-        glGetTexImage(GL_TEXTURE_2D,
+        CHECK_GL_CALL(glGetTexImage(GL_TEXTURE_2D,
                       level,
-                      element_format_to_gl_element_type(this->format()),
                       element_format_to_texdata_format(this->format()),
-                      texData);
+                      element_format_to_gl_element_type(this->format()),
+                      texData));
         int err = GL_NO_ERROR;
         if((err = glGetError()) != GL_NO_ERROR) {
             log_error(format_string("GLGraphicDevice: error when locking texture, code %d", err));
@@ -196,7 +201,7 @@ namespace ukn {
         glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
         
         glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
-        glTexSubImage2D(GL_TEXTURE_2D,
+        CHECK_GL_CALL(glTexSubImage2D(GL_TEXTURE_2D,
                         mMappedLevel,
                         0,
                         0,
@@ -204,12 +209,7 @@ namespace ukn {
                         mHeight,
                         element_format_to_texdata_format(this->format()),
                         element_format_to_gl_element_type(this->format()),
-                        mTextureData);
-        
-        int err = GL_NO_ERROR;
-        if((err = glGetError()) != GL_NO_ERROR) {
-            log_error(format_string("GLGraphicDevice: error when locking texture, code %d", err));
-        }
+                        mTextureData));
         
         glBindTexture(GL_TEXTURE_2D, prevTexture);
 
@@ -222,7 +222,7 @@ namespace ukn {
         glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
         
         glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
-        glTexSubImage2D(GL_TEXTURE_2D,
+        CHECK_GL_CALL(glTexSubImage2D(GL_TEXTURE_2D,
                         level,
                         (GLsizei)rect.x(),
                         (GLsizei)rect.y(),
@@ -230,12 +230,7 @@ namespace ukn {
                         (GLsizei)rect.height(),
                         element_format_to_texdata_format(this->format()),
                         element_format_to_gl_element_type(this->format()),
-                        data);
-        
-        int err = GL_NO_ERROR;
-        if((err = glGetError()) != GL_NO_ERROR) {
-            log_error(format_string("GLGraphicDevice: error when updating texture, code %d", err));
-        }
+                        data));
         
         glBindTexture(GL_TEXTURE_2D, prevTexture);
     }

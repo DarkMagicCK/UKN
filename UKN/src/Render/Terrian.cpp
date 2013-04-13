@@ -60,35 +60,7 @@ namespace ukn {
             }
         }
     }
-
-    static const char* _color_vert_program = "\
-                                             const uniform float4x4 worldMatrix;         \
-                                             const uniform float4x4 viewMatrix;          \
-                                             const uniform float4x4 projectionMatrix;    \
-                                             struct VertexOutputType {\
-                                                float4 position: POSITION;\
-                                                float4 color: COLOR;\
-                                             };\
-                                             VertexOutputType VertexProgram(in float3 position POSITION: ATTR0:,  \
-                                                                            in float4 color: COLOR: ATTR3) {      \
-                                             VertexOutputType output;\
-                                             output.position = float4(position, 1);\
-                                             output.position = mul(output.position, worldMatrix);\
-                                             output.position = mul(output.position, viewMatrix);\
-                                             output.position = mul(output.position, projectionMatrix);\
-                                             output.color = color;\
-                                             return output;\
-                                             }\0";
-
-    static const char* _color_frag_program = "\
-                                             struct VertexOutputType {\
-                                             float4 position: POSITION;\
-                                             float4 color: COLOR;\
-                                             };\
-                                             float4 FragmentProgram(VertexOutputType input): COLOR {\
-                                             return input.color;\
-                                             }\0";
-
+    
     Terrian::~Terrian() {
 
     }

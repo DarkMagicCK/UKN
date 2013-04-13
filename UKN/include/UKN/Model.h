@@ -10,6 +10,9 @@
 #include "UKN/PreDeclare.h"
 #include "UKN/Renderable.h"
 
+#include <unordered_map>
+#include <map>
+
 namespace ukn {
 
     class UKN_API ModelLoader {

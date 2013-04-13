@@ -38,6 +38,7 @@ namespace ukn {
         EffectPtr mDepthWriteEffect;
         EffectTechniquePtr mEXPDepthMapTechnique;
         EffectTechniquePtr mDepthMapTechnique;
+        EffectTechniquePtr mBlurTechnique;
 
         RenderBufferPtr mPointLightGeometry;
         RenderBufferPtr mSpotLightGeometry;

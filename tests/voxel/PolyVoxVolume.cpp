@@ -47,6 +47,27 @@ namespace ukn {
 	        }
         }
 
+        void createPlaneInVolume(SimpleVolume<uint8_t>& volData, int thickess)
+        {
+	         //This vector hold the position of the center of the volume
+	        Vector3DFloat v3dVolCenter(volData.getWidth() / 2, volData.getHeight() / 2, volData.getDepth() / 2);
+
+	        //This three-level for loop iterates over every voxel in the volume
+	        for (int z = 0; z < volData.getDepth(); z++)
+	        {
+		        for (int y = 0; y < volData.getHeight(); y++)
+		        {
+			        for (int x = 0; x < volData.getWidth(); x++)
+			        {
+                        if(y < thickess)
+                            volData.setVoxelAt(x, y, z, 255);
+                        else
+                            volData.setVoxelAt(x, y, z, 0);
+			        }
+		        }
+	        }
+        }
+
         std::vector<VertexUVNormal> tranform_pv_vertex_to_vertex_uv_normal(const std::vector<PositionMaterialNormal>& pv) {
             std::vector<VertexUVNormal> n;
             std::for_each(pv.begin(), pv.end(), [&](const PositionMaterialNormal& pvv) {
@@ -75,7 +96,6 @@ namespace ukn {
         };
 
         SimplePolyvoxVolume::SimplePolyvoxVolume() {
-            this->init();
         }
 
         SimplePolyvoxVolume::~SimplePolyvoxVolume() {
@@ -95,7 +115,7 @@ namespace ukn {
             return mRenderBuffer;
         }
 
-        void SimplePolyvoxVolume::init() {
+        void SimplePolyvoxVolume::initSphere() {
               //Create an empty volume and then place a sphere in it
 	        SimpleVolume<uint8_t> volData(PolyVox::Region(Vector3DInt32(0, 0, 0), 
                                                           Vector3DInt32(63, 63, 63)));
@@ -112,7 +132,45 @@ namespace ukn {
 	        surfaceExtractor.execute();
 
           //  std::vector<VertexUVNormal> vertices(tranform_pv_vertex_to_vertex_uv_normal(mesh.getVertices()));
+            this->createBuffers(mesh);
+            
+            MaterialPtr default_mat = MakeSharedPtr<Material>();
+                default_mat->ambient = color::Skyblue.getRGB();
+                default_mat->diffuse = color::Skyblue.getRGB();
+                default_mat->emit = float3(0, 0, 0);
+                default_mat->opacity = 1.f;
+                default_mat->shininess = 10.f;
+                default_mat->specular = float3(0, 0, 0);
+                default_mat->specular_power = 16.f;
+            mMaterial = default_mat;
 
+        }
+
+        void SimplePolyvoxVolume::initPlane(int thickness) {
+            SimpleVolume<uint8_t> volData(PolyVox::Region(Vector3DInt32(0, 0, 0), 
+                                                          Vector3DInt32(128, 128, 128)));
+	        createPlaneInVolume(volData, thickness);
+
+	        SurfaceMesh<PositionMaterialNormal> mesh;
+
+	        CubicSurfaceExtractorWithNormals< SimpleVolume<uint8_t> > surfaceExtractor(&volData, volData.getEnclosingRegion(), &mesh);
+	        surfaceExtractor.execute();
+            this->createBuffers(mesh);
+
+            
+            MaterialPtr default_mat = MakeSharedPtr<Material>();
+                default_mat->ambient = color::Lightgrey.getRGB();
+                default_mat->diffuse = color::Lightgrey.getRGB();
+                default_mat->emit = float3(0, 0, 0);
+                default_mat->opacity = 1.f;
+                default_mat->shininess = 10.f;
+                default_mat->specular = float3(0, 0, 0);
+                default_mat->specular_power = 16.f;
+            mMaterial = default_mat;
+
+        }
+
+        void SimplePolyvoxVolume::createBuffers(const SurfaceMesh<PositionMaterialNormal>& mesh) {
             ukn::GraphicFactory& gf = Context::Instance().getGraphicFactory();
             ukn::GraphicBufferPtr vtxBuffer = gf.createVertexBuffer(GraphicBuffer::None,
                                                                     GraphicBuffer::Static,
@@ -124,18 +182,6 @@ namespace ukn {
                                                                    mesh.getIndices().size(),
                                                                    &mesh.getIndices()[0]);
 
-            MaterialPtr default_mat = MakeSharedPtr<Material>();
-                default_mat->ambient = color::Skyblue.getRGB();
-                default_mat->diffuse = color::Skyblue.getRGB();
-                default_mat->emit = float3(0, 0, 0);
-                default_mat->opacity = 1.f;
-                default_mat->shininess = 10.f;
-                default_mat->specular = float3(0, 0, 0);
-                default_mat->specular_power = 16.f;
-            mMaterial = default_mat;
-
-            this->setModelMatrix(Matrix4::TransMat(-32, -32, -32));
-
             if(vtxBuffer && idxBuffer) {
                 mRenderBuffer = gf.createRenderBuffer();
                 mRenderBuffer->bindVertexStream(vtxBuffer, PVVertexMeshNormalVertex::Format());
@@ -146,7 +192,6 @@ namespace ukn {
                 log_error(L"Error building volume data");
             }
         }
-
     }
 
 }

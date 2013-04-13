@@ -232,7 +232,7 @@ class Model(object):
 						current_mat.specular = Vector3(mat_data[0], mat_data[1], mat_data[2])
 					elif mat_cmmds[0] == 'Ns':
 						current_mat.specular_power = float(mat_data[0])
-					elif mat_cmmds[0] == 'r' or mat_cmmds[0] == 'Tr':
+					elif mat_cmmds[0] == 'd' or mat_cmmds[0] == 'Tr':
 						current_mat.opacity = float(mat_data[0])
 					elif mat_cmmds[0] == 'map_Ka':
 						current_mat.textures.update({'ambient': mat_data[-1]})

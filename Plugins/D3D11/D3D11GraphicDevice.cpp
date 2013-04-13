@@ -317,6 +317,20 @@ namespace ukn {
 
             mDeviceContext->IASetPrimitiveTopology(RenderModeToPrimitiveTopology(buffer->getRenderMode()));
 
+            for(uint32 i=0; i<technique->getNumPasses(); ++i) {
+                const EffectPassPtr& pass = technique->getPass(i);
+                CgDxShader* shader = (CgDxShader*)pass->getVertexShader().get();
+                ID3D10Blob* blob = shader->getCompiledProgram();
+                if(!blob) {
+                    log_error("D3D11GraphicDevice::renderBuffer: invalid shader program");
+                    return;
+                }
+                mDeviceContext->IASetInputLayout(d3dBuffer->inputLayout(blob->GetBufferPointer(),
+                                                                        blob->GetBufferSize()));
+                   
+                pass->begin();
+
+                
             for(int i=0; i < mSamplerStates.size(); ++i) {
                 D3D11SamplerStateObject* samplerObj = checked_cast<D3D11SamplerStateObject*>(mSamplerStates[i].get());
                 if(samplerObj) {
@@ -324,21 +338,7 @@ namespace ukn {
                     mDeviceContext->PSSetSamplers(i, 1, &d3d11samplerState);
                 }
             }
-            if(mSamplerStates.size() < mCurrFrameBuffer->colorViewSize()) {
-                for(int i=mSamplerStates.size(); i<mCurrFrameBuffer->colorViewSize(); ++i) {
-                    ID3D11SamplerState* empty_state = 0;
-                    mDeviceContext->PSSetSamplers(i, 1, &empty_state);
-                }
-            }
 
-            for(uint32 i=0; i<technique->getNumPasses(); ++i) {
-                const EffectPassPtr& pass = technique->getPass(i);
-                CgDxShader* shader = (CgDxShader*)pass->getVertexShader().get();
-                ID3D10Blob* blob = shader->getCompiledProgram();
-                mDeviceContext->IASetInputLayout(d3dBuffer->inputLayout(blob->GetBufferPointer(),
-                                                                        blob->GetBufferSize()));
-                   
-                pass->begin();
                 if(buffer->hasInstanceStream()) {
                     if(indexBuffer.isValid() &&
                         buffer->isUseIndexStream()) {

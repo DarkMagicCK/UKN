@@ -43,12 +43,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(SolutionDir)\..\UKN\include;$(DXSDK_DIR)\Include;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\External\Cg;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\Plugins\D3D11;$(SolutionDir)\..\External\Cg;C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.1A\Lib;$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(DXSDK_DIR)\Include;$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\External\Cg;$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)\..\Plugins\D3D11;$(SolutionDir)\..\External\Cg;$(DXSDK_DIR)\Lib\x86;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

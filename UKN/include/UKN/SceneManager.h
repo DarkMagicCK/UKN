@@ -44,7 +44,7 @@ namespace ukn {
 
         const LightManagerPtr& getLightManager() const;
 
-        void render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat);
+        void render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat, uint32 flag);
         
     protected:
         void flush();

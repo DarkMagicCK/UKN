@@ -4,7 +4,9 @@
 #include "D3D11Convert.h"
 
 #include "mist/Logger.h"
-#include <D3DX11.h>
+#include "DirectXTex/DirectXTex.h"
+
+#pragma comment(lib, "DirectXTex.lib")
 
 namespace ukn {
 
@@ -19,6 +21,8 @@ namespace ukn {
     }
 
     bool D3D11Texture2D::load(const ResourcePtr& resource, bool createMipmap) {
+        using namespace DirectX;
+
         if(!resource->getResourceStream())
             return false;
 
@@ -28,13 +32,22 @@ namespace ukn {
             MemoryStream* memData = static_cast<MemoryStream*>(memStream.get());
 
             ID3D11Texture2D* texture;
-            if(D3D11Debug::CHECK_RESULT(D3DX11CreateTextureFromMemory(mDevice->getD3DDevice(),
-                memData->data(),
-                memData->size(),
-                0,
-                0,
-                (ID3D11Resource**)&texture,
-                0))) {
+            TexMetadata info;
+            ScopedPtr<ScratchImage> image ( new ScratchImage );
+
+            HRESULT hr;
+            if(resource->getName().find(L".dds") != UknString::npos) 
+                hr = LoadFromDDSMemory(memData->data(), memData->size(), DDS_FLAGS_NONE, &info, *image);
+            else if(resource->getName().find(L".tga") != UknString::npos)
+                hr = LoadFromTGAMemory(memData->data(), memData->size(), &info, *image);
+            else
+                hr = LoadFromWICMemory(memData->data(), memData->size(), WIC_FLAGS_NONE, &info, *image);
+            if(SUCCEEDED(hr)) {
+                if(D3D11Debug::CHECK_RESULT(CreateTexture(mDevice->getD3DDevice(),
+                                                          image->GetImages(),
+                                                          1,
+                                                          info,
+                                                          (ID3D11Resource**)&texture))) {
                     mTexture = MakeCOMPtr(texture);
 
                     D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc;
@@ -63,6 +76,7 @@ namespace ukn {
                     mTexture->GetDesc(&mDesc);
                     this->mBindFlag = TB_Texture;
                     return true;
+                }
             }
         }
 

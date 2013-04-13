@@ -8,13 +8,13 @@
 
 namespace ukn {
 
-    class Fog: public PostEffect {
+    class UKN_API Fog: public PostEffect {
     public:
         Fog();
         virtual ~Fog();
 
         enum FogType {
-            Linear,
+            Linear = 1,
             Exponential,
             Exponential2,
         };
@@ -22,17 +22,32 @@ namespace ukn {
     public:
         void render(const TexturePtr& color,
                     const TexturePtr& normal,
-                    const TexturePtr& depth,
-                    const TexturePtr& target) override;
+                    const TexturePtr& depth) override;
         bool init(float2 size) override;
-        const TexturePtr& getFinalTexture() const override;
+        TexturePtr getFinalTexture() const override;
+
+    public:
+        float getStart() const;
+        float getEnd() const;
+        float getDensity() const;
+        FogType getType() const;
+        Color getColor() const;
+
+        void setStart(float start);
+        void setEnd(float end);
+        void setDensity(float density);
+        void setType(FogType type);
+        void setColor(const Color& color);
 
     private:
         mist::Color mColor;
-        float mStart, mEnd;
+        float mStart;
+        float mEnd;
+        float mDensity;
         FogType mType;
         
-        RenderTargetPtr mTarget;
+        CompositeRenderTargetPtr mRT;
+        RenderTargetPtr mFogTarget;
         
         EffectPtr mEffect;
         EffectTechniquePtr mFogTechnique;

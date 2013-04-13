@@ -23,7 +23,8 @@ namespace ukn {
     RenderTarget::RenderTarget(uint32 width,
                                uint32 height,
                                int32 num_of_levels,
-                               ElementFormat color_format) {
+                               ElementFormat color_format):
+    mFormat(color_format) {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         
         mTexture = gf.create2DTexture(width, 
@@ -44,7 +45,8 @@ namespace ukn {
 
     RenderTarget::RenderTarget(uint32 width,
                                uint32 height,
-                               ElementFormat depth_stencil_format) {
+                               ElementFormat depth_stencil_format):
+    mFormat(depth_stencil_format) {
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         
         mTexture = gf.create2DTexture(width, 
@@ -79,11 +81,11 @@ namespace ukn {
         return 0;
     }
 
-    const RenderViewPtr& RenderTarget::getRenderView() const {
+    RenderViewPtr RenderTarget::getRenderView() const {
         return mRenderView;
     }
 
-    const TexturePtr& RenderTarget::getTexture() const {
+    TexturePtr RenderTarget::getTexture() const {
         return mTexture;
     }
 

@@ -105,7 +105,7 @@ namespace ukn {
         return mLightManager;
     }
 
-    void SceneManager::render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat) {
+    void SceneManager::render(const EffectTechniquePtr& technique, const Matrix4& viewMat, const Matrix4& projMat, uint32 flag) {
         mNumObjectsRendered = 0;
         mNumRenderableRendered = 0;
         mNumPrimitivesRendered = 0;
@@ -121,22 +121,24 @@ namespace ukn {
         vertexShader->setMatrixVariable("projectionMatrix", projMat);
         
         for(const SceneObjectPtr& obj: objects) {
-            vertexShader->setMatrixVariable("worldMatrix", obj->getModelMatrix());
+            if(obj->getAttribute() & flag) {
+                vertexShader->setMatrixVariable("worldMatrix", obj->getModelMatrix());
       
-            const RenderablePtr& pr = obj->getRenderable();
-            if(pr) {
-                Model* model = dynamic_cast<Model*>(pr.get());
-                // if it's a model, render each mesh
-                if(model) {
-                    for(uint32 i=0; i<model->getMeshCount(); ++i) {
-                        const MeshPtr& mesh = model->getMesh(i);
-                        this->renderRenderable(gd, *mesh.get(), technique);
+                const RenderablePtr& pr = obj->getRenderable();
+                if(pr) {
+                    Model* model = dynamic_cast<Model*>(pr.get());
+                    // if it's a model, render each mesh
+                    if(model) {
+                        for(uint32 i=0; i<model->getMeshCount(); ++i) {
+                            const MeshPtr& mesh = model->getMesh(i);
+                            this->renderRenderable(gd, *mesh.get(), technique);
+                        }
+                    } else {
+                        this->renderRenderable(gd, *pr.get(), technique);
                     }
-                } else {
-                    this->renderRenderable(gd, *pr.get(), technique);
                 }
+                mNumObjectsRendered++;
             }
-            mNumObjectsRendered++;
         }
     }
 
@@ -164,6 +166,7 @@ namespace ukn {
         }
         if(renderable.getNormalTex()) {
             fragmentShader->setTextureVariable("normalMap", renderable.getNormalTex());
+            fragmentShader->setIntVariable("use_bump_mapping", 1);
         }
         if(renderable.getHeightTex()) {
             fragmentShader->setTextureVariable("heightMap", renderable.getHeightTex());
@@ -178,8 +181,8 @@ namespace ukn {
             fragmentShader->setFloatVariable("specular_intensity", renderable.getMaterial()->specular_power);
         } else {
             fragmentShader->setFloatVectorVariable("ambient", float3(0, 0, 0));
-            fragmentShader->setFloatVariable("specular_power", 0);
-            fragmentShader->setFloatVariable("specular_intensity", 0);
+            fragmentShader->setFloatVariable("specular_power", 0.f);
+            fragmentShader->setFloatVariable("specular_intensity", 0.f);
         }
 
         mNumVerticesRendered += renderable.getRenderBuffer()->getVertexCount();

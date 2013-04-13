@@ -133,6 +133,7 @@ namespace ukn {
         mColor = _color;
         mIntensity = _intensity;
         mShadowMapResolution = shadowMapResolution;
+        mPosition = float3(0, 50, 0);
         
         this->setCastShadows(castShadows);
         this->updateCamera();
@@ -179,7 +180,7 @@ namespace ukn {
             mShadowMap = new RenderTarget(mShadowMapResolution,
                                           mShadowMapResolution,
                                           1,
-                                          EF_RGBA8);
+                                          EF_Float);
             if(!mShadowMap)
                 log_error(L"LightSource::setCastShadows: error creating shadow map");
         

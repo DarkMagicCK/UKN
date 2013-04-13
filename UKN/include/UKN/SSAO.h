@@ -27,10 +27,9 @@ namespace ukn {
         // render currrent scene, see Context::getSceneManager()
         void render(const TexturePtr& color,
                     const TexturePtr& normap,
-                    const TexturePtr& depth,
-                    const TexturePtr& target) override;
+                    const TexturePtr& depth) override;
         bool init(float2 size) override;
-        const TexturePtr& getFinalTexture() const override;
+        TexturePtr getFinalTexture() const override;
 
     private:
         void makeSSAO(const TexturePtr& color,
@@ -39,7 +38,7 @@ namespace ukn {
         void makeSSAOBlur(const TexturePtr& color,
                           const TexturePtr& normap,
                           const TexturePtr& depth);
-        void makeFinal(const TexturePtr& target);
+        void makeFinal(const TexturePtr& color);
 
         CompositeRenderTargetPtr mRT;
         RenderTargetPtr mSSAOTarget;

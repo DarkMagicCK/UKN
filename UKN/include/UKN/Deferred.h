@@ -41,7 +41,7 @@ namespace ukn {
         RenderTargetPtr getNormalTarget() const;
         RenderTargetPtr getLightTarget() const;
         
-        const TexturePtr& getFinalTexture() const;
+        TexturePtr getFinalTexture() const;
 
         float2 size() const;
 
@@ -90,6 +90,7 @@ namespace ukn {
         EffectPtr mEffect;
         EffectTechniquePtr mClearTechnique;
         EffectTechniquePtr mGBufferTechnique;
+        EffectTechniquePtr mGBufferBumpMapTechnique;
         EffectTechniquePtr mDirectionalLightTechnique;
         EffectTechniquePtr mSpotLightTechnique;
         EffectTechniquePtr mPointLightTechnique;

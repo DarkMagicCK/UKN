@@ -94,7 +94,7 @@ namespace ukn {
             mProfile = profile;
             return _check_error(mContext);
         }
-        return true;
+        return false;;
     }
 
     void CgGLShader::bind() {

@@ -144,6 +144,25 @@ namespace ukn {
             return static_format;
         }
     };
+
+    struct VertexTBN {
+        Vector2 uv;
+        Vector3 position;
+        Vector3 normal;
+        Vector3 tangent;
+        Vector3 binormal;
+
+        static vertex_elements_type& Format() {
+            static vertex_elements_type static_format = VertexElementsBuilder()
+                                                        .add(VertexElement(VU_UV, EF_Float2, 0))
+                                                        .add(VertexElement(VU_Position, EF_Float3, 0))
+                                                        .add(VertexElement(VU_Normal, EF_Float3, 0))
+                                                        .add(VertexElement(VU_Tangent, EF_Float3, 0))
+                                                        .add(VertexElement(VU_Binormal, EF_Float3, 0))
+                                                        .to_vector();
+            return static_format;
+        }
+    };
     
 } // namespace ukn
 

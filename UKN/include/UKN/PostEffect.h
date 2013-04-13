@@ -17,11 +17,10 @@ namespace ukn {
     public:
         virtual void render(const TexturePtr& color,
                             const TexturePtr& normap,
-                            const TexturePtr& depth,
-                            const TexturePtr& target) = 0;
+                            const TexturePtr& depth) = 0;
         virtual bool init(float2 size) = 0;
         
-        virtual const TexturePtr& getFinalTexture() const = 0;
+        virtual TexturePtr getFinalTexture() const = 0;
     };
 
 } // namespace ukn

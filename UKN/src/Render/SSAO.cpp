@@ -15,8 +15,8 @@
 namespace ukn {
 
     SSAO::SSAO():
-    mSampleRadius(0.3f),
-    mDistanceScale(1.0f) {
+    mSampleRadius(0.07f),
+    mDistanceScale(20.0f) {
 
     }
 
@@ -58,8 +58,7 @@ namespace ukn {
 
     void SSAO::render(const TexturePtr& color,
                       const TexturePtr& normal,
-                      const TexturePtr& depth,
-                      const TexturePtr& target) {
+                      const TexturePtr& depth) {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         CameraPtr currCamera = gd.getCurrFrameBuffer()->getViewport().camera;
         
@@ -67,7 +66,7 @@ namespace ukn {
 
         this->makeSSAO(color, normal, depth);
         this->makeSSAOBlur(color, normal, depth);
-        this->makeFinal(target);
+        this->makeFinal(color);
     }
 
     bool SSAO::init(float2 size) {
@@ -143,7 +142,7 @@ namespace ukn {
 
         mRT->attach(ATT_Color0, mSSAOTarget);
         mRT->attachToRender();
-        gd.clear(CM_Color, color::White, 1.0f, 0);
+        gd.clear(CM_Color, color::Transparent, 1.0f, 0);
 
         const ShaderPtr& fragmentShader = mSSAOTechnique->getPass(0)->getFragmentShader();
         fragmentShader->setTextureVariable("normalMap", normal);
@@ -194,7 +193,7 @@ namespace ukn {
         mRT->detachFromRender();
     }
 
-    void SSAO::makeFinal(const TexturePtr& target) {
+    void SSAO::makeFinal(const TexturePtr& color) {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
         mRT->attach(ATT_Color0, mCompositeTarget);
@@ -202,7 +201,7 @@ namespace ukn {
         gd.clear(CM_Color, color::White, 1.0f, 0);
 
         const ShaderPtr& fragmentShader = mCompositeTechnique->getPass(0)->getFragmentShader();
-        fragmentShader->setTextureVariable("colorMap", target);
+        fragmentShader->setTextureVariable("colorMap", color);
         fragmentShader->setTextureVariable("SSAO", this->mSSAOTarget->getTexture());
         
         SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, Vector2(-1, 1), Vector2(1, -1));
@@ -210,7 +209,7 @@ namespace ukn {
         mRT->detachFromRender();
     }
 
-    const TexturePtr& SSAO::getFinalTexture() const {
+    TexturePtr SSAO::getFinalTexture() const {
         return mCompositeTarget->getTexture();
     }
 

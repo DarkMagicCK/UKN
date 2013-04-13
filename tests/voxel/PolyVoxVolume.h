@@ -3,6 +3,8 @@
 
 #include "UKN/UKN.h"
 
+#include "PolyVoxCore/SurfaceMesh.h"
+#include "PolyVoxCore/SimpleVolume.h"
 
 #ifdef MIST_DEBUG
 #pragma comment(lib, "PolyVoxCored.lib")
@@ -16,6 +18,8 @@ namespace ukn {
 
     namespace voxel {
 
+        
+        using namespace PolyVox;
 
         class SimplePolyvoxVolume: public Renderable {
         public:
@@ -29,8 +33,11 @@ namespace ukn {
             Box getBound() const override;
             RenderBufferPtr getRenderBuffer() const override;
         
+            void initSphere();
+            void initPlane(int thickness);
+
         private:
-            void init();
+            void createBuffers(const SurfaceMesh<PositionMaterialNormal>& mesh);
 
             ukn::RenderBufferPtr mRenderBuffer;
         };

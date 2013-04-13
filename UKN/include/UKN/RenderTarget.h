@@ -36,8 +36,8 @@ namespace ukn {
         uint32  width() const;
         uint32  height() const;
 
-        const RenderViewPtr& getRenderView() const;
-        const TexturePtr& getTexture() const;
+        RenderViewPtr getRenderView() const;
+        TexturePtr getTexture() const;
 
         ElementFormat getElementFormat() const;
 

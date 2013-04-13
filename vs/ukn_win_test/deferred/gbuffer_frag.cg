@@ -28,16 +28,19 @@ const uniform float3 ambient = float3(0, 0, 0);
 const uniform float specular_intensity = 0;
 const uniform float specular_power = 0;
 
+const uniform int use_bump_mapping = 0;
+
 FragmentOutputType FragmentProgram(VertexOutputType input,
-				                   uniform sampler2D diffuseMap: TEX0) {    
+				                   uniform sampler2D diffuseMap: TEX0,
+                                   uniform sampler2D normalMap: TEX1) {    
     FragmentOutputType output;
     // not using specular map now
 
     output.color = tex2D(diffuseMap, input.texCoord);
-    output.color.w = specular_intensity;
+    output.color.a = specular_intensity;
 
     output.normal.xyz = encode(input.normal);
-    output.normal.w = specular_power;
+    output.normal.a = specular_power;
 
     output.depth.r = input.depth.x / input.depth.y;
     output.depth.g = input.depth.z;

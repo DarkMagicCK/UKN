@@ -9,10 +9,6 @@
 
 #include "mist/Logger.h"
 
-#include <D3DX10math.h>
-#include <d3d.h>
-#include <D3Dcompiler.h>
-
 namespace ukn {
 
     bool _check_error(CGcontext context) {
@@ -110,6 +106,8 @@ namespace ukn {
         mDesc = desc;
         
         StreamPtr stream = resource->readIntoMemory();
+        if(!stream)
+            return false;
         MemoryStream* memStream = ((MemoryStream*)stream.get());
         std::string content(memStream->data(), memStream->data() + memStream->size());
         
@@ -124,7 +122,7 @@ namespace ukn {
             D3D11Debug::CHECK_RESULT( cgD3D11LoadProgram(mProgram, 0))) {
                 return true;
         }
-        return true;
+        return false;
     }
 
     void CgDxShader::bind() {

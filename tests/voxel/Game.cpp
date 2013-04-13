@@ -43,8 +43,8 @@ namespace ukn {
                     ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
             sb.draw(mSSAO->getSSAOTarget()->getTexture(), 
                     ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
-            sb.draw(mSSAO->getCompositeTarget()->getTexture(), 
-                    ukn::Rectangle(0, 0, wnd->width(), wnd->height(), true));
+            sb.draw(mRenderer->getFinalTexture(), 
+                    ukn::Rectangle(0, 0, wnd->width() , wnd->height(), true));
             sb.end();
         }
 
@@ -92,15 +92,18 @@ namespace ukn {
      
             mCameraController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
-            vp.camera->setViewParams(ukn::Vector3(0, 5, 0), ukn::Vector3(0, 0, 1));
 
             mCameraController->attachCamera(vp.camera);
             
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
             SharedPtr<SimplePolyvoxVolume> vox = MakeSharedPtr<SimplePolyvoxVolume>();
+            vox->initSphere();
             ukn::SceneObjectPtr voxObject = ukn::MakeSharedPtr<ukn::SceneObject>(vox, ukn::SOA_Cullable | ukn::SOA_Moveable);
             scene.addSceneObject(voxObject);
+            
+            
+            vp.camera->setViewParams(ukn::Vector3(0, 5, 0), ukn::Vector3(0, 0, 1));
 
             mDirectionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 1),
                                                                         ukn::color::Skyblue.c,
@@ -108,6 +111,16 @@ namespace ukn {
                                                                         false,
                                                                         1024);
             scene.addLight(mDirectionalLight);
+
+            SkyboxPtr skybox = MakeSharedPtr<ukn::Skybox>();
+            if(!skybox->load(mist::ResourceLoader::Instance().loadResource(L"skyboxsun25degtest.png"))) {
+                mist::log_error(L"unable to load skybox");
+            }
+
+            ukn::SceneObjectPtr skyboxObject = ukn::MakeSharedPtr<ukn::SceneObject>(skybox, ukn::SOA_Overlay);
+            skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(200, 200, 200));
+                
+            scene.addSceneObject(skyboxObject);
         }
 
         void Game::start() {
@@ -115,8 +128,8 @@ namespace ukn {
 
             (*mApp).create(
                 ukn::ContextCfg::Default()
-                  .width(800)
-                  .height(600)
+                  .width(1024)
+                  .height(768)
                   .sampleCount(1)
                   .showMouse(true)
                   .isFullScreen(false)

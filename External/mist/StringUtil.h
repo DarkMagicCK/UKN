@@ -28,6 +28,8 @@ namespace mist {
         
         MIST_API MistString GetFileName(const MistString& str);
         MIST_API MistString GetFilePath(const MistString& str);
+
+        MIST_API MistString Strip(const MistString& str);
         
         template<typename T>
         static std::string AnyToString(const T& val) {

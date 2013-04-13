@@ -22,11 +22,10 @@ namespace ukn {
          */
         struct ModelData {
             std::vector<std::vector<uint8> > vertex_data;
-            uint32 vertex_count;
+            std::vector<vertex_format> vertex_format;
 
             std::vector<uint32> index_data;
-            vertex_format vertex_format;
-
+            
             std::vector<MaterialPtr> materials;
 
             struct MeshData {
@@ -102,6 +101,8 @@ namespace ukn {
 
         uint32 getIndexStartIndex() const;
         void setIndexStartIndex(uint32 index);
+
+        void setBoundingBox(const Box& box);
 
     public:
         void setIndexStream(const GraphicBufferPtr& index_steam);

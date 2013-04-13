@@ -46,8 +46,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\External\freetype;$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\vs\$(Configuration);$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\External\freetype;$(SolutionDir)\..\External\polyvox_;$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\External\polyvox_;$(SolutionDir)\..\vs\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

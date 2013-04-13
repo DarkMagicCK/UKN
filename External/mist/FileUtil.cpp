@@ -601,7 +601,7 @@ namespace mist {
             rs = path.rfind(L'\\');
         }
         if(rs != MistString::npos) {
-            return MistString(path.begin(), path.begin() + rs);
+            return MistString(path.begin(), path.begin() + rs + 1);
         }
         return MistString(L"");
     }

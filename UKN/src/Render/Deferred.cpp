@@ -87,8 +87,8 @@ namespace ukn {
             
             mLightMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
             mLightMapRT->attach(ukn::ATT_Color0,
-                                MakeSharedPtr<ukn::RenderTarget>(800,
-                                                                 600,
+                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                 (uint32)mSize[1],
                                                                  1,
                                                                  ukn::EF_RGBA8));
 
@@ -96,8 +96,8 @@ namespace ukn {
             
             mCompositeRT = new ukn::CompositeRenderTarget();
             mCompositeRT->attach(ukn::ATT_Color0,
-                                 MakeSharedPtr<ukn::RenderTarget>(800,
-                                                                  600,
+                                 MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                  (uint32)mSize[1],
                                                                   1,
                                                                   ukn::EF_RGBA8));
             
@@ -129,6 +129,8 @@ namespace ukn {
                                                      VERTEX_SHADER_DESC("VertexProgram"));
                 fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/directionallight_frag.cg"), 
                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
+
+
 
                 mDirectionalLightTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
 
@@ -212,7 +214,7 @@ namespace ukn {
                 fragmentShader->setMatrixVariable("inverseViewProj", invViewProj);
                 fragmentShader->setFloatVectorVariable("cameraPosition", cam->getEyePos());
                 fragmentShader->setFloatVectorVariable("gbufferSize", mSize);
-        
+                
                 fragmentShader->setTextureVariable("colorMap", 
                                                     mGBufferRT->getTargetTexture(ukn::ATT_Color0));
                 fragmentShader->setTextureVariable("normalMap", 
@@ -231,14 +233,15 @@ namespace ukn {
                     fragmentShader->setFloatVectorVariable("lightColor", light->getColor());
                     fragmentShader->setFloatVariable("lightDirection", 3, light->getDirection().value);
                     fragmentShader->setFloatVariable("lightIntensity", light->getIntensity());
+                    fragmentShader->setFloatVectorVariable("lightPosition", light->getPosition());
+                    fragmentShader->setFloatVariable("depthBias", light->getDepthBias());
                 
                     const CameraPtr& lightCam = light->getCamera(0);
-                    fragmentShader->setMatrixVariable("lightView", lightCam->getViewMatrix());
                     fragmentShader->setMatrixVariable("lightViewProj", lightCam->getViewMatrix() * lightCam->getProjMatrix());
                     fragmentShader->setIntVariable("hasShadow", light->getCastShadows() ? 1 : 0);
                     fragmentShader->setFloatVariable("shadowMapSize", (float)light->getShadowMapResolution());
                     fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
-                
+                    
                     ukn::SpriteBatch::DefaultObject().drawQuad(mDirectionalLightTechnique, 
                                                                ukn::Vector2(-1, 1), 
                                                                ukn::Vector2(1, -1));
@@ -402,7 +405,8 @@ namespace ukn {
 
         gd.setBlendState(BlendStateObject::Opaque());
         gd.setDepthStencilState(DepthStencilStateObject::DepthRead());
-        gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
+        gd.setRasterizerState(RasterizerStateObject::CullNone());
+        gd.setSamplerState(SamplerStateObject::LinearWrap());
 
         // first clear the GBuffer
         ukn::SpriteBatch::DefaultObject().drawQuad(mClearTechnique, ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
@@ -414,7 +418,7 @@ namespace ukn {
         const CameraPtr& cam = fb->getViewport().camera;
 
         // render scene
-        scene.render(mGBufferTechnique, cam->getViewMatrix(), cam->getProjMatrix());
+        scene.render(mGBufferTechnique, cam->getViewMatrix(), cam->getProjMatrix(), SOA_Cullable | SOA_Moveable | SOA_Overlay);
 
         mGBufferRT->detachFromRender();
     }
@@ -436,10 +440,9 @@ namespace ukn {
 
         TexturePtr target = mCompositeRT->getTarget(ATT_Color0)->getTexture();
         for(std::pair<MistString, PostEffectPtr>& pe: mPostEffects) {
-            pe.second->render(this->getColorTarget()->getTexture(),
+            pe.second->render(target,
                               this->getNormalTarget()->getTexture(),
-                              this->getDepthTarget()->getTexture(),
-                              target);
+                              this->getDepthTarget()->getTexture());
             target = pe.second->getFinalTexture();
         }
     }
@@ -460,7 +463,7 @@ namespace ukn {
         return mLightMapRT->getTarget(ATT_Color0);
     }
 
-    const TexturePtr& DeferredRenderer::getFinalTexture() const {
+    TexturePtr DeferredRenderer::getFinalTexture() const {
         if(mPostEffects.empty()) 
             return mCompositeRT->getTarget(ATT_Color0)->getTexture();
         else

@@ -32,6 +32,7 @@ namespace ukn {
     
     
     extern bool check_gl_error(const char* f);
+    extern bool check_framebuffer_status();
     
 }
 

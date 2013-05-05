@@ -62,7 +62,6 @@ int CALLBACK WinMain(__in  HINSTANCE hInstance,
 
     ukn::FontPtr font;
     
-    
     ukn::AppLauncher(L"Windows Test")
     .create(
             ukn::ContextCfg::Default()

@@ -503,9 +503,9 @@ namespace ukn {
                 }
 
                 ModelData::MeshData mesh;
-                mesh.num_indices = index_data.size();
+                mesh.num_indices = (uint32)index_data.size();
                 mesh.start_index = 0;
-                mesh.num_vertices = position_source.size();
+                mesh.num_vertices = (uint32)position_source.size();
                 mesh.start_vertex = 0;
                 mesh.material_id = 0;
                 mesh.name = file->getName();
@@ -560,8 +560,8 @@ namespace ukn {
             data->meshes.push_back(mesh);
             mesh.num_indices = 0;
             mesh.num_vertices = 0;
-            mesh.start_vertex = vertices.size();
-            mesh.start_index = data->index_data.size();
+            mesh.start_vertex = (uint32)vertices.size();
+            mesh.start_index = (uint32)data->index_data.size();
 
             useStart = false;
         }
@@ -628,9 +628,9 @@ namespace ukn {
                             vertices.push_back(v3);
                             mesh.num_vertices += 3;
 
-                            data->index_data.push_back(data->index_data.size());
-                            data->index_data.push_back(data->index_data.size());
-                            data->index_data.push_back(data->index_data.size());
+                            data->index_data.push_back((uint32)data->index_data.size());
+                            data->index_data.push_back((uint32)data->index_data.size());
+                            data->index_data.push_back((uint32)data->index_data.size());
                             mesh.num_indices += 3;
                         }
                     } else if(tokens[0] == L"mtllib") {
@@ -854,7 +854,7 @@ namespace ukn {
             for(uint32 i=0; i<data->vertex_data.size(); ++i) {
                 ukn::GraphicBufferPtr vertexBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::None,
                                                                            ukn::GraphicBuffer::Static,
-                                                                           data->vertex_data[i].size() / GetVertexElementsTotalSize(data->vertex_format[i]),
+                                                                           (uint32)data->vertex_data[i].size() / GetVertexElementsTotalSize(data->vertex_format[i]),
                                                                            &data->vertex_data[i][0],
                                                                            data->vertex_format[i]);
                 vtxBuffers.push_back(vertexBuffer);
@@ -862,7 +862,7 @@ namespace ukn {
      
             ukn::GraphicBufferPtr indexBuffer = gf.createIndexBuffer(ukn::GraphicBuffer::None,
                                                                      ukn::GraphicBuffer::Static,
-                                                                     data->index_data.size(),
+                                                                     (uint32)data->index_data.size(),
                                                                      &data->index_data[0]);
             ukn::RenderBufferPtr buffer = gf.createRenderBuffer();
             for(size_t i=0; i<vtxBuffers.size(); ++i)

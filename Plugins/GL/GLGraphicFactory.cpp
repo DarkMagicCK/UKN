@@ -137,7 +137,7 @@ namespace ukn {
     }
     
     RenderViewPtr GLGraphicFactory::createDepthStencilView(const TexturePtr& texture) const {
-        return RenderView::NullObject();
+        return MakeSharedPtr<GLTexture2DDepthStencilView>(texture);
     }
     
     FrameBufferPtr GLGraphicFactory::createFrameBuffer() const {

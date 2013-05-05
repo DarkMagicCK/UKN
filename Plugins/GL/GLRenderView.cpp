@@ -10,6 +10,7 @@
 #include "GLRenderView.h"
 #include "GLGraphicDevice.h"
 #include "GLFrameBuffer.h"
+#include "GLError.h"
 
 #include "mist/Common.h"
 #include "mist/Stream.h"
@@ -30,6 +31,10 @@ namespace ukn {
     GLRenderView::~GLRenderView() {
 
     }
+    
+    void GLRenderView::clearColor(const Color& clr) {
+        this->doClear(GL_COLOR_BUFFER_BIT, clr, 1.f, 0);
+    }
 
     void GLRenderView::clearDepth(float depth) {
         this->doClear(GL_DEPTH_BUFFER_BIT, Color(), depth, 0);
@@ -41,6 +46,18 @@ namespace ukn {
 
     void GLRenderView::clearDepthStencil(float depth, int32 stencil) {
         this->doClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT, Color(), depth, stencil);
+    }
+    
+    GLuint GLRenderView::getGLIndex() const {
+        return mIndex;
+    }
+    
+    GLuint GLRenderView::getGLFBO() const {
+        return mFBO;
+    }
+    
+    GLuint GLRenderView::getGLTex() const {
+        return mTex;
     }
 
     void GLRenderView::doClear(uint32 flags, const class Color& clr, float depth, int32 stencil) {
@@ -148,7 +165,7 @@ namespace ukn {
             glBindTexture(GL_TEXTURE_2D, mTex);
 
             std::vector<Color> mem_clr(mWidth * mHeight, clr);
-            glTexSubImage2D(GL_TEXTURE_2D, mLevel, 0, 0, mWidth, mHeight, GL_RGBA, GL_FLOAT, mem_clr.data());
+            CHECK_GL_CALL(glTexSubImage2D(GL_TEXTURE_2D, mLevel, 0, 0, mWidth, mHeight, GL_RGBA, GL_FLOAT, mem_clr.data()));
         }
     }
 
@@ -160,9 +177,9 @@ namespace ukn {
 
         gd.bindGLFrameBuffer(mFBO);
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + att - ATT_Color0, GL_TEXTURE_2D, mTex, mLevel);
+        CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + att - ATT_Color0, GL_TEXTURE_2D, mTex, mLevel));
 #else
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + att - ATT_Color0, GL_TEXTURE_2D, mTex, mLevel);
+        CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + att - ATT_Color0, GL_TEXTURE_2D, mTex, mLevel));
 #endif
         gd.bindGLFrameBuffer(0);
     }
@@ -175,12 +192,85 @@ namespace ukn {
 
         gd.bindGLFrameBuffer(mFBO);
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
-        glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + att - ATT_Color0, GL_TEXTURE_2D, mTex, 0);
+        CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT + att - ATT_Color0, GL_TEXTURE_2D, 0, 0));
 #else
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + att - ATT_Color0, GL_TEXTURE_2D, mTex, 0);
+        CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + att - ATT_Color0, GL_TEXTURE_2D, 0, 0));
 #endif
         gd.bindGLFrameBuffer(0);
+        mFBO = 0;
 
     }
+    
+    GLTexture2DDepthStencilView::GLTexture2DDepthStencilView(uint32 width, uint32 height, ElementFormat ef) {
+        
+        GraphicFactory& gf = Context::Instance().getGraphicFactory();
+        mTexture = gf.create2DTexture(width,
+                                      height,
+                                      0,
+                                      ef,
+                                      0,
+                                      TB_DepthStencil);
+        if(!mTexture)
+            log_error(L"GLTexture2DDepthStencilView: error creating depth stencil texture");
+        else {
+            GLTexture2D* glTexture = (GLTexture2D*)mTexture.get();
+            mTex = (GLuint)glTexture->getTextureId();
+            mWidth = glTexture->width(0);
+            mHeight = glTexture->height(0);
+            mElementFormat = glTexture->format();
+        }
+    }
+    
+    GLTexture2DDepthStencilView::GLTexture2DDepthStencilView(const TexturePtr& texture):
+    mTexture(texture) {
+        GLTexture2D* glTexture = (GLTexture2D*)mTexture.get();
+        mTex = (GLuint)glTexture->getTextureId();
+        mWidth = glTexture->width(0);
+        mHeight = glTexture->height(0);
+        mElementFormat = glTexture->format();
+    }
+    
+    void GLTexture2DDepthStencilView::clearDepth(float depth) {
+        glClearDepth(depth);
+    }
+    
+    void GLTexture2DDepthStencilView::clearStencil(int32 stencil) {
+        glClearStencil(stencil);
+    }
+    
+    void GLTexture2DDepthStencilView::clearDepthStencil(float depth, int32 stencil) {
+        glClearDepth(depth);
+        glClearStencil(stencil);
+    }
+    
+    void GLTexture2DDepthStencilView::onAttached(FrameBuffer& fb, uint32 att) {
+        mFBO = checked_cast<GLFrameBuffer*>(&fb)->getGLFBO();
+        
+        GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
+        
+        gd.bindGLFrameBuffer(mFBO);
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
+        CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, mTex, 0));
+#else
+        CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, mTex, 0));
+#endif
+        gd.bindGLFrameBuffer(0);
+    }
+    
+    void GLTexture2DDepthStencilView::onDetached(FrameBuffer& fb, uint32 att) {
+        mFBO = checked_cast<GLFrameBuffer*>(&fb)->getGLFBO();
+        
+        GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
+        
+        gd.bindGLFrameBuffer(mFBO);
+#ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
+        CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
+#else
+        CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
+#endif
+        gd.bindGLFrameBuffer(0);
+        mFBO = 0;
+    }
+    
 
 } // namespace ukn

@@ -122,10 +122,19 @@ namespace ukn {
     static void KeyFunc(GLFWwindow* window, int key, int state) {
         GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
         glwnd->onKeyDown(glfw_to_ukn_key(key), state);
+        
+        
+        input::KeyEventArgs args;
+        args.key    = glfw_to_ukn_key(key);
+        args.state  = state == 1 ? input::Press : input::Release;
+        args.isIME  = false;
+        args.flag   = g_key_flag;
+        
+        glwnd->onKeyEvent().raise(glwnd, args);
     }
 
     static void CharFunc(GLFWwindow* window, int c) {
-        GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
+     /*   GLWindow* glwnd = (GLWindow*)glfwGetWindowUserPointer(window);
         
         input::KeyEventArgs args;
         args.key    = c;
@@ -133,7 +142,7 @@ namespace ukn {
         args.isIME  = true;
         args.flag   = g_key_flag;
         
-        glwnd->onKeyEvent().raise(glwnd, args);
+        glwnd->onKeyEvent().raise(glwnd, args);*/
     }
     
     static void ErrorCallback(int,const char* error) {

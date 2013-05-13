@@ -150,7 +150,7 @@ namespace ukn {
             it != end;
             ++it) {
             // deprecated way of transmission vertex arrays
-            // though backward compatible and avoid generic attrib locations in shaders that causes different versions of shaders
+            // though backward compatible and avoid generic attrib locations in shaders
             // but also lack of some vertex usage support
 
 #if UKN_OPENGL_VERSION_MAJOR <= 2

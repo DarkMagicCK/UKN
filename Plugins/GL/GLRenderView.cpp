@@ -149,12 +149,12 @@ namespace ukn {
 
     GLTexture2DRenderView::GLTexture2DRenderView(const TexturePtr& texture, int32 index, int32 level):
     mTexture(texture),
-    mIndex(index),
     mLevel(level) {
         GLTexture2D* glTexture = (GLTexture2D*)mTexture.get();
         mTex = (GLuint)glTexture->getTextureId();
         mWidth = glTexture->width(0);
         mHeight = glTexture->height(0);
+        mIndex = index;
         mElementFormat = glTexture->format();
     }
 
@@ -264,7 +264,7 @@ namespace ukn {
         
         gd.bindGLFrameBuffer(mFBO);
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
-        CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
+ //       CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
 #else
         CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
 #endif

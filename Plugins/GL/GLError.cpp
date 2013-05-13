@@ -47,13 +47,13 @@ namespace ukn {
                     fbError = L"incomplte attachment";
                     break;
                 case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT:
-                    fbError = L"incomplte attachment";
+                    fbError = L"incomplte dimensions";
                     break;
                 case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-                    fbError = L"incomplte attachment";
+                    fbError = L"missing attachment";
                     break;
                 case GL_FRAMEBUFFER_UNSUPPORTED:
-                    fbError = L"incomplte attachment";
+                    fbError = L"unsupported";
                     break;
             }
             log_error((mist::FormatString(L"GLGraphicDevice::bindGLFrameBuffer: incomplete framebuffer, reason = {0}"), fbError));

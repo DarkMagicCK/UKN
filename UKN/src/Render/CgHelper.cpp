@@ -35,7 +35,7 @@ namespace ukn {
                                                float4 FragmentProgram(VertexOutputType input,\
                                                 uniform sampler2D tex: TEX): COLOR {\
                                                 float4 texColor = tex2D(tex, input.texCoord);\
-                                                return texColor * input.color;\
+                                                return float4( 1, 1, 1, 1);\
                                                }\0";
 
     }

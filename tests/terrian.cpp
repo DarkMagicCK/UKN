@@ -61,7 +61,7 @@ int main (int argc, const char * argv[])
             All,
         };
         
-        Mode mode = Scene;
+        Mode mode = Color;
         
 #ifndef MIST_OS_WINDOWS
         ukn::GraphicFactoryPtr factory;
@@ -163,7 +163,7 @@ int main (int argc, const char * argv[])
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
-            
+           /*
             {
                 scene.getLightManager()->makeShadowMaps(scene);
             }
@@ -222,13 +222,13 @@ int main (int argc, const char * argv[])
                                                            ukn::Vector2(-1, 1),
                                                            ukn::Vector2(1, -1));
                 
-            }
+            }*/
             if(font) {
                 mist::ProfileData shadowMapProf = mist::Profiler::Instance().get(L"SHADOW_MAP");
                 mist::ProfileData gbufferProf = mist::Profiler::Instance().get(L"DEFERRED_GBUFFER");
                 mist::ProfileData lightMapPro = mist::Profiler::Instance().get(L"DEFERRED_LIGHTMAP");
                 
-                /*   font->begin();
+                 font->begin();
                  font->draw(gd.description().c_str(), 0, 20, ukn::FA_Left, ukn::color::Skyblue);
                  font->draw((ukn::FormatString(L"FPS: {0}"), mist::FrameCounter::Instance().getCurrentFps()),
                  0,
@@ -238,14 +238,14 @@ int main (int argc, const char * argv[])
                  
                  font->draw((ukn::FormatString(L"Vertices Rendered: {0}\nSample Radius: {1}\nDistance Scale: {2}"),
                  scene.numVerticesRendered(),
-                 ssao->getSampleRadius(),
-                 ssao->getDistanceScale()),
+                 0,
+                 0),
                  0,
                  40,
                  ukn::FA_Left,
                  ukn::color::Skyblue);
                  
-                 font->end();*/
+                 font->end();
             }
         })
         .connectInit([&](ukn::Window*) {
@@ -257,7 +257,7 @@ int main (int argc, const char * argv[])
             
             camController->attachCamera(vp.camera);
             
-            font = ukn::Font::Create(L"Consola.ttf", 20);
+            font = ukn::Font::Create(L"Arial.ttf", 20);
             
             skybox = new ukn::Skybox();
             if(!skybox->load(mist::ResourceLoader::Instance().loadResource(L"skyboxsun25degtest.png"))) {

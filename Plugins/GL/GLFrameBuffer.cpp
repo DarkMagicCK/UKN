@@ -114,7 +114,7 @@ namespace ukn {
                 GLRenderView* glrv = checked_cast<GLRenderView*>(rv.get());
                 if(glrv) {
                     GLuint index = glrv->getGLIndex();
-                    buffers.push_back(index);
+                    buffers.push_back(index + GL_COLOR_ATTACHMENT0);
                 }
             }
             CHECK_GL_CALL(glDrawBuffers((GLsizei)buffers.size(), &buffers[0]));

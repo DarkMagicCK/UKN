@@ -82,7 +82,6 @@ namespace ukn {
         
     private:
         TexturePtr mTexture;
-        int32 mIndex;
         int32 mLevel;
     };
     

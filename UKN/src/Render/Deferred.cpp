@@ -63,7 +63,7 @@ namespace ukn {
         }
         /* render targets */
         {
-            mGBufferRT = new ukn::CompositeRenderTarget();
+            mGBufferRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
             mGBufferRT->attach(ukn::ATT_Color0,
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
@@ -78,7 +78,7 @@ namespace ukn {
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
                                                                 1,
-                                                                ukn::EF_Float2));
+                                                                ukn::EF_HalfFloat2));
             mGBufferRT->attach(ukn::ATT_DepthStencil,
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
@@ -94,7 +94,7 @@ namespace ukn {
 
             mGBufferRT->attach(ukn::ATT_Color3, mLightMapRT->getTarget(ukn::ATT_Color0));
             
-            mCompositeRT = new ukn::CompositeRenderTarget();
+            mCompositeRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
             mCompositeRT->attach(ukn::ATT_Color0,
                                  MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                   (uint32)mSize[1],
@@ -418,7 +418,10 @@ namespace ukn {
         const CameraPtr& cam = fb->getViewport().camera;
 
         // render scene
-        scene.render(mGBufferTechnique, cam->getViewMatrix(), cam->getProjMatrix(), SOA_Cullable | SOA_Moveable | SOA_Overlay);
+        scene.render(mGBufferTechnique,
+                     cam->getViewMatrix(),
+                     cam->getProjMatrix(),
+                     SOA_Cullable | SOA_Moveable | SOA_Overlay);
 
         mGBufferRT->detachFromRender();
     }

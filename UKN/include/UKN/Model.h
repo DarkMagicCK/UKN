@@ -56,6 +56,8 @@ namespace ukn {
         static ModelDataPtr LoadFromMeshML(const mist::ResourcePtr& file);
         /* Collada file */
         static ModelDataPtr LoadFromCollada(const mist::ResourcePtr& file);
+        /* Id MD5 */
+        static ModelDataPtr LoadFromMD5(const mist::ResourcePtr& file);
         
         /* ukn model format, to do */
         static ModelDataPtr LoadFromUknModel(const mist::ResourcePtr& file, bool is_bin);

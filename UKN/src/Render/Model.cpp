@@ -499,6 +499,7 @@ namespace ukn {
                                              (uint8*)&c,
                                              ((uint8*)&c) + 4);
                             break;
+                        default: break;
                         }
                     }
                 }
@@ -663,6 +664,7 @@ namespace ukn {
                                                 (uint8*)&vertices.back());
                 return data;
             }
+            return ModelLoader::ModelDataPtr();
         }
 
         bool parseMaterial(const MistString& mtlPath, const MistString& dir) {
@@ -833,6 +835,20 @@ namespace ukn {
     ModelLoader::ModelDataPtr ModelLoader::LoadFromCollada(const mist::ResourcePtr& file) {
         return ModelDataPtr();
     }
+    
+    
+    struct MD5Loader {
+        
+        ModelLoader::ModelDataPtr load(const mist::ResourcePtr& file) {
+            
+        }
+    };
+    
+    ModelLoader::ModelDataPtr ModelLoader::LoadFromMD5(const mist::ResourcePtr& file) {
+        MD5Loader loader;
+        return loader.load(file);
+    };
+    
 
     ModelPtr ModelLoader::LoadModel(const UknString& name, uint32 access_hint) {
         ModelDataPtr data;
@@ -846,6 +862,8 @@ namespace ukn {
                 ResourceLoader::Instance().loadResource(name)
             );
         }
+        
+        
         if(data) {
             ModelPtr model = MakeSharedPtr<Model>(Path::GetFileNameWithoutExtension(name));
                 

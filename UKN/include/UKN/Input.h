@@ -148,7 +148,7 @@ namespace ukn {
         
         // mouse
         enum MouseButton {
-            LeftButton = 256,
+            LeftButton = 128,
             RightButton,
             MiddleButton,
 

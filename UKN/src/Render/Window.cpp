@@ -109,54 +109,44 @@ namespace ukn {
         return globalUpdate;
     }
 
-	Window& Window::connectInit(const Window::InitializeEvent::signal_type::slot_type& f) {
-		mInitEvent.connect(f);
-		return *this;
+	Connection Window::connectInit(const Window::InitializeEvent::signal_type::slot_type& f) {
+		return mInitEvent.connect(f);
 	}
 
-	Window& Window::connectUpdate(const Window::UpdateEvent::signal_type::slot_type& f) {
-		mUpdateEvent.connect(f);
-		return *this;
+	Connection Window::connectUpdate(const Window::UpdateEvent::signal_type::slot_type& f) {
+		return mUpdateEvent.connect(f);
 	}
 
-	Window& Window::connectRender(const Window::RenderEvent::signal_type::slot_type& f) {
-		mRenderEvent.connect(f);
-		return *this;
+	Connection Window::connectRender(const Window::RenderEvent::signal_type::slot_type& f) {
+		return mRenderEvent.connect(f);
 	}
 
-	Window& Window::connectMouse(const Window::MouseEvent::signal_type::slot_type& f) {
-		mMouseEvent.connect(f);
-		return *this;
+	Connection Window::connectMouse(const Window::MouseEvent::signal_type::slot_type& f) {
+		return mMouseEvent.connect(f);
 	}
 
-	Window& Window::connectKey(const Window::KeyEvent::signal_type::slot_type& f) {
-		mKeyEvent.connect(f);
-		return *this;
+	Connection Window::connectKey(const Window::KeyEvent::signal_type::slot_type& f) {
+		return mKeyEvent.connect(f);
 	}
 
-	Window& Window::connectClose(const Window::CloseEvent::signal_type::slot_type& f) {
-		mCloseEvent.connect(f);
-		return *this;
+	Connection Window::connectClose(const Window::CloseEvent::signal_type::slot_type& f) {
+		return mCloseEvent.connect(f);
+    }
+
+	Connection Window::connectResize(const Window::ResizeEvent::signal_type::slot_type& f) {
+		return mResizeEvent.connect(f);
 	}
 
-	Window& Window::connectResize(const Window::ResizeEvent::signal_type::slot_type& f) {
-		mResizeEvent.connect(f);
-		return *this;
+	Connection Window::connectFrameStart(const Window::FrameStartEvent::signal_type::slot_type& f) {
+		return mFrameStartEvent.connect(f);
 	}
 
-	Window& Window::connectFrameStart(const Window::FrameStartEvent::signal_type::slot_type& f) {
-		mFrameStartEvent.connect(f);
-		return *this;
+	Connection Window::connectFrameEnd(const Window::FrameEndEvent::signal_type::slot_type& f) {
+		return mFrameEndEvent.connect(f);
 	}
 
-	Window& Window::connectFrameEnd(const Window::FrameEndEvent::signal_type::slot_type& f) {
-		mFrameEndEvent.connect(f);
-		return *this;
-	}
-
-	Window& Window::connectWindowCreate(const Window::WindowCreateEvent::signal_type::slot_type& f) {
-		mWindowCreateEvent.connect(f);
-		return *this;
+	Connection Window::connectWindowCreate(const Window::WindowCreateEvent::signal_type::slot_type& f) {
+		return mWindowCreateEvent.connect(f);
 	}
     
     

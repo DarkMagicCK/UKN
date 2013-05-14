@@ -64,6 +64,7 @@
 		88871FE4148CB1800026B2B8 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FD9148CB1800026B2B8 /* image_helper.c */; };
 		88871FE5148CB1800026B2B8 /* SOIL.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FDB148CB1800026B2B8 /* SOIL.c */; };
 		88871FE6148CB1800026B2B8 /* stb_image_aug.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FDD148CB1800026B2B8 /* stb_image_aug.c */; };
+		88CA27AE1741D912007A7371 /* opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CA27AC1741D910007A7371 /* opengl.cpp */; };
 		88CB67AD17190F090025249F /* BitmapFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB673217190F090025249F /* BitmapFont.cpp */; };
 		88CB67AE17190F090025249F /* SequencialAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB677417190F090025249F /* SequencialAnimation.cpp */; };
 		88CB67AF17190F090025249F /* Skeletal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB677517190F090025249F /* Skeletal.cpp */; };
@@ -117,7 +118,6 @@
 		88CB67E017190F090025249F /* Window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB67AA17190F090025249F /* Window.cpp */; };
 		88CB67E117190F090025249F /* TMXTiledMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB67AC17190F090025249F /* TMXTiledMap.cpp */; };
 		88CB67E417192E5A0025249F /* GLError.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB67E217192E5A0025249F /* GLError.cpp */; };
-		88CB67E7171936C70025249F /* terrian.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB67E5171936C50025249F /* terrian.cpp */; };
 		88E1938F15EBD1F40098FA28 /* Arial.ttf in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88E1938D15EBD13E0098FA28 /* Arial.ttf */; };
 		88E3C3DE147F2CD400E8754D /* GLGraphicDevice.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3DD147F2CD400E8754D /* GLGraphicDevice.cpp */; };
 		88E3C3E1147F2D6200E8754D /* GLGraphicFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88E3C3E0147F2D6200E8754D /* GLGraphicFactory.cpp */; };
@@ -386,6 +386,8 @@
 		88871FDE148CB1800026B2B8 /* stb_image_aug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image_aug.h; sourceTree = "<group>"; };
 		88871FDF148CB1800026B2B8 /* stbi_DDS_aug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stbi_DDS_aug.h; sourceTree = "<group>"; };
 		88871FE0148CB1800026B2B8 /* stbi_DDS_aug_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stbi_DDS_aug_c.h; sourceTree = "<group>"; };
+		88CA27AC1741D910007A7371 /* opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl.cpp; path = tests/opengl.cpp; sourceTree = SOURCE_ROOT; };
+		88CA27AD1741D911007A7371 /* opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl.h; path = tests/opengl.h; sourceTree = SOURCE_ROOT; };
 		88CB672C17190F090025249F /* 2DHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 2DHelper.h; sourceTree = "<group>"; };
 		88CB672D17190F090025249F /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		88CB672E17190F090025249F /* Asset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Asset.h; sourceTree = "<group>"; };
@@ -508,7 +510,6 @@
 		88CB67AC17190F090025249F /* TMXTiledMap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TMXTiledMap.cpp; sourceTree = "<group>"; };
 		88CB67E217192E5A0025249F /* GLError.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLError.cpp; sourceTree = "<group>"; };
 		88CB67E317192E5A0025249F /* GLError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLError.h; sourceTree = "<group>"; };
-		88CB67E5171936C50025249F /* terrian.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = terrian.cpp; path = tests/terrian.cpp; sourceTree = SOURCE_ROOT; };
 		88CC31191477915700558EA1 /* Project Unknown */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Project Unknown"; sourceTree = BUILT_PRODUCTS_DIR; };
 		88D1300E14CF812C001BB071 /* GLFWInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLFWInput.h; sourceTree = "<group>"; };
 		88E1938D15EBD13E0098FA28 /* Arial.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = Arial.ttf; path = /Library/Fonts/Arial.ttf; sourceTree = "<absolute>"; };
@@ -1130,7 +1131,8 @@
 				88CB677217190F090025249F /* src */,
 				88AAC170148689ED007A80A4 /* External */,
 				88E3C3C7147F2BAC00E8754D /* Plugins */,
-				88CB67E5171936C50025249F /* terrian.cpp */,
+				88CA27AC1741D910007A7371 /* opengl.cpp */,
+				88CA27AD1741D911007A7371 /* opengl.h */,
 				88E1938D15EBD13E0098FA28 /* Arial.ttf */,
 			);
 			path = "Project Unknown";
@@ -1578,7 +1580,7 @@
 				88CB67E017190F090025249F /* Window.cpp in Sources */,
 				88CB67E117190F090025249F /* TMXTiledMap.cpp in Sources */,
 				88CB67E417192E5A0025249F /* GLError.cpp in Sources */,
-				88CB67E7171936C70025249F /* terrian.cpp in Sources */,
+				88CA27AE1741D912007A7371 /* opengl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

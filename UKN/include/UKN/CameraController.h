@@ -53,6 +53,9 @@ namespace ukn {
 
         float mPrevX;
         float mPrevY;
+        
+        Connection mKeyDownConn;
+        Connection mMouseMoveConn;
     };
 
     typedef SharedPtr<CameraController> CameraControllerPtr;

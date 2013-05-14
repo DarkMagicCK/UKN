@@ -50,15 +50,16 @@ namespace ukn {
 
     FpsCameraController::FpsCameraController() {
         Window& wnd = ukn::Context::Instance().getApp().getWindow();
-        wnd.connectMouse(Bind(this, &FpsCameraController::onMouseMove));
-        wnd.connectKey(Bind(this, &FpsCameraController::onKeyDown));
+        mMouseMoveConn = wnd.connectMouse(Bind(this, &FpsCameraController::onMouseMove));
+        mKeyDownConn = wnd.connectKey(Bind(this, &FpsCameraController::onKeyDown));
 
         mPrevX = (float)wnd.getMousePos()[0];
         mPrevY = (float)wnd.getMousePos()[1];
     }
 
     FpsCameraController::~FpsCameraController() {
-
+        mKeyDownConn.disconnect();
+        mMouseMoveConn.disconnect();
     }
 
     void FpsCameraController::attachCamera(const CameraPtr& camera)  {

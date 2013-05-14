@@ -285,6 +285,7 @@ namespace ukn {
                         case V:
                             format.push_back(VertexElement(VU_UV, EF_Float2, 0));
                             break;
+                        default: break;
                         }
                     }
                     

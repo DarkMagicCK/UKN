@@ -853,7 +853,7 @@ namespace mist {
         void ThreadTaskPool::run() {
             MutexGuard<Mutex> lock(mMutex);
             
-            while(!mTasks.empty()) {
+            while(mTasks.size() > 0) {
                 ThreadTask task = mTasks.back();
                 
                 task();

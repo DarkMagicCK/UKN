@@ -8,6 +8,8 @@
 #include "mist/Query.h"
 #include "mist/Profiler.h"
 
+#include "UKN/2DHelper.h"
+
 #include <vector>
 #include <map>
 #include <numeric>
@@ -15,6 +17,8 @@
 #ifndef MIST_OS_WINDOWS
 
 #include "../Plugins/gl/GLGraphicFactory.h"
+
+#include "../Plugins/gl/GLPreq.h"
 
 int main (int argc, const char * argv[])
 {
@@ -33,6 +37,7 @@ int main (int argc, const char * argv[])
         
         ukn::FontPtr font;
         ukn::CameraControllerPtr camController;
+        ukn::TexturePtr texture;
         
 #ifndef MIST_OS_WINDOWS
         ukn::GraphicFactoryPtr factory;
@@ -62,8 +67,22 @@ int main (int argc, const char * argv[])
         .connectRender([&](ukn::Window* wnd) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             
-            gd.clear(ukn::CM_Color, ukn::color::Blue, 1.f, 0);
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Blue, 1.f, 0);
             
+            ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
+            
+            ukn::Ukn2DHelper& helper = ukn::Ukn2DHelper::Instance();
+            helper.setupMat();
+            helper.bindTexture(texture);
+            sb.drawQuad(helper.getEffect()->getTechnique(0), ukn::Vector2(0, 0), ukn::Vector2(3, 3));
+            
+            glBegin(GL_TRIANGLES);
+            glVertex3f(1, 1, 1);
+            glVertex3f(0, 0, 0);
+            glVertex3f(1, 0, 1);
+            glEnd();
+            
+            glFlush();
         })
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
@@ -75,7 +94,7 @@ int main (int argc, const char * argv[])
             camController->attachCamera(vp.camera);
             
             font = ukn::Font::Create(L"Arial.ttf", 20);
-            
+            texture = ukn::AssetManager::Instance().load<ukn::Texture>(L"angel.png");
             
         })
         .run();

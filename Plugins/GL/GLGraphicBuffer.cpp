@@ -84,7 +84,7 @@ namespace ukn {
                 break;
         }
 
-        glBindBuffer(GL_ARRAY_BUFFER, mId);
+        CHECK_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, mId));
         void* p = CHECK_GL_CALL(glMapBuffer(GL_ARRAY_BUFFER, gl_acess));
         if(p)
             mMaped = true;
@@ -93,30 +93,30 @@ namespace ukn {
 
     void GLVertexBuffer::unmap() {
         if(mMaped) {
-            glUnmapBuffer(GL_ARRAY_BUFFER);
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            CHECK_GL_CALL(glUnmapBuffer(GL_ARRAY_BUFFER));
+            CHECK_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
             mMaped = false;
         }
     }
 
     void GLVertexBuffer::activate() {
-        glBindBuffer(GL_ARRAY_BUFFER, mId);
+        CHECK_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, mId));
 
     }
     
     void GLVertexBuffer::deactivate() {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        CHECK_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
     
     void GLVertexBuffer::resize(uint32 desired_count) {
-        glBindBuffer(GL_ARRAY_BUFFER, mId);
+        CHECK_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, mId));
 
         CHECK_GL_CALL(glBufferData(GL_ARRAY_BUFFER,
                      static_cast<GLsizeiptr>(desired_count * GetVertexElementsTotalSize(mFormat)),
                      0,
                      usage() == Dynamic ? GL_DYNAMIC_DRAW : GL_STATIC_DRAW));
         mCount = desired_count;
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        CHECK_GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
     }
 
     vertex_elements_type& GLVertexBuffer::format() {

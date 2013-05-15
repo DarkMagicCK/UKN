@@ -489,7 +489,7 @@ namespace ukn {
                                                 (uint8*)uv_source[i].value,
                                                 (uint8*)(uv_source[i].value + 2));
                             break;
-                        case VU_Diffuse:
+                        case VU_Diffuse: {
                             float3& rgb = color_source[i];
                             uint32 c = COLOR_RGBA(rgb[0] / 255.f,
                                                   rgb[1] / 255.f,
@@ -499,6 +499,7 @@ namespace ukn {
                                              (uint8*)&c,
                                              ((uint8*)&c) + 4);
                             break;
+                        }
                         default: break;
                         }
                     }

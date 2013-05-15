@@ -237,7 +237,6 @@ namespace ukn {
 
     void GLGraphicDevice::renderBuffer(const EffectTechniquePtr& technique, const RenderBufferPtr& buffer) {
         if(buffer) {
-            EffectPtr effect = mBindedEffect;
             const RenderBuffer::VertexStreamVec& vertex_streams = buffer->getVertexStreams();
 
             uint32 total_stream_size = 0;
@@ -331,6 +330,13 @@ namespace ukn {
                 }
                 pass->end();
             }
+            for(const RenderBuffer::StreamObject& so: vertex_streams) {
+                so.stream->deactivate();
+            }
+            if(buffer->isUseIndexStream() &&
+               indexBuffer) {
+                indexBuffer->deactivate();
+            }
             for(auto attr: attributes) {
 #if UKN_OPENGL_VERSION_MAJOR <= 2
                 glDisableClientState(attr);
@@ -381,9 +387,9 @@ namespace ukn {
                     MIST_PROFILE(L"__MainFrame__");
 
                     glViewport(fb.getViewport().left,
-                        fb.getViewport().top,
-                        fb.getViewport().width,
-                        fb.getViewport().height);
+                               fb.getViewport().top,
+                               fb.getViewport().width,
+                               fb.getViewport().height);
 
                     fb.getViewport().camera->update();
 

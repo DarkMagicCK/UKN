@@ -13,17 +13,17 @@
 namespace mist {
     
     template<typename T>
-    struct ClassInstantiator {
-        static T* instantiate() {
+    struct SingletonClassInstantiator {
+        static T* Instantiate() {
             return new T();
         }
         
         template<typename R>
-        static T* instantiate(R arg) {
+        static T* Instantiate(R arg) {
             return new T(arg);
         }
         
-        static void release(T* obj) {
+        static void Release(T* obj) {
             delete obj;
         }
     };
@@ -39,11 +39,11 @@ namespace mist {
         
         ~SingletonHolder() {
             if(this->mInstance)
-                ClassInstantiator<T>::release(this->mInstance);
+                SingletonClassInstantiator<T>::Release(this->mInstance);
         }
         
         T* get(R arg) {
-            if(!mInstance) mInstance = ClassInstantiator<T>::template instantiate<R>(arg);
+            if(!mInstance) mInstance = SingletonClassInstantiator<T>::template Instantiate<R>(arg);
             return mInstance;
         }
         
@@ -61,11 +61,11 @@ namespace mist {
         
         ~SingletonHolder() {
             if(this->mInstance)
-                ClassInstantiator<T>::release(this->mInstance);
+                SingletonClassInstantiator<T>::Release(this->mInstance);
         }
         
         T* get(void) {
-            if(!mInstance) mInstance = ClassInstantiator<T>::instantiate();
+            if(!mInstance) mInstance = SingletonClassInstantiator<T>::Instantiate();
             return mInstance;
         }
         
@@ -81,13 +81,13 @@ namespace mist {
         }
         
         static T* InstancePtr() {
-            if(!mInstance) mInstance = ClassInstantiator<T>::instantiate();
+            if(!mInstance) mInstance = SingletonClassInstantiator<T>::Instantiate();
             return mInstance;
         }
         
         static void Destroy() {
             if(mInstance) 
-                ClassInstantiator<T>::release(mInstance);
+                SingletonClassInstantiator<T>::Release(mInstance);
             mInstance = 0;
         }
         

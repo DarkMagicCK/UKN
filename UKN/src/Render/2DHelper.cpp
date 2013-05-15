@@ -20,10 +20,7 @@ namespace ukn {
     void Ukn2DHelper::initialize() {
         if(!mEffect) {
             mEffect = CreateCgEffet2D();
-            if(mEffect) {
-                this->setupMat();
-            }
-            else
+            if(!mEffect)
                 log_error("Ukn2DHelper::initialize: error creating effect for 2d rendering");
         }
     }
@@ -36,11 +33,12 @@ namespace ukn {
         GraphicDevice& device = Context::Instance().getGraphicFactory().getGraphicDevice();
         mScreenOrthoMat = Matrix4::OrthoOffCenterMatLH(0.f,
                                                        device.getCurrFrameBuffer()->getViewport().width,
-                                                       device.getCurrFrameBuffer()->getViewport().height,
                                                        0.f,
+                                                       device.getCurrFrameBuffer()->getViewport().height,
+                                                       
                                                        0.f,
                                                        1.0f);
-        device.adjustOrthoMat(mScreenOrthoMat);
+ //       device.adjustOrthoMat(mScreenOrthoMat);
 
         this->setupMat(mScreenOrthoMat, viewMat);
     }
@@ -48,7 +46,7 @@ namespace ukn {
     void Ukn2DHelper::setupMat(const mist::Matrix4& orthoMat, const mist::Matrix4& viewMat) {
          if(!mEffect)
             this->initialize();
-
+        
         if(mEffect) {
             EffectPassPtr pass0 = mEffect->getTechnique(0)->getPass(0);
             pass0->getVertexShader()->setMatrixVariable("projectionMatrix", orthoMat);

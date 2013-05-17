@@ -130,7 +130,7 @@ int CALLBACK WinMain(
                                             cosf(r + rs[i]) * (i * 2 % 50) * 5));
             }
             
-            r += (float)ukn::d_pi / 180.f;
+            r += (float)ukn::d_pi / 360.f;
         })
         .connectKey([&](ukn::Window* window, ukn::input::KeyEventArgs& e) {
             if(e.key == ukn::input::Escape)
@@ -299,7 +299,7 @@ int CALLBACK WinMain(
      
             camController = new ukn::FpsCameraController();
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
-            vp.camera->setViewParams(ukn::Vector3(0, 5, 0), ukn::Vector3(0, 0, 1));
+            vp.camera->setViewParams(ukn::Vector3(0, 10, 0), ukn::Vector3(0, 0, 1));
 
             camController->attachCamera(vp.camera);
 
@@ -334,37 +334,31 @@ int CALLBACK WinMain(
 
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
-            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
+            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip.ply");
             if(dragonModel) {
                 ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, ukn::SOA_Cullable | ukn::SOA_Moveable);
-                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(30, 30, 30));
+                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(20, 20, 20));
                 scene.addSceneObject(dragonObject);
             }
             
             ukn::SceneObjectPtr skyboxObject = ukn::MakeSharedPtr<ukn::SceneObject>(skybox, ukn::SOA_Overlay);
-            skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(100, 100, 100));
+            skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(300, 300, 300));
                 
             scene.addSceneObject(skyboxObject);
 
-     //       ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
-     //      scene.addSceneObject(terrianObject);
+           ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
+           scene.addSceneObject(terrianObject);
             
-            ukn::ModelPtr sponza = ukn::AssetManager::Instance().load<ukn::Model>(L"sponza/sponza.obj");
+        /*    ukn::ModelPtr sponza = ukn::AssetManager::Instance().load<ukn::Model>(L"sponza/sponza.obj");
             if(sponza) {
                 ukn::SceneObjectPtr sponzaObject = ukn::MakeSharedPtr<ukn::SceneObject>(sponza, ukn::SOA_Cullable | ukn::SOA_Moveable);
                 sponzaObject->setModelMatrix(ukn::Matrix4::ScaleMat(1, 1, 1));
                 scene.addSceneObject(sponzaObject);
-           }
+           }*/
       
             directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 0.5),
                                                                         ukn::float4(1, 1, 1, 1),
                                                                         1.0,
-                                                                        true,
-                                                                        1024);
-            scene.addLight(directionalLight);
-            directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(1, 0, 0.5),
-                                                                        ukn::float4(1, 1, 1, 1),
-                                                                        0.5,
                                                                         true,
                                                                         1024);
 

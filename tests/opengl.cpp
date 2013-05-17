@@ -9,11 +9,13 @@
 #include "mist/Profiler.h"
 
 #include "UKN/2DHelper.h"
+#include "UKN/CgHelper.h"
 
 #include <vector>
 #include <map>
 #include <numeric>
 
+#include "../Plugins/gl/GLPreq.h"
 #ifndef MIST_OS_WINDOWS
 
 #include "../Plugins/gl/GLGraphicFactory.h"
@@ -38,6 +40,9 @@ int main (int argc, const char * argv[])
         ukn::FontPtr font;
         ukn::CameraControllerPtr camController;
         ukn::TexturePtr texture;
+
+        ukn::RenderBufferPtr renderBuffer;
+        ukn::GraphicBufferPtr vtxBuffer;
         
 #ifndef MIST_OS_WINDOWS
         ukn::GraphicFactoryPtr factory;
@@ -53,7 +58,7 @@ int main (int argc, const char * argv[])
                 .sampleCount(1)
                 .showMouse(true)
                 .isFullScreen(false)
-                .graphicFactoryName(L"D3D11Plugin.dll")
+                .graphicFactoryName(L"GLPlugin.dll")
                 )
         .connectUpdate([&](ukn::Window* ) {
           
@@ -68,21 +73,12 @@ int main (int argc, const char * argv[])
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             
             gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Blue, 1.f, 0);
-            
+
             ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
-            
-            ukn::Ukn2DHelper& helper = ukn::Ukn2DHelper::Instance();
-            helper.setupMat();
-            helper.bindTexture(texture);
-            sb.drawQuad(helper.getEffect()->getTechnique(0), ukn::Vector2(0, 0), ukn::Vector2(3, 3));
-            
-            glBegin(GL_TRIANGLES);
-            glVertex3f(1, 1, 1);
-            glVertex3f(0, 0, 0);
-            glVertex3f(1, 0, 1);
-            glEnd();
-            
-            glFlush();
+            sb.begin(ukn::SBB_None, ukn::SBS_None, ukn::Matrix4());
+            sb.draw(texture, ukn::Vector2(0, 0));
+            sb.end();
+
         })
         .connectInit([&](ukn::Window*) {
             ukn::GraphicFactory& gf = ukn::Context::Instance().getGraphicFactory();
@@ -94,8 +90,15 @@ int main (int argc, const char * argv[])
             camController->attachCamera(vp.camera);
             
             font = ukn::Font::Create(L"Arial.ttf", 20);
-            texture = ukn::AssetManager::Instance().load<ukn::Texture>(L"angel.png");
-            
+            texture = ukn::AssetManager::Instance().load<ukn::Texture>(L"test.jpg");
+
+            vtxBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::Access::WriteOnly,
+                                              ukn::GraphicBuffer::Usage::Dynamic,
+                                              6,
+                                              0,
+                                              ukn::Vertex2D::Format());
+            renderBuffer = gf.createRenderBuffer();
+            renderBuffer->bindVertexStream(vtxBuffer, ukn::Vertex2D::Format());
         })
         .run();
         

@@ -841,7 +841,7 @@ namespace ukn {
     struct MD5Loader {
         
         ModelLoader::ModelDataPtr load(const mist::ResourcePtr& file) {
-            
+            return ModelLoader::ModelDataPtr();
         }
     };
     

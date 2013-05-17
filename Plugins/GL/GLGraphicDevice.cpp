@@ -153,7 +153,7 @@ namespace ukn {
             // though backward compatible and avoid generic attrib locations in shaders
             // but also lack of some vertex usage support
 
-#if UKN_OPENGL_VERSION_MAJOR <= 2
+#if 1
             switch(it->usage) {
                 case VU_Position: {
                     glEnableClientState(GL_VERTEX_ARRAY);
@@ -338,7 +338,7 @@ namespace ukn {
                 indexBuffer->deactivate();
             }
             for(auto attr: attributes) {
-#if UKN_OPENGL_VERSION_MAJOR <= 2
+#if 1
                 glDisableClientState(attr);
 #else
                 // ogl 3.x+

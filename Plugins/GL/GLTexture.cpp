@@ -48,7 +48,8 @@ namespace ukn {
 
                 int w, h, channels;
 
-                mTextureId = (uintPtr)SOIL_load_OGL_texture_and_info_from_memory((const unsigned char* const)memData->data(),
+                mTextureId = (uintPtr)SOIL_load_OGL_texture_and_info_from_memory(
+                                                                   (const unsigned char* const)memData->data(),
                                                                    (int)memData->size(),
                                                                    SOIL_LOAD_AUTO,
                                                                    SOIL_CREATE_NEW_ID,
@@ -73,7 +74,7 @@ namespace ukn {
                     mHeight = h;
                     mNumMipmaps = 1;
                     // temp
-                    if(channels == 4) {
+                    if(channels == 4 || channels == 3) {
                         mFormat = EF_RGBA8;
                     }
 

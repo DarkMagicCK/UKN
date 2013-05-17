@@ -15,8 +15,8 @@
 namespace ukn {
 
     SSAO::SSAO():
-    mSampleRadius(0.07f),
-    mDistanceScale(20.0f) {
+    mSampleRadius(0.03f),
+    mDistanceScale(10.0f) {
 
     }
 

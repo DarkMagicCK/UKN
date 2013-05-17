@@ -120,6 +120,7 @@
     <ClCompile Include="..\..\Plugins\GL\CgShader.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLBlendStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLDepthStencilStateObject.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLError.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />

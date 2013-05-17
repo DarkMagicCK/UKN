@@ -28,6 +28,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "D3D11Plugin", "D3D10Plugin\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DirectXTex", "..\Plugins\D3D11\DirectXTex\DirectXTex_Desktop_2012.vcxproj", "{371B9FA9-4C90-4AC6-A123-ACED756D6C77}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OGLTest", "OGLTest\OGLTest.vcxproj", "{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -95,6 +97,15 @@ Global
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|Win32.Build.0 = Release|Win32
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x64.ActiveCfg = Release|x64
 		{371B9FA9-4C90-4AC6-A123-ACED756D6C77}.Release|x64.Build.0 = Release|x64
+		{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}.Debug|Win32.Build.0 = Debug|Win32
+		{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}.Debug|x64.ActiveCfg = Debug|Win32
+		{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}.Profile|Win32.ActiveCfg = Release|Win32
+		{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}.Profile|Win32.Build.0 = Release|Win32
+		{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}.Profile|x64.ActiveCfg = Release|Win32
+		{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}.Release|Win32.ActiveCfg = Release|Win32
+		{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}.Release|Win32.Build.0 = Release|Win32
+		{2ACA8256-6A33-423E-8A8E-1C6CCBBC0230}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

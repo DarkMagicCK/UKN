@@ -168,7 +168,7 @@ namespace ukn {
             case RS_SrcAlpha:
                 return GL_SRC_ALPHA;
             case RS_DstAlpha:
-                return GL_DST_COLOR;
+                return GL_DST_ALPHA;
                 
             default:
                 return type;

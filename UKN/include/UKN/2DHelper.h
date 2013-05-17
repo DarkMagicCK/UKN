@@ -8,10 +8,11 @@
 
 namespace ukn {
 
-    /* 2d rendering utility class
+    /* 
+       2d rendering utility class
        sets up a default 2d effect with Vertex2DFormat
-       */
-    class Ukn2DHelper: public mist::Singleton<Ukn2DHelper> {
+    */
+    class UKN_API Ukn2DHelper: public mist::Singleton<Ukn2DHelper> {
     protected:
         Ukn2DHelper();
         ~Ukn2DHelper();

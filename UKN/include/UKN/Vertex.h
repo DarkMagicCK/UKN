@@ -128,6 +128,14 @@ namespace ukn {
                                                         .to_vector();
             return static_format;
         }
+
+        static inline Vertex2D Make(const Vector2& uv, uint32 color, const Vector3& xyz) {
+            Vertex2D vtx;
+            vtx.uv = uv;
+            vtx.color = color;
+            vtx.xyz = xyz;
+            return vtx;
+        }
     };
 
     struct VertexUVNormal {
@@ -142,6 +150,14 @@ namespace ukn {
                                                         .add(VertexElement(VU_Normal, EF_Float3, 0))
                                                         .to_vector();
             return static_format;
+        }
+
+        static inline VertexUVNormal Make(const Vector2& uv, const Vector3& position, const Vector3& normal) {
+            VertexUVNormal vtx;
+            vtx.uv = uv;
+            vtx.position = position;
+            vtx.normal = normal;
+            return vtx;
         }
     };
 
@@ -161,6 +177,16 @@ namespace ukn {
                                                         .add(VertexElement(VU_Binormal, EF_Float3, 0))
                                                         .to_vector();
             return static_format;
+        }
+
+        static inline VertexTBN Make(const Vector2& uv, const Vector3& position, const Vector3& normal, const Vector3& tangent, const Vector3& binormal) {
+            VertexTBN vtx;
+            vtx.uv = uv;
+            vtx.position = position;
+            vtx.normal = normal;
+            vtx.tangent = tangent;
+            vtx.binormal = binormal;
+            return vtx;
         }
     };
     

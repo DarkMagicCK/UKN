@@ -257,8 +257,8 @@ namespace ukn {
                 const GraphicBufferPtr& instanceStream = buffer->getInstanceStream();
                 instanceStream->activate();
                 std::vector<int> appliedAttr = this->applyBuffer(buffer->getInstanceFormat(), 
-                                  buffer->getInstanceFormatSize(), 
-                                  1);
+                                                                 buffer->getInstanceFormatSize(), 
+                                                                 1);
                 attributes.insert(attributes.end(), appliedAttr.begin(), appliedAttr.end());
 
             }

@@ -113,6 +113,7 @@ namespace ukn {
 
         // direct draw
         void drawQuad(const EffectTechniquePtr& technique, const Vector2& upper, const Vector2& lower);
+        void drawTexture(const TexturePtr& texture, const Vector2& upper, const Vector2& lower);
         
         Matrix4& getTransformMatrix();
         const Matrix4& getTransformMatrix() const;

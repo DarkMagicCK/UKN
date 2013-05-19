@@ -176,6 +176,7 @@ namespace ukn {
             if(_check_error(mContext) && param) {
                 cgGLSetTextureParameter(param, (GLuint)tex->getTextureId());
                 cgSetSamplerState(param);
+                cgGLEnableTextureParameter(param);
                 return _check_error(mContext);
             }
         }

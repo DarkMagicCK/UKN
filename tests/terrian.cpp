@@ -1,38 +1,25 @@
-#include "UKN/UKN.h"
+#include "test.h"
 
-#include "mist/SysUtil.h"
-#include "mist/TimeUtil.h"
-#include "mist/RandomUtil.h"
-#include "mist/Convert.h"
-#include "mist/TimeUtil.h"
-#include "mist/Query.h"
-#include "mist/Profiler.h"
+#ifndef MIST_OS_WINDOWS 
 
-#include <vector>
-#include <map>
-#include <numeric>
+#include "../Plugins/gl/GLGraphicFactory.h"    
 
-#ifndef MIST_OS_WINDOWS
+int main (int argc, const char * argv[]) { 
 
-#include "../Plugins/gl/GLGraphicFactory.h"
+#else 
 
-int main (int argc, const char * argv[])
-{
-#else
-#pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
-    
-#pragma comment(lib, "mist.lib")
-#pragma comment(lib, "ukn_dll.lib")
-    
-    int CALLBACK WinMain(
-                         __in  HINSTANCE hInstance,
-                         __in  HINSTANCE hPrevInstance,
-                         __in  LPSTR lpCmdLine,
-                         __in  int nCmdSho) {
+#pragma comment(linker, "/NODEFAULTLIB:libcmt.lib") 
+
+#pragma comment(lib, "mist.lib") 
+#pragma comment(lib, "ukn_dll.lib") 
+
+int CALLBACK WinMain( 
+__in  HINSTANCE hInstance, 
+__in  HINSTANCE hPrevInstance, 
+__in  LPSTR lpCmdLine, 
+__in  int nCmdSho) { 
 #endif
-        
-        
-        
+
         ukn::Matrix4 worldMat;
         ukn::CameraController* camController;
         ukn::FontPtr font;
@@ -163,9 +150,9 @@ int main (int argc, const char * argv[])
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
             
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
-           /*
+           
             {
-                scene.getLightManager()->makeShadowMaps(scene);
+         //       scene.getLightManager()->makeShadowMaps(scene);
             }
             {
                 deferredRenderer->renderScene(scene);
@@ -221,8 +208,8 @@ int main (int argc, const char * argv[])
                 ukn::SpriteBatch::DefaultObject().drawQuad(displayDepthTechnique,
                                                            ukn::Vector2(-1, 1),
                                                            ukn::Vector2(1, -1));
-                
-            }*/
+             
+            }
             if(font) {
                 mist::ProfileData shadowMapProf = mist::Profiler::Instance().get(L"SHADOW_MAP");
                 mist::ProfileData gbufferProf = mist::Profiler::Instance().get(L"DEFERRED_GBUFFER");

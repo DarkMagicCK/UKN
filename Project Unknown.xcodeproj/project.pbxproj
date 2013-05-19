@@ -50,6 +50,7 @@
 		8832D14A1488CFDC00D08C15 /* GLFrameBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1491488CFDB00D08C15 /* GLFrameBuffer.cpp */; };
 		8832D1531489A47E00D08C15 /* GLRenderView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8832D1521489A47E00D08C15 /* GLRenderView.cpp */; };
 		8833AA0C16C939AB0051E378 /* Color.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8833AA0B16C939AB0051E378 /* Color.cpp */; };
+		88486CC017488E1700307310 /* opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88486CBF17488E1700307310 /* opengl.cpp */; };
 		884CE3FB148F843A00F58E2E /* GLGraphicBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE3FA148F843800F58E2E /* GLGraphicBuffer.cpp */; };
 		884CE4011490905900F58E2E /* GLSpriteBatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 884CE4001490905600F58E2E /* GLSpriteBatch.cpp */; };
 		8854499B1491E253006B8B60 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 885449981491E253006B8B60 /* libfreetype.a */; };
@@ -64,7 +65,6 @@
 		88871FE4148CB1800026B2B8 /* image_helper.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FD9148CB1800026B2B8 /* image_helper.c */; };
 		88871FE5148CB1800026B2B8 /* SOIL.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FDB148CB1800026B2B8 /* SOIL.c */; };
 		88871FE6148CB1800026B2B8 /* stb_image_aug.c in Sources */ = {isa = PBXBuildFile; fileRef = 88871FDD148CB1800026B2B8 /* stb_image_aug.c */; };
-		88CA27AE1741D912007A7371 /* opengl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CA27AC1741D910007A7371 /* opengl.cpp */; };
 		88CB67AD17190F090025249F /* BitmapFont.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB673217190F090025249F /* BitmapFont.cpp */; };
 		88CB67AE17190F090025249F /* SequencialAnimation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB677417190F090025249F /* SequencialAnimation.cpp */; };
 		88CB67AF17190F090025249F /* Skeletal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88CB677517190F090025249F /* Skeletal.cpp */; };
@@ -271,6 +271,8 @@
 		8832D1521489A47E00D08C15 /* GLRenderView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLRenderView.cpp; sourceTree = "<group>"; };
 		8832D1541489B53100D08C15 /* GLPreq.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLPreq.h; sourceTree = "<group>"; };
 		8833AA0B16C939AB0051E378 /* Color.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Color.cpp; sourceTree = "<group>"; };
+		88486CBC17488BD900307310 /* test.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test.h; path = tests/test.h; sourceTree = SOURCE_ROOT; };
+		88486CBF17488E1700307310 /* opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl.cpp; path = tests/opengl.cpp; sourceTree = SOURCE_ROOT; };
 		884CE3F8148F82E600F58E2E /* GLRenderBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLRenderBuffer.h; sourceTree = "<group>"; };
 		884CE3F9148F838100F58E2E /* GLGraphicBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLGraphicBuffer.h; sourceTree = "<group>"; };
 		884CE3FA148F843800F58E2E /* GLGraphicBuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GLGraphicBuffer.cpp; sourceTree = "<group>"; };
@@ -386,8 +388,6 @@
 		88871FDE148CB1800026B2B8 /* stb_image_aug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image_aug.h; sourceTree = "<group>"; };
 		88871FDF148CB1800026B2B8 /* stbi_DDS_aug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stbi_DDS_aug.h; sourceTree = "<group>"; };
 		88871FE0148CB1800026B2B8 /* stbi_DDS_aug_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stbi_DDS_aug_c.h; sourceTree = "<group>"; };
-		88CA27AC1741D910007A7371 /* opengl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = opengl.cpp; path = tests/opengl.cpp; sourceTree = SOURCE_ROOT; };
-		88CA27AD1741D911007A7371 /* opengl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = opengl.h; path = tests/opengl.h; sourceTree = SOURCE_ROOT; };
 		88CB672C17190F090025249F /* 2DHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = 2DHelper.h; sourceTree = "<group>"; };
 		88CB672D17190F090025249F /* App.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		88CB672E17190F090025249F /* Asset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Asset.h; sourceTree = "<group>"; };
@@ -1131,9 +1131,9 @@
 				88CB677217190F090025249F /* src */,
 				88AAC170148689ED007A80A4 /* External */,
 				88E3C3C7147F2BAC00E8754D /* Plugins */,
-				88CA27AC1741D910007A7371 /* opengl.cpp */,
-				88CA27AD1741D911007A7371 /* opengl.h */,
 				88E1938D15EBD13E0098FA28 /* Arial.ttf */,
+				88486CBF17488E1700307310 /* opengl.cpp */,
+				88486CBC17488BD900307310 /* test.h */,
 			);
 			path = "Project Unknown";
 			sourceTree = "<group>";
@@ -1580,7 +1580,7 @@
 				88CB67E017190F090025249F /* Window.cpp in Sources */,
 				88CB67E117190F090025249F /* TMXTiledMap.cpp in Sources */,
 				88CB67E417192E5A0025249F /* GLError.cpp in Sources */,
-				88CA27AE1741D912007A7371 /* opengl.cpp in Sources */,
+				88486CC017488E1700307310 /* opengl.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

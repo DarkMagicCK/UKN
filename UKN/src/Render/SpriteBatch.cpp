@@ -18,6 +18,7 @@
 #include "UKN/BlendStateObject.h"
 #include "UKN/DepthStencilStateObject.h"
 #include "UKN/Shader.h"
+#include "UKN/CgHelper.h"
 
 #include "mist/Singleton.h"
 #include "mist/Profiler.h"
@@ -530,6 +531,42 @@ namespace ukn {
 
             mRenderBuffer->setVertexCount(6);
             Context::Instance().getGraphicFactory().getGraphicDevice().renderBuffer(technique, mRenderBuffer);
+        } else {
+            log_error(L"SpriteBatch::drawQuad: error mapping data");
+        }
+    }
+    
+    void SpriteBatch::drawTexture(const TexturePtr& texture, const Vector2& upper, const Vector2& lower) {
+        Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
+        
+        if(vertices) {
+            Vertex2D vertex;
+            vertex.xyz.set(lower.x(), lower.y(), 0);
+            vertex.uv.set(1, 1);
+            *vertices++ = vertex;
+            
+            vertex.xyz.x() = upper.x();
+            vertex.uv.set(0, 1);
+            *vertices++ = vertex;
+            
+            vertex.xyz.y() = upper.y();
+            vertex.uv.set(0, 0);
+            *vertices++ = vertex;
+            *vertices++ = vertex;
+            
+            vertex.xyz.x() = lower.x();
+            vertex.uv.set(1, 0);
+            *vertices++ = vertex;
+            
+            vertex.xyz.y() = lower.y();
+            vertex.uv.set(1, 1);
+            *vertices++ = vertex;
+            
+            mVertexBuffer->unmap();
+            
+            mRenderBuffer->setVertexCount(6);
+            GetCgEffet2D()->getTechnique(0)->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
+            Context::Instance().getGraphicFactory().getGraphicDevice().renderBuffer(GetCgEffet2D()->getTechnique(0), mRenderBuffer);
         } else {
             log_error(L"SpriteBatch::drawQuad: error mapping data");
         }

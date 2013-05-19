@@ -106,7 +106,7 @@ namespace ukn {
             uint8* texData;
             if(initialData == 0) {
                 texData = mist_malloc_t(uint8, w*h*GetElementSize(format));
-                memset(texData, 0xFF, w*h*GetElementSize(format));
+                memset(texData, 0x0, w*h*GetElementSize(format));
             } else {
                 texData = const_cast<uint8*>(initialData);
             }
@@ -122,14 +122,14 @@ namespace ukn {
             }
             else {
                 CHECK_GL_CALL(glTexImage2D(GL_TEXTURE_2D,
-                             0,
-                             element_format_to_gl_format(format),
-                             w,
-                             h,
-                             0,
-                             element_format_to_texdata_format(format),
-                             element_format_to_gl_element_type(format),
-                             texData));
+                              0,
+                              element_format_to_gl_format(format),
+                              w,
+                              h,
+                              0,
+                              element_format_to_texdata_format(format),
+                              element_format_to_gl_element_type(format),
+                              texData));
             }
             if(initialData == 0)
                 mist_free(texData);

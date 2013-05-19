@@ -70,7 +70,6 @@ namespace ukn {
                                                                               in float4 color: COLOR) {\
                                                 VertexOutputType output;\
                                                 output.position = float4(position, 1);\
-                                                output.texCoord = texCoord;\
                                                 output.color = color;\
                                                 return output;\
                                                }\0";

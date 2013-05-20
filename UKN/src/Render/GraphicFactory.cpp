@@ -62,6 +62,14 @@ namespace ukn {
             return RenderView::NullObject();
         }
         
+        RenderViewPtr createDepthStencilView(uint32 width,
+                                             uint32 height,
+                                             ElementFormat format,
+                                             uint32 sampleCount,
+                                             uint32 sampleQuality) const override {
+            return RenderView::NullObject();
+        }
+
         FrameBufferPtr createFrameBuffer() const {
             return FrameBuffer::NullObject();
         }

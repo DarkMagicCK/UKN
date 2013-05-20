@@ -66,7 +66,7 @@ namespace ukn {
         }
 		return GL_UNSIGNED_BYTE;
     }
-    
+
     inline GLenum element_format_to_gl_element_type(ElementFormat format) {
         switch(format) {
             case EF_RGBA8: return GL_UNSIGNED_INT_8_8_8_8;
@@ -116,6 +116,12 @@ namespace ukn {
                 return GL_UNSIGNED_BYTE;
         }
 		return GL_UNSIGNED_BYTE;
+    }
+
+    inline bool element_format_contains_stencil(ElementFormat format) {
+        if(format == EF_D24S8)
+            return true;
+        return false;
     }
     
 #if !defined(UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE)

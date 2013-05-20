@@ -356,7 +356,6 @@ namespace ukn {
             glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 #endif
             mCurrGLFrameBuffer = fbo;
-            check_framebuffer_status();
         }
     }
 
@@ -369,7 +368,10 @@ namespace ukn {
     }
 
     void GLGraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
-
+        glViewport(frameBuffer->getViewport().left,
+                   frameBuffer->getViewport().top,
+                   frameBuffer->getViewport().width,
+                   frameBuffer->getViewport().height);
     }
 
     void GLGraphicDevice::beginRendering() {
@@ -597,7 +599,7 @@ namespace ukn {
         else
             glDisable(GL_STENCIL_TEST);
         glStencilMask(desc.stencil_write_mask);
-
+        /*
         CHECK_GL_CALL(glStencilOpSeparate(GL_FRONT,
                                           render_state_param_to_gl_state_param(desc.front.stencil_fail_op),
                                           render_state_param_to_gl_state_param(desc.front.depth_fail_op),
@@ -614,7 +616,7 @@ namespace ukn {
                                             render_state_param_to_gl_state_param(desc.back.func),
                                             desc.stencil_ref,
                                             0xFFFFFFFF));
-
+                                            */
     }
 
 } // namespace ukn

@@ -37,15 +37,15 @@ namespace ukn {
         GLGraphicFactory();
         virtual ~GLGraphicFactory();
         
-        GraphicDevice& getGraphicDevice() const;
+        GraphicDevice& getGraphicDevice() const override;
         
-        SpriteBatchPtr createSpriteBatch() const;
+        SpriteBatchPtr createSpriteBatch() const override;
         
         GraphicBufferPtr createVertexBuffer(GraphicBuffer::Access, 
                                             GraphicBuffer::Usage, 
                                             uint32 count, 
                                             const void* initialData, 
-                                            const vertex_elements_type& format) const;
+                                            const vertex_elements_type& format) const override;
         
         GraphicBufferPtr createIndexBuffer(GraphicBuffer::Access, 
                                            GraphicBuffer::Usage, 
@@ -53,27 +53,33 @@ namespace ukn {
                                            const void* initialData) const;
         
         
-        RenderBufferPtr createRenderBuffer() const;
+        RenderBufferPtr createRenderBuffer() const override;
         
-        RenderViewPtr createRenderView(const TexturePtr& texture) const;
-        RenderViewPtr createDepthStencilView(const TexturePtr& texture) const;
+        RenderViewPtr createRenderView(const TexturePtr& texture) const override;
+        RenderViewPtr createDepthStencilView(const TexturePtr& texture) const override;
         
-        FrameBufferPtr createFrameBuffer() const;
+        RenderViewPtr createDepthStencilView(uint32 width,
+                                             uint32 height,
+                                             ElementFormat format,
+                                             uint32 sampleCount,
+                                             uint32 sampleQuality) const override;
+        
+        FrameBufferPtr createFrameBuffer() const override;
         
         TexturePtr create2DTexture(uint32 width, 
                                    uint32 height, 
                                    uint32 numMipmaps, 
                                    ElementFormat format, 
                                    const uint8* initialData,
-                                   uint32 bindFlag) const;
+                                   uint32 bindFlag) const override;
+
+        TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const override;
+        EffectPtr createEffect() const override;
         
-        TexturePtr load2DTexture(const ResourcePtr& rsrc, bool generateMipmaps=false) const;
-        EffectPtr createEffect() const;
-        
-        BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const;
-        SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const;
-        RasterizerStatePtr createRasterizerStateObject(const RasterizerStateDesc& desc) const;
-        DepthStencilStatePtr createDepthStencilStateObject(const DepthStencilStateDesc& desc) const;
+        BlendStatePtr createBlendStateObject(const BlendStateDesc& desc) const override;
+        SamplerStatePtr createSamplerStateObject(const SamplerStateDesc& desc) const override;
+        RasterizerStatePtr createRasterizerStateObject(const RasterizerStateDesc& desc) const override;
+        DepthStencilStatePtr createDepthStencilStateObject(const DepthStencilStateDesc& desc) const override;
 
     private:
         GraphicDevicePtr mGraphicDevice;
@@ -137,7 +143,17 @@ namespace ukn {
     }
     
     RenderViewPtr GLGraphicFactory::createDepthStencilView(const TexturePtr& texture) const {
-        return MakeSharedPtr<GLTexture2DDepthStencilView>(texture);
+        if(texture->type() == TT_Texture2D)
+            return MakeSharedPtr<GLDepthStencilView>(texture);
+        return RenderViewPtr();
+    }
+
+    RenderViewPtr GLGraphicFactory::createDepthStencilView(uint32 width,
+                                                           uint32 height,
+                                                           ElementFormat format,
+                                                           uint32 sampleCount,
+                                                           uint32 sampleQuality) const {
+        return MakeSharedPtr<GLDepthStencilView>(width, height, format, sampleCount, sampleQuality);
     }
     
     FrameBufferPtr GLGraphicFactory::createFrameBuffer() const {

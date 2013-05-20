@@ -46,6 +46,11 @@ namespace ukn {
         // FBOs
         virtual RenderViewPtr createRenderView(const TexturePtr& texture) const = 0;
         virtual RenderViewPtr createDepthStencilView(const TexturePtr& texture) const = 0;
+        virtual RenderViewPtr createDepthStencilView(uint32 width,
+                                                     uint32 height,
+                                                     ElementFormat format,
+                                                     uint32 sampleCount,
+                                                     uint32 sampleQuality) const = 0;
         
         // FrameBuffer
         virtual FrameBufferPtr createFrameBuffer() const = 0;

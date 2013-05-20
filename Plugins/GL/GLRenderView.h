@@ -87,10 +87,10 @@ namespace ukn {
     
     typedef SharedPtr<GLTexture2DRenderView> GLTexture2DRenderViewPtr;
     
-    class GLTexture2DDepthStencilView: Uncopyable, public GLRenderView {
+    class GLDepthStencilView: Uncopyable, public GLRenderView {
     public:
-        GLTexture2DDepthStencilView(uint32 width, uint32 height, ElementFormat ef);
-        GLTexture2DDepthStencilView(const TexturePtr& texture);
+        GLDepthStencilView(uint32 width, uint32 height, ElementFormat ef, uint32 sampleCount, uint32 sampleQuality);
+        GLDepthStencilView(const TexturePtr& texture, int32 level = 0);
         
         void clearDepth(float depth);
         void clearStencil(int32 stencil);
@@ -101,9 +101,13 @@ namespace ukn {
         
     private:
         TexturePtr mTexture;
+        int32 mLevel;
+        uint32 mSampleCount;
+        uint32 mSampleQuaility;
+        GLuint mRBO;
     };
     
-    typedef SharedPtr<GLTexture2DDepthStencilView> GLTexture2DDepthStencilViewPtr;
+    typedef SharedPtr<GLDepthStencilView> GLDepthStencilViewPtr;
     
 } // namespace ukn
 

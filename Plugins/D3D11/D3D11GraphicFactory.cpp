@@ -45,6 +45,11 @@ namespace ukn {
 
         RenderViewPtr createRenderView(const TexturePtr& texture) const;
         RenderViewPtr createDepthStencilView(const TexturePtr& texture) const;
+        RenderViewPtr createDepthStencilView(uint32 width,
+                                             uint32 height,
+                                             ElementFormat format,
+                                             uint32 sampleCount,
+                                             uint32 sampleQuality) const override;
 
         FrameBufferPtr createFrameBuffer() const;
 
@@ -124,6 +129,14 @@ namespace ukn {
 
     RenderViewPtr D3D11GraphicFactory::createDepthStencilView(const TexturePtr& texture) const {
         return MakeSharedPtr<D3D11DepthStencilRenderView>(texture, (D3D11GraphicDevice*)mGraphicDevice.get());
+    }
+
+    RenderViewPtr D3D11GraphicFactory::createDepthStencilView(uint32 width,
+                                                              uint32 height,
+                                                              ElementFormat format,
+                                                              uint32 sampleCount,
+                                                              uint32 sampleQuality) const {
+        return MakeSharedPtr<D3D11DepthStencilRenderView>(width, height, format, sampleCount, sampleQuality, (D3D11GraphicDevice*)mGraphicDevice.get());
     }
 
     FrameBufferPtr D3D11GraphicFactory::createFrameBuffer() const {

@@ -135,6 +135,7 @@ namespace ukn {
     }
 
     D3D11DepthStencilRenderView::~D3D11DepthStencilRenderView() {
+
     }
 
     void D3D11DepthStencilRenderView::createDSView(uint32 bindFlag, ElementFormat ef, int32 sampleCount) {

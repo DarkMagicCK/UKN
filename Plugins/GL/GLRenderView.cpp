@@ -11,6 +11,7 @@
 #include "GLGraphicDevice.h"
 #include "GLFrameBuffer.h"
 #include "GLError.h"
+#include "GLConvert.h"
 
 #include "mist/Common.h"
 #include "mist/Stream.h"
@@ -201,73 +202,133 @@ namespace ukn {
 
     }
     
-    GLTexture2DDepthStencilView::GLTexture2DDepthStencilView(uint32 width, uint32 height, ElementFormat ef) {
+    GLDepthStencilView::GLDepthStencilView(uint32 width, uint32 height, ElementFormat ef, uint32 sampleCount, uint32 sampleQuality):
+    mLevel(-1),
+    mRBO(0),
+    mSampleCount(sampleCount),
+    mSampleQuaility(sampleQuality) {
         
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
-        mTexture = gf.create2DTexture(width,
-                                      height,
-                                      0,
-                                      ef,
-                                      0,
-                                      TB_DepthStencil);
-        if(!mTexture)
-            log_error(L"GLTexture2DDepthStencilView: error creating depth stencil texture");
-        else {
-            GLTexture2D* glTexture = (GLTexture2D*)mTexture.get();
-            mTex = (GLuint)glTexture->getTextureId();
-            mWidth = glTexture->width(0);
-            mHeight = glTexture->height(0);
-            mElementFormat = glTexture->format();
+     
+        mWidth = width;
+        mHeight = height;
+        mElementFormat = ef;
+
+        CHECK_GL_CALL(glGenRenderbuffers(1, &mRBO));
+        if(mRBO) {
+            glBindRenderbuffer(GL_RENDERBUFFER, mRBO);
+
+            if(mSampleCount <= 1 || !glRenderbufferStorageMultisampleEXT)
+                glRenderbufferStorage(GL_RENDERBUFFER, element_format_to_gl_format(ef), width, height);
+            else
+                glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, mSampleCount, element_format_to_gl_format(ef), width, height);
         }
     }
     
-    GLTexture2DDepthStencilView::GLTexture2DDepthStencilView(const TexturePtr& texture):
-    mTexture(texture) {
+    GLDepthStencilView::GLDepthStencilView(const TexturePtr& texture, int32 level):
+    mTexture(texture),
+    mLevel(level),
+    mRBO(0),
+    mSampleCount(1),
+    mSampleQuaility(1) {
         GLTexture2D* glTexture = (GLTexture2D*)mTexture.get();
         mTex = (GLuint)glTexture->getTextureId();
         mWidth = glTexture->width(0);
         mHeight = glTexture->height(0);
         mElementFormat = glTexture->format();
+
+        CHECK_GL_CALL(glGenRenderbuffers(1, &mRBO));
+        if(mRBO) {
+            CHECK_GL_CALL(glBindRenderbuffer(GL_RENDERBUFFER, mRBO));
+
+            if(mSampleCount <= 1 || !glRenderbufferStorageMultisampleEXT) {
+                CHECK_GL_CALL(glRenderbufferStorage(GL_RENDERBUFFER, element_format_to_gl_format(mElementFormat), mWidth, mHeight));
+            }
+            else {
+                CHECK_GL_CALL(glRenderbufferStorageMultisampleEXT(GL_RENDERBUFFER, mSampleCount, element_format_to_gl_format(mElementFormat), mWidth, mHeight));
+            }
+        }
     }
     
-    void GLTexture2DDepthStencilView::clearDepth(float depth) {
+    void GLDepthStencilView::clearDepth(float depth) {
         glClearDepth(depth);
     }
     
-    void GLTexture2DDepthStencilView::clearStencil(int32 stencil) {
+    void GLDepthStencilView::clearStencil(int32 stencil) {
         glClearStencil(stencil);
     }
     
-    void GLTexture2DDepthStencilView::clearDepthStencil(float depth, int32 stencil) {
+    void GLDepthStencilView::clearDepthStencil(float depth, int32 stencil) {
         glClearDepth(depth);
         glClearStencil(stencil);
     }
     
-    void GLTexture2DDepthStencilView::onAttached(FrameBuffer& fb, uint32 att) {
+    void GLDepthStencilView::onAttached(FrameBuffer& fb, uint32 att) {
         mFBO = checked_cast<GLFrameBuffer*>(&fb)->getGLFBO();
         
         GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
         
         gd.bindGLFrameBuffer(mFBO);
+
+        if(mLevel >= 0) {
+
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
-        CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, mTex, 0));
+            CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, mTex, mLevel));
+        
+            if(element_format_contains_stencil(mElementFormat)) 
+                CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_TEXTURE_2D, mTex, mLevel));
+
 #else
-        CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, mTex, 0));
+            CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, mTex, mLevel));
+
+            if(element_format_contains_stencil(mElementFormat)) 
+                CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT_EXT, GL_TEXTURE_2D, mTex, mLevel));
+
 #endif
+
+        }
+        if(mRBO) {
+            
+            CHECK_GL_CALL(glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, mRBO));
+
+            if(element_format_contains_stencil(mElementFormat)) 
+                CHECK_GL_CALL(glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, mRBO));
+
+        }
+        
         gd.bindGLFrameBuffer(0);
     }
     
-    void GLTexture2DDepthStencilView::onDetached(FrameBuffer& fb, uint32 att) {
+    void GLDepthStencilView::onDetached(FrameBuffer& fb, uint32 att) {
         mFBO = checked_cast<GLFrameBuffer*>(&fb)->getGLFBO();
         
         GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
         
         gd.bindGLFrameBuffer(mFBO);
+
+        if(mLevel >= 0) {
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
- //       CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
+            CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
+
+            if(element_format_contains_stencil(mElementFormat)) 
+                CHECK_GL_CALL(glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
+
 #else
-        CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
+            CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
+
+            if(element_format_contains_stencil(mElementFormat)) 
+                CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
 #endif
+        }
+        if(mRBO) {
+            
+            CHECK_GL_CALL(glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0));
+
+            if(element_format_contains_stencil(mElementFormat)) 
+                CHECK_GL_CALL(glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0));
+
+        }
+       
         gd.bindGLFrameBuffer(0);
         mFBO = 0;
     }

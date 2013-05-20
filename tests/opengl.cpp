@@ -16,22 +16,23 @@
 #include <numeric>
 
 #include "../Plugins/gl/GLPreq.h"
+
 #ifndef MIST_OS_WINDOWS
 
 #include "../Plugins/gl/GLGraphicFactory.h"
 
 #include "../Plugins/gl/GLPreq.h"
 
-int main (int argc, const char * argv[])
-{
+int main (int argc, const char * argv[]) {
+
 #else
+
 #pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
     
 #pragma comment(lib, "mist.lib")
 #pragma comment(lib, "ukn_dll.lib")
     
-    int CALLBACK WinMain(
-                         __in  HINSTANCE hInstance,
+    int CALLBACK WinMain(__in  HINSTANCE hInstance,
                          __in  HINSTANCE hPrevInstance,
                          __in  LPSTR lpCmdLine,
                          __in  int nCmdSho) {
@@ -76,9 +77,10 @@ int main (int argc, const char * argv[])
         })
         .connectRender([&](ukn::Window* wnd) {
             ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
-            
-            crt->attachToRender();
             gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 1.f, 0);
+
+            crt->attachToRender();
+            gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Blue, 1.f, 0);
             
             ukn::Vertex2D* vtx = (ukn::Vertex2D*)vtxBuffer->map();
             if(vtx) {
@@ -97,10 +99,8 @@ int main (int argc, const char * argv[])
             gd.renderBuffer(ukn::GetCgEffetPass()->getTechnique(0), renderBuffer);
             crt->detachFromRender();
             
-            gd.clear(ukn::CM_Color | ukn::CM_Depth, ukn::color::Black, 1.f, 0);
-            
             ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
-            sb.begin();
+            sb.begin(ukn::SBB_Additive, ukn::SBS_None, ukn::Matrix4());
             sb.draw(rt->getTexture(), ukn::Vector2(0, 0));
             sb.end();
             
@@ -121,7 +121,7 @@ int main (int argc, const char * argv[])
             camController->attachCamera(vp.camera);
             
             font = ukn::Font::Create(L"Arial.ttf", 20);
-            texture = ukn::AssetManager::Instance().load<ukn::Texture>(L"angel.png");
+            texture = ukn::AssetManager::Instance().load<ukn::Texture>(L"test.jpg");
 
             vtxBuffer = gf.createVertexBuffer(ukn::GraphicBuffer::Access::WriteOnly,
                                               ukn::GraphicBuffer::Usage::Dynamic,
@@ -134,6 +134,7 @@ int main (int argc, const char * argv[])
             crt = ukn::MakeSharedPtr<ukn::CompositeRenderTarget>();
             rt = ukn::MakeSharedPtr<ukn::RenderTarget>(wnd->width(),
                                                        wnd->height(),
+                                                       0,
                                                        ukn::EF_RGBA8);
             crt->attach(ukn::ATT_Color0,
                         rt);

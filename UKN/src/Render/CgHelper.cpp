@@ -41,21 +41,24 @@ namespace ukn {
     }
 
     EffectPtr GetCgEffet2D() {
-        static EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
-        EffectTechniquePtr technique = effect->appendTechnique();
-        EffectPassPtr pass0 = technique->appendPass();
-        pass0->setFragmentShader(effect->createShader(
-            ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_2d_frag_program, 
-                                                                 strlen(_2d_frag_program)), 
-                                                                 L""),
-                                           ukn::ShaderDesc(ST_FragmentShader,
-                                           "FragmentProgram")));
-        pass0->setVertexShader(effect->createShader(
-            ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_2d_vert_program, 
-                                                                 strlen(_2d_vert_program)), 
-                                                                 L""),
-                                           ukn::ShaderDesc(ST_VertexShader,
-                                           "VertexProgram")));
+        static EffectPtr effect;
+        if(!effect) {
+            effect = ukn::Context::Instance().getGraphicFactory().createEffect();
+            EffectTechniquePtr technique = effect->appendTechnique();
+            EffectPassPtr pass0 = technique->appendPass();
+            pass0->setFragmentShader(effect->createShader(
+                ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_2d_frag_program, 
+                                                                                strlen(_2d_frag_program)), 
+                                                                                L""),
+                                                ukn::ShaderDesc(ST_FragmentShader,
+                                                "FragmentProgram")));
+            pass0->setVertexShader(effect->createShader(
+                ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_2d_vert_program, 
+                                                                                strlen(_2d_vert_program)), 
+                                                                                L""),
+                                                ukn::ShaderDesc(ST_VertexShader,
+                                                "VertexProgram")));
+        }
         return effect;
     }
 
@@ -84,21 +87,24 @@ namespace ukn {
     }
 
     EffectPtr GetCgEffetPass() {
-        static EffectPtr effect = ukn::Context::Instance().getGraphicFactory().createEffect();
-        EffectTechniquePtr technique = effect->appendTechnique();
-        EffectPassPtr pass0 = technique->appendPass();
-        pass0->setFragmentShader(effect->createShader(
-            ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_pass_frag_program, 
-                                                                 strlen(_pass_frag_program)), 
-                                                                 L""),
-                                           ukn::ShaderDesc(ST_FragmentShader,
-                                           "FragmentProgram")));
-        pass0->setVertexShader(effect->createShader(
-            ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_pass_vert_program, 
-                                                                 strlen(_pass_vert_program)), 
-                                                                 L""),
-                                           ukn::ShaderDesc(ST_VertexShader,
-                                           "VertexProgram")));
+        static EffectPtr effect;
+        if(!effect) {
+            effect = ukn::Context::Instance().getGraphicFactory().createEffect();
+            EffectTechniquePtr technique = effect->appendTechnique();
+            EffectPassPtr pass0 = technique->appendPass();
+            pass0->setFragmentShader(effect->createShader(
+                ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_pass_frag_program, 
+                                                                                strlen(_pass_frag_program)), 
+                                                                                L""),
+                                                ukn::ShaderDesc(ST_FragmentShader,
+                                                "FragmentProgram")));
+          pass0->setVertexShader(effect->createShader(
+                ukn::Resource::MakeResourcePtr(MakeSharedPtr<ukn::MemoryStream>((const uint8*)_pass_vert_program, 
+                                                                                strlen(_pass_vert_program)), 
+                                                                                L""),
+                                                ukn::ShaderDesc(ST_VertexShader,
+                                                "VertexProgram")));
+        }
         return effect;
     }
 

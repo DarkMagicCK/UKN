@@ -91,6 +91,7 @@ namespace ukn {
         }
         if(flags & CM_Depth) {
             glClearDepth(depth);
+            glDepthMask(GL_TRUE);
             
             glflags |= GL_DEPTH_BUFFER_BIT;
         }
@@ -100,24 +101,28 @@ namespace ukn {
             glflags |= GL_STENCIL_BUFFER_BIT;
         }
         
-        glClear(glflags);
+        CHECK_GL_CALL(glClear(glflags));
+
+        if(flags & CM_Depth)
+            glDepthMask(GL_FALSE);
     }
     
     void GLFrameBuffer::onBind() {
         GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
         
         gd.bindGLFrameBuffer(mFBO);
-        
         if(mFBO != 0) {
-            std::vector<GLuint> buffers;
-            for(const RenderViewPtr& rv: this->mClearViews) {
-                GLRenderView* glrv = checked_cast<GLRenderView*>(rv.get());
-                if(glrv) {
-                    GLuint index = glrv->getGLIndex();
-                    buffers.push_back(index + GL_COLOR_ATTACHMENT0);
-                }
+            check_framebuffer_status();
+
+            std::vector<GLenum> buffers(mClearViews.size());
+            for(size_t i=0; i<mClearViews.size(); ++i) {
+                buffers[i] = static_cast<GLenum>(i + GL_COLOR_ATTACHMENT0_EXT);
             }
             CHECK_GL_CALL(glDrawBuffers((GLsizei)buffers.size(), &buffers[0]));
+
+        } else {
+            GLenum targets[] = { GL_BACK_LEFT };
+            glDrawBuffers(1, &targets[0]);
         }
     }
     

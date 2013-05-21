@@ -287,7 +287,7 @@ namespace ukn {
 #endif
 
         }
-        if(mRBO) {
+        else if(mRBO) {
             
             CHECK_GL_CALL(glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, mRBO));
 
@@ -320,7 +320,7 @@ namespace ukn {
                 CHECK_GL_CALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT_EXT, GL_TEXTURE_2D, 0, 0));
 #endif
         }
-        if(mRBO) {
+        else if(mRBO) {
             
             CHECK_GL_CALL(glFramebufferRenderbufferEXT(GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0));
 

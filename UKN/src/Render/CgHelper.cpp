@@ -40,7 +40,7 @@ namespace ukn {
 
     }
 
-    EffectPtr GetCgEffet2D() {
+    EffectPtr GetCgEffect2D() {
         static EffectPtr effect;
         if(!effect) {
             effect = ukn::Context::Instance().getGraphicFactory().createEffect();
@@ -86,7 +86,7 @@ namespace ukn {
                                                }\0";
     }
 
-    EffectPtr GetCgEffetPass() {
+    EffectPtr GetCgEffectPass() {
         static EffectPtr effect;
         if(!effect) {
             effect = ukn::Context::Instance().getGraphicFactory().createEffect();

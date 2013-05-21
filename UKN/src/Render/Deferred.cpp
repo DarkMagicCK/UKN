@@ -74,6 +74,11 @@ namespace ukn {
                                                                 (uint32)mSize[1],
                                                                 1,
                                                                 ukn::EF_RGBA8));
+            mGBufferRT->attach(ukn::ATT_Color3,
+                               MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                (uint32)mSize[1],
+                                                                1,
+                                                                ukn::EF_RGBA8));
             mGBufferRT->attach(ukn::ATT_Color2,
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
@@ -92,7 +97,7 @@ namespace ukn {
                                                                  1,
                                                                  ukn::EF_RGBA8));
 
-            mGBufferRT->attach(ukn::ATT_Color3, mLightMapRT->getTarget(ukn::ATT_Color0));
+     //       mGBufferRT->attach(ukn::ATT_Color3, mLightMapRT->getTarget(ukn::ATT_Color0));
             
             mCompositeRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
             mCompositeRT->attach(ukn::ATT_Color0,

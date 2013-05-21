@@ -1,4 +1,5 @@
 #include "test.h"
+#include "UKN/CgHelper.h"
 
 #ifndef MIST_OS_WINDOWS 
 
@@ -25,11 +26,11 @@ __in  int nCmdSho) {
         ukn::FontPtr font;
         ukn::SkyboxPtr skybox;
         ukn::TerrianPtr terrian;
-        ukn::RenderBufferPtr dragonBuffer;
         ukn::LightSourcePtr spotLight;
         ukn::LightSourcePtr directionalLight;
         ukn::SSAO* ssao;
-        
+    ukn::ModelPtr dragonModel;
+    
         ukn::EffectPtr testEffect;
         ukn::EffectTechniquePtr displayDepthTechnique;
         
@@ -162,61 +163,18 @@ __in  int nCmdSho) {
             // to do with rendering shader
             
             gd.clear(ukn::CM_Color | ukn::CM_Depth, mist::color::Black, 1.f, 0);
+            ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
             
-            if(mode != Depth) {
-                ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
-                sb.begin(ukn::SBB_None, ukn::SBS_Deffered, ukn::Matrix4());
-                
-                const ukn::CompositeRenderTargetPtr& gbuffer = deferredRenderer->getGBufferRT();
-                
-                if(mode == SSAOAll) {
-                    //       sb.draw(deferredRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0),
-                    //               ukn::Rectangle(0, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
-                    //        sb.draw(deferredRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color1),
-                    //               ukn::Rectangle(wnd->width() / 2, wnd->height() / 2, wnd->width() / 2, wnd->height() / 2, true));
-                    sb.draw(ssao->getSSAOTarget()->getTexture(),
-                            ukn::Rectangle(0, 0, wnd->width(), wnd->height(), true));
-                }  else if(mode == All) {
-                    //   sb.draw(ssao->getSSAOTarget()->getTexture(),
-                    //          ukn::Rectangle(0, 0, wnd->width() / 2, wnd->height() / 2, true));
-                    //       sb.draw(deferredRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0),
-                    //              ukn::Rectangle(0, 0, wnd->width(), wnd->height(), true));
-                    sb.draw(deferredRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color1),
-                            ukn::Rectangle(0, 0, wnd->width(), wnd->height(), true));
-                    //       sb.draw(deferredRenderer->getCompositeRT()->getTargetTexture(ukn::ATT_Color0),
-                    //               ukn::Rectangle(wnd->width() / 2, 0, wnd->width() / 2, wnd->height() / 2, true));
-                } else if(mode == LightMap) {
-                    sb.draw(deferredRenderer->getLightMapRT()->getTargetTexture(ukn::ATT_Color0),
-                            ukn::Rectangle(0, 0, wnd->width() , wnd->height(), true));
-                    
-                } else if(mode == Scene) {
-                    sb.draw(deferredRenderer->getFinalTexture(),
-                            ukn::Rectangle(0, 0, wnd->width() , wnd->height(), true));
-                    
-                } else if(mode == Color) {
-                    sb.draw(deferredRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color0),
-                            ukn::Rectangle(0, 0, wnd->width() , wnd->height(), true));
-                    
-                }
-                sb.end();
-            }
+            sb.begin();
+            sb.draw(deferredRenderer->getNormalTarget()->getTexture(), ukn::Vector2(0, 0));
+            sb.end();
             
-            if(mode == Depth) {
-                displayDepthTechnique->getPass(0)->getFragmentShader()->setTextureVariable("depthMap",
-                                                                                           deferredRenderer->getDepthTarget()->getTexture());
-                
-                ukn::SpriteBatch::DefaultObject().drawQuad(displayDepthTechnique,
-                                                           ukn::Vector2(-1, 1),
-                                                           ukn::Vector2(1, -1));
-             
-            }
             if(font) {
                 mist::ProfileData shadowMapProf = mist::Profiler::Instance().get(L"SHADOW_MAP");
                 mist::ProfileData gbufferProf = mist::Profiler::Instance().get(L"DEFERRED_GBUFFER");
                 mist::ProfileData lightMapPro = mist::Profiler::Instance().get(L"DEFERRED_LIGHTMAP");
                 
                  font->begin();
-                 font->draw(gd.description().c_str(), 0, 20, ukn::FA_Left, ukn::color::Skyblue);
                  font->draw((ukn::FormatString(L"FPS: {0}"), mist::FrameCounter::Instance().getCurrentFps()),
                  0,
                  0,
@@ -275,7 +233,7 @@ __in  int nCmdSho) {
             
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
             
-            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
+            dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
             if(dragonModel) {
                 ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, ukn::SOA_Cullable | ukn::SOA_Moveable);
                 dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(30, 30, 30));

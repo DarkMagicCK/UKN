@@ -9,8 +9,8 @@ namespace ukn {
     /* creating effects some simple cg shaders shared by different renderers */
     /* Shader Provider must be Cg */
 
-    UKN_API EffectPtr GetCgEffet2D();    
-    UKN_API EffectPtr GetCgEffetPass();   
+    UKN_API EffectPtr GetCgEffect2D();
+    UKN_API EffectPtr GetCgEffectPass();
 
 
 } // namespace ukn

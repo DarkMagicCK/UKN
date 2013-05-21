@@ -19,7 +19,7 @@ namespace ukn {
     
     void Ukn2DHelper::initialize() {
         if(!mEffect) {
-            mEffect = GetCgEffet2D();
+            mEffect = GetCgEffect2D();
             if(!mEffect)
                 log_error("Ukn2DHelper::initialize: error creating effect for 2d rendering");
         }

@@ -112,7 +112,7 @@ namespace ukn {
                 texData = const_cast<uint8*>(initialData);
             }
 
-            if(mipmaps != 0) {
+            if(mipmaps > 1) {
                 CHECK_GL_CALL(gluBuild2DMipmaps(GL_TEXTURE_2D,
                                   element_format_to_gl_format(format),
                                   w,
@@ -181,10 +181,6 @@ namespace ukn {
                       element_format_to_texdata_format(this->format()),
                       element_format_to_gl_element_type(this->format()),
                       texData));
-        int err = GL_NO_ERROR;
-        if((err = glGetError()) != GL_NO_ERROR) {
-            log_error(format_string("GLGraphicDevice: error when locking texture, code %d", err));
-        }
         
         glBindTexture(GL_TEXTURE_2D, prevTexture);
         mTextureData = texData;

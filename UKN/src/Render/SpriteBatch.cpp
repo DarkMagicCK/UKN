@@ -565,8 +565,8 @@ namespace ukn {
             mVertexBuffer->unmap();
             
             mRenderBuffer->setVertexCount(6);
-            GetCgEffet2D()->getTechnique(0)->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
-            Context::Instance().getGraphicFactory().getGraphicDevice().renderBuffer(GetCgEffet2D()->getTechnique(0), mRenderBuffer);
+            GetCgEffect2D()->getTechnique(0)->getPass(0)->getFragmentShader()->setTextureVariable("tex", texture);
+            Context::Instance().getGraphicFactory().getGraphicDevice().renderBuffer(GetCgEffect2D()->getTechnique(0), mRenderBuffer);
         } else {
             log_error(L"SpriteBatch::drawQuad: error mapping data");
         }

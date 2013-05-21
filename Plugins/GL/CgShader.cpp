@@ -31,6 +31,8 @@ namespace ukn {
         mDevice(device) {
             mContext = cgCreateContext();
             mist_assert(mContext);
+            
+            cgGLSetManageTextureParameters(mContext, true);
     }
 
     CgGLEffect::~CgGLEffect() {
@@ -176,7 +178,7 @@ namespace ukn {
             if(_check_error(mContext) && param) {
                 cgGLSetTextureParameter(param, (GLuint)tex->getTextureId());
                 cgSetSamplerState(param);
-                cgGLEnableTextureParameter(param);
+                
                 return _check_error(mContext);
             }
         }

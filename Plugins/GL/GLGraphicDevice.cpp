@@ -571,10 +571,11 @@ namespace ukn {
     
     void GLGraphicDevice::onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) {
         const SamplerStateDesc& desc = samplerState->getDesc();
+        /*
         this->setRenderState(RS_Filter, desc.filter);
         this->setRenderState(RS_TextureWrap0, desc.address_u);
         this->setRenderState(RS_TextureWrap1, desc.address_v);
-        this->setRenderState(RS_TextureWrap2, desc.address_w);
+        this->setRenderState(RS_TextureWrap2, desc.address_w);*/
     }
 
     void GLGraphicDevice::onSetRasterizerState(const RasterizerStatePtr& rasterizerState) {

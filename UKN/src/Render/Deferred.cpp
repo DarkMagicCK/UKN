@@ -83,7 +83,7 @@ namespace ukn {
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
                                                                 1,
-                                                                ukn::EF_HalfFloat2));
+                                                                ukn::EF_RGBA8));
             mGBufferRT->attach(ukn::ATT_DepthStencil,
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],

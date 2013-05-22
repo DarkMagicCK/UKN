@@ -507,14 +507,6 @@ namespace ukn {
             glDepthMask((func == RSP_Enable) ? GL_TRUE : GL_FALSE);
             break;
 
-        case RS_SrcBlend:
-        case RS_DstBlend:
-        case RS_SrcAlpha:
-        case RS_DstAlpha:
-            CHECK_GL_CALL(glBlendFunc(render_state_to_gl_state(type), 
-                render_state_param_to_gl_state_param((RenderStateParam)func)));
-            break;
-
         case RS_Blend:
             if(func == RSP_Enable)
                 glEnable(GL_BLEND);
@@ -556,11 +548,15 @@ namespace ukn {
         const BlendStateDesc& desc = blendState->getDesc();
         
         this->setRenderState(RS_Blend, desc.blend_state.enabled ? RSP_Enable : RSP_Disable);
-        this->setRenderState(RS_SrcBlend, desc.blend_state.src);
-        this->setRenderState(RS_DstBlend, desc.blend_state.dst);
-        this->setRenderState(RS_SrcAlpha, desc.blend_state.src_alpha);
-        this->setRenderState(RS_DstAlpha, desc.blend_state.dst_alpha);
-        this->setRenderState(RS_BlendOp, desc.blend_state.op);
+        if(desc.blend_state.enabled)
+            glEnable(GL_BLEND);
+        else
+            glDisable(GL_BLEND);
+        glBlendFuncSeparate(render_state_param_to_gl_state_param(desc.blend_state.src),
+                            render_state_param_to_gl_state_param(desc.blend_state.dst),
+                            render_state_param_to_gl_state_param(desc.blend_state.src_alpha),
+                            render_state_param_to_gl_state_param(desc.blend_state.dst_alpha));
+        glBlendEquation(render_state_param_to_blend_equation((RenderStateParam)desc.blend_state.op));
         
         /* rgba blend factor */
         glBlendColor(desc.blend_factor.value[0],

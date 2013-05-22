@@ -15,6 +15,7 @@
 #include "mist/TimeUtil.h"
 #include "mist/Query.h"
 #include "mist/Profiler.h"
+#include "mist/FileUtil.h"
 
 #include <vector>
 #include <map>

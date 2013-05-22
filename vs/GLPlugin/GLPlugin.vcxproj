@@ -119,6 +119,7 @@
     <ClCompile Include="..\..\External\soil\stb_image_aug.c" />
     <ClCompile Include="..\..\Plugins\GL\CgShader.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLBlendStateObject.cpp" />
+    <ClCompile Include="..\..\Plugins\GL\GLConvert.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLDepthStencilStateObject.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLError.cpp" />
     <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />

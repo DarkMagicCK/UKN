@@ -67,7 +67,7 @@ __in  int nCmdSho) {
                 .sampleCount(1)
                 .showMouse(true)
                 .isFullScreen(false)
-                .graphicFactoryName(L"D3D11Plugin.dll")
+                .graphicFactoryName(L"GLPlugin.dll")
                 )
         .connectUpdate([&](ukn::Window* ) {
             for(int i=0; i<pointLightCount; ++i) {
@@ -166,7 +166,14 @@ __in  int nCmdSho) {
             ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
             
             sb.begin();
-            sb.draw(deferredRenderer->getNormalTarget()->getTexture(), ukn::Vector2(0, 0));
+            sb.draw(deferredRenderer->getLightTarget()->getTexture(), ukn::Rectangle(),
+                        ukn::Rectangle(0, 0, wnd->width()/2, wnd->height()/2, true));
+            sb.draw(deferredRenderer->getNormalTarget()->getTexture(), ukn::Rectangle(),
+                        ukn::Rectangle(wnd->width()/2, 0, wnd->width()/2, wnd->height()/2, true));
+            sb.draw(deferredRenderer->getDepthTarget()->getTexture(), ukn::Rectangle(),
+                        ukn::Rectangle(wnd->width()/2, wnd->height()/2,  wnd->width()/2, wnd->height()/2, true));
+            sb.draw(deferredRenderer->getColorTarget()->getTexture(), ukn::Rectangle(),
+                        ukn::Rectangle(0, wnd->height()/2, wnd->width()/2, wnd->height()/2, true));
             sb.end();
             
             if(font) {
@@ -203,6 +210,8 @@ __in  int nCmdSho) {
             camController->attachCamera(vp.camera);
             
             font = ukn::Font::Create(L"Arial.ttf", 20);
+
+            mist::ResourceLoader::Instance().addPath(L"../Release/");
             
             skybox = new ukn::Skybox();
             if(!skybox->load(mist::ResourceLoader::Instance().loadResource(L"skyboxsun25degtest.png"))) {
@@ -243,7 +252,7 @@ __in  int nCmdSho) {
             ukn::SceneObjectPtr skyboxObject = ukn::MakeSharedPtr<ukn::SceneObject>(skybox, ukn::SOA_Overlay);
             skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(100, 100, 100));
             
-            scene.addSceneObject(skyboxObject);
+          //  scene.addSceneObject(skyboxObject);
             
             //       ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
             //      scene.addSceneObject(terrianObject);

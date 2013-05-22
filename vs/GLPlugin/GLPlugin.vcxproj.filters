@@ -170,5 +170,8 @@
     <ClCompile Include="..\..\Plugins\GL\GLError.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Plugins\GL\GLConvert.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

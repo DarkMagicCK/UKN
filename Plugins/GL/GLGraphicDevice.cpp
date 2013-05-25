@@ -537,6 +537,10 @@ namespace ukn {
     }
 
     void GLGraphicDevice::adjustPerspectiveMat(Matrix4& mat) {
+        // in clipping space
+        // ogl z [-1, 1]
+        // d3d z [0, 1]
+        // so we need to adjust projection matrix here
         mat *= (Matrix4::ScaleMat(1.f, 1.f, 2.f) * Matrix4::TransMat(0.f, 0.f, -1.f));
     }
 
@@ -596,7 +600,7 @@ namespace ukn {
         else
             glDisable(GL_STENCIL_TEST);
         glStencilMask(desc.stencil_write_mask);
-        /*
+        
         CHECK_GL_CALL(glStencilOpSeparate(GL_FRONT,
                                           render_state_param_to_gl_state_param(desc.front.stencil_fail_op),
                                           render_state_param_to_gl_state_param(desc.front.depth_fail_op),
@@ -613,7 +617,7 @@ namespace ukn {
                                             render_state_param_to_gl_state_param(desc.back.func),
                                             desc.stencil_ref,
                                             0xFFFFFFFF));
-                                            */
+                                           
     }
 
 } // namespace ukn

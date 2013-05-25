@@ -33,7 +33,7 @@ namespace ukn {
     }
     
     bool GLFrameBuffer::requiresFlipping() const {
-        return false;
+        return mFBO != 0;
     }
     
     void GLFrameBuffer::swapBuffers() {

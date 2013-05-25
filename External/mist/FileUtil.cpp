@@ -625,6 +625,15 @@ namespace mist {
         }
         return filename;
     }
+
+    MistString Path::GetExtension(const MistString& path) {
+        MistString filename = Path::GetFileName(path);
+        size_t rs = filename.rfind(L'.');
+        if(rs != MistString::npos) {
+            return MistString(filename.begin() + rs + 1, filename.end());
+        }
+        return L"";
+    }
     
 } // namespace mist
 

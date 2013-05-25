@@ -68,6 +68,7 @@ namespace mist {
 
         static MistString GetDirectory(const MistString& path);
         static MistString GetFileName(const MistString& path);
+        static MistString GetExtension(const MistString& path);
         static MistString GetFileNameWithoutExtension(const MistString& path);
         
         // check and get path of a font

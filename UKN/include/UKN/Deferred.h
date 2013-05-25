@@ -100,6 +100,8 @@ namespace ukn {
         CompositeRenderTargetPtr mLightMapRT;
         CompositeRenderTargetPtr mCompositeRT;
 
+        RenderTargetPtr mLightMap;
+
         BlendStatePtr mLightMapBS;
         RasterizerStatePtr mWireframeRS;
     };

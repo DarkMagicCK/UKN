@@ -71,7 +71,7 @@ typedef struct {
 #define DDSCAPS2_CUBEMAP_NEGATIVEZ	0x00008000
 #define DDSCAPS2_VOLUME	0x00200000
 
-static int dds_test(struct stbi *s)
+static int stbi_dds_test(stbi *s)
 {
 	//	check the magic number
 	if (get8(s) != 'D') return 0;
@@ -80,25 +80,27 @@ static int dds_test(struct stbi *s)
 	if (get8(s) != ' ') return 0;
 	//	check header size
 	if (get32le(s) != 124) return 0;
+
+    stbi_rewind(s);
 	return 1;
 }
 #ifndef STBI_NO_STDIO
-static int      stbi_dds_test_file        (FILE *f)
+static int stbi_dds_test_file(FILE *f)
 {
-   struct stbi s;
+   stbi s;
    int r,n = (int)ftell(f);
    start_file(&s,f);
-   r = dds_test(&s);
+   r = stbi_dds_test(&s);
    fseek(f,n,SEEK_SET);
    return r;
 }
 #endif
 
-static int      stbi_dds_test_memory      (stbi_uc const *buffer, int len)
+static int stbi_dds_test_memory(stbi_uc const *buffer, int len)
 {
-   struct stbi s;
+   stbi s;
    start_mem(&s,buffer, len);
-   return dds_test(&s);
+   return stbi_dds_test(&s);
 }
 
 //	helper functions
@@ -265,7 +267,7 @@ static void stbi_decode_DXT_color_block(
 	}
 	//	done
 }
-static stbi_uc *dds_load(struct stbi *s, int *x, int *y, int *comp, int req_comp)
+static stbi_uc *stbi_dds_load(stbi *s, int *x, int *y, int *comp, int req_comp)
 {
 	//	all variables go up front
 	stbi_uc *dds_data = NULL;
@@ -485,15 +487,15 @@ static stbi_uc *dds_load(struct stbi *s, int *x, int *y, int *comp, int req_comp
 }
 
 #ifndef STBI_NO_STDIO
-static stbi_uc *stbi_dds_load_from_file   (FILE *f,                  int *x, int *y, int *comp, int req_comp)
+static stbi_uc *stbi_dds_load_from_file(FILE *f, int *x, int *y, int *comp, int req_comp)
 {
-struct stbi s;
+   stbi s;
    start_file(&s,f);
-   return dds_load(&s,x,y,comp,req_comp);
+   return stbi_dds_load(&s,x,y,comp,req_comp);
 }
 
-static stbi_uc *stbi_dds_load             (char *filename,           int *x, int *y, int *comp, int req_comp)
-{
+static stbi_uc *stbi_dds_load_from_disk(char *filename, int *x, int *y, int *comp, int req_comp) 
+{ 
    stbi_uc *data;
    FILE *f = fopen(filename, "rb");
    if (!f) return NULL;
@@ -505,7 +507,7 @@ static stbi_uc *stbi_dds_load             (char *filename,           int *x, int
 
 static stbi_uc *stbi_dds_load_from_memory (stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp)
 {
-    struct stbi s;
+   stbi s;
    start_mem(&s,buffer, len);
-   return dds_load(&s,x,y,comp,req_comp);
+   return stbi_dds_load(&s,x,y,comp,req_comp);
 }

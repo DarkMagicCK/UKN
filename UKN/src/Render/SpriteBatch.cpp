@@ -504,6 +504,8 @@ namespace ukn {
     void SpriteBatch::drawQuad(const EffectTechniquePtr& technique, const Vector2& upper, const Vector2& lower) {
         Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
         
+        GraphicDevice& device = Context::Instance().getGraphicFactory().getGraphicDevice();
+        
         if(vertices) {
             Vertex2D vertex;
             vertex.xyz.set(lower.x(), lower.y(), 0);
@@ -530,7 +532,7 @@ namespace ukn {
             mVertexBuffer->unmap();
 
             mRenderBuffer->setVertexCount(6);
-            Context::Instance().getGraphicFactory().getGraphicDevice().renderBuffer(technique, mRenderBuffer);
+            device.renderBuffer(technique, mRenderBuffer);
         } else {
             log_error(L"SpriteBatch::drawQuad: error mapping data");
         }

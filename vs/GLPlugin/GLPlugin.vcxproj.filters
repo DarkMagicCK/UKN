@@ -93,16 +93,16 @@
     <ClInclude Include="..\..\External\soil\stb_image_aug.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\External\soil\stbi_DDS_aug.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\External\soil\image_DXT.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Plugins\GL\GLDepthStencilStateObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\soil\stbi_DDS_aug.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

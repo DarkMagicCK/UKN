@@ -74,16 +74,17 @@ namespace ukn {
                                                                 (uint32)mSize[1],
                                                                 1,
                                                                 ukn::EF_RGBA8));
-            mGBufferRT->attach(ukn::ATT_Color3,
-                               MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
-                                                                (uint32)mSize[1],
-                                                                1,
-                                                                ukn::EF_RGBA8));
             mGBufferRT->attach(ukn::ATT_Color2,
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
                                                                 1,
-                                                                ukn::EF_RGBA8));
+                                                                ukn::EF_RG32));
+
+            mLightMap = MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
+                                                                (uint32)mSize[1],
+                                                                1,
+                                                                ukn::EF_RGBA8);
+       
             mGBufferRT->attach(ukn::ATT_DepthStencil,
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
@@ -91,11 +92,6 @@ namespace ukn {
 
             
             mLightMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
-            mLightMapRT->attach(ukn::ATT_Color0,
-                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
-                                                                 (uint32)mSize[1],
-                                                                 1,
-                                                                 ukn::EF_RGBA8));
 
      //       mGBufferRT->attach(ukn::ATT_Color3, mLightMapRT->getTarget(ukn::ATT_Color0));
             
@@ -193,6 +189,7 @@ namespace ukn {
 
     void DeferredRenderer::makeLightMap(SceneManager& scene) {
         MIST_PROFILE(L"DEFERRED_LIGHTMAP");
+        mLightMapRT->attach(ATT_Color0, mLightMap);
         mLightMapRT->attachToRender();
 
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
@@ -247,9 +244,14 @@ namespace ukn {
                     fragmentShader->setFloatVariable("shadowMapSize", (float)light->getShadowMapResolution());
                     fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
                     
-                    ukn::SpriteBatch::DefaultObject().drawQuad(mDirectionalLightTechnique, 
+                    if(!gd.getCurrFrameBuffer()->requiresFlipping())
+                        ukn::SpriteBatch::DefaultObject().drawQuad(mDirectionalLightTechnique, 
                                                                ukn::Vector2(-1, 1), 
                                                                ukn::Vector2(1, -1));
+                    else
+                        ukn::SpriteBatch::DefaultObject().drawQuad(mDirectionalLightTechnique, 
+                                                               ukn::Vector2(-1, -1), 
+                                                               ukn::Vector2(1, 1));
 
                 }
             }
@@ -379,6 +381,7 @@ namespace ukn {
             }
         }
         mLightMapRT->detachFromRender();
+        mLightMapRT->detach(ATT_Color0);
            
         gd.setBlendState(BlendStateObject::Opaque());
         gd.setDepthStencilState(DepthStencilStateObject::Default());
@@ -397,13 +400,15 @@ namespace ukn {
         fragmentShader->setTextureVariable("lightMap",
                                             mLightMapRT->getTargetTexture(ATT_Color0));
 
-        ukn::SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, ukn::Vector2(-1, 1), ukn::Vector2(1, -1));
+        ukn::SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, ukn::Vector2(-1, -1), ukn::Vector2(1, 1));
         
         mCompositeRT->detachFromRender();
     }
 
     void DeferredRenderer::makeGBuffer(SceneManager& scene) {
         MIST_PROFILE(L"DEFERRED_GBUFFER");
+        mGBufferRT->attach(ATT_Color3, mLightMap);
+
         mGBufferRT->attachToRender();
         
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
@@ -429,6 +434,7 @@ namespace ukn {
                      SOA_Cullable | SOA_Moveable | SOA_Overlay);
 
         mGBufferRT->detachFromRender();
+        mGBufferRT->detach(ATT_Color3);
     }
 
     void DeferredRenderer::prepare() {

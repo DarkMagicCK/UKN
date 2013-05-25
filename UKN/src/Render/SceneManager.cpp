@@ -116,9 +116,15 @@ namespace ukn {
         const SceneManager::SceneObjectList& objects = this->getSceneObjects();
         Shader* vertexShader = technique->getPass(0)->getVertexShader().get();
         Shader* fragmentShader = technique->getPass(0)->getFragmentShader().get();
+
+        Matrix4 tprojMat = projMat;
+        /* ogl rtt origin */
+        if(gd.getCurrFrameBuffer()->requiresFlipping()) {
+            tprojMat *= Matrix4::ScaleMat(1.f, -1.f, 1.f);
+        }
         
         vertexShader->setMatrixVariable("viewMatrix", viewMat);
-        vertexShader->setMatrixVariable("projectionMatrix", projMat);
+        vertexShader->setMatrixVariable("projectionMatrix", tprojMat);
         
         for(const SceneObjectPtr& obj: objects) {
             if(obj->getAttribute() & flag) {
@@ -156,10 +162,11 @@ namespace ukn {
                 float3 d = renderable.getMaterial()->diffuse;
                 c = COLOR_RGBA(d[0] * 255, d[1] * 255, d[2] * 255, 255);
             }
-            static TexturePtr white = Context::Instance().getGraphicFactory()
+            if(!mWhite)
+                mWhite = Context::Instance().getGraphicFactory()
                                         .create2DTexture(1, 1, 0, EF_RGBA8, (uint8*)&c);
 
-            fragmentShader->setTextureVariable("diffuseMap", white);
+            fragmentShader->setTextureVariable("diffuseMap", mWhite);
         }
         if(renderable.getEmitTex()) {
             fragmentShader->setTextureVariable("emitMap", renderable.getEmitTex());

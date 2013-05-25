@@ -58,6 +58,9 @@ namespace ukn {
         mProjMat[1] = mProjMat[0];
         mProjMat[0] = Matrix4::OrthoOffCenterMatLH(l, r, b, t, n, f);
         mFrustumDirty = true;
+
+        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+        gd.adjustOrthoMat(mProjMat[0]);
     }
     
     Vector3 Camera::getEyePos() const {

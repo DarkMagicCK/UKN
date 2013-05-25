@@ -13,6 +13,7 @@
 #include "mist/Resource.h"
 #include "mist/Stream.h"
 #include "mist/Logger.h"
+#include "mist/FileUtil.h"
 
 #include "GLPreq.h"
 #include "GLConvert.h"
@@ -34,7 +35,7 @@ namespace ukn {
 
     GLTexture2D::~GLTexture2D() {
         if(mTextureId != 0) {
-            CHECK_GL_CALL(glDeleteTextures(1, (GLuint*)&mTextureId));
+            glDeleteTextures(1, (GLuint*)&mTextureId);
         }
     
     }
@@ -106,8 +107,7 @@ namespace ukn {
 
             uint8* texData;
             if(initialData == 0) {
-                texData = mist_malloc_t(uint8, w*h*GetElementSize(format));
-                memset(texData, 0x0, w*h*GetElementSize(format));
+                texData = 0;
             } else {
                 texData = const_cast<uint8*>(initialData);
             }

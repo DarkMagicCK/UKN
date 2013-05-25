@@ -166,11 +166,11 @@ __in  int nCmdSho) {
             ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
             
             sb.begin();
-            sb.draw(deferredRenderer->getLightTarget()->getTexture(), ukn::Rectangle(),
+            sb.draw(deferredRenderer->getFinalTexture(), ukn::Rectangle(),
                         ukn::Rectangle(0, 0, wnd->width()/2, wnd->height()/2, true));
             sb.draw(deferredRenderer->getNormalTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(wnd->width()/2, 0, wnd->width()/2, wnd->height()/2, true));
-            sb.draw(deferredRenderer->getDepthTarget()->getTexture(), ukn::Rectangle(),
+            sb.draw(deferredRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color3), ukn::Rectangle(),
                         ukn::Rectangle(wnd->width()/2, wnd->height()/2,  wnd->width()/2, wnd->height()/2, true));
             sb.draw(deferredRenderer->getColorTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(0, wnd->height()/2, wnd->width()/2, wnd->height()/2, true));
@@ -228,7 +228,6 @@ __in  int nCmdSho) {
                 t->texture(gf.load2DTexture(ukn::ResourceLoader::Instance().loadResource(L"dirt01.dds")));
                 
                 terrian = t;
-                
             } else {
                 ukn::log_error(L"unable to build terrian");
             }
@@ -252,10 +251,10 @@ __in  int nCmdSho) {
             ukn::SceneObjectPtr skyboxObject = ukn::MakeSharedPtr<ukn::SceneObject>(skybox, ukn::SOA_Overlay);
             skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(100, 100, 100));
             
-          //  scene.addSceneObject(skyboxObject);
+            scene.addSceneObject(skyboxObject);
             
-            //       ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
-            //      scene.addSceneObject(terrianObject);
+            ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
+            scene.addSceneObject(terrianObject);
                        
             directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 0.5),
                                                                          ukn::float4(1, 1, 1, 1),

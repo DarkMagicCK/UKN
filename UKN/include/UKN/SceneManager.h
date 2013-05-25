@@ -67,6 +67,7 @@ namespace ukn {
         uint32 mNumVerticesRendered;
 
         LightManagerPtr mLightManager;
+        TexturePtr mWhite;
     };
     
 }

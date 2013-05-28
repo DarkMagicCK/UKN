@@ -54,7 +54,8 @@ namespace ukn {
     }
 
     GLVertexBuffer::~GLVertexBuffer() {
-        glDeleteBuffers(1, &mId);
+        if(mId)
+            glDeleteBuffers(1, &mId);
     }
 
     void* GLVertexBuffer::map() {

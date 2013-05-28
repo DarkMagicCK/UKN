@@ -34,10 +34,14 @@ namespace mist {
 
     template<typename T, typename Base>
     static T checked_cast(Base* pointer) {
+#ifdef MIST_DEBUG
         T derived = dynamic_cast<T>(pointer);
         if(!derived)
             MIST_THROW_EXCEPTION(L"checked_cast: failed to cast from parent to child");
         return derived;
+#else
+        return (T*)pointer;
+#endif
     }
 
     class MIST_API SharedPtrRefCounter {

@@ -103,7 +103,8 @@ namespace ukn {
         
         CHECK_GL_CALL(glClear(glflags));
 
-        if(flags & CM_Depth)
+        GLGraphicDevice& gd = *checked_cast<GLGraphicDevice*>(&Context::Instance().getGraphicFactory().getGraphicDevice());
+        if(!gd.getDepthStencilState()->getDesc().depth_write_mask)
             glDepthMask(GL_FALSE);
     }
     

@@ -588,35 +588,37 @@ namespace ukn {
     void GLGraphicDevice::onSetDepthStencilState(const DepthStencilStatePtr& depthStencilState) {
         const DepthStencilStateDesc& desc = depthStencilState->getDesc();
 
-        if(desc.depth_enable)
+        if(desc.depth_enable) {
             glEnable(GL_DEPTH_TEST);
+            glDepthFunc(render_state_param_to_gl_state_param(desc.depth_func));
+        }
         else
             glDisable(GL_DEPTH_TEST);
         glDepthMask(desc.depth_write_mask);
-        glDepthFunc(render_state_param_to_gl_state_param(desc.depth_func));
 
-        if(desc.stencil_enable)
+        if(desc.stencil_enable) {
             glEnable(GL_STENCIL_TEST);
-        else
-            glDisable(GL_STENCIL_TEST);
-        glStencilMask(desc.stencil_write_mask);
-        
-        CHECK_GL_CALL(glStencilOpSeparate(GL_FRONT,
+           
+            CHECK_GL_CALL(glStencilOpSeparate(GL_FRONT,
                                           render_state_param_to_gl_state_param(desc.front.stencil_fail_op),
                                           render_state_param_to_gl_state_param(desc.front.depth_fail_op),
                                           render_state_param_to_gl_state_param(desc.front.pass_op)));
-        CHECK_GL_CALL(glStencilOpSeparate(GL_BACK,
+            CHECK_GL_CALL(glStencilOpSeparate(GL_BACK,
                                           render_state_param_to_gl_state_param(desc.back.stencil_fail_op),
                                           render_state_param_to_gl_state_param(desc.back.depth_fail_op),
                                           render_state_param_to_gl_state_param(desc.back.pass_op)));
-        CHECK_GL_CALL(glStencilFuncSeparate(GL_FRONT,
+            CHECK_GL_CALL(glStencilFuncSeparate(GL_FRONT,
                                             render_state_param_to_gl_state_param(desc.front.func),
                                             desc.stencil_ref,
                                             0xFFFFFFFF));
-        CHECK_GL_CALL(glStencilFuncSeparate(GL_BACK,
+            CHECK_GL_CALL(glStencilFuncSeparate(GL_BACK,
                                             render_state_param_to_gl_state_param(desc.back.func),
                                             desc.stencil_ref,
                                             0xFFFFFFFF));
+        }
+        else
+            glDisable(GL_STENCIL_TEST);
+        glStencilMask(desc.stencil_write_mask);
                                            
     }
 

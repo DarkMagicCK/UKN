@@ -170,7 +170,7 @@ __in  int nCmdSho) {
                         ukn::Rectangle(0, 0, wnd->width()/2, wnd->height()/2, true));
             sb.draw(deferredRenderer->getNormalTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(wnd->width()/2, 0, wnd->width()/2, wnd->height()/2, true));
-            sb.draw(deferredRenderer->getGBufferRT()->getTargetTexture(ukn::ATT_Color3), ukn::Rectangle(),
+            sb.draw(deferredRenderer->getDepthTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(wnd->width()/2, wnd->height()/2,  wnd->width()/2, wnd->height()/2, true));
             sb.draw(deferredRenderer->getColorTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(0, wnd->height()/2, wnd->width()/2, wnd->height()/2, true));

@@ -84,12 +84,10 @@ namespace ukn {
         if(flags != 0)
             glClear(flags);
 
-        if(flags & GL_DEPTH_BUFFER_BIT)
-            glDepthMask(GL_FALSE);
-
-        //if(flags & GL_STENCIL_BUFFER_BIT)
-
         gd.bindGLFrameBuffer(oldfbo);
+
+        if(!gd.getDepthStencilState()->getDesc().depth_write_mask)
+            glDepthMask(GL_FALSE);
     }
 
     GLScreenColorRenderView::GLScreenColorRenderView(uint32 width, uint32 height, ElementFormat ef) {

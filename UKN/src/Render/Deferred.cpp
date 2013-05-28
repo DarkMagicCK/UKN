@@ -400,8 +400,15 @@ namespace ukn {
         fragmentShader->setTextureVariable("lightMap",
                                             mLightMapRT->getTargetTexture(ATT_Color0));
 
-        ukn::SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, ukn::Vector2(-1, -1), ukn::Vector2(1, 1));
-        
+        if(!gd.getCurrFrameBuffer()->requiresFlipping())
+                        ukn::SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, 
+                                                               ukn::Vector2(-1, 1), 
+                                                               ukn::Vector2(1, -1));
+                    else
+                        ukn::SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, 
+                                                               ukn::Vector2(-1, -1), 
+                                                               ukn::Vector2(1, 1));
+
         mCompositeRT->detachFromRender();
     }
 

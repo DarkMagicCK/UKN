@@ -195,28 +195,28 @@ namespace mist {
         BinaryStreamReader(const StreamPtr& stream);
         virtual ~BinaryStreamReader();
         
-        virtual void close();
+        virtual void close() override;
         
     public:
         // peek next char, does not advance stream
-        virtual char peek();
+        virtual char peek() override;
         
-        virtual size_t read(uint8* buffer, size_t size_to_read);
+        virtual size_t read(uint8* buffer, size_t size_to_read) override;
         
-        virtual uint8   readByte();
-        virtual uint16  readUInt16();
-        virtual uint32  readUInt32();
-        virtual uint64  readUInt64();
+        virtual uint8   readByte() override;
+        virtual uint16  readUInt16() override;
+        virtual uint32  readUInt32() override;
+        virtual uint64  readUInt64() override;
         
-        virtual int8    readChar();
-        virtual int16   readInt16();
-        virtual int32   readInt32();
-        virtual int64   readInt64();
+        virtual int8    readChar() override;
+        virtual int16   readInt16() override;
+        virtual int32   readInt32() override;
+        virtual int64   readInt64() override;
         
-        virtual float   readFloat();
-        virtual double  readDouble();
+        virtual float   readFloat() override;
+        virtual double  readDouble() override;
         
-        virtual MistString  readString();
+        virtual MistString  readString() override;
         
         // read a string with specified encoding
         MistString  readString(size_t char_count);
@@ -240,27 +240,27 @@ namespace mist {
         TextStreamReader(const StreamPtr& stream);
         virtual ~TextStreamReader();
         
-        virtual void close();
+        virtual void close() override;
         
     public:
-        virtual char peek();
+        virtual char peek() override;
         
         virtual size_t read(uint8* buffer, size_t size_to_read);
         
-        virtual uint8   readByte();
-        virtual uint16  readUInt16();
-        virtual uint32  readUInt32();
-        virtual uint64  readUInt64();
+        virtual uint8   readByte() override;
+        virtual uint16  readUInt16() override;
+        virtual uint32  readUInt32() override;
+        virtual uint64  readUInt64() override;
         
-        virtual int8    readChar();
-        virtual int16   readInt16();
-        virtual int32   readInt32();
-        virtual int64   readInt64();
+        virtual int8    readChar() override;
+        virtual int16   readInt16() override;
+        virtual int32   readInt32() override;
+        virtual int64   readInt64() override;
         
-        virtual float   readFloat();
-        virtual double  readDouble();
+        virtual float   readFloat() override;
+        virtual double  readDouble() override;
         
-        virtual MistString  readString();
+        virtual MistString  readString() override;
     
         MistString readLine();
         MistString readNumber();
@@ -269,7 +269,7 @@ namespace mist {
     private:
         StreamPtr mStream;
     };
-    
+
 } // namespace mist
 
 

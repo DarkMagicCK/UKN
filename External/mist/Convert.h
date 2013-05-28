@@ -13,6 +13,7 @@
 #include "mist/Util.h"
 #include "mist/Serializer.h"
 #include "mist/MathUtil.h"
+#include "mist/Lazy.h"
 
 #include <algorithm>
 
@@ -23,6 +24,11 @@ namespace mist {
         template<typename T>
         static MistString ToString(const T& t);
         
+        template<>
+        static MistString ToString<std::string>(const std::string& t) {
+            return string::StringToWString(t);
+        }
+
         static bool     ToBoolean(const MistString& str);
         
         static int16    ToInt16(const MistString& str);
@@ -60,30 +66,26 @@ namespace mist {
         return string::AnyToWString(t);
     }
     
-    struct MIST_API FormatString {
-        FormatString(const MistString& str):
-        mStr(str),
-        mCurrIndex(0) {
-            
-        }
         
-        operator MistString() { return mStr; }
+    struct MIST_API FormatString {
+        FormatString(const MistString& str);
+
+        operator MistString();
         
         template<typename T>
         FormatString& operator,(const T& t);
         
-        void replace(const MistString& search, const MistString& replacement);
-        
     private:
+        MistString doReplace();
+
         MistString mStr;
-        uint32 mCurrIndex;
+        std::vector<MistString> mItemsToReplace;
+        Lazy<MistString> mConvertTask;
     };
 
     template<typename T>
     FormatString& FormatString::operator,(const T& t) {
-        MistString search = L"{" + Convert::ToString(mCurrIndex) + L"}";
-        this->replace(search, Convert::ToString(t));
-        mCurrIndex += 1;
+        this->mItemsToReplace.push_back(Convert::ToString(t));
         return *this;
     }
     

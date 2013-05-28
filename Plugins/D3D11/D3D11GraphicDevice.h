@@ -14,15 +14,15 @@
 
 namespace ukn {
 
-	class D3D11Effect;
-	class D3D11Debug;
+    class D3D11Effect;
+    class D3D11Debug;
 
-	class D3D11GraphicDevice: public GraphicDevice {
-	public:
-		D3D11GraphicDevice();
-		virtual ~D3D11GraphicDevice();
+    class D3D11GraphicDevice: public GraphicDevice {
+    public:
+        D3D11GraphicDevice();
+        virtual ~D3D11GraphicDevice();
 
-		UknString description() const override;
+        UknString description() const override;
         
         WindowPtr doCreateRenderWindow(const UknString& name, const RenderSettings& settings);
         
@@ -50,30 +50,33 @@ namespace ukn {
         void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) override;
         void onSetDepthStencilState(const DepthStencilStatePtr& depthstentialState) override;
 
-		ID3D11Device* getD3DDevice() const;
+        ID3D11Device* getD3DDevice() const;
         ID3D11DeviceContext* getD3DDeviceContext() const;
         IDXGISwapChain* getSwapChain() const;
+        ID3D11SamplerState* getD3DSamplerState() const;
 
         /* get device feature level, this flag is required to determine shader profiles etc*/ 
         D3D_FEATURE_LEVEL getDeviceFeatureLevel() const;
 
     private:
         void setViewport(const Viewport& vp);
-		bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
-		void onWindowResize();
+        bool initD3DDevice(const RenderSettings& settings, HWND hWnd);
+        void onWindowResize();
 
         WindowPtr mWindow;
 
-		COM<ID3D11Device>::Ptr mDevice;
+        COM<ID3D11Device>::Ptr mDevice;
         COM<ID3D11DeviceContext>::Ptr mDeviceContext;
-		COM<IDXGISwapChain>::Ptr mSwapChain;
+        COM<IDXGISwapChain>::Ptr mSwapChain;
 
-		Matrix4 mProjectionMatrix;
-		Matrix4 mViewMatrix;
+        Matrix4 mProjectionMatrix;
+        Matrix4 mViewMatrix;
 
-		ScopedPtr<D3D11Debug> mDebug;
+        ScopedPtr<D3D11Debug> mDebug;
         D3D_FEATURE_LEVEL mFeatureLevel;
-	};
+
+        ID3D11SamplerState* mSamplerState;
+    };
 
 } // namespace ukn
 

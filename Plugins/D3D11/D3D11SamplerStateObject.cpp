@@ -12,6 +12,7 @@ namespace ukn {
         case RSP_TextureWrapClampToBorder: return D3D11_TEXTURE_ADDRESS_BORDER;
         case RSP_TextureWrapWrap: return D3D11_TEXTURE_ADDRESS_WRAP;
         }
+        return D3D11_TEXTURE_ADDRESS_CLAMP;
     }
 
     D3D11_FILTER _rs_to_filter(RenderStateParam param) {
@@ -26,6 +27,7 @@ namespace ukn {
         case RSP_FilterMinPointMagLinearMipPoint: return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
         case RSP_FilterMinPointMagMipLinear:    return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
         }
+        return D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
     }
 
     D3D11SamplerStateObject::D3D11SamplerStateObject(const SamplerStateDesc& desc, ID3D11SamplerState* state):
@@ -51,6 +53,7 @@ namespace ukn {
         d3ddesc.MinLOD = -FLT_MAX;
         d3ddesc.MaxLOD = FLT_MAX;
         d3ddesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+
         
         ID3D11SamplerState* samplerState;
         if(D3D11Debug::CHECK_RESULT(device->getD3DDevice()->CreateSamplerState(&d3ddesc, &samplerState))) {

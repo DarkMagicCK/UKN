@@ -78,7 +78,7 @@ namespace ukn {
                                MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
                                                                 1,
-                                                                ukn::EF_RG32));
+                                                                ukn::EF_HalfFloat2));
 
             mLightMap = MakeSharedPtr<ukn::RenderTarget>((uint32)mSize[0],
                                                                 (uint32)mSize[1],
@@ -422,7 +422,7 @@ namespace ukn {
 
         gd.setBlendState(BlendStateObject::Opaque());
         gd.setDepthStencilState(DepthStencilStateObject::DepthRead());
-        gd.setRasterizerState(RasterizerStateObject::CullNone());
+        gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
         gd.setSamplerState(SamplerStateObject::LinearWrap());
 
         // first clear the GBuffer

@@ -103,7 +103,7 @@ int CALLBACK WinMain(
     };
 
     Mode mode = Scene;
-    
+
 #ifndef MIST_OS_WINDOWS
     ukn::GraphicFactoryPtr factory;
     ukn::CreateGraphicFactory(factory);
@@ -327,14 +327,14 @@ int CALLBACK WinMain(
 
             deferredRenderer = new ukn::DeferredRenderer();
             deferredRenderer->addPostEffect(L"SSAO");
-        //    deferredRenderer->addPostEffect(L"Fog");
+            deferredRenderer->addPostEffect(L"Fog");
 
             ssao = ukn::checked_cast<ukn::SSAO*>(deferredRenderer->getPostEffect(L"SSAO").get());
-        //    fog = ukn::checked_cast<ukn::Fog*>(deferredRenderer->getPostEffect(L"Fog").get());
+            fog = ukn::checked_cast<ukn::Fog*>(deferredRenderer->getPostEffect(L"Fog").get());
 
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
-            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip.ply");
+            ukn::ModelPtr dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res3.ply");
             if(dragonModel) {
                 ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, ukn::SOA_Cullable | ukn::SOA_Moveable);
                 dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(20, 20, 20));
@@ -348,8 +348,9 @@ int CALLBACK WinMain(
 
            ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
            scene.addSceneObject(terrianObject);
-            
-        /*    ukn::ModelPtr sponza = ukn::AssetManager::Instance().load<ukn::Model>(L"sponza/sponza.obj");
+     
+           /*
+            ukn::ModelPtr sponza = ukn::AssetManager::Instance().load<ukn::Model>(L"sponza/sponza.obj");
             if(sponza) {
                 ukn::SceneObjectPtr sponzaObject = ukn::MakeSharedPtr<ukn::SceneObject>(sponza, ukn::SOA_Cullable | ukn::SOA_Moveable);
                 sponzaObject->setModelMatrix(ukn::Matrix4::ScaleMat(1, 1, 1));

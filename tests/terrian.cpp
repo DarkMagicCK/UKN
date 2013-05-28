@@ -57,6 +57,8 @@ __in  int nCmdSho) {
         ukn::Context::Instance().registerGraphicFactory(factory);
 #endif
         
+        mist::ResourceLoader::Instance().addPath(L"../Release/");
+            
         ukn::uint32 count;
         float r = 0;
         ukn::AppLauncher(L"Windows Test")
@@ -153,7 +155,7 @@ __in  int nCmdSho) {
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
             {
-         //       scene.getLightManager()->makeShadowMaps(scene);
+                scene.getLightManager()->makeShadowMaps(scene);
             }
             {
                 deferredRenderer->renderScene(scene);
@@ -211,8 +213,6 @@ __in  int nCmdSho) {
             
             font = ukn::Font::Create(L"Arial.ttf", 20);
 
-            mist::ResourceLoader::Instance().addPath(L"../Release/");
-            
             skybox = new ukn::Skybox();
             if(!skybox->load(mist::ResourceLoader::Instance().loadResource(L"skyboxsun25degtest.png"))) {
                 mist::log_error(L"unable to load skybox");
@@ -234,7 +234,7 @@ __in  int nCmdSho) {
             
             deferredRenderer = new ukn::DeferredRenderer();
        //     deferredRenderer->addPostEffect(L"SSAO");
-            //    deferredRenderer->addPostEffect(L"Fog");
+                deferredRenderer->addPostEffect(L"Fog");
             
         //    ssao = ukn::checked_cast<ukn::SSAO*>(deferredRenderer->getPostEffect(L"SSAO").get());
             //    fog = ukn::checked_cast<ukn::Fog*>(deferredRenderer->getPostEffect(L"Fog").get());

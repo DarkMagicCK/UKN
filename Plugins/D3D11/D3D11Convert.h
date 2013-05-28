@@ -11,12 +11,8 @@
 
 #include <D3D11.h>
 
-    struct D3DXMATRIX;
-   
 namespace ukn {
 
-    void D3DXMatrixToMatrix4(const D3DXMATRIX& d3dmat, Matrix4& mat);
-    void Matrix4ToD3DMatrix(const Matrix4& mat, D3DXMATRIX& d3dmat);
 	DXGI_FORMAT ElementFormatToDxGIFormat(ukn::ElementFormat format);
     ElementFormat DxGIFormatToElementFormat(DXGI_FORMAT format);
     

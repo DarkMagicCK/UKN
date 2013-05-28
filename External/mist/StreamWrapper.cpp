@@ -475,21 +475,15 @@ namespace mist {
         return Convert::ToDouble(this->readNumber());
     }
     
-    inline bool is_space(char c) {
-        return c == ' ' || 
-               c == '\n' ||
-               c == '\r';
-    }
-    
     MistString TextStreamReader::readString() {
         MistString result;
         
         uint8 buffer = ' ';
-        while(is_space((char)buffer))  
+        while(string::IsSpace((char)buffer))  
             mStream->read(&buffer, 1);
               
         while(mStream->isValid() &&
-              !is_space((char)buffer)) {
+              !string::IsSpace((char)buffer)) {
             result.push_back((char)buffer);
             mStream->read(&buffer, 1);
         }
@@ -517,11 +511,11 @@ namespace mist {
         MistString result;
         
         uint8 buffer = ' ';
-        while(is_space((char)buffer))  
+        while(string::IsSpace((char)buffer))  
             mStream->read(&buffer, 1);
    
         while(!mStream->eos() &&
-              !is_space((char)buffer)) {
+              !string::IsSpace((char)buffer)) {
             result.push_back((char)buffer);
             mStream->read(&buffer, 1);
         }

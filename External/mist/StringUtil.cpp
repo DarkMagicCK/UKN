@@ -284,6 +284,44 @@ namespace mist {
         }
         return MistString(it, str.end());
     }
+
+    bool string::IsSpace(char c) {
+        return c == ' ' || 
+               c == '\n' ||
+               c == '\t' ||
+               c == '\r';
+    }
+
+    bool string::IsSpace(wchar_t c) {
+        return c == L' ' || 
+               c == L'\n' ||
+               c == L'\t' ||
+               c == L'\r';
+    }
+
+    bool string::IsNumber(char c) {
+        return (c >= '0' && c <= '9');
+    }
+
+    bool string::IsNumber(wchar_t c) {
+        return (c >= L'0' && c <= L'9');
+    }
+
+    bool string::IsAlphabet(wchar_t c) {
+        if(!string::IsAscII(c))
+            return false;
+        return (c >= L'A' && c <= L'Z') ||
+               (c >= L'a' && c <= L'z');
+    }
+
+    bool string::IsAlphabet(char c) {
+        return (c >= 'A' && c <= 'Z') ||
+               (c >= 'a' && c <= 'z');
+    }
+
+    bool string::IsAscII(wchar_t c) {
+        return ((c&0x80) == 0);
+    }
     
     MistString string::GetFilePath(const MistString& str) {
         if(str.empty())

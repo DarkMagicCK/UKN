@@ -64,6 +64,7 @@ namespace ukn {
         CGprogram mProgram;
         CGcontext mContext;
         ShaderDesc mDesc;
+        D3D11GraphicDevice* mDevice;
     };
 
 }

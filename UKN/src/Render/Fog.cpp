@@ -9,7 +9,7 @@ namespace ukn {
 
     Fog::Fog():
     mColor(color::Lightgrey),
-    mDensity(0.01f),
+    mDensity(0.1f),
     mStart(0.f), mEnd(100.f),
     mType(Linear) {
 
@@ -28,8 +28,12 @@ namespace ukn {
 
         mRT->attachCamera(cam);
         mRT->attachToRender();
-        gd.clear(CM_Color | CM_Depth, color::White, 1.0f, 0);
 
+        gd.setDepthStencilState(DepthStencilStateObject::None());
+        gd.setBlendState(BlendStateObject::BlendOff());
+
+        gd.clear(CM_Color | CM_Depth, color::Black, 1.0f, 0);
+        
         const ShaderPtr& fragmentShader = mFogTechnique->getPass(0)->getFragmentShader();
         const ShaderPtr& vertexShader = mFogTechnique->getPass(0)->getVertexShader();
             
@@ -45,7 +49,14 @@ namespace ukn {
         fragmentShader->setFloatVariable("fogType", mType);
         fragmentShader->setFloatVectorVariable("fogColor", mColor.getRGB());
 
-        SpriteBatch::DefaultObject().drawQuad(mFogTechnique, Vector2(-1, 1), Vector2(1, -1));
+        if(!gd.getCurrFrameBuffer()->requiresFlipping())
+                        ukn::SpriteBatch::DefaultObject().drawQuad(mFogTechnique, 
+                                                               ukn::Vector2(-1, 1), 
+                                                               ukn::Vector2(1, -1));
+                    else
+                        ukn::SpriteBatch::DefaultObject().drawQuad(mFogTechnique, 
+                                                               ukn::Vector2(-1, -1), 
+                                                               ukn::Vector2(1, 1));
 
         mRT->detachFromRender();
     }
@@ -56,7 +67,7 @@ namespace ukn {
         mFogTarget = MakeSharedPtr<ukn::RenderTarget>((uint32)size[0],
                                                       (uint32)size[1],
                                                       1,
-                                                      ukn::EF_RGBA64);
+                                                      ukn::EF_RGBA8);
         mRT->attach(ATT_Color0, mFogTarget);
 
         ukn::ShaderPtr vertexShader;

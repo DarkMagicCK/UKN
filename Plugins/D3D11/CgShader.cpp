@@ -8,21 +8,33 @@
 #include "Cg/cgD3D11.h"
 
 #include "mist/Logger.h"
+#include "mist/Convert.h"
 
 namespace ukn {
+    
+#define LOG_CG_ERROR(str, file)                                 \
+        if(file) {                                              \
+            log_error((FormatString(L"{0}: {1}"), file, str));   \
+        }                                                       \
+        else {                                                  \
+            log_error(str);                                     \
+        }                                                       \
 
-    bool _check_error(CGcontext context) {
+    bool _check_error(CGcontext context, const wchar_t* file = 0) {
         CGerror error;
         const char* str = cgGetLastErrorString(&error);
         if(error != CG_NO_ERROR) {
             if(error == CG_COMPILER_ERROR) {
                 const char* listing =  cgGetLastListing(context);
-                if(listing)
-                    log_error(std::string(str) + listing);
-                else
-                    log_error(str);
-            } else 
-                log_error(str);
+                if(listing) {
+                    LOG_CG_ERROR(std::string(str) + listing, file);
+                }
+                else {
+                    LOG_CG_ERROR(str, file);
+                }
+            } else {
+                LOG_CG_ERROR(str, file);
+            }
             return false;
         }
         return true;
@@ -60,6 +72,12 @@ namespace ukn {
                 break;
             }
         }
+        
+        switch(type){
+            case ST_FragmentShader: return CG_PROFILE_PS_3_0;
+            case ST_VertexShader: return CG_PROFILE_VS_3_0;
+            case ST_GeometryShader: return CG_PROFILE_UNKNOWN;
+        }
     }
 
     CgDxEffect::CgDxEffect(D3D11GraphicDevice* device):
@@ -69,6 +87,7 @@ namespace ukn {
             mist_assert(mContext);
 
             cgD3D11SetDevice(mContext, device->getD3DDevice());
+            cgD3D11SetManageTextureParameters(mContext, CG_TRUE);
     }
 
     CgDxEffect::~CgDxEffect() {
@@ -104,7 +123,8 @@ namespace ukn {
 
     bool CgDxShader::initialize(D3D11GraphicDevice* device, const ResourcePtr& resource, const ShaderDesc& desc) {
         mDesc = desc;
-        
+        mDevice = device;
+
         StreamPtr stream = resource->readIntoMemory();
         if(!stream)
             return false;
@@ -113,12 +133,12 @@ namespace ukn {
         
         CGprofile profile = _d3d_feature_level_to_cgprofile(device->getDeviceFeatureLevel(), desc.type);
         mProgram = cgCreateProgram(mContext, 
-            CG_SOURCE, 
-            content.c_str(), 
-            profile, 
-            desc.entry.c_str(), 
-            cgD3D11GetOptimalOptions(profile));
-        if(_check_error(mContext) &&
+                                   CG_SOURCE, 
+                                   content.c_str(), 
+                                   profile, 
+                                   desc.entry.c_str(), 
+                                   cgD3D11GetOptimalOptions(profile));
+        if(_check_error(mContext, resource->getName().c_str()) &&
             D3D11Debug::CHECK_RESULT( cgD3D11LoadProgram(mProgram, 0))) {
                 return true;
         }
@@ -172,8 +192,11 @@ namespace ukn {
     bool CgDxShader::setTextureVariable(const char* name, const TexturePtr& tex) {
         if(mProgram && tex) {
             CGparameter param = cgGetNamedParameter(mProgram, name);
+            
             if(_check_error(mContext) && param) {
-                cgD3D11SetTextureParameter(param, (ID3D11Resource*)tex->getTextureId());
+                cgD3D11SetTextureSamplerStateParameter(param, 
+                                                       (ID3D11Resource*)tex->getTextureId(),
+                                                       mDevice->getD3DSamplerState());
                 return _check_error(mContext);
             }
         }

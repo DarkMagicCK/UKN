@@ -31,8 +31,8 @@ const uniform float specular_power = 0;
 const uniform int use_bump_mapping = 0;
 
 FragmentOutputType FragmentProgram(VertexOutputType input,
-				                   uniform sampler2D diffuseMap: TEX0,
-                                   uniform sampler2D normalMap: TEX1) {    
+				                   uniform sampler2D diffuseMap,
+                                   uniform sampler2D normalMap) {    
     FragmentOutputType output;
     // not using specular map now
 

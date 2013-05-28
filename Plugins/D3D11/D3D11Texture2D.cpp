@@ -269,13 +269,13 @@ namespace ukn {
     void D3D11Texture2D::updateData(const mist::Rectangle& rect, const uint8* data, uint32 level) {
         if(mTexture) {
             D3D11_BOX box;
-            box.top = rect.y(); box.left = rect.x();
-            box.bottom = rect.bottom(); box.right = rect.right();
+            box.top = (UINT)rect.y(); box.left = (UINT)rect.x();
+            box.bottom = (UINT)rect.bottom(); box.right = (UINT)rect.right();
             mDevice->getD3DDeviceContext()->UpdateSubresource(mTexture.get(),
                                                               level,
                                                               &box,
                                                               data,
-                                                              rect.width() * GetElementSize(this->format()),
+                                                              (UINT)rect.width() * GetElementSize(this->format()),
                                                               0);
         }
     }
@@ -286,6 +286,7 @@ namespace ukn {
                 return mDesc.Width;
             return mDesc.Width / (1U << (level-1));
         }
+        return 0;
     }
 
     uint32 D3D11Texture2D::height(uint32 level) const {
@@ -295,6 +296,7 @@ namespace ukn {
            
             return mDesc.Height / (1U << (level-1));
         }
+        return 0;
     }
 
     uint32 D3D11Texture2D::depth(uint32 level) const {

@@ -28,6 +28,7 @@ namespace ukn {
         case RSP_StencilOpIncrWrap: return D3D11_STENCIL_OP_INCR;
         case RSP_StencilOpDecrWrap: return D3D11_STENCIL_OP_DECR;
         }
+        return D3D11_STENCIL_OP_INCR;
     }
 
     D3D11DepthStencilStateObject::D3D11DepthStencilStateObject(const DepthStencilStateDesc& desc, D3D11GraphicDevice* device):

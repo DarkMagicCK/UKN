@@ -177,7 +177,7 @@ namespace mist {
     class BufferedStream: public Stream {
     public:
         BufferedStream(const StreamPtr& stream);
-        BufferedStream(const StreamPtr& stream, size_t buffer_size);
+        BufferedStream(const StreamPtr& stream, size_t read_buffer_size);
         virtual ~BufferedStream();
         
         bool	canRead() const override;
@@ -200,8 +200,12 @@ namespace mist {
         StreamPtr readIntoMemory() override;
         
     private:
-        Array<uint8> mBuffer;
+        void readMore(size_t length);
+
+        Array<uint8> mWriteBuffer;
+        Array<uint8> mReadBuffer;
         StreamPtr mStream;
+        size_t mReadBufferSize;
     };
 
     class StringStream: public Stream {

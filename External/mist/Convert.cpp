@@ -133,13 +133,44 @@ namespace mist {
         return result;
     }
     
+    FormatString::FormatString(const MistString& str):
+    mStr(str),
+    mConvertTask(Bind(this, &FormatString::doReplace)) {
+
+    }
+
+    FormatString::operator MistString() {
+        return mConvertTask.value();
+    }
     
-    void FormatString::replace(const MistString& search, const MistString& replacement) {
-        size_t pos = 0;
-        while((pos = mStr.find(search, pos)) != MistString::npos) {
-            mStr.replace(pos, search.length(), replacement);
-            pos += replacement.length();
+    MistString FormatString::doReplace() {
+        MistString::iterator it = mStr.begin();
+        while(it != mStr.end()) {
+            if(*it == L'{') {
+                MistString numBuffer;
+
+                MistString::iterator end = it;
+                ++end;
+                while(string::IsNumber(*end)) {
+                    numBuffer.push_back(*end);
+                    ++end;
+                }
+                if(*end == L'}') {
+                    uint32 index = Convert::ToUInt32(numBuffer);
+                    if(index < mItemsToReplace.size()) {
+                        size_t cindex = it - mStr.begin();
+
+                        mStr.replace(it, end+1, mItemsToReplace[index]);
+                        
+                        it = mStr.begin() + (mItemsToReplace[index].size() + cindex);
+                        if(it >= mStr.end())
+                            break;
+                    }
+                }
+            }
+            ++it;
         }
+        return mStr;
     }
 
     

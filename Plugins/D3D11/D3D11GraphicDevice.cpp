@@ -25,23 +25,14 @@
 #include "D3D11Debug.h"
 
 #pragma comment(lib, "D3D11.lib")
-#pragma comment(lib, "d3dx11.lib")
-#pragma comment(lib, "d3dx10.lib")
 #pragma comment(lib, "dxgi.lib")
 
 namespace ukn {
 
     D3D11GraphicDevice::D3D11GraphicDevice():
         mDevice(0),
-        mDebug(0) {
-            /*
-            LH to RH and fix z
-            www.klayge.org/2011/07/15
-            1  0   0   0
-            0  1   0   0
-            0  0   2   0
-            0  0   -1  1
-            */
+        mDebug(0),
+        mSamplerState(0) {
     }
 
     D3D11GraphicDevice::~D3D11GraphicDevice() {
@@ -330,15 +321,6 @@ namespace ukn {
                    
                 pass->begin();
 
-                
-            for(int i=0; i < mSamplerStates.size(); ++i) {
-                D3D11SamplerStateObject* samplerObj = checked_cast<D3D11SamplerStateObject*>(mSamplerStates[i].get());
-                if(samplerObj) {
-                    ID3D11SamplerState* d3d11samplerState = samplerObj->getD3DSamplerState();
-                    mDeviceContext->PSSetSamplers(i, 1, &d3d11samplerState);
-                }
-            }
-
                 if(buffer->hasInstanceStream()) {
                     if(indexBuffer.isValid() &&
                         buffer->isUseIndexStream()) {
@@ -393,7 +375,6 @@ namespace ukn {
     }
 
     void D3D11GraphicDevice::bindTexture(const TexturePtr& texture) {
-        
     }
 
     void D3D11GraphicDevice::fillGraphicCaps(GraphicDeviceCaps& caps) {
@@ -425,12 +406,11 @@ namespace ukn {
         if(samplerState) {
             D3D11SamplerStateObject* samplerObj = checked_cast<D3D11SamplerStateObject*>(samplerState.get());
             if(samplerObj) {
-                ID3D11SamplerState* d3d11samplerState = samplerObj->getD3DSamplerState();
-                mDeviceContext->PSSetSamplers(index, 1, &d3d11samplerState);
+                ID3D11SamplerState* d3d11SamplerState = samplerObj->getD3DSamplerState();
+                mSamplerState = d3d11SamplerState;
             }
         } else {
-            ID3D11SamplerState* empty_state = 0;
-            mDeviceContext->PSSetSamplers(index, 1, &empty_state);
+            mSamplerState = 0;
         }
     }
 
@@ -451,4 +431,9 @@ namespace ukn {
              }
          }
      }
+
+     ID3D11SamplerState* D3D11GraphicDevice::getD3DSamplerState() const {
+         return mSamplerState;
+     }
+
 } // namespace ukn

@@ -186,7 +186,7 @@ namespace ukn {
         
             mDSView = new RenderTarget(mShadowMapResolution,
                                        mShadowMapResolution,
-                                       EF_D24S8);
+                                       EF_D32);
         }
     }
 
@@ -290,7 +290,7 @@ namespace ukn {
         
             mDSView = new RenderTarget(mShadowMapResolution,
                                        mShadowMapResolution,
-                                       EF_D24S8);
+                                       EF_D32);
         }
     }
 

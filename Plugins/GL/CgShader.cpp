@@ -6,21 +6,33 @@
 #include "Cg/cgGL.h"
 
 #include "mist/Logger.h"
+#include "mist/Convert.h"
 
 namespace ukn {
 
-    inline bool _check_error(CGcontext context) {
+#define LOG_CG_ERROR(str, file)                                 \
+        if(file) {                                              \
+            log_error((FormatString(L"{0}: {1}"), file, str));   \
+        }                                                       \
+        else {                                                  \
+            log_error(str);                                     \
+        }                                                       \
+
+    bool _check_error(CGcontext context, const wchar_t* file = 0) {
         CGerror error;
         const char* str = cgGetLastErrorString(&error);
         if(error != CG_NO_ERROR) {
             if(error == CG_COMPILER_ERROR) {
-                const char* err = cgGetLastListing(context);
-                if(err)
-                    log_error(std::string(str) + err);
-                else
-                    log_error(str);
-            } else 
-                log_error(str);
+                const char* listing =  cgGetLastListing(context);
+                if(listing) {
+                    LOG_CG_ERROR(std::string(str) + listing, file);
+                }
+                else {
+                    LOG_CG_ERROR(str, file);
+                }
+            } else {
+                LOG_CG_ERROR(str, file);
+            }
             return false;
         }
         return true;

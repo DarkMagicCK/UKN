@@ -2,7 +2,7 @@
 #define MISTLazy_h_
 
 #include "mist/Function.h"
-#include "mist/SharedPtr.h"
+#include "mist/Ptr.h"
 
 namespace mist {
 

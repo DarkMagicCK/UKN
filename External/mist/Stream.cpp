@@ -476,13 +476,15 @@ namespace mist {
     }
     
     BufferedStream::BufferedStream(const StreamPtr& stream):
-    mStream(stream) {
+    mStream(stream),
+    mReadBufferSize(16) {
         
     }
     
     BufferedStream::BufferedStream(const StreamPtr& stream, size_t buffer_size):
-    mStream(stream){
-        mBuffer.resize(buffer_size);
+    mStream(stream), 
+    mReadBufferSize(buffer_size) {
+        this->readMore(mReadBufferSize);
     }
     
     BufferedStream::~BufferedStream() {
@@ -509,12 +511,29 @@ namespace mist {
         return mStream->seek(pos);
     }
     
+    void BufferedStream::readMore(size_t length) {
+        if(mStream->eos())
+            return;
+        uint8* buffer = (uint8*)malloc(length);
+        size_t readLength = mStream->read(buffer, length);
+        mReadBuffer.insert(mReadBuffer.end(), 
+                           buffer, 
+                           buffer + readLength);
+    }
+
     size_t BufferedStream::read(uint8* buffer, size_t length) {
-        return mStream->read(buffer, length);
+        if(mReadBuffer.size() < length)
+            this->readMore(length > mReadBufferSize ? length: mReadBufferSize);
+        size_t sizeToRead = length;
+        if(mReadBuffer.size() < length)
+            sizeToRead = mReadBuffer.size();
+
+        memcpy(buffer, &mReadBuffer[0], sizeToRead);
+        return sizeToRead;
     }
     
     size_t BufferedStream::write(const uint8* buffer, size_t length) {
-        mBuffer.insert(mBuffer.end(), buffer, buffer + length);
+        mWriteBuffer.insert(mWriteBuffer.end(), buffer, buffer + length);
         return length;
     }
     
@@ -536,8 +555,8 @@ namespace mist {
     
     void BufferedStream::flush() {
         if(mStream->isValid()) {
-            mStream->write(mBuffer.data(), mBuffer.size());
-            mBuffer.clear();
+            mStream->write(mWriteBuffer.data(), mWriteBuffer.size());
+            mWriteBuffer.clear();
             mStream->flush();
         } else 
             MIST_THROW_EXCEPTION(L"mist::BufferedStream::flush: attempted to write a invalid stream, maybe the stream had been closed?");
@@ -550,8 +569,6 @@ namespace mist {
     StreamPtr BufferedStream::readIntoMemory() {
         return mStream->readIntoMemory();
     }
-
-
 
     bool StringStream::eos() const {
         return mPos >= mString.size();

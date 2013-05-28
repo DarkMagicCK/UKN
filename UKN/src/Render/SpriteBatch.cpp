@@ -184,7 +184,7 @@ namespace ukn {
         
         mVertexBuffer = gf.createVertexBuffer(GraphicBuffer::WriteOnly, 
                                               GraphicBuffer::Dynamic, 
-                                              1024, 
+                                              60, 
                                               0, 
                                               Vertex2D::Format());
         mist_assert(mVertexBuffer);

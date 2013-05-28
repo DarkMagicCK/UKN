@@ -30,6 +30,17 @@ namespace mist {
         MIST_API MistString GetFilePath(const MistString& str);
 
         MIST_API MistString Strip(const MistString& str);
+
+        MIST_API bool IsSpace(char chr);
+        MIST_API bool IsSpace(wchar_t chr);
+
+        MIST_API bool IsNumber(char chr);
+        MIST_API bool IsNumber(wchar_t chr);
+
+        MIST_API bool IsAscII(wchar_t chr);
+
+        MIST_API bool IsAlphabet(char chr);
+        MIST_API bool IsAlphabet(wchar_t chr);
         
         template<typename T>
         static std::string AnyToString(const T& val) {

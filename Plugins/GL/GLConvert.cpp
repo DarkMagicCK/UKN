@@ -13,13 +13,13 @@ namespace ukn {
     GLenum render_mode_to_gl_mode(RenderMode mode) {
         switch (mode) {
             case RM_Point:              return GL_POINTS;
-			case RM_Line:               return GL_LINES;
+            case RM_Line:               return GL_LINES;
             case RM_LineLoop:           return GL_LINE_LOOP;
-			case RM_Triangle:           return GL_TRIANGLES;
-			case RM_TriangleFan:        return GL_TRIANGLE_FAN;
-			case RM_TriangleStrip:      return GL_TRIANGLE_STRIP;
-		}
-		return GL_INVALID_VALUE;
+           case RM_Triangle:           return GL_TRIANGLES;
+            case RM_TriangleFan:        return GL_TRIANGLE_FAN;
+            case RM_TriangleStrip:      return GL_TRIANGLE_STRIP;
+        }
+        return GL_INVALID_VALUE;
     }
     
     GLenum element_format_to_gl_format(ElementFormat format) {
@@ -28,8 +28,8 @@ namespace ukn {
             case EF_RGBA4444: return GL_RGBA4;
             case EF_RGB565: return GL_RGB5;
             case EF_RGB5A1: return GL_RGB5_A1;
-			case EF_D32: return GL_DEPTH_COMPONENT32;
-			case EF_D16: return GL_DEPTH_COMPONENT16;
+            case EF_D32: return GL_DEPTH_COMPONENT32;
+            case EF_D16: return GL_DEPTH_COMPONENT16;
             case EF_D24S8: return GL_DEPTH24_STENCIL8;
             case EF_Float4: return GL_RGBA32F;
             case EF_Float3: return GL_RGB32F;
@@ -43,7 +43,7 @@ namespace ukn {
             default:
                 return GL_UNSIGNED_BYTE;
         }
-		return GL_UNSIGNED_BYTE;
+        return GL_UNSIGNED_BYTE;
     }
     
     GLenum element_format_to_texdata_format(ElementFormat format) {
@@ -55,19 +55,19 @@ namespace ukn {
             case EF_HalfFloat2: return GL_RG;
             case EF_HalfFloat4: return GL_RGBA;
             case EF_UInt32: return GL_RGBA;
-            case EF_Float: return GL_R;
+            case EF_Float: return GL_RED;
             case EF_Float2: return GL_RG;
             case EF_RG32: return GL_RG;
             case EF_RGBA64: return GL_RGBA;
             case EF_Float3: return GL_RGB;
             case EF_Float4: return GL_RGBA;
-			case EF_D32: return GL_DEPTH_COMPONENT;
-			case EF_D16: return GL_DEPTH_COMPONENT;
+            case EF_D32: return GL_DEPTH_COMPONENT;
+            case EF_D16: return GL_DEPTH_COMPONENT;
             case EF_D24S8: return GL_DEPTH_STENCIL;
             default:
                 return GL_UNSIGNED_BYTE;
         }
-		return GL_UNSIGNED_BYTE;
+        return GL_UNSIGNED_BYTE;
     }
     
     GLenum element_format_to_gl_element_type(ElementFormat format) {
@@ -92,7 +92,7 @@ namespace ukn {
             default:
                 return GL_UNSIGNED_BYTE;
         }
-		return GL_UNSIGNED_BYTE;
+        return GL_UNSIGNED_BYTE;
     }
     
     GLenum element_format_to_gl_data_type(ElementFormat format) {
@@ -118,7 +118,7 @@ namespace ukn {
             default:
                 return GL_UNSIGNED_BYTE;
         }
-		return GL_UNSIGNED_BYTE;
+        return GL_UNSIGNED_BYTE;
     }
     
     bool element_format_contains_stencil(ElementFormat format) {

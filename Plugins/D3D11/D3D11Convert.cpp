@@ -1,26 +1,9 @@
 #include "D3D11Convert.h"
-#include <D3DX10math.h>
 
 #include "mist/Convert.h"
 #include "ukn/Vertex.h"
 
 namespace ukn {
-
-    void D3DXMatrixToMatrix4(const D3DXMATRIX& d3dmat, Matrix4& mat) {
-        for(int col = 0; col < 4; ++col) {
-            for(int row = 0; row < 4; ++row) {
-                mat.c[col][row] = d3dmat(row, col);
-            }
-        }
-    }
-
-    void Matrix4ToD3DMatrix(const Matrix4& mat, D3DXMATRIX& d3dmat) {
-        for(int col = 0; col < 4; ++col) {
-            for(int row = 0; row < 4; ++row) {
-                d3dmat(row, col) = mat.c[col][row];
-            }
-        }
-    }
 
     DXGI_FORMAT ElementFormatToDxGIFormat(ukn::ElementFormat format) {
         switch(format) {
@@ -57,6 +40,7 @@ namespace ukn {
         case ElementFormat::EF_HalfFloat4:
             return DXGI_FORMAT_R16G16B16A16_FLOAT;
         }
+        return DXGI_FORMAT_R8G8B8A8_UNORM;
     }
 
     ElementFormat DxGIFormatToElementFormat(DXGI_FORMAT format) {
@@ -92,6 +76,7 @@ namespace ukn {
         case DXGI_FORMAT_R16G16B16A16_FLOAT:
             return ElementFormat::EF_HalfFloat4;
         }
+        return ElementFormat::EF_RGBA8;
     }
 
     const char* VertexUsageToSemanticName(ukn::VertexUsage usage) {
@@ -106,7 +91,9 @@ namespace ukn {
         case VU_BlendWeight: return "BLENDWEIGHT";
         case VU_BlendIndices: return "BLENDINDICIES";
         case VU_PSize: return "PSIZE";
+        case VU_Unknown: return "";
         }
+        
     }
 
     D3D11_PRIMITIVE_TOPOLOGY RenderModeToPrimitiveTopology(ukn::RenderMode mode) {
@@ -118,6 +105,7 @@ namespace ukn {
         case ukn::RenderMode::RM_TriangleFan: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST; /* to fix */
         case ukn::RenderMode::RM_TriangleStrip: return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
         }
+        return D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     }
 
 }

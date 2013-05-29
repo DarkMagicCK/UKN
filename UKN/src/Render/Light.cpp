@@ -154,7 +154,7 @@ namespace ukn {
             nearPlane = cp->getNearPlane();
         }
 
-        mCamera->setProjParamsOrtho(-50, 50, -50, 50, nearPlane, farPlane);
+        mCamera->setProjParamsOrtho(-30, 30, -30, 30, nearPlane, farPlane);
         
         float3 target = mPosition + mDirection;
         if(target.sqrLength() == 0) 

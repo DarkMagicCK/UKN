@@ -244,14 +244,9 @@ namespace ukn {
                     fragmentShader->setFloatVariable("shadowMapSize", (float)light->getShadowMapResolution());
                     fragmentShader->setFloatVariable("depthPrecision", lightCam->getFarPlane());
                     
-                    if(!gd.getCurrFrameBuffer()->requiresFlipping())
-                        ukn::SpriteBatch::DefaultObject().drawQuad(mDirectionalLightTechnique, 
+                    ukn::SpriteBatch::DefaultObject().drawQuad(mDirectionalLightTechnique, 
                                                                ukn::Vector2(-1, 1), 
                                                                ukn::Vector2(1, -1));
-                    else
-                        ukn::SpriteBatch::DefaultObject().drawQuad(mDirectionalLightTechnique, 
-                                                               ukn::Vector2(-1, -1), 
-                                                               ukn::Vector2(1, 1));
 
                 }
             }
@@ -400,14 +395,9 @@ namespace ukn {
         fragmentShader->setTextureVariable("lightMap",
                                             mLightMapRT->getTargetTexture(ATT_Color0));
 
-        if(!gd.getCurrFrameBuffer()->requiresFlipping())
-                        ukn::SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, 
-                                                               ukn::Vector2(-1, 1), 
-                                                               ukn::Vector2(1, -1));
-                    else
-                        ukn::SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, 
-                                                               ukn::Vector2(-1, -1), 
-                                                               ukn::Vector2(1, 1));
+        ukn::SpriteBatch::DefaultObject().drawQuad(mCompositeTechnique, 
+                                                    ukn::Vector2(-1, 1), 
+                                                    ukn::Vector2(1, -1));
 
         mCompositeRT->detachFromRender();
     }

@@ -350,6 +350,9 @@ namespace ukn {
                 }
                 pass->end();
             }
+            ID3D11ShaderResourceView* view[D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT] = {0};
+            mDeviceContext->PSSetShaderResources(0, 
+                D3D11_COMMONSHADER_INPUT_RESOURCE_SLOT_COUNT, view);
         }
     }
 

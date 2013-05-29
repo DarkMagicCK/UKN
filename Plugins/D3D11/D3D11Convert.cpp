@@ -30,7 +30,7 @@ namespace ukn {
         case ElementFormat::EF_Float:
             return DXGI_FORMAT_R32_FLOAT;
         case ElementFormat::EF_UInt32:
-            return DXGI_FORMAT_R8G8B8A8_UNORM;
+            return DXGI_FORMAT_R8G8B8A8_UINT;
         case ElementFormat::EF_RGBA64:
             return DXGI_FORMAT_R16G16B16A16_UNORM;
         case ElementFormat::EF_RG32:

@@ -41,7 +41,7 @@ namespace ukn {
     }
 
     bool GLTexture2D::load(const ResourcePtr& resource, bool mipmap) {
-        if(resource->getResourceStream()) {
+        if(resource && resource->getResourceStream()) {
             StreamPtr memStream = resource->getResourceStream()->readIntoMemory();
 
             if(memStream) {
@@ -175,7 +175,7 @@ namespace ukn {
         
         uint8* texData = mist_malloc_t(uint8, mOrigWidth * mOrigHeight * GetElementSize(this->format()));
         
-        glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
+        CHECK_GL_CALL(glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId));
         CHECK_GL_CALL(glGetTexImage(GL_TEXTURE_2D,
                       level,
                       element_format_to_texdata_format(this->format()),
@@ -198,7 +198,7 @@ namespace ukn {
         GLint prevTexture;
         glGetIntegerv(GL_TEXTURE_BINDING_2D, &prevTexture);
         
-        glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId);
+        CHECK_GL_CALL(glBindTexture(GL_TEXTURE_2D, (GLint)mTextureId));
         CHECK_GL_CALL(glTexSubImage2D(GL_TEXTURE_2D,
                         mMappedLevel,
                         0,

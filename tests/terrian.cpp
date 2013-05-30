@@ -57,11 +57,12 @@ __in  int nCmdSho) {
         ukn::Context::Instance().registerGraphicFactory(factory);
 #endif
         
-        mist::ResourceLoader::Instance().addPath(L"../Release/");
+        mist::ResourceLoader::Instance().addPath(L"/Users/darkfall/Documents/codes/UKN/DerivedData/Project Unknown/Build/Products/Debug/Media/");
+        mist::ResourceLoader::Instance().addPath(L"/Users/darkfall/Documents/codes/UKN/DerivedData/Project Unknown/Build/Products/Debug/");
             
         ukn::uint32 count;
         float r = 0;
-        ukn::AppLauncher(L"Windows Test")
+        ukn::AppLauncher(L"OpenGL Test")
         .create(
                 ukn::ContextCfg::Default()
                 .width(1024)

@@ -246,8 +246,9 @@ namespace ukn {
 
         helper.setupMat();
         while(it != mRenderQueue.end()) { 
-            if(currTexture &&
-                it->texture != currTexture) {
+            if((currTexture &&
+                it->texture != currTexture) || (
+               renderCount > mVertexBuffer->count())) {
                 mVertexBuffer->unmap();
                 
                 helper.bindTexture(currTexture);

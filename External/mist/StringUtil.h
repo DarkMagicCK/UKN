@@ -56,6 +56,11 @@ namespace mist {
             return sstr.str();
         }
         
+        template<>
+        static std::wstring AnyToWString<std::string>(const std::string& val) {
+            return StringToWString(val);
+        }
+        
     }
     
     class MIST_API StringTokenlizer {

@@ -24,11 +24,6 @@ namespace mist {
         template<typename T>
         static MistString ToString(const T& t);
         
-        template<>
-        static MistString ToString<std::string>(const std::string& t) {
-            return string::StringToWString(t);
-        }
-
         static bool     ToBoolean(const MistString& str);
         
         static int16    ToInt16(const MistString& str);
@@ -66,7 +61,7 @@ namespace mist {
         return string::AnyToWString(t);
     }
     
-        
+
     struct MIST_API FormatString {
         FormatString(const MistString& str);
 

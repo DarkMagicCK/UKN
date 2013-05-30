@@ -124,7 +124,8 @@ namespace mist {
             
             ++itFac;
         }
-        return MakeSharedPtr<Resource>(name, StreamPtr());
+        log_error(L"ResourceManager: Error loading resource: " + name);
+        return ResourcePtr();
     }
     
     ResourcePtr ResourceLoader::loadResource(const MistString& name_or_path, bool isFullPath) {

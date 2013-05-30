@@ -62,5 +62,6 @@ namespace ukn {
     const EffectPtr& Ukn2DHelper::getEffect() const {
         return mEffect;
     }
+    
 
 } // namespace ukn

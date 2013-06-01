@@ -87,7 +87,7 @@ namespace ukn {
             mist_assert(mContext);
 
             cgD3D11SetDevice(mContext, device->getD3DDevice());
-            cgD3D11SetManageTextureParameters(mContext, CG_TRUE);
+          //  cgD3D11SetManageTextureParameters(mContext, CG_TRUE);
     }
 
     CgDxEffect::~CgDxEffect() {

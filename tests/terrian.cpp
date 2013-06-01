@@ -172,7 +172,7 @@ __in  int nCmdSho) {
                         ukn::Rectangle(0, 0, wnd->width()/2, wnd->height()/2, true));
             sb.draw(deferredRenderer->getNormalTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(wnd->width()/2, 0, wnd->width()/2, wnd->height()/2, true));
-            sb.draw(directionalLight->getShadowMap()->getTexture(), ukn::Rectangle(),
+            sb.draw(deferredRenderer->getDepthTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(wnd->width()/2, wnd->height()/2,  wnd->width()/2, wnd->height()/2, true));
             sb.draw(deferredRenderer->getColorTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(0, wnd->height()/2, wnd->width()/2, wnd->height()/2, true));
@@ -235,7 +235,7 @@ __in  int nCmdSho) {
             
             deferredRenderer = new ukn::DeferredRenderer();
        //     deferredRenderer->addPostEffect(L"SSAO");
-            deferredRenderer->addPostEffect(L"Fog");
+       //     deferredRenderer->addPostEffect(L"Fog");
             
         //    ssao = ukn::checked_cast<ukn::SSAO*>(deferredRenderer->getPostEffect(L"SSAO").get());
             //    fog = ukn::checked_cast<ukn::Fog*>(deferredRenderer->getPostEffect(L"Fog").get());

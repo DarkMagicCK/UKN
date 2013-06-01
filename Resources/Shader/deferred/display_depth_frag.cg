@@ -4,7 +4,7 @@ struct VertexOutputType {
 };
 
 float4 FragmentProgram(VertexOutputType input,
-					   uniform sampler2D depthMap): COLOR0 {
+					   uniform sampler2D depthMap: TEXUNIT0): COLOR0 {
 	float depth = tex2D(depthMap, input.texCoord).g;
 	return float4(depth / 50, depth / 50, depth / 50, 1.0);	
 }

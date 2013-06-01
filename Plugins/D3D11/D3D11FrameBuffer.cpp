@@ -66,8 +66,11 @@ namespace ukn {
         if(this->attached(ATT_DepthStencil)) {
             dsView = ((D3D11DepthStencilRenderView*)this->attached(ATT_DepthStencil).get())->getD3D11DepthStencilView();
         }
+        for(uint32 i = mClearViews.size(); i < D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT; ++i) {
+            rtViews.push_back(0);
+        }
         mGraphicDevice->getD3DDeviceContext()->OMSetRenderTargets(
-            mClearViews.size(), 
+            D3D11_SIMULTANEOUS_RENDER_TARGET_COUNT, 
             &rtViews[0], 
             dsView);
     }

@@ -9,9 +9,9 @@ namespace ukn {
 
     Fog::Fog():
     mColor(color::Lightgrey),
-    mDensity(0.1f),
+    mDensity(0.02f),
     mStart(0.f), mEnd(100.f),
-    mType(Linear) {
+    mType(Exponential2) {
 
     }
 

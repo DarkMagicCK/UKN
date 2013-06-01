@@ -17,9 +17,9 @@ float3 decode(float3 enc) {
 }
 
 float4 FragmentProgram(VertexOutputType input,
-					   uniform sampler2D normalMap: TEX0,
-					   uniform sampler2D depthMap: TEX1,
-					   uniform sampler2D randNormalMap: TEX2): COLOR0 {
+					   uniform sampler2D normalMap: TEXUNIT0,
+					   uniform sampler2D depthMap: TEXUNIT1,
+					   uniform sampler2D randNormalMap: TEXUNIT2): COLOR0 {
 
 	float4 samples[8] = {
 		float4(0.355512, 	-0.709318, 	-0.102371, 	0),

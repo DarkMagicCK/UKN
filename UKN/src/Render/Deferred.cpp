@@ -203,6 +203,7 @@ namespace ukn {
 
         gd.setBlendState(mLightMapBS);
         gd.setDepthStencilState(DepthStencilStateObject::None());
+        gd.setSamplerState(SamplerStateObject::LinearWrap());
 
         const LightManagerPtr& lights = scene.getLightManager();
 

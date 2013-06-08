@@ -56,6 +56,8 @@ namespace ukn {
         const ShaderPtr& getVertexShader() const;
         const ShaderPtr& getGeometryShader() const;
 
+        bool isOK() const;
+
         /* overridable */
         virtual void begin();
         virtual void end();

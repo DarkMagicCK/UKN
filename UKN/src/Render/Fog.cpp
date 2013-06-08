@@ -22,6 +22,9 @@ namespace ukn {
     void Fog::render(const TexturePtr& color,
                      const TexturePtr& normal,
                      const TexturePtr& depth) {
+        if(!mFogTechnique->getPass(0)->isOK())
+            return;
+
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         const CameraPtr& cam = gd.getCurrFrameBuffer()->getViewport().camera;
@@ -63,21 +66,23 @@ namespace ukn {
                                                       ukn::EF_RGBA8);
         mRT->attach(ATT_Color0, mFogTarget);
 
-        ukn::ShaderPtr vertexShader;
-        ukn::ShaderPtr fragmentShader;
-            
         GraphicFactory& gf = Context::Instance().getGraphicFactory();
         mEffect = gf.createEffect();
 
         if(mEffect) {
-            vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/fog_vert.cg"), 
-                                                    VERTEX_SHADER_DESC("VertexProgram"));
-            fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/fog_frag.cg"), 
-                                                    FRAGMENT_SHADER_DESC("FragmentProgram"));
-            mFogTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
+            mFogTechnique = mEffect->appendTechnique();
+            this->reloadShaders();
         }
 
         return true;
+    }
+
+    void Fog::reloadShaders() {
+        ukn::ShaderPtr vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/fog_vert.cg"), 
+                                             VERTEX_SHADER_DESC("VertexProgram"));
+        ukn::ShaderPtr fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/fog_frag.cg"), 
+                                               FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mFogTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
     }
 
     TexturePtr Fog::getFinalTexture() const {

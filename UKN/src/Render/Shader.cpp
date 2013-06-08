@@ -44,6 +44,10 @@ namespace ukn {
         return mGeometryShader;
     }
 
+    bool EffectPass::isOK() const {
+        return mFragmentShader && mVertexShader;
+    }
+
     void EffectPass::begin() {
         if(mVertexShader)
             mVertexShader->bind();

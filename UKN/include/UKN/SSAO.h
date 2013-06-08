@@ -31,6 +31,8 @@ namespace ukn {
         bool init(float2 size) override;
         TexturePtr getFinalTexture() const override;
 
+        void reloadShaders();
+
     private:
         void makeSSAO(const TexturePtr& color,
                       const TexturePtr& normap,

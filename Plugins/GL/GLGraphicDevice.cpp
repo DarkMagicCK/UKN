@@ -435,7 +435,7 @@ namespace ukn {
         switch(type) {
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
         case RS_ColorOp:
-            CHECK_GL_CALL(glTexEnvf(GL_TEXTURE_2D, 
+            CHECK_GL_CALL(glTexEnvi(GL_TEXTURE_2D, 
                 render_state_to_gl_state(type), 
                 render_state_param_to_gl_state_param((RenderStateParam)func)));
             break;

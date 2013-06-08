@@ -26,29 +26,11 @@ namespace ukn {
 
         // tests
         mDepthWriteEffect = gf.createEffect();
-        ukn::ShaderPtr vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/expdepth_vert.cg"), 
-                                                                        VERTEX_SHADER_DESC("VertexProgram"));
-        ukn::ShaderPtr fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/expdepth_frag.cg"), 
-                                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
 
-        mEXPDepthMapTechnique = mDepthWriteEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
-
-
-        vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/depth_vert.cg"), 
-                                                                        VERTEX_SHADER_DESC("VertexProgram"));
-        fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/depth_frag.cg"), 
-                                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
-
-        mDepthMapTechnique = mDepthWriteEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
-
-        
-        vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/shadowmap_blur_vert.cg"), 
-                                                                        VERTEX_SHADER_DESC("VertexProgram"));
-        fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/shadowmap_blur_frag.cg"), 
-                                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
-
-        mBlurTechnique = mDepthWriteEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
-
+        mEXPDepthMapTechnique = mDepthWriteEffect->appendTechnique();
+        mDepthMapTechnique = mDepthWriteEffect->appendTechnique();
+        mBlurTechnique = mDepthWriteEffect->appendTechnique();
+        this->reloadShaders();
 
         mShadowMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
 
@@ -60,6 +42,26 @@ namespace ukn {
 
     LightManager::~LightManager() {
 
+    }
+
+    void LightManager::reloadShaders() {
+        ukn::ShaderPtr vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/expdepth_vert.cg"), 
+                                                                        VERTEX_SHADER_DESC("VertexProgram"));
+        ukn::ShaderPtr fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/expdepth_frag.cg"), 
+                                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mEXPDepthMapTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
+        
+        vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/depth_vert.cg"), 
+                                                                        VERTEX_SHADER_DESC("VertexProgram"));
+        fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/depth_frag.cg"), 
+                                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mDepthMapTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
+        
+        vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/shadowmap_blur_vert.cg"), 
+                                                                        VERTEX_SHADER_DESC("VertexProgram"));
+        fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/shadowmap_blur_frag.cg"), 
+                                                                        FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mBlurTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
     }
 
     const LightManager::LightSourceVec& LightManager::getDirectionalLights() const {
@@ -127,6 +129,9 @@ namespace ukn {
     }
 
     void LightManager::makeShadowMaps(SceneManager& scene) {
+        if(!mDepthMapTechnique->getPass(0)->isOK())
+            return;
+
         MIST_PROFILE(L"SHADOW_MAP");
 
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();

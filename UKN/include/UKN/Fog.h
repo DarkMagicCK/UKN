@@ -39,6 +39,8 @@ namespace ukn {
         void setType(FogType type);
         void setColor(const Color& color);
 
+        void reloadShaders();
+
     private:
         mist::Color mColor;
         float mStart;

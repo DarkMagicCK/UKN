@@ -57,10 +57,10 @@ float3 decode(float3 enc) {
 }
 
 float4 FragmentProgram(VertexOutputType input,
-                       uniform sampler2D colorMap: TEX0,
-                       uniform sampler2D normalMap: TEX1,
-                       uniform sampler2D depthMap: TEX2,
-                       uniform sampler2D shadowMap: TEX3
+                       uniform sampler2D colorMap: TEXUNIT0,
+                       uniform sampler2D normalMap: TEXUNIT1,
+                       uniform sampler2D depthMap: TEXUNIT2,
+                       uniform sampler2D shadowMap: TEXUNIT3
                        ): COLOR0 {
     input.screenPosition.xy /= input.screenPosition.w;
     float2 uv = 0.5f * (float2(input.screenPosition.x, 
@@ -80,5 +80,5 @@ float4 FragmentProgram(VertexOutputType input,
     position = mul(position, inverseViewProj);
     position /= position.w;
 
-    return phong(position.xyz, normal, 0, 0);
+    return phong(position.xyz, normal, specularIntensity, specularPower);
 }

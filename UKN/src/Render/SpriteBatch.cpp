@@ -184,7 +184,7 @@ namespace ukn {
         
         mVertexBuffer = gf.createVertexBuffer(GraphicBuffer::WriteOnly, 
                                               GraphicBuffer::Dynamic, 
-                                              60, 
+                                              120,
                                               0, 
                                               Vertex2D::Format());
         mist_assert(mVertexBuffer);
@@ -247,8 +247,8 @@ namespace ukn {
         helper.setupMat();
         while(it != mRenderQueue.end()) { 
             if((currTexture &&
-                it->texture != currTexture) || (
-               renderCount > mVertexBuffer->count())) {
+                it->texture != currTexture)
+                || renderCount >= mVertexBuffer->count()) {
                 mVertexBuffer->unmap();
                 
                 helper.bindTexture(currTexture);
@@ -506,27 +506,31 @@ namespace ukn {
         Vertex2D* vertices = (Vertex2D*)mVertexBuffer->map();
         
         GraphicDevice& device = Context::Instance().getGraphicFactory().getGraphicDevice();
+        Vector2 tupper = upper;
+        Vector2 tlower = lower;
+        if(device.getCurrFrameBuffer()->requiresFlipping())
+            std::swap(tupper.y(), tlower.y());
         
         if(vertices) {
             Vertex2D vertex;
-            vertex.xyz.set(lower.x(), lower.y(), 0);
+            vertex.xyz.set(tlower.x(), tlower.y(), 0);
             vertex.uv.set(1, 1);
             *vertices++ = vertex; 
         
-            vertex.xyz.x() = upper.x();
+            vertex.xyz.x() = tupper.x();
             vertex.uv.set(0, 1);
             *vertices++ = vertex; 
         
-            vertex.xyz.y() = upper.y();
+            vertex.xyz.y() = tupper.y();
             vertex.uv.set(0, 0);
             *vertices++ = vertex; 
             *vertices++ = vertex; 
 
-            vertex.xyz.x() = lower.x();
+            vertex.xyz.x() = tlower.x();
             vertex.uv.set(1, 0);
             *vertices++ = vertex; 
 
-            vertex.xyz.y() = lower.y();
+            vertex.xyz.y() = tlower.y();
             vertex.uv.set(1, 1);
             *vertices++ = vertex; 
         

@@ -1,9 +1,0 @@
-struct VertexOutputType {
-	float4 position: POSITION;
-};
-
-VertexOutputType VertexProgram(in float3 position: POSITION) {
-	VertexOutputType output;
-	output.position = float4(position, 1);
-	return output;
-}

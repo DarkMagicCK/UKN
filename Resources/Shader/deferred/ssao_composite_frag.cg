@@ -4,8 +4,8 @@ struct VertexOutputType {
 };
 
 float4 FragmentProgram(VertexOutputType input,
-					   uniform sampler2D colorMap,
-					   uniform sampler2D SSAO): COLOR0 {
+					   uniform sampler2D colorMap: TEXUNIT0,
+					   uniform sampler2D SSAO: TEXUNIT1): COLOR0 {
 	float4 color = tex2D(colorMap, input.uv);
 	float4 ssao = tex2D(SSAO, input.uv);
 	return color * ssao;	

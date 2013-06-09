@@ -15,7 +15,7 @@ namespace ukn {
     mColor(float4(1, 1, 1, 1)),
     mPosition(float3(0, 0, 0)),
     mIntensity(0.f),
-    mDepthBias(1.f / 2000.f),
+    mDepthBias(1.f / 1000.f),
     mCastShadows(false),
     mEnabled(true),
     mShadowMapResolution(0) {
@@ -154,7 +154,7 @@ namespace ukn {
             nearPlane = cp->getNearPlane();
         }
 
-        mCamera->setProjParamsOrtho(-50, 50, -50, 50, nearPlane, farPlane);
+        mCamera->setProjParamsOrtho(-30, 30, -30, 30, nearPlane, farPlane);
         
         float3 target = mPosition + mDirection;
         if(target.sqrLength() == 0) 

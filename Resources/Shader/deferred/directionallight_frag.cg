@@ -43,11 +43,6 @@ float4 phong(float3 position, float3 N, float specularIntensity, float specularP
     float3 R = normalize(reflect(lightDirection, N));
     float3 E = normalize(cameraPosition - position.xyz);
     float NL = dot(N, -lightDirection);
- /*   float df = max(0.0, NL);
-    if(df < 0.1) df = 0.0;
-    else if(df < 0.3) df = 0.3;
-    else if(df < 0.6) df = 0.6;
-    else df = 1.0;*/
 
     float3 diffuse = NL * lightColor.xyz;
     float specular = specularIntensity * pow(saturate(dot(R, E)), specularPower);
@@ -60,10 +55,10 @@ float3 decode(float3 enc) {
 }
 
 float4 FragmentProgram(VertexOutputType input,
-                       uniform sampler2D colorMap,
-                       uniform sampler2D normalMap,
-                       uniform sampler2D depthMap,
-                       uniform sampler2D shadowMap
+                       uniform sampler2D colorMap: TEXUNIT0,
+                       uniform sampler2D normalMap: TEXUNIT1,
+                       uniform sampler2D depthMap: TEXUNIT2,
+                       uniform sampler2D shadowMap: TEXUNIT3
                        ): COLOR0 {
 
     float4 encodedNormal = tex2D(normalMap, input.texCoord);
@@ -87,12 +82,14 @@ float4 FragmentProgram(VertexOutputType input,
     float shadowFactor = 1.0f;
 
     if(hasShadow) {
-        float lZ = tex2D(shadowMap, LUV).r;
-        float R = lightScreenPos.z;
-        if(lZ < R - depthBias) {
-            shadowFactor = 0.2f;
+        if(saturate(LUV.x) == LUV.x && saturate(LUV.y) == LUV.y) {
+            float lZ = tex2D(shadowMap, LUV).r;
+            float R = lightScreenPos.z;
+            if(lZ < R - depthBias) {
+                shadowFactor = 0.2f;
+            }
         }
     }
-    return shadowFactor * phong(position.xyz, normal, 0, 0);
+    return shadowFactor * phong(position.xyz, normal, specularIntensity, specularPower);
     
 }

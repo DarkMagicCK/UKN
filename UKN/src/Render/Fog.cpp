@@ -9,9 +9,9 @@ namespace ukn {
 
     Fog::Fog():
     mColor(color::Lightgrey),
-    mDensity(0.1f),
+    mDensity(0.02f),
     mStart(0.f), mEnd(100.f),
-    mType(Linear) {
+    mType(Exponential2) {
 
     }
 
@@ -20,8 +20,8 @@ namespace ukn {
     }
 
     void Fog::render(const TexturePtr& color,
-                    const TexturePtr& normal,
-                    const TexturePtr& depth) {
+                     const TexturePtr& normal,
+                     const TexturePtr& depth) {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         const CameraPtr& cam = gd.getCurrFrameBuffer()->getViewport().camera;
@@ -32,7 +32,7 @@ namespace ukn {
         gd.setDepthStencilState(DepthStencilStateObject::None());
         gd.setBlendState(BlendStateObject::BlendOff());
 
-        gd.clear(CM_Color | CM_Depth, color::Black, 1.0f, 0);
+        gd.clear(CM_Color , color::Black, 1.0f, 0);
         
         const ShaderPtr& fragmentShader = mFogTechnique->getPass(0)->getFragmentShader();
         const ShaderPtr& vertexShader = mFogTechnique->getPass(0)->getVertexShader();
@@ -49,15 +49,8 @@ namespace ukn {
         fragmentShader->setFloatVariable("fogType", mType);
         fragmentShader->setFloatVectorVariable("fogColor", mColor.getRGB());
 
-        if(!gd.getCurrFrameBuffer()->requiresFlipping())
-                        ukn::SpriteBatch::DefaultObject().drawQuad(mFogTechnique, 
-                                                               ukn::Vector2(-1, 1), 
-                                                               ukn::Vector2(1, -1));
-                    else
-                        ukn::SpriteBatch::DefaultObject().drawQuad(mFogTechnique, 
-                                                               ukn::Vector2(-1, -1), 
-                                                               ukn::Vector2(1, 1));
-
+        SpriteBatch::DefaultObject().drawQuad(mFogTechnique, Vector2(-1, 1), Vector2(1, -1));
+        
         mRT->detachFromRender();
     }
 

@@ -60,7 +60,7 @@ namespace ukn {
         mFrustumDirty = true;
 
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-        gd.adjustOrthoMat(mProjMat[0]);
+        gd.adjustPerspectiveMat(mProjMat[0]);
     }
     
     Vector3 Camera::getEyePos() const {

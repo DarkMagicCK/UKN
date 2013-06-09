@@ -70,7 +70,7 @@ __in  int nCmdSho) {
                 .sampleCount(1)
                 .showMouse(true)
                 .isFullScreen(false)
-                .graphicFactoryName(L"GLPlugin.dll")
+                .graphicFactoryName(L"D3D11Plugin.dll")
                 )
         .connectUpdate([&](ukn::Window* ) {
             for(int i=0; i<pointLightCount; ++i) {
@@ -178,6 +178,7 @@ __in  int nCmdSho) {
             sb.draw(deferredRenderer->getColorTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(0, wnd->height()/2, wnd->width()/2, wnd->height()/2, true));
             sb.end();
+
             
             if(font) {
                 mist::ProfileData shadowMapProf = mist::Profiler::Instance().get(L"SHADOW_MAP");
@@ -235,7 +236,7 @@ __in  int nCmdSho) {
             
             deferredRenderer = new ukn::DeferredRenderer();
        //     deferredRenderer->addPostEffect(L"SSAO");
-                deferredRenderer->addPostEffect(L"Fog");
+       //     deferredRenderer->addPostEffect(L"Fog");
             
         //    ssao = ukn::checked_cast<ukn::SSAO*>(deferredRenderer->getPostEffect(L"SSAO").get());
             //    fog = ukn::checked_cast<ukn::Fog*>(deferredRenderer->getPostEffect(L"Fog").get());
@@ -260,8 +261,8 @@ __in  int nCmdSho) {
             directionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 0.5),
                                                                          ukn::float4(1, 1, 1, 1),
                                                                          1.0,
-                                                                         false,
-                                                                         1024);
+                                                                         true,
+                                                                         256);
             scene.addLight(directionalLight);
             
             testEffect = gf.createEffect();

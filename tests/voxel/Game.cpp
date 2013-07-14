@@ -1,9 +1,9 @@
-#include "Game.h"
+#include "voxel/Game.h"
 
 #undef MessageBox
 #include "mist/SysUtil.h"
 
-#include "PolyVoxVolume.h"
+#include "OculusRift/OVRDevice.h"
 
 namespace ukn {
 
@@ -97,12 +97,6 @@ namespace ukn {
             
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
            
-            SharedPtr<SimplePolyvoxVolume> vox = MakeSharedPtr<SimplePolyvoxVolume>();
-            vox->initSphere();
-            ukn::SceneObjectPtr voxObject = ukn::MakeSharedPtr<ukn::SceneObject>(vox, ukn::SOA_Cullable | ukn::SOA_Moveable);
-            scene.addSceneObject(voxObject);
-            
-            
             vp.camera->setViewParams(ukn::Vector3(0, 5, 0), ukn::Vector3(0, 0, 1));
 
             mDirectionalLight = ukn::MakeSharedPtr<ukn::DirectionalLight>(ukn::float3(0, -1, 1),

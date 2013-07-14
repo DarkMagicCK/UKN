@@ -82,12 +82,15 @@ namespace ukn {
         /* create and append a pass */
         const EffectPassPtr& appendPass();
         const EffectPassPtr& appendPass(const ShaderPtr& fragmentShader, const ShaderPtr& vertexShader, const ShaderPtr& geometryShader);
+       
         void appendPass(const EffectPassPtr& pass);
         const EffectPassPtr& getPass(uint32 pass) const;
         
         /* begin */
         void bind(uint32 pass);
         void unbind(uint32 pass);
+
+        void clear();
         
         uint32 getNumPasses() const;
 

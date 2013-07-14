@@ -46,6 +46,7 @@
 #include <numeric>
 
 #include "../../Tests/voxel/Game.h"
+#include "../../Tests/OculusRift/Game.h"
 
 #ifndef MIST_OS_WINDOWS
 
@@ -66,8 +67,8 @@ int CALLBACK WinMain(
   __in  int nCmdSho) {
 #endif
 
-     if(0) {
-          ukn::voxel::Game game;
+     if(1) {
+          ukn::ovr::OvrGame game;
           game.start();
           return 0;
       }

@@ -82,6 +82,7 @@ namespace ukn {
                                              VERTEX_SHADER_DESC("VertexProgram"));
         ukn::ShaderPtr fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/fog_frag.cg"), 
                                                FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mFogTechnique->clear();
         mFogTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
     }
 

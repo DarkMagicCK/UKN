@@ -155,36 +155,42 @@ namespace ukn {
                                                 VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/clear_frag.cg"), 
                                                 FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mClearTechnique->clear();
         mClearTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
 
         vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/gbuffer_vert.cg"), 
                                                 VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/gbuffer_frag.cg"), 
                                                 FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mGBufferTechnique->clear();
         mGBufferTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
 
         vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/directionallight_vert.cg"), 
                                                 VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/directionallight_frag.cg"), 
                                                 FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mDirectionalLightTechnique->clear();
         mDirectionalLightTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
 
         vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/spotlight_vert.cg"), 
                                                 VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/spotlight_frag.cg"), 
                                                 FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mSpotLightTechnique->clear();
         mSpotLightTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
         
         vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/pointlight_vert.cg"), 
                                                 VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/pointlight_frag.cg"), 
                                                 FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mPointLightTechnique->clear();
         mPointLightTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
         
         vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/composite_vert.cg"), 
                                                 VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/composite_frag.cg"), 
                                                 FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mCompositeTechnique->clear();
         mCompositeTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
     }
 

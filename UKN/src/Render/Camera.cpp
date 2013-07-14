@@ -62,6 +62,19 @@ namespace ukn {
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         gd.adjustPerspectiveMat(mProjMat[0]);
     }
+
+    void Camera::setViewMat(const Matrix4& mat) {
+        mViewMat[1] = mViewMat[0];
+        mViewMat[0] = mat;
+    }
+
+    void Camera::setProjMat(const Matrix4& mat) {
+        mProjMat[1] = mProjMat[0];
+        mProjMat[0] = mat;
+
+        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
+        gd.adjustPerspectiveMat(mProjMat[0]);
+    }
     
     Vector3 Camera::getEyePos() const {
         return mEysPos;

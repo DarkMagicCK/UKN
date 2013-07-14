@@ -41,6 +41,9 @@ namespace mist {
 
         MIST_API bool IsAlphabet(char chr);
         MIST_API bool IsAlphabet(wchar_t chr);
+
+        MIST_API bool EndsWith(const MistString& str, const MistString& end);
+        MIST_API bool StartsWith(const MistString& str, const MistString& start);
         
         template<typename T>
         static std::string AnyToString(const T& val) {

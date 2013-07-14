@@ -16,6 +16,9 @@
     <Filter Include="Source Files\voxel">
       <UniqueIdentifier>{3dfa46b0-ed05-40dc-afe4-ce7870189812}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\OculusRift">
+      <UniqueIdentifier>{253ce8dc-1c4f-480c-bb89-6f787fac98f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ukn_win_test.rc">
@@ -43,6 +46,9 @@
     <ClCompile Include="..\..\Tests\voxel\PolyVoxVolume.cpp">
       <Filter>Source Files\voxel</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Tests\OculusRift\Game.cpp">
+      <Filter>Source Files\OculusRift</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Tests\voxel\Voxel.h">
@@ -53,6 +59,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Tests\voxel\PolyVoxVolume.h">
       <Filter>Source Files\voxel</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Tests\OculusRift\Game.h">
+      <Filter>Source Files\OculusRift</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

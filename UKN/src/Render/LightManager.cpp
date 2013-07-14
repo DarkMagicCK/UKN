@@ -49,18 +49,21 @@ namespace ukn {
                                                                         VERTEX_SHADER_DESC("VertexProgram"));
         ukn::ShaderPtr fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/expdepth_frag.cg"), 
                                                                         FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mEXPDepthMapTechnique->clear();
         mEXPDepthMapTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
         
         vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/depth_vert.cg"), 
                                                                         VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/depth_frag.cg"), 
                                                                         FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mDepthMapTechnique->clear();
         mDepthMapTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
         
         vertexShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/shadowmap_blur_vert.cg"), 
                                                                         VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mDepthWriteEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/shadowmap_blur_frag.cg"), 
                                                                         FRAGMENT_SHADER_DESC("FragmentProgram"));
+        mBlurTechnique->clear();
         mBlurTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
     }
 

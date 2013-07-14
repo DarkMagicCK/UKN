@@ -388,11 +388,6 @@ namespace ukn {
                 {            
                     MIST_PROFILE(L"__MainFrame__");
 
-                    glViewport(fb.getViewport().left,
-                               fb.getViewport().top,
-                               fb.getViewport().width,
-                               fb.getViewport().height);
-
                     fb.getViewport().camera->update();
 
                     setViewMatrix(fb.getViewport().camera->getViewMatrix());
@@ -409,6 +404,14 @@ namespace ukn {
 
             }
         }
+    }
+
+    void GLGraphicDevice::setViewport(const Viewport& vp) {
+        glViewport(vp.left,
+                   vp.top,
+                   vp.width,
+                   vp.height);
+
     }
 
     GLuint GLGraphicDevice::getBindedGLFrameBuffer() const {

@@ -128,7 +128,8 @@ namespace ukn {
                                                 VERTEX_SHADER_DESC("VertexProgram"));
         fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_frag.cg"), 
                                                 FRAGMENT_SHADER_DESC("FragmentProgram"));
-        
+
+        mSSAOTechnique->clear();
         mSSAOTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
 
         vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_blur_vert.cg"), 
@@ -136,6 +137,7 @@ namespace ukn {
         fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_blur_frag.cg"), 
                                                 FRAGMENT_SHADER_DESC("FragmentProgram"));
         
+        mSSAOBlurTechnique->clear();
         mSSAOBlurTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
 
         vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_composite_vert.cg"), 
@@ -143,6 +145,7 @@ namespace ukn {
         fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_composite_frag.cg"), 
                                                 FRAGMENT_SHADER_DESC("FragmentProgram"));
         
+        mCompositeTechnique->clear();
         mCompositeTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
  
     }

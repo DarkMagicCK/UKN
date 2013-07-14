@@ -40,7 +40,7 @@ namespace mist {
             MIST_THROW_EXCEPTION(L"checked_cast: failed to cast from parent to child");
         return derived;
 #else
-        return (T*)pointer;
+        return (T)pointer;
 #endif
     }
 

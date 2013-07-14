@@ -108,6 +108,7 @@ namespace ukn {
     public:
         virtual UknString description() const = 0;
                
+        virtual void setViewport(const Viewport& vp) = 0;
         virtual void setViewMatrix(const Matrix4& mat) = 0;
         virtual void setProjectionMatrix(const Matrix4& mat) = 0;
 

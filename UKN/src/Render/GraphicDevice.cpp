@@ -62,6 +62,8 @@ namespace ukn {
         }
         
         void beginRendering() { }
+
+        void setViewport(const Viewport& vp) {}
         
         void setViewMatrix(const Matrix4& mat) { }
         void setProjectionMatrix(const Matrix4& mat) { }

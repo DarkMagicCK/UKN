@@ -87,7 +87,7 @@ namespace ukn {
             mist_assert(mContext);
 
             cgD3D11SetDevice(mContext, device->getD3DDevice());
-          //  cgD3D11SetManageTextureParameters(mContext, CG_TRUE);
+            cgD3D11SetManageTextureParameters(mContext, CG_TRUE);
     }
 
     CgDxEffect::~CgDxEffect() {
@@ -197,6 +197,7 @@ namespace ukn {
                 cgD3D11SetTextureSamplerStateParameter(param, 
                                                        (ID3D11Resource*)tex->getTextureId(),
                                                        mDevice->getD3DSamplerState());
+               
                 return _check_error(mContext);
             }
         }

@@ -29,7 +29,7 @@ __in  int nCmdSho) {
         ukn::LightSourcePtr spotLight;
         ukn::LightSourcePtr directionalLight;
         ukn::SSAO* ssao;
-    ukn::ModelPtr dragonModel;
+        ukn::ModelPtr dragonModel;
     
         ukn::EffectPtr testEffect;
         ukn::EffectTechniquePtr displayDepthTechnique;
@@ -39,17 +39,6 @@ __in  int nCmdSho) {
         ukn::PointLightPtr pointLights[400];
         float rs[400];
         ukn::uint32 pointLightCount = 0;
-        
-        enum Mode {
-            LightMap,
-            Scene,
-            Depth,
-            Color,
-            SSAOAll,
-            All,
-        };
-        
-        Mode mode = Color;
         
 #ifndef MIST_OS_WINDOWS
         ukn::GraphicFactoryPtr factory;
@@ -98,19 +87,6 @@ __in  int nCmdSho) {
                     }
                 } else if(e.key == ukn::input::F2) {
                     directionalLight->setEnabled(!directionalLight->getEnabled());
-                } else if(e.key == ukn::input::Num2) {
-                    mode = LightMap;
-                } else if(e.key == ukn::input::Num1) {
-                    mode = Scene;
-                } else if(e.key == ukn::input::Num3) {
-                    mode = All;
-                } else if(e.key == ukn::input::Num4) {
-                    mode = SSAOAll;
-                    
-                }  else if(e.key == ukn::input::Num5) {
-                    mode = Depth;
-                }  else if(e.key == ukn::input::Num6) {
-                    mode = Color;
                 } else if(e.key == ukn::input::Equals) {
                     
                     ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
@@ -134,6 +110,9 @@ __in  int nCmdSho) {
                     
                     pointLightCount --;
                     scene.removeLight(pointLights[pointLightCount]);
+                } else if (e.key == ukn::input::R) {
+                    deferredRenderer->reloadShaders();
+                    ssao->reloadShaders();
                 }
             }
             
@@ -210,7 +189,7 @@ __in  int nCmdSho) {
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
             vp.camera->setViewParams(ukn::Vector3(0, 5, 0), ukn::Vector3(0, 0, 1));
             
-            camController->attachCamera(vp.camera);
+        //    camController->attachCamera(vp.camera);
             
             font = ukn::Font::Create(L"Arial.ttf", 20);
 

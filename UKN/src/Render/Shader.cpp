@@ -116,6 +116,10 @@ namespace ukn {
         return pass;
     }
 
+    void EffectTechnique::clear() {
+        this->mPasses.clear();
+    }
+
     uint32 EffectTechnique::getNumPasses() const {
         return uint32(mPasses.size());
     }

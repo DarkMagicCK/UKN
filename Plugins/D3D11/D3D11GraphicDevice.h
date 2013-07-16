@@ -50,7 +50,7 @@ namespace ukn {
         void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) override;
         void onSetDepthStencilState(const DepthStencilStatePtr& depthstentialState) override;
         
-        void setViewport(const Viewport& vp) override;
+        void onSetViewport(const Viewport& vp) override;
 
         ID3D11Device* getD3DDevice() const;
         ID3D11DeviceContext* getD3DDeviceContext() const;

@@ -77,7 +77,15 @@ namespace ukn {
                 mStereoConfig.SetFullViewport(OVR::Util::Render::Viewport(0, 0, getHResolution(), getVResolution()));
                 mStereoConfig.SetStereoMode(OVR::Util::Render::Stereo_LeftRight_Multipass);
                 mStereoConfig.Set2DAreaFov(mist::math::degree_to_radius(85.f));
-
+                
+                if(mHMDInfo.HScreenSize > 0.0f) {
+                    if(mHMDInfo.HScreenSize > 0.140f)
+                        mStereoConfig.SetDistortionFitPointVP(-1.0, 0.0);
+                    else
+                        mStereoConfig.SetDistortionFitPointVP(0.0, 1.0f);
+                }
+                mStereoConfig.SetDistortionConfig(OVR::Util::Render::DistortionConfig(1.0, 0.18, 0.115));
+                
                 mist::log_info(mist::format_string("libOVR: scene distortion scale = %.2f", mStereoConfig.GetDistortionScale()));
 
                 mist::log_info("libOVR: initialization succeed, you can use OVRCameraController now");
@@ -135,6 +143,13 @@ namespace ukn {
 
     void OVRDevice::OnMessage(const OVR::Message& message) {
 
+    }
+
+    float OVRDevice::getDistortionScale() {
+        if(mHasDevice) {
+            return mStereoConfig.GetDistortionScale();
+        }
+        return 1.0;
     }
 
 

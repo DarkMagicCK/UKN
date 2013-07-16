@@ -72,8 +72,6 @@ namespace ukn {
         mProjMat[1] = mProjMat[0];
         mProjMat[0] = mat;
 
-        GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
-        gd.adjustPerspectiveMat(mProjMat[0]);
     }
     
     Vector3 Camera::getEyePos() const {

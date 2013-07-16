@@ -63,7 +63,6 @@ namespace ukn {
         
         void beginRendering() { }
 
-        void setViewport(const Viewport& vp) {}
         
         void setViewMatrix(const Matrix4& mat) { }
         void setProjectionMatrix(const Matrix4& mat) { }
@@ -99,6 +98,7 @@ namespace ukn {
         void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) { }
         void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) { }
         void onSetDepthStencilState(const DepthStencilStatePtr& depthStencilState) { }
+        void onSetViewport(const Viewport& vp) {}
     };
     
     GraphicDevicePtr GraphicDevice::NullObject() {
@@ -241,6 +241,15 @@ namespace ukn {
 
     const DepthStencilStatePtr& GraphicDevice::getDepthStencilState() const {
         return mDepthStencilState;
+    }
+
+    void GraphicDevice::setViewport(const Viewport& vp) {
+        mViewport = vp;
+        this->onSetViewport(vp);
+    }
+
+    const Viewport& GraphicDevice::getViewport() const {
+        return mViewport;
     }
 
 } // namespace ukn

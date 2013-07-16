@@ -8,10 +8,10 @@
 #include "mist/Platform.h"
 #include "mist/MathUtil.h"
 
-// OVR libs
 #ifdef MIST_OS_WINDOWS
 
     #pragma comment(lib, "mist.lib")
+    #pragma comment(lib, "ukn_dll.lib")
     // OVR::Timer
     #pragma comment(lib, "winmm.lib")
 
@@ -24,6 +24,7 @@
         #pragma comment(lib, "libovr64.lib")
 
     #endif
+
 #endif
 
 namespace ukn {
@@ -36,7 +37,7 @@ namespace ukn {
 
     public:
         OVRDevice();
-        ~OVRDevice();
+        virtual ~OVRDevice();
 
         bool checkDevice();
         void close();
@@ -46,6 +47,8 @@ namespace ukn {
         // OVR Device resolution, currently should be 1280 * 800 for DK
         uint32 getHResolution() const;
         uint32 getVResolution() const;
+
+        float getDistortionScale();
 
     public:
         // getters

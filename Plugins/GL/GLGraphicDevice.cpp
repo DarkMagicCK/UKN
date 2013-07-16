@@ -368,10 +368,7 @@ namespace ukn {
     }
 
     void GLGraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
-        glViewport(frameBuffer->getViewport().left,
-                   frameBuffer->getViewport().top,
-                   frameBuffer->getViewport().width,
-                   frameBuffer->getViewport().height);
+        this->onSetViewport(frameBuffer->getViewport());
     }
 
     void GLGraphicDevice::beginRendering() {
@@ -406,7 +403,7 @@ namespace ukn {
         }
     }
 
-    void GLGraphicDevice::setViewport(const Viewport& vp) {
+    void GLGraphicDevice::onSetViewport(const Viewport& vp) {
         glViewport(vp.left,
                    vp.top,
                    vp.width,

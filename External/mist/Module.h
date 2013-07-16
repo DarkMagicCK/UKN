@@ -43,6 +43,7 @@ namespace mist {
         bool addModule(Module* module);
         bool delModule(Module* module);
         
+        // extern "C" { CreateModule }
         bool addModuleFromDll(const MistString& name);
         bool delModule(const MistString& name);
         

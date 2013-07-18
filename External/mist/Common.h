@@ -48,6 +48,7 @@ namespace mist {
     }
 
     inline MistString get_lib_name(const MistString& lib) {
+        if(lib.find(L".") == MistString::npos) {
 #if defined(MIST_OS_OSX)
         return lib + L".dylib";
 #elif defined(MIST_OS_WINDOWS)
@@ -55,6 +56,8 @@ namespace mist {
 #elif defined(MIST_OS_LINUX)
         return lib + L".so";
 #endif
+        }
+        return lib;
     }
 
 

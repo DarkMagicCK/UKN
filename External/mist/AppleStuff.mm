@@ -143,7 +143,7 @@ namespace mist {
     void mist_apple_run_in_mainthread(const Function<void(void)>& f) {
         __block Function<void(void)> _f = f;
         dispatch_async(
-                       dispatch_get_current_queue(), ^{
+                       dispatch_get_main_queue(), ^{
                            _f();
                        });
     }
@@ -363,15 +363,15 @@ namespace mist {
         NSString*  systemVersion=[[UIDevice currentDevice] systemVersion];
         NSString*  model=[[UIDevice currentDevice] model];
         
-        return format_string("iOS %s %s", 
-                             [systemVersion UTF8String],
-                             [model UTF8String]);
+        return mist_apple_string_to_wstring(format_string("iOS %s %s",
+                                                          [systemVersion UTF8String],
+                                                          [model UTF8String]));
     }
     
     MessageBoxButton mist_apple_message_box(const MistString& mssg, const MistString& title, int option) {
         
-        NSString* nsMessage = [[NSString alloc] initWithUTF8String:mssg.c_str()];
-		NSString* nsTitle = [[NSString alloc] initWithUTF8String:title.c_str()];
+        NSString* nsMessage = [[NSString alloc] initWithUTF8String:mist_apple_wstring_to_string(mssg).c_str()];
+		NSString* nsTitle = [[NSString alloc] initWithUTF8String:mist_apple_wstring_to_string(title).c_str()];
 		
 		UIAlertView* alert = [[UIAlertView alloc]
 							  initWithTitle:nsTitle
@@ -384,11 +384,6 @@ namespace mist {
 		return MBB_OK;
     }
     
-    MessageBoxButton mist_apple_message_box(const MistString& mssg, const MistString& title, int option) {
-        return mist_apple_message_box(string::WStringToString(mssg),
-                                     string::WStringToString(title),
-                                     option);
-    }
     
 #endif
     

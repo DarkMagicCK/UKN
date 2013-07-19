@@ -10,6 +10,10 @@
 #define Project_Unknown_Font_h
 
 #include "mist/Platform.h"
+
+// todo with iOS
+#ifndef MIST_OS_IOS
+
 #include "mist/Uncopyable.h"
 #include "mist/Serializer.h"
 #include "mist/Color.h"
@@ -158,6 +162,17 @@ namespace ukn {
         std::vector<TexturePlacement> mTextures;
     };
     
-} // namespace ukn  
+} // namespace ukn
+
+#else
+
+namespace ukn  {
+    
+    class Font {
+        
+    };
+}
+
+#endif
 
 #endif

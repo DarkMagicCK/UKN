@@ -5,6 +5,9 @@
 //  Created by Robert Bu on 12/9/11.
 //  Copyright (c) 2011 heizi. All rights reserved.
 //
+#include "UKN/Font.h"
+
+#ifndef MIST_OS_IOS
 
 #include "mist/ConfigParser.h"
 #include "mist/FileUtil.h"
@@ -14,7 +17,6 @@
 #include "mist/Resource.h"
 #include "mist/StringUtil.h"
 
-#include "UKN/Font.h"
 #include "UKN/RenderBuffer.h"
 #include "UKN/GraphicDevice.h"
 #include "UKN/GraphicFactory.h"
@@ -529,3 +531,5 @@ namespace ukn {
     }
     
 } // namespace ukn
+
+#endif

@@ -119,7 +119,7 @@
     return [NSString stringWithFormat:@"Mac OS X Version %d.%d", versionMajor, versionMinor];
 }
 
-+ (void)enumDesktopModes:(void (^)(uint32 w, uint32 h, int bpp))callback {
++ (void)enumDesktopModes:(void (^)(unsigned int w, unsigned int h, int bpp))callback {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= MAC_OS_X_VERSION_10_6
     CGDisplayModeRef cgmode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
     
@@ -133,8 +133,8 @@
     else if(CFStringCompare(pixEnc, CFSTR(IO8BitIndexedPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
         bpp = 8;
     
-    callback((uint32)CGDisplayModeGetWidth(cgmode),
-             (uint32)CGDisplayModeGetHeight(cgmode),
+    callback((unsigned int)CGDisplayModeGetWidth(cgmode),
+             (unsigned int)CGDisplayModeGetHeight(cgmode),
              bpp);
     
     CFRelease(pixEnc);
@@ -164,8 +164,8 @@
             bpp = 8;
         CFRelease(pixEnc);
         
-        callback((uint32)CGDisplayModeGetWidth(cgmode),
-                 (uint32)CGDisplayModeGetHeight(cgmode),
+        callback((unsigned int)CGDisplayModeGetWidth(cgmode),
+                 (unsigned int)CGDisplayModeGetHeight(cgmode),
                  bpp);
     }
     CFRelease(modes);
@@ -183,16 +183,16 @@
 #endif
 }
 
-+ (uint32)screenWidth {
++ (unsigned int)screenWidth {
     CGDisplayModeRef cgmode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
-    uint32 result = (uint32)CGDisplayModeGetWidth(cgmode);
+    unsigned int result = (unsigned int)CGDisplayModeGetWidth(cgmode);
     CGDisplayModeRelease(cgmode);
     return result;
 }
 
-+ (uint32)screenHeight {
++ (unsigned int)screenHeight {
     CGDisplayModeRef cgmode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
-    uint32 result = (uint32)CGDisplayModeGetHeight(cgmode);
+    unsigned int result = (unsigned int)CGDisplayModeGetHeight(cgmode);
     CGDisplayModeRelease(cgmode);
     return result;
 }
@@ -228,12 +228,12 @@
     AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 }
 
-+ (uint32)screenWidth {
++ (unsigned int)screenWidth {
     CGRect rect = [[UIScreen mainScreen] bounds];
     return rect.size.width;
 }
 
-+ (uint32)screenHeight {
++ (unsigned int)screenHeight {
     CGRect rect = [[UIScreen mainScreen] bounds];
     return rect.size.height;
 }

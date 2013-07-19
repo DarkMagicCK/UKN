@@ -12,7 +12,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "Platform.h"
 
 #if defined(MIST_OS_IOS)
 
@@ -36,10 +35,10 @@ enum iOSDeviceType {
 
 + (NSString*)osVersion;
 
-+ (void)enumDesktopModes:(void (^)(uint32 w, uint32 h, int bpp))callback;
++ (void)enumDesktopModes:(void (^)(unsigned int w, unsigned int h, int bpp))callback;
 
-+ (uint32)screenWidth;
-+ (uint32)screenHeight;
++ (unsigned int)screenWidth;
++ (unsigned int)screenHeight;
 
 + (bool)fileExists:(NSString*)file;
 + (bool)copyFile:(NSString*)src dst:(NSString*)dst;

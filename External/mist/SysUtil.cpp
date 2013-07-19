@@ -25,7 +25,7 @@
         #include <intrin.h>
     #endif
 
-#elif defined(MIST_OS_LINUX) || defined(MIST_OS_OSX)
+#elif defined(MIST_OS_LINUX) || defined(MIST_OS_FAMILY_APPLE)
         #include <sched.h>
         #include <unistd.h>
         #include <sys/utsname.h>
@@ -661,7 +661,7 @@ namespace mist {
                     }
                 }
             }
-#elif defined(MIST_OS_LINUX) || defined(MIST_OS_OSX)
+#elif defined(MIST_OS_LINUX) || defined(MIST_OS_FAMILY_APPLE)
             {
                 bool supported = (GenuineIntel == mCPUString) || (AuthenticAMD == mCPUString);
                 

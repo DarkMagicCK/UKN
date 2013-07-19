@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BB6CF286-461D-489F-AF09-81A9092DBF4C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>mist</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;MIST_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;MIST_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\External\md5lib\md5lib.h" />
+    <ClInclude Include="..\..\External\mist\Animation.h" />
+    <ClInclude Include="..\..\External\mist\Any.h" />
+    <ClInclude Include="..\..\External\mist\AppleStuff.h" />
+    <ClInclude Include="..\..\External\mist\AutoUpdate.h" />
+    <ClInclude Include="..\..\External\mist\Base64.h" />
+    <ClInclude Include="..\..\External\mist\Basic.h" />
+    <ClInclude Include="..\..\External\mist\Color.h" />
+    <ClInclude Include="..\..\External\mist\Common.h" />
+    <ClInclude Include="..\..\External\mist\Component.h" />
+    <ClInclude Include="..\..\External\mist\Condition.h" />
+    <ClInclude Include="..\..\External\mist\ConfigParser.h" />
+    <ClInclude Include="..\..\External\mist\ConfigParserXml.h" />
+    <ClInclude Include="..\..\External\mist\Convert.h" />
+    <ClInclude Include="..\..\External\mist\DllLoader.h" />
+    <ClInclude Include="..\..\External\mist\Encode.h" />
+    <ClInclude Include="..\..\External\mist\Entity.h" />
+    <ClInclude Include="..\..\External\mist\Error.h" />
+    <ClInclude Include="..\..\External\mist\Event.h" />
+    <ClInclude Include="..\..\External\mist\Exception.h" />
+    <ClInclude Include="..\..\External\mist\Factory.h" />
+    <ClInclude Include="..\..\External\mist\FileUtil.h" />
+    <ClInclude Include="..\..\External\mist\FSM.h" />
+    <ClInclude Include="..\..\External\mist\Function.h" />
+    <ClInclude Include="..\..\External\mist\Hashing.h" />
+    <ClInclude Include="..\..\External\mist\Interfaces.h" />
+    <ClInclude Include="..\..\External\mist\Lazy.h" />
+    <ClInclude Include="..\..\External\mist\Lexer.h" />
+    <ClInclude Include="..\..\External\mist\ListenerManager.h" />
+    <ClInclude Include="..\..\External\mist\Logger.h" />
+    <ClInclude Include="..\..\External\mist\MathUtil.h" />
+    <ClInclude Include="..\..\External\mist\MemoryUtil.h" />
+    <ClInclude Include="..\..\External\mist\Message.h" />
+    <ClInclude Include="..\..\External\mist\Module.h" />
+    <ClInclude Include="..\..\External\mist\Operations.h" />
+    <ClInclude Include="..\..\External\mist\Platform.h" />
+    <ClInclude Include="..\..\External\mist\Port.h" />
+    <ClInclude Include="..\..\External\mist\PreDeclare.h" />
+    <ClInclude Include="..\..\External\mist\Preprocessor.h" />
+    <ClInclude Include="..\..\External\mist\Profiler.h" />
+    <ClInclude Include="..\..\External\mist\Ptr.h" />
+    <ClInclude Include="..\..\External\mist\Query.h" />
+    <ClInclude Include="..\..\External\mist\RandomUtil.h" />
+    <ClInclude Include="..\..\External\mist\RectPlacement.h" />
+    <ClInclude Include="..\..\External\mist\RefCounted.h" />
+    <ClInclude Include="..\..\External\mist\Reflection.h" />
+    <ClInclude Include="..\..\External\mist\Resource.h" />
+    <ClInclude Include="..\..\External\mist\safe_bool.h" />
+    <ClInclude Include="..\..\External\mist\Serial.h" />
+    <ClInclude Include="..\..\External\mist\Serializer.h" />
+    <ClInclude Include="..\..\External\mist\Signal.h" />
+    <ClInclude Include="..\..\External\mist\Singleton.h" />
+    <ClInclude Include="..\..\External\mist\StackTrace.h" />
+    <ClInclude Include="..\..\External\mist\Stream.h" />
+    <ClInclude Include="..\..\External\mist\StreamWrapper.h" />
+    <ClInclude Include="..\..\External\mist\StringUtil.h" />
+    <ClInclude Include="..\..\External\mist\SysUtil.h" />
+    <ClInclude Include="..\..\External\mist\Task.h" />
+    <ClInclude Include="..\..\External\mist\Thread.h" />
+    <ClInclude Include="..\..\External\mist\TimeUtil.h" />
+    <ClInclude Include="..\..\External\mist\Transform.h" />
+    <ClInclude Include="..\..\External\mist\Trigger.h" />
+    <ClInclude Include="..\..\External\mist\Type.h" />
+    <ClInclude Include="..\..\External\mist\TypeInfo.h" />
+    <ClInclude Include="..\..\External\mist\Uncopyable.h" />
+    <ClInclude Include="..\..\External\mist\UnitTest.h" />
+    <ClInclude Include="..\..\External\mist\Util.h" />
+    <ClInclude Include="..\..\External\mist\ZipUtil.h" />
+    <ClInclude Include="..\..\External\pugixml\pugiconfig.hpp" />
+    <ClInclude Include="..\..\External\pugixml\pugixml.hpp" />
+    <ClInclude Include="..\..\External\zlib\crc32.h" />
+    <ClInclude Include="..\..\External\zlib\crypt.h" />
+    <ClInclude Include="..\..\External\zlib\deflate.h" />
+    <ClInclude Include="..\..\External\zlib\inffast.h" />
+    <ClInclude Include="..\..\External\zlib\inffixed.h" />
+    <ClInclude Include="..\..\External\zlib\inflate.h" />
+    <ClInclude Include="..\..\External\zlib\inftrees.h" />
+    <ClInclude Include="..\..\External\zlib\ioapi.h" />
+    <ClInclude Include="..\..\External\zlib\mztools.h" />
+    <ClInclude Include="..\..\External\zlib\trees.h" />
+    <ClInclude Include="..\..\External\zlib\unzip.h" />
+    <ClInclude Include="..\..\External\zlib\zconf.h" />
+    <ClInclude Include="..\..\External\zlib\zconf.in.h" />
+    <ClInclude Include="..\..\External\zlib\zip.h" />
+    <ClInclude Include="..\..\External\zlib\zlib.h" />
+    <ClInclude Include="..\..\External\zlib\zutil.h" />
+    <ClInclude Include="mist.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\External\md5lib\md5lib.cpp" />
+    <ClCompile Include="..\..\External\mist\Animation.cpp" />
+    <ClCompile Include="..\..\External\mist\AutoUpdate.cpp" />
+    <ClCompile Include="..\..\External\mist\Base64.cpp" />
+    <ClCompile Include="..\..\External\mist\Color.cpp" />
+    <ClCompile Include="..\..\External\mist\Component.cpp" />
+    <ClCompile Include="..\..\External\mist\ConfigParser.cpp" />
+    <ClCompile Include="..\..\External\mist\ConfigParserXml.cpp" />
+    <ClCompile Include="..\..\External\mist\Convert.cpp" />
+    <ClCompile Include="..\..\External\mist\DllLoader.cpp" />
+    <ClCompile Include="..\..\External\mist\Event.cpp" />
+    <ClCompile Include="..\..\External\mist\FileUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\Hashing.cpp" />
+    <ClCompile Include="..\..\External\mist\Lexer.cpp" />
+    <ClCompile Include="..\..\External\mist\Logger.cpp" />
+    <ClCompile Include="..\..\External\mist\MathUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\Module.cpp" />
+    <ClCompile Include="..\..\External\mist\Port.cpp" />
+    <ClCompile Include="..\..\External\mist\Profiler.cpp" />
+    <ClCompile Include="..\..\External\mist\Query.cpp" />
+    <ClCompile Include="..\..\External\mist\RandomUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\RectPlacement.cpp" />
+    <ClCompile Include="..\..\External\mist\Resource.cpp" />
+    <ClCompile Include="..\..\External\mist\Serial.cpp" />
+    <ClCompile Include="..\..\External\mist\Serializer.cpp" />
+    <ClCompile Include="..\..\External\mist\Signal.cpp" />
+    <ClCompile Include="..\..\External\mist\Stream.cpp" />
+    <ClCompile Include="..\..\External\mist\StreamWrapper.cpp" />
+    <ClCompile Include="..\..\External\mist\StringUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\SysUtil.cpp" />
+    <ClCompile Include="..\..\External\mist\Task.cpp" />
+    <ClCompile Include="..\..\External\mist\Thread.cpp" />
+    <ClCompile Include="..\..\External\mist\Timeutil.cpp" />
+    <ClCompile Include="..\..\External\mist\ZipUtil.cpp" />
+    <ClCompile Include="..\..\External\pugixml\pugixml.cpp" />
+    <ClCompile Include="..\..\External\zlib\adler32.c" />
+    <ClCompile Include="..\..\External\zlib\compress.c" />
+    <ClCompile Include="..\..\External\zlib\crc32.c" />
+    <ClCompile Include="..\..\External\zlib\deflate.c" />
+    <ClCompile Include="..\..\External\zlib\gzio.c" />
+    <ClCompile Include="..\..\External\zlib\infback.c" />
+    <ClCompile Include="..\..\External\zlib\inffast.c" />
+    <ClCompile Include="..\..\External\zlib\inflate.c" />
+    <ClCompile Include="..\..\External\zlib\inftrees.c" />
+    <ClCompile Include="..\..\External\zlib\ioapi.c" />
+    <ClCompile Include="..\..\External\zlib\mztools.c" />
+    <ClCompile Include="..\..\External\zlib\trees.c" />
+    <ClCompile Include="..\..\External\zlib\uncompr.c" />
+    <ClCompile Include="..\..\External\zlib\unzip.c" />
+    <ClCompile Include="..\..\External\zlib\zip.c" />
+    <ClCompile Include="..\..\External\zlib\zutil.c" />
+    <ClCompile Include="dllmain.cpp">
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="mist.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\External\mist\AppleStuff.mm" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

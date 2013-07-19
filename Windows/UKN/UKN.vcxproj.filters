@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{2f326ab9-6d1a-4327-9b9a-d46852a7902b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plugins">
+      <UniqueIdentifier>{042abb47-9664-42d3-83cd-0103ee091223}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plugins\D3D10">
+      <UniqueIdentifier>{66c08f9c-97c6-4721-821b-4894f72227f5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\UKN\include\UKN\App.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Asset.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Audio.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Basic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Binding.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Camera.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Context.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Font.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\FrameBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Frustum.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicContext.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicDevice.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicFactory.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\GraphicSettings.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Input.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\ListenerManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTableLoader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Material.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Mesh.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Physics.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\PreDeclare.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Renderable.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\RenderBuffer.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\RenderEffect.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\RenderTarget.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\RenderView.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Scene.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Scripting.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\SequencialAnimation.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Shader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Skeletal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Sprite.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\SpriteBatch.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Texture.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\tmx\TMXTiledMap.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Transform.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\UKN.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Vertex.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Viewport.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\include\UKN\Window.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\UKN\SqaureGame.h">
+      <Filter>源文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Convert.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10FrameBuffer.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10GraphicDevice.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10GraphicFactory.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Preq.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10RenderView.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\D3D10Texture.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Plugins\D3D10\WindowsWindow.h">
+      <Filter>Plugins\D3D10</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\UKN\src\Animation\SequencialAnimation.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Animation\Skeletal.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\App\App.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Core\Asset.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Core\Context.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Core\Input.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTableLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\Camera.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\Font.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\FrameBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\Frustum.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\GraphicBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\GraphicContext.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\GraphicDevice.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\GraphicFactory.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\RenderBuffer.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\RenderTarget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\RenderView.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\Scene.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\Shader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\Texture.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\Render\Window.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\UKN\src\TMX\TMXTiledMap.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10FrameBuffer.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10GraphicDevice.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10GraphicFactory.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10RenderView.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\D3D10Texture.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Plugins\D3D10\WindowsWindow.cpp">
+      <Filter>Plugins\D3D10</Filter>
+    </ClCompile>
+    <ClCompile Include="main_win.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

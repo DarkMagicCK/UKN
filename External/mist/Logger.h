@@ -47,7 +47,7 @@ namespace mist {
         
         // redirect to another stream
         // will output to standard output when a null stream is passed(StreamPtr())
-        void redirect(StreamPtr);
+        void redirect(const StreamPtr&);
         void setFeature(LoggerFeature feature, bool flag);
         
         void log(const MistString& log, LogLevel level=LL_Info);

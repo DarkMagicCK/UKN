@@ -39,8 +39,9 @@ namespace mist {
             mOutputStream->close();
     }
     
-    void Logger::redirect(StreamPtr outputStream) {
-        mOutputStream = outputStream;
+    void Logger::redirect(const StreamPtr& outputStream) {
+        if(outputStream)
+            mOutputStream = outputStream;
     }
     
     void Logger::setFeature(LoggerFeature feature, bool flag) {

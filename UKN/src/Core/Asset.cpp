@@ -32,11 +32,14 @@ namespace ukn {
             resource = ResourceLoader::Instance().loadResource(mist::Path::GetFont() + path);
         }
         
-        if(resource) {            
+        // todo with ios
+#ifndef MIST_OS_IOS
+        if(resource) {
             SharedPtr<Font> font = MakeSharedPtr<Font>();
             if(font && font->loadFromConfigFile(resource))
                 return font;
         }
+#endif
         
         return SharedPtr<Font>();
     }

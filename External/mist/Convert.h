@@ -19,10 +19,26 @@
 
 namespace mist {
     
+    template<typename T>
+    struct ToStringTrait {
+        static inline MistString ToString(const T& t) {
+            return string::AnyToWString(t);
+        }
+    };
+    
+    template<>
+    struct ToStringTrait<std::string> {
+        static inline MistString ToString(const std::string& t) {
+            return string::StringToWString(t);
+        }
+    };
+    
     class MIST_API Convert {
     public:
         template<typename T>
-        static MistString ToString(const T& t);
+        static inline MistString ToString(const T& t) {
+            return ToStringTrait<T>::ToString(t);
+        }
         
         static bool     ToBoolean(const MistString& str);
         
@@ -56,12 +72,15 @@ namespace mist {
         }
     };
     
+<<<<<<< HEAD
     template<typename T>
     MistString Convert::ToString(const T& t) {
         return string::AnyToWString(t);
     }
     
 
+=======
+>>>>>>> iOS
     struct MIST_API FormatString {
         FormatString(const MistString& str);
 

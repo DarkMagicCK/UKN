@@ -73,6 +73,9 @@ namespace ukn {
         const PostEffectQueue& getPostEffects() const;
         PostEffectPtr getPostEffect(const MistString& name) const;
 
+    public:
+        void reloadShaders();
+
     private:
         PostEffectQueue mPostEffects;
         PostEffectFactory mPostEffectFactory;

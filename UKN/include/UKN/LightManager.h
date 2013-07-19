@@ -28,6 +28,8 @@ namespace ukn {
         const RenderBufferPtr& getSpotLightGeometry() const;
         const RenderBufferPtr& getPointLightGeometry() const;
 
+        void reloadShaders();
+
     private:
         void renderShadowMap(GraphicDevice& gd, SceneManager& scene, const LightSourcePtr& ls);
         

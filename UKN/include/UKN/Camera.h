@@ -22,6 +22,10 @@ namespace ukn {
             
         void setViewParams(const Vector3& eye, const Vector3& lookat, const Vector3& up = Vector3(0, 1, 0));
         void setProjParams(float fov, float aspect, float near, float far);
+        
+        // set view / proj directly
+        void setViewMat(const Matrix4& mat);
+        void setProjMat(const Matrix4& mat);
 
         // sets up a orthogonal projection matrix, fov & aspect will not be avaiable
         // far helper functions
@@ -45,6 +49,7 @@ namespace ukn {
         virtual void update();
         virtual const Matrix4& getViewMatrix() const;
         virtual const Matrix4& getProjMatrix() const;
+
         
         // stereo mode?
         

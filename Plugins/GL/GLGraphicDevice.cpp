@@ -368,10 +368,7 @@ namespace ukn {
     }
 
     void GLGraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
-        glViewport(frameBuffer->getViewport().left,
-                   frameBuffer->getViewport().top,
-                   frameBuffer->getViewport().width,
-                   frameBuffer->getViewport().height);
+        this->onSetViewport(frameBuffer->getViewport());
     }
 
     void GLGraphicDevice::beginRendering() {
@@ -387,11 +384,6 @@ namespace ukn {
 
                 {            
                     MIST_PROFILE(L"__MainFrame__");
-
-                    glViewport(fb.getViewport().left,
-                               fb.getViewport().top,
-                               fb.getViewport().width,
-                               fb.getViewport().height);
 
                     fb.getViewport().camera->update();
 
@@ -409,6 +401,14 @@ namespace ukn {
 
             }
         }
+    }
+
+    void GLGraphicDevice::onSetViewport(const Viewport& vp) {
+        glViewport(vp.left,
+                   vp.top,
+                   vp.width,
+                   vp.height);
+
     }
 
     GLuint GLGraphicDevice::getBindedGLFrameBuffer() const {
@@ -435,7 +435,7 @@ namespace ukn {
         switch(type) {
 #ifndef UKN_OSX_REQUEST_OPENGL_32_CORE_PROFILE
         case RS_ColorOp:
-            CHECK_GL_CALL(glTexEnvf(GL_TEXTURE_2D, 
+            CHECK_GL_CALL(glTexEnvi(GL_TEXTURE_2D, 
                 render_state_to_gl_state(type), 
                 render_state_param_to_gl_state_param((RenderStateParam)func)));
             break;

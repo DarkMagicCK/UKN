@@ -54,6 +54,8 @@ namespace ukn {
         void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) override;
         void onSetDepthStencilState(const DepthStencilStatePtr& depthStencilState) override;
 
+        void onSetViewport(const Viewport& vp) override;
+
     private:
         std::vector<int> applyBuffer(const vertex_elements_type& format, uint32 size, uint32 instance_freq);
 

@@ -235,6 +235,9 @@ namespace ukn {
     }
     
     void SpriteBatch::onRender() {
+        if(mRenderQueue.empty())
+            return;
+
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
         
         RenderQueue::iterator it = mRenderQueue.begin();

@@ -393,5 +393,13 @@ namespace mist {
         }
     }
 
+    bool EndsWith(const MistString& str, const MistString& end) {
+        return str.rfind(end) == str.length() - end.length();
+    }
+
+    bool StartsWith(const MistString& str, const MistString& start) {
+        return str.find(start) == 0;
+    }
+
     
 } // namespace mist

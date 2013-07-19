@@ -131,7 +131,9 @@ namespace ukn {
         virtual void onSetSamplerState(const SamplerStatePtr& samplerState, uint32 index) = 0;
         virtual void onSetRasterizerState(const RasterizerStatePtr& rasterizerState) = 0;
         virtual void onSetDepthStencilState(const DepthStencilStatePtr& depthstentialState) = 0;
-
+        
+        virtual void onSetViewport(const Viewport& vp) = 0;
+        
     public:
         WindowPtr createRenderWindow(const UknString& name, const RenderSettings& settings);
         
@@ -155,6 +157,9 @@ namespace ukn {
         SamplerStatePtr getSamplerState(uint32 index = 0) const;
         const DepthStencilStatePtr& getDepthStencilState() const;
 
+        void setViewport(const Viewport& vp);
+        const Viewport& getViewport() const;
+
     protected:
         FrameBufferPtr mCurrFrameBuffer;
         FrameBufferPtr mScreenFrameBuffer;
@@ -169,6 +174,7 @@ namespace ukn {
         int mClearStencil;
 
         EffectPtr mBindedEffect;
+        Viewport mViewport;
     };
     
 } // namespace ukn

@@ -15,8 +15,8 @@
 namespace ukn {
 
     SSAO::SSAO():
-    mSampleRadius(0.03f),
-    mDistanceScale(10.0f) {
+    mSampleRadius(0.3f),
+    mDistanceScale(1.f) {
 
     }
 
@@ -105,39 +105,58 @@ namespace ukn {
             mEffect = gf.createEffect();
 
             if(mEffect) {
-                vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_vert.cg"), 
-                                                     VERTEX_SHADER_DESC("VertexProgram"));
-                fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_frag.cg"), 
-                                                       FRAGMENT_SHADER_DESC("FragmentProgram"));
+                mSSAOTechnique = mEffect->appendTechnique();
+                mSSAOBlurTechnique = mEffect->appendTechnique();
+                mCompositeTechnique = mEffect->appendTechnique();
 
-                mSSAOTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
-
-                vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_blur_vert.cg"), 
-                                                     VERTEX_SHADER_DESC("VertexProgram"));
-                fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_blur_frag.cg"), 
-                                                       FRAGMENT_SHADER_DESC("FragmentProgram"));
-            
-                mSSAOBlurTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
-
-                vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_composite_vert.cg"), 
-                                                     VERTEX_SHADER_DESC("VertexProgram"));
-                fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_composite_frag.cg"), 
-                                                       FRAGMENT_SHADER_DESC("FragmentProgram"));
-
-                mCompositeTechnique = mEffect->appendTechnique(fragmentShader, vertexShader, ShaderPtr());
+                this->reloadShaders();
             }
         }
 
         {
-            mRandomNormalTex = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"RandomNormals.png"));
+            mRandomNormalTex = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"RandomNormals2.jpg"));
         }
 
         return true;
     }
 
+    void SSAO::reloadShaders() {
+        ukn::ShaderPtr vertexShader;
+        ukn::ShaderPtr fragmentShader;
+           
+        vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_vert.cg"), 
+                                                VERTEX_SHADER_DESC("VertexProgram"));
+        fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_frag.cg"), 
+                                                FRAGMENT_SHADER_DESC("FragmentProgram"));
+
+        mSSAOTechnique->clear();
+        mSSAOTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
+
+        vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_blur_vert.cg"), 
+                                                VERTEX_SHADER_DESC("VertexProgram"));
+        fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_blur_frag.cg"), 
+                                                FRAGMENT_SHADER_DESC("FragmentProgram"));
+        
+        mSSAOBlurTechnique->clear();
+        mSSAOBlurTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
+
+        vertexShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_composite_vert.cg"), 
+                                                VERTEX_SHADER_DESC("VertexProgram"));
+        fragmentShader = mEffect->createShader(MIST_LOAD_RESOURCE(L"deferred/ssao_composite_frag.cg"), 
+                                                FRAGMENT_SHADER_DESC("FragmentProgram"));
+        
+        mCompositeTechnique->clear();
+        mCompositeTechnique->appendPass(fragmentShader, vertexShader, ShaderPtr());
+ 
+    }
+
     void SSAO::makeSSAO(const TexturePtr& color,
                         const TexturePtr& normal,
                         const TexturePtr& depth) {
+    
+        if(!mSSAOTechnique->getPass(0)->isOK())
+            return;
+
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
         mRT->attach(ATT_Color0, mSSAOTarget);
@@ -158,8 +177,8 @@ namespace ukn {
         cornerFrustum[1] = float(tanf(cam->getFOV() / 2.0f)) * cam->getFarPlane();
         cornerFrustum[0] = cornerFrustum[1] * cam->getAspect();
         cornerFrustum[2] = cam->getFarPlane();
-        mSSAOTechnique->getPass(0)->getVertexShader()->setFloatVectorVariable("cornerFrustum", cornerFrustum);
-        fragmentShader->setMatrixVariable("projection", cam->getProjMatrix());
+        mSSAOTechnique->getPass(0)->getVertexShader()->setMatrixVariable("invProj", (cam->getProjMatrix()).inverted());
+        fragmentShader->setMatrixVariable("projection", (cam->getProjMatrix()));
         fragmentShader->setFloatVariable("sampleRadius", mSampleRadius);
         fragmentShader->setFloatVariable("distanceScale", mDistanceScale);
         fragmentShader->setFloatVectorVariable("gbufferSize", mSize);
@@ -172,6 +191,10 @@ namespace ukn {
     void SSAO::makeSSAOBlur(const TexturePtr& color,
                             const TexturePtr& normal,
                             const TexturePtr& depth) {
+
+        if(!mSSAOBlurTechnique->getPass(0)->isOK())
+            return;
+
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
         mRT->attach(ATT_Color0, mSSAOBlurTarget);
@@ -182,7 +205,6 @@ namespace ukn {
 
         const ShaderPtr& fragmentShader = mSSAOBlurTechnique->getPass(0)->getFragmentShader();
         fragmentShader->setTextureVariable("normalMap", normal);
-        fragmentShader->setTextureVariable("depthMap", depth);
         fragmentShader->setTextureVariable("SSAO", mSSAOTarget->getTexture());
 
         fragmentShader->setFloatVectorVariable("blurDirection", float2(1, 1));
@@ -194,6 +216,9 @@ namespace ukn {
     }
 
     void SSAO::makeFinal(const TexturePtr& color) {
+        if(!mCompositeTechnique->getPass(0)->isOK())
+            return;
+
         GraphicDevice& gd = Context::Instance().getGraphicFactory().getGraphicDevice();
 
         mRT->attach(ATT_Color0, mCompositeTarget);

@@ -44,6 +44,10 @@ namespace ukn {
         return mGeometryShader;
     }
 
+    bool EffectPass::isOK() const {
+        return mFragmentShader && mVertexShader;
+    }
+
     void EffectPass::begin() {
         if(mVertexShader)
             mVertexShader->bind();
@@ -110,6 +114,10 @@ namespace ukn {
         pass->setVertexShader(vertexShader);
         pass->setGeometryShader(geometryShader);
         return pass;
+    }
+
+    void EffectTechnique::clear() {
+        this->mPasses.clear();
     }
 
     uint32 EffectTechnique::getNumPasses() const {

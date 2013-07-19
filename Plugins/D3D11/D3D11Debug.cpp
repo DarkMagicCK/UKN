@@ -3,8 +3,6 @@
 #include "mist/Logger.h"
 #include "mist/StringUtil.h"
 
-#include <D3DX11.h>
-
 namespace ukn {
 
 	using namespace mist;
@@ -37,7 +35,8 @@ namespace ukn {
 		case D3D11_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS:
 			log_error(MistString(L"D3D error: too many unique state objects ") + customMessage);
 			break;
-
+/*
+        // d3dx11
 		case D3DERR_INVALIDCALL:
 			log_error(MistString(L"D3D error: invalid call ") + customMessage);
 			break;
@@ -45,7 +44,7 @@ namespace ukn {
 		case D3DERR_WASSTILLDRAWING:
 			log_error(MistString(L"D3D error: was still drawwing ") + customMessage);
 			break;
-
+*/
 		case E_FAIL:
 			log_error(MistString(L"D3D error: fail ") + customMessage);
 			break;

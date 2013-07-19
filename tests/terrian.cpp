@@ -29,7 +29,7 @@ __in  int nCmdSho) {
         ukn::LightSourcePtr spotLight;
         ukn::LightSourcePtr directionalLight;
         ukn::SSAO* ssao;
-    ukn::ModelPtr dragonModel;
+        ukn::ModelPtr dragonModel;
     
         ukn::EffectPtr testEffect;
         ukn::EffectTechniquePtr displayDepthTechnique;
@@ -39,17 +39,6 @@ __in  int nCmdSho) {
         ukn::PointLightPtr pointLights[400];
         float rs[400];
         ukn::uint32 pointLightCount = 0;
-        
-        enum Mode {
-            LightMap,
-            Scene,
-            Depth,
-            Color,
-            SSAOAll,
-            All,
-        };
-        
-        Mode mode = Color;
         
 #ifndef MIST_OS_WINDOWS
         ukn::GraphicFactoryPtr factory;
@@ -98,19 +87,6 @@ __in  int nCmdSho) {
                     }
                 } else if(e.key == ukn::input::F2) {
                     directionalLight->setEnabled(!directionalLight->getEnabled());
-                } else if(e.key == ukn::input::Num2) {
-                    mode = LightMap;
-                } else if(e.key == ukn::input::Num1) {
-                    mode = Scene;
-                } else if(e.key == ukn::input::Num3) {
-                    mode = All;
-                } else if(e.key == ukn::input::Num4) {
-                    mode = SSAOAll;
-                    
-                }  else if(e.key == ukn::input::Num5) {
-                    mode = Depth;
-                }  else if(e.key == ukn::input::Num6) {
-                    mode = Color;
                 } else if(e.key == ukn::input::Equals) {
                     
                     ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
@@ -134,6 +110,9 @@ __in  int nCmdSho) {
                     
                     pointLightCount --;
                     scene.removeLight(pointLights[pointLightCount]);
+                } else if (e.key == ukn::input::R) {
+                    deferredRenderer->reloadShaders();
+                    ssao->reloadShaders();
                 }
             }
             
@@ -172,9 +151,9 @@ __in  int nCmdSho) {
                         ukn::Rectangle(0, 0, wnd->width()/2, wnd->height()/2, true));
             sb.draw(deferredRenderer->getNormalTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(wnd->width()/2, 0, wnd->width()/2, wnd->height()/2, true));
-            sb.draw(deferredRenderer->getDepthTarget()->getTexture(), ukn::Rectangle(),
+            sb.draw(ssao->getSSAOTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(wnd->width()/2, wnd->height()/2,  wnd->width()/2, wnd->height()/2, true));
-            sb.draw(deferredRenderer->getColorTarget()->getTexture(), ukn::Rectangle(),
+            sb.draw(ssao->getSSAOBlurTarget()->getTexture(), ukn::Rectangle(),
                         ukn::Rectangle(0, wnd->height()/2, wnd->width()/2, wnd->height()/2, true));
             sb.end();
 
@@ -193,8 +172,8 @@ __in  int nCmdSho) {
                  
                  font->draw((ukn::FormatString(L"Vertices Rendered: {0}\nSample Radius: {1}\nDistance Scale: {2}"),
                  scene.numVerticesRendered(),
-                 0,
-                 0),
+                 ssao->getSampleRadius(),
+                 ssao->getDistanceScale()),
                  0,
                  40,
                  ukn::FA_Left,
@@ -210,7 +189,7 @@ __in  int nCmdSho) {
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
             vp.camera->setViewParams(ukn::Vector3(0, 5, 0), ukn::Vector3(0, 0, 1));
             
-            camController->attachCamera(vp.camera);
+        //    camController->attachCamera(vp.camera);
             
             font = ukn::Font::Create(L"Arial.ttf", 20);
 
@@ -234,10 +213,10 @@ __in  int nCmdSho) {
             }
             
             deferredRenderer = new ukn::DeferredRenderer();
-       //     deferredRenderer->addPostEffect(L"SSAO");
-       //     deferredRenderer->addPostEffect(L"Fog");
+            deferredRenderer->addPostEffect(L"SSAO");
+            deferredRenderer->addPostEffect(L"Fog");
             
-        //    ssao = ukn::checked_cast<ukn::SSAO*>(deferredRenderer->getPostEffect(L"SSAO").get());
+            ssao = ukn::checked_cast<ukn::SSAO*>(deferredRenderer->getPostEffect(L"SSAO").get());
             //    fog = ukn::checked_cast<ukn::Fog*>(deferredRenderer->getPostEffect(L"Fog").get());
             
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
@@ -245,14 +224,14 @@ __in  int nCmdSho) {
             dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
             if(dragonModel) {
                 ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, ukn::SOA_Cullable | ukn::SOA_Moveable);
-                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(30, 30, 30));
+                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(5, 5, 5));
                 scene.addSceneObject(dragonObject);
             }
             
             ukn::SceneObjectPtr skyboxObject = ukn::MakeSharedPtr<ukn::SceneObject>(skybox, ukn::SOA_Overlay);
             skyboxObject->setModelMatrix(ukn::Matrix4::ScaleMat(100, 100, 100));
             
-            scene.addSceneObject(skyboxObject);
+      //      scene.addSceneObject(skyboxObject);
             
             ukn::SceneObjectPtr terrianObject = ukn::MakeSharedPtr<ukn::SceneObject>(terrian, ukn::SOA_Cullable | ukn::SOA_Moveable);
             scene.addSceneObject(terrianObject);

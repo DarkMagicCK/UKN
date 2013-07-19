@@ -207,7 +207,7 @@ namespace ukn {
         mWindow->onFrameEnd().raise(mWindow.get(), _NullEventArgs);
     }
 
-    void D3D11GraphicDevice::setViewport(const Viewport& vp) {
+    void D3D11GraphicDevice::onSetViewport(const Viewport& vp) {
         D3D11_VIEWPORT viewport;
         viewport.Width = (FLOAT)vp.width;
         viewport.Height = (FLOAT)vp.height;
@@ -358,7 +358,7 @@ namespace ukn {
 
     void D3D11GraphicDevice::onBindFrameBuffer(const FrameBufferPtr& frameBuffer) {
         Viewport& vp = frameBuffer->getViewport();
-        this->setViewport(vp);
+        this->onSetViewport(vp);
     }
 
     void D3D11GraphicDevice::setViewMatrix(const Matrix4& mat) {

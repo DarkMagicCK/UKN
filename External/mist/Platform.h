@@ -9,7 +9,7 @@
 #ifndef MISTPlatform_h
 #define MISTPlatform_h
 
-#if !defined(__cplusplus)
+#if !defined(__cplusplus) && !defined(__APPLE__)
     #error C++ compiler required.
 #endif
 
@@ -87,7 +87,9 @@
 #endif
 
 #if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE == 1 || TARGET_IPHONE_SIMULATOR == 1
-#define MIST_OS_IOS
+
+    #define MIST_OS_IOS
+    #define MIST_OS_MOBILE
 
 #endif
 
@@ -101,6 +103,7 @@
 // android
 #elif defined(__ANDROID__)
     #define MIST_OS_ANDROID
+    #define MIST_OS_MOBILE
 
 // windows
 #elif defined(_WIN32) || defined(_WIN64)

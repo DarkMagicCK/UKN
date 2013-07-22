@@ -11,7 +11,7 @@
 
 #include "mist/Platform.h"
 #include "mist/Uncopyable.h"
-#include "mist/Signal.h"
+#include "mist/SSignal.h"
 #include "mist/Event.h"
 
 #include "UKN/PreDeclare.h"

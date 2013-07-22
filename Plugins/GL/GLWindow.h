@@ -10,7 +10,7 @@
 #define Project_Unknown_GLWindow_h
 
 #include "mist/Platform.h"
-#include "mist/Signal.h"
+#include "mist/SSignal.h"
 
 #include "UKN/Window.h"
 #include "UKN/FrameBuffer.h"

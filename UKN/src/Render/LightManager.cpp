@@ -27,10 +27,12 @@ namespace ukn {
         // tests
         mDepthWriteEffect = gf.createEffect();
 
-        mEXPDepthMapTechnique = mDepthWriteEffect->appendTechnique();
-        mDepthMapTechnique = mDepthWriteEffect->appendTechnique();
-        mBlurTechnique = mDepthWriteEffect->appendTechnique();
-        this->reloadShaders();
+        if(mDepthWriteEffect) {
+            mEXPDepthMapTechnique = mDepthWriteEffect->appendTechnique();
+            mDepthMapTechnique = mDepthWriteEffect->appendTechnique();
+            mBlurTechnique = mDepthWriteEffect->appendTechnique();
+            this->reloadShaders();
+        }
 
         mShadowMapRT = MakeSharedPtr<ukn::CompositeRenderTarget>();
 

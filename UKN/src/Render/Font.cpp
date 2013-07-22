@@ -24,6 +24,9 @@
 #include "UKN/SpriteBatch.h"
 #include "UKN/Texture.h"
 
+#include <ft2build.h>
+#include <freetype/freetype.h>
+
 #ifdef MIST_OS_WINDOWS
 #pragma comment(lib, "freetype244ST.lib")
 #endif
@@ -138,10 +141,12 @@ namespace ukn {
     bool Font::FTGlyph::cache(uint32 index, Font& font, uint32* texdata, TexturePlacement& placement) {
         if(cached)
             return true;
+        
+        FT_Face* ft_face = (FT_Face*)face;
             
-        FT_Set_Pixel_Sizes(*face, 0, size);
-        if(!FT_Load_Glyph(*face, index, FT_LOAD_DEFAULT)) {
-            FT_GlyphSlot glyph = (*face)->glyph;
+        FT_Set_Pixel_Sizes(*ft_face, 0, size);
+        if(!FT_Load_Glyph(*ft_face, index, FT_LOAD_DEFAULT)) {
+            FT_GlyphSlot glyph = (*ft_face)->glyph;
             FT_Bitmap bits;
             if(glyph->format == ft_glyph_format_outline) {
                 if(!FT_Render_Glyph(glyph, FT_RENDER_MODE_NORMAL)) {

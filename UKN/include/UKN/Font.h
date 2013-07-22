@@ -25,9 +25,6 @@
 #include "UKN/SpriteBatch.h"
 #include <vector>
 
-#include <ft2build.h>
-#include <freetype/freetype.h>
-
 namespace ukn {
     
     /**
@@ -143,7 +140,7 @@ namespace ukn {
 			void resetFontSize(uint32 newsize);
 			bool cache(uint32 index, Font& font, uint32* texdata, TexturePlacement& placement);
         
-			FT_Face* face;
+			void* face;
         
 			uint32 size;
 			uint32 top;

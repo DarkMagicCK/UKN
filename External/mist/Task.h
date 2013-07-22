@@ -10,7 +10,7 @@
 #define Project_Unknown_Task_h
 
 #include "mist/Platform.h"
-#include "mist/Signal.h"
+#include "mist/SSignal.h"
 #include "mist/Event.h"
 #include "mist/Util.h"
 

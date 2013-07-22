@@ -12,6 +12,8 @@
 #include "mist/Stream.h"
 #include "mist/Logger.h"
 #include "mist/Common.h"
+#include "mist/FileUtil.h"
+#include "mist/SysUtil.h"
 
 #include "UKN/Context.h"
 #include "UKN/GraphicDevice.h"
@@ -315,7 +317,11 @@ namespace ukn {
     void Context::loadGraphicFactory(const UknString& name) {
         mGraphicFactoryLoader.close();
         
-        if(mGraphicFactoryLoader.open(string::WStringToString(mist::get_lib_name(name)).c_str())) {
+        UknString libName = mist::get_lib_name(name);
+        if(!mist::File::FileExists(libName)) {
+            libName = mist::Path::GetApplicationPath() + libName;
+        }
+        if(mGraphicFactoryLoader.open(string::WStringToString(libName).c_str())) {
             CreateGraphicFactoryFunc func = (CreateGraphicFactoryFunc)mGraphicFactoryLoader.getProc("CreateGraphicFactory");
             
             if(func) {

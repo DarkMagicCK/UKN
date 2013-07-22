@@ -12,7 +12,7 @@
 #include "mist/Platform.h"
 #include "mist/Any.h"
 #include "mist/PreDeclare.h"
-#include "mist/Signal.h"
+#include "mist/SSignal.h"
 #include <vector>
 
 namespace mist {

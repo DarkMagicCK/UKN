@@ -1,0 +1,353 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		88AD637C179DEB010023B3F5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD637B179DEB010023B3F5 /* Cocoa.framework */; };
+		88AD6386179DEB010023B3F5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 88AD6384179DEB010023B3F5 /* InfoPlist.strings */; };
+		88AD638C179DEB010023B3F5 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 88AD638A179DEB010023B3F5 /* Credits.rtf */; };
+		88AD6399179DEB380023B3F5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AD6398179DEB380023B3F5 /* main.cpp */; };
+		88AD63B4179DEF8D0023B3F5 /* libMist.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63B2179DEF8D0023B3F5 /* libMist.dylib */; };
+		88AD63B5179DEF8D0023B3F5 /* libUKN.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63B3179DEF8D0023B3F5 /* libUKN.dylib */; };
+		88AD63CF179DF02A0023B3F5 /* libGLPlugin.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88AD63CC179DF0270023B3F5 /* libGLPlugin.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		88AD63A4179DED550023B3F5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				88AD63CF179DF02A0023B3F5 /* libGLPlugin.dylib in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		88AD63D2179DF1C90023B3F5 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 12;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		88AD6377179DEB010023B3F5 /* FontTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FontTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		88AD637B179DEB010023B3F5 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		88AD637E179DEB010023B3F5 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		88AD637F179DEB010023B3F5 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		88AD6380179DEB010023B3F5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		88AD6383179DEB010023B3F5 /* FontTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FontTest-Info.plist"; sourceTree = "<group>"; };
+		88AD6385179DEB010023B3F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		88AD6389179DEB010023B3F5 /* FontTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FontTest-Prefix.pch"; sourceTree = "<group>"; };
+		88AD638B179DEB010023B3F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		88AD6398179DEB380023B3F5 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Tests/Font/main.cpp; sourceTree = "<group>"; };
+		88AD63B2179DEF8D0023B3F5 /* libMist.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMist.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libMist.dylib; sourceTree = "<group>"; };
+		88AD63B3179DEF8D0023B3F5 /* libUKN.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libUKN.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libUKN.dylib; sourceTree = "<group>"; };
+		88AD63CC179DF0270023B3F5 /* libGLPlugin.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLPlugin.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libGLPlugin.dylib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		88AD6374179DEB010023B3F5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88AD63B4179DEF8D0023B3F5 /* libMist.dylib in Frameworks */,
+				88AD63B5179DEF8D0023B3F5 /* libUKN.dylib in Frameworks */,
+				88AD637C179DEB010023B3F5 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		88AD636C179DEB010023B3F5 = {
+			isa = PBXGroup;
+			children = (
+				88AD63CC179DF0270023B3F5 /* libGLPlugin.dylib */,
+				88AD63B2179DEF8D0023B3F5 /* libMist.dylib */,
+				88AD63B3179DEF8D0023B3F5 /* libUKN.dylib */,
+				88AD6381179DEB010023B3F5 /* FontTest */,
+				88AD637A179DEB010023B3F5 /* Frameworks */,
+				88AD6378179DEB010023B3F5 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		88AD6378179DEB010023B3F5 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				88AD6377179DEB010023B3F5 /* FontTest.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		88AD637A179DEB010023B3F5 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				88AD637B179DEB010023B3F5 /* Cocoa.framework */,
+				88AD637D179DEB010023B3F5 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		88AD637D179DEB010023B3F5 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				88AD637E179DEB010023B3F5 /* AppKit.framework */,
+				88AD637F179DEB010023B3F5 /* CoreData.framework */,
+				88AD6380179DEB010023B3F5 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		88AD6381179DEB010023B3F5 /* FontTest */ = {
+			isa = PBXGroup;
+			children = (
+				88AD6398179DEB380023B3F5 /* main.cpp */,
+				88AD6382179DEB010023B3F5 /* Supporting Files */,
+			);
+			path = FontTest;
+			sourceTree = "<group>";
+		};
+		88AD6382179DEB010023B3F5 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				88AD6383179DEB010023B3F5 /* FontTest-Info.plist */,
+				88AD6384179DEB010023B3F5 /* InfoPlist.strings */,
+				88AD6389179DEB010023B3F5 /* FontTest-Prefix.pch */,
+				88AD638A179DEB010023B3F5 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		88AD6376179DEB010023B3F5 /* FontTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 88AD6395179DEB020023B3F5 /* Build configuration list for PBXNativeTarget "FontTest" */;
+			buildPhases = (
+				88AD6373179DEB010023B3F5 /* Sources */,
+				88AD6374179DEB010023B3F5 /* Frameworks */,
+				88AD6375179DEB010023B3F5 /* Resources */,
+				88AD63A4179DED550023B3F5 /* CopyFiles */,
+				88AD63D2179DF1C90023B3F5 /* CopyFiles */,
+				88AD63D5179DF2620023B3F5 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FontTest;
+			productName = FontTest;
+			productReference = 88AD6377179DEB010023B3F5 /* FontTest.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		88AD636E179DEB010023B3F5 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0450;
+				ORGANIZATIONNAME = "Robert Bu";
+			};
+			buildConfigurationList = 88AD6371179DEB010023B3F5 /* Build configuration list for PBXProject "FontTest" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 88AD636C179DEB010023B3F5;
+			productRefGroup = 88AD6378179DEB010023B3F5 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				88AD6376179DEB010023B3F5 /* FontTest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		88AD6375179DEB010023B3F5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88AD6386179DEB010023B3F5 /* InfoPlist.strings in Resources */,
+				88AD638C179DEB010023B3F5 /* Credits.rtf in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		88AD63D5179DF2620023B3F5 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		88AD6373179DEB010023B3F5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				88AD6399179DEB380023B3F5 /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		88AD6384179DEB010023B3F5 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				88AD6385179DEB010023B3F5 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		88AD638A179DEB010023B3F5 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				88AD638B179DEB010023B3F5 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		88AD6393179DEB020023B3F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../UKN/include\"",
+					"\"$(SRCROOT)/../../../External\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		88AD6394179DEB020023B3F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"\"$(SRCROOT)/../../../UKN/include\"",
+					"\"$(SRCROOT)/../../../External\"",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		88AD6396179DEB020023B3F5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FontTest/FontTest-Prefix.pch";
+				INFOPLIST_FILE = "FontTest/FontTest-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../DerivedData/UKN/Build/Products/Debug\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		88AD6397179DEB020023B3F5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "FontTest/FontTest-Prefix.pch";
+				INFOPLIST_FILE = "FontTest/FontTest-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../DerivedData/UKN/Build/Products/Debug\"",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		88AD6371179DEB010023B3F5 /* Build configuration list for PBXProject "FontTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88AD6393179DEB020023B3F5 /* Debug */,
+				88AD6394179DEB020023B3F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		88AD6395179DEB020023B3F5 /* Build configuration list for PBXNativeTarget "FontTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				88AD6396179DEB020023B3F5 /* Debug */,
+				88AD6397179DEB020023B3F5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 88AD636E179DEB010023B3F5 /* Project object */;
+}

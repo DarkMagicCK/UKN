@@ -10,7 +10,7 @@
 
 #include "mist/StringUtil.h"
 #include "mist/Common.h"
-
+#include "mist/FileUtil.h"
 #include "mist/Logger.h"
 
 #ifdef MIST_OS_FAMILY_APPLE
@@ -75,7 +75,7 @@ namespace mist {
     }
     
     MistString mist_apple_application_path() {
-        return string::StringToWStringFast([[[NSBundle mainBundle] bundlePath] UTF8String]) + L"/";
+        return Path::GetDirectory(string::StringToWStringFast([[[NSBundle mainBundle] executablePath] UTF8String])) + L"/";
     }
     
     MistString mist_apple_documents_path() {
@@ -175,8 +175,8 @@ namespace mist {
 	}
     
     MessageBoxButton mist_apple_message_box(const std::wstring& mssg, const std::wstring& title, int option) {
-        CFStringRef header_ref   = CFStringCreateWithCString(NULL, string::WStringToString(mssg).c_str(), (uint32)title.size());
-		CFStringRef message_ref  = CFStringCreateWithCString(NULL, string::WStringToString(title).c_str(), (uint32)mssg.size());
+        CFStringRef header_ref   = CFStringCreateWithCString(NULL, string::WStringToString(mssg).c_str(), (uint32)mssg.size());
+		CFStringRef message_ref  = CFStringCreateWithCString(NULL, string::WStringToString(title).c_str(), (uint32)title.size());
 		
 		CFOptionFlags result;
 		int32 level = mb_option_to_kCFNotificationLevel(option);

@@ -46,7 +46,7 @@ namespace mist {
     
     bool ModuleManager::addModuleFromDll(const MistString& name) {
         DllLoader* loader = new DllLoader();
-        if(loader->open(string::WStringToString(name).c_str())) {
+        if(loader->open(string::WStringToString(get_lib_name(name)).c_str())) {
             typedef Module* (*ModuleCreateFunc)();
             ModuleCreateFunc func = (ModuleCreateFunc)loader->getProc("CreateModule");
             

@@ -6,30 +6,7 @@
 //  Copyright (c) 2013 heizi. All rights reserved.
 //
 
-#include "UKN/App.h"
-#include "UKN/Context.h"
-#include "UKN/Window.h"
-#include "UKN/Texture.h"
-#include "UKN/GraphicDevice.h"
-#include "UKN/GraphicBuffer.h"
-#include "UKN/GraphicFactory.h"
-#include "UKN/FrameBuffer.h"
-#include "UKN/Texture.h"
-#include "UKN/SpriteBatch.h"
-#include "UKN/RenderBuffer.h"
-#include "UKN/Font.h"
-#include "UKN/Asset.h"
-#include "UKN/Skeletal.h"
-#include "UKN/Input.h"
-#include "UKN/Shader.h"
-#include "UKN/Model.h"
-#include "UKN/RenderTarget.h"
-#include "UKN/CameraController.h"
-#include "UKN/Skybox.h"
-#include "UKN/Terrian.h"
-#include "UKN/GraphicContext.h"
-
-#include "mist/Convert.h"
+#include "UKN/UKN.h"
 
 #include <vector>
 #include <map>
@@ -70,7 +47,7 @@ int CALLBACK WinMain(__in  HINSTANCE hInstance,
             .sampleCount(1)
             .showMouse(true)
             .isFullScreen(false)
-            .graphicFactoryName(L"D3D11Plugin.dll")
+            .graphicFactoryName(L"D3D11Plugin")
             .fps(60)
             )
     .connectUpdate([](ukn::Window* ) {
@@ -81,9 +58,11 @@ int CALLBACK WinMain(__in  HINSTANCE hInstance,
         gd.clear(ukn::CM_Color, ukn::color::Black, 1.0f, 0.f);
         
         font->begin();
-        font->draw(L"ABCSDAKDadSKDJADLKSAJDKASDJALSDJAKSDJDEFGHIJKLMNOPQRSTUVWRST", 0, 0, ukn::FA_Left);
+        font->draw(L"ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, 0, ukn::FA_Left);
         font->end();
         ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
+        
+        gd.clear(ukn::CM_Color, ukn::color::Black, 1.0f, 0.f);
 
         sb.begin();
         sb.draw(font->getTexturePlacement(0)->texture, ukn::Vector2(0, 0));
@@ -91,14 +70,7 @@ int CALLBACK WinMain(__in  HINSTANCE hInstance,
         
     })
     .connectInit([&](ukn::Window* ) {
-        font = ukn::Font::Create(L"Arial.ttf", 20);
-
-        mist::log_info((mist::FormatString(L"{0}, {1} {2}, {1} test"), 1, 0.2f, "test"));
-
-        ukn::ModelLoader::ModelDataPtr model = ukn::ModelLoader::LoadFromPly(
-            ukn::ResourceLoader::Instance().loadResource(L"dragon_vrip_res4.ply"),
-                                                                             true
-        );
+        font = ukn::Font::Create(L"Courier New.ttf", 20);
     })
     .run();
     

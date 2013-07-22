@@ -72,15 +72,6 @@ namespace mist {
         }
     };
     
-<<<<<<< HEAD
-    template<typename T>
-    MistString Convert::ToString(const T& t) {
-        return string::AnyToWString(t);
-    }
-    
-
-=======
->>>>>>> iOS
     struct MIST_API FormatString {
         FormatString(const MistString& str);
 

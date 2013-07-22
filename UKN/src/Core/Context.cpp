@@ -315,7 +315,7 @@ namespace ukn {
     void Context::loadGraphicFactory(const UknString& name) {
         mGraphicFactoryLoader.close();
         
-        if(mGraphicFactoryLoader.open(string::WStringToString(name).c_str())) {
+        if(mGraphicFactoryLoader.open(string::WStringToString(mist::get_lib_name(name)).c_str())) {
             CreateGraphicFactoryFunc func = (CreateGraphicFactoryFunc)mGraphicFactoryLoader.getProc("CreateGraphicFactory");
             
             if(func) {

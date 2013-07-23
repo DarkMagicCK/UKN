@@ -8,9 +8,6 @@
 
 #include "UKN/UKN.h"
 
-#include <vector>
-#include <map>
-
 #ifndef MIST_OS_WINDOWS
 
 int main (int argc, const char * argv[])

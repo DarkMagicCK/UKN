@@ -107,7 +107,8 @@ namespace ukn {
                     .resizable(false)
                     .showMouse(true)
                     .colorFormat(EF_RGBA8)
-                    .depthStencilFormat(EF_D16);
+                    .depthStencilFormat(EF_D16)
+                    .fps(FrameCounter::FpsUnlimited);
     }
     
     typedef void (*CreateGraphicFactoryFunc)(GraphicFactoryPtr&);

@@ -911,8 +911,8 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../External\"";
-				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/libUKN.dylib";
-				MACH_O_TYPE = staticlib;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/libMist.dylib";
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -922,8 +922,8 @@
 			buildSettings = {
 				EXECUTABLE_PREFIX = lib;
 				HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../External\"";
-				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/libUKN.dylib";
-				MACH_O_TYPE = staticlib;
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/libMist.dylib";
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

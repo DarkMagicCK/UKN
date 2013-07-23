@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		88AD637C179DEB010023B3F5 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD637B179DEB010023B3F5 /* Cocoa.framework */; };
 		88AD6386179DEB010023B3F5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 88AD6384179DEB010023B3F5 /* InfoPlist.strings */; };
-		88AD638C179DEB010023B3F5 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 88AD638A179DEB010023B3F5 /* Credits.rtf */; };
 		88AD6399179DEB380023B3F5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AD6398179DEB380023B3F5 /* main.cpp */; };
 		88AD63B5179DEF8D0023B3F5 /* libUKN.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63B3179DEF8D0023B3F5 /* libUKN.dylib */; };
 		88AD63CF179DF02A0023B3F5 /* libGLPlugin.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88AD63CC179DF0270023B3F5 /* libGLPlugin.dylib */; };
@@ -49,7 +48,6 @@
 		88AD6383179DEB010023B3F5 /* FontTest-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "FontTest-Info.plist"; sourceTree = "<group>"; };
 		88AD6385179DEB010023B3F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		88AD6389179DEB010023B3F5 /* FontTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FontTest-Prefix.pch"; sourceTree = "<group>"; };
-		88AD638B179DEB010023B3F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		88AD6398179DEB380023B3F5 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Tests/Font/main.cpp; sourceTree = "<group>"; };
 		88AD63B3179DEF8D0023B3F5 /* libUKN.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libUKN.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libUKN.dylib; sourceTree = "<group>"; };
 		88AD63CC179DF0270023B3F5 /* libGLPlugin.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLPlugin.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libGLPlugin.dylib; sourceTree = "<group>"; };
@@ -124,7 +122,6 @@
 				88AD6383179DEB010023B3F5 /* FontTest-Info.plist */,
 				88AD6384179DEB010023B3F5 /* InfoPlist.strings */,
 				88AD6389179DEB010023B3F5 /* FontTest-Prefix.pch */,
-				88AD638A179DEB010023B3F5 /* Credits.rtf */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -184,7 +181,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				88AD6386179DEB010023B3F5 /* InfoPlist.strings in Resources */,
-				88AD638C179DEB010023B3F5 /* Credits.rtf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -224,14 +220,6 @@
 				88AD6385179DEB010023B3F5 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		88AD638A179DEB010023B3F5 /* Credits.rtf */ = {
-			isa = PBXVariantGroup;
-			children = (
-				88AD638B179DEB010023B3F5 /* en */,
-			);
-			name = Credits.rtf;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

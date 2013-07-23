@@ -188,7 +188,7 @@ namespace mist {
     
     class MIST_API FrameCounter {
     public:
-        enum { FpsUnlimited = 0 };
+        enum { FpsUnlimited = 1000 };
         
         static FrameCounter& Instance();
         

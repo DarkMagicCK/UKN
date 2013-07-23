@@ -533,6 +533,9 @@ namespace ukn {
         case RS_FillMode:
         case RS_FrontFace:
             break;
+                
+            default:
+                break;
         }
     }
 

@@ -205,9 +205,6 @@ namespace ukn {
     mRBO(0),
     mSampleCount(sampleCount),
     mSampleQuaility(sampleQuality) {
-        
-        GraphicFactory& gf = Context::Instance().getGraphicFactory();
-     
         mWidth = width;
         mHeight = height;
         mElementFormat = ef;

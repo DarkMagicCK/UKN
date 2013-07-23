@@ -152,13 +152,8 @@ namespace mist {
 #ifdef MIST_OS_OSX
    
     MistString mist_apple_get_os_version() {
-        SInt32 versionMajor = 0;
-        SInt32 versionMinor = 0;
-        Gestalt( gestaltSystemVersionMajor, &versionMajor );
-        Gestalt( gestaltSystemVersionMinor, &versionMinor );
-        return string::StringToWString(format_string("Mac OS X Version %d.%d",
-                                                     versionMajor,
-                                                     versionMinor));
+        NSString* str = [[NSProcessInfo processInfo] operatingSystemVersionString];
+        return string::StringToWString([str UTF8String]);
     }
     
     inline int32 mb_option_to_kCFNotificationLevel(int32 option) {

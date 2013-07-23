@@ -38,7 +38,6 @@ namespace ukn {
         gd.clear(CM_Color , color::Black, 1.0f, 0);
         
         const ShaderPtr& fragmentShader = mFogTechnique->getPass(0)->getFragmentShader();
-        const ShaderPtr& vertexShader = mFogTechnique->getPass(0)->getVertexShader();
             
         fragmentShader->setTextureVariable("colorMap", color);
         fragmentShader->setTextureVariable("depthMap", depth);

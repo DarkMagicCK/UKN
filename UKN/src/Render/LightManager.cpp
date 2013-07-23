@@ -107,7 +107,7 @@ namespace ukn {
     }
 
     void LightManager::renderShadowMap(GraphicDevice& gd, SceneManager& scene, const LightSourcePtr& ls) {
-        const RenderTargetPtr& rt = ls->getShadowMap();
+        //const RenderTargetPtr& rt = ls->getShadowMap();
         EffectTechniquePtr techniuqe;
         if(ls->type() == LS_Directional)
             techniuqe = mDepthMapTechnique;

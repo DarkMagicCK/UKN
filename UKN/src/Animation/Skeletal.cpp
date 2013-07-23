@@ -133,7 +133,7 @@ namespace ukn {
     
     void BoneAnimation::setStatus(AnimationStatus status) {        
         switch(status) {
-            case AS_Playing:
+            case AS_Playing: {
                 if(mCurrentStatus != AS_Paused) {
                     if(key_frames.size() > 0) {
                         mCurrentTime = 0;
@@ -152,13 +152,15 @@ namespace ukn {
                 mCurrentStatus = status;
 
                 break;
+            }
                 
-            case AS_Paused:
+            case AS_Paused: {
                 mPausedTime = 0;
                 mCurrentStatus = status;
                 break;
+            }
                 
-            case AS_Stopped:   
+            case AS_Stopped: {
                 mCurrentTime = 0;
                 mCurrentFrameIndex = -1;
                 mPausedTime = 0;
@@ -169,7 +171,11 @@ namespace ukn {
                 BoneAnimationCompleteArgs args(mTotalPlayedTime);
                 complete_event.raise(this, args);
                 break;
+            }
                 
+            default: {
+                break;
+            }
         }
     }
     

@@ -38,7 +38,7 @@ namespace mist {
         }
         */
         static void OnTypeDBInitialize() {
-            TypeDB& db = TypeDB::Default();
+          //  TypeDB& db = TypeDB::Default();
             
         //    OnMathTypeRegistration(db);
         }

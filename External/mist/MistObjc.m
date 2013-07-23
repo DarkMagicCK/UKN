@@ -13,7 +13,22 @@
 
 #import "MistObjc.h"
 
-#ifdef MIST_OS_FAMILY_APPLE
+#include "TargetConditionals.h"
+#include <Availability.h>
+
+#if defined(TARGET_OS_MAC) && TARGET_OS_MAC == 1 && TARGET_IPHONE_SIMULATOR == 0
+
+#define MIST_OS_OSX
+
+#endif
+
+#if defined(TARGET_OS_IPHONE) && TARGET_OS_IPHONE == 1 || TARGET_IPHONE_SIMULATOR == 1
+
+#define MIST_OS_IOS
+#define MIST_OS_MOBILE
+
+#endif
+
 
 #import <CoreFoundation/CoreFoundation.h>
 #import <Foundation/Foundation.h>
@@ -27,8 +42,6 @@
 #import <UIKit/UIDevice.h>
 #import <AudioToolbox/AudioToolbox.h>
 
-
-#endif
 
 #endif
 
@@ -112,11 +125,7 @@
 }
 
 + (NSString*)osVersion {
-    SInt32 versionMajor = 0;
-    SInt32 versionMinor = 0;
-    Gestalt( gestaltSystemVersionMajor, &versionMajor );
-    Gestalt( gestaltSystemVersionMinor, &versionMinor );
-    return [NSString stringWithFormat:@"Mac OS X Version %d.%d", versionMajor, versionMinor];
+    return [[NSProcessInfo processInfo] operatingSystemVersionString];
 }
 
 + (void)enumDesktopModes:(void (^)(unsigned int w, unsigned int h, int bpp))callback {

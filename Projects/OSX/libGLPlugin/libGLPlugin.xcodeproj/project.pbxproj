@@ -66,7 +66,7 @@
 		88AD6367179DEACB0023B3F5 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD6366179DEACB0023B3F5 /* OpenGL.framework */; };
 		88AD636B179DEADA0023B3F5 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD636A179DEADA0023B3F5 /* IOKit.framework */; };
 		88AD63AF179DEF780023B3F5 /* libUKN.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63AE179DEF780023B3F5 /* libUKN.dylib */; };
-		88AD63B1179DEF7B0023B3F5 /* libMist.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63B0179DEF7B0023B3F5 /* libMist.dylib */; };
+		88AD6545179F023A0023B3F5 /* libMist.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD6544179F023A0023B3F5 /* libMist.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -134,7 +134,7 @@
 		88AD6368179DEAD20023B3F5 /* libIOKit.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libIOKit.dylib; path = usr/lib/libIOKit.dylib; sourceTree = SDKROOT; };
 		88AD636A179DEADA0023B3F5 /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
 		88AD63AE179DEF780023B3F5 /* libUKN.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libUKN.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libUKN.dylib; sourceTree = "<group>"; };
-		88AD63B0179DEF7B0023B3F5 /* libMist.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMist.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libMist.dylib; sourceTree = "<group>"; };
+		88AD6544179F023A0023B3F5 /* libMist.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMist.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libMist.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,7 +142,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88AD63B1179DEF7B0023B3F5 /* libMist.dylib in Frameworks */,
+				88AD6545179F023A0023B3F5 /* libMist.dylib in Frameworks */,
 				88AD63AF179DEF780023B3F5 /* libUKN.dylib in Frameworks */,
 				88AD636B179DEADA0023B3F5 /* IOKit.framework in Frameworks */,
 				88AD6367179DEACB0023B3F5 /* OpenGL.framework in Frameworks */,
@@ -161,7 +161,7 @@
 		88AD5D70179DE5A90023B3F5 = {
 			isa = PBXGroup;
 			children = (
-				88AD63B0179DEF7B0023B3F5 /* libMist.dylib */,
+				88AD6544179F023A0023B3F5 /* libMist.dylib */,
 				88AD63AE179DEF780023B3F5 /* libUKN.dylib */,
 				88AD636A179DEADA0023B3F5 /* IOKit.framework */,
 				88AD6368179DEAD20023B3F5 /* libIOKit.dylib */,
@@ -501,6 +501,7 @@
 				88AD5D81179DE5A90023B3F5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

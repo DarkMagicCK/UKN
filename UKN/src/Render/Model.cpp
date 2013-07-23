@@ -42,7 +42,7 @@ namespace ukn {
                              float3& tout, float3& bout) {
         Vector3 e0 = p2 - p1;
         Vector3 e1 = p3 - p2;
-        Vector3 normal = e0.cross(e1);
+       // Vector3 normal = e0.cross(e1);
 
         float s1 = uv2[0] - uv1[0],
               t1 = uv2[1] - uv1[1],
@@ -162,8 +162,6 @@ namespace ukn {
             float half3 = 1.0f / 3;
             float half32 = 2.0f / 3;
 
-            float d = 1;
-      
             float3 n[6] = {
                 float3(0, 0, -1), // 0
                 float3(-1, 0, 0), // 1

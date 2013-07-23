@@ -148,10 +148,11 @@
 		88AD635B179DEA330023B3F5 /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = 88AD6345179DEA330023B3F5 /* pngwrite.c */; };
 		88AD635C179DEA330023B3F5 /* pngwtran.c in Sources */ = {isa = PBXBuildFile; fileRef = 88AD6346179DEA330023B3F5 /* pngwtran.c */; };
 		88AD635D179DEA330023B3F5 /* pngwutil.c in Sources */ = {isa = PBXBuildFile; fileRef = 88AD6347179DEA330023B3F5 /* pngwutil.c */; };
-		88AD63AD179DEF5C0023B3F5 /* libMist.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63AC179DEF5C0023B3F5 /* libMist.dylib */; };
 		88AD63DA179DF3D30023B3F5 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63D7179DF3D30023B3F5 /* CoreServices.framework */; };
 		88AD63DB179DF3D30023B3F5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63D8179DF3D30023B3F5 /* CoreGraphics.framework */; };
 		88AD63DC179DF3D30023B3F5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63D9179DF3D30023B3F5 /* Foundation.framework */; };
+		88AD6543179F02320023B3F5 /* libMist.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63DF179DF3D30023B3F5 /* libMist.dylib */; };
+		88AD6547179F02490023B3F5 /* libMist.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD6546179F02490023B3F5 /* libMist.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -312,10 +313,10 @@
 		88AD6345179DEA330023B3F5 /* pngwrite.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwrite.c; sourceTree = "<group>"; };
 		88AD6346179DEA330023B3F5 /* pngwtran.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwtran.c; sourceTree = "<group>"; };
 		88AD6347179DEA330023B3F5 /* pngwutil.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = pngwutil.c; sourceTree = "<group>"; };
-		88AD63AC179DEF5C0023B3F5 /* libMist.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMist.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libMist.dylib; sourceTree = "<group>"; };
 		88AD63D7179DF3D30023B3F5 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreServices.framework; sourceTree = "<absolute>"; };
 		88AD63D8179DF3D30023B3F5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = "<absolute>"; };
 		88AD63D9179DF3D30023B3F5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.8.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		88AD6546179F02490023B3F5 /* libMist.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMist.dylib; path = /Users/darkfall/Documents/codes/UKN/Projects/OSX/libGLPlugin/../DerivedData/UKN/Build/Products/Debug/libMist.dylib; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -323,11 +324,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88AD63AD179DEF5C0023B3F5 /* libMist.dylib in Frameworks */,
+				88AD6543179F02320023B3F5 /* libMist.dylib in Frameworks */,
 				88AD6050179DE6400023B3F5 /* libfreetype.a in Frameworks */,
 				88AD63DA179DF3D30023B3F5 /* CoreServices.framework in Frameworks */,
 				88AD63DB179DF3D30023B3F5 /* CoreGraphics.framework in Frameworks */,
 				88AD63DC179DF3D30023B3F5 /* Foundation.framework in Frameworks */,
+				88AD6547179F02490023B3F5 /* libMist.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -337,10 +339,10 @@
 		88AD5D4C179DE58C0023B3F5 = {
 			isa = PBXGroup;
 			children = (
+				88AD6546179F02490023B3F5 /* libMist.dylib */,
 				88AD63D7179DF3D30023B3F5 /* CoreServices.framework */,
 				88AD63D8179DF3D30023B3F5 /* CoreGraphics.framework */,
 				88AD63D9179DF3D30023B3F5 /* Foundation.framework */,
-				88AD63AC179DEF5C0023B3F5 /* libMist.dylib */,
 				88AD632E179DEA330023B3F5 /* libpng */,
 				88AD604D179DE6400023B3F5 /* libbz2.dylib */,
 				88AD604E179DE6400023B3F5 /* libfreetype.a */,
@@ -842,6 +844,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -865,6 +868,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = "";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
 			};
@@ -879,12 +883,13 @@
 					"\"$(SRCROOT)/../../../UKN/include\"",
 					"\"$(SRCROOT)/../../../External/freetype\"",
 				);
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/libUKN.dylib";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../Libs/OSX\"",
 					"\"$(SRCROOT)/../DerivedData/UKN/Build/Products/Debug\"",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -898,12 +903,13 @@
 					"\"$(SRCROOT)/../../../UKN/include\"",
 					"\"$(SRCROOT)/../../../External/freetype\"",
 				);
+				LD_DYLIB_INSTALL_NAME = "@executable_path/../Frameworks/libUKN.dylib";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../Libs/OSX\"",
 					"\"$(SRCROOT)/../DerivedData/UKN/Build/Products/Debug\"",
 				);
-				MACH_O_TYPE = staticlib;
+				MACH_O_TYPE = mh_dylib;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

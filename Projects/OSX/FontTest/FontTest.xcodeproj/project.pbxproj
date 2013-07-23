@@ -11,9 +11,10 @@
 		88AD6386179DEB010023B3F5 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 88AD6384179DEB010023B3F5 /* InfoPlist.strings */; };
 		88AD638C179DEB010023B3F5 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 88AD638A179DEB010023B3F5 /* Credits.rtf */; };
 		88AD6399179DEB380023B3F5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 88AD6398179DEB380023B3F5 /* main.cpp */; };
-		88AD63B4179DEF8D0023B3F5 /* libMist.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63B2179DEF8D0023B3F5 /* libMist.dylib */; };
 		88AD63B5179DEF8D0023B3F5 /* libUKN.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD63B3179DEF8D0023B3F5 /* libUKN.dylib */; };
 		88AD63CF179DF02A0023B3F5 /* libGLPlugin.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88AD63CC179DF0270023B3F5 /* libGLPlugin.dylib */; };
+		88AD6536179EFF100023B3F5 /* libUKN.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = 88AD63B3179DEF8D0023B3F5 /* libUKN.dylib */; };
+		88AD6541179F01AC0023B3F5 /* libMist.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 88AD6540179F01AC0023B3F5 /* libMist.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,8 +32,9 @@
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
-			dstSubfolderSpec = 12;
+			dstSubfolderSpec = 10;
 			files = (
+				88AD6536179EFF100023B3F5 /* libUKN.dylib in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -49,9 +51,9 @@
 		88AD6389179DEB010023B3F5 /* FontTest-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FontTest-Prefix.pch"; sourceTree = "<group>"; };
 		88AD638B179DEB010023B3F5 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
 		88AD6398179DEB380023B3F5 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = ../../../../Tests/Font/main.cpp; sourceTree = "<group>"; };
-		88AD63B2179DEF8D0023B3F5 /* libMist.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMist.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libMist.dylib; sourceTree = "<group>"; };
 		88AD63B3179DEF8D0023B3F5 /* libUKN.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libUKN.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libUKN.dylib; sourceTree = "<group>"; };
 		88AD63CC179DF0270023B3F5 /* libGLPlugin.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLPlugin.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libGLPlugin.dylib; sourceTree = "<group>"; };
+		88AD6540179F01AC0023B3F5 /* libMist.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libMist.dylib; path = ../DerivedData/UKN/Build/Products/Debug/libMist.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,7 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88AD63B4179DEF8D0023B3F5 /* libMist.dylib in Frameworks */,
+				88AD6541179F01AC0023B3F5 /* libMist.dylib in Frameworks */,
 				88AD63B5179DEF8D0023B3F5 /* libUKN.dylib in Frameworks */,
 				88AD637C179DEB010023B3F5 /* Cocoa.framework in Frameworks */,
 			);
@@ -71,8 +73,8 @@
 		88AD636C179DEB010023B3F5 = {
 			isa = PBXGroup;
 			children = (
+				88AD6540179F01AC0023B3F5 /* libMist.dylib */,
 				88AD63CC179DF0270023B3F5 /* libGLPlugin.dylib */,
-				88AD63B2179DEF8D0023B3F5 /* libMist.dylib */,
 				88AD63B3179DEF8D0023B3F5 /* libUKN.dylib */,
 				88AD6381179DEB010023B3F5 /* FontTest */,
 				88AD637A179DEB010023B3F5 /* Frameworks */,
@@ -200,7 +202,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "";
+			shellScript = "Type a script or drag a script file from your workspace";
 		};
 /* End PBXShellScriptBuildPhase section */
 

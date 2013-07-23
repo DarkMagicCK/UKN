@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:libMist/libMist.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:FontTest/FontTest.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:libGLPlugin/libGLPlugin.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:libUKN/libUKN.xcodeproj">
+   </FileRef>
+</Workspace>

@@ -46,6 +46,22 @@ namespace mist {
         MIST_API bool StartsWith(const MistString& str, const MistString& start);
         
         template<typename T>
+        struct ToWStringTrait {
+            static inline std::wstring ToWString(const T& val) {
+                std::wostringstream sstr;
+                sstr << val;
+                return sstr.str();
+            }
+        };
+        
+        template<>
+        struct ToWStringTrait<std::string> {
+            static inline std::wstring ToWString(const std::string& val) {
+                return StringToWString(val);
+            }
+        };
+        
+        template<typename T>
         static std::string AnyToString(const T& val) {
             std::ostringstream sstr;
             sstr << val;
@@ -54,14 +70,7 @@ namespace mist {
         
         template<typename T>
         static std::wstring AnyToWString(const T& val) {
-            std::wostringstream sstr;
-            sstr << val;
-            return sstr.str();
-        }
-        
-        template<>
-        static std::wstring AnyToWString<std::string>(const std::string& val) {
-            return StringToWString(val);
+            return ToWStringTrait<T>::ToWString(val);
         }
         
     }

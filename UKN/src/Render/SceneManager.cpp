@@ -115,7 +115,7 @@ namespace ukn {
         
         const SceneManager::SceneObjectList& objects = this->getSceneObjects();
         Shader* vertexShader = technique->getPass(0)->getVertexShader().get();
-        Shader* fragmentShader = technique->getPass(0)->getFragmentShader().get();
+   //     Shader* fragmentShader = technique->getPass(0)->getFragmentShader().get();
 
         Matrix4 tprojMat = projMat;
         /* ogl rtt origin */
@@ -150,7 +150,7 @@ namespace ukn {
 
     
     void SceneManager::renderRenderable(GraphicDevice& gd, Renderable& renderable, const EffectTechniquePtr& technique) {
-        Shader* vertexShader = technique->getPass(0)->getVertexShader().get();
+      //  Shader* vertexShader = technique->getPass(0)->getVertexShader().get();
         Shader* fragmentShader = technique->getPass(0)->getFragmentShader().get();
      
         if(renderable.getDiffuseTex()) {

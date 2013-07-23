@@ -96,7 +96,7 @@ namespace ukn {
     }
 
     uint32 Effect::getNumTechniques() const {
-        return mTechniques.size();
+        return (uint32)mTechniques.size();
     }
 
     EffectTechnique::EffectTechnique(Effect* parent):

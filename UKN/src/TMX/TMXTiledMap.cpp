@@ -249,7 +249,8 @@ namespace ukn {
                             tile_index += 4;
                             
                             // Read out the flags
-                            /* Bit 32 is used for storing whether the tile is horizontally flipped and bit 31 is used for the vertically flipped tiles. And since Tiled Qt 0.8.0, bit 30 means whether the tile is flipped (anti) diagonally, enabling tile rotation
+                            /* Bit 32 is used for storing whether the tile is horizontally flipped and bit 31 is used for the vertically flipped tiles. 
+                            And since Tiled Qt 0.8.0, bit 30 means whether the tile is flipped (anti) diagonally, enabling tile rotation
                              */
                             bool flipped_horizontally = (bool)(global_tile_id & FLIPPED_HORIZONTALLY_FLAG);
                             bool flipped_vertically = (bool)(global_tile_id & FLIPPED_VERTICALLY_FLAG);                                          

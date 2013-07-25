@@ -330,6 +330,8 @@ namespace ukn {
                 
                 mist_assert(mGraphicFactory.isValid());
             }
+        } else {
+            mist::MessageBox::Show(L"Unable to load renderer plugin " + libName, L"Fatal Error", MBO_OK | MBO_IconError);
         }
     }
 

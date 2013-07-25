@@ -35,10 +35,9 @@ namespace ukn {
 
     FontPtr Font::Create(const UknString& name_or_path, uint32 size, bool bold, bool italic) {
         ResourcePtr resource;
-        
-        if(mist::File::FileExists(name_or_path)) {
-            resource = ResourceLoader::Instance().loadResource(name_or_path);
-        } else {
+
+        resource = ResourceLoader::Instance().loadResource(name_or_path);
+        if(!resource) {
             resource = ResourceLoader::Instance().loadResource(mist::Path::GetFont() + name_or_path);
         }
         

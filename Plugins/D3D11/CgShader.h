@@ -5,11 +5,11 @@
 #include "Cg/cg.h"
 
 #if defined(MIST_PLATFORM_32)
-#pragma comment(lib, "lib/cg.lib")
-#pragma comment(lib, "lib/cgD3D11.lib")
+#pragma comment(lib, "cg.lib")
+#pragma comment(lib, "cgD3D11.lib")
 #else
-#pragma comment(lib, "libx.64/cg.lib")
-#pragma comment(lib, "libx.64/cgD3D11.lib")
+#pragma comment(lib, "cg.x64.lib")
+#pragma comment(lib, "cgD3D11.x64.lib")
 #endif
 
 struct ID3D11InputLayout;

@@ -5,130 +5,205 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Plugins\D3D10\D3D10Convert.h" />
-    <ClInclude Include="..\..\Plugins\D3D10\D3D10FrameBuffer.h" />
-    <ClInclude Include="..\..\Plugins\D3D10\D3D10GraphicDevice.h" />
-    <ClInclude Include="..\..\Plugins\D3D10\D3D10GraphicFactory.h" />
-    <ClInclude Include="..\..\Plugins\D3D10\D3D10Preq.h" />
-    <ClInclude Include="..\..\Plugins\D3D10\D3D10RenderView.h" />
-    <ClInclude Include="..\..\Plugins\D3D10\D3D10Texture.h" />
-    <ClInclude Include="..\..\Plugins\D3D10\WindowsWindow.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\App.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Asset.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Audio.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Basic.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Binding.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Camera.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Context.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Font.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\FrameBuffer.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Frustum.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\GraphicBuffer.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\GraphicContext.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\GraphicDevice.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\GraphicFactory.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\GraphicSettings.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Input.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\ListenerManager.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTable.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\LocalizedStringTableLoader.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Material.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Mesh.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Physics.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\PreDeclare.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Renderable.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\RenderBuffer.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\RenderEffect.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\RenderTarget.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\RenderView.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Scene.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Scripting.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\SequencialAnimation.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Shader.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Skeletal.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Sprite.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\SpriteBatch.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Texture.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\tmx\TMXTiledMap.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Transform.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\UKN.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Vertex.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Viewport.h" />
-    <ClInclude Include="..\..\UKN\include\UKN\Window.h" />
-    <ClInclude Include="..\..\UKN\SqaureGame.h" />
+    <ClInclude Include="..\..\..\External\libpng\png.h" />
+    <ClInclude Include="..\..\..\External\libpng\pngconf.h" />
+    <ClInclude Include="..\..\..\External\libpng\pngdebug.h" />
+    <ClInclude Include="..\..\..\External\libpng\pnginfo.h" />
+    <ClInclude Include="..\..\..\External\libpng\pnglibconf.h" />
+    <ClInclude Include="..\..\..\External\libpng\pngpriv.h" />
+    <ClInclude Include="..\..\..\External\libpng\pngstruct.h" />
+    <ClInclude Include="..\..\..\External\zlib\crc32.h" />
+    <ClInclude Include="..\..\..\External\zlib\crypt.h" />
+    <ClInclude Include="..\..\..\External\zlib\deflate.h" />
+    <ClInclude Include="..\..\..\External\zlib\inffast.h" />
+    <ClInclude Include="..\..\..\External\zlib\inffixed.h" />
+    <ClInclude Include="..\..\..\External\zlib\inflate.h" />
+    <ClInclude Include="..\..\..\External\zlib\inftrees.h" />
+    <ClInclude Include="..\..\..\External\zlib\ioapi.h" />
+    <ClInclude Include="..\..\..\External\zlib\mztools.h" />
+    <ClInclude Include="..\..\..\External\zlib\trees.h" />
+    <ClInclude Include="..\..\..\External\zlib\unzip.h" />
+    <ClInclude Include="..\..\..\External\zlib\zconf.h" />
+    <ClInclude Include="..\..\..\External\zlib\zconf.in.h" />
+    <ClInclude Include="..\..\..\External\zlib\zip.h" />
+    <ClInclude Include="..\..\..\External\zlib\zlib.h" />
+    <ClInclude Include="..\..\..\External\zlib\zutil.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\2DHelper.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\App.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Asset.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Audio.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Basic.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Binding.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\BitmapFont.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\BlendStateObject.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Camera.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\CameraController.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\CgHelper.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Context.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Deferred.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\DepthStencilStateObject.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Fog.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Font.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\FrameBuffer.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Frustum.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\GraphicBuffer.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\GraphicContext.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\GraphicDevice.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\GraphicFactory.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\GraphicSettings.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\ImageWriter.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Input.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\InputDevice.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\InputEngine.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Light.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\LightManager.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\ListenerManager.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\LocalizedStringTable.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\LocalizedStringTableLoader.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Material.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Mesh.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Model.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Physics.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\PostEffect.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\PreDeclare.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\RasterizerStateObject.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Renderable.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\RenderBuffer.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\RenderEffect.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\RenderState.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\RenderTarget.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\RenderView.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\SamplerStateObject.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\SceneManager.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\SceneObject.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\SceneObjectWrapper.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Scripting.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\SequencialAnimation.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Shader.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\ShaderManager.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Skeletal.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Skybox.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\SkyDome.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Sprite.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\SpriteBatch.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\SSAO.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Terrian.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Texture.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\tmx\TMXTiledMap.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Transform.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\UKN.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Vertex.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Viewport.h" />
+    <ClInclude Include="..\..\..\UKN\include\UKN\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Plugins\D3D10\D3D10FrameBuffer.cpp" />
-    <ClCompile Include="..\..\Plugins\D3D10\D3D10GraphicDevice.cpp" />
-    <ClCompile Include="..\..\Plugins\D3D10\D3D10GraphicFactory.cpp" />
-    <ClCompile Include="..\..\Plugins\D3D10\D3D10RenderView.cpp" />
-    <ClCompile Include="..\..\Plugins\D3D10\D3D10Texture.cpp" />
-    <ClCompile Include="..\..\Plugins\D3D10\WindowsWindow.cpp" />
-    <ClCompile Include="..\..\UKN\src\Animation\SequencialAnimation.cpp" />
-    <ClCompile Include="..\..\UKN\src\Animation\Skeletal.cpp" />
-    <ClCompile Include="..\..\UKN\src\App\App.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Asset.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Context.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\Input.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTable.cpp" />
-    <ClCompile Include="..\..\UKN\src\Core\LocalizedStringTableLoader.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\Camera.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\Font.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\FrameBuffer.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\Frustum.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\GraphicBuffer.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\GraphicContext.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\GraphicDevice.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\GraphicFactory.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\RenderBuffer.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\RenderTarget.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\RenderView.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\Scene.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\Shader.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\SpriteBatch.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\Texture.cpp" />
-    <ClCompile Include="..\..\UKN\src\Render\Window.cpp" />
-    <ClCompile Include="..\..\UKN\src\TMX\TMXTiledMap.cpp" />
-    <ClCompile Include="main_win.cpp" />
+    <ClCompile Include="..\..\..\External\libpng\png.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngerror.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngget.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngmem.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngpread.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngread.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngrio.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngrtran.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngrutil.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngset.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngtrans.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngwio.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngwrite.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngwtran.c" />
+    <ClCompile Include="..\..\..\External\libpng\pngwutil.c" />
+    <ClCompile Include="..\..\..\External\zlib\adler32.c" />
+    <ClCompile Include="..\..\..\External\zlib\compress.c" />
+    <ClCompile Include="..\..\..\External\zlib\crc32.c" />
+    <ClCompile Include="..\..\..\External\zlib\deflate.c" />
+    <ClCompile Include="..\..\..\External\zlib\gzio.c" />
+    <ClCompile Include="..\..\..\External\zlib\infback.c" />
+    <ClCompile Include="..\..\..\External\zlib\inffast.c" />
+    <ClCompile Include="..\..\..\External\zlib\inflate.c" />
+    <ClCompile Include="..\..\..\External\zlib\inftrees.c" />
+    <ClCompile Include="..\..\..\External\zlib\ioapi.c" />
+    <ClCompile Include="..\..\..\External\zlib\mztools.c" />
+    <ClCompile Include="..\..\..\External\zlib\trees.c" />
+    <ClCompile Include="..\..\..\External\zlib\uncompr.c" />
+    <ClCompile Include="..\..\..\External\zlib\unzip.c" />
+    <ClCompile Include="..\..\..\External\zlib\zip.c" />
+    <ClCompile Include="..\..\..\External\zlib\zutil.c" />
+    <ClCompile Include="..\..\..\UKN\src\Animation\SequencialAnimation.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Animation\Skeletal.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\App\App.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Core\Asset.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Core\Context.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Core\Input.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Core\InputEngine.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Core\LocalizedStringTable.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Core\LocalizedStringTableLoader.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\2DHelper.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\BitmapFont.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\BlendStateObject.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Camera.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\CameraController.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\CgHelper.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Deferred.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\DepthStencilStateObject.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Fog.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Font.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\FrameBuffer.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Frustum.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\GraphicBuffer.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\GraphicContext.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\GraphicDevice.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\GraphicFactory.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\ImageWriter.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Light.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\LightManager.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Model.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\PostEffect.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\RasterizerStateObject.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Renderable.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\RenderBuffer.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\RenderState.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\RenderTarget.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\RenderView.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\SamplerStateObject.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\SceneManager.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\SceneObject.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\SceneObjectWrapper.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Shader.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\ShaderManager.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Skybox.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\SkyDome.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\SpriteBatch.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\SSAO.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Terrian.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Texture.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Vertex.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\Render\Window.cpp" />
+    <ClCompile Include="..\..\..\UKN\src\TMX\TMXTiledMap.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{33687FF7-7B1D-4ACC-BE3F-85190D3C657C}</ProjectGuid>
+    <ProjectGuid>{6C49606A-3D70-4EA2-B0E0-86D07786769C}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>UKN</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <PlatformToolset>v110</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -142,50 +217,46 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Codes\UKN\vs\$(Configuration);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)/../External/freetype/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\..\UKN\include;$(SolutionDir)\..\..\External\zlib;$(SolutionDir)\..\..\External\freetype;$(SolutionDir)\..\..\External;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\..\Bin\$(Configuration)\;$(SolutionDir)\..\..\Libs\Windows;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\..\..\Bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Codes\UKN\vs\$(Configuration);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)/../External/freetype/;$(SolutionDir)/../../Plugins/GL/;$(LibraryPath)</LibraryPath>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Include;$(SolutionDir)/../Plugins;$(SolutionDir)/../External/freetype;$(SolutionDir)/../External;$(SolutionDir)/../UKN/include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2010%29\Lib\x86;$(SolutionDir)/../External/freetype/;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\..\UKN\include;$(SolutionDir)\..\..\External\zlib;$(SolutionDir)\..\..\External\freetype;$(SolutionDir)\..\..\External;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\..\Bin\$(Configuration)\;$(SolutionDir)\..\..\Libs\Windows;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\..\..\Bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>UKN_EXPORTS;WIN32;_DEBUG;_WINDOWS;_USRDLL;UKN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>libcmtd.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>mist.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>UKN_EXPORTS;WIN32;NDEBUG;_WINDOWS;_USRDLL;UKN_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>mist.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

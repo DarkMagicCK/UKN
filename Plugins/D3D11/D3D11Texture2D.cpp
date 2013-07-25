@@ -6,8 +6,6 @@
 #include "mist/Logger.h"
 #include "DirectXTex/DirectXTex.h"
 
-#pragma comment(lib, "DirectXTex.lib")
-
 namespace ukn {
 
     D3D11Texture2D::D3D11Texture2D(D3D11GraphicDevice* device):

@@ -362,7 +362,7 @@ namespace mist {
     
     bool FileStream::eos() const {
         if(file)
-            return feof(file);
+            return feof(file) != EOF;
         return true;
     }
     

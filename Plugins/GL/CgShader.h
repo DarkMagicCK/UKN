@@ -4,11 +4,11 @@
 #include "Cg/cg.h"
 
 #if defined(MIST_PLATFORM_32)
-#pragma comment(lib, "lib/cg.lib")
-#pragma comment(lib, "lib/cgGL.lib")
+#pragma comment(lib, "cg.lib")
+#pragma comment(lib, "cgGL.lib")
 #else
-#pragma comment(lib, "libx.64/cg.lib")
-#pragma comment(lib, "libx.64/cgGL.lib")
+#pragma comment(lib, "cg.x64.lib")
+#pragma comment(lib, "cgGL.x64.lib")
 #endif
 
 namespace ukn {

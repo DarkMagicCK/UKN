@@ -5,6 +5,12 @@
 // D3D11 headers
 #include <D3D11.h>
 
+#ifdef D3D11PLUGIN_EXPORTS
+
+#else
+
+#endif
+
 // #include <d3dx11.h>
 // #include <D3DX10math.h>
 /* convert ukn enums to d3d */

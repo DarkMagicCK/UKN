@@ -8,3 +8,5 @@ Debug
 Release
 .sdf
 .pch
+ipch
+ukn_log.txt

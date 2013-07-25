@@ -24,9 +24,6 @@
 #include "D3D11RenderBuffer.h"
 #include "D3D11Debug.h"
 
-#pragma comment(lib, "D3D11.lib")
-#pragma comment(lib, "dxgi.lib")
-
 namespace ukn {
 
     D3D11GraphicDevice::D3D11GraphicDevice():

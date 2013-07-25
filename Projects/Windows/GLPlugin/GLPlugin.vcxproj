@@ -10,8 +10,62 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Plugins\GL\CgShader.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLBlendStateObject.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLConvert.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLDepthStencilStateObject.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLError.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\glew\glew.c" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLFrameBuffer.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLGraphicBuffer.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLGraphicDevice.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLGraphicFactory.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLRenderView.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLSamplerStateObject.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLShader.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLSpriteBatch.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLTexture.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\GLWindow.cpp" />
+    <ClCompile Include="..\..\..\Plugins\GL\soil\image_DXT.c" />
+    <ClCompile Include="..\..\..\Plugins\GL\soil\image_helper.c" />
+    <ClCompile Include="..\..\..\Plugins\GL\soil\SOIL.c" />
+    <ClCompile Include="..\..\..\Plugins\GL\soil\stb_image_aug.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Plugins\GL\CgShader.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLBlendStateObject.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLConvert.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLDepthStencilStateObject.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLError.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\glew\glew.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\glew\glxew.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\glew\wglew.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLFrameBuffer.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLFWInput.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\glfw\glfw3.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\glfw\glfw3native.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLGraphicBuffer.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLGraphicDevice.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLGraphicFactory.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLPreq.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLRasterizerStateObject.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLRenderBuffer.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLRenderView.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLSamplerStateObject.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLShader.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLSpriteBatch.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLTexture.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\GLWindow.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\image_DXT.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\image_helper.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\SOIL.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\stbi_DDS_aug.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\stbi_DDS_aug_c.h" />
+    <ClInclude Include="..\..\..\Plugins\GL\soil\stb_image_aug.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{81628EC7-98CE-46F9-89D2-03BB08ECAFED}</ProjectGuid>
+    <ProjectGuid>{8BF5CF67-7421-4883-9DE6-C11E9FF0C566}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>GLPlugin</RootNamespace>
   </PropertyGroup>
@@ -41,13 +95,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\External\Cg;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\..\UKN\include;$(SolutionDir)\..\..\External;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\..\Bin\$(Configuration);$(SolutionDir)\..\..\Libs\Windows;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\..\..\Bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)\..\UKN\include;$(SolutionDir)\..\External;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\..\External\Cg;$(SolutionDir)\..\vs\$(Configuration);$(SolutionDir)\..\External\glfw;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\..\UKN\include;$(SolutionDir)\..\..\External;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\..\Bin\$(Configuration);$(SolutionDir)\..\..\Libs\Windows;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)\..\..\Bin\$(Configuration)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -59,13 +115,13 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>mist.lib;ukn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -76,75 +132,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <IgnoreSpecificDefaultLibraries>libcmt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalDependencies>mist.lib;ukn.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="..\..\External\glew\glew.h" />
-    <ClInclude Include="..\..\External\glew\glxew.h" />
-    <ClInclude Include="..\..\External\glew\wglew.h" />
-    <ClInclude Include="..\..\External\soil\image_DXT.h" />
-    <ClInclude Include="..\..\External\soil\image_helper.h" />
-    <ClInclude Include="..\..\External\soil\SOIL.h" />
-    <ClInclude Include="..\..\External\soil\stbi_DDS_aug.h" />
-    <ClInclude Include="..\..\External\soil\stbi_DDS_aug_c.h" />
-    <ClInclude Include="..\..\External\soil\stb_image_aug.h" />
-    <ClInclude Include="..\..\Plugins\GL\CgShader.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLBlendStateObject.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLConvert.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLDepthStencilStateObject.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLFrameBuffer.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLFWInput.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLGraphicBuffer.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLGraphicDevice.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLGraphicFactory.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLPreq.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLRasterizerStateObject.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLRenderBuffer.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLRenderView.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLSamplerStateObject.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLShader.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLSpriteBatch.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLTexture.h" />
-    <ClInclude Include="..\..\Plugins\GL\GLWindow.h" />
-    <ClInclude Include="GLPlugin.h" />
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="targetver.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\External\glew\glew.c" />
-    <ClCompile Include="..\..\External\soil\image_DXT.c" />
-    <ClCompile Include="..\..\External\soil\image_helper.c" />
-    <ClCompile Include="..\..\External\soil\SOIL.c" />
-    <ClCompile Include="..\..\External\soil\stb_image_aug.c" />
-    <ClCompile Include="..\..\Plugins\GL\CgShader.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLBlendStateObject.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLConvert.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLDepthStencilStateObject.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLError.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLFrameBuffer.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLGraphicBuffer.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLGraphicDevice.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLGraphicFactory.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLRenderView.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLSamplerStateObject.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLShader.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLSpriteBatch.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLTexture.cpp" />
-    <ClCompile Include="..\..\Plugins\GL\GLWindow.cpp" />
-    <ClCompile Include="dllmain.cpp">
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-      </PrecompiledHeader>
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</CompileAsManaged>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-      </PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
-    </ClCompile>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

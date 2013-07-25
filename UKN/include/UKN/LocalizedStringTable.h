@@ -92,7 +92,7 @@ namespace ukn {
         const_iterator end()   const { return mLocalizedString.end(); }
         
     private:
-        friend class LocalizedStringTableLoader;
+        friend struct LocalizedStringTableLoader;
         void updateStringId(const UknString& before, const UknString& after);
         
         LanguageMap mLocalizedString;

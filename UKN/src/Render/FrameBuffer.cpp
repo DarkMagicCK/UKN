@@ -242,7 +242,7 @@ namespace ukn {
             vp.camera = MakeSharedPtr<Camera>();
             vp.camera->setProjParams(d_pi / 2,  
                                      (float)this->width() / (float)this->height(), 
-                                     0.1, 
+                                     0.1f, 
                                      1000.f);
             vp.camera->setViewParams(Vector3(0, 0, -5), Vector3(0, 0, 1));
         }

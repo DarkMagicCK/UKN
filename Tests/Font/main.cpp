@@ -7,6 +7,9 @@
 //
 
 #include "UKN/UKN.h"
+#include "mist/SysUtil.h"
+
+#include "../Test.h"
 
 #ifndef MIST_OS_WINDOWS
 
@@ -17,11 +20,7 @@ int main (int argc, const char * argv[])
     
 #else
 
-
 #pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
-    
-#pragma comment(lib, "mist.lib")
-#pragma comment(lib, "ukn_dll.lib")
     
 #define GRAPHIC_PLUGIN_NAME L"D3D11Plugin"
     
@@ -30,7 +29,8 @@ int CALLBACK WinMain(__in  HINSTANCE hInstance,
                      __in  LPSTR lpCmdLine,
                      __in  int nCmdSho) {
 #endif
-    
+    SetupTestMediaResourceDirectories();
+
     ukn::FontPtr font;
     
     ukn::AppLauncher(L"Windows Test")
@@ -51,20 +51,26 @@ int CALLBACK WinMain(__in  HINSTANCE hInstance,
         ukn::GraphicDevice& gd = ukn::Context::Instance().getGraphicFactory().getGraphicDevice();
         gd.clear(ukn::CM_Color, ukn::color::Black, 1.0f, 0.f);
         
-        font->begin();
-        font->draw(L"ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, 0, ukn::FA_Left);
-        font->end();
-        ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
-        
-        gd.clear(ukn::CM_Color, ukn::color::Black, 1.0f, 0.f);
+        if(font) {
+            font->begin();
+            font->draw(L"ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0, 0, ukn::FA_Left);
+            font->end();
 
-        sb.begin();
-        sb.draw(font->getTexturePlacement(0)->texture, ukn::Vector2(0, 0));
-        sb.end();
+            ukn::SpriteBatch& sb = ukn::SpriteBatch::DefaultObject();
+        
+            gd.clear(ukn::CM_Color, ukn::color::Black, 1.0f, 0.f);
+
+            sb.begin();
+            sb.draw(font->getTexturePlacement(0)->texture, ukn::Vector2(0, 0));
+            sb.end();
+        }
         
     })
     .connectInit([&](ukn::Window* ) {
-        font = ukn::Font::Create(L"Courier New.ttf", 20);
+        font = ukn::Font::Create(L"Courier New.ttf", 40);
+        if(!font) {
+            mist::MessageBox::Show(L"Error loading font", L"Fatal error", mist::MBO_OK | mist::MBO_IconError);
+        }
     })
     .run();
     

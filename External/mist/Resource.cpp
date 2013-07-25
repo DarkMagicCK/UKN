@@ -109,7 +109,7 @@ namespace mist {
                     
                     if((*itFac)->resourceExists(fullPath)) {
                         ResourcePtr ptr = (*itFac)->createResource(fullPath);
-                        ptr->setName(fullPath);
+                        ptr->setName(name);
                         return ptr;
                     }
                     

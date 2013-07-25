@@ -263,6 +263,12 @@ namespace mist {
         
     }
     
+    bool BinaryStreamReader::eos() {
+        if(mStream)
+            return mStream->eos();
+        return true;
+    }
+    
     void BinaryStreamReader::close() {
         mStream->close();
     }
@@ -429,6 +435,12 @@ namespace mist {
         mStream->read((uint8*)&buffer, 1);
         mStream->seek(pos);
         return buffer;
+    }
+
+    bool TextStreamReader::eos() {
+        if(mStream)
+            return mStream->eos();
+        return true;
     }
     
     size_t TextStreamReader::read(uint8* buffer, size_t size_to_read) {

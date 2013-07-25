@@ -538,6 +538,7 @@ namespace ukn {
             mesh.num_vertices = 0;
             mesh.start_vertex = 0;
             mesh.start_index = 0;
+            mesh.material_id = 0;
             needCalculateNormal = false;
             needTBN = false;
             useStart = false;
@@ -568,14 +569,14 @@ namespace ukn {
         }
 
         ModelLoader::ModelDataPtr load(const ResourcePtr& file) {
-            mist::TextStreamReader reader(file->getResourceStream());
+            mist::TextStreamReader reader(MakeSharedPtr<BufferedStream>(file->getResourceStream()));
 
 
 #define TO_FLOAT3(t, i) float3((float)Convert::ToDouble(t[i]), \
                                (float)Convert::ToDouble(t[i+1]), \
                                (float)Convert::ToDouble(t[i+2]))
 
-            while(reader.peek() != -1) {
+            while(!reader.eos()) {
                 MistString line = reader.readLine();
                 if(line.empty())
                     continue;
@@ -643,7 +644,7 @@ namespace ukn {
 
                     } else if(tokens[0] == L"usemtl") {
                         for(uint32 i=0; i<materials.size(); ++i) {
-                            if(materials[i].first == tokens[1]) {
+                            if(materials[i].first == string::Strip(tokens[1])) {
                                 mesh.material_id = i;
                                 mesh.name = materials[i].first;
                                 break;
@@ -673,7 +674,7 @@ namespace ukn {
                 MaterialPtr currentMat;
 
                 while(mtlReader.peek() != -1) {
-                    MistString mtlLine = mtlReader.readLine();
+                    MistString mtlLine = string::Strip(mtlReader.readLine());
                     if(mtlLine.empty())
                         continue;
                     if(mtlLine[0] == L'#')
@@ -707,7 +708,7 @@ namespace ukn {
                                                                 mist::string::WStringToString(dir + mtlTokens.back())));
                             } else if(mtlTokens[0] == L"map_bump" || mtlTokens[0] == L"bump") {
                                 currentMat->textures.push_back(std::make_pair("normal", 
-                                                                mist::string::WStringToString(dir + mtlTokens[1])));
+                                                                mist::string::WStringToString(dir + mtlTokens.back())));
                             }
                         }
                     }

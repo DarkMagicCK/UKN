@@ -21,7 +21,7 @@ namespace ukn {
     bool D3D11Texture2D::load(const ResourcePtr& resource, bool createMipmap) {
         using namespace DirectX;
 
-        if(!resource->getResourceStream())
+        if(resource && !resource->getResourceStream())
             return false;
 
         StreamPtr memStream = resource->getResourceStream()->readIntoMemory();

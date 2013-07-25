@@ -168,6 +168,7 @@ namespace mist {
         virtual ~StreamReader();
         
         virtual void close() = 0;
+        virtual bool eos() = 0;
         
     public:
         virtual char peek() = 0;
@@ -200,6 +201,7 @@ namespace mist {
     public:
         // peek next char, does not advance stream
         virtual char peek() override;
+        virtual bool eos() override;
         
         virtual size_t read(uint8* buffer, size_t size_to_read) override;
         
@@ -241,6 +243,7 @@ namespace mist {
         virtual ~TextStreamReader();
         
         virtual void close() override;
+        virtual bool eos() override;
         
     public:
         virtual char peek() override;

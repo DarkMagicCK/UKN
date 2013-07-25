@@ -114,7 +114,7 @@ namespace ukn {
         }
 
         {
-            mRandomNormalTex = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"RandomNormals2.jpg"));
+            mRandomNormalTex = gf.load2DTexture(mist::ResourceLoader::Instance().loadResource(L"RandomNormals.png"));
         }
 
         return true;

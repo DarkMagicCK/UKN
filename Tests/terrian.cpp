@@ -1,25 +1,30 @@
-#include "test.h"
-#include "UKN/CgHelper.h"
 
-#ifndef MIST_OS_WINDOWS 
+#include "UKN/UKN.h"
+#include "mist/SysUtil.h"
+#include "mist/Profiler.h"
+#include "mist/RandomUtil.h"
 
-#include "../Plugins/gl/GLGraphicFactory.h"    
+#include "Test.h"
 
-int main (int argc, const char * argv[]) { 
+#ifndef MIST_OS_WINDOWS
 
-#else 
+int main (int argc, const char * argv[])
+{
 
-#pragma comment(linker, "/NODEFAULTLIB:libcmt.lib") 
+#define GRAPHIC_PLUGIN_NAME L"libGLPlugin"
+    
+#else
 
-#pragma comment(lib, "mist.lib") 
-#pragma comment(lib, "ukn_dll.lib") 
-
-int CALLBACK WinMain( 
-__in  HINSTANCE hInstance, 
-__in  HINSTANCE hPrevInstance, 
-__in  LPSTR lpCmdLine, 
-__in  int nCmdSho) { 
+#pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
+    
+#define GRAPHIC_PLUGIN_NAME L"D3D11Plugin"
+    
+int CALLBACK WinMain(__in  HINSTANCE hInstance,
+                     __in  HINSTANCE hPrevInstance,
+                     __in  LPSTR lpCmdLine,
+                     __in  int nCmdSho) {
 #endif
+    SetupTestMediaResourceDirectories();
 
         ukn::Matrix4 worldMat;
         ukn::CameraController* camController;
@@ -189,7 +194,7 @@ __in  int nCmdSho) {
             ukn::Viewport& vp = gf.getGraphicDevice().getCurrFrameBuffer()->getViewport();
             vp.camera->setViewParams(ukn::Vector3(0, 5, 0), ukn::Vector3(0, 0, 1));
             
-        //    camController->attachCamera(vp.camera);
+            camController->attachCamera(vp.camera);
             
             font = ukn::Font::Create(L"Arial.ttf", 20);
 
@@ -221,10 +226,11 @@ __in  int nCmdSho) {
             
             ukn::SceneManager& scene = ukn::Context::Instance().getSceneManager();
             
-            dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"dragon_recon/dragon_vrip_res4.ply");
+            dragonModel = ukn::AssetManager::Instance().load<ukn::Model>(L"sponza/sponza.obj");
             if(dragonModel) {
                 ukn::SceneObjectPtr dragonObject = ukn::MakeSharedPtr<ukn::SceneObject>(dragonModel, ukn::SOA_Cullable | ukn::SOA_Moveable);
-                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(5, 5, 5));
+                dragonObject->setModelMatrix(ukn::Matrix4::ScaleMat(5, 5, 5) * ukn::Matrix4::TransMat(0, 5, 0));
+               
                 scene.addSceneObject(dragonObject);
             }
             

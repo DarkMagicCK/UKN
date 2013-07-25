@@ -434,7 +434,7 @@ namespace ukn {
 
         gd.setBlendState(BlendStateObject::Opaque());
         gd.setDepthStencilState(DepthStencilStateObject::DepthRead());
-        gd.setRasterizerState(RasterizerStateObject::CullCounterClockwise());
+        gd.setRasterizerState(RasterizerStateObject::CullNone());
         gd.setSamplerState(SamplerStateObject::LinearWrap());
 
         // first clear the GBuffer

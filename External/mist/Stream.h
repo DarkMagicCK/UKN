@@ -174,7 +174,7 @@ namespace mist {
         FILE* file;
     };
     
-    class BufferedStream: public Stream {
+    class MIST_API BufferedStream: public Stream {
     public:
         BufferedStream(const StreamPtr& stream);
         BufferedStream(const StreamPtr& stream, size_t read_buffer_size);
@@ -202,13 +202,14 @@ namespace mist {
     private:
         void readMore(size_t length);
 
+        size_t mReadIndex;
         Array<uint8> mWriteBuffer;
         Array<uint8> mReadBuffer;
         StreamPtr mStream;
         size_t mReadBufferSize;
     };
 
-    class StringStream: public Stream {
+    class MIST_API StringStream: public Stream {
     public:
         StringStream(const MistString& stream);
         virtual ~StringStream();

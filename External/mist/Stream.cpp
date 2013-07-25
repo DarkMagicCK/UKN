@@ -362,7 +362,7 @@ namespace mist {
     
     bool FileStream::eos() const {
         if(file)
-            return feof(file) != EOF;
+            return feof(file) != 0;
         return true;
     }
     
@@ -477,13 +477,15 @@ namespace mist {
     
     BufferedStream::BufferedStream(const StreamPtr& stream):
     mStream(stream),
-    mReadBufferSize(16) {
-        
+    mReadBufferSize(64),
+    mReadIndex(0) {
+         this->readMore(mReadBufferSize);
     }
     
     BufferedStream::BufferedStream(const StreamPtr& stream, size_t buffer_size):
     mStream(stream), 
-    mReadBufferSize(buffer_size) {
+    mReadBufferSize(buffer_size),
+    mReadIndex(0)  {
         this->readMore(mReadBufferSize);
     }
     
@@ -508,27 +510,50 @@ namespace mist {
     }
     
     bool BufferedStream::seek(size_t pos) {
-        return mStream->seek(pos);
+        if(mStream) {
+            size_t current_pos = mStream->pos();
+            if(current_pos != pos) {
+                bool result =  mStream->seek(pos);
+                if(result) {
+                    size_t dist = current_pos - pos;
+                    if(dist > 0 && mReadIndex > dist) {
+                        mReadIndex -= dist;
+                    } else {
+                        mReadBuffer.clear();
+                        mReadIndex = 0;
+                        this->readMore(mReadBufferSize);
+                    }
+                }
+            }
+            
+        } 
+        return false;
     }
     
     void BufferedStream::readMore(size_t length) {
         if(mStream->eos())
             return;
-        uint8* buffer = (uint8*)malloc(length);
+        uint8* buffer = (uint8*)mist_malloc(length);
         size_t readLength = mStream->read(buffer, length);
+        mReadBuffer.erase(mReadBuffer.begin(), mReadBuffer.begin() + mReadIndex);
         mReadBuffer.insert(mReadBuffer.end(), 
                            buffer, 
                            buffer + readLength);
+        mist_free(buffer);
+        mReadIndex = 0;
     }
 
     size_t BufferedStream::read(uint8* buffer, size_t length) {
-        if(mReadBuffer.size() < length)
+        if(mReadBuffer.size() <= length + mReadIndex)
             this->readMore(length > mReadBufferSize ? length: mReadBufferSize);
         size_t sizeToRead = length;
         if(mReadBuffer.size() < length)
             sizeToRead = mReadBuffer.size();
 
-        memcpy(buffer, &mReadBuffer[0], sizeToRead);
+        if(sizeToRead == 0)
+            return sizeToRead;
+        memcpy(buffer, &mReadBuffer[mReadIndex], sizeToRead);
+        mReadIndex += sizeToRead;
         return sizeToRead;
     }
     
@@ -568,6 +593,10 @@ namespace mist {
     
     StreamPtr BufferedStream::readIntoMemory() {
         return mStream->readIntoMemory();
+    }
+
+    StringStream::~StringStream() {
+        
     }
 
     bool StringStream::eos() const {

@@ -17,7 +17,7 @@ int main (int argc, const char * argv[])
 
 #pragma comment(linker, "/NODEFAULTLIB:libcmt.lib")
     
-#define GRAPHIC_PLUGIN_NAME L"D3D11Plugin"
+#define GRAPHIC_PLUGIN_NAME L"GLPlugin"
     
 int CALLBACK WinMain(__in  HINSTANCE hInstance,
                      __in  HINSTANCE hPrevInstance,
@@ -63,7 +63,7 @@ int CALLBACK WinMain(__in  HINSTANCE hInstance,
                 .sampleCount(1)
                 .showMouse(true)
                 .isFullScreen(false)
-                .graphicFactoryName(L"D3D11Plugin.dll")
+                .graphicFactoryName(GRAPHIC_PLUGIN_NAME)
                 )
         .connectUpdate([&](ukn::Window* ) {
             for(int i=0; i<pointLightCount; ++i) {
